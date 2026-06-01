@@ -29,10 +29,20 @@ if ( file_exists( '/workspace/src/.wikven.json' ) ) {
 	$config = json_decode( $text, true );
 
 	// Skins
-	if ( isset( $config['skin'] ) ) {
-		wfLoadSkin( $config['skin'] );
-		$wgDefaultSkin = strtolower( $config['skin'] );
-		unset( $config['skin'] );
+	if ( isset( $config['Skin'] ) ) {
+		wfLoadSkin( $config['Skin'] );
+		// A skin's default-skin name (e.g. 'minerva') can differ from its
+		// extension directory name (e.g. 'MinervaNeue'), so read the canonical
+		// name from the skin's own skin.json instead of guessing it.
+		$wgDefaultSkin = strtolower( $config['Skin'] );
+		$skinJson = "$IP/skins/{$config['Skin']}/skin.json";
+		if ( is_readable( $skinJson ) ) {
+			$skinMeta = json_decode( file_get_contents( $skinJson ), true );
+			if ( isset( $skinMeta['ValidSkinNames'] ) && is_array( $skinMeta['ValidSkinNames'] ) ) {
+				$wgDefaultSkin = (string)array_key_first( $skinMeta['ValidSkinNames'] );
+			}
+		}
+		unset( $config['Skin'] );
 	}
 
 	// Extensions

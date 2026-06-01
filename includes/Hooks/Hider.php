@@ -16,17 +16,24 @@ class Hider implements
 
 	/** @inheritDoc */
 	public function onSidebarBeforeOutput( $skin, &$sidebar ): void {
-		unset( $sidebar['TOOLBOX'] );
-		unset( $sidebar['SEARCH'] );
+		// Empty rather than unset: some skins (e.g. Minerva) read these keys and
+		// require them to stay arrays.
+		foreach ( [ 'TOOLBOX', 'SEARCH' ] as $key ) {
+			if ( isset( $sidebar[$key] ) ) {
+				$sidebar[$key] = [];
+			}
+		}
 	}
 
 	/** @inheritDoc */
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
 		// Hide the personal tools (login, talk, preferences, etc.); this replaces the
-		// removed PersonalUrls hook.
-		unset( $links['user-menu'] );
-		unset( $links['user-page'] );
-		unset( $links['user-interface-preferences'] );
-		unset( $links['notifications'] );
+		// removed PersonalUrls hook. Empty the groups rather than unset them: some
+		// skins (e.g. Minerva) read these keys and require them to stay arrays.
+		foreach ( [ 'user-menu', 'user-page', 'user-interface-preferences', 'notifications' ] as $key ) {
+			if ( isset( $links[$key] ) ) {
+				$links[$key] = [];
+			}
+		}
 	}
 }
