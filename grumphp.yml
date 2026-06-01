@@ -1,9 +1,7 @@
 grumphp:
     tasks:
-        phplint:
-            exclude:
-                - vendor
-                - node_modules
-        phpcs:
-            standard:
-                - .phpcs.xml
+        shell:
+            scripts:
+                - ["-c", "npm run lint"]
+                - ["-c", "vendor/bin/minus-x check ."]
+            triggered_by: [php, json, css, less, js, ts, md]
