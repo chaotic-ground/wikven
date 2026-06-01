@@ -6,6 +6,6 @@
 ** Images|Images
 ** Skins|Skins
 * References
-** nowiki.json|.nowiki.json
+** wikven.json|.wikven.json
 *
 ** helppage|help-mediawiki

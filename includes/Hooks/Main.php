@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\ThisIsNotAWiki\Hooks;
+namespace MediaWiki\Extension\Wikven\Hooks;
 
 use Config;
 use FauxRequest;
@@ -31,8 +31,8 @@ class Main implements
 	 * @param Config $config
 	 */
 	public function __construct( Config $config ) {
-		$this->htmlDirectory = $config->get( 'ThisIsNotAWikiHtmlDirectory' );
-		$this->styleDirectory = $config->get( 'ThisIsNotAWikiStyleDirectory' );
+		$this->htmlDirectory = $config->get( 'WikvenHtmlDirectory' );
+		$this->styleDirectory = $config->get( 'WikvenStyleDirectory' );
 	}
 
 	/** @inheritDoc */
@@ -43,16 +43,16 @@ class Main implements
 		if ( $title->getInterwiki() ) {
 			return;
 		}
-		global $wgThisIsNotAWikiEditUrl, $wgThisIsNotAWikiHistoryUrl;
+		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
 		$name = Title::makeName( $title->getNamespace(), $title->getDBkey() );
 		if ( preg_match( '/action=([^&]+)/', $query, $matches ) ) {
 			$action = $matches[1];
-			if ( $action === 'edit' && $wgThisIsNotAWikiEditUrl ) {
+			if ( $action === 'edit' && $wgWikvenEditUrl ) {
 				$name = str_replace( '_', '%20', $name );
-				$url = str_replace( '$1', $name, $wgThisIsNotAWikiEditUrl );
-			} elseif ( $action === 'history' && $wgThisIsNotAWikiHistoryUrl ) {
+				$url = str_replace( '$1', $name, $wgWikvenEditUrl );
+			} elseif ( $action === 'history' && $wgWikvenHistoryUrl ) {
 				$name = str_replace( '_', '%20', $name );
-				$url = str_replace( '$1', $name, $wgThisIsNotAWikiHistoryUrl );
+				$url = str_replace( '$1', $name, $wgWikvenHistoryUrl );
 			} else {
 				$url = "./$name.html";
 

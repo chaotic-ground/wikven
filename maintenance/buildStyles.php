@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\ThisIsNotAWiki;
+namespace MediaWiki\Extension\Wikven;
 
 use FauxRequest;
 use Maintenance;
@@ -17,24 +17,24 @@ require_once "$IP/maintenance/Maintenance.php";
 class BuildStyles extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->addDescription( 'Build styles based on the CSS files on $wgThisIsNotAWikiStyleDirectory.' );
+		$this->addDescription( 'Build styles based on the CSS files on $wgWikvenStyleDirectory.' );
 	}
 
 	public function execute() {
-		global $wgThisIsNotAWikiHtmlDirectory, $wgThisIsNotAWikiStyleDirectory, $wgLanguageCode, $wgDefaultSkin;
+		global $wgWikvenHtmlDirectory, $wgWikvenStyleDirectory, $wgLanguageCode, $wgDefaultSkin;
 
-		if ( str_ends_with( $wgThisIsNotAWikiHtmlDirectory, '/' ) ) {
-			$wgThisIsNotAWikiHtmlDirectory = rtrim( $wgThisIsNotAWikiHtmlDirectory, '/' );
+		if ( str_ends_with( $wgWikvenHtmlDirectory, '/' ) ) {
+			$wgWikvenHtmlDirectory = rtrim( $wgWikvenHtmlDirectory, '/' );
 		}
-		if ( str_ends_with( $wgThisIsNotAWikiStyleDirectory, '/' ) ) {
-			$wgThisIsNotAWikiStyleDirectory = rtrim( $wgThisIsNotAWikiStyleDirectory, '/' );
+		if ( str_ends_with( $wgWikvenStyleDirectory, '/' ) ) {
+			$wgWikvenStyleDirectory = rtrim( $wgWikvenStyleDirectory, '/' );
 		}
 
 		MediaWikiServices::getInstance()->getDBLoadBalancerFactory()->disableChronologyProtection();
 
 		$resourceLoader = MediaWikiServices::getInstance()->getResourceLoader();
 
-		foreach ( glob( "$wgThisIsNotAWikiHtmlDirectory/$wgThisIsNotAWikiStyleDirectory/*.css" ) as $filename ) {
+		foreach ( glob( "$wgWikvenHtmlDirectory/$wgWikvenStyleDirectory/*.css" ) as $filename ) {
 			$query = ResourceLoader::makeLoaderQuery(
 				[ basename( $filename, '.css' ) ],
 				$wgLanguageCode,

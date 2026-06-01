@@ -1,7 +1,7 @@
-This page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{nowiki}}.
+This page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{wikven}}.
 {{note|This page assumes unix-like OS.}}
 
-{{nowiki}} is formed of two parts: a script and a MediaWiki extension. To simplify the whole building
+{{wikven}} is formed of two parts: a script and a MediaWiki extension. To simplify the whole building
 process, a docker image is provided and this guide will show the usage.
 
 ; Requirement
@@ -19,7 +19,7 @@ $ mkdir src dist
 </syntaxhighlight>
 
 Then create a wikitext file. Any file ends with <code>.wikitext</code> is considered as a wiki
-article by {{nowiki}}.
+article by {{wikven}}.
 
 <syntaxhighlight lang="shell-session">
 $ echo 'Hello, World!' > src/index.wikitext
@@ -32,18 +32,18 @@ $ docker run \
   --rm \
   -v "$(pwd)"/src:/workspace/src \
   -v "$(pwd)"/dist:/workspace/dist \
-  ghcr.io/lens0021/this-is-not-a-wiki
+  ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
 
 Open <code>"$(pwd)"/dist/index.html</code> on your browser.
 
 == Setting the title of the site ==
 
-For configurations, you must create [[nowiki.json|<code>.nowiki.json</code>]] file in your
+For configurations, you must create [[wikven.json|<code>.wikven.json</code>]] file in your
 <code>src</code> directory.
 
 <syntaxhighlight lang="shell-session">
-$ cat <<EOF > src/.nowiki.json
+$ cat <<EOF > src/.wikven.json
 {
   "wg": {
     "Sitename": "My Site"
@@ -58,7 +58,7 @@ $ docker run \
   --rm \
   -v "$(pwd)"/src:/workspace/src \
   -v "$(pwd)"/dist:/workspace/dist \
-  ghcr.io/lens0021/this-is-not-a-wiki
+  ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
 
 {{prevnext|Editing sidebar}}
@@ -68,7 +68,7 @@ $ docker run \
 <syntaxhighlight lang="shell-session">
 $ mkdir src dist
 $ echo 'Hello, World!' > src/index.wikitext
-$ cat <<EOF > src/.nowiki.json
+$ cat <<EOF > src/.wikven.json
 {
   "wg": {
     "Sitename": "My Site"
@@ -79,9 +79,9 @@ $ docker run \
   --rm \
   -v "$(pwd)"/src:/workspace/src \
   -v "$(pwd)"/dist:/workspace/dist \
-  ghcr.io/lens0021/this-is-not-a-wiki
+  ghcr.io/chaotic-ground/wikven
 $ ls dist
-ext.ThisIsNotAWiki.styles.css
+ext.Wikven.styles.css
 index.html
 jquery.makeCollapsible.styles.css
 Main_Page.html

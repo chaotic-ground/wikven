@@ -1,10 +1,10 @@
-# This Is Not A Wiki
+# Wikven
 
-**This Is Not A Wiki** is a static web page generator that uses [MediaWiki], the software used on [Wikipedia].
+**Wikven** is a static web page generator that uses [MediaWiki], the software used on [Wikipedia].
 
-Read more on https://lens0021.github.io/this-is-not-a-wiki/.
+Read more on https://chaotic-ground.github.io/wikven/.
 
-[![Lint](https://github.com/lens0021/this-is-not-a-wiki/actions/workflows/lint.yaml/badge.svg)](https://github.com/lens0021/this-is-not-a-wiki/actions/workflows/lint.yaml)
+[![Lint](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml/badge.svg)](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml)
 
 [mediawiki]: https://www.mediawiki.org/
 [wikipedia]: https://www.wikipedia.org/

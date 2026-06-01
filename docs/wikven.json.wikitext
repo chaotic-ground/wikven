@@ -7,11 +7,11 @@ __TOC__
   "HistoryUrl": "https://github.com/yourname/some-repository/commits/branch-name/path/to/$1.wikitext",
   "Extensions": ["SyntaxHighlight_GeSHi", "ParserFunctions"],
   "wg": {
-    "Sitename": "This Is Not A Wiki"
+    "Sitename": "Wikven"
   }
 }
 </syntaxhighlight>
-{{DISPLAYTITLE:.nowiki.json}}
+{{DISPLAYTITLE:.wikven.json}}
 
 == <code>Skin</code> ==
 See [[Skins]].

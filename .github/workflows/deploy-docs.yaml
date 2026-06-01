@@ -13,7 +13,7 @@ jobs:
 
       - name: Build
         run: |
-          docker run --rm -v "$(pwd)"/docs:/workspace/src -v "$(pwd)"/dist:/workspace/dist ghcr.io/lens0021/this-is-not-a-wiki
+          docker run --rm -v "$(pwd)"/docs:/workspace/src -v "$(pwd)"/dist:/workspace/dist ghcr.io/chaotic-ground/wikven
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.8

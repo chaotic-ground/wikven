@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\ThisIsNotAWiki\Hooks;
+namespace MediaWiki\Extension\Wikven\Hooks;
 
 class Hider implements
 	\MediaWiki\Hook\ParserOutputPostCacheTransformHook,

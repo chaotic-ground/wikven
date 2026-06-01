@@ -1,9 +1,9 @@
-{{nowiki}} is a static web page generator that uses {{ml|MediaWiki}},
+{{wikven}} is a static web page generator that uses {{ml|MediaWiki}},
 the software used on [https://www.wikipedia.org/ Wikipedia].
 
 == Supported features ==
 
-With {{nowiki}}, you can use the following features of MediaWiki.
+With {{wikven}}, you can use the following features of MediaWiki.
 
 * {{ml|Wikitext}}
 * {{ml|Help:Templates|Templates}}
@@ -26,4 +26,4 @@ The follwing features are currently not supported but planned to be added in the
 * Support for thrid-party skins/extensions.
 
 {{prevnext|Getting Started}}
-{{DISPLAYTITLE:This Is Not A Wiki}}
+{{DISPLAYTITLE:Wikven}}

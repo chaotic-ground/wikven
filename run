@@ -12,15 +12,15 @@ php maintenance/install.php \
   MediaWiki \
   Admin
 
-echo 'require_once '\''ThisIsNotAWikiSettings.php'\'';' >> LocalSettings.php
+echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
 
 echo 'index' | php maintenance/edit.php 'MediaWiki:Mainpage'
-php extensions/ThisIsNotAWiki/maintenance/importWikitext.php
+php extensions/Wikven/maintenance/importWikitext.php
 
 php maintenance/runJobs.php
 php maintenance/purgeList.php
 php maintenance/rebuildFileCache.php --overwrite
 
-php extensions/ThisIsNotAWiki/maintenance/buildStyles.php
-php extensions/ThisIsNotAWiki/maintenance/rename.php
+php extensions/Wikven/maintenance/buildStyles.php
+php extensions/Wikven/maintenance/rename.php
 rm -rf /workspace/dist/history/

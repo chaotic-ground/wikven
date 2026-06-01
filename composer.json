@@ -1,5 +1,5 @@
 {
-  "name": "lens0021/this-is-not-a-wiki",
+  "name": "chaotic-ground/wikven",
   "type": "mediawiki-extension",
   "scripts": {
     "test": [

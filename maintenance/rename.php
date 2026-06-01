@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\ThisIsNotAWiki;
+namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
 use MediaWiki\MediaWikiServices;
@@ -18,8 +18,8 @@ class Rename extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgThisIsNotAWikiHtmlDirectory;
-		$path = $wgThisIsNotAWikiHtmlDirectory;
+		global $wgWikvenHtmlDirectory;
+		$path = $wgWikvenHtmlDirectory;
 		if ( str_ends_with( $path, '/' ) ) {
 			$path = rtrim( $path, '/' );
 		}

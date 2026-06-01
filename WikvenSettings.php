@@ -1,6 +1,6 @@
 <?php
 
-wfLoadExtension( 'ThisIsNotAWiki' );
+wfLoadExtension( 'Wikven' );
 
 // File caches
 $wgUseFileCache = true;
@@ -8,7 +8,7 @@ $wgFileCacheDepth = 0;
 $wgFileCacheDirectory = '/workspace/dist';
 
 // Contents
-$wgSitename = 'This Is Not A Wiki';
+$wgSitename = 'Wikven';
 $wgCapitalLinks = false;
 $wgRestrictDisplayTitle = false;
 $wgUseInstantCommons = true;
@@ -23,9 +23,9 @@ $wgVectorStickyHeader = [ 'logged_out' => true ];
 $wgVectorLanguageInHeader = $wgVectorStickyHeader;
 $wgVectorResponsive = true;
 
-// Read configurations from .nowiki.json
-if ( file_exists( '/workspace/src/.nowiki.json' ) ) {
-	$text = file_get_contents( '/workspace/src/.nowiki.json' );
+// Read configurations from .wikven.json
+if ( file_exists( '/workspace/src/.wikven.json' ) ) {
+	$text = file_get_contents( '/workspace/src/.wikven.json' );
 	$config = json_decode( $text, true );
 
 	// Skins
@@ -54,11 +54,11 @@ if ( file_exists( '/workspace/src/.nowiki.json' ) ) {
 
 	// Etc
 	if ( isset( $config['Url'] ) ) {
-		$wgThisIsNotAWikiFooterUrl = $config['Url'];
+		$wgWikvenFooterUrl = $config['Url'];
 		unset( $config['Url'] );
 	}
 	foreach ( $config as $key => $val ) {
-		$key = 'wgThisIsNotAWiki' . $key;
+		$key = 'wgWikven' . $key;
 		$GLOBALS[$key] = $val;
 	}
 }

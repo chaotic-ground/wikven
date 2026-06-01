@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\ThisIsNotAWiki\Hooks;
+namespace MediaWiki\Extension\Wikven\Hooks;
 
 use Html;
 use Skin;
@@ -12,19 +12,19 @@ class Adder implements
 
 	/** @inheritDoc */
 	public function onBeforePageDisplay( $out, $skin ): void {
-		$out->addModuleStyles( 'ext.ThisIsNotAWiki.styles' );
+		$out->addModuleStyles( 'ext.Wikven.styles' );
 	}
 
 	/** @inheritDoc */
 	public function onSkinAddFooterLinks( Skin $skin, string $key, array &$footerItems ) {
-		global $wgThisIsNotAWikiFooterUrl;
+		global $wgWikvenFooterUrl;
 
-		if ( $key !== 'places' || !$wgThisIsNotAWikiFooterUrl ) {
+		if ( $key !== 'places' || !$wgWikvenFooterUrl ) {
 			return;
 		}
 		$footerItems['github'] = Html::element(
 			'a',
-			[ 'href' => $wgThisIsNotAWikiFooterUrl ],
+			[ 'href' => $wgWikvenFooterUrl ],
 			// TODO: it could not be Github.
 			'View project on Github'
 		);

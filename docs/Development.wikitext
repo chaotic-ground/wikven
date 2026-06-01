@@ -1,5 +1,5 @@
 == Build ==
 
 <syntaxhighlight lang="shell">
-docker build --tag this-is-not-a-wiki .
+docker build --tag wikven .
 </syntaxhighlight>
