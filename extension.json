@@ -1,82 +1,82 @@
 {
-  "name": "Wikven",
-  "version": "0.1.0",
-  "author": "[https://meta.wikimedia.org/wiki/User:Lens0021 Lens0021]",
-  "url": "https://github.com/chaotic-ground/wikven",
-  "descriptionmsg": "wikven-desc",
-  "license-name": "GPL-3.0-or-later",
-  "type": "other",
-  "requires": {
-    "MediaWiki": ">= 1.37.0"
-  },
-  "AutoloadNamespaces": {
-    "MediaWiki\\Extension\\Wikven\\": "includes/"
-  },
-  "ResourceModules": {
-    "ext.Wikven.styles": {
-      "styles": ["ext.Wikven.styles.less"]
-    }
-  },
-  "ResourceModuleSkinStyles": {
-    "vector": {
-      "+skins.vector.styles": "skins.vector.styles.less"
-    }
-  },
-  "ResourceFileModulePaths": {
-    "localBasePath": "resources",
-    "remoteExtPath": "Wikven/resources"
-  },
-  "Hooks": {
-    "ParserOutputPostCacheTransform": "hider",
-    "PersonalUrls": "hider",
-    "SidebarBeforeOutput": "hider",
-    "SkinAddFooterLinks": "adder",
-    "BeforePageDisplay": "adder",
-    "GetLocalURL": "main",
-    "OutputPageAfterGetHeadLinksArray": "main"
-  },
-  "HookHandlers": {
-    "main": {
-      "class": "MediaWiki\\Extension\\Wikven\\Hooks\\Main",
-      "services": ["MainConfig"]
-    },
-    "adder": {
-      "class": "MediaWiki\\Extension\\Wikven\\Hooks\\Adder"
-    },
-    "hider": {
-      "class": "MediaWiki\\Extension\\Wikven\\Hooks\\Hider"
-    }
-  },
-  "config": {
-    "WikvenSourceDirectory": {
-      "value": "/workspace/src",
-      "description": "Path to the source directory where wikitext files are"
-    },
-    "WikvenHtmlDirectory": {
-      "value": "/workspace/dist",
-      "description": "Path to the dist directory of HTML files."
-    },
-    "WikvenStyleDirectory": {
-      "value": ".",
-      "description": "Relative Path to the dist directory of CSS files from $wgWikvenHtmlDirectory."
-    },
-    "WikvenFooterUrl": {
-      "value": "",
-      "description": "Url that is added as a footer item."
-    },
-    "WikvenEditUrl": {
-      "value": ""
-    },
-    "WikvenHistoryUrl": {
-      "value": ""
-    }
-  },
-  "MessagesDirs": {
-    "Wikven": ["i18n"]
-  },
-  "TestAutoloadNamespaces": {
-    "MediaWiki\\Extension\\Wikven\\Tests\\Integration\\": "tests/phpunit/integration/",
-    "MediaWiki\\Extension\\Wikven\\Tests\\Unit\\": "tests/phpunit/unit/"
-  },
-  "manifest_version": 2
+	"name": "Wikven",
+	"version": "0.1.0",
+	"author": "[https://meta.wikimedia.org/wiki/User:Lens0021 Lens0021]",
+	"url": "https://github.com/chaotic-ground/wikven",
+	"descriptionmsg": "wikven-desc",
+	"license-name": "GPL-3.0-or-later",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.37.0"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\Wikven\\": "includes/"
+	},
+	"ResourceModules": {
+		"ext.Wikven.styles": {
+			"styles": ["ext.Wikven.styles.less"]
+		}
+	},
+	"ResourceModuleSkinStyles": {
+		"vector": {
+			"+skins.vector.styles": "skins.vector.styles.less"
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "Wikven/resources"
+	},
+	"Hooks": {
+		"ParserOutputPostCacheTransform": "hider",
+		"PersonalUrls": "hider",
+		"SidebarBeforeOutput": "hider",
+		"SkinAddFooterLinks": "adder",
+		"BeforePageDisplay": "adder",
+		"GetLocalURL": "main",
+		"OutputPageAfterGetHeadLinksArray": "main"
+	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Main",
+			"services": ["MainConfig"]
+		},
+		"adder": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Adder"
+		},
+		"hider": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Hider"
+		}
+	},
+	"config": {
+		"WikvenSourceDirectory": {
+			"value": "/workspace/src",
+			"description": "Path to the source directory where wikitext files are"
+		},
+		"WikvenHtmlDirectory": {
+			"value": "/workspace/dist",
+			"description": "Path to the dist directory of HTML files."
+		},
+		"WikvenStyleDirectory": {
+			"value": ".",
+			"description": "Relative Path to the dist directory of CSS files from $wgWikvenHtmlDirectory."
+		},
+		"WikvenFooterUrl": {
+			"value": "",
+			"description": "Url that is added as a footer item."
+		},
+		"WikvenEditUrl": {
+			"value": ""
+		},
+		"WikvenHistoryUrl": {
+			"value": ""
+		}
+	},
+	"MessagesDirs": {
+		"Wikven": ["i18n"]
+	},
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Extension\\Wikven\\Tests\\Integration\\": "tests/phpunit/integration/",
+		"MediaWiki\\Extension\\Wikven\\Tests\\Unit\\": "tests/phpunit/unit/"
+	},
+	"manifest_version": 2
 }

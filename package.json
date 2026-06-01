@@ -1,15 +1,10 @@
 {
-  "private": true,
-  "scripts": {
-    "test": "yarn run lint",
-    "lint": "yarn run prettier --check .",
-    "fix": "yarn run prettier --write ."
-  },
-  "devDependencies": {
-    "@prettier/plugin-xml": "^1.2.0",
-    "prettier": "^2.5.1"
-  },
-  "prettier": {
-    "singleQuote": true
-  }
+	"private": true,
+	"scripts": {
+		"lint": "biome ci && rumdl check .",
+		"fix": "biome check --write . && rumdl check --fix ."
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.16"
+	}
 }
