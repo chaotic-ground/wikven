@@ -5,16 +5,16 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 use Config;
 use FauxRequest;
 use Html;
+use MediaWiki\ResourceLoader\Context;
+use MediaWiki\ResourceLoader\ResourceLoader;
 use OutputPage;
-use ResourceLoader;
-use ResourceLoaderContext;
 use Title;
 
 class Main implements
 	\MediaWiki\Hook\GetLocalURLHook,
 	\MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook
 {
-	/** @var ResourceLoaderContext */
+	/** @var Context */
 	private $rlClientContext;
 
 	/**
@@ -126,7 +126,7 @@ class Main implements
 
 	/**
 	 * @param OutputPage $output
-	 * @return ResourceLoaderContext
+	 * @return Context
 	 */
 	private function getRlClientContext( $output ) {
 		if ( !$this->rlClientContext ) {
@@ -146,7 +146,7 @@ class Main implements
 				false,
 				$output->getRequest()->getBool( 'handheld' )
 			);
-			$this->rlClientContext = new ResourceLoaderContext(
+			$this->rlClientContext = new Context(
 				$output->getResourceLoader(),
 				new FauxRequest( $query )
 			);

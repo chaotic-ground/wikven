@@ -3,7 +3,7 @@ set -euo pipefail; IFS=$'\n\t'
 
 cd /var/www/html
 
-php maintenance/install.php \
+php maintenance/run.php install \
   --server=http://localhost:4000 \
   --dbtype sqlite \
   --dbpath cache/ \
@@ -14,13 +14,13 @@ php maintenance/install.php \
 
 echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
 
-echo 'index' | php maintenance/edit.php 'MediaWiki:Mainpage'
-php extensions/Wikven/maintenance/importWikitext.php
+echo 'index' | php maintenance/run.php edit 'MediaWiki:Mainpage'
+php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/importWikitext.php
 
-php maintenance/runJobs.php
-php maintenance/purgeList.php
-php maintenance/rebuildFileCache.php --overwrite
+php maintenance/run.php runJobs
+php maintenance/run.php purgeList
+php maintenance/run.php rebuildFileCache --overwrite
 
-php extensions/Wikven/maintenance/buildStyles.php
-php extensions/Wikven/maintenance/rename.php
+php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/buildStyles.php
+php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/rename.php
 rm -rf /workspace/dist/history/

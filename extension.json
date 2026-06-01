@@ -28,7 +28,7 @@
 	},
 	"Hooks": {
 		"ParserOutputPostCacheTransform": "hider",
-		"PersonalUrls": "hider",
+		"SkinTemplateNavigation::Universal": "hider",
 		"SidebarBeforeOutput": "hider",
 		"SkinAddFooterLinks": "adder",
 		"BeforePageDisplay": "adder",

@@ -5,8 +5,8 @@ namespace MediaWiki\Extension\Wikven;
 use FauxRequest;
 use Maintenance;
 use MediaWiki\MediaWikiServices;
-use ResourceLoader;
-use ResourceLoaderContext;
+use MediaWiki\ResourceLoader\Context;
+use MediaWiki\ResourceLoader\ResourceLoader;
 
 $IP = strval( getenv( 'MW_INSTALL_PATH' ) ) !== ''
 	? getenv( 'MW_INSTALL_PATH' )
@@ -49,7 +49,7 @@ class BuildStyles extends Maintenance {
 				'styles',
 			);
 
-			$context = new ResourceLoaderContext(
+			$context = new Context(
 				$resourceLoader,
 				new FauxRequest( $query )
 			);
@@ -58,8 +58,8 @@ class BuildStyles extends Maintenance {
 			$resourceLoader->respond( $context );
 			$text = ob_get_clean();
 
-			if ( !file_put_contents( $filename, $text, LOCK_EX ) ) {
-				wfDebug( __METHOD__ . "() failed saving " . $filename() );
+			if ( file_put_contents( $filename, $text, LOCK_EX ) === false ) {
+				wfDebug( __METHOD__ . '() failed saving ' . $filename );
 				continue;
 			}
 		}

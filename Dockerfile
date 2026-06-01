@@ -1,4 +1,4 @@
-FROM mediawiki:1.37
+FROM mediawiki:1.43
 
 COPY ./ /var/www/html/extensions/Wikven
 COPY WikvenSettings.php /var/www/html/
