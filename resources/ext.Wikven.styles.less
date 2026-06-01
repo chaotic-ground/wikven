@@ -1,11 +1,28 @@
+// Footer: the project (about/disclaimer/privacy) pages do not exist in the
+// static export, so hide those links. The "disclaimers" id is plural.
 #footer-places-privacy,
 #footer-places-about,
 #footer-places-disclaimer,
+#footer-places-disclaimers,
 #p-search,
 #footer-info-credits,
 #footer-info-lastmod,
 // There is not a option to disable some or all talk namespaces (T35298)
 #ca-talk {
+  display: none;
+}
+
+// Wiki chrome that is meaningless on a static, read-only, single-language site:
+// the personal/preferences menu, the language switcher, the watch action, and
+// the placeholder "change your logo" header logo (no logo is configured).
+.vector-user-links,
+#p-vector-user-menu-preferences,
+#p-lang-btn,
+.mw-portlet-lang,
+.mw-watchlink,
+#ca-watch,
+#ca-unwatch,
+.mw-logo {
   display: none;
 }
 
