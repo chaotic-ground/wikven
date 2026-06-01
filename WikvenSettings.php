@@ -13,6 +13,15 @@ $wgCapitalLinks = false;
 $wgRestrictDisplayTitle = false;
 $wgUseInstantCommons = true;
 
+// Ship a small built-in favicon so browsers do not 404 on /favicon.ico.
+// Overridable from .wikven.json via "wg": { "Favicon": "..." }.
+$wgFavicon = 'data:image/svg+xml,' . rawurlencode(
+	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
+	. '<rect width="32" height="32" rx="6" fill="#3366cc"/>'
+	. '<text x="16" y="23" font-family="sans-serif" font-size="20" font-weight="700"'
+	. ' fill="#ffffff" text-anchor="middle">W</text></svg>'
+);
+
 // Etc
 $wgJobRunRate = 0;
 unset( $wgFooterIcons['poweredby'] );
