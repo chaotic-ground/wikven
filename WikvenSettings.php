@@ -17,6 +17,10 @@ $wgUseInstantCommons = true;
 $wgJobRunRate = 0;
 unset( $wgFooterIcons['poweredby'] );
 
+// The static export ships its own startup + module bundle, so the
+// localStorage module store would only cache stale code across rebuilds.
+$wgResourceLoaderStorageEnabled = false;
+
 // Skin
 $wgVectorDefaultSkinVersion = '2';
 $wgVectorStickyHeader = [ 'logged_out' => true ];

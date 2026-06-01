@@ -60,6 +60,10 @@
 			"value": ".",
 			"description": "Relative Path to the dist directory of CSS files from $wgWikvenHtmlDirectory."
 		},
+		"WikvenScriptDirectory": {
+			"value": ".",
+			"description": "Relative path to the dist directory of JS files from $wgWikvenHtmlDirectory."
+		},
 		"WikvenFooterUrl": {
 			"value": "",
 			"description": "Url that is added as a footer item."

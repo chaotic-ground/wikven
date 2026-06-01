@@ -22,5 +22,7 @@ php maintenance/run.php purgeList
 php maintenance/run.php rebuildFileCache --overwrite
 
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/buildStyles.php
+php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/buildScripts.php
+php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/rewriteScripts.php
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/rename.php
 rm -rf /workspace/dist/history/
