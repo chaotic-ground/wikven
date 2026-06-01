@@ -93,8 +93,91 @@ class RewriteScripts extends Maintenance {
 				$html
 			);
 
+			// Search cannot work on a static host (it needs the API), and the JS
+			// search widget lazily fetches codex/vue from load.php. Drop the search
+			// boxes, and the skin-vector-search-vue body class that makes the sticky
+			// header load the search module, so nothing mounts and nothing is fetched.
+			$html = $this->removeElements( $html, 'vector-search-box-vue' );
+			$html = str_replace( ' skin-vector-search-vue', '', $html );
+
+			// The appearance menu (dark mode / width) pulls in codex+vue from
+			// load.php for its widgets, which 404s and cannot work statically.
+			// Remove it so it stops fetching.
+			$html = $this->removeElements( $html, 'id="vector-appearance"' );
+
 			file_put_contents( $file, $html, LOCK_EX );
 		}
+	}
+
+	/**
+	 * Remove every balanced <div ...$marker...>...</div> from the HTML, where
+	 * $marker is a substring of the opening tag. Handles nested <div>s.
+	 *
+	 * @param string $html
+	 * @param string $marker
+	 * @return string
+	 */
+	private function removeElements( $html, $marker ) {
+		while ( true ) {
+			$start = $this->findOpeningDiv( $html, $marker );
+			if ( $start === -1 ) {
+				return $html;
+			}
+			$end = $this->matchingDivEnd( $html, $start );
+			if ( $end === -1 ) {
+				return $html;
+			}
+			$html = substr( $html, 0, $start ) . substr( $html, $end );
+		}
+	}
+
+	/**
+	 * @param string $html
+	 * @param string $marker
+	 * @return int Byte offset of the opening <div, or -1.
+	 */
+	private function findOpeningDiv( $html, $marker ) {
+		$offset = 0;
+		while ( ( $pos = strpos( $html, '<div', $offset ) ) !== false ) {
+			$tagEnd = strpos( $html, '>', $pos );
+			if ( $tagEnd === false ) {
+				return -1;
+			}
+			if ( strpos( substr( $html, $pos, $tagEnd - $pos ), $marker ) !== false ) {
+				return $pos;
+			}
+			$offset = $tagEnd + 1;
+		}
+		return -1;
+	}
+
+	/**
+	 * @param string $html
+	 * @param int $start Offset of an opening <div.
+	 * @return int Byte offset just past the matching </div>, or -1.
+	 */
+	private function matchingDivEnd( $html, $start ) {
+		$depth = 0;
+		$len = strlen( $html );
+		$i = $start;
+		while ( $i < $len ) {
+			$open = strpos( $html, '<div', $i );
+			$close = strpos( $html, '</div>', $i );
+			if ( $close === false ) {
+				return -1;
+			}
+			if ( $open !== false && $open < $close ) {
+				$depth++;
+				$i = $open + 4;
+			} else {
+				$depth--;
+				$i = $close + 6;
+				if ( $depth === 0 ) {
+					return $i;
+				}
+			}
+		}
+		return -1;
 	}
 }
 
