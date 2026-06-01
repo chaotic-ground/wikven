@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: biomejs/setup-biome@29711cbb52afee00eb13aeb30636592f9edc0088 # v2.7.0
+      - uses: biomejs/setup-biome@4c91541eaada48f67d7dbd7833600ce162b68f51 # v2.7.1
       - run: biome ci
 
   rumdl:
@@ -20,4 +20,4 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: rvben/rumdl@2c8cb017490f9bc5dc969f3b9de1da81385985de # v0.0.203
+      - uses: rvben/rumdl@d9e57d93efd2c85a2b4efa1f597652fe017e464a # v0.2.0
