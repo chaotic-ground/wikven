@@ -2,21 +2,50 @@ name: Deploy docs
 
 on:
   push:
+    branches: [main]
     paths:
       - 'docs/**'
+      - 'Dockerfile'
+      - 'run'
+      - 'WikvenSettings.php'
+      - 'extension.json'
+      - 'includes/**'
+      - 'maintenance/**'
+      - 'resources/**'
+      - 'i18n/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment, and let a newer run supersede an in-flight one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Build
         run: |
-          docker run --rm -v "$(pwd)"/docs:/workspace/src -v "$(pwd)"/dist:/workspace/dist ghcr.io/chaotic-ground/wikven
+          docker build -t wikven .
+          docker run --rm -v "$(pwd)/docs:/workspace/src" -v "$(pwd)/dist:/workspace/dist" wikven
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.8
+      - uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: dist
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
