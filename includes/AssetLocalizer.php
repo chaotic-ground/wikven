@@ -7,12 +7,16 @@ use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 
 /**
- * Rewrites ResourceLoader image-endpoint references (url(/load.php?...image=...))
- * inside dumped CSS and JS bundles to locally dumped image files, so the static
- * output never calls load.php for an icon.
+ * Rewrites image references inside dumped CSS and JS bundles to locally dumped
+ * image files, so the static output never calls load.php or points at a path
+ * that only exists inside a live MediaWiki install. Two reference forms are
+ * handled:
  *
- * Handles both plain CSS (url(/load.php?a&image=b)) and the JSON-escaped form
- * embedded in combined-mode JS bundles (url(\/load.php?a&image=b)).
+ *   - the ResourceLoader image endpoint: url(/load.php?...image=...)
+ *   - direct skin/resource asset paths:  url(/skins/...x.svg), url(/resources/...)
+ *
+ * Both plain CSS and the JSON-escaped form embedded in combined-mode JS bundles
+ * (url(\/load.php?a&image=b)) are handled.
  */
 class AssetLocalizer {
 
@@ -24,13 +28,16 @@ class AssetLocalizer {
 	 * @param string $skin
 	 */
 	public static function localizeImages( ResourceLoader $rl, $dir, array $files, $lang, $skin ) {
+		$mwRoot = rtrim( (string)( $GLOBALS['IP'] ?? '' ), '/' );
 		$map = [];
 		foreach ( $files as $file ) {
 			$text = file_get_contents( $file );
 			if ( $text === false ) {
 				continue;
 			}
-			$new = preg_replace_callback(
+
+			// (1) ResourceLoader image endpoint.
+			$text = preg_replace_callback(
 				'~url\(\s*[\'"]?([^)\'"]*load\.php\?[^)\'"]*image=[^)\'"]*?)[\'"]?\s*\)~',
 				static function ( $m ) use ( &$map, $rl, $dir, $lang, $skin ) {
 					// Decode the JSON-string escapes used inside JS bundles.
@@ -40,15 +47,29 @@ class AssetLocalizer {
 						$m[1]
 					);
 					if ( !array_key_exists( $url, $map ) ) {
-						$map[$url] = self::dumpImage( $rl, $url, $dir, $lang, $skin );
+						$map[$url] = self::dumpRlImage( $rl, $url, $dir, $lang, $skin );
 					}
 					return $map[$url] !== null ? 'url(' . $map[$url] . ')' : $m[0];
 				},
 				$text
 			);
-			if ( $new !== null && $new !== $text ) {
-				file_put_contents( $file, $new, LOCK_EX );
+
+			// (2) Direct skin/resource/extension asset paths.
+			if ( $mwRoot !== '' ) {
+				$text = preg_replace_callback(
+					'~url\(\s*[\'"]?(\\\\?/(?:skins|resources|extensions)/[^)\'"?]+\.(?:svg|png|gif|jpe?g))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
+					static function ( $m ) use ( &$map, $mwRoot, $dir ) {
+						$path = str_replace( '\\/', '/', $m[1] );
+						if ( !array_key_exists( $path, $map ) ) {
+							$map[$path] = self::copyAsset( $mwRoot, $path, $dir );
+						}
+						return $map[$path] !== null ? 'url(' . $map[$path] . ')' : $m[0];
+					},
+					$text
+				);
 			}
+
+			file_put_contents( $file, $text, LOCK_EX );
 		}
 	}
 
@@ -62,7 +83,7 @@ class AssetLocalizer {
 	 * @param string $skin
 	 * @return string|null Relative url() target (./img-*.svg), or null if not an image.
 	 */
-	private static function dumpImage( ResourceLoader $rl, $url, $dir, $lang, $skin ) {
+	private static function dumpRlImage( ResourceLoader $rl, $url, $dir, $lang, $skin ) {
 		$qs = parse_url( $url, PHP_URL_QUERY );
 		if ( !$qs ) {
 			return null;
@@ -96,6 +117,30 @@ class AssetLocalizer {
 		// Hash without the cache-busting version so filenames are stable across rebuilds.
 		$key = preg_replace( '/[&?]version=[^&]*/', '', $url );
 		$name = 'img-' . substr( md5( $key ), 0, 12 ) . ( $isSvg ? '.svg' : '.png' );
+		file_put_contents( "$dir/$name", $bytes, LOCK_EX );
+		return "./$name";
+	}
+
+	/**
+	 * Copy a direct asset path (e.g. /skins/Vector/.../foo.svg) out of the
+	 * MediaWiki install into the output directory.
+	 *
+	 * @param string $mwRoot
+	 * @param string $path Absolute web path (with leading slash, no query).
+	 * @param string $dir
+	 * @return string|null Relative url() target, or null if the file is missing.
+	 */
+	private static function copyAsset( $mwRoot, $path, $dir ) {
+		$src = $mwRoot . $path;
+		if ( !is_readable( $src ) ) {
+			return null;
+		}
+		$bytes = file_get_contents( $src );
+		if ( $bytes === false || $bytes === '' ) {
+			return null;
+		}
+		$ext = pathinfo( $path, PATHINFO_EXTENSION ) ?: 'svg';
+		$name = 'img-' . substr( md5( $path ), 0, 12 ) . ".$ext";
 		file_put_contents( "$dir/$name", $bytes, LOCK_EX );
 		return "./$name";
 	}

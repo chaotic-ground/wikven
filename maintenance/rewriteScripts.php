@@ -85,6 +85,14 @@ class RewriteScripts extends Maintenance {
 				$html
 			);
 
+			// No logo is configured, so the placeholder "change your logo" asset
+			// would 404. Neutralize its reference (the logo itself is CSS-hidden).
+			$html = preg_replace(
+				'#(["\'(])[^"\')]*change-your-logo[^"\')]*\.svg#',
+				'$1data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22/%3E',
+				$html
+			);
+
 			file_put_contents( $file, $html, LOCK_EX );
 		}
 	}
