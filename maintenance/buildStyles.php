@@ -63,6 +63,18 @@ class BuildStyles extends Maintenance {
 				continue;
 			}
 		}
+
+		// The dumped CSS still points icon background-images at the load.php image
+		// endpoint, which 404s on a static host. Dump each referenced image to a
+		// local file and rewrite the url() to it.
+		$cssDir = "$wgWikvenHtmlDirectory/$wgWikvenStyleDirectory";
+		AssetLocalizer::localizeImages(
+			$resourceLoader,
+			$cssDir,
+			glob( "$cssDir/*.css" ),
+			$wgLanguageCode,
+			$wgDefaultSkin
+		);
 	}
 }
 
