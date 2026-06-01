@@ -14,6 +14,12 @@
 		"mediawiki/mediawiki-phan-config": "0.11.1",
 		"mediawiki/minus-x": "1.1.1",
 		"php-parallel-lint/php-console-highlighter": "0.5.0",
-		"php-parallel-lint/php-parallel-lint": "1.3.1"
+		"php-parallel-lint/php-parallel-lint": "1.3.1",
+		"phpro/grumphp": "2.21.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"phpro/grumphp": true
+		}
 	}
 }

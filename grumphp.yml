@@ -1,0 +1,9 @@
+grumphp:
+    tasks:
+        phplint:
+            exclude:
+                - vendor
+                - node_modules
+        phpcs:
+            standard:
+                - .phpcs.xml
