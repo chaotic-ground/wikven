@@ -19,7 +19,6 @@ use MediaWiki\ResourceLoader\ResourceLoader;
  * (url(\/load.php?a&image=b)) are handled.
  */
 class AssetLocalizer {
-
 	/**
 	 * @param ResourceLoader $rl
 	 * @param string $dir Directory the files live in and where images are dumped.
@@ -27,27 +26,27 @@ class AssetLocalizer {
 	 * @param string $lang
 	 * @param string $skin
 	 */
-	public static function localizeImages( ResourceLoader $rl, $dir, array $files, $lang, $skin ) {
-		$mwRoot = rtrim( (string)( $GLOBALS['IP'] ?? '' ), '/' );
+	public static function localizeImages(ResourceLoader $rl, $dir, array $files, $lang, $skin) {
+		$mwRoot = rtrim((string)( $GLOBALS['IP'] ?? '' ), '/');
 		$map = [];
-		foreach ( $files as $file ) {
-			$text = file_get_contents( $file );
-			if ( $text === false ) {
+		foreach ($files as $file) {
+			$text = file_get_contents($file);
+			if ($text === false) {
 				continue;
 			}
 
 			// (1) ResourceLoader image endpoint.
 			$text = preg_replace_callback(
 				'~url\(\s*[\'"]?([^)\'"]*load\.php\?[^)\'"]*image=[^)\'"]*?)[\'"]?\s*\)~',
-				static function ( $m ) use ( &$map, $rl, $dir, $lang, $skin ) {
+				static function ($m) use (&$map, $rl, $dir, $lang, $skin) {
 					// Decode the JSON-string escapes used inside JS bundles.
 					$url = str_replace(
-						[ '\\/', '\\u0026', '\\u003d', '\\u003D' ],
-						[ '/', '&', '=', '=' ],
+						['\\/', '\\u0026', '\\u003d', '\\u003D'],
+						['/', '&', '=', '='],
 						$m[1]
 					);
-					if ( !array_key_exists( $url, $map ) ) {
-						$map[$url] = self::dumpRlImage( $rl, $url, $dir, $lang, $skin );
+					if (!array_key_exists($url, $map)) {
+						$map[$url] = self::dumpRlImage($rl, $url, $dir, $lang, $skin);
 					}
 					return $map[$url] !== null ? 'url(' . $map[$url] . ')' : $m[0];
 				},
@@ -55,14 +54,14 @@ class AssetLocalizer {
 			);
 
 			// (2) Direct skin/resource/extension asset paths.
-			if ( $mwRoot !== '' ) {
+			if ($mwRoot !== '') {
 				$text = preg_replace_callback(
 					'~url\(\s*[\'"]?(\\\\?/(?:skins|resources|extensions)/[^)\'"?]+'
-						. '\.(?:svg|png|gif|jpe?g))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
-					static function ( $m ) use ( &$map, $mwRoot, $dir ) {
-						$path = str_replace( '\\/', '/', $m[1] );
-						if ( !array_key_exists( $path, $map ) ) {
-							$map[$path] = self::copyAsset( $mwRoot, $path, $dir );
+					. '\.(?:svg|png|gif|jpe?g))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
+					static function ($m) use (&$map, $mwRoot, $dir) {
+						$path = str_replace('\\/', '/', $m[1]);
+						if (!array_key_exists($path, $map)) {
+							$map[$path] = self::copyAsset($mwRoot, $path, $dir);
 						}
 						return $map[$path] !== null ? 'url(' . $map[$path] . ')' : $m[0];
 					},
@@ -70,7 +69,7 @@ class AssetLocalizer {
 				);
 			}
 
-			file_put_contents( $file, $text, LOCK_EX );
+			file_put_contents($file, $text, LOCK_EX);
 		}
 	}
 
@@ -84,13 +83,13 @@ class AssetLocalizer {
 	 * @param string $skin
 	 * @return string|null Relative url() target (./img-*.svg), or null if not an image.
 	 */
-	private static function dumpRlImage( ResourceLoader $rl, $url, $dir, $lang, $skin ) {
-		$qs = parse_url( $url, PHP_URL_QUERY );
-		if ( !$qs ) {
+	private static function dumpRlImage(ResourceLoader $rl, $url, $dir, $lang, $skin) {
+		$qs = parse_url($url, PHP_URL_QUERY);
+		if (!$qs) {
 			return null;
 		}
-		parse_str( $qs, $p );
-		if ( empty( $p['modules'] ) || !isset( $p['image'] ) ) {
+		parse_str($qs, $p);
+		if (empty($p['modules']) || !isset($p['image'])) {
 			return null;
 		}
 
@@ -99,26 +98,26 @@ class AssetLocalizer {
 			'image' => $p['image'],
 			'format' => $p['format'] ?? 'original',
 			'lang' => $lang,
-			'skin' => $skin,
+			'skin' => $skin
 		];
-		if ( isset( $p['variant'] ) ) {
+		if (isset($p['variant'])) {
 			$query['variant'] = $p['variant'];
 		}
 
 		ob_start();
-		$rl->respond( new Context( $rl, new FauxRequest( $query ) ) );
+		$rl->respond(new Context($rl, new FauxRequest($query)));
 		$bytes = ob_get_clean();
 
-		$isSvg = $bytes !== false && strpos( $bytes, '<svg' ) !== false;
-		$isPng = $bytes !== false && strncmp( $bytes, "\x89PNG\r\n\x1a\n", 8 ) === 0;
-		if ( !$isSvg && !$isPng ) {
+		$isSvg = $bytes !== false && strpos($bytes, '<svg') !== false;
+		$isPng = $bytes !== false && strncmp($bytes, "\x89PNG\r\n\x1a\n", 8) === 0;
+		if (!$isSvg && !$isPng) {
 			return null;
 		}
 
 		// Hash without the cache-busting version so filenames are stable across rebuilds.
-		$key = preg_replace( '/[&?]version=[^&]*/', '', $url );
-		$name = 'img-' . substr( md5( $key ), 0, 12 ) . ( $isSvg ? '.svg' : '.png' );
-		file_put_contents( "$dir/$name", $bytes, LOCK_EX );
+		$key = preg_replace('/[&?]version=[^&]*/', '', $url);
+		$name = 'img-' . substr(md5($key), 0, 12) . ( $isSvg ? '.svg' : '.png' );
+		file_put_contents("$dir/$name", $bytes, LOCK_EX);
 		return "./$name";
 	}
 
@@ -131,18 +130,18 @@ class AssetLocalizer {
 	 * @param string $dir
 	 * @return string|null Relative url() target, or null if the file is missing.
 	 */
-	private static function copyAsset( $mwRoot, $path, $dir ) {
+	private static function copyAsset($mwRoot, $path, $dir) {
 		$src = $mwRoot . $path;
-		if ( !is_readable( $src ) ) {
+		if (!is_readable($src)) {
 			return null;
 		}
-		$bytes = file_get_contents( $src );
-		if ( $bytes === false || $bytes === '' ) {
+		$bytes = file_get_contents($src);
+		if ($bytes === false || $bytes === '') {
 			return null;
 		}
-		$ext = pathinfo( $path, PATHINFO_EXTENSION ) ?: 'svg';
-		$name = 'img-' . substr( md5( $path ), 0, 12 ) . ".$ext";
-		file_put_contents( "$dir/$name", $bytes, LOCK_EX );
+		$ext = pathinfo($path, PATHINFO_EXTENSION) ?: 'svg';
+		$name = 'img-' . substr(md5($path), 0, 12) . ".$ext";
+		file_put_contents("$dir/$name", $bytes, LOCK_EX);
 		return "./$name";
 	}
 }

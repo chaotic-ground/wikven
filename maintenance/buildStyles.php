@@ -8,35 +8,35 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 
-$IP = strval( getenv( 'MW_INSTALL_PATH' ) ) !== ''
-	? getenv( 'MW_INSTALL_PATH' )
-	: realpath( __DIR__ . '/../../../' );
+$IP = strval(getenv('MW_INSTALL_PATH')) !== ''
+	? getenv('MW_INSTALL_PATH')
+	: realpath(__DIR__ . '/../../../');
 
 require_once "$IP/maintenance/Maintenance.php";
 
 class BuildStyles extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->addDescription( 'Build styles based on the CSS files on $wgWikvenStyleDirectory.' );
+		$this->addDescription('Build styles based on the CSS files on $wgWikvenStyleDirectory.');
 	}
 
 	public function execute() {
 		global $wgWikvenHtmlDirectory, $wgWikvenStyleDirectory, $wgLanguageCode, $wgDefaultSkin;
 
-		if ( str_ends_with( $wgWikvenHtmlDirectory, '/' ) ) {
-			$wgWikvenHtmlDirectory = rtrim( $wgWikvenHtmlDirectory, '/' );
+		if (str_ends_with($wgWikvenHtmlDirectory, '/')) {
+			$wgWikvenHtmlDirectory = rtrim($wgWikvenHtmlDirectory, '/');
 		}
-		if ( str_ends_with( $wgWikvenStyleDirectory, '/' ) ) {
-			$wgWikvenStyleDirectory = rtrim( $wgWikvenStyleDirectory, '/' );
+		if (str_ends_with($wgWikvenStyleDirectory, '/')) {
+			$wgWikvenStyleDirectory = rtrim($wgWikvenStyleDirectory, '/');
 		}
 
 		MediaWikiServices::getInstance()->getDBLoadBalancerFactory()->disableChronologyProtection();
 
 		$resourceLoader = MediaWikiServices::getInstance()->getResourceLoader();
 
-		foreach ( glob( "$wgWikvenHtmlDirectory/$wgWikvenStyleDirectory/*.css" ) as $filename ) {
+		foreach (glob("$wgWikvenHtmlDirectory/$wgWikvenStyleDirectory/*.css") as $filename) {
 			$query = ResourceLoader::makeLoaderQuery(
-				[ basename( $filename, '.css' ) ],
+				[basename($filename, '.css')],
 				$wgLanguageCode,
 				$wgDefaultSkin,
 				// user
@@ -46,20 +46,20 @@ class BuildStyles extends Maintenance {
 				// inDebugMode
 				null,
 				// only
-				'styles',
+				'styles'
 			);
 
 			$context = new Context(
 				$resourceLoader,
-				new FauxRequest( $query )
+				new FauxRequest($query)
 			);
 
 			ob_start();
-			$resourceLoader->respond( $context );
+			$resourceLoader->respond($context);
 			$text = ob_get_clean();
 
-			if ( file_put_contents( $filename, $text, LOCK_EX ) === false ) {
-				wfDebug( __METHOD__ . '() failed saving ' . $filename );
+			if (file_put_contents($filename, $text, LOCK_EX) === false) {
+				wfDebug(__METHOD__ . '() failed saving ' . $filename);
 				continue;
 			}
 		}
@@ -71,7 +71,7 @@ class BuildStyles extends Maintenance {
 		AssetLocalizer::localizeImages(
 			$resourceLoader,
 			$cssDir,
-			glob( "$cssDir/*.css" ),
+			glob("$cssDir/*.css"),
 			$wgLanguageCode,
 			$wgDefaultSkin
 		);
