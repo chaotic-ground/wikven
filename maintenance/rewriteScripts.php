@@ -137,8 +137,8 @@ class RewriteScripts extends Maintenance {
 	 * @return int Byte offset of the opening <div, or -1.
 	 */
 	private function findOpeningDiv( $html, $marker ) {
-		$offset = 0;
-		while ( ( $pos = strpos( $html, '<div', $offset ) ) !== false ) {
+		$pos = strpos( $html, '<div' );
+		while ( $pos !== false ) {
 			$tagEnd = strpos( $html, '>', $pos );
 			if ( $tagEnd === false ) {
 				return -1;
@@ -146,7 +146,7 @@ class RewriteScripts extends Maintenance {
 			if ( strpos( substr( $html, $pos, $tagEnd - $pos ), $marker ) !== false ) {
 				return $pos;
 			}
-			$offset = $tagEnd + 1;
+			$pos = strpos( $html, '<div', $tagEnd + 1 );
 		}
 		return -1;
 	}
