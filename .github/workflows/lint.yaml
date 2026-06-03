@@ -11,10 +11,8 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+      # The version is autodetected from the $schema URL in biome.json.
       - uses: biomejs/setup-biome@4c91541eaada48f67d7dbd7833600ce162b68f51 # v2.7.1
-        with:
-          # No package.json to autodetect the version from.
-          version: "2.4.16"
       - run: biome ci
 
   rumdl:
