@@ -1,0 +1,53 @@
+# A mago configuration that approximates the MediaWiki coding style
+# (mediawiki/mediawiki-codesniffer) as closely as mago allows.
+# Derived from https://github.com/chaotic-ground/mago-mediawiki-style,
+# which tracks how far this configuration is from a zero diff against
+# MediaWiki core and lists the differences that cannot be configured away.
+
+# The mediawiki:1.43 base image ships PHP 8.1.
+php-version = "8.1"
+
+[source]
+paths = ["includes", "maintenance", "WikvenSettings.php"]
+
+[formatter]
+print-width = 120
+tab-width = 4
+use-tabs = true
+single-quote = true
+
+# MediaWiki does not require trailing commas.
+trailing-comma = false
+
+# MediaWiki places every opening brace on the same line.
+control-brace-style = "same-line"
+closure-brace-style = "same-line"
+function-brace-style = "same-line"
+method-brace-style = "same-line"
+classlike-brace-style = "same-line"
+
+# MediaWiki: `(int)$var`, not `(int) $var`.
+space-after-cast-unary-prefix-operators = false
+
+# MediaWiki puts spaces inside grouping parentheses: `( $a + $b )`.
+space-within-grouping-parenthesis = true
+
+# MediaWiki files start with `<?php` immediately followed by code or a
+# file-level doc comment.
+empty-line-after-opening-tag = false
+
+# MediaWiki does not align array tables or assignments.
+array-table-style-alignment = false
+
+# Do not reorder or regroup use statements.
+sort-uses = false
+separate-use-types = false
+
+# Preserve author line-breaking decisions to keep the diff minimal.
+preserve-breaking-member-access-chain = true
+preserve-breaking-member-access-chain-first-method-on-same-line = true
+preserve-breaking-argument-list = true
+preserve-breaking-parameter-list = true
+preserve-breaking-attribute-list = true
+preserve-breaking-conditional-expression = true
+preserve-breaking-condition-expression = true

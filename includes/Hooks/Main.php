@@ -10,10 +10,7 @@ use MediaWiki\ResourceLoader\ResourceLoader;
 use OutputPage;
 use Title;
 
-class Main implements
-	\MediaWiki\Hook\GetLocalURLHook,
-	\MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook
-{
+class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook {
 	/** @var Context */
 	private $rlClientContext;
 
@@ -30,32 +27,31 @@ class Main implements
 	/**
 	 * @param Config $config
 	 */
-	public function __construct( Config $config ) {
-		$this->htmlDirectory = $config->get( 'WikvenHtmlDirectory' );
-		$this->styleDirectory = $config->get( 'WikvenStyleDirectory' );
+	public function __construct(Config $config) {
+		$this->htmlDirectory = $config->get('WikvenHtmlDirectory');
+		$this->styleDirectory = $config->get('WikvenStyleDirectory');
 	}
 
 	/** @inheritDoc */
-	public function onGetLocalURL( $title, &$url, $query ) {
-		if ( MW_ENTRY_POINT != 'cli' ) {
+	public function onGetLocalURL($title, &$url, $query) {
+		if (MW_ENTRY_POINT != 'cli') {
 			return;
 		}
-		if ( $title->getInterwiki() ) {
+		if ($title->getInterwiki()) {
 			return;
 		}
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
-		$name = Title::makeName( $title->getNamespace(), $title->getDBkey() );
-		if ( preg_match( '/action=([^&]+)/', $query, $matches ) ) {
+		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
+		if (preg_match('/action=([^&]+)/', $query, $matches)) {
 			$action = $matches[1];
-			if ( $action === 'edit' && $wgWikvenEditUrl ) {
-				$name = str_replace( '_', '%20', $name );
-				$url = str_replace( '$1', $name, $wgWikvenEditUrl );
-			} elseif ( $action === 'history' && $wgWikvenHistoryUrl ) {
-				$name = str_replace( '_', '%20', $name );
-				$url = str_replace( '$1', $name, $wgWikvenHistoryUrl );
+			if ($action === 'edit' && $wgWikvenEditUrl) {
+				$name = str_replace('_', '%20', $name);
+				$url = str_replace('$1', $name, $wgWikvenEditUrl);
+			} elseif ($action === 'history' && $wgWikvenHistoryUrl) {
+				$name = str_replace('_', '%20', $name);
+				$url = str_replace('$1', $name, $wgWikvenHistoryUrl);
 			} else {
 				$url = "./$name.html";
-
 			}
 		} else {
 			$url = "./$name.html";
@@ -63,41 +59,39 @@ class Main implements
 	}
 
 	/** @inheritDoc */
-	public function onOutputPageAfterGetHeadLinksArray( &$tags, $out ) {
+	public function onOutputPageAfterGetHeadLinksArray(&$tags, $out) {
 		// Remove unreachable links, for example, api calls.
-		foreach ( [
+		foreach ([
 			'alternative-edit',
 			'opensearch',
 			'rsd',
-			'universal-edit-button',
-			] as $key ) {
-			unset( $tags[$key] );
+			'universal-edit-button'
+		] as $key) {
+			unset($tags[$key]);
 		}
 
 		// Links static stylesheet files
-		$moduleStyles = $out->getModuleStyles( true );
+		$moduleStyles = $out->getModuleStyles(true);
 		$rl = $out->getResourceLoader();
-		$context = $this->getRlClientContext( $out );
-		$moduleStyles = array_filter( $moduleStyles,
-			static function ( $name ) use ( $rl ) {
-				$module = $rl->getModule( $name );
-				if ( !$module ) {
-					return false;
-				}
-				if ( in_array( $module->getGroup(), [ 'site', 'noscript', 'private', 'user' ] ) ) {
-					return false;
-				}
-				return true;
+		$context = $this->getRlClientContext($out);
+		$moduleStyles = array_filter($moduleStyles, static function ($name) use ($rl) {
+			$module = $rl->getModule($name);
+			if (!$module) {
+				return false;
 			}
-		);
-		foreach ( $moduleStyles as $name ) {
-			$module = $out->getResourceLoader()->getModule( $name );
+			if (in_array($module->getGroup(), ['site', 'noscript', 'private', 'user'])) {
+				return false;
+			}
+			return true;
+		});
+		foreach ($moduleStyles as $name) {
+			$module = $out->getResourceLoader()->getModule($name);
 			$group = $module->getGroup();
-			if ( !$module->shouldEmbedModule( $context ) ) {
-				if ( $group !== 'user' || !$module->isKnownEmpty( $context ) ) {
+			if (!$module->shouldEmbedModule($context)) {
+				if ($group !== 'user' || !$module->isKnownEmpty($context)) {
 					$path = './' . $this->styleDirectory . "/$name.css";
-					$tags[$name] = Html::linkedStyle( $path );
-					$this->addStyleToList( $name );
+					$tags[$name] = Html::linkedStyle($path);
+					$this->addStyleToList($name);
 				}
 			}
 		}
@@ -106,21 +100,21 @@ class Main implements
 	/**
 	 * @param string $name
 	 */
-	private function addStyleToList( $name ) {
-		if ( MW_ENTRY_POINT != 'cli' ) {
+	private function addStyleToList($name) {
+		if (MW_ENTRY_POINT != 'cli') {
 			return;
 		}
 
 		$path = $this->htmlDirectory;
-		if ( str_ends_with( $path, '/' ) ) {
-			$path = rtrim( $path, '/' );
+		if (str_ends_with($path, '/')) {
+			$path = rtrim($path, '/');
 		}
 		$path .= '/' . $this->styleDirectory;
-		if ( !is_dir( $path ) ) {
-			mkdir( $path, 0777, true );
+		if (!is_dir($path)) {
+			mkdir($path, 0777, true);
 		}
-		if ( !file_exists( "$path/$name" ) ) {
-			touch( "$path/$name.css" );
+		if (!file_exists("$path/$name")) {
+			touch("$path/$name.css");
 		}
 	}
 
@@ -128,8 +122,8 @@ class Main implements
 	 * @param OutputPage $output
 	 * @return Context
 	 */
-	private function getRlClientContext( $output ) {
-		if ( !$this->rlClientContext ) {
+	private function getRlClientContext($output) {
+		if (!$this->rlClientContext) {
 			$query = ResourceLoader::makeLoaderQuery(
 				// modules; not relevant
 				[],
@@ -144,11 +138,11 @@ class Main implements
 				null,
 				// printable
 				false,
-				$output->getRequest()->getBool( 'handheld' )
+				$output->getRequest()->getBool('handheld')
 			);
 			$this->rlClientContext = new Context(
 				$output->getResourceLoader(),
-				new FauxRequest( $query )
+				new FauxRequest($query)
 			);
 		}
 		return $this->rlClientContext;

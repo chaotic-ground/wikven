@@ -5,26 +5,22 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 use Html;
 use Skin;
 
-class Adder implements
-	\MediaWiki\Hook\BeforePageDisplayHook,
-	\MediaWiki\Hook\SkinAddFooterLinksHook
-{
-
+class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\SkinAddFooterLinksHook {
 	/** @inheritDoc */
-	public function onBeforePageDisplay( $out, $skin ): void {
-		$out->addModuleStyles( 'ext.Wikven.styles' );
+	public function onBeforePageDisplay($out, $skin): void {
+		$out->addModuleStyles('ext.Wikven.styles');
 	}
 
 	/** @inheritDoc */
-	public function onSkinAddFooterLinks( Skin $skin, string $key, array &$footerItems ) {
+	public function onSkinAddFooterLinks(Skin $skin, string $key, array &$footerItems) {
 		global $wgWikvenFooterUrl;
 
-		if ( $key !== 'places' || !$wgWikvenFooterUrl ) {
+		if ($key !== 'places' || !$wgWikvenFooterUrl) {
 			return;
 		}
 		$footerItems['github'] = Html::element(
 			'a',
-			[ 'href' => $wgWikvenFooterUrl ],
+			['href' => $wgWikvenFooterUrl],
 			// TODO: it could not be Github.
 			'View project on Github'
 		);
