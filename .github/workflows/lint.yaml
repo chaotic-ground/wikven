@@ -12,6 +12,9 @@ jobs:
         with:
           persist-credentials: false
       - uses: biomejs/setup-biome@4c91541eaada48f67d7dbd7833600ce162b68f51 # v2.7.1
+        with:
+          # No package.json to autodetect the version from.
+          version: "2.4.16"
       - run: biome ci
 
   rumdl:
@@ -21,3 +24,24 @@ jobs:
         with:
           persist-credentials: false
       - uses: rvben/rumdl@d9e57d93efd2c85a2b4efa1f597652fe017e464a # v0.2.0
+
+  taplo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: uncenter/setup-taplo@b18c8c8302695fe63d6853bc004006215ac52b91 # v2
+        with:
+          version: "0.10.0"
+      - run: taplo fmt --check
+      - run: taplo check
+
+  mago:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: nhedger/setup-mago@b1b8f89862e133daf595f9ec95c7193c36ccfc14 # v1.0.0
+      - run: mago format --check
