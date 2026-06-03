@@ -22,6 +22,9 @@ class ImportWikitext extends Maintenance {
 		$this->addDescription( 'Import *.wikitext files from the given path' );
 	}
 
+	/**
+	 * @return bool Whether every file was imported successfully.
+	 */
 	public function execute() {
 		global $wgWikvenSourceDirectory;
 		$sourceDirectory = rtrim( $wgWikvenSourceDirectory, '/' );

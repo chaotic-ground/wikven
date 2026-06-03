@@ -57,7 +57,8 @@ class AssetLocalizer {
 			// (2) Direct skin/resource/extension asset paths.
 			if ( $mwRoot !== '' ) {
 				$text = preg_replace_callback(
-					'~url\(\s*[\'"]?(\\\\?/(?:skins|resources|extensions)/[^)\'"?]+\.(?:svg|png|gif|jpe?g))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
+					'~url\(\s*[\'"]?(\\\\?/(?:skins|resources|extensions)/[^)\'"?]+'
+						. '\.(?:svg|png|gif|jpe?g))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
 					static function ( $m ) use ( &$map, $mwRoot, $dir ) {
 						$path = str_replace( '\\/', '/', $m[1] );
 						if ( !array_key_exists( $path, $map ) ) {
