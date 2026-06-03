@@ -2,6 +2,10 @@ grumphp:
     tasks:
         shell:
             scripts:
-                - ["-c", "npm run lint"]
+                - ["-c", "biome ci"]
+                - ["-c", "rumdl check ."]
+                - ["-c", "taplo fmt --check"]
+                - ["-c", "taplo check"]
+                - ["-c", "mago format --check"]
                 - ["-c", "vendor/bin/minus-x check ."]
-            triggered_by: [php, json, css, less, js, ts, md]
+            triggered_by: [php, json, css, less, js, ts, md, toml]
