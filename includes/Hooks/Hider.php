@@ -35,5 +35,17 @@ class Hider implements
 				$links[$key] = [];
 			}
 		}
+
+		// The edit and history tabs only make sense when they point at the
+		// external URLs configured via $wgWikvenEditUrl / $wgWikvenHistoryUrl.
+		// Without those, GetLocalURL falls back to a self-link (./Page.html),
+		// so drop the tabs instead of rendering dead links.
+		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
+		if ( !$wgWikvenEditUrl ) {
+			unset( $links['views']['edit'], $links['views']['ve-edit'], $links['views']['viewsource'] );
+		}
+		if ( !$wgWikvenHistoryUrl ) {
+			unset( $links['views']['history'] );
+		}
 	}
 }
