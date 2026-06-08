@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: rvben/rumdl@d9e57d93efd2c85a2b4efa1f597652fe017e464a # v0.2.0
+      - uses: rvben/rumdl@a0d57ac276a15c3697a27cfe53f46e7742c341b9 # v0.2.4
 
   taplo:
     runs-on: ubuntu-latest
@@ -52,4 +52,4 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: zizmorcore/zizmor-action@e639db99335bc9038abc0e066dfcd72e23d26fb4 # v0.3.0
+      - uses: zizmorcore/zizmor-action@5f14fd08f7cf1cb1609c1e344975f152c7ee938d # v0.5.6
