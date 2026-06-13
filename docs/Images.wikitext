@@ -4,6 +4,8 @@ You can embed images from [[commons:Main Page|Wikimedia Commons]]. See {{ml|Inst
 
 == Local images ==
 
+[[File:Bakery oven.jpg|thumb|A bakery oven (circa 1850-1900), embedded here as a local image.]]
+
 You can also use your own image files. Put them in your source directory, next to the <code>.wikitext</code> files, and embed them with the {{ml|Help:Images|usual file syntax}}:
 
 <syntaxhighlight lang="wikitext">
