@@ -9,19 +9,20 @@ resource "github_repository_ruleset" "default" {
   enforcement = "active"
 
   # Let repository admins and the chaotic-ground/publishers team bypass the
-  # rules. Declared unconditionally (not gated on github_actions): the stateless
-  # CI run re-imports the ruleset every time, so the config must match reality
-  # or it reports drift forever. Rulesets are readable with plain repo read, so
-  # the Actions GITHUB_TOKEN can still refresh them.
-  bypass_actors {
-    actor_id    = 5 # Repository admin
-    actor_type  = "RepositoryRole"
-    bypass_mode = "always"
-  }
-  bypass_actors {
-    actor_id    = 17810468 # chaotic-ground/publishers
-    actor_type  = "Team"
-    bypass_mode = "always"
+  # rules. Gated on github_actions: the Actions GITHUB_TOKEN cannot read a
+  # ruleset's bypass actors (they are admin-only), so in CI it sees an empty
+  # set. Declaring them only on local PAT runs keeps both the stateless CI plan
+  # (empty == empty) and local runs (two == two) free of drift.
+  dynamic "bypass_actors" {
+    for_each = var.github_actions ? [] : [
+      { actor_id = 5, actor_type = "RepositoryRole" }, # Repository admin
+      { actor_id = 17810468, actor_type = "Team" },    # chaotic-ground/publishers
+    ]
+    content {
+      actor_id    = bypass_actors.value.actor_id
+      actor_type  = bypass_actors.value.actor_type
+      bypass_mode = "always"
+    }
   }
 
   conditions {
