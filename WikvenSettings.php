@@ -59,10 +59,21 @@ if (file_exists('/workspace/src/.wikven.json')) {
 		unset($config['Skin']);
 	}
 
-	// Extensions
+	// Extensions. Only extensions bundled in this image can be enabled; a name
+	// that is not installed (a typo, or a third-party extension that is not yet
+	// supported) is skipped with a warning instead of aborting the whole build.
 	if (isset($config['Extensions'])) {
 		if (is_array($config['Extensions'])) {
-			wfLoadExtensions($config['Extensions']);
+			foreach ($config['Extensions'] as $extension) {
+				if (!is_string($extension)) {
+					continue;
+				}
+				if (is_file("$IP/extensions/$extension/extension.json")) {
+					wfLoadExtension($extension);
+				} else {
+					error_log("Wikven: skipping extension '$extension' (not bundled in this image)");
+				}
+			}
 		}
 		unset($config['Extensions']);
 	}
