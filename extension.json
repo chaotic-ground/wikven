@@ -15,6 +15,10 @@
 	"ResourceModules": {
 		"ext.Wikven.styles": {
 			"styles": ["ext.Wikven.styles.less"]
+		},
+		"ext.Wikven.pinnableState": {
+			"scripts": ["pinnable-state.js"],
+			"dependencies": ["mediawiki.storage"]
 		}
 	},
 	"ResourceModuleSkinStyles": {
