@@ -14,6 +14,7 @@ resource "github_repository" "this" {
   delete_branch_on_merge      = true
   description                 = "A static web site generator using MediaWiki."
   has_discussions             = false
+  has_downloads               = true
   has_issues                  = true
   has_projects                = false
   has_wiki                    = false
@@ -25,6 +26,12 @@ resource "github_repository" "this" {
   visibility                  = "public"
   vulnerability_alerts        = var.github_actions ? null : true
   web_commit_signoff_required = false
+
+  # GitHub Pages publishes the site to chaotic-ground.github.io/wikven via the
+  # deploy-docs workflow. Declare it so the configuration does not remove it.
+  pages {
+    build_type = "workflow"
+  }
 
   dynamic "security_and_analysis" {
     for_each = var.github_actions ? [] : [true]
