@@ -9,6 +9,7 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 	/** @inheritDoc */
 	public function onBeforePageDisplay($out, $skin): void {
 		$out->addModuleStyles('ext.Wikven.styles');
+		$out->addModules('ext.Wikven.pinnableState');
 	}
 
 	/** @inheritDoc */
