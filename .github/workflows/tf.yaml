@@ -1,0 +1,32 @@
+name: Tofu
+
+on:
+  pull_request:
+    paths:
+      - ".tf/**"
+      - .github/workflows/tf.yaml
+  push:
+    branches:
+      - main
+    paths:
+      - ".tf/**"
+      - .github/workflows/tf.yaml
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      security-events: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: lens0021/repo-settings-as-code@382f2d2dc79977772e993f66a1fd801bfc67e8c3 # v2.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
