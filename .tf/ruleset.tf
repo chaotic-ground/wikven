@@ -1,3 +1,7 @@
+import {
+  id = "wikven:17638220"
+  to = github_repository_ruleset.default
+}
 resource "github_repository_ruleset" "default" {
   name        = "default"
   repository  = github_repository.this.name
@@ -5,8 +9,10 @@ resource "github_repository_ruleset" "default" {
   enforcement = "active"
 
   # Let repository admins and the chaotic-ground/publishers team bypass the
-  # rules. Gated on github_actions because the Actions GITHUB_TOKEN cannot
-  # resolve the team actor; bypass actors are managed only on local PAT runs.
+  # rules. Gated on github_actions: the Actions GITHUB_TOKEN cannot read a
+  # ruleset's bypass actors (they are admin-only), so in CI it sees an empty
+  # set. Declaring them only on local PAT runs keeps both the stateless CI plan
+  # (empty == empty) and local runs (two == two) free of drift.
   dynamic "bypass_actors" {
     for_each = var.github_actions ? [] : [
       { actor_id = 5, actor_type = "RepositoryRole" }, # Repository admin
