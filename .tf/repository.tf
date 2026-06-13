@@ -5,9 +5,9 @@ import {
 resource "github_repository" "this" {
   allow_auto_merge            = true
   allow_merge_commit          = true
-  allow_rebase_merge          = true
-  allow_squash_merge          = true
-  allow_update_branch         = false
+  allow_rebase_merge          = false
+  allow_squash_merge          = false
+  allow_update_branch         = true
   archived                    = false
   archive_on_destroy          = true
   auto_init                   = false
@@ -18,9 +18,9 @@ resource "github_repository" "this" {
   has_projects                = false
   has_wiki                    = false
   homepage_url                = "https://chaotic-ground.github.io/wikven/"
+  merge_commit_message        = "PR_BODY"
+  merge_commit_title          = "PR_TITLE"
   name                        = "wikven"
-  squash_merge_commit_message = "COMMIT_MESSAGES"
-  squash_merge_commit_title   = "COMMIT_OR_PR_TITLE"
   topics                      = ["docker-image", "mediawiki", "static-site-generator", "wikitext"]
   visibility                  = "public"
   vulnerability_alerts        = var.github_actions ? null : true
