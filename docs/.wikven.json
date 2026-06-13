@@ -1,6 +1,7 @@
 {
 	"Skin": "Vector",
 	"Url": "https://github.com/chaotic-ground/wikven",
+	"Logo": "logo.svg",
 	"EditUrl": "https://github.com/chaotic-ground/wikven/edit/main/docs/$1.wikitext",
 	"HistoryUrl": "https://github.com/chaotic-ground/wikven/commits/main/docs/$1.wikitext",
 	"Extensions": ["SyntaxHighlight_GeSHi", "ParserFunctions"],

@@ -18,7 +18,7 @@ $wgUseInstantCommons = true;
 $wgFavicon = 'data:image/svg+xml,'
 . rawurlencode(
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
-	. '<rect width="32" height="32" rx="6" fill="#3366cc"/>'
+	. '<rect width="32" height="32" rx="6" fill="#157f93"/>'
 	. '<text x="16" y="23" font-family="sans-serif" font-size="20" font-weight="700"'
 	. ' fill="#ffffff" text-anchor="middle">W</text></svg>'
 );
@@ -85,6 +85,34 @@ if (file_exists('/workspace/src/.wikven.json')) {
 			$GLOBALS[$key] = $val;
 		}
 		unset($config['wg']);
+	}
+
+	// Logo: read an image file from the source directory and inline it as the
+	// header icon, so the static export carries its logo with no extra request
+	// and no path that only resolves on a live server.
+	if (isset($config['Logo'])) {
+		$logoFile = '/workspace/src/' . $config['Logo'];
+		if (is_file($logoFile)) {
+			$logoMimeTypes = [
+				'svg' => 'image/svg+xml',
+				'png' => 'image/png',
+				'jpg' => 'image/jpeg',
+				'jpeg' => 'image/jpeg',
+				'gif' => 'image/gif',
+				'webp' => 'image/webp',
+				'ico' => 'image/x-icon'
+			];
+			$logoExtension = strtolower(pathinfo($logoFile, PATHINFO_EXTENSION));
+			$logoMime = $logoMimeTypes[$logoExtension] ?? 'application/octet-stream';
+			$logoData = 'data:' . $logoMime . ';base64,' . base64_encode(file_get_contents($logoFile));
+
+			$logos = isset($wgLogos) && is_array($wgLogos) ? $wgLogos : [];
+			$logos['icon'] = $logoData;
+			$wgLogos = $logos;
+		} else {
+			error_log("Wikven: logo file '{$config['Logo']}' not found in the source directory");
+		}
+		unset($config['Logo']);
 	}
 
 	// Etc

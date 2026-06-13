@@ -1,3 +1,5 @@
+![Wikven logo](docs/logo.png)
+
 # Wikven
 
 **Wikven** is a static web page generator that uses [MediaWiki], the software used on [Wikipedia].
