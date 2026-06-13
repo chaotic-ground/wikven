@@ -1,29 +1,25 @@
 You can choose {{ml|Bundled extensions|bundled skins}} in [[wikven.yaml|.wikven.yaml]].
 
-== Availrable skins ==
+== Available skins ==
 
 * {{ml|Skin:Vector|Vector}} (default)
 * {{ml|Skin:Timeless|Timeless}}
 * {{ml|Skin:Monobook|Monobook}}
 
-== Configuration skin ==
+== Configuring the skin ==
 
-Changing skin is possible by set <code>Skin</code>.
+You can change the skin by setting <code>skins</code>. The first skin in the list is used as the default.
 
-<syntaxhighlight lang="json">
-{
-  "Skin": "Timeless"
-}
+<syntaxhighlight lang="yaml">
+skins:
+  - Timeless
 </syntaxhighlight>
 
-== Skin-specific configurations ==
+== Skin-specific configuration ==
 
-You can use <code>wg</code> map.
+Use the <code>config</code> map.
 
-<syntaxhighlight lang="json">
-{
-  "wg": {
-    "VectorDefaultSkinVersion": "1"
-  }
-}
+<syntaxhighlight lang="yaml">
+config:
+  VectorDefaultSkinVersion: "1"
 </syntaxhighlight>

@@ -1,5 +1,5 @@
 [[File:Moscow Metro Volokolamskaya asv2018-09.jpg|thumb|Volokolamskaya metro station in Moscow, Russia.]]
 
-You can embed images on [[commons:Main Page|Wikimedia Commons]]. Visit {{ml|InstantCommons}} for details.
+You can embed images from [[commons:Main Page|Wikimedia Commons]]. See {{ml|InstantCommons}} for details.
 
 {{prevnext|Skins}}
