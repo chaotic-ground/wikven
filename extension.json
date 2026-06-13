@@ -77,6 +77,10 @@
 		},
 		"WikvenHistoryUrl": {
 			"value": ""
+		},
+		"WikvenLogo": {
+			"value": "",
+			"description": "Path to a header logo image in the source directory, inlined as the wiki logo."
 		}
 	},
 	"MessagesDirs": {
