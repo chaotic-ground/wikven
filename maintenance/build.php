@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven;
 
 use CommentStoreComment;
 use ContentHandler;
+use ImportImages;
 use Maintenance;
 use MediaWiki\Revision\SlotRecord;
 use RebuildFileCache;
@@ -42,6 +43,7 @@ class Build extends Maintenance {
 
 		$this->setMainPage();
 
+		$this->importImages("$ip/maintenance/importImages.php");
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->step(RunJobs::class, "$ip/maintenance/runJobs.php");
 		$this->step(RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", ['overwrite' => true]);
@@ -64,6 +66,21 @@ class Build extends Maintenance {
 		foreach ($options as $name => $value) {
 			$child->setOption($name, $value);
 		}
+		$child->execute();
+	}
+
+	/**
+	 * Upload the image files in the source directory into the File: namespace,
+	 * so pages that embed them render with local thumbnails. Runs core's
+	 * importImages.php over the source directory; non-image files are ignored.
+	 *
+	 * @param string $file
+	 */
+	private function importImages($file) {
+		$child = $this->createChild(ImportImages::class, $file);
+		$child->setArg(0, rtrim($GLOBALS['wgWikvenSourceDirectory'], '/'));
+		$child->setOption('extensions', implode(',', $GLOBALS['wgFileExtensions']));
+		$child->setOption('skip-dupes', true);
 		$child->execute();
 	}
 

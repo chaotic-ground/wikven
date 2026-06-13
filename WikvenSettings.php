@@ -13,6 +13,14 @@ $wgCapitalLinks = false;
 $wgRestrictDisplayTitle = false;
 $wgUseInstantCommons = true;
 
+// Local images: image files placed in the source directory are uploaded into
+// the File: namespace at build time so pages can embed them. ImageMagick is
+// the only image scaler in the base image, so use it to render thumbnails.
+$wgEnableUploads = true;
+$wgUseImageMagick = true;
+$wgImageMagickConvertCommand = '/usr/bin/convert';
+$wgFileExtensions = ['png', 'gif', 'jpg', 'jpeg', 'webp'];
+
 // Ship a small built-in favicon so browsers do not 404 on /favicon.ico.
 // Overridable from .wikven.yaml via "config": { "Favicon": "..." }.
 $wgFavicon = 'data:image/svg+xml,'

@@ -2,4 +2,14 @@
 
 You can embed images from [[commons:Main Page|Wikimedia Commons]]. See {{ml|InstantCommons}} for details.
 
+== Local images ==
+
+You can also use your own image files. Put them in your source directory, next to the <code>.wikitext</code> files, and embed them with the {{ml|Help:Images|usual file syntax}}:
+
+<syntaxhighlight lang="wikitext">
+[[File:My photo.png|thumb|A caption]]
+</syntaxhighlight>
+
+PNG, GIF, JPEG, and WebP files are supported, and thumbnails are generated at build time.
+
 {{prevnext|Skins}}
