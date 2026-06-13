@@ -3,6 +3,9 @@
 /composer.lock
 /dist/
 
+# The build mounts assets/logo.svg here; the bind mount leaves a stub behind.
+/docs/logo.svg
+
 # OpenTofu / Terraform
 /.tf/.terraform/
 /.tf/terraform.tfstate

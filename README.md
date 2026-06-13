@@ -1,4 +1,4 @@
-![Wikven logo](docs/logo.png)
+![Wikven logo](assets/logo.png)
 
 # Wikven
 

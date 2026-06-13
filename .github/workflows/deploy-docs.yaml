@@ -41,9 +41,15 @@ jobs:
           enablement: true
 
       - name: Build
+        # The site logo lives in assets/, outside the docs source tree, so mount
+        # it into the source directory where the build expects $wgWikvenLogo.
         run: |
           docker build -t wikven .
-          docker run --rm -v "$(pwd)/docs:/workspace/src" -v "$(pwd)/dist:/workspace/dist" wikven
+          docker run --rm \
+            -v "$(pwd)/docs:/workspace/src" \
+            -v "$(pwd)/assets/logo.svg:/workspace/src/logo.svg" \
+            -v "$(pwd)/dist:/workspace/dist" \
+            wikven
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
