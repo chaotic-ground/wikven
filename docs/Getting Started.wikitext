@@ -39,16 +39,13 @@ Open <code>"$(pwd)"/dist/index.html</code> on your browser.
 
 == Setting the title of the site ==
 
-For configurations, you must create [[wikven.json|<code>.wikven.json</code>]] file in your
+For configurations, you must create [[wikven.yaml|<code>.wikven.yaml</code>]] file in your
 <code>src</code> directory.
 
 <syntaxhighlight lang="shell-session">
-$ cat <<EOF > src/.wikven.json
-{
-  "wg": {
-    "Sitename": "My Site"
-  }
-}
+$ cat <<EOF > src/.wikven.yaml
+config:
+  Sitename: My Site
 EOF
 </syntaxhighlight>
 
@@ -68,12 +65,9 @@ $ docker run \
 <syntaxhighlight lang="shell-session">
 $ mkdir src dist
 $ echo 'Hello, World!' > src/index.wikitext
-$ cat <<EOF > src/.wikven.json
-{
-  "wg": {
-    "Sitename": "My Site"
-  }
-}
+$ cat <<EOF > src/.wikven.yaml
+config:
+  Sitename: My Site
 EOF
 $ docker run \
   --rm \

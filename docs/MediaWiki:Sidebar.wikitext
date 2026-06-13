@@ -6,6 +6,6 @@
 ** Images|Images
 ** Skins|Skins
 * References
-** wikven.json|.wikven.json
+** wikven.yaml|.wikven.yaml
 *
 ** helppage|help-mediawiki

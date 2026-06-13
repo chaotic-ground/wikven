@@ -1,4 +1,4 @@
-You can choose {{ml|Bundled extensions|bundled skins}} in [[wikven.json|.wikven.json]].
+You can choose {{ml|Bundled extensions|bundled skins}} in [[wikven.yaml|.wikven.yaml]].
 
 == Availrable skins ==
 

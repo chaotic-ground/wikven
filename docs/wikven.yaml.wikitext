@@ -1,0 +1,26 @@
+__TOC__
+
+The configuration file follows the same shape as {{ml|Manual:YAML settings file format|MediaWiki's own YAML settings format}}: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
+
+<syntaxhighlight lang="yaml">
+extensions:
+  - SyntaxHighlight_GeSHi
+  - ParserFunctions
+skins:
+  - Timeless
+config:
+  Sitename: Wikven
+  WikvenEditUrl: https://github.com/yourname/some-repository/edit/branch-name/path/to/$1.wikitext
+  WikvenHistoryUrl: https://github.com/yourname/some-repository/commits/branch-name/path/to/$1.wikitext
+</syntaxhighlight>
+{{DISPLAYTITLE:.wikven.yaml}}
+
+== <code>extensions</code> ==
+A list of {{ml|Bundled extensions|bundled extension}} names to load.
+
+== <code>skins</code> ==
+A list of bundled skin names to enable. The first one is used as the default skin. See [[Skins]].
+
+== <code>config</code> ==
+
+A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any {{ml|Manual:Configuration settings|configuration setting}} can be defined here, including Wikven's own variables such as <code>WikvenFooterUrl</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, and <code>WikvenLogo</code>.

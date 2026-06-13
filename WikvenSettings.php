@@ -14,7 +14,7 @@ $wgRestrictDisplayTitle = false;
 $wgUseInstantCommons = true;
 
 // Ship a small built-in favicon so browsers do not 404 on /favicon.ico.
-// Overridable from .wikven.json via "wg": { "Favicon": "..." }.
+// Overridable from .wikven.yaml via "config": { "Favicon": "..." }.
 $wgFavicon = 'data:image/svg+xml,'
 . rawurlencode(
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
@@ -37,61 +37,65 @@ $wgVectorStickyHeader = ['logged_out' => true];
 $wgVectorLanguageInHeader = $wgVectorStickyHeader;
 $wgVectorResponsive = true;
 
-// Read configurations from .wikven.json
-if (file_exists('/workspace/src/.wikven.json')) {
-	$text = file_get_contents('/workspace/src/.wikven.json');
-	$config = json_decode($text, true);
+// Read configurations from .wikven.yaml, the same format MediaWiki's own
+// settings system (MW_CONFIG_FILE) accepts. YamlFormat prefers the PECL yaml
+// extension and falls back to the bundled symfony/yaml, so no extra dependency
+// is required.
+if (file_exists('/workspace/src/.wikven.yaml')) {
+	$text = file_get_contents('/workspace/src/.wikven.yaml');
+	$config = ( new MediaWiki\Settings\Source\Format\YamlFormat() )->decode($text);
 
-	// Skins
-	if (isset($config['Skin'])) {
-		wfLoadSkin($config['Skin']);
-		// A skin's default-skin name (e.g. 'minerva') can differ from its
-		// extension directory name (e.g. 'MinervaNeue'), so read the canonical
-		// name from the skin's own skin.json instead of guessing it.
-		$wgDefaultSkin = strtolower($config['Skin']);
-		$skinJson = "$IP/skins/{$config['Skin']}/skin.json";
-		if (is_readable($skinJson)) {
-			$skinMeta = json_decode(file_get_contents($skinJson), true);
+	// Skins. Register each named skin and use the first as the default. Only
+	// skins bundled in this image can be enabled; an unknown name is skipped
+	// with a warning instead of aborting the whole build.
+	foreach ($config['skins'] ?? [] as $skin) {
+		if (!is_string($skin)) {
+			continue;
+		}
+		if (!is_file("$IP/skins/$skin/skin.json")) {
+			error_log("Wikven: skipping skin '$skin' (not bundled in this image)");
+			continue;
+		}
+		wfLoadSkin($skin);
+		if (!isset($wgDefaultSkin)) {
+			// A skin's default-skin name (e.g. 'minerva') can differ from its
+			// directory name (e.g. 'MinervaNeue'), so read the canonical name
+			// from the skin's own skin.json instead of guessing it.
+			$wgDefaultSkin = strtolower($skin);
+			$skinMeta = json_decode(file_get_contents("$IP/skins/$skin/skin.json"), true);
 			if (isset($skinMeta['ValidSkinNames']) && is_array($skinMeta['ValidSkinNames'])) {
 				$wgDefaultSkin = (string)array_key_first($skinMeta['ValidSkinNames']);
 			}
 		}
-		unset($config['Skin']);
 	}
 
 	// Extensions. Only extensions bundled in this image can be enabled; a name
 	// that is not installed (a typo, or a third-party extension that is not yet
 	// supported) is skipped with a warning instead of aborting the whole build.
-	if (isset($config['Extensions'])) {
-		if (is_array($config['Extensions'])) {
-			foreach ($config['Extensions'] as $extension) {
-				if (!is_string($extension)) {
-					continue;
-				}
-				if (is_file("$IP/extensions/$extension/extension.json")) {
-					wfLoadExtension($extension);
-				} else {
-					error_log("Wikven: skipping extension '$extension' (not bundled in this image)");
-				}
-			}
+	foreach ($config['extensions'] ?? [] as $extension) {
+		if (!is_string($extension)) {
+			continue;
 		}
-		unset($config['Extensions']);
+		if (is_file("$IP/extensions/$extension/extension.json")) {
+			wfLoadExtension($extension);
+		} else {
+			error_log("Wikven: skipping extension '$extension' (not bundled in this image)");
+		}
 	}
 
-	// wg variables
-	if (isset($config['wg'])) {
-		foreach ($config['wg'] as $key => $val) {
-			$key = 'wg' . $key;
-			$GLOBALS[$key] = $val;
-		}
-		unset($config['wg']);
+	// Config. Every entry maps to a MediaWiki or extension configuration
+	// variable, named without the "wg" prefix, exactly as in MediaWiki's own
+	// YAML settings format. This includes Wikven's own variables such as
+	// WikvenFooterUrl, WikvenEditUrl, WikvenHistoryUrl, and WikvenLogo.
+	foreach ($config['config'] ?? [] as $key => $val) {
+		$GLOBALS['wg' . $key] = $val;
 	}
 
-	// Logo: read an image file from the source directory and inline it as the
-	// header icon, so the static export carries its logo with no extra request
-	// and no path that only resolves on a live server.
-	if (isset($config['Logo'])) {
-		$logoFile = '/workspace/src/' . $config['Logo'];
+	// Logo: WikvenLogo names an image file in the source directory. Inline it
+	// as the header icon, so the static export carries its logo with no extra
+	// request and no path that only resolves on a live server.
+	if (!empty($wgWikvenLogo)) {
+		$logoFile = '/workspace/src/' . $wgWikvenLogo;
 		if (is_file($logoFile)) {
 			$logoMimeTypes = [
 				'svg' => 'image/svg+xml',
@@ -110,18 +114,7 @@ if (file_exists('/workspace/src/.wikven.json')) {
 			$logos['icon'] = $logoData;
 			$wgLogos = $logos;
 		} else {
-			error_log("Wikven: logo file '{$config['Logo']}' not found in the source directory");
+			error_log("Wikven: logo file '$wgWikvenLogo' not found in the source directory");
 		}
-		unset($config['Logo']);
-	}
-
-	// Etc
-	if (isset($config['Url'])) {
-		$wgWikvenFooterUrl = $config['Url'];
-		unset($config['Url']);
-	}
-	foreach ($config as $key => $val) {
-		$key = 'wgWikven' . $key;
-		$GLOBALS[$key] = $val;
 	}
 }
