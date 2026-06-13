@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 use Config;
 use FauxRequest;
 use Html;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 use OutputPage;
@@ -40,6 +41,18 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 		if ($title->getInterwiki()) {
 			return;
 		}
+
+		// Images come from a foreign repo (Wikimedia Commons via InstantCommons),
+		// so the static export has no local File: page to link to. Point clicks at
+		// the file's real description page on Commons instead of a dead ./File:*.html.
+		if ($title->getNamespace() === NS_FILE) {
+			$file = MediaWikiServices::getInstance()->getRepoGroup()->findFile($title);
+			if ($file && !$file->isLocal()) {
+				$url = $file->getDescriptionUrl();
+				return;
+			}
+		}
+
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
 		if (preg_match('/action=([^&]+)/', $query, $matches)) {
