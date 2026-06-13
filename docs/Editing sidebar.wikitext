@@ -1,4 +1,4 @@
-The sidebar can be configured by the same way on MediaWiki, editing <code>MediaWiki:Sidebar</code>.
+The sidebar can be configured the same way as on MediaWiki, by editing <code>MediaWiki:Sidebar</code>.
 
 {{prevnext|Images}}
 

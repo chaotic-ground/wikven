@@ -1,13 +1,13 @@
-This page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{wikven}}.
-{{note|This page assumes unix-like OS.}}
+On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{wikven}}.
+{{note|This page assumes a unix-like OS.}}
 
-{{wikven}} is formed of two parts: a script and a MediaWiki extension. To simplify the whole building
-process, a docker image is provided and this guide will show the usage.
+{{wikven}} consists of two parts: a script and a MediaWiki extension. To simplify the whole build
+process, a docker image is provided, and this guide shows how to use it.
 
 ; Requirement
 :* [https://www.docker.com/ Docker]
 
-If Docker is ready, you could go to the next step.
+If Docker is ready, you can move on to the next step.
 
 ----
 
@@ -18,14 +18,14 @@ Create two directories, <code>src</code> and
 $ mkdir src dist
 </syntaxhighlight>
 
-Then create a wikitext file. Any file ends with <code>.wikitext</code> is considered as a wiki
+Then create a wikitext file. Any file that ends with <code>.wikitext</code> is treated as a wiki
 article by {{wikven}}.
 
 <syntaxhighlight lang="shell-session">
 $ echo 'Hello, World!' > src/index.wikitext
 </syntaxhighlight>
 
-And run Docker with [https://docs.docker.com/storage/volumes/ volume mounting]:
+Then run Docker with [https://docs.docker.com/storage/volumes/ volume mounting]:
 
 <syntaxhighlight lang="shell-session">
 $ docker run \
@@ -35,11 +35,11 @@ $ docker run \
   ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
 
-Open <code>"$(pwd)"/dist/index.html</code> on your browser.
+Open <code>"$(pwd)"/dist/index.html</code> in your browser.
 
 == Setting the title of the site ==
 
-For configurations, you must create [[wikven.yaml|<code>.wikven.yaml</code>]] file in your
+For configuration, you must create a [[wikven.yaml|<code>.wikven.yaml</code>]] file in your
 <code>src</code> directory.
 
 <syntaxhighlight lang="shell-session">

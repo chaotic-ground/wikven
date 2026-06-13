@@ -1,5 +1,5 @@
 <onlyinclude>[[mw:Special:MyLanguage/{{{1|}}}|{{{2|{{{1|}}}}}}]]</onlyinclude><!--
-Links on the article on MediaWikiWiki(https://www.mediawiki.org/).
+Links to an article on mediawiki.org (https://www.mediawiki.org/).
 
 Usage:
 

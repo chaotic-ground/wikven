@@ -10,7 +10,7 @@ With {{wikven}}, you can use the following features of MediaWiki.
 * [[Images|Using images on Wikimedia Commons]]
 * {{ml|Bundled extensions and skins}}
 
-== Unsuporretd features ==
+== Unsupported features ==
 
 * Search
 * All special pages
@@ -19,11 +19,11 @@ With {{wikven}}, you can use the following features of MediaWiki.
 
 === Planned features ===
 
-The follwing features are currently not supported but planned to be added in the future.
+The following features are currently not supported, but are planned for the future.
 
-* JavaScript.
-* Local images.
-* Support for thrid-party skins/extensions.
+* JavaScript
+* Local images
+* Support for third-party skins/extensions
 
 {{prevnext|Getting Started}}
 {{DISPLAYTITLE:Wikven}}
