@@ -12,34 +12,48 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 require_once "$IP/maintenance/Maintenance.php";
 
 /**
- * Download the Wikimedia Commons image files that the generated pages hotlink
- * (via InstantCommons) and rewrite their <img src>/srcset references to the
- * local copies, so the static export is self-contained and never depends on
- * upload.wikimedia.org being reachable.
+ * Make every image the generated pages reference available next to the HTML,
+ * and rewrite the references to those local copies, so the static export is
+ * self-contained and never depends on a live MediaWiki install or on
+ * upload.wikimedia.org being reachable. Two sources are handled:
+ *
+ *   - Wikimedia Commons hotlinks (via InstantCommons): downloaded over HTTP.
+ *   - Local File: namespace uploads: copied from the upload directory.
  *
  * Files are dumped flat next to the HTML using the same img-<hash>.<ext> scheme
- * as AssetLocalizer. The hash is taken over the full remote URL, so each srcset
- * candidate (which differs only by thumbnail width) becomes its own local file.
+ * as AssetLocalizer. The hash is taken over the reference (the storage path for
+ * local files), so each srcset candidate and thumbnail (which differ only by
+ * width) becomes its own file.
  */
 class StoreImages extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->addDescription('Download hotlinked Commons images and point the pages at local copies.');
+		$this->addDescription('Make referenced images local and point the pages at the local copies.');
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory;
+		global $wgWikvenHtmlDirectory, $wgUploadPath, $wgUploadDirectory;
 		$dir = rtrim($wgWikvenHtmlDirectory, '/');
+		$uploadDir = rtrim((string)$wgUploadDirectory, '/');
 
 		$http = MediaWikiServices::getInstance()->getHttpRequestFactory();
 
 		// Reference as it appears in the HTML => local "./img-*.ext" (or null if
-		// the download failed), so each distinct URL is fetched at most once.
+		// it could not be fetched/found), so each distinct reference is handled once.
 		$map = [];
+
+		// Local upload URLs ($wgUploadPath/...) as they appear in src, srcset, and
+		// the file page's full-resolution links, with an optional scheme and host.
+		// Group 1 is the storage path; a trailing cache-busting ?query (added on
+		// file pages) is matched so the whole URL is replaced, but excluded from
+		// the path used for the disk lookup.
+		$localPattern = '~(?:(?:https?:)?//[^/\s"]+)?' . preg_quote($wgUploadPath, '~') . '(/[^\s"?]+)(?:\?[^\s"]*)?~';
+
 		foreach (glob("$dir/*.html") as $file) {
 			$html = file_get_contents($file);
-			// Commons URLs only ever appear as src/srcset values; matching up to the
-			// next space or quote isolates each candidate (the srcset width
+
+			// Wikimedia Commons URLs only ever appear as src/srcset values; matching
+			// up to the next space or quote isolates each candidate (the srcset width
 			// descriptor that follows is separated by a space) while still allowing
 			// commas inside file names.
 			$html = preg_replace_callback(
@@ -53,6 +67,21 @@ class StoreImages extends Maintenance {
 				},
 				$html
 			);
+
+			$html = preg_replace_callback(
+				$localPattern,
+				function ($m) use (&$map, $uploadDir, $dir) {
+					// Key by the storage path (without the cache-busting ?query) so the
+					// same file referenced at different sizes or timestamps dedupes.
+					$path = $m[1];
+					if (!array_key_exists($path, $map)) {
+						$map[$path] = $this->storeLocal($uploadDir . $path, $path, $dir);
+					}
+					return $map[$path] ?? $m[0];
+				},
+				$html
+			);
+
 			file_put_contents($file, $html, LOCK_EX);
 		}
 
@@ -62,7 +91,7 @@ class StoreImages extends Maintenance {
 	}
 
 	/**
-	 * Download a single image and return its local reference.
+	 * Download a single remote image and return its local reference.
 	 *
 	 * @param \MediaWiki\Http\HttpRequestFactory $http
 	 * @param string $ref The reference as written in the HTML (may be protocol-relative).
@@ -97,6 +126,27 @@ class StoreImages extends Maintenance {
 
 		$this->output("  failed: $url\n");
 		return null;
+	}
+
+	/**
+	 * Copy a locally uploaded file into the output directory.
+	 *
+	 * @param string $src Absolute path of the file in the upload directory.
+	 * @param string $path The storage path (no query), used for the name and hash.
+	 * @param string $dir Output directory.
+	 * @return string|null Local "./img-*.ext" reference, or null if the file is missing.
+	 */
+	private function storeLocal($src, $path, $dir) {
+		if (!is_file($src)) {
+			$this->output("  missing: $path\n");
+			return null;
+		}
+		$name = 'img-' . substr(md5($path), 0, 12) . '.' . $this->extension($path);
+		$dest = "$dir/$name";
+		if (!file_exists($dest)) {
+			copy($src, $dest);
+		}
+		return "./$name";
 	}
 
 	/**
