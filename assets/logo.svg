@@ -3,8 +3,7 @@
 	<path d="M8 20 L17 49" stroke="#157f93" stroke-width="9" fill="none" stroke-linecap="round"/>
 	<path d="M56 20 L47 49" stroke="#157f93" stroke-width="9" fill="none" stroke-linecap="round"/>
 	<path d="M13 50 L13 41 Q13 26 32 26 Q51 26 51 41 L51 50 Z" fill="#157f93"/>
-	<path d="M19 50 a13 13 0 0 1 26 0 Z" fill="#241204"/>
-	<path d="M21.5 49.5 a10.5 10 0 0 1 21 0 Z" fill="#ff8c1a"/>
-	<ellipse cx="32" cy="48" rx="10.5" ry="4.3" fill="#e6a058"/>
+	<path d="M19 50 a13 13 0 0 1 26 0 a13 3 0 0 1 -26 0 Z" fill="#241204"/>
+	<path d="M21.5 49.5 a10.5 10 0 0 1 21 0 a10.5 2.6 0 0 1 -21 0 Z" fill="#ff8c1a"/>
 	<path d="M26 47 l1.8 -2.6 M31.3 46.6 l1.8 -2.6 M36.6 47 l1.8 -2.6" stroke="#9a5a1c" stroke-width="1.15" stroke-linecap="round"/>
 </svg>
