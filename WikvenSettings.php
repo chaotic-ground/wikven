@@ -37,13 +37,28 @@ $wgVectorStickyHeader = ['logged_out' => true];
 $wgVectorLanguageInHeader = $wgVectorStickyHeader;
 $wgVectorResponsive = true;
 
-// Read configurations from .wikven.yaml, the same format MediaWiki's own
-// settings system (MW_CONFIG_FILE) accepts. YamlFormat prefers the PECL yaml
-// extension and falls back to the bundled symfony/yaml, so no extra dependency
-// is required.
+// Read configurations from .wikven.yaml or .wikven.json, the same formats
+// MediaWiki's own settings system (MW_CONFIG_FILE) accepts. YAML is the primary
+// format; .wikven.json is read only when no .wikven.yaml is present. (YAML is a
+// superset of JSON, so JSON syntax is also valid inside a .wikven.yaml file.)
+// YamlFormat prefers the PECL yaml extension and falls back to the bundled
+// symfony/yaml, so no extra dependency is required.
+$wikvenConfigFile = null;
 if (file_exists('/workspace/src/.wikven.yaml')) {
-	$text = file_get_contents('/workspace/src/.wikven.yaml');
-	$config = ( new MediaWiki\Settings\Source\Format\YamlFormat() )->decode($text);
+	$wikvenConfigFile = '/workspace/src/.wikven.yaml';
+	if (file_exists('/workspace/src/.wikven.json')) {
+		error_log('Wikven: both .wikven.yaml and .wikven.json exist; using .wikven.yaml and ignoring .wikven.json');
+	}
+} elseif (file_exists('/workspace/src/.wikven.json')) {
+	$wikvenConfigFile = '/workspace/src/.wikven.json';
+}
+
+if ($wikvenConfigFile !== null) {
+	$text = file_get_contents($wikvenConfigFile);
+	$format = str_ends_with($wikvenConfigFile, '.json')
+		? new MediaWiki\Settings\Source\Format\JsonFormat()
+		: new MediaWiki\Settings\Source\Format\YamlFormat();
+	$config = $format->decode($text);
 
 	// Skins. Register each named skin and use the first as the default. Only
 	// skins bundled in this image can be enabled; an unknown name is skipped

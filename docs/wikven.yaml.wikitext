@@ -2,6 +2,8 @@ __TOC__
 
 The configuration file follows the same shape as {{ml|Manual:YAML settings file format|MediaWiki's own YAML settings format}}: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
 
+The file may also be written as <code>.wikven.json</code> with the same structure. When both files are present, <code>.wikven.yaml</code> takes precedence and <code>.wikven.json</code> is ignored.
+
 <syntaxhighlight lang="yaml">
 extensions:
   - SyntaxHighlight_GeSHi
