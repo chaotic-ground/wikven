@@ -24,10 +24,10 @@ require_once "$IP/maintenance/Maintenance.php";
  */
 class RewriteScripts extends Maintenance {
 	/** Module groups that are not shipped statically (mirrors Main/buildScripts). */
-	private const SKIP_GROUPS = ['site', 'noscript', 'private', 'user'];
+	private const SKIP_GROUPS = ['noscript', 'private', 'user'];
 
 	/** Modules excluded from the bundle, so they must not be triggered either. */
-	private const SKIP_MODULES = ['site', 'site.styles', 'user', 'user.styles', 'user.options'];
+	private const SKIP_MODULES = ['site.styles', 'user', 'user.styles', 'user.options'];
 
 	public function __construct() {
 		parent::__construct();
@@ -63,6 +63,13 @@ class RewriteScripts extends Maintenance {
 					}
 				}
 			}
+
+			// Make sure the site JS (MediaWiki:Common.js plus the skin's JS) and the
+			// gadgets enabled for every reader run: buildScripts bundles them, but
+			// the static render does not queue them, so trigger them here. Dedupe.
+			$trigger[] = 'site';
+			$trigger = array_merge($trigger, $this->defaultGadgetModules());
+			$trigger = array_values(array_unique($trigger));
 
 			// Stop the startup module from auto-loading anything over the network.
 			$html = preg_replace('/RLPAGEMODULES=\[[^\]]*\]/', 'RLPAGEMODULES=[]', $html);
@@ -115,6 +122,28 @@ class RewriteScripts extends Maintenance {
 
 			file_put_contents($file, $html, LOCK_EX);
 		}
+	}
+
+	/**
+	 * @return string[] Module names of the gadgets enabled for every reader (so
+	 *   they are triggered like the page's own modules), or an empty array when
+	 *   the Gadgets extension is not loaded.
+	 */
+	private function defaultGadgetModules() {
+		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
+		if (!class_exists($repoClass)) {
+			return [];
+		}
+		$modules = [];
+		$repo = $repoClass::singleton();
+		foreach ($repo->getGadgetIds() as $id) {
+			$gadget = $repo->getGadget($id);
+			// Styles-only gadgets belong in the CSS dump, not the JS bundle.
+			if ($gadget->isOnByDefault() && $gadget->hasModule() && $gadget->getType() !== 'styles') {
+				$modules[] = \MediaWiki\Extension\Gadgets\Gadget::getModuleName($id);
+			}
+		}
+		return $modules;
 	}
 
 	/**
