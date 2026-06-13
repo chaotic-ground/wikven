@@ -4,6 +4,21 @@ resource "github_repository_ruleset" "default" {
   target      = "branch"
   enforcement = "active"
 
+  # Let repository admins and the chaotic-ground/publishers team bypass the
+  # rules. Gated on github_actions because the Actions GITHUB_TOKEN cannot
+  # resolve the team actor; bypass actors are managed only on local PAT runs.
+  dynamic "bypass_actors" {
+    for_each = var.github_actions ? [] : [
+      { actor_id = 5, actor_type = "RepositoryRole" }, # Repository admin
+      { actor_id = 17810468, actor_type = "Team" },    # chaotic-ground/publishers
+    ]
+    content {
+      actor_id    = bypass_actors.value.actor_id
+      actor_type  = bypass_actors.value.actor_type
+      bypass_mode = "always"
+    }
+  }
+
   conditions {
     ref_name {
       include = ["~DEFAULT_BRANCH"]
@@ -31,9 +46,10 @@ resource "github_repository_ruleset" "default" {
       required_review_thread_resolution = false
     }
 
-    # Require the checks from the Lint workflow (.github/workflows/lint.yaml) to
-    # pass before a pull request can be merged. integration_id 15368 is the
-    # GitHub Actions app, so only its check runs satisfy these.
+    # Require status checks to pass before a pull request can be merged: the
+    # Lint workflow jobs (.github/workflows/lint.yaml) and the semantic pull
+    # request title check. integration_id 15368 is the GitHub Actions app, so
+    # only its check runs satisfy these.
     required_status_checks {
       do_not_enforce_on_create             = false
       strict_required_status_checks_policy = false
@@ -43,6 +59,7 @@ resource "github_repository_ruleset" "default" {
           "biome",
           "mago",
           "rumdl",
+          "semantic-pull-request",
           "taplo",
           "typos",
           "zizmor",
