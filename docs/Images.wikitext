@@ -12,4 +12,6 @@ You can also use your own image files. Put them in your source directory, next t
 
 PNG, GIF, JPEG, and WebP files are supported, and thumbnails are generated at build time.
 
+To give a file its own description page, add a wikitext file named after it in the <code>File:</code> namespace, the same way other namespaced pages are named. For <code>My photo.png</code>, that is <code>File:My photo.png.wikitext</code>.
+
 {{prevnext|Skins}}

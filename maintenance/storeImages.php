@@ -21,8 +21,9 @@ require_once "$IP/maintenance/Maintenance.php";
  *   - Local File: namespace uploads: copied from the upload directory.
  *
  * Files are dumped flat next to the HTML using the same img-<hash>.<ext> scheme
- * as AssetLocalizer. The hash is taken over the full reference, so each srcset
- * candidate and thumbnail (which differ only by width) becomes its own file.
+ * as AssetLocalizer. The hash is taken over the reference (the storage path for
+ * local files), so each srcset candidate and thumbnail (which differ only by
+ * width) becomes its own file.
  */
 class StoreImages extends Maintenance {
 	public function __construct() {
@@ -42,8 +43,11 @@ class StoreImages extends Maintenance {
 		$map = [];
 
 		// Local upload URLs ($wgUploadPath/...) as they appear in src, srcset, and
-		// the file page's full-resolution href, with an optional scheme and host.
-		$localPattern = '~(?:(?:https?:)?//[^/\s"]+)?' . preg_quote($wgUploadPath, '~') . '(/[^\s"]+)~';
+		// the file page's full-resolution links, with an optional scheme and host.
+		// Group 1 is the storage path; a trailing cache-busting ?query (added on
+		// file pages) is matched so the whole URL is replaced, but excluded from
+		// the path used for the disk lookup.
+		$localPattern = '~(?:(?:https?:)?//[^/\s"]+)?' . preg_quote($wgUploadPath, '~') . '(/[^\s"?]+)(?:\?[^\s"]*)?~';
 
 		foreach (glob("$dir/*.html") as $file) {
 			$html = file_get_contents($file);
@@ -67,11 +71,13 @@ class StoreImages extends Maintenance {
 			$html = preg_replace_callback(
 				$localPattern,
 				function ($m) use (&$map, $uploadDir, $dir) {
-					$ref = $m[0];
-					if (!array_key_exists($ref, $map)) {
-						$map[$ref] = $this->storeLocal($uploadDir . $m[1], $ref, $dir);
+					// Key by the storage path (without the cache-busting ?query) so the
+					// same file referenced at different sizes or timestamps dedupes.
+					$path = $m[1];
+					if (!array_key_exists($path, $map)) {
+						$map[$path] = $this->storeLocal($uploadDir . $path, $path, $dir);
 					}
-					return $map[$ref] ?? $ref;
+					return $map[$path] ?? $m[0];
 				},
 				$html
 			);
@@ -126,16 +132,16 @@ class StoreImages extends Maintenance {
 	 * Copy a locally uploaded file into the output directory.
 	 *
 	 * @param string $src Absolute path of the file in the upload directory.
-	 * @param string $ref The reference as written in the HTML.
+	 * @param string $path The storage path (no query), used for the name and hash.
 	 * @param string $dir Output directory.
 	 * @return string|null Local "./img-*.ext" reference, or null if the file is missing.
 	 */
-	private function storeLocal($src, $ref, $dir) {
+	private function storeLocal($src, $path, $dir) {
 		if (!is_file($src)) {
-			$this->output("  missing: $ref\n");
+			$this->output("  missing: $path\n");
 			return null;
 		}
-		$name = 'img-' . substr(md5($ref), 0, 12) . '.' . $this->extension($ref);
+		$name = 'img-' . substr(md5($path), 0, 12) . '.' . $this->extension($path);
 		$dest = "$dir/$name";
 		if (!file_exists($dest)) {
 			copy($src, $dest);

@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven;
 
+use CommentStoreComment;
 use ContentHandler;
 use Maintenance;
 use MediaWiki\Revision\SlotRecord;
@@ -43,11 +44,25 @@ class ImportWikitext extends Maintenance {
 			$text = file_get_contents($filename);
 			$content = ContentHandler::makeContent($text, $title);
 
+			$this->output("Saving... $title");
+
+			// A "File:Name.ext.wikitext" file describes an uploaded image. The
+			// upload already created the File: page with a default description, so
+			// save the sidecar as the current revision to replace it; an old
+			// revision (below) would land behind the upload and be ignored.
+			if ($title->getNamespace() === NS_FILE) {
+				$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
+				$updater = $page->newPageUpdater($user);
+				$updater->setContent(SlotRecord::MAIN, $content);
+				$updater->saveRevision(CommentStoreComment::newUnsavedComment('Set file description'));
+				$this->output(" done\n");
+				continue;
+			}
+
 			// Import as an old revision (like core's importTextFiles.php with
 			// --use-timestamp) so the source file's modification time becomes the
 			// revision timestamp and the footer shows the real last-modified date
 			// instead of the build time.
-			$this->output("Saving... $title");
 			$revision = new WikiRevision();
 			$revision->setContent(SlotRecord::MAIN, $content);
 			$revision->setTitle($title);

@@ -21,6 +21,11 @@ $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = '/usr/bin/convert';
 $wgFileExtensions = ['png', 'gif', 'jpg', 'jpeg', 'webp'];
 
+// Treat File: pages as content so the file cache exports them and the thumbnail
+// description-page links resolve, without dumping every Template:/MediaWiki:
+// page the way RebuildFileCache --all would.
+$wgContentNamespaces = [NS_MAIN, NS_FILE];
+
 // Ship a small built-in favicon so browsers do not 404 on /favicon.ico.
 // Overridable from .wikven.yaml via "config": { "Favicon": "..." }.
 $wgFavicon = 'data:image/svg+xml,'
