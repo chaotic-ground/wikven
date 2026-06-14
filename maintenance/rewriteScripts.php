@@ -35,10 +35,12 @@ class RewriteScripts extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenScriptDirectory;
+		global $wgWikvenHtmlDirectory, $wgWikvenScriptDirectory, $wgWikvenStyleDirectory;
 
 		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
 		$prefix = './' . rtrim($wgWikvenScriptDirectory, '/');
+		$siteStylesHref = './' . rtrim($wgWikvenStyleDirectory, '/') . '/site.styles.css';
+		$hasSiteStyles = is_file("$htmlDir/site.styles.css") && filesize("$htmlDir/site.styles.css") > 0;
 
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
 
@@ -99,6 +101,17 @@ class RewriteScripts extends Maintenance {
 				'',
 				$html
 			);
+
+			// The dropped combined link carried the site styles (MediaWiki:Common.css
+			// and the skin's site CSS); buildStyles wrote them to their own file.
+			// Link it last, so it wins the cascade over the skin's defaults.
+			if ($hasSiteStyles) {
+				$html = str_replace(
+					'</head>',
+					'<link rel="stylesheet" href="' . $siteStylesHref . '"></head>',
+					$html
+				);
+			}
 
 			// No logo is configured, so the placeholder "change your logo" asset
 			// would 404. Neutralize its reference (the logo itself is CSS-hidden).
