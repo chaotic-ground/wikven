@@ -78,9 +78,9 @@
 		"WikvenHistoryUrl": {
 			"value": ""
 		},
-		"WikvenLogo": {
-			"value": "",
-			"description": "Path to a header logo image in the source directory, inlined as the wiki logo."
+		"WikvenLogos": {
+			"value": [],
+			"description": "Header logos, mirroring $wgLogos but keyed to image file names in the source directory (each inlined as a data URI)."
 		}
 	},
 	"MessagesDirs": {

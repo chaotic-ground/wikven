@@ -14,12 +14,14 @@ $wgRestrictDisplayTitle = false;
 $wgUseInstantCommons = true;
 
 // Local images: image files placed in the source directory are uploaded into
-// the File: namespace at build time so pages can embed them. ImageMagick is
-// the only image scaler in the base image, so use it to render thumbnails.
+// the File: namespace at build time so pages can embed them. ImageMagick scales
+// raster thumbnails; rsvg-convert (in the base image) rasterizes SVG thumbnails.
 $wgEnableUploads = true;
 $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = '/usr/bin/convert';
-$wgFileExtensions = ['png', 'gif', 'jpg', 'jpeg', 'webp'];
+$wgFileExtensions = ['png', 'gif', 'jpg', 'jpeg', 'webp', 'svg'];
+$wgSVGConverter = 'rsvg';
+$wgSVGConverterPath = '/usr/bin';
 
 // Treat File: pages as content so the file cache exports them and the thumbnail
 // description-page links resolve, without dumping every Template:/MediaWiki:
@@ -114,18 +116,25 @@ if ($wikvenConfigFile !== null) {
 	// Config. Every entry maps to a MediaWiki or extension configuration
 	// variable, named without the "wg" prefix, exactly as in MediaWiki's own
 	// YAML settings format. This includes Wikven's own variables such as
-	// WikvenFooterUrl, WikvenEditUrl, WikvenHistoryUrl, and WikvenLogo.
+	// WikvenFooterUrl, WikvenEditUrl, WikvenHistoryUrl, and WikvenLogos.
 	foreach ($config['config'] ?? [] as $key => $val) {
 		$GLOBALS['wg' . $key] = $val;
 	}
 
-	// Logo: WikvenLogo names an image file in the source directory. Inline it
-	// as the header icon, so the static export carries its logo with no extra
-	// request and no path that only resolves on a live server.
-	if (!empty($wgWikvenLogo)) {
-		$logoFile = '/workspace/src/' . $wgWikvenLogo;
-		if (is_file($logoFile)) {
-			$logoMimeTypes = [
+	// Logos: WikvenLogos mirrors MediaWiki's $wgLogos, except each source is the
+	// name of an image file in the source directory rather than a URL. The static
+	// export rewrites asset URLs to hashed local files, so there is no stable URL
+	// to point $wgLogos at; instead each named file is inlined as a data URI. A
+	// value is either a file name, or (like $wgLogos['wordmark'] and ['tagline'])
+	// a map with a "src" file name plus extra keys such as width and height.
+	if (!empty($wgWikvenLogos) && is_array($wgWikvenLogos)) {
+		$wikvenLogoData = static function ($name) {
+			$file = '/workspace/src/' . $name;
+			if (!is_file($file)) {
+				error_log("Wikven: logo file '$name' not found in the source directory");
+				return null;
+			}
+			$mimeTypes = [
 				'svg' => 'image/svg+xml',
 				'png' => 'image/png',
 				'jpg' => 'image/jpeg',
@@ -134,15 +143,29 @@ if ($wikvenConfigFile !== null) {
 				'webp' => 'image/webp',
 				'ico' => 'image/x-icon'
 			];
-			$logoExtension = strtolower(pathinfo($logoFile, PATHINFO_EXTENSION));
-			$logoMime = $logoMimeTypes[$logoExtension] ?? 'application/octet-stream';
-			$logoData = 'data:' . $logoMime . ';base64,' . base64_encode(file_get_contents($logoFile));
+			$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+			$mime = $mimeTypes[$ext] ?? 'application/octet-stream';
+			return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($file));
+		};
 
-			$logos = isset($wgLogos) && is_array($wgLogos) ? $wgLogos : [];
-			$logos['icon'] = $logoData;
-			$wgLogos = $logos;
-		} else {
-			error_log("Wikven: logo file '$wgWikvenLogo' not found in the source directory");
+		$logos = isset($wgLogos) && is_array($wgLogos) ? $wgLogos : [];
+		foreach ($wgWikvenLogos as $key => $value) {
+			if (is_array($value)) {
+				if (isset($value['src'])) {
+					$src = $wikvenLogoData($value['src']);
+					if ($src === null) {
+						continue;
+					}
+					$value['src'] = $src;
+				}
+				$logos[$key] = $value;
+			} else {
+				$data = $wikvenLogoData($value);
+				if ($data !== null) {
+					$logos[$key] = $data;
+				}
+			}
 		}
+		$wgLogos = $logos;
 	}
 }
