@@ -5,8 +5,19 @@
 # (the file cache, favicon, and logo handling) live in WikvenSettings.php.
 config:
   Sitename: Wikven
+
+  # Keep the first letter of page titles as written instead of force-capitalizing
+  # it (MediaWiki's default). Source file names map straight to page titles, and
+  # the main page is "index"; with the default a file named index.wikitext would
+  # become the page "Index" and the main-page link would not match.
   CapitalLinks: false
+
+  # Let {{DISPLAYTITLE}} set any shown title. MediaWiki's default only allows a
+  # display title that normalizes back to the real one, which would reject e.g.
+  # the ".wikven.yaml" page displaying a leading dot.
   RestrictDisplayTitle: false
+
+  # Embed files from Wikimedia Commons without uploading them. See Images.
   UseInstantCommons: true
 
   # Local images: source-directory image files are uploaded into the File:
@@ -19,16 +30,18 @@ config:
   SVGConverter: rsvg
   SVGConverterPath: /usr/bin
 
-  # Treat File: pages (namespace 6) as content alongside the main namespace (0),
-  # so the file cache exports them without dumping every Template:/MediaWiki: page.
+  # Which namespaces count as content. MediaWiki's default is the main namespace
+  # alone ([0]); Wikven adds File: (namespace 6) so the file cache exports file
+  # description pages too, without dumping every Template:/MediaWiki: page.
   ContentNamespaces: [0, 6]
 
   # The static export runs its own jobs and ships its own module bundle.
   JobRunRate: 0
   ResourceLoaderStorageEnabled: false
 
-  # Skin (Vector 2022).
-  VectorDefaultSkinVersion: "2"
+  # Vector 2022 options. The skin itself is selected in .wikven.yaml via skins:;
+  # loading "Vector" defaults to its first variant, vector-2022. (The old
+  # VectorDefaultSkinVersion no longer exists in Vector and is not set here.)
   VectorStickyHeader: { logged_out: true }
   VectorLanguageInHeader: { logged_out: true }
   VectorResponsive: true
