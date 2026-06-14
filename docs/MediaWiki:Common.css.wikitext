@@ -7,4 +7,11 @@
 	--color-progressive--active: #0c4d5b;
 	--color-progressive--focus: #157f93;
 	--color-link: #157f93;
+	--color-visited: #0e5f70;
+}
+
+/* Visited links are coloured by a hard-coded a:visited rule in the skin, not the
+ * token above, so recolour them to a darker teal here as well. */
+a:visited {
+	color: #0e5f70;
 }
