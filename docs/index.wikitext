@@ -1,5 +1,10 @@
-{{wikven}} is a static web page generator that uses {{ml|MediaWiki}},
-the software used on [https://www.wikipedia.org/ Wikipedia].
+{{wikven}} is a static site generator built on {{ml|MediaWiki}}, the software
+behind [https://www.wikipedia.org/ Wikipedia]. It turns a directory of wikitext
+into a plain HTML site you can host anywhere, with no server or database to run.
+This documentation site is itself built with {{wikven}}.
+
+Start with [[Getting Started]], which builds a site two ways: as a Docker image,
+or as a standalone [[Binary|binary]].
 
 == Supported features ==
 
@@ -7,12 +12,14 @@ With {{wikven}}, you can use the following features of MediaWiki.
 
 * {{ml|Wikitext}}
 * {{ml|Help:Templates|Templates}}
-* [[Images|Images]] from Wikimedia Commons or local files
+* [[Images]] from Wikimedia Commons or local files
 * [[JavaScript]] (MediaWiki:Common.js and gadgets)
 * {{ml|Bundled extensions and skins}}
 * Third-party extensions and skins (see [[wikven.yaml|.wikven.yaml]])
 
 == Unsupported features ==
+
+These need a live wiki, so they are not part of the static export:
 
 * Search
 * All special pages

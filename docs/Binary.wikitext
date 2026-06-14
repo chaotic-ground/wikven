@@ -35,7 +35,7 @@ The rendered site is written to <code>dist/</code>. The working directory defaul
 WIKVEN_WORKDIR=/path/to/project ./wikven build
 </syntaxhighlight>
 
-The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language.
+The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same [[wikven.yaml|.wikven.yaml]] layered over {{wikven}}'s defaults.
 
 == Optional host tools ==
 
@@ -44,5 +44,7 @@ The binary renders on its own, but uses these host programs when they are presen
 * '''ImageMagick''' and '''librsvg''' produce higher-quality thumbnails. Without them the binary uses the built-in GD library for raster images and serves SVG inline. See [[Images]].
 * '''git''' is needed only to fetch [[wikven.yaml#WikvenRepositories|third-party extensions and skins]].
 
-{{prevnext|Getting Started}}
+{{note|Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any [[wikven.yaml#WikvenRepositories|third-party extensions or skins]], relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.}}
+
+{{prevnext|Getting Started|Editing sidebar}}
 {{DISPLAYTITLE:Standalone binary}}

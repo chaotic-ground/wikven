@@ -88,3 +88,5 @@ docker run --rm --entrypoint cat ghcr.io/chaotic-ground/wikven extensions/Wikven
 </syntaxhighlight>
 
 It is also in the [https://github.com/chaotic-ground/wikven/blob/main/default.yaml repository].
+
+{{prevnext|JavaScript|Development}}

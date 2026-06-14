@@ -1,4 +1,4 @@
-{{wikven}} runs the wiki's own JavaScript in the static export, so site scripts and gadgets work without a live server.
+{{wikven}} bundles the wiki's own JavaScript into the static export at build time, so site scripts and gadgets run without a live server or <code>load.php</code>.
 
 == MediaWiki:Common.js ==
 
@@ -21,4 +21,5 @@ List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put
 
 Only gadgets marked <code>default</code> are loaded: a static site has no logged-in readers to turn other gadgets on. A gadget's own CSS (in the same module) is included, but standalone styles-only gadgets are not yet covered.
 
+{{prevnext|Skins|wikven.yaml}}
 {{DISPLAYTITLE:JavaScript}}

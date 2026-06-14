@@ -18,4 +18,4 @@ The thumbnailing backend is detected from the tools present at build time: Image
 
 To give a file its own description page, add a wikitext file named after it in the <code>File:</code> namespace, the same way other namespaced pages are named. For <code>My photo.png</code>, that is <code>File:My photo.png.wikitext</code>.
 
-{{prevnext|Skins}}
+{{prevnext|Editing sidebar|Skins}}
