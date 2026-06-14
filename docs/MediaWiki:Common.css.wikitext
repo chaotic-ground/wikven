@@ -15,3 +15,60 @@
 a:visited {
 	color: #0e5f70;
 }
+
+/* The external-link arrow is a fixed-colour background image in the skin; swap it
+ * for a teal one so it matches the brand. Only the image changes; the skin keeps
+ * setting its size and position. */
+.mw-parser-output a.external {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2020%2020'%3E%3Cpath%20fill='%23157f93'%20d='M17%2017H3V3h5V1H3a2%202%200%2000-2%202v14a2%202%200%20002%202h14a2%202%200%20002-2v-5h-2zM11%201v2h4.6L7.3%2011.3l1.4%201.4L17%204.4V9h2V1z'/%3E%3C/svg%3E");
+}
+
+/* A cleaner syntax-highlight palette in place of the default Pygments theme,
+ * tuned for the light background with teal as the keyword accent. */
+.mw-highlight .c, .mw-highlight .ch, .mw-highlight .cm, .mw-highlight .cp,
+.mw-highlight .cpf, .mw-highlight .c1, .mw-highlight .cs {
+	color: #6a737d;
+	font-style: italic;
+}
+.mw-highlight .k, .mw-highlight .kc, .mw-highlight .kd, .mw-highlight .kn,
+.mw-highlight .kp, .mw-highlight .kr, .mw-highlight .kt {
+	color: #157f93;
+	font-weight: bold;
+}
+.mw-highlight .o, .mw-highlight .ow {
+	color: #0c4d5b;
+}
+.mw-highlight .s, .mw-highlight .sa, .mw-highlight .sb, .mw-highlight .sc,
+.mw-highlight .dl, .mw-highlight .sd, .mw-highlight .s2, .mw-highlight .se,
+.mw-highlight .sh, .mw-highlight .si, .mw-highlight .sx, .mw-highlight .sr,
+.mw-highlight .s1, .mw-highlight .ss {
+	color: #15803d;
+}
+.mw-highlight .m, .mw-highlight .mb, .mw-highlight .mf, .mw-highlight .mh,
+.mw-highlight .mi, .mw-highlight .mo, .mw-highlight .il,
+.mw-highlight .nb, .mw-highlight .bp {
+	color: #0b6eb8;
+}
+.mw-highlight .nf, .mw-highlight .fm {
+	color: #8250df;
+}
+.mw-highlight .nc, .mw-highlight .nn, .mw-highlight .ne {
+	color: #8250df;
+	font-weight: bold;
+}
+.mw-highlight .nt {
+	color: #157f93;
+	font-weight: bold;
+}
+.mw-highlight .na {
+	color: #6f42c1;
+}
+.mw-highlight .nv, .mw-highlight .vc, .mw-highlight .vg, .mw-highlight .vi {
+	color: #953800;
+}
+.mw-highlight .gd {
+	color: #b31d28;
+}
+.mw-highlight .gi {
+	color: #15803d;
+}
