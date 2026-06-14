@@ -26,13 +26,13 @@ Put your wikitext and a [[wikven.yaml|.wikven.yaml]] in a <code>src/</code> dire
 <syntaxhighlight lang="shell">
 mkdir -p src
 echo 'Hello, World!' > src/index.wikitext
-./wikven php-cli build.php
+./wikven build
 </syntaxhighlight>
 
 The rendered site is written to <code>dist/</code>. The working directory defaults to the current directory; set <code>WIKVEN_WORKDIR</code> to build a project elsewhere:
 
 <syntaxhighlight lang="shell">
-WIKVEN_WORKDIR=/path/to/project ./wikven php-cli build.php
+WIKVEN_WORKDIR=/path/to/project ./wikven build
 </syntaxhighlight>
 
 The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language.
