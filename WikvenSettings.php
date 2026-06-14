@@ -14,12 +14,14 @@ $wgRestrictDisplayTitle = false;
 $wgUseInstantCommons = true;
 
 // Local images: image files placed in the source directory are uploaded into
-// the File: namespace at build time so pages can embed them. ImageMagick is
-// the only image scaler in the base image, so use it to render thumbnails.
+// the File: namespace at build time so pages can embed them. ImageMagick scales
+// raster thumbnails; rsvg-convert (in the base image) rasterizes SVG thumbnails.
 $wgEnableUploads = true;
 $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = '/usr/bin/convert';
-$wgFileExtensions = ['png', 'gif', 'jpg', 'jpeg', 'webp'];
+$wgFileExtensions = ['png', 'gif', 'jpg', 'jpeg', 'webp', 'svg'];
+$wgSVGConverter = 'rsvg';
+$wgSVGConverterPath = '/usr/bin';
 
 // Treat File: pages as content so the file cache exports them and the thumbnail
 // description-page links resolve, without dumping every Template:/MediaWiki:
