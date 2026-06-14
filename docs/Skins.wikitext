@@ -41,4 +41,4 @@ config:
   VectorResponsive: false
 </syntaxhighlight>
 
-{{prevnext|JavaScript}}
+{{prevnext|Images|JavaScript}}

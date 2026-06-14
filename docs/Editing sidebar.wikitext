@@ -1,7 +1,23 @@
-The sidebar can be configured the same way as on MediaWiki, by editing <code>MediaWiki:Sidebar</code>.
+The navigation sidebar is configured the same way as on MediaWiki, through the <code>MediaWiki:Sidebar</code> system message. Create a <code>MediaWiki:Sidebar.wikitext</code> file in your source directory, alongside your other pages.
 
-{{prevnext|Images}}
+Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. A bare word is looked up as a system message (so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label). This site's sidebar, for example:
+
+<syntaxhighlight lang="wikitext">
+* navigation
+** mainpage|mainpage-description
+* Docs
+** Getting Started|Getting Started
+** Images|Images
+* References
+** wikven.yaml|.wikven.yaml
+</syntaxhighlight>
+
+== What is removed ==
+
+Some default sidebar blocks need a live wiki, so {{wikven}} drops them from the static export: the '''toolbox''' (What links here, Special pages, Printable version, and so on) and the '''search''' box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 
 == See also ==
 
 * {{ml|Manual:Interface/Sidebar}}
+
+{{prevnext|Binary|Images}}

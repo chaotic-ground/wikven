@@ -9,7 +9,7 @@ A {{wikven}} build has four moving parts:
 * The '''extension''' (<code>extension.json</code>, <code>includes/</code>). It registers {{wikven}}'s configuration and a few hooks that adapt MediaWiki's output for a static host: hiding the edit/history UI and the sidebar's wiki-only links, swapping footer links for the configured <code>WikvenFooterUrl</code>/<code>WikvenEditUrl</code>/<code>WikvenHistoryUrl</code>, and rewriting internal URLs so they point at <code>.html</code> files instead of <code>index.php?title=</code>.
 * The '''maintenance scripts''' (<code>maintenance/</code>). These are the build pipeline, described below.
 * '''<code>WikvenSettings.php</code>'''. The <code>LocalSettings.php</code> the build runs under: it loads the configuration, detects the image backend, and applies {{wikven}}'s defaults.
-* The '''<code>run</code>''' script and '''<code>Dockerfile</code>'''. They package MediaWiki 1.45 plus the extension into an image whose entry point performs one build.
+* The '''<code>run</code>''' script and '''<code>Dockerfile</code>'''. They package MediaWiki 1.45 plus the extension into an image whose default command runs one build.
 
 == Building the image ==
 
@@ -17,7 +17,7 @@ A {{wikven}} build has four moving parts:
 docker build --tag wikven .
 </syntaxhighlight>
 
-The <code>Dockerfile</code> is <code>FROM mediawiki:1.45</code>. It adds Composer and unzip (needed when fetching third-party extensions), copies the extension into <code>/var/www/html/extensions/Wikven</code>, copies <code>WikvenSettings.php</code> into the MediaWiki root, and sets the <code>run</code> script as the entry point.
+The <code>Dockerfile</code> is <code>FROM mediawiki:1.45</code>. It adds Composer and unzip (needed when fetching third-party extensions), copies the extension into <code>/var/www/html/extensions/Wikven</code>, copies <code>WikvenSettings.php</code> into the MediaWiki root, and sets the <code>run</code> script as the image's default command (<code>CMD</code>).
 
 == Running a build ==
 
@@ -32,7 +32,7 @@ The container mounts the source at <code>/workspace/src</code> and writes the re
 
 The <code>run</code> script:
 
-# installs a throwaway MediaWiki into an SQLite database (no server, no real admin),
+# installs a throwaway MediaWiki into an SQLite database (no web server; the admin account it creates is never used),
 # fetches any third-party extensions and skins (see below),
 # appends <code>require_once 'WikvenSettings.php';</code> to the generated <code>LocalSettings.php</code>,
 # runs the build pipeline,
@@ -73,7 +73,7 @@ A live wiki relies on <code>load.php</code>, an action API, and a database; a st
 
 == Third-party extensions and skins ==
 
-Names in <code>extensions</code>/<code>skins</code> that are not bundled in the image are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in [[wikven.yaml#WikvenRepositories|<code>WikvenRepositories</code>]] (a tarball, a Git repository, or a Composer package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
+Names in <code>extensions</code>/<code>skins</code> that are not bundled with {{wikven}} are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in [[wikven.yaml#WikvenRepositories|<code>WikvenRepositories</code>]] (a tarball, a Git repository, or a Composer package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
 
 == Standalone binary ==
 
@@ -84,6 +84,7 @@ The same MediaWiki + {{wikven}} tree is embedded into a single [[Binary|FrankenP
 * <code>lint.yaml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, zizmor).
 * <code>docker-build.yaml</code> builds the image and publishes it to <code>ghcr.io/chaotic-ground/wikven</code> on <code>main</code>.
 * <code>deploy-docs.yaml</code> builds the <code>docs/</code> directory with the image and deploys the result to GitHub Pages, so this site is itself a {{wikven}} build.
-* <code>release-please.yaml</code> manages versioning and releases; the release binaries are attached by the binary build workflow.
+* <code>build-binary.yaml</code> is a reusable workflow that builds the standalone [[Binary|binary]] for each platform. <code>release-binary.yaml</code> calls it on a tagged release to attach the binaries, and <code>nightly.yaml</code> calls it daily to refresh the rolling <code>nightly</code> pre-release.
+* <code>release-please.yaml</code> manages versioning and releases (see below).
 
 Versions follow [https://www.conventionalcommits.org/ Conventional Commits], which release-please uses to generate the changelog and bump the version.
