@@ -1,0 +1,42 @@
+name: Nightly binary
+
+# Build the standalone binary from the tip of main every day and publish it to a
+# single rolling "nightly" pre-release, so there is always a stable URL for the
+# latest build: releases/download/nightly/wikven-linux-<arch>.
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # recreate the nightly release + tag
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      # Re-point the rolling "nightly" pre-release at the current main commit so
+      # the binary job can upload fresh assets to it.
+      - name: Recreate the nightly pre-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete nightly --yes --cleanup-tag || true
+          gh release create nightly \
+            --prerelease \
+            --target "$GITHUB_SHA" \
+            --title "Nightly" \
+            --notes "Standalone binaries built from main ($GITHUB_SHA), refreshed daily."
+
+  binary:
+    needs: prepare
+    permissions:
+      contents: write
+    uses: ./.github/workflows/build-binary.yaml
+    with:
+      tag: nightly

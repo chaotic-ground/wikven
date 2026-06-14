@@ -13,6 +13,12 @@ chmod +x wikven
 
 On arm64, use <code>wikven-linux-aarch64</code>.
 
+To track the latest commit on the main branch instead of a tagged release, use the rolling [https://github.com/chaotic-ground/wikven/releases/tag/nightly nightly] build, refreshed daily:
+
+<syntaxhighlight lang="shell">
+curl -L -o wikven https://github.com/chaotic-ground/wikven/releases/download/nightly/wikven-linux-x86_64
+</syntaxhighlight>
+
 == Building a site ==
 
 Put your wikitext and a [[wikven.yaml|.wikven.yaml]] in a <code>src/</code> directory, then build:
