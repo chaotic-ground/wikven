@@ -2,7 +2,7 @@ __TOC__
 
 The configuration file follows the same shape as {{ml|Manual:YAML settings file format|MediaWiki's own YAML settings format}}: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
 
-The file may also be written as <code>.wikven.json</code> with the same structure. When both files are present, <code>.wikven.yaml</code> takes precedence and <code>.wikven.json</code> is ignored.
+The file may also be written as <code>.wikven.json</code> with the same structure. When both files are present, <code>.wikven.yaml</code> takes precedence and <code>.wikven.json</code> is ignored (the build logs a warning).
 
 Wikven ships its own defaults (a sensible MediaWiki configuration for a static wiki) and loads your file on top of them, so anything you set here overrides the default. The defaults live in a <code>default.yaml</code> that uses this same format; see [[#Defaults]] below.
 
@@ -41,9 +41,11 @@ config:
 
 The values are file names instead of URLs in <code>$wgLogos</code> directly because the static export copies every referenced asset to a local file whose name includes a content hash that is only computed at build time. The logo's final address is therefore not known when you write the configuration, so <code>WikvenLogos</code> names the source file instead and the build inlines it as the logo.
 
+Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
+
 === <code>WikvenRepositories</code> ===
 
-Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled in the image. They are fetched when the container runs, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice.
+Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice.
 
 Each entry chooses one of three methods by the key it carries:
 
@@ -65,7 +67,9 @@ config:
       package: mediawiki/semantic-media-wiki:~4.1
 </syntaxhighlight>
 
-A name in <code>WikvenRepositories</code> that already exists in the image (a bundled component) is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
+A name in <code>WikvenRepositories</code> that is already bundled with wikven is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
+
+Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and Composer when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[Binary|binary]] they must be on your <code>PATH</code>.
 
 {{note|The build downloads and runs the code you name here, with network access. Only declare sources you trust, and prefer pinning a <code>reference</code> or version.}}
 
@@ -73,12 +77,14 @@ This very site fetches {{ml|Extension:Variables|Variables}} this way (see its <c
 
 == Defaults ==
 
-Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yaml</code> bundled in the image. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
+Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yaml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
 
 Titles are kept as written (rather than first-letter-capitalized, MediaWiki's default) so the entry page can be the lowercase <code>index</code>, which the build writes as <code>index.html</code>, the file a static host serves at the site root. The file is otherwise commented; each comment notes why Wikven sets that value.
 
-To see the current defaults, print the file from the image:
+To see the current defaults, read the bundled <code>default.yaml</code>. From the Docker image:
 
 <syntaxhighlight lang="shell">
 docker run --rm --entrypoint cat ghcr.io/chaotic-ground/wikven extensions/Wikven/default.yaml
 </syntaxhighlight>
+
+It is also in the [https://github.com/chaotic-ground/wikven/blob/main/default.yaml repository].

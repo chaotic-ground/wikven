@@ -1,10 +1,13 @@
-You can choose {{ml|Bundled extensions|bundled skins}} in [[wikven.yaml|.wikven.yaml]].
+You can choose {{ml|Bundled extensions and skins|bundled skins}} in [[wikven.yaml|.wikven.yaml]].
 
 == Available skins ==
 
+The skins bundled with MediaWiki are available. Selecting <code>Vector</code> gives Vector 2022 (the skin's <code>vector-2022</code> variant).
+
 * {{ml|Skin:Vector|Vector}} (default)
 * {{ml|Skin:Timeless|Timeless}}
-* {{ml|Skin:Monobook|Monobook}}
+* {{ml|Skin:MonoBook|MonoBook}}
+* {{ml|Skin:MinervaNeue|MinervaNeue}} (mobile-oriented)
 
 == Configuring the skin ==
 
@@ -17,7 +20,7 @@ skins:
 
 == Third-party skins ==
 
-A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in [[wikven.yaml#WikvenRepositories|<code>WikvenRepositories</code>]]. It is fetched when the container runs and may be the default like any other.
+A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in [[wikven.yaml#WikvenRepositories|<code>WikvenRepositories</code>]]. It is fetched at build time and may be the default like any other.
 
 <syntaxhighlight lang="yaml">
 skins:
