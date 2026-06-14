@@ -1,0 +1,37 @@
+# Build a standalone FrankenPHP binary that embeds MediaWiki + Wikven, so the
+# static-site build runs without Docker. Built in CI per target architecture and
+# attached to the GitHub release; see .github/workflows/release-binary.yaml.
+#
+# Usage (the wikven image must be built first, e.g. `docker build -t wikven .`):
+#   docker build -f Dockerfile.binary --target export -o type=local,dest=out .
+#   # -> out/wikven, a single static executable. Run it with:
+#   #    WIKVEN_WORKDIR=. ./wikven php-cli build.php
+
+# Stage 1: the app tree to embed = the wikven image + the binary entry point,
+# minus what the build never needs (keeping all locales, so the binary is not
+# English-only).
+FROM wikven AS app
+COPY bin/build.php /var/www/html/build.php
+RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
+ && rm -rf \
+      /var/www/html/HISTORY \
+      /var/www/html/UPGRADE \
+      /var/www/html/RELEASE-NOTES-* \
+      /var/www/html/cache/* \
+      /var/www/html/images/*
+
+# Stage 2: compile a static PHP + FrankenPHP and embed the app. curl is omitted:
+# its HTTP/3 (ngtcp2/nghttp3) static libs fail to link, and it is unneeded
+# (MediaWiki/Guzzle uses PHP stream wrappers over openssl).
+FROM dunglas/frankenphp:static-builder-musl AS builder
+WORKDIR /go/src/app
+COPY --from=app /var/www/html ./dist/app
+ENV PHP_VERSION=8.3
+ENV PHP_EXTENSIONS="gd,intl,pdo_sqlite,sqlite3,mbstring,dom,xml,simplexml,xmlreader,xmlwriter,fileinfo,iconv,ctype,filter,tokenizer,phar,session,calendar,opcache,openssl,sodium,zlib,bcmath,exif"
+ENV PHP_EXTENSION_LIBS="libpng,libjpeg,freetype,libwebp"
+RUN EMBED=dist/app ./build-static.sh
+
+# Stage 3: expose just the binary (named per arch by build-static.sh) for
+# `docker build --target export -o`.
+FROM scratch AS export
+COPY --from=builder /go/src/app/dist/frankenphp-linux-* /wikven

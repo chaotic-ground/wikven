@@ -1,0 +1,42 @@
+__TOC__
+
+Besides the [[Getting Started|Docker image]], {{wikven}} ships as a single self-contained executable that embeds MediaWiki, so you can build a site without Docker. It is available for Linux on x86_64 and arm64.
+
+== Download ==
+
+Download the binary for your architecture from the [https://github.com/chaotic-ground/wikven/releases latest release] and make it executable:
+
+<syntaxhighlight lang="shell">
+curl -L -o wikven https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
+chmod +x wikven
+</syntaxhighlight>
+
+On arm64, use <code>wikven-linux-aarch64</code>.
+
+== Building a site ==
+
+Put your wikitext and a [[wikven.yaml|.wikven.yaml]] in a <code>src/</code> directory, then build:
+
+<syntaxhighlight lang="shell">
+mkdir -p src
+echo 'Hello, World!' > src/index.wikitext
+./wikven php-cli build.php
+</syntaxhighlight>
+
+The rendered site is written to <code>dist/</code>. The working directory defaults to the current directory; set <code>WIKVEN_WORKDIR</code> to build a project elsewhere:
+
+<syntaxhighlight lang="shell">
+WIKVEN_WORKDIR=/path/to/project ./wikven php-cli build.php
+</syntaxhighlight>
+
+The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language.
+
+== Optional host tools ==
+
+The binary renders on its own, but uses these host programs when they are present:
+
+* '''ImageMagick''' and '''librsvg''' produce higher-quality thumbnails. Without them the binary uses the built-in GD library for raster images and serves SVG inline. See [[Images]].
+* '''git''' is needed only to fetch [[wikven.yaml#WikvenRepositories|third-party extensions and skins]].
+
+{{prevnext|Getting Started}}
+{{DISPLAYTITLE:Standalone binary}}

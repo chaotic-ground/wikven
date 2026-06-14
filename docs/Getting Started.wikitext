@@ -2,7 +2,8 @@ On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] pag
 {{note|This page assumes a unix-like OS.}}
 
 {{wikven}} consists of two parts: a script and a MediaWiki extension. To simplify the whole build
-process, a docker image is provided, and this guide shows how to use it.
+process, a docker image is provided, and this guide shows how to use it. If you would rather not
+use Docker, there is also a [[Binary|standalone binary]].
 
 ; Requirement
 :* [https://www.docker.com/ Docker]
