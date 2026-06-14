@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-use FauxRequest;
+use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 

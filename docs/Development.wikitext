@@ -9,7 +9,7 @@ A {{wikven}} build has four moving parts:
 * The '''extension''' (<code>extension.json</code>, <code>includes/</code>). It registers {{wikven}}'s configuration and a few hooks that adapt MediaWiki's output for a static host: hiding the edit/history UI and the sidebar's wiki-only links, swapping footer links for the configured <code>WikvenFooterUrl</code>/<code>WikvenEditUrl</code>/<code>WikvenHistoryUrl</code>, and rewriting internal URLs so they point at <code>.html</code> files instead of <code>index.php?title=</code>.
 * The '''maintenance scripts''' (<code>maintenance/</code>). These are the build pipeline, described below.
 * '''<code>WikvenSettings.php</code>'''. The <code>LocalSettings.php</code> the build runs under: it loads the configuration, detects the image backend, and applies {{wikven}}'s defaults.
-* The '''<code>run</code>''' script and '''<code>Dockerfile</code>'''. They package MediaWiki 1.43 plus the extension into an image whose entry point performs one build.
+* The '''<code>run</code>''' script and '''<code>Dockerfile</code>'''. They package MediaWiki 1.45 plus the extension into an image whose entry point performs one build.
 
 == Building the image ==
 
@@ -17,7 +17,7 @@ A {{wikven}} build has four moving parts:
 docker build --tag wikven .
 </syntaxhighlight>
 
-The <code>Dockerfile</code> is <code>FROM mediawiki:1.43</code>. It adds Composer and unzip (needed when fetching third-party extensions), copies the extension into <code>/var/www/html/extensions/Wikven</code>, copies <code>WikvenSettings.php</code> into the MediaWiki root, and sets the <code>run</code> script as the entry point.
+The <code>Dockerfile</code> is <code>FROM mediawiki:1.45</code>. It adds Composer and unzip (needed when fetching third-party extensions), copies the extension into <code>/var/www/html/extensions/Wikven</code>, copies <code>WikvenSettings.php</code> into the MediaWiki root, and sets the <code>run</code> script as the entry point.
 
 == Running a build ==
 

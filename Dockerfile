@@ -1,4 +1,4 @@
-FROM mediawiki:1.43
+FROM mediawiki:1.45
 
 # composer (and unzip, which composer uses to extract dist archives) so that
 # third-party extensions/skins declared in .wikven.yaml can be installed at build

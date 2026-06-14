@@ -2,15 +2,15 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-use CommentStoreComment;
-use ContentHandler;
+use MediaWiki\CommentStore\CommentStoreComment;
+use MediaWiki\Content\ContentHandler;
 use ImportImages;
 use Maintenance;
 use MediaWiki\Revision\SlotRecord;
 use RebuildFileCache;
 use RunJobs;
-use Title;
-use User;
+use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')

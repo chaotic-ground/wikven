@@ -2,8 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
-use Html;
-use Skin;
+use MediaWiki\Html\Html;
+use MediaWiki\Skin\Skin;
 
 class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\SkinAddFooterLinksHook {
 	/** @inheritDoc */
