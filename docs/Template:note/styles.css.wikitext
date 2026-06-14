@@ -1,0 +1,11 @@
+.wikven-note {
+	border: 0.2em solid lightgray;
+	margin: 0.2em 1em;
+	padding: 0.7em;
+	display: flex;
+	column-gap: 0.5em;
+}
+
+.wikven-note-text {
+	vertical-align: middle;
+}

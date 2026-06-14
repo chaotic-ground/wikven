@@ -12,6 +12,11 @@ php maintenance/run.php install \
   MediaWiki \
   Admin
 
+# Fetch third-party extensions/skins before WikvenSettings is wired in, so they
+# are on disk when the build boot loads them (and no "not bundled" warnings fire
+# while they are still being fetched).
+php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/fetchExtensions.php
+
 echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
 
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/build.php

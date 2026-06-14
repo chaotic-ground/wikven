@@ -4,9 +4,9 @@ Usage:
 * {{prevnext|next step}}
 * {{prevnext|previous step|next step}}
 
---><div style="clear: both; overflow: hidden;"><!--
+--><templatestyles src="prevnext/styles.css" /><div class="wikven-prevnext"><!--
   -->{{#if:{{{2|}}}|
-    <div style="float: left;">&larr;&nbsp;[[{{{1|}}}]]</div>
+    <div class="wikven-prevnext-prev">&larr;&nbsp;[[{{{1|}}}]]</div>
   }}<!--
-  --><div style="float: right;">[[{{{2|{{{1|}}}}}}]]&nbsp;&rarr;</div><!--
+  --><div class="wikven-prevnext-next">[[{{{2|{{{1|}}}}}}]]&nbsp;&rarr;</div><!--
 --></div>

@@ -1,0 +1,12 @@
+.wikven-prevnext {
+	clear: both;
+	overflow: hidden;
+}
+
+.wikven-prevnext-prev {
+	float: left;
+}
+
+.wikven-prevnext-next {
+	float: right;
+}

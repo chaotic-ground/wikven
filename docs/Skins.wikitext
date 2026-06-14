@@ -15,6 +15,20 @@ skins:
   - Timeless
 </syntaxhighlight>
 
+== Third-party skins ==
+
+A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in [[wikven.yaml#WikvenRepositories|<code>WikvenRepositories</code>]]. It is fetched when the container runs and may be the default like any other.
+
+<syntaxhighlight lang="yaml">
+skins:
+  - Example
+config:
+  WikvenRepositories:
+    Example:
+      repository: https://github.com/example/Example.git
+      reference: REL1_43
+</syntaxhighlight>
+
 == Skin-specific configuration ==
 
 Use the <code>config</code> map.
