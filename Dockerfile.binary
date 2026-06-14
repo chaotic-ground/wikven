@@ -5,7 +5,7 @@
 # Usage (the wikven image must be built first, e.g. `docker build -t wikven .`):
 #   docker build -f Dockerfile.binary --target export -o type=local,dest=out .
 #   # -> out/wikven, a single static executable. Run it with:
-#   #    WIKVEN_WORKDIR=. ./wikven php-cli build.php
+#   #    WIKVEN_WORKDIR=. ./wikven build
 
 # Stage 1: the app tree to embed = the wikven image + the binary entry point,
 # minus what the build never needs (keeping all locales, so the binary is not
@@ -26,6 +26,11 @@ RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
 FROM dunglas/frankenphp:static-builder-musl AS builder
 WORKDIR /go/src/app
 COPY --from=app /var/www/html ./dist/app
+# A small Caddy module registers the `build` subcommand, so the binary can be run
+# as `./wikven build` instead of `./wikven php-cli build.php`. It is linked into
+# the FrankenPHP binary alongside FrankenPHP's own default Caddy modules.
+COPY caddy /go/wikven-caddy
+ENV SPC_CMD_VAR_FRANKENPHP_XCADDY_MODULES="--with github.com/dunglas/mercure/caddy --with github.com/dunglas/vulcain/caddy --with github.com/dunglas/caddy-cbrotli --with github.com/chaotic-ground/wikven/caddy=/go/wikven-caddy"
 ENV PHP_VERSION=8.3
 ENV PHP_EXTENSIONS="gd,intl,pdo_sqlite,sqlite3,mbstring,dom,xml,simplexml,xmlreader,xmlwriter,fileinfo,iconv,ctype,filter,tokenizer,phar,session,calendar,opcache,openssl,sodium,zlib,bcmath,exif"
 ENV PHP_EXTENSION_LIBS="libpng,libjpeg,freetype,libwebp"

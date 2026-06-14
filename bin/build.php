@@ -1,8 +1,10 @@
 <?php
 /**
  * Standalone-binary entry point: build the whole static site in one invocation.
+ * The `build` Caddy subcommand (see caddy/) runs this through php-cli, so the
+ * user-facing command is:
  *
- *   WIKVEN_WORKDIR=/path/to/work  ./wikven php-cli build.php
+ *   WIKVEN_WORKDIR=/path/to/work  ./wikven build
  *
  * Reads $WIKVEN_WORKDIR/src (input), writes $WIKVEN_WORKDIR/dist (output), and
  * keeps ephemeral state in $WIKVEN_WORKDIR/.cache. WIKVEN_WORKDIR defaults to the
