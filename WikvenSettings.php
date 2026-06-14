@@ -171,37 +171,46 @@ foreach ($config['config'] ?? [] as $key => $val) {
 }
 
 // Logos: WikvenLogos mirrors MediaWiki's $wgLogos, except each source is the name
-// of an image file in the source directory rather than a URL. The static export
-// rewrites asset URLs to hashed local files, so there is no stable URL to point
-// $wgLogos at; instead each named file is inlined as a data URI. A value is
-// either a file name, or (like $wgLogos['wordmark'] and ['tagline']) a map with a
-// "src" file name plus extra keys such as width and height.
+// of an image file in the source directory rather than a URL. Those files are
+// uploaded into the File: namespace at build time like any other source image, so
+// each one already has a URL; we point $wgLogos at it. The upload path is
+// predictable because uploads are stored flat (HashedUploadDirectory: false in
+// default.yaml), so the URL can be built here, at config time, before the file is
+// actually uploaded later in the build. The static export then localizes that URL
+// to a single shared file alongside the HTML (storeImages.php), so the logo is not
+// inlined into every page. A value is either a file name, or (like
+// $wgLogos['wordmark'] and ['tagline']) a map with a "src" file name plus extra
+// keys such as width and height.
 if (!empty($wgWikvenLogos) && is_array($wgWikvenLogos)) {
-	$wikvenLogoData = static function ($name) use ($wikvenSrc) {
-		$file = "$wikvenSrc/" . $name;
-		if (!is_file($file)) {
+	// Map a source file name to the URL its upload will have. MediaWiki turns the
+	// file name into a File: title (spaces become underscores, and the first letter
+	// is capitalized unless $wgCapitalLinks is off, as Wikven's default keeps it),
+	// then, with flat storage, serves it from $wgUploadPath/<title>.
+	$wikvenLogoUrl = static function ($name) use ($wikvenSrc) {
+		global $wgUploadPath, $wgScriptPath, $wgCapitalLinks;
+		if (!is_file("$wikvenSrc/" . $name)) {
 			error_log("Wikven: logo file '$name' not found in the source directory");
 			return null;
 		}
-		$mimeTypes = [
-			'svg' => 'image/svg+xml',
-			'png' => 'image/png',
-			'jpg' => 'image/jpeg',
-			'jpeg' => 'image/jpeg',
-			'gif' => 'image/gif',
-			'webp' => 'image/webp',
-			'ico' => 'image/x-icon'
-		];
-		$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-		$mime = $mimeTypes[$ext] ?? 'application/octet-stream';
-		return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($file));
+		// $wgUploadPath is still its false default this early (MediaWiki resolves it
+		// to "$wgScriptPath/images" later, in Setup.php); resolve it the same way so
+		// the URL matches what the upload, and storeImages.php, will use.
+		$uploadPath =
+			$wgUploadPath !== false && (string)$wgUploadPath !== ''
+				? $wgUploadPath
+				: ( $wgScriptPath ?? '' ) . '/images';
+		$title = str_replace(' ', '_', trim($name));
+		if ($wgCapitalLinks ?? true) {
+			$title = ucfirst($title);
+		}
+		return rtrim((string)$uploadPath, '/') . '/' . $title;
 	};
 
 	$logos = isset($wgLogos) && is_array($wgLogos) ? $wgLogos : [];
 	foreach ($wgWikvenLogos as $key => $value) {
 		if (is_array($value)) {
 			if (isset($value['src'])) {
-				$src = $wikvenLogoData($value['src']);
+				$src = $wikvenLogoUrl($value['src']);
 				if ($src === null) {
 					continue;
 				}
@@ -209,9 +218,9 @@ if (!empty($wgWikvenLogos) && is_array($wgWikvenLogos)) {
 			}
 			$logos[$key] = $value;
 		} else {
-			$data = $wikvenLogoData($value);
-			if ($data !== null) {
-				$logos[$key] = $data;
+			$url = $wikvenLogoUrl($value);
+			if ($url !== null) {
+				$logos[$key] = $url;
 			}
 		}
 	}

@@ -30,6 +30,14 @@ config:
   EnableUploads: true
   FileExtensions: [png, gif, jpg, jpeg, webp, svg]
 
+  # Store uploads flat (images/<name>) instead of in MediaWiki's default
+  # md5-hashed subdirectories (images/a/ab/<name>). The static export has a
+  # single flat upload dir per build, so the hashing buys nothing, and a flat
+  # layout gives every upload a predictable URL. That predictable URL is what
+  # lets WikvenLogos point $wgLogos straight at an uploaded logo file (see
+  # WikvenSettings.php) instead of inlining it into every page.
+  HashedUploadDirectory: false
+
   # Which namespaces count as content. MediaWiki's default is the main namespace
   # alone ([0]); Wikven adds File: (namespace 6) so the file cache exports file
   # description pages too, without dumping every Template:/MediaWiki: page.
