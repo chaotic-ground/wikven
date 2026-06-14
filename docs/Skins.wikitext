@@ -23,3 +23,5 @@ Use the <code>config</code> map.
 config:
   VectorDefaultSkinVersion: "1"
 </syntaxhighlight>
+
+{{prevnext|JavaScript}}

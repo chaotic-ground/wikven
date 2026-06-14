@@ -32,10 +32,10 @@ require_once "$IP/maintenance/Maintenance.php";
  */
 class BuildScripts extends Maintenance {
 	/** Module groups that are never emitted statically (mirrors Main/buildStyles). */
-	private const SKIP_GROUPS = ['site', 'noscript', 'private', 'user'];
+	private const SKIP_GROUPS = ['noscript', 'private', 'user'];
 
-	/** Modules that cannot be built outside a real web request. */
-	private const SKIP_MODULES = ['site', 'site.styles', 'user', 'user.styles', 'user.options'];
+	/** Per-user / styles-only modules that have no place in the static JS bundle. */
+	private const SKIP_MODULES = ['site.styles', 'user', 'user.styles', 'user.options'];
 
 	public function __construct() {
 		parent::__construct();
@@ -52,10 +52,22 @@ class BuildScripts extends Maintenance {
 		}
 
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
+		// Gadgets registers its modules into the ResourceLoader at boot, before the
+		// single build process has imported the gadget definitions, so the modules
+		// are missing here. Re-register them from the (now populated) gadget repo.
+		$this->registerGadgetModules($rl);
 		MediaWikiServices::getInstance()->getDBLoadBalancerFactory()->disableChronologyProtection();
 
 		// 1. Discover the modules the rendered pages actually queue.
 		$seeds = $this->collectPageModules($htmlDir);
+		// The site module (MediaWiki:Common.js plus the skin's JS) is pulled in by
+		// the startup module on a live wiki, so it never appears in a page's module
+		// queue. Seed it explicitly so that site JS runs on the static pages too.
+		$seeds[] = 'site';
+		// Likewise the gadgets enabled for every reader: the Gadgets hook adds them
+		// at request time, which the static render does not reproduce, so seed them
+		// so default gadgets are bundled too.
+		$seeds = array_merge($seeds, $this->defaultGadgetModules());
 		// 2. Expand to the full dependency closure, plus the implicit base modules.
 		$closure = $this->resolveClosure($rl, $seeds, $wgLanguageCode, $wgDefaultSkin);
 
@@ -80,6 +92,51 @@ class BuildScripts extends Maintenance {
 		);
 
 		$this->output('Wrote startup-static.js and modules-static.js (' . count($closure) . " modules)\n");
+	}
+
+	/**
+	 * Register every gadget's ResourceLoader module on the given loader, mirroring
+	 * the Gadgets extension's own registration. No-op without the extension.
+	 *
+	 * @param ResourceLoader $rl
+	 */
+	private function registerGadgetModules(ResourceLoader $rl) {
+		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
+		if (!class_exists($repoClass)) {
+			return;
+		}
+		$repo = $repoClass::singleton();
+		foreach ($repo->getGadgetIds() as $id) {
+			$name = \MediaWiki\Extension\Gadgets\Gadget::getModuleName($id);
+			if (!$rl->isModuleRegistered($name)) {
+				$rl->register($name, [
+					'class' => \MediaWiki\Extension\Gadgets\GadgetResourceLoaderModule::class,
+					'id' => $id
+				]);
+			}
+		}
+	}
+
+	/**
+	 * @return string[] Module names of the gadgets enabled for every reader (so
+	 *   they can be bundled like the page's own modules), or an empty array when
+	 *   the Gadgets extension is not loaded.
+	 */
+	private function defaultGadgetModules() {
+		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
+		if (!class_exists($repoClass)) {
+			return [];
+		}
+		$modules = [];
+		$repo = $repoClass::singleton();
+		foreach ($repo->getGadgetIds() as $id) {
+			$gadget = $repo->getGadget($id);
+			// Styles-only gadgets belong in the CSS dump, not the JS bundle.
+			if ($gadget->isOnByDefault() && $gadget->hasModule() && $gadget->getType() !== 'styles') {
+				$modules[] = \MediaWiki\Extension\Gadgets\Gadget::getModuleName($id);
+			}
+		}
+		return $modules;
 	}
 
 	/**

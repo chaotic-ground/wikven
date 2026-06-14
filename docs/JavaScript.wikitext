@@ -1,0 +1,24 @@
+{{wikven}} runs the wiki's own JavaScript in the static export, so site scripts and gadgets work without a live server.
+
+== MediaWiki:Common.js ==
+
+Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a regular wiki. Create a <code>MediaWiki:Common.js.wikitext</code> file in your source directory and it runs on every page. The skin's <code>MediaWiki:Vector.js</code> (and so on) works the same way.
+
+== Gadgets ==
+
+To use {{ml|Extension:Gadgets|gadgets}}, enable the bundled Gadgets extension in [[wikven.yaml|.wikven.yaml]]:
+
+<syntaxhighlight lang="yaml">
+extensions:
+  - Gadgets
+</syntaxhighlight>
+
+List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put each gadget's code in <code>MediaWiki:Gadget-<name>.js.wikitext</code>:
+
+<syntaxhighlight lang="wikitext">
+* MyGadget[ResourceLoader|default]|MyGadget.js
+</syntaxhighlight>
+
+Only gadgets marked <code>default</code> are loaded: a static site has no logged-in readers to turn other gadgets on. A gadget's own CSS (in the same module) is included, but standalone styles-only gadgets are not yet covered.
+
+{{DISPLAYTITLE:JavaScript}}

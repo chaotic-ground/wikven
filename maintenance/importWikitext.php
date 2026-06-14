@@ -46,15 +46,18 @@ class ImportWikitext extends Maintenance {
 
 			$this->output("Saving... $title");
 
-			// A "File:Name.ext.wikitext" file describes an uploaded image. The
-			// upload already created the File: page with a default description, so
-			// save the sidecar as the current revision to replace it; an old
-			// revision (below) would land behind the upload and be ignored.
-			if ($title->getNamespace() === NS_FILE) {
+			// File: description sidecars and MediaWiki: system pages (Common.js, the
+			// gadget definition and gadget code, ...) are saved as the current
+			// revision via a normal edit. For a File: page the upload already created
+			// it with a default description that an old revision would land behind;
+			// for MediaWiki: pages the edit hooks must fire so registries like the
+			// gadget list are invalidated before the pages render. importOldRevision
+			// would skip both.
+			if ($title->getNamespace() === NS_FILE || $title->getNamespace() === NS_MEDIAWIKI) {
 				$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
 				$updater = $page->newPageUpdater($user);
 				$updater->setContent(SlotRecord::MAIN, $content);
-				$updater->saveRevision(CommentStoreComment::newUnsavedComment('Set file description'));
+				$updater->saveRevision(CommentStoreComment::newUnsavedComment('Import'));
 				$this->output(" done\n");
 				continue;
 			}

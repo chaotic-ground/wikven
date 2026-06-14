@@ -8,6 +8,7 @@ With {{wikven}}, you can use the following features of MediaWiki.
 * {{ml|Wikitext}}
 * {{ml|Help:Templates|Templates}}
 * [[Images|Images]] from Wikimedia Commons or local files
+* [[JavaScript]] (MediaWiki:Common.js and gadgets)
 * {{ml|Bundled extensions and skins}}
 
 == Unsupported features ==
@@ -21,7 +22,6 @@ With {{wikven}}, you can use the following features of MediaWiki.
 
 The following features are currently not supported, but are planned for the future.
 
-* JavaScript
 * Support for third-party skins/extensions
 
 {{prevnext|Getting Started}}
