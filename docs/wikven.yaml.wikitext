@@ -43,7 +43,9 @@ The values are file names instead of URLs in <code>$wgLogos</code> directly beca
 
 == Defaults ==
 
-Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yaml</code> bundled in the image. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, case-insensitive titles, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
+Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yaml</code> bundled in the image. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
+
+Titles are kept as written (rather than first-letter-capitalized, MediaWiki's default) so the entry page can be the lowercase <code>index</code>, which the build writes as <code>index.html</code>, the file a static host serves at the site root. The file is otherwise commented; each comment notes why Wikven sets that value.
 
 To see the current defaults, print the file from the image:
 

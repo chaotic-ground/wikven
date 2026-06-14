@@ -7,9 +7,11 @@ config:
   Sitename: Wikven
 
   # Keep the first letter of page titles as written instead of force-capitalizing
-  # it (MediaWiki's default). Source file names map straight to page titles, and
-  # the main page is "index"; with the default a file named index.wikitext would
-  # become the page "Index" and the main-page link would not match.
+  # it (MediaWiki's default). The entry page is the lowercase "index", which the
+  # build writes as index.html, the file a static host (GitHub Pages, and web
+  # servers generally) serves at the site root. With the default, index.wikitext
+  # would become the page "Index", and so "Index.html", and the root URL would
+  # not resolve.
   CapitalLinks: false
 
   # Let {{DISPLAYTITLE}} set any shown title. MediaWiki's default only allows a
