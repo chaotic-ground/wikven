@@ -116,11 +116,13 @@ class FetchExtensions extends Maintenance {
 		$yaml = new YamlFormat();
 		$config = $yaml->decode(file_get_contents("$IP/extensions/Wikven/default.yaml"));
 
+		$work = getenv('WIKVEN_WORKDIR');
+		$src = $work !== false && $work !== '' ? "$work/src" : '/workspace/src';
 		$siteFile = null;
-		if (file_exists('/workspace/src/.wikven.yaml')) {
-			$siteFile = '/workspace/src/.wikven.yaml';
-		} elseif (file_exists('/workspace/src/.wikven.json')) {
-			$siteFile = '/workspace/src/.wikven.json';
+		if (file_exists("$src/.wikven.yaml")) {
+			$siteFile = "$src/.wikven.yaml";
+		} elseif (file_exists("$src/.wikven.json")) {
+			$siteFile = "$src/.wikven.json";
 		}
 		if ($siteFile !== null) {
 			$format = str_ends_with($siteFile, '.json') ? new JsonFormat() : $yaml;

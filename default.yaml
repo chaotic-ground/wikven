@@ -23,14 +23,12 @@ config:
   UseInstantCommons: true
 
   # Local images: source-directory image files are uploaded into the File:
-  # namespace at build time. ImageMagick scales raster thumbnails; rsvg-convert
-  # rasterizes SVG thumbnails.
+  # namespace at build time. The thumbnailing backend (ImageMagick or GD, and
+  # rsvg or native SVG) is not set here; WikvenSettings.php detects it at run time
+  # from the tools available on the host, so the same build works in the Docker
+  # image and in a standalone binary that has only GD.
   EnableUploads: true
-  UseImageMagick: true
-  ImageMagickConvertCommand: /usr/bin/convert
   FileExtensions: [png, gif, jpg, jpeg, webp, svg]
-  SVGConverter: rsvg
-  SVGConverterPath: /usr/bin
 
   # Which namespaces count as content. MediaWiki's default is the main namespace
   # alone ([0]); Wikven adds File: (namespace 6) so the file cache exports file

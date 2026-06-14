@@ -5,10 +5,39 @@ wfLoadExtension('Wikven');
 // Build mechanics. The user-overridable MediaWiki defaults live in default.yaml;
 // only the static-export internals that are not plain config stay here.
 
+// All filesystem locations derive from one working directory so the same build
+// works in the Docker image (where /workspace is mounted) and in a standalone
+// binary (where it points at a writable host directory). Layout:
+//   $WIKVEN_WORKDIR/src    input (read-only)
+//   $WIKVEN_WORKDIR/dist   output (the rendered file cache)
+//   $WIKVEN_WORKDIR/.cache ephemeral state (uploads, l10n + object cache, tmp)
+$wikvenWorkEnv = getenv('WIKVEN_WORKDIR');
+$wikvenWork = $wikvenWorkEnv !== false && $wikvenWorkEnv !== '' ? $wikvenWorkEnv : '/workspace';
+$wikvenSrc = "$wikvenWork/src";
+$wikvenDist = "$wikvenWork/dist";
+$wikvenCache = "$wikvenWork/.cache";
+
 // The static export is MediaWiki's own file cache, written to the output dir.
 $wgUseFileCache = true;
 $wgFileCacheDepth = 0;
-$wgFileCacheDirectory = '/workspace/dist';
+$wgFileCacheDirectory = $wikvenDist;
+$wgWikvenSourceDirectory = $wikvenSrc;
+$wgWikvenHtmlDirectory = $wikvenDist;
+
+// Standalone-binary mode (WIKVEN_WORKDIR set): keep every ephemeral write out of
+// the install dir, which in the embedded binary is an extracted, throwaway tree.
+// In the Docker image WIKVEN_WORKDIR is unset, the install dir is writable, and
+// MediaWiki's defaults are left untouched (no behavior change).
+if ($wikvenWorkEnv !== false && $wikvenWorkEnv !== '') {
+	$wgUploadDirectory = "$wikvenCache/uploads";
+	$wgCacheDirectory = "$wikvenCache/mw";
+	$wgTmpDirectory = "$wikvenCache/tmp";
+	foreach ([$wgUploadDirectory, $wgCacheDirectory, $wgTmpDirectory] as $wikvenDir) {
+		if (!is_dir($wikvenDir)) {
+			@mkdir($wikvenDir, 0777, true);
+		}
+	}
+}
 
 // Ship a small built-in favicon so browsers do not 404 on /favicon.ico.
 // Overridable from .wikven.yaml via "config": { "Favicon": "..." }.
@@ -22,6 +51,48 @@ $wgFavicon = 'data:image/svg+xml,'
 
 unset($wgFooterIcons['poweredby']);
 
+// Image backend, detected at run time so the build uses whatever the host has.
+// Raster thumbnails (png/jpg/gif/webp) go through ImageMagick when its `convert`
+// (or `magick`) is on PATH, otherwise the GD extension. SVG goes through
+// rsvg-convert when present, otherwise it is served inline as sanitized native
+// SVG. SVG is deliberately never routed through ImageMagick, whose built-in
+// 'ImageMagick' converter calls the `convert` binary that does not exist on
+// ImageMagick-7-only hosts. This runs before the config load below, so an
+// explicit value in .wikven.yaml still wins; default.yaml does not set the
+// backend. In the Docker image both tools are present, so this reproduces the
+// previous ImageMagick + rsvg configuration exactly.
+$wikvenFindExe = static function (array $names) {
+	$path = getenv('PATH') ?: '/usr/local/bin:/usr/bin:/bin';
+	foreach ($names as $name) {
+		foreach (explode(':', $path) as $dir) {
+			if ($dir !== '' && is_executable(rtrim($dir, '/') . '/' . $name)) {
+				return rtrim($dir, '/') . '/' . $name;
+			}
+		}
+	}
+	return null;
+};
+$wikvenConvert = $wikvenFindExe(['convert', 'magick']);
+$wikvenRsvg = $wikvenFindExe(['rsvg-convert']);
+$wgUseImageMagick = $wikvenConvert !== null;
+if ($wikvenConvert !== null) {
+	$wgImageMagickConvertCommand = $wikvenConvert;
+}
+if ($wikvenRsvg !== null) {
+	$wgSVGConverter = 'rsvg';
+	$wgSVGConverterPath = dirname($wikvenRsvg);
+} else {
+	$wgSVGNativeRendering = true;
+}
+if ($wikvenConvert === null || $wikvenRsvg === null) {
+	error_log(
+		'Wikven: '
+		. ( $wikvenConvert === null ? 'ImageMagick not found, using GD for raster thumbnails. ' : '' )
+		. ( $wikvenRsvg === null ? 'rsvg-convert not found, serving SVG inline (native). ' : '' )
+		. 'Install ImageMagick and librsvg for higher-quality thumbnails.'
+	);
+}
+
 // Configuration: wikven's defaults (default.yaml) merged with the site's own
 // .wikven.yaml (or .wikven.json), the site overriding the defaults. Both use
 // MediaWiki's YAML settings format: a "config" map (variables without the "wg"
@@ -32,13 +103,13 @@ $wikvenYaml = new MediaWiki\Settings\Source\Format\YamlFormat();
 $config = $wikvenYaml->decode(file_get_contents("$IP/extensions/Wikven/default.yaml"));
 
 $wikvenSiteFile = null;
-if (file_exists('/workspace/src/.wikven.yaml')) {
-	$wikvenSiteFile = '/workspace/src/.wikven.yaml';
-	if (file_exists('/workspace/src/.wikven.json')) {
+if (file_exists("$wikvenSrc/.wikven.yaml")) {
+	$wikvenSiteFile = "$wikvenSrc/.wikven.yaml";
+	if (file_exists("$wikvenSrc/.wikven.json")) {
 		error_log('Wikven: both .wikven.yaml and .wikven.json exist; using .wikven.yaml and ignoring .wikven.json');
 	}
-} elseif (file_exists('/workspace/src/.wikven.json')) {
-	$wikvenSiteFile = '/workspace/src/.wikven.json';
+} elseif (file_exists("$wikvenSrc/.wikven.json")) {
+	$wikvenSiteFile = "$wikvenSrc/.wikven.json";
 }
 
 if ($wikvenSiteFile !== null) {
@@ -106,8 +177,8 @@ foreach ($config['config'] ?? [] as $key => $val) {
 // either a file name, or (like $wgLogos['wordmark'] and ['tagline']) a map with a
 // "src" file name plus extra keys such as width and height.
 if (!empty($wgWikvenLogos) && is_array($wgWikvenLogos)) {
-	$wikvenLogoData = static function ($name) {
-		$file = '/workspace/src/' . $name;
+	$wikvenLogoData = static function ($name) use ($wikvenSrc) {
+		$file = "$wikvenSrc/" . $name;
 		if (!is_file($file)) {
 			error_log("Wikven: logo file '$name' not found in the source directory");
 			return null;
