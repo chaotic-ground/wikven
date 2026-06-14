@@ -1,99 +1,50 @@
 On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{wikven}}.
 {{note|This page assumes a unix-like OS.}}
 
-{{wikven}} consists of two parts: a script and a MediaWiki extension. To simplify the whole build
-process, a docker image is provided, and this guide shows how to use it. If you would rather not
-use Docker, there is also a [[Binary|standalone binary]].
+{{wikven}} builds a static website from a directory of wikitext. You can run it two ways: as a Docker image, or as a standalone [[Binary|binary]] that needs no Docker. This guide shows both, pick whichever you prefer.
 
 ; Requirement
-:* [https://www.docker.com/ Docker]
-
-If Docker is ready, you can move on to the next step.
+:* either [https://www.docker.com/ Docker], or the standalone [[Binary|binary]] for your platform.
 
 ----
 
-Create two directories, <code>src</code> and
-<code>dist</code>.
+Create a source directory and add a wikitext file. Any file ending in <code>.wikitext</code> becomes a wiki article. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a browser opens at the site root.
 
-<syntaxhighlight lang="shell-session">
-$ mkdir src dist
+<syntaxhighlight lang="shell">
+mkdir src
+echo 'Hello, World!' > src/index.wikitext
 </syntaxhighlight>
 
-Then create a wikitext file. Any file that ends with <code>.wikitext</code> is treated as a wiki
-article by {{wikven}}.
+Then build the site. The rendered pages are written to <code>dist/</code>.
 
-<syntaxhighlight lang="shell-session">
-$ echo 'Hello, World!' > src/index.wikitext
-</syntaxhighlight>
-
-Then run Docker with [https://docs.docker.com/storage/volumes/ volume mounting]:
-
-<syntaxhighlight lang="shell-session">
-$ docker run \
-  --rm \
-  -v "$(pwd)"/src:/workspace/src \
-  -v "$(pwd)"/dist:/workspace/dist \
+; With Docker
+: mount the source and output directories into the container:
+<syntaxhighlight lang="shell">
+docker run --rm \
+  -v "$(pwd)/src:/workspace/src" \
+  -v "$(pwd)/dist:/workspace/dist" \
   ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
 
-Open <code>"$(pwd)"/dist/index.html</code> in your browser.
+; With the binary
+: run it in the directory that holds <code>src/</code> (see [[Binary]] to download it):
+<syntaxhighlight lang="shell">
+./wikven build
+</syntaxhighlight>
+
+Open <code>dist/index.html</code> in your browser.
 
 == Setting the title of the site ==
 
-For configuration, you must create a [[wikven.yaml|<code>.wikven.yaml</code>]] file in your
-<code>src</code> directory.
+For configuration, create a [[wikven.yaml|<code>.wikven.yaml</code>]] file in your <code>src</code> directory.
 
-<syntaxhighlight lang="shell-session">
-$ cat <<EOF > src/.wikven.yaml
+<syntaxhighlight lang="shell">
+cat <<EOF > src/.wikven.yaml
 config:
   Sitename: My Site
 EOF
 </syntaxhighlight>
 
-Then build again.
-<syntaxhighlight lang="shell-session">
-$ docker run \
-  --rm \
-  -v "$(pwd)"/src:/workspace/src \
-  -v "$(pwd)"/dist:/workspace/dist \
-  ghcr.io/chaotic-ground/wikven
-</syntaxhighlight>
+Build again with the same command as before, and the site is titled "My Site".
 
 {{prevnext|Editing sidebar}}
-
-{{hr}}
-
-<syntaxhighlight lang="shell-session">
-$ mkdir src dist
-$ echo 'Hello, World!' > src/index.wikitext
-$ cat <<EOF > src/.wikven.yaml
-config:
-  Sitename: My Site
-EOF
-$ docker run \
-  --rm \
-  -v "$(pwd)"/src:/workspace/src \
-  -v "$(pwd)"/dist:/workspace/dist \
-  ghcr.io/chaotic-ground/wikven
-$ ls dist
-ext.Wikven.styles.css
-index.html
-jquery.makeCollapsible.styles.css
-Main_Page.html
-mediawiki.action.history.styles.css
-mediawiki.feedlink.css
-mediawiki.helplink.css
-mediawiki.htmlform.ooui.styles.css
-mediawiki.htmlform.styles.css
-mediawiki.interface.helpers.styles.css
-mediawiki.special.changeslist.css
-mediawiki.ui.button.css
-mediawiki.ui.icon.css
-mediawiki.widgets.DateInputWidget.styles.css
-mediawiki.widgets.styles.css
-oojs-ui-core.icons.css
-oojs-ui-core.styles.css
-oojs-ui.styles.indicators.css
-skins.vector.icons.css
-skins.vector.styles.css
-</syntaxhighlight>
