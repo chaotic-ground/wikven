@@ -1,0 +1,10 @@
+/* Wikven uses a teal brand colour, so replace the skin's default Wikimedia blue
+ * (the Codex "progressive" colour) with teal. Links and interactive accents read
+ * these tokens, so overriding them recolours them site-wide. */
+:root {
+	--color-progressive: #157f93;
+	--color-progressive--hover: #0f6173;
+	--color-progressive--active: #0c4d5b;
+	--color-progressive--focus: #157f93;
+	--color-link: #157f93;
+}
