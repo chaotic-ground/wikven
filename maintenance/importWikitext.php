@@ -2,13 +2,13 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-use CommentStoreComment;
-use ContentHandler;
+use MediaWiki\CommentStore\CommentStoreComment;
+use MediaWiki\Content\ContentHandler;
 use Maintenance;
 use MediaWiki\Revision\SlotRecord;
-use StubGlobalUser;
-use Title;
-use User;
+use MediaWiki\StubObject\StubGlobalUser;
+use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 use WikiRevision;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''

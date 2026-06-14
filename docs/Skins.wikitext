@@ -26,7 +26,7 @@ config:
   WikvenRepositories:
     Example:
       repository: https://github.com/example/Example.git
-      reference: REL1_43
+      reference: REL1_45
 </syntaxhighlight>
 
 == Skin-specific configuration ==

@@ -2,14 +2,14 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
-use Config;
-use FauxRequest;
-use Html;
+use MediaWiki\Config\Config;
+use MediaWiki\Request\FauxRequest;
+use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
-use OutputPage;
-use Title;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Title\Title;
 
 class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook {
 	/** @var Context */

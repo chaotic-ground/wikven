@@ -53,12 +53,12 @@ config:
     # 1. A tarball, e.g. from Special:ExtensionDistributor, whose archive already
     #    bundles the extension's dependencies.
     Foo:
-      tarball: https://extdist.wmflabs.org/dist/extensions/Foo-REL1_43-abc1234.tar.gz
+      tarball: https://extdist.wmflabs.org/dist/extensions/Foo-REL1_45-abc1234.tar.gz
     # 2. A Git repository. Add an optional reference (a tag or branch), and
     #    composer: true to run Composer inside the cloned directory.
     Bar:
       repository: https://github.com/example/Bar.git
-      reference: REL1_43
+      reference: REL1_45
       composer: true
     # 3. A Composer package, resolved through MediaWiki's composer.local.json.
     SemanticMediaWiki:
@@ -69,7 +69,7 @@ A name in <code>WikvenRepositories</code> that already exists in the image (a bu
 
 {{note|The build downloads and runs the code you name here, with network access. Only declare sources you trust, and prefer pinning a <code>reference</code> or version.}}
 
-This very site fetches {{ml|Extension:TemplateStyles|TemplateStyles}} this way (see its <code>.wikven.yaml</code>) to style its templates; the notice box above is one example.
+This very site fetches {{ml|Extension:Variables|Variables}} this way (see its <code>.wikven.yaml</code>): {{#vardefine:demo|42}}{{#var:demo}} is rendered by the fetched extension. (Its templates are styled with TemplateStyles, which is bundled in MediaWiki and so needs no source here.)
 
 == Defaults ==
 
