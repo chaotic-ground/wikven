@@ -81,6 +81,10 @@
 		"WikvenLogos": {
 			"value": [],
 			"description": "Header logos, mirroring $wgLogos but keyed to image file names in the source directory (each inlined as a data URI)."
+		},
+		"WikvenRepositories": {
+			"value": [],
+			"description": "Sources for third-party extensions and skins listed in extensions/skins. A map of component name to a tarball/repository/package source, fetched by maintenance/fetchExtensions.php before MediaWiki loads them."
 		}
 	},
 	"MessagesDirs": {

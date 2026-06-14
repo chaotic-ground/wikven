@@ -34,8 +34,8 @@ class ImportWikitext extends Maintenance {
 		StubGlobalUser::setUser($user);
 
 		$ok = true;
-		foreach (glob("$sourceDirectory/*.wikitext") as $filename) {
-			$title = Title::newFromText($this->filenameToTitle($filename));
+		foreach ($this->wikitextFiles($sourceDirectory) as $filename) {
+			$title = Title::newFromText($this->filenameToTitle($filename, $sourceDirectory));
 			if (!$title) {
 				$this->output('Invalid title: ' . basename($filename) . "\n");
 				continue;
@@ -85,13 +85,40 @@ class ImportWikitext extends Maintenance {
 	}
 
 	/**
+	 * Find every *.wikitext file under the source directory, recursing into
+	 * subdirectories so subpages can be supplied as nested files (e.g. a
+	 * template's "Template:Foo/styles.css.wikitext" in a "Template:Foo/" folder).
+	 *
+	 * @param string $sourceDirectory
+	 * @return string[] Absolute paths, sorted for a stable import order.
+	 */
+	private function wikitextFiles($sourceDirectory) {
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($sourceDirectory, \FilesystemIterator::SKIP_DOTS)
+		);
+		$files = [];
+		foreach ($iterator as $file) {
+			if ($file->isFile() && str_ends_with($file->getFilename(), '.wikitext')) {
+				$files[] = $file->getPathname();
+			}
+		}
+		sort($files);
+		return $files;
+	}
+
+	/**
+	 * Map a wikitext file to its page title: the path relative to the source
+	 * directory, minus the .wikitext suffix. A nested file thus becomes a
+	 * subpage, so "Template:Foo/styles.css.wikitext" imports as the subpage
+	 * "Template:Foo/styles.css".
+	 *
 	 * @param string $name
+	 * @param string $sourceDirectory
 	 * @return string
 	 */
-	private function filenameToTitle($name) {
-		$name = basename($name);
-		$name = preg_replace('/\.wikitext$/', '', $name);
-		return $name;
+	private function filenameToTitle($name, $sourceDirectory) {
+		$relative = substr($name, strlen($sourceDirectory) + 1);
+		return preg_replace('/\.wikitext$/', '', $relative);
 	}
 }
 

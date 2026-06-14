@@ -10,6 +10,7 @@ With {{wikven}}, you can use the following features of MediaWiki.
 * [[Images|Images]] from Wikimedia Commons or local files
 * [[JavaScript]] (MediaWiki:Common.js and gadgets)
 * {{ml|Bundled extensions and skins}}
+* Third-party extensions and skins (see [[wikven.yaml|.wikven.yaml]])
 
 == Unsupported features ==
 
@@ -17,12 +18,6 @@ With {{wikven}}, you can use the following features of MediaWiki.
 * All special pages
 * All editors ({{ml|Extension:WikiEditor|WikiEditor}}, <!--
 -->{{ml|Extension:VisualEditor|VisualEditor}} and {{ml|Extension:CodeEditor|CodeEditor}})
-
-=== Planned features ===
-
-The following features are currently not supported, but are planned for the future.
-
-* Support for third-party skins/extensions
 
 {{prevnext|Getting Started}}
 {{DISPLAYTITLE:Wikven}}

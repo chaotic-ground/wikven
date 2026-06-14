@@ -1,6 +1,7 @@
 extensions:
   - SyntaxHighlight_GeSHi
   - ParserFunctions
+  - TemplateStyles
 skins:
   - Vector
 config:
@@ -9,3 +10,10 @@ config:
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1.wikitext
   WikvenLogos:
     icon: logo.svg
+  WikvenRepositories:
+    # TemplateStyles is not bundled in the image; clone it from Git. Its only
+    # Composer dependency (wikimedia/css-sanitizer) already ships in MediaWiki
+    # core, so a plain clone is enough.
+    TemplateStyles:
+      repository: https://github.com/wikimedia/mediawiki-extensions-TemplateStyles.git
+      reference: REL1_43
