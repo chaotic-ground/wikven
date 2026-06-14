@@ -1,6 +1,6 @@
 [[File:The Earth seen from Apollo 17.jpg|thumb|The Earth, seen from Apollo 17 (1972).]]
 
-You can embed images from [[commons:Main Page|Wikimedia Commons]]. See {{ml|InstantCommons}} for details.
+You can embed images from [[commons:Main Page|Wikimedia Commons]]. Referenced files are downloaded and stored next to the HTML at build time, so the static site does not depend on Commons when viewed. See {{ml|InstantCommons}} for details.
 
 == Local images ==
 
@@ -12,7 +12,9 @@ You can also use your own image files. Put them in your source directory, next t
 [[File:My photo.png|thumb|A caption]]
 </syntaxhighlight>
 
-PNG, GIF, JPEG, and WebP files are supported, and thumbnails are generated at build time.
+PNG, GIF, JPEG, WebP, and SVG files are supported. Raster images are thumbnailed at build time; an SVG is rasterized to a thumbnail when a converter is available, otherwise served inline.
+
+The thumbnailing backend is detected from the tools present at build time: ImageMagick for raster images when it is installed (as in the Docker image), otherwise the built-in GD library (as in the standalone [[Binary|binary]], which carries GD); SVG uses librsvg when present, otherwise native inline rendering. The pages render the same either way, ImageMagick simply produces higher-quality thumbnails and supports more formats.
 
 To give a file its own description page, add a wikitext file named after it in the <code>File:</code> namespace, the same way other namespaced pages are named. For <code>My photo.png</code>, that is <code>File:My photo.png.wikitext</code>.
 
