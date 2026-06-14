@@ -4,7 +4,6 @@ extensions:
 skins:
   - Vector
 config:
-  Sitename: Wikven
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1.wikitext
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1.wikitext
