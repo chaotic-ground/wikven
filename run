@@ -1,6 +1,10 @@
 #!/bin/bash
 set -euo pipefail; IFS=$'\n\t'
 
+# Source input and rendered output live under one working dir, matching
+# WikvenSettings.php. Defaults to /workspace, the path the image mounts.
+WIKVEN_WORKDIR="${WIKVEN_WORKDIR:-/workspace}"
+
 cd /var/www/html
 
 php maintenance/run.php install \
@@ -20,4 +24,4 @@ php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/fetchExtensi
 echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
 
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/build.php
-rm -rf /workspace/dist/history/
+rm -rf "$WIKVEN_WORKDIR/dist/history/"
