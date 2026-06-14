@@ -1,5 +1,89 @@
-== Build ==
+__TOC__
+
+This page explains how {{wikven}} is built, for people who want to work on it. {{wikven}} is a {{ml|MediaWiki}} extension plus a handful of maintenance scripts that turn a directory of wikitext into a static website; it does not add a new rendering engine, it drives MediaWiki itself and then captures the result.
+
+== Architecture ==
+
+A {{wikven}} build has four moving parts:
+
+* The '''extension''' (<code>extension.json</code>, <code>includes/</code>). It registers {{wikven}}'s configuration and a few hooks that adapt MediaWiki's output for a static host: hiding the edit/history UI and the sidebar's wiki-only links, swapping footer links for the configured <code>WikvenFooterUrl</code>/<code>WikvenEditUrl</code>/<code>WikvenHistoryUrl</code>, and rewriting internal URLs so they point at <code>.html</code> files instead of <code>index.php?title=</code>.
+* The '''maintenance scripts''' (<code>maintenance/</code>). These are the build pipeline, described below.
+* '''<code>WikvenSettings.php</code>'''. The <code>LocalSettings.php</code> the build runs under: it loads the configuration, detects the image backend, and applies {{wikven}}'s defaults.
+* The '''<code>run</code>''' script and '''<code>Dockerfile</code>'''. They package MediaWiki 1.43 plus the extension into an image whose entry point performs one build.
+
+== Building the image ==
 
 <syntaxhighlight lang="shell">
 docker build --tag wikven .
 </syntaxhighlight>
+
+The <code>Dockerfile</code> is <code>FROM mediawiki:1.43</code>. It adds Composer and unzip (needed when fetching third-party extensions), copies the extension into <code>/var/www/html/extensions/Wikven</code>, copies <code>WikvenSettings.php</code> into the MediaWiki root, and sets the <code>run</code> script as the entry point.
+
+== Running a build ==
+
+<syntaxhighlight lang="shell">
+docker run --rm \
+  -v "$(pwd)/docs:/workspace/src" \
+  -v "$(pwd)/dist:/workspace/dist" \
+  wikven
+</syntaxhighlight>
+
+The container mounts the source at <code>/workspace/src</code> and writes the rendered site to <code>/workspace/dist</code>. Both paths derive from <code>WIKVEN_WORKDIR</code> (default <code>/workspace</code>), which also has a <code>.cache/</code> for ephemeral state; the same layout lets the [[Binary|standalone binary]] point everything at a writable host directory.
+
+The <code>run</code> script:
+
+# installs a throwaway MediaWiki into an SQLite database (no server, no real admin),
+# fetches any third-party extensions and skins (see below),
+# appends <code>require_once 'WikvenSettings.php';</code> to the generated <code>LocalSettings.php</code>,
+# runs the build pipeline,
+# deletes the per-page history the file cache emits.
+
+== The build pipeline ==
+
+<code>maintenance/build.php</code> boots MediaWiki '''once''' and runs every step as a child maintenance script, rather than paying the bootstrap cost once per step. In order:
+
+; <code>setMainPage</code>
+: Points <code>MediaWiki:Mainpage</code> at the imported <code>index</code> article, so the site root resolves to <code>index.html</code>.
+; <code>importImages</code>
+: Uploads the image files in the source directory into the <code>File:</code> namespace. It runs '''before''' the wikitext import, so pages that embed a local image render a real thumbnail instead of a broken-media placeholder.
+; <code>importWikitext</code>
+: Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions stamped with the file's modification time, so the footer shows a real "last modified" date.
+; <code>RunJobs</code>
+: Runs MediaWiki's job queue, mainly thumbnail generation and link-table updates.
+; <code>RebuildFileCache</code>
+: Renders every content page to an HTML file under <code>dist/</code>. This is MediaWiki's own file cache; {{wikven}} treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.
+; <code>buildStyles</code>
+: Re-renders each CSS module the pages reference into a local file, and renders the <code>site.styles</code> module (<code>MediaWiki:Common.css</code> and the skin's site CSS) to its own file.
+; <code>buildScripts</code>
+: Dumps the JavaScript the pages need into two files: <code>startup-static.js</code> (the loader manifest, with its network auto-load removed) and <code>modules-static.js</code> (the full dependency closure, so every module self-executes). It seeds the <code>site</code> module (<code>MediaWiki:Common.js</code> and the skin's JS) and any default [[JavaScript|gadgets]], which a live wiki pulls in implicitly.
+; <code>rewriteScripts</code>
+: Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the search box and appearance menu, which need a live API.
+; <code>storeImages</code>
+: Copies every referenced image (from Wikimedia Commons via InstantCommons, or from local uploads) to a content-hashed local file and rewrites the URLs, so nothing is fetched over the network at view time.
+; <code>rename</code>
+: Gives the namespace-prefixed cache files readable names (for example <code>ns6%3A...</code> becomes <code>File:...</code>).
+
+== Configuration ==
+
+Configuration is layered. <code>default.yaml</code> ships {{wikven}}'s baseline MediaWiki settings; the site's [[wikven.yaml|.wikven.yaml]] is merged on top. <code>WikvenSettings.php</code> reads both with MediaWiki's own YAML settings parser, applies the merged <code>config</code> map, loads the listed <code>extensions</code> and <code>skins</code>, and inlines the <code>WikvenLogos</code>. It also detects the thumbnailing backend at run time, ImageMagick and rsvg when available, otherwise the built-in GD library plus native inline SVG, so the same build works in the image and in a binary that has only GD.
+
+== Why these steps exist ==
+
+A live wiki relies on <code>load.php</code>, an action API, and a database; a static host has none of these. Each pipeline step removes one such dependency: the file cache replaces the renderer, <code>buildStyles</code>/<code>buildScripts</code>/<code>rewriteScripts</code> replace <code>load.php</code>, <code>storeImages</code> replaces the thumbnail/Commons endpoints, and the extension's hooks remove the UI that would call the API. What is left is plain HTML, CSS, JS, and images.
+
+== Third-party extensions and skins ==
+
+Names in <code>extensions</code>/<code>skins</code> that are not bundled in the image are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in [[wikven.yaml#WikvenRepositories|<code>WikvenRepositories</code>]] (a tarball, a Git repository, or a Composer package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
+
+== Standalone binary ==
+
+The same MediaWiki + {{wikven}} tree is embedded into a single [[Binary|FrankenPHP executable]] (see <code>Dockerfile.binary</code>), so a site can be built with no Docker. The binary extracts its app to a writable temporary directory at startup and runs the same pipeline, which is why all writable paths are kept under <code>WIKVEN_WORKDIR</code>.
+
+== Continuous integration ==
+
+* <code>lint.yaml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, zizmor).
+* <code>docker-build.yaml</code> builds the image and publishes it to <code>ghcr.io/chaotic-ground/wikven</code> on <code>main</code>.
+* <code>deploy-docs.yaml</code> builds the <code>docs/</code> directory with the image and deploys the result to GitHub Pages, so this site is itself a {{wikven}} build.
+* <code>release-please.yaml</code> manages versioning and releases; the release binaries are attached by the binary build workflow.
+
+Versions follow [https://www.conventionalcommits.org/ Conventional Commits], which release-please uses to generate the changelog and bump the version.
