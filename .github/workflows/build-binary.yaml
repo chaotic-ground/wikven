@@ -1,0 +1,48 @@
+name: Build binary
+
+# Reusable: build the standalone binary for each architecture and attach it to
+# the given release tag. Called by release-binary.yaml and nightly.yaml.
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: The release tag to upload the binaries to.
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  binary:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            arch: x86_64
+          - runner: ubuntu-24.04-arm
+            arch: aarch64
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: write # gh release upload
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      # The standalone binary embeds the same MediaWiki + Wikven tree the image
+      # ships, so build that image first, then embed it into a FrankenPHP binary.
+      - name: Build the embedding image
+        run: docker build -t wikven .
+
+      - name: Build the standalone binary
+        run: docker build -f Dockerfile.binary --target export -o type=local,dest=out .
+
+      - name: Name it per architecture
+        run: mv out/wikven "wikven-linux-${{ matrix.arch }}"
+
+      - name: Attach to the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: gh release upload "$TAG" "wikven-linux-${{ matrix.arch }}" --clobber
