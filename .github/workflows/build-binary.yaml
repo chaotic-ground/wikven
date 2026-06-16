@@ -1,7 +1,7 @@
 name: Build binary
 
 # Reusable: build the standalone binary for each architecture and attach it to
-# the given release tag. Called by release-binary.yaml and nightly.yaml.
+# the given release tag. Called by release-please.yaml and nightly.yaml.
 on:
   workflow_call:
     inputs:
