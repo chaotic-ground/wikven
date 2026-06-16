@@ -14,8 +14,8 @@ skins:
   - Timeless
 config:
   Sitename: Wikven
-  WikvenEditUrl: https://github.com/yourname/some-repository/edit/branch-name/path/to/$1.wikitext
-  WikvenHistoryUrl: https://github.com/yourname/some-repository/commits/branch-name/path/to/$1.wikitext
+  WikvenEditUrl: https://github.com/yourname/some-repository/edit/branch-name/path/to/$1
+  WikvenHistoryUrl: https://github.com/yourname/some-repository/commits/branch-name/path/to/$1
 </syntaxhighlight>
 {{DISPLAYTITLE:.wikven.yaml}}
 
@@ -42,6 +42,10 @@ config:
 The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file next to the HTML and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page.
 
 Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
+
+=== <code>WikvenEditUrl</code> and <code>WikvenHistoryUrl</code> ===
+
+The targets the "Edit" and "View history" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave either unset to fall back to the static page itself.
 
 === <code>WikvenRepositories</code> ===
 
