@@ -21,11 +21,19 @@ require_once "$IP/maintenance/Maintenance.php";
  * config map. Each entry picks a method by which key it carries:
  *
  *   - `tarball:`    download and extract a tarball (e.g. from ExtensionDistributor,
- *                   whose tarballs already bundle their dependencies).
- *   - `repository:` git clone (plus optional `reference:` tag/branch, and
- *                   `composer: true` to run composer inside the cloned directory).
+ *                   whose tarballs already bundle their dependencies). Add a
+ *                   `sha256:` to verify the download before extracting.
+ *   - `repository:` git clone. Pin it with either `commit:` (an exact SHA, the
+ *                   reproducible choice) or `reference:` (a mutable tag/branch),
+ *                   and `composer: true` to run composer inside the clone.
  *   - `package:`    a Composer "vendor/name:constraint" installed via the core
  *                   composer.local.json (resolved by composer-merge-plugin).
+ *
+ * The build downloads and runs whatever these sources resolve to (composer
+ * scripts and the fetched code itself execute during the subsequent build), so
+ * only trusted sources should be declared. `sha256:`/`commit:` make a fetch
+ * tamper-evident and reproducible; a mutable `reference:` or a floating package
+ * constraint does not.
  *
  * Whether a name is an extension or a skin is inferred from which list it appears
  * in, so it is never written twice. This runs after install but before
@@ -90,7 +98,8 @@ class FetchExtensions extends Maintenance {
 			}
 
 			if (isset($spec['tarball'])) {
-				$this->fetchTarball((string)$spec['tarball'], $dest, $name, $kind);
+				$sha256 = $this->validatedSha256($spec, $name, $kind);
+				$this->fetchTarball((string)$spec['tarball'], $dest, $name, $kind, $sha256);
 			} elseif (isset($spec['repository'])) {
 				$this->fetchGit($spec, $dest, $name, $kind);
 			} else {
@@ -180,10 +189,62 @@ class FetchExtensions extends Maintenance {
 		return [substr($package, 0, $pos), substr($package, $pos + 1)];
 	}
 
-	private function fetchTarball($url, $dest, $name, $kind) {
+	/**
+	 * The lowercased, validated `sha256:` of a tarball spec, or null if absent.
+	 *
+	 * @param array $spec
+	 * @param string $name
+	 * @param string $kind
+	 * @return ?string
+	 */
+	private function validatedSha256(array $spec, $name, $kind) {
+		if (!isset($spec['sha256'])) {
+			return null;
+		}
+		$sha = strtolower(trim((string)$spec['sha256']));
+		if (!preg_match('/^[0-9a-f]{64}$/', $sha)) {
+			$this->fatalError("Wikven: $kind '$name' has an invalid sha256 (expected 64 hex characters).");
+		}
+		return $sha;
+	}
+
+	/**
+	 * The validated `commit:` SHA of a repository spec, or null if absent. Errors
+	 * if it is combined with `reference:`, since the two pin differently.
+	 *
+	 * @param array $spec
+	 * @param string $name
+	 * @param string $kind
+	 * @return ?string
+	 */
+	private function validatedCommit(array $spec, $name, $kind) {
+		if (empty($spec['commit'])) {
+			return null;
+		}
+		if (!empty($spec['reference'])) {
+			$this->fatalError("Wikven: $kind '$name' sets both 'commit' and 'reference'; use one.");
+		}
+		$commit = strtolower(trim((string)$spec['commit']));
+		if (!preg_match('/^[0-9a-f]{7,64}$/', $commit)) {
+			$this->fatalError("Wikven: $kind '$name' has an invalid commit (expected a hex SHA).");
+		}
+		return $commit;
+	}
+
+	private function fetchTarball($url, $dest, $name, $kind, $sha256 = null) {
 		$this->output("Wikven: downloading $kind '$name' from $url\n");
 		$tmp = tempnam(sys_get_temp_dir(), 'wikven');
 		$this->run(['curl', '-sSL', '-f', '-o', $tmp, '--', $url], "download $kind '$name'");
+		if ($sha256 !== null) {
+			$actual = hash_file('sha256', $tmp);
+			if (!hash_equals($sha256, (string)$actual)) {
+				unlink($tmp);
+				$this->fatalError(
+					"Wikven: $kind '$name' tarball sha256 mismatch (expected $sha256, got $actual)."
+				);
+			}
+			$this->output("Wikven: verified $kind '$name' tarball sha256\n");
+		}
 		if (!mkdir($dest, 0777, true) && !is_dir($dest)) {
 			$this->fatalError("Wikven: could not create '$dest'.");
 		}
@@ -193,19 +254,32 @@ class FetchExtensions extends Maintenance {
 
 	private function fetchGit(array $spec, $dest, $name, $kind) {
 		$repo = (string)$spec['repository'];
-		$cmd = ['git', 'clone', '--depth', '1'];
-		if (!empty($spec['reference'])) {
-			// --branch takes a tag or a branch (not an arbitrary commit SHA).
-			$cmd[] = '--branch';
-			$cmd[] = (string)$spec['reference'];
+		$commit = $this->validatedCommit($spec, $name, $kind);
+
+		if ($commit !== null) {
+			// Pin to an exact commit. `git clone --branch` only accepts a tag or
+			// branch, so fetch the SHA directly into a fresh repo and detach onto
+			// it (GitHub and most hosts allow fetching a reachable SHA).
+			$this->output("Wikven: cloning $kind '$name' from $repo @ $commit\n");
+			$this->run(['git', 'init', '--quiet', '--', $dest], "init $kind '$name'");
+			$this->run(['git', '-C', $dest, 'remote', 'add', 'origin', $repo], "configure $kind '$name'");
+			$this->run(
+				['git', '-C', $dest, 'fetch', '--depth', '1', 'origin', $commit],
+				"fetch $kind '$name' @ $commit"
+			);
+			$this->run(['git', '-C', $dest, 'checkout', '--quiet', '--detach', 'FETCH_HEAD'], "checkout $kind '$name'");
+		} else {
+			$cmd = ['git', 'clone', '--depth', '1'];
+			if (!empty($spec['reference'])) {
+				// --branch takes a tag or a branch (not an arbitrary commit SHA).
+				$cmd[] = '--branch';
+				$cmd[] = (string)$spec['reference'];
+			}
+			array_push($cmd, '--', $repo, $dest);
+			$ref = !empty($spec['reference']) ? " @ {$spec['reference']}" : '';
+			$this->output("Wikven: cloning $kind '$name' from $repo$ref\n");
+			$this->run($cmd, "clone $kind '$name'");
 		}
-		array_push($cmd, '--', $repo, $dest);
-		$this->output(
-			"Wikven: cloning $kind '$name' from $repo"
-			. ( !empty($spec['reference']) ? " @ {$spec['reference']}" : '' )
-			. "\n"
-		);
-		$this->run($cmd, "clone $kind '$name'");
 
 		if (!empty($spec['composer'])) {
 			$this->run(

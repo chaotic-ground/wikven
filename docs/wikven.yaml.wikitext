@@ -57,14 +57,16 @@ Each entry chooses one of three methods by the key it carries:
 config:
   WikvenRepositories:
     # 1. A tarball, e.g. from Special:ExtensionDistributor, whose archive already
-    #    bundles the extension's dependencies.
+    #    bundles the extension's dependencies. Add sha256 to verify the download.
     Foo:
       tarball: https://extdist.wmflabs.org/dist/extensions/Foo-REL1_45-abc1234.tar.gz
-    # 2. A Git repository. Add an optional reference (a tag or branch), and
-    #    composer: true to run Composer inside the cloned directory.
+      sha256: 4f5e...  # 64 hex characters; the build aborts on a mismatch
+    # 2. A Git repository. Pin it with commit (an exact SHA, reproducible) or
+    #    reference (a tag or branch). Add composer: true to run Composer inside
+    #    the cloned directory.
     Bar:
       repository: https://github.com/example/Bar.git
-      reference: REL1_45
+      commit: 1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b
       composer: true
     # 3. A Composer package, resolved through MediaWiki's composer.local.json.
     SemanticMediaWiki:
@@ -75,7 +77,7 @@ A name in <code>WikvenRepositories</code> that is already bundled with wikven is
 
 Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and Composer when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[Binary|binary]] they must be on your <code>PATH</code>.
 
-{{note|The build downloads and runs the code you name here, with network access. Only declare sources you trust, and prefer pinning a <code>reference</code> or version.}}
+{{note|The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}
 
 This very site fetches {{ml|Extension:TabberNeue|TabberNeue}} this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 
