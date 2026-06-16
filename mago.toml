@@ -4,7 +4,8 @@
 # which tracks how far this configuration is from a zero diff against
 # MediaWiki core and lists the differences that cannot be configured away.
 
-# The mediawiki:1.43 base image ships PHP 8.1.
+# MediaWiki 1.45 (the base image, see Dockerfile) requires PHP 8.1+, so lint
+# against 8.1 as the floor even though the shipped binary runs a newer PHP.
 php-version = "8.1"
 
 [source]
