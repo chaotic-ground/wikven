@@ -7,8 +7,8 @@ skins:
   - Vector
 config:
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
-  WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1.wikitext
-  WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1.wikitext
+  WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
+  WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1
   WikvenLogos:
     icon: logo.svg
   WikvenRepositories:

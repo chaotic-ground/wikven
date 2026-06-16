@@ -85,9 +85,9 @@ class ImportWikitext extends Maintenance {
 	}
 
 	/**
-	 * Find every *.wikitext file under the source directory, recursing into
+	 * Find every page file under the source directory, recursing into
 	 * subdirectories so subpages can be supplied as nested files (e.g. a
-	 * template's "Template:Foo/styles.css.wikitext" in a "Template:Foo/" folder).
+	 * template's "Template:Foo/styles.css" in a "Template:Foo/" folder).
 	 *
 	 * @param string $sourceDirectory
 	 * @return string[] Absolute paths, sorted for a stable import order.
@@ -98,8 +98,10 @@ class ImportWikitext extends Maintenance {
 		);
 		$files = [];
 		foreach ($iterator as $file) {
-			if ($file->isFile() && str_ends_with($file->getFilename(), '.wikitext')) {
-				$files[] = $file->getPathname();
+			$pathname = $file->getPathname();
+			$relative = substr($pathname, strlen($sourceDirectory) + 1);
+			if ($file->isFile() && SourceFile::isPageFile($relative)) {
+				$files[] = $pathname;
 			}
 		}
 		sort($files);
@@ -107,10 +109,8 @@ class ImportWikitext extends Maintenance {
 	}
 
 	/**
-	 * Map a wikitext file to its page title: the path relative to the source
-	 * directory, minus the .wikitext suffix. A nested file thus becomes a
-	 * subpage, so "Template:Foo/styles.css.wikitext" imports as the subpage
-	 * "Template:Foo/styles.css".
+	 * Map a page file to its title: the path relative to the source directory,
+	 * resolved by SourceFile's naming convention.
 	 *
 	 * @param string $name
 	 * @param string $sourceDirectory
@@ -118,7 +118,7 @@ class ImportWikitext extends Maintenance {
 	 */
 	private function filenameToTitle($name, $sourceDirectory) {
 		$relative = substr($name, strlen($sourceDirectory) + 1);
-		return preg_replace('/\.wikitext$/', '', $relative);
+		return SourceFile::filenameToTitle($relative);
 	}
 }
 

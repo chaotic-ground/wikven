@@ -25,34 +25,64 @@ a:visited {
 
 /* A cleaner syntax-highlight palette in place of the default Pygments theme,
  * tuned for the light background with teal as the keyword accent. */
-.mw-highlight .c, .mw-highlight .ch, .mw-highlight .cm, .mw-highlight .cp,
-.mw-highlight .cpf, .mw-highlight .c1, .mw-highlight .cs {
+.mw-highlight .c,
+.mw-highlight .ch,
+.mw-highlight .cm,
+.mw-highlight .cp,
+.mw-highlight .cpf,
+.mw-highlight .c1,
+.mw-highlight .cs {
 	color: #6a737d;
 	font-style: italic;
 }
-.mw-highlight .k, .mw-highlight .kc, .mw-highlight .kd, .mw-highlight .kn,
-.mw-highlight .kp, .mw-highlight .kr, .mw-highlight .kt {
+.mw-highlight .k,
+.mw-highlight .kc,
+.mw-highlight .kd,
+.mw-highlight .kn,
+.mw-highlight .kp,
+.mw-highlight .kr,
+.mw-highlight .kt {
 	color: #157f93;
 	font-weight: bold;
 }
-.mw-highlight .o, .mw-highlight .ow {
+.mw-highlight .o,
+.mw-highlight .ow {
 	color: #0c4d5b;
 }
-.mw-highlight .s, .mw-highlight .sa, .mw-highlight .sb, .mw-highlight .sc,
-.mw-highlight .dl, .mw-highlight .sd, .mw-highlight .s2, .mw-highlight .se,
-.mw-highlight .sh, .mw-highlight .si, .mw-highlight .sx, .mw-highlight .sr,
-.mw-highlight .s1, .mw-highlight .ss {
+.mw-highlight .s,
+.mw-highlight .sa,
+.mw-highlight .sb,
+.mw-highlight .sc,
+.mw-highlight .dl,
+.mw-highlight .sd,
+.mw-highlight .s2,
+.mw-highlight .se,
+.mw-highlight .sh,
+.mw-highlight .si,
+.mw-highlight .sx,
+.mw-highlight .sr,
+.mw-highlight .s1,
+.mw-highlight .ss {
 	color: #15803d;
 }
-.mw-highlight .m, .mw-highlight .mb, .mw-highlight .mf, .mw-highlight .mh,
-.mw-highlight .mi, .mw-highlight .mo, .mw-highlight .il,
-.mw-highlight .nb, .mw-highlight .bp {
+.mw-highlight .m,
+.mw-highlight .mb,
+.mw-highlight .mf,
+.mw-highlight .mh,
+.mw-highlight .mi,
+.mw-highlight .mo,
+.mw-highlight .il,
+.mw-highlight .nb,
+.mw-highlight .bp {
 	color: #0b6eb8;
 }
-.mw-highlight .nf, .mw-highlight .fm {
+.mw-highlight .nf,
+.mw-highlight .fm {
 	color: #8250df;
 }
-.mw-highlight .nc, .mw-highlight .nn, .mw-highlight .ne {
+.mw-highlight .nc,
+.mw-highlight .nn,
+.mw-highlight .ne {
 	color: #8250df;
 	font-weight: bold;
 }
@@ -63,7 +93,10 @@ a:visited {
 .mw-highlight .na {
 	color: #6f42c1;
 }
-.mw-highlight .nv, .mw-highlight .vc, .mw-highlight .vg, .mw-highlight .vi {
+.mw-highlight .nv,
+.mw-highlight .vc,
+.mw-highlight .vg,
+.mw-highlight .vi {
 	color: #953800;
 }
 .mw-highlight .gd {

@@ -10,6 +10,7 @@ use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Title\Title;
+use MediaWiki\Extension\Wikven\SourceFile;
 
 class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook {
 	/** @var Context */
@@ -57,12 +58,15 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
 		if (preg_match('/action=([^&]+)/', $query, $matches)) {
 			$action = $matches[1];
+			// $1 is the source filename the page imported from (e.g.
+			// "Getting Started.wikitext" or "MediaWiki:Common.css"), so the link
+			// lands on the file to edit rather than the rendered page.
 			if ($action === 'edit' && $wgWikvenEditUrl) {
-				$name = str_replace('_', '%20', $name);
-				$url = str_replace('$1', $name, $wgWikvenEditUrl);
+				$file = str_replace('_', '%20', SourceFile::titleToFilename($name));
+				$url = str_replace('$1', $file, $wgWikvenEditUrl);
 			} elseif ($action === 'history' && $wgWikvenHistoryUrl) {
-				$name = str_replace('_', '%20', $name);
-				$url = str_replace('$1', $name, $wgWikvenHistoryUrl);
+				$file = str_replace('_', '%20', SourceFile::titleToFilename($name));
+				$url = str_replace('$1', $file, $wgWikvenHistoryUrl);
 			} else {
 				$url = "./$name.html";
 			}
