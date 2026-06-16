@@ -73,7 +73,7 @@ Each method needs a host tool present at build time: <code>tarball</code> uses <
 
 {{note|The build downloads and runs the code you name here, with network access. Only declare sources you trust, and prefer pinning a <code>reference</code> or version.}}
 
-This very site fetches {{ml|Extension:Variables|Variables}} this way (see its <code>.wikven.yaml</code>): {{#vardefine:demo|42}}{{#var:demo}} is rendered by the fetched extension. (Its templates are styled with TemplateStyles, which is bundled in MediaWiki and so needs no source here.)
+This very site fetches {{ml|Extension:TabberNeue|TabberNeue}} this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 
 == Defaults ==
 
