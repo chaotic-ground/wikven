@@ -41,6 +41,18 @@ class ImportWikitext extends Maintenance {
 				continue;
 			}
 
+			// The static export derives a page's edit/history link filename from
+			// its title. If the title does not round-trip back to this source
+			// file name (MediaWiki normalised it), those links would 404; warn so
+			// the author can rename the file to an already-normalised title.
+			$relative = substr($filename, strlen($sourceDirectory) + 1);
+			if (SourceFile::titleToFilename($title->getPrefixedText()) !== $relative) {
+				$this->output(
+					"Warning: '$relative' imports as page '{$title->getPrefixedText()}'; "
+					. "edit/history links may not resolve back to the file.\n"
+				);
+			}
+
 			$text = file_get_contents($filename);
 			$content = ContentHandler::makeContent($text, $title);
 
