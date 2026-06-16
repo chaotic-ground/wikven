@@ -93,14 +93,16 @@ if ($wikvenConvert === null || $wikvenRsvg === null) {
 	);
 }
 
-// Configuration: wikven's defaults (default.yaml) merged with the site's own
-// .wikven.yaml (or .wikven.json), the site overriding the defaults. Both use
-// MediaWiki's YAML settings format: a "config" map (variables without the "wg"
-// prefix), plus "extensions" and "skins" lists. .wikven.json is read only when
-// no .wikven.yaml is present (YAML is a superset of JSON). YamlFormat prefers the
-// PECL yaml extension and falls back to the bundled symfony/yaml.
-$wikvenYaml = new MediaWiki\Settings\Source\Format\YamlFormat();
-$config = $wikvenYaml->decode(file_get_contents("$IP/extensions/Wikven/default.yaml"));
+// Configuration: wikven's defaults (default.yaml) and then the site's own
+// .wikven.yaml (or .wikven.json) on top, loaded through MediaWiki's own settings
+// system ($wgSettings, available here because LocalSettings.php runs inside it).
+// The "config" map (variables without the "wg" prefix) is fed to $wgSettings so
+// keys merge per their declared strategy and can be schema-validated; the
+// "extensions" and "skins" lists are collected here and loaded leniently below,
+// because the settings loader fatals on a name it cannot find whereas wikven
+// skips an unbundled one. .wikven.json is read only when no .wikven.yaml is
+// present (YAML is a superset of JSON).
+global $wgSettings;
 
 $wikvenSiteFile = null;
 if (file_exists("$wikvenSrc/.wikven.yaml")) {
@@ -112,17 +114,80 @@ if (file_exists("$wikvenSrc/.wikven.yaml")) {
 	$wikvenSiteFile = "$wikvenSrc/.wikven.json";
 }
 
-if ($wikvenSiteFile !== null) {
-	$format = str_ends_with($wikvenSiteFile, '.json')
-		? new MediaWiki\Settings\Source\Format\JsonFormat()
-		: $wikvenYaml;
-	$site = $format->decode(file_get_contents($wikvenSiteFile));
-	// The site overrides the defaults: config keys merge (the site wins), and
-	// the extensions and skins lists are appended.
-	$config['config'] = array_merge($config['config'] ?? [], $site['config'] ?? []);
-	$config['extensions'] = array_merge($config['extensions'] ?? [], $site['extensions'] ?? []);
-	$config['skins'] = array_merge($config['skins'] ?? [], $site['skins'] ?? []);
+// Wikven's own config variables, used to flag a misspelled one (which would set
+// a global nothing reads); the canonical names come from extension.json.
+$wikvenManifest = json_decode(file_get_contents("$IP/extensions/Wikven/extension.json"), true);
+$wikvenKnownConfig = array_keys($wikvenManifest['config'] ?? []);
+
+/**
+ * Warn about site-file mistakes the settings system would otherwise drop
+ * silently: an unknown top-level key, a wrong-typed config/extensions/skins, or
+ * a misspelled Wikven variable. Validation only; it does not alter the data.
+ *
+ * @param mixed $data Decoded .wikven.yaml/.json contents.
+ * @param string $name File name, for the messages.
+ * @param string[] $knownConfig Canonical Wikven config variable names.
+ */
+function wikvenValidateSiteFile($data, $name, array $knownConfig) {
+	if (!is_array($data)) {
+		error_log("Wikven: $name is not a map; ignoring it.");
+		return;
+	}
+	foreach (array_keys($data) as $key) {
+		if (!in_array($key, ['config', 'extensions', 'skins'], true)) {
+			error_log("Wikven: $name has an unknown top-level key '$key' (expected config/extensions/skins).");
+		}
+	}
+	foreach (['extensions', 'skins'] as $listKey) {
+		if (isset($data[$listKey]) && !is_array($data[$listKey])) {
+			error_log("Wikven: $name '$listKey' must be a list.");
+		}
+	}
+	if (isset($data['config']) && !is_array($data['config'])) {
+		error_log("Wikven: $name 'config' must be a map.");
+		return;
+	}
+	foreach (array_keys($data['config'] ?? []) as $cfgKey) {
+		if (str_starts_with($cfgKey, 'Wikven') && !in_array($cfgKey, $knownConfig, true)) {
+			error_log("Wikven: $name sets unknown config '$cfgKey' (not a Wikven variable; typo?).");
+		}
+	}
 }
+
+// The defaults, then the site file on top. For each, hand its "config" map to
+// $wgSettings (so keys merge per their declared strategy) and collect its
+// extension/skin names for the lenient loading below.
+$config = ['extensions' => [], 'skins' => []];
+$wikvenYaml = new MediaWiki\Settings\Source\Format\YamlFormat();
+$wikvenYamlData = $wikvenYaml->decode(file_get_contents("$IP/extensions/Wikven/default.yaml"));
+$wikvenSiteData = [];
+if ($wikvenSiteFile !== null) {
+	$wikvenSiteFormat = str_ends_with($wikvenSiteFile, '.json')
+		? new MediaWiki\Settings\Source\Format\JsonFormat()
+		: new MediaWiki\Settings\Source\Format\YamlFormat();
+	$wikvenSiteData = $wikvenSiteFormat->decode(file_get_contents($wikvenSiteFile));
+	wikvenValidateSiteFile($wikvenSiteData, basename($wikvenSiteFile), $wikvenKnownConfig);
+}
+
+foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {
+	if (!is_array($wikvenData)) {
+		continue;
+	}
+	if (isset($wikvenData['config']) && is_array($wikvenData['config'])) {
+		$wgSettings->loadArray(['config' => $wikvenData['config']]);
+	}
+	$config['extensions'] = array_merge($config['extensions'], (array)( $wikvenData['extensions'] ?? [] ));
+	$config['skins'] = array_merge($config['skins'], (array)( $wikvenData['skins'] ?? [] ));
+}
+
+// Push the merged config into globals so the logo handling below reads the final
+// values.
+$wgSettings->apply();
+
+// Load each extension/skin at most once even if it appears in both the defaults
+// and the site file (or twice in one list).
+$config['extensions'] = array_values(array_unique(array_filter($config['extensions'], 'is_string'), SORT_STRING));
+$config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_string'), SORT_STRING));
 
 // Skins. Register each named skin and use the first as the default. Only skins
 // bundled in this image can be enabled; an unknown name is skipped with a
@@ -160,14 +225,6 @@ foreach ($config['extensions'] ?? [] as $extension) {
 	} else {
 		error_log("Wikven: skipping extension '$extension' (not bundled in this image)");
 	}
-}
-
-// Config. Every entry maps to a MediaWiki or extension configuration variable,
-// named without the "wg" prefix, exactly as in MediaWiki's own YAML settings
-// format. This includes Wikven's own variables such as WikvenFooterUrl,
-// WikvenEditUrl, WikvenHistoryUrl, and WikvenLogos.
-foreach ($config['config'] ?? [] as $key => $val) {
-	$GLOBALS['wg' . $key] = $val;
 }
 
 // Logos: WikvenLogos mirrors MediaWiki's $wgLogos, except each source is the name
