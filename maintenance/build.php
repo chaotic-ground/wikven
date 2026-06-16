@@ -41,6 +41,7 @@ class Build extends Maintenance {
 		$ip = $GLOBALS['IP'];
 		$own = __DIR__;
 
+		$this->clearOutputDirectory();
 		$this->setMainPage();
 
 		$this->importImages("$ip/maintenance/importImages.php");
@@ -53,6 +54,32 @@ class Build extends Maintenance {
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");
 		$this->step(Rename::class, "$own/rename.php");
+	}
+
+	/**
+	 * Empty the output directory so each build starts from a clean slate. The
+	 * dump/rewrite steps edit HTML in place and rename files, so output left by
+	 * an earlier run into a persistent (e.g. mounted) dist would otherwise
+	 * accumulate: orphaned renamed pages, doubly-rewritten image references, and
+	 * never-collected img-* files. The directory itself is kept (it may be a
+	 * mount point); only its contents are removed.
+	 */
+	private function clearOutputDirectory() {
+		$dir = rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/');
+		if ($dir === '' || !is_dir($dir)) {
+			return;
+		}
+		$entries = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::CHILD_FIRST
+		);
+		foreach ($entries as $entry) {
+			if ($entry->isDir()) {
+				rmdir($entry->getPathname());
+			} else {
+				unlink($entry->getPathname());
+			}
+		}
 	}
 
 	/**
