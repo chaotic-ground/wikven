@@ -20,6 +20,22 @@ tag=$(curl -s https://api.github.com/repos/chaotic-ground/wikven/releases | sed 
 curl -L -o wikven "https://github.com/chaotic-ground/wikven/releases/download/$tag/wikven-linux-x86_64"
 </syntaxhighlight>
 
+== Install ==
+
+The downloaded file already runs as-is — <code>./wikven</code> from the directory you saved it in. To run it as plain <code>wikven</code> from anywhere, install it onto your <code>PATH</code>:
+
+<syntaxhighlight lang="shell">
+sudo install wikven /usr/local/bin/
+</syntaxhighlight>
+
+Without root, install it into a personal directory that is on your <code>PATH</code> instead, such as <code>~/.local/bin</code> (<code>-D</code> creates the directory if it is missing):
+
+<syntaxhighlight lang="shell">
+install -D wikven ~/.local/bin/wikven
+</syntaxhighlight>
+
+The commands below assume it is on your <code>PATH</code>. If you skipped this step, run it as <code>./wikven</code> from the directory you downloaded it to.
+
 == Building a site ==
 
 Put your wikitext and a [[wikven.yaml|.wikven.yaml]] in a <code>src/</code> directory, then build:
@@ -27,13 +43,13 @@ Put your wikitext and a [[wikven.yaml|.wikven.yaml]] in a <code>src/</code> dire
 <syntaxhighlight lang="shell">
 mkdir -p src
 echo 'Hello, World!' > src/index.wikitext
-./wikven build
+wikven build
 </syntaxhighlight>
 
 The rendered site is written to <code>dist/</code>. The working directory defaults to the current directory; set <code>WIKVEN_WORKDIR</code> to build a project elsewhere:
 
 <syntaxhighlight lang="shell">
-WIKVEN_WORKDIR=/path/to/project ./wikven build
+WIKVEN_WORKDIR=/path/to/project wikven build
 </syntaxhighlight>
 
 The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same [[wikven.yaml|.wikven.yaml]] layered over {{wikven}}'s defaults.
