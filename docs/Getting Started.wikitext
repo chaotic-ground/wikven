@@ -15,22 +15,23 @@ mkdir src
 echo 'Hello, World!' > src/index.wikitext
 </syntaxhighlight>
 
-Then build the site. The rendered pages are written to <code>dist/</code>.
+Then build the site. The rendered pages are written to <code>dist/</code>. Pick the tab for how you run {{wikven}}:
 
-; With Docker
-: mount the source and output directories into the container:
+<tabber>
+|-|Docker=
+Mount the source and output directories into the container:
 <syntaxhighlight lang="shell">
 docker run --rm \
   -v "$(pwd)/src:/workspace/src" \
   -v "$(pwd)/dist:/workspace/dist" \
   ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
-
-; With the binary
-: run it in the directory that holds <code>src/</code> (see [[Binary]] to download it):
+|-|Binary=
+Run it in the directory that holds <code>src/</code> (see [[Binary]] to download it):
 <syntaxhighlight lang="shell">
 ./wikven build
 </syntaxhighlight>
+</tabber>
 
 Open <code>dist/index.html</code> in your browser.
 
