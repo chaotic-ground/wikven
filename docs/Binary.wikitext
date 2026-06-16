@@ -22,16 +22,16 @@ curl -L -o wikven "https://github.com/chaotic-ground/wikven/releases/download/$t
 
 == Install ==
 
-The downloaded file already runs as-is — <code>./wikven</code> from the directory you saved it in. To run it as plain <code>wikven</code> from anywhere, move it onto your <code>PATH</code>:
+The downloaded file already runs as-is — <code>./wikven</code> from the directory you saved it in. To run it as plain <code>wikven</code> from anywhere, install it onto your <code>PATH</code>:
 
 <syntaxhighlight lang="shell">
-sudo mv wikven /usr/local/bin/
+sudo install wikven /usr/local/bin/
 </syntaxhighlight>
 
-Without root, move it to a personal directory that is on your <code>PATH</code> instead, such as <code>~/.local/bin</code>:
+Without root, install it into a personal directory that is on your <code>PATH</code> instead, such as <code>~/.local/bin</code> (<code>-D</code> creates the directory if it is missing):
 
 <syntaxhighlight lang="shell">
-mv wikven ~/.local/bin/
+install -D wikven ~/.local/bin/wikven
 </syntaxhighlight>
 
 The commands below use <code>./wikven</code>; drop the <code>./</code> if you installed it on your <code>PATH</code>.
