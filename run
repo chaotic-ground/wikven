@@ -2,8 +2,9 @@
 set -euo pipefail; IFS=$'\n\t'
 
 # Source input and rendered output live under one working dir, matching
-# WikvenSettings.php. Defaults to /workspace, the path the image mounts.
-WIKVEN_WORKDIR="${WIKVEN_WORKDIR:-/workspace}"
+# WikvenSettings.php. Defaults to /workspace, the path the image mounts. Export
+# it so the PHP maintenance children (which read it via getenv) see any override.
+export WIKVEN_WORKDIR="${WIKVEN_WORKDIR:-/workspace}"
 
 cd /var/www/html
 
@@ -21,7 +22,10 @@ php maintenance/run.php install \
 # while they are still being fetched).
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/fetchExtensions.php
 
-echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
+# Wire in WikvenSettings, but only once: a persistent/mounted install tree would
+# otherwise collect a duplicate require_once on every run.
+grep -qF "require_once 'WikvenSettings.php';" LocalSettings.php \
+  || echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
 
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/build.php
 rm -rf "$WIKVEN_WORKDIR/dist/history/"

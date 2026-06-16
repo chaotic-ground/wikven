@@ -141,7 +141,7 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 		if (!is_dir($path)) {
 			mkdir($path, 0777, true);
 		}
-		if (!file_exists("$path/$name")) {
+		if (!file_exists("$path/$name.css")) {
 			touch("$path/$name.css");
 		}
 	}
