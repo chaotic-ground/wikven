@@ -77,10 +77,12 @@
 			"description": "Url that is added as a footer item."
 		},
 		"WikvenEditUrl": {
-			"value": ""
+			"value": "",
+			"description": "URL template for the per-page \"Edit\" link. $1 is replaced with the page's percent-encoded source file name (e.g. \"Getting Started.wikitext\", \"MediaWiki:Common.css\"). Empty disables the link."
 		},
 		"WikvenHistoryUrl": {
-			"value": ""
+			"value": "",
+			"description": "URL template for the per-page \"View history\" link. $1 is replaced with the page's percent-encoded source file name, as for WikvenEditUrl. Empty disables the link."
 		},
 		"WikvenLogos": {
 			"value": [],

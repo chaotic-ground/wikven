@@ -56,23 +56,34 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
-		if (preg_match('/action=([^&]+)/', $query, $matches)) {
-			$action = $matches[1];
-			// $1 is the source filename the page imported from (e.g.
-			// "Getting Started.wikitext" or "MediaWiki:Common.css"), so the link
-			// lands on the file to edit rather than the rendered page.
-			if ($action === 'edit' && $wgWikvenEditUrl) {
-				$file = str_replace('_', '%20', SourceFile::titleToFilename($name));
-				$url = str_replace('$1', $file, $wgWikvenEditUrl);
-			} elseif ($action === 'history' && $wgWikvenHistoryUrl) {
-				$file = str_replace('_', '%20', SourceFile::titleToFilename($name));
-				$url = str_replace('$1', $file, $wgWikvenHistoryUrl);
-			} else {
-				$url = "./$name.html";
-			}
+		// Parse the query into name=>value pairs rather than substring-matching
+		// "action=", which would also fire on e.g. "veaction=edit".
+		$action = wfCgiToArray($query)['action'] ?? null;
+		// For edit/history, $1 is the page's source filename, so the link lands
+		// on the file to edit rather than the rendered page.
+		if ($action === 'edit' && $wgWikvenEditUrl) {
+			$url = str_replace('$1', $this->sourceFileParam($title), $wgWikvenEditUrl);
+		} elseif ($action === 'history' && $wgWikvenHistoryUrl) {
+			$url = str_replace('$1', $this->sourceFileParam($title), $wgWikvenHistoryUrl);
 		} else {
 			$url = "./$name.html";
 		}
+	}
+
+	/**
+	 * The source file a page imported from, percent-encoded for use as the $1 in
+	 * WikvenEditUrl/WikvenHistoryUrl. Built from the title text (spaces, not the
+	 * DB key's underscores) so it matches the on-disk file name, then encoded so
+	 * characters legal in a title but unsafe in a URL path (spaces, '#', '?',
+	 * '%', non-ASCII) cannot break or truncate the link. The subpage separator
+	 * '/' and the namespace separator ':' are kept readable.
+	 *
+	 * @param Title $title
+	 * @return string
+	 */
+	private function sourceFileParam($title) {
+		$file = SourceFile::titleToFilename($title->getPrefixedText());
+		return strtr(rawurlencode($file), ['%2F' => '/', '%3A' => ':']);
 	}
 
 	/** @inheritDoc */
