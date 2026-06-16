@@ -43,3 +43,31 @@ updates:
     labels:
       - dependencies
       - github-actions
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    groups:
+      docker:
+        patterns:
+          - "*"
+    labels:
+      - dependencies
+      - docker
+  - package-ecosystem: gomod
+    directory: /caddy
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    groups:
+      gomod:
+        patterns:
+          - "*"
+    labels:
+      - dependencies
+      - gomod
