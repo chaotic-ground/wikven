@@ -56,6 +56,10 @@
 			"value": "/workspace/src",
 			"description": "Path to the source directory where wikitext files are"
 		},
+		"WikvenMainPage": {
+			"value": "index",
+			"description": "Title of the page used as the wiki's main page, i.e. the static site root (written as <value>.html). Must be an imported page."
+		},
 		"WikvenHtmlDirectory": {
 			"value": "/workspace/dist",
 			"description": "Path to the dist directory of HTML files."

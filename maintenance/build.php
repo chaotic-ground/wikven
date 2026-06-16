@@ -45,6 +45,7 @@ class Build extends Maintenance {
 
 		$this->importImages("$ip/maintenance/importImages.php");
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
+		$this->assertMainPageExists();
 		$this->step(RunJobs::class, "$ip/maintenance/runJobs.php");
 		$this->step(RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", ['overwrite' => true]);
 		$this->step(BuildStyles::class, "$own/buildStyles.php");
@@ -85,7 +86,9 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * Point the wiki's main page at the imported "index" article.
+	 * Point the wiki's main page at the configured article ($wgWikvenMainPage,
+	 * "index" by default). The article itself is imported afterwards; see
+	 * assertMainPageExists().
 	 */
 	private function setMainPage() {
 		$title = Title::newFromText('MediaWiki:Mainpage');
@@ -93,8 +96,25 @@ class Build extends Maintenance {
 		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
 
 		$updater = $page->newPageUpdater($user);
-		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent('index', $title));
+		$content = ContentHandler::makeContent($GLOBALS['wgWikvenMainPage'], $title);
+		$updater->setContent(SlotRecord::MAIN, $content);
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Set the main page'));
+	}
+
+	/**
+	 * Fail the build if the configured main page was not imported. Without this
+	 * the main page points at a non-existent article, so the static host serves
+	 * no page at the site root while the build otherwise reports success.
+	 */
+	private function assertMainPageExists() {
+		$name = $GLOBALS['wgWikvenMainPage'];
+		$title = Title::newFromText($name);
+		if (!$title || !$title->exists()) {
+			$this->fatalError(
+				"Wikven: the main page '$name' was not imported. Add a source file for it "
+				. "(e.g. '$name.wikitext') or set \$wgWikvenMainPage to an imported page."
+			);
+		}
 	}
 }
 
