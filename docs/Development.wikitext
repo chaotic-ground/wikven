@@ -84,7 +84,7 @@ The same MediaWiki + {{wikven}} tree is embedded into a single [[Binary|FrankenP
 * <code>lint.yaml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, zizmor).
 * <code>docker-build.yaml</code> builds the image and publishes it to <code>ghcr.io/chaotic-ground/wikven</code> on <code>main</code>.
 * <code>deploy-docs.yaml</code> builds the <code>docs/</code> directory with the image and deploys the result to GitHub Pages, so this site is itself a {{wikven}} build.
-* <code>build-binary.yaml</code> is a reusable workflow that builds the standalone [[Binary|binary]] for each platform. <code>release-binary.yaml</code> calls it on a tagged release to attach the binaries, and <code>nightly.yaml</code> calls it daily to refresh the rolling <code>nightly</code> pre-release.
+* <code>build-binary.yaml</code> is a reusable workflow that builds the standalone [[Binary|binary]] for each platform. <code>release-please.yaml</code> calls it to attach the binaries to a version release, and <code>nightly.yaml</code> calls it daily to publish a dated <code>nightly-YYYY-MM-DD</code> pre-release. Both create the release as a draft, attach the binaries, then publish it, because GitHub's immutable releases lock a release's assets once it is published.
 * <code>release-please.yaml</code> manages versioning and releases (see below).
 
 Versions follow [https://www.conventionalcommits.org/ Conventional Commits], which release-please uses to generate the changelog and bump the version.

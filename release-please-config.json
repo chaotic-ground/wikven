@@ -4,6 +4,7 @@
 		".": {
 			"release-type": "simple",
 			"include-component-in-tag": false,
+			"draft": true,
 			"extra-files": [
 				{ "type": "json", "path": "extension.json", "jsonpath": "$.version" }
 			],

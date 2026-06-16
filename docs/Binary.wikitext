@@ -13,10 +13,11 @@ chmod +x wikven
 
 On arm64, use <code>wikven-linux-aarch64</code>.
 
-To track the latest commit on the main branch instead of a tagged release, use the rolling [https://github.com/chaotic-ground/wikven/releases/tag/nightly nightly] build, refreshed daily:
+To track the latest commit on the main branch instead of a tagged release, use a nightly build. These are published daily as dated pre-releases tagged <code>nightly-YYYY-MM-DD</code>; pick the most recent from the [https://github.com/chaotic-ground/wikven/releases releases page], or resolve it automatically:
 
 <syntaxhighlight lang="shell">
-curl -L -o wikven https://github.com/chaotic-ground/wikven/releases/download/nightly/wikven-linux-x86_64
+tag=$(curl -s https://api.github.com/repos/chaotic-ground/wikven/releases | sed -n 's/.*"tag_name": *"\(nightly-[^"]*\)".*/\1/p' | head -n1)
+curl -L -o wikven "https://github.com/chaotic-ground/wikven/releases/download/$tag/wikven-linux-x86_64"
 </syntaxhighlight>
 
 == Building a site ==
