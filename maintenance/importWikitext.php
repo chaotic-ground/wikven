@@ -101,10 +101,9 @@ class ImportWikitext extends Maintenance {
 	 * subdirectories so subpages can be supplied as nested files (e.g. a
 	 * template's "Template:Foo/styles.css" in a "Template:Foo/" folder).
 	 *
-	 * @param string $sourceDirectory
 	 * @return string[] Absolute paths, sorted for a stable import order.
 	 */
-	private function wikitextFiles($sourceDirectory) {
+	private function wikitextFiles(string $sourceDirectory): array {
 		$iterator = new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator($sourceDirectory, \FilesystemIterator::SKIP_DOTS)
 		);
@@ -123,12 +122,8 @@ class ImportWikitext extends Maintenance {
 	/**
 	 * Map a page file to its title: the path relative to the source directory,
 	 * resolved by SourceFile's naming convention.
-	 *
-	 * @param string $name
-	 * @param string $sourceDirectory
-	 * @return string
 	 */
-	private function filenameToTitle($name, $sourceDirectory) {
+	private function filenameToTitle(string $name, string $sourceDirectory): string {
 		$relative = substr($name, strlen($sourceDirectory) + 1);
 		return SourceFile::filenameToTitle($relative);
 	}

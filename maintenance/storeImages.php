@@ -93,12 +93,11 @@ class StoreImages extends Maintenance {
 	/**
 	 * Download a single remote image and return its local reference.
 	 *
-	 * @param \MediaWiki\Http\HttpRequestFactory $http
 	 * @param string $ref The reference as written in the HTML (may be protocol-relative).
 	 * @param string $dir Output directory.
 	 * @return string|null Local "./img-*.ext" reference, or null on failure.
 	 */
-	private function store($http, $ref, $dir) {
+	private function store(\MediaWiki\Http\HttpRequestFactory $http, string $ref, string $dir): ?string {
 		$url = str_starts_with($ref, '//') ? "https:$ref" : $ref;
 		$name = 'img-' . substr(md5($ref), 0, 12) . '.' . $this->extension($url);
 		$dest = "$dir/$name";
@@ -136,7 +135,7 @@ class StoreImages extends Maintenance {
 	 * @param string $dir Output directory.
 	 * @return string|null Local "./img-*.ext" reference, or null if the file is missing.
 	 */
-	private function storeLocal($src, $path, $dir) {
+	private function storeLocal(string $src, string $path, string $dir): ?string {
 		if (!is_file($src)) {
 			$this->output("  missing: $path\n");
 			return null;
@@ -150,10 +149,9 @@ class StoreImages extends Maintenance {
 	}
 
 	/**
-	 * @param string $url
 	 * @return string A safe lowercase file extension, defaulting to "img".
 	 */
-	private function extension($url) {
+	private function extension(string $url): string {
 		$ext = strtolower((string)pathinfo((string)parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
 		return preg_match('/^[a-z0-9]+$/', $ext) ? $ext : 'img';
 	}

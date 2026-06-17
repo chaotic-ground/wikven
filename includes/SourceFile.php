@@ -31,13 +31,11 @@ class SourceFile {
 	private const MARKER = 'wikitext';
 
 	/**
-	 * Whether a file under the source directory is a page to import (as opposed
-	 * to an asset like an image or the .wikven.yaml config).
-	 *
-	 * @param string $relativePath Path relative to the source directory.
-	 * @return bool
+	 * Whether a file under the source directory (given by its path relative to
+	 * it) is a page to import, as opposed to an asset like an image or the
+	 * .wikven.yaml config.
 	 */
-	public static function isPageFile($relativePath) {
+	public static function isPageFile(string $relativePath): bool {
 		return str_ends_with($relativePath, '.' . self::MARKER) || self::titleHasOwnContentModel($relativePath);
 	}
 
@@ -46,11 +44,8 @@ class SourceFile {
 	 * drop the ".wikitext" marker if present, otherwise keep the path verbatim
 	 * because the title carries its own content model. A nested file becomes a
 	 * subpage, so "Template:Foo/styles.css" imports as "Template:Foo/styles.css".
-	 *
-	 * @param string $relativePath
-	 * @return string
 	 */
-	public static function filenameToTitle($relativePath) {
+	public static function filenameToTitle(string $relativePath): string {
 		$suffix = '.' . self::MARKER;
 		if (str_ends_with($relativePath, $suffix)) {
 			return substr($relativePath, 0, -strlen($suffix));
@@ -62,11 +57,8 @@ class SourceFile {
 	 * Map a page title back to its source path (the inverse of
 	 * filenameToTitle()): keep the title verbatim when it carries its own
 	 * content model, otherwise append the ".wikitext" marker.
-	 *
-	 * @param string $title
-	 * @return string
 	 */
-	public static function titleToFilename($title) {
+	public static function titleToFilename(string $title): string {
 		if (self::titleHasOwnContentModel($title)) {
 			return $title;
 		}
@@ -78,11 +70,8 @@ class SourceFile {
 	 * given title text — i.e. the title (via its extension or namespace) already
 	 * determines the content, so no ".wikitext" marker is needed. Driven by the
 	 * live content-model registry, so it tracks whatever extensions are loaded.
-	 *
-	 * @param string $titleText
-	 * @return bool
 	 */
-	private static function titleHasOwnContentModel($titleText) {
+	private static function titleHasOwnContentModel(string $titleText): bool {
 		$services = MediaWikiServices::getInstance();
 		$title = $services->getTitleFactory()->newFromText($titleText);
 		if (!$title) {

@@ -142,7 +142,7 @@ class RewriteScripts extends Maintenance {
 	 *   they are triggered like the page's own modules), or an empty array when
 	 *   the Gadgets extension is not loaded.
 	 */
-	private function defaultGadgetModules() {
+	private function defaultGadgetModules(): array {
 		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
 		if (!class_exists($repoClass)) {
 			return [];
@@ -162,12 +162,8 @@ class RewriteScripts extends Maintenance {
 	/**
 	 * Remove every balanced <div ...$marker...>...</div> from the HTML, where
 	 * $marker is a substring of the opening tag. Handles nested <div>s.
-	 *
-	 * @param string $html
-	 * @param string $marker
-	 * @return string
 	 */
-	private function removeElements($html, $marker) {
+	private function removeElements(string $html, string $marker): string {
 		while (true) {
 			$start = $this->findOpeningDiv($html, $marker);
 			if ($start === -1) {
@@ -182,11 +178,9 @@ class RewriteScripts extends Maintenance {
 	}
 
 	/**
-	 * @param string $html
-	 * @param string $marker
 	 * @return int Byte offset of the opening <div, or -1.
 	 */
-	private function findOpeningDiv($html, $marker) {
+	private function findOpeningDiv(string $html, string $marker): int {
 		$pos = strpos($html, '<div');
 		while ($pos !== false) {
 			$tagEnd = strpos($html, '>', $pos);
@@ -202,11 +196,10 @@ class RewriteScripts extends Maintenance {
 	}
 
 	/**
-	 * @param string $html
 	 * @param int $start Offset of an opening <div.
 	 * @return int Byte offset just past the matching </div>, or -1.
 	 */
-	private function matchingDivEnd($html, $start) {
+	private function matchingDivEnd(string $html, int $start): int {
 		$depth = 0;
 		$len = strlen($html);
 		$i = $start;

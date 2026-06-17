@@ -97,10 +97,8 @@ class BuildScripts extends Maintenance {
 	/**
 	 * Register every gadget's ResourceLoader module on the given loader, mirroring
 	 * the Gadgets extension's own registration. No-op without the extension.
-	 *
-	 * @param ResourceLoader $rl
 	 */
-	private function registerGadgetModules(ResourceLoader $rl) {
+	private function registerGadgetModules(ResourceLoader $rl): void {
 		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
 		if (!class_exists($repoClass)) {
 			return;
@@ -122,7 +120,7 @@ class BuildScripts extends Maintenance {
 	 *   they can be bundled like the page's own modules), or an empty array when
 	 *   the Gadgets extension is not loaded.
 	 */
-	private function defaultGadgetModules() {
+	private function defaultGadgetModules(): array {
 		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
 		if (!class_exists($repoClass)) {
 			return [];
@@ -140,10 +138,9 @@ class BuildScripts extends Maintenance {
 	}
 
 	/**
-	 * @param string $htmlDir
 	 * @return string[] The union of the RLPAGEMODULES lists across all pages.
 	 */
-	private function collectPageModules($htmlDir) {
+	private function collectPageModules(string $htmlDir): array {
 		$modules = [];
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);
@@ -160,13 +157,10 @@ class BuildScripts extends Maintenance {
 	}
 
 	/**
-	 * @param ResourceLoader $rl
 	 * @param string[] $seeds
-	 * @param string $lang
-	 * @param string $skin
 	 * @return string[] The full dependency closure, including the base modules.
 	 */
-	private function resolveClosure(ResourceLoader $rl, array $seeds, $lang, $skin) {
+	private function resolveClosure(ResourceLoader $rl, array $seeds, string $lang, string $skin): array {
 		$query = ResourceLoader::makeLoaderQuery([], $lang, $skin, null, null, Context::DEBUG_OFF, null);
 		$context = new Context($rl, new FauxRequest($query));
 
@@ -201,15 +195,16 @@ class BuildScripts extends Maintenance {
 	}
 
 	/**
-	 * @param ResourceLoader $rl
 	 * @param string[] $modules
-	 * @param string $lang
-	 * @param string $skin
-	 * @param string|null $only
-	 * @param array $extra
-	 * @return string
 	 */
-	private function dump(ResourceLoader $rl, array $modules, $lang, $skin, $only, array $extra) {
+	private function dump(
+		ResourceLoader $rl,
+		array $modules,
+		string $lang,
+		string $skin,
+		?string $only,
+		array $extra
+	): string {
 		$query = ResourceLoader::makeLoaderQuery(
 			$modules,
 			$lang,
