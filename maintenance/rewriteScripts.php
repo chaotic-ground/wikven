@@ -89,7 +89,7 @@ class RewriteScripts extends Maintenance {
 				. ');</script>';
 			$html = preg_replace_callback(
 				'#<script async(?:="")? src="[^"]*\bmodules=startup\b[^"]*"></script>#',
-				static function () use ($tags) {
+				static function (array $unused) use ($tags) {
 					return $tags;
 				},
 				$html

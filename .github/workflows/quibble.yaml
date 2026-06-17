@@ -17,5 +17,6 @@ jobs:
       - uses: femiwiki/quibble-action@dc8d9ec9d6c86ba9805a77736c68f974d250aa8f # v1.0.0
         with:
           stage: phan
-          # wikven supports MediaWiki >= 1.43 (extension.json); test the floor.
-          mediawiki-version: REL1_43
+          # wikven targets MediaWiki 1.45 (Dockerfile, extension.json), whose
+          # namespaced types (e.g. MediaWiki\Skin\Skin) the code uses.
+          mediawiki-version: REL1_45

@@ -143,7 +143,7 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 				// version; not relevant
 				null,
 				// inDebugMode
-				null,
+				Context::DEBUG_OFF,
 				// only; not relevant
 				null,
 				// printable

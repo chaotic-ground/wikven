@@ -37,7 +37,9 @@ class Rename extends Maintenance {
 				continue;
 			}
 
-			$nsText = MediaWikiServices::getInstance()->getContentLanguage()->getNsText($ns);
+			$nsText = MediaWikiServices::getInstance()
+				->getContentLanguage()
+				->getNsText((int)$ns);
 			$newName = preg_replace("/^ns$ns%3A/", "$nsText:", $basename);
 			$newName = ltrim($newName, ':');
 			rename("$path/$basename", "$path/$newName");
