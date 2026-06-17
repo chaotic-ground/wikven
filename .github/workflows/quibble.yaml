@@ -1,0 +1,21 @@
+name: Quibble
+
+on: [push, pull_request]
+
+permissions: {}
+
+jobs:
+  # phan needs a full MediaWiki environment to resolve core symbols, which neither
+  # mago's analyzer nor a bare phpcs run can provide. Quibble sets that up and runs
+  # phan (via .phan/config.php + mediawiki-phan-config) against the extension.
+  phan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - uses: femiwiki/quibble-action@dc8d9ec9d6c86ba9805a77736c68f974d250aa8f # v1.0.0
+        with:
+          stage: phan
+          # wikven supports MediaWiki >= 1.43 (extension.json); test the floor.
+          mediawiki-version: REL1_43

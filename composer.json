@@ -9,6 +9,7 @@
 	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "51.0.0",
+		"mediawiki/mediawiki-phan-config": "0.15.1",
 		"mediawiki/minus-x": "2.0.1",
 		"phpro/grumphp": "2.21.0"
 	},

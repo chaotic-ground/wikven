@@ -77,5 +77,7 @@ jobs:
           # this is only the environment phpcs runs in, not wikven's target.
           php-version: "8.3"
           tools: composer
-      - run: composer install --no-interaction --no-progress
+      # mediawiki-phan-config (a dev dep, used only by the Quibble phan job)
+      # pulls in phan, which requires ext-ast; phpcs does not need it.
+      - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
       - run: composer phpcs
