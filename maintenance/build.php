@@ -64,7 +64,7 @@ class Build extends Maintenance {
 	 * never-collected img-* files. The directory itself is kept (it may be a
 	 * mount point); only its contents are removed.
 	 */
-	private function clearOutputDirectory() {
+	private function clearOutputDirectory(): void {
 		$dir = rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/');
 		if ($dir === '' || !is_dir($dir)) {
 			return;
@@ -85,11 +85,9 @@ class Build extends Maintenance {
 	/**
 	 * Run one build step as a child maintenance script.
 	 *
-	 * @param string $class
-	 * @param string $file
 	 * @param array $options Options to set on the child before it runs.
 	 */
-	private function step($class, $file, array $options = []) {
+	private function step(string $class, string $file, array $options = []): void {
 		$child = $this->createChild($class, $file);
 		foreach ($options as $name => $value) {
 			$child->setOption($name, $value);
@@ -101,10 +99,8 @@ class Build extends Maintenance {
 	 * Upload the image files in the source directory into the File: namespace,
 	 * so pages that embed them render with local thumbnails. Runs core's
 	 * importImages.php over the source directory; non-image files are ignored.
-	 *
-	 * @param string $file
 	 */
-	private function importImages($file) {
+	private function importImages(string $file): void {
 		$child = $this->createChild(ImportImages::class, $file);
 		$child->setArg(0, rtrim($GLOBALS['wgWikvenSourceDirectory'], '/'));
 		$child->setOption('extensions', implode(',', $GLOBALS['wgFileExtensions']));
@@ -117,7 +113,7 @@ class Build extends Maintenance {
 	 * "index" by default). The article itself is imported afterwards; see
 	 * assertMainPageExists().
 	 */
-	private function setMainPage() {
+	private function setMainPage(): void {
 		$title = Title::newFromText('MediaWiki:Mainpage');
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
@@ -133,7 +129,7 @@ class Build extends Maintenance {
 	 * the main page points at a non-existent article, so the static host serves
 	 * no page at the site root while the build otherwise reports success.
 	 */
-	private function assertMainPageExists() {
+	private function assertMainPageExists(): void {
 		$name = $GLOBALS['wgWikvenMainPage'];
 		$title = Title::newFromText($name);
 		if (!$title || !$title->exists()) {

@@ -117,11 +117,8 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * Read and merge default.yaml + the site's .wikven.yaml/.json, exactly as
 	 * WikvenSettings.php does, so the fetched set matches what will be loaded.
-	 *
-	 * @param string $IP
-	 * @return array
 	 */
-	private function loadConfig($IP) {
+	private function loadConfig(string $IP): array {
 		$yaml = new YamlFormat();
 		$config = $yaml->decode(file_get_contents("$IP/extensions/Wikven/default.yaml"));
 
@@ -145,10 +142,9 @@ class FetchExtensions extends Maintenance {
 	}
 
 	/**
-	 * @param array $list
 	 * @return array<string,true> Set of the string names in $list.
 	 */
-	private function nameSet(array $list) {
+	private function nameSet(array $list): array {
 		$set = [];
 		foreach ($list as $entry) {
 			if (is_string($entry)) {
@@ -159,12 +155,11 @@ class FetchExtensions extends Maintenance {
 	}
 
 	/**
-	 * @param string $name
 	 * @param array<string,true> $extensionNames
 	 * @param array<string,true> $skinNames
 	 * @return array{0:string,1:string} [base directory, kind]
 	 */
-	private function target($name, array $extensionNames, array $skinNames) {
+	private function target(string $name, array $extensionNames, array $skinNames): array {
 		$IP = $GLOBALS['IP'];
 		if (isset($extensionNames[$name])) {
 			return ["$IP/extensions", 'extension'];
@@ -181,7 +176,7 @@ class FetchExtensions extends Maintenance {
 	 * @param string $package "vendor/name" or "vendor/name:constraint"
 	 * @return array{0:string,1:string} [package name, version constraint]
 	 */
-	private function splitPackage($package) {
+	private function splitPackage(string $package): array {
 		$pos = strpos($package, ':');
 		if ($pos === false) {
 			return [$package, '*'];
@@ -191,13 +186,8 @@ class FetchExtensions extends Maintenance {
 
 	/**
 	 * The lowercased, validated `sha256:` of a tarball spec, or null if absent.
-	 *
-	 * @param array $spec
-	 * @param string $name
-	 * @param string $kind
-	 * @return ?string
 	 */
-	private function validatedSha256(array $spec, $name, $kind) {
+	private function validatedSha256(array $spec, string $name, string $kind): ?string {
 		if (!isset($spec['sha256'])) {
 			return null;
 		}
@@ -211,13 +201,8 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * The validated `commit:` SHA of a repository spec, or null if absent. Errors
 	 * if it is combined with `reference:`, since the two pin differently.
-	 *
-	 * @param array $spec
-	 * @param string $name
-	 * @param string $kind
-	 * @return ?string
 	 */
-	private function validatedCommit(array $spec, $name, $kind) {
+	private function validatedCommit(array $spec, string $name, string $kind): ?string {
 		if (empty($spec['commit'])) {
 			return null;
 		}
@@ -231,7 +216,7 @@ class FetchExtensions extends Maintenance {
 		return $commit;
 	}
 
-	private function fetchTarball($url, $dest, $name, $kind, $sha256 = null) {
+	private function fetchTarball(string $url, string $dest, string $name, string $kind, ?string $sha256 = null): void {
 		$this->output("Wikven: downloading $kind '$name' from $url\n");
 		$tmp = tempnam(sys_get_temp_dir(), 'wikven');
 		$this->run(['curl', '-sSL', '-f', '-o', $tmp, '--', $url], "download $kind '$name'");
@@ -252,7 +237,7 @@ class FetchExtensions extends Maintenance {
 		unlink($tmp);
 	}
 
-	private function fetchGit(array $spec, $dest, $name, $kind) {
+	private function fetchGit(array $spec, string $dest, string $name, string $kind): void {
 		$repo = (string)$spec['repository'];
 		$commit = $this->validatedCommit($spec, $name, $kind);
 
@@ -290,10 +275,9 @@ class FetchExtensions extends Maintenance {
 	}
 
 	/**
-	 * @param string $IP
 	 * @param array<string,string> $packages package name => constraint
 	 */
-	private function installPackages($IP, array $packages) {
+	private function installPackages(string $IP, array $packages): void {
 		// Core's composer.json merges composer.local.json via composer-merge-plugin,
 		// so registering the requirement there and running composer update at the
 		// root pulls each package (and its dependencies) into place.
@@ -319,9 +303,8 @@ class FetchExtensions extends Maintenance {
 	 * silently produce a wiki missing the feature.
 	 *
 	 * @param string[] $cmd
-	 * @param string $what
 	 */
-	private function run(array $cmd, $what) {
+	private function run(array $cmd, string $what): void {
 		$shell = implode(' ', array_map('escapeshellarg', $cmd));
 		$ret = 0;
 		passthru($shell, $ret);

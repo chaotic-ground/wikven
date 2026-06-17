@@ -13,22 +13,14 @@ use MediaWiki\Title\Title;
 use MediaWiki\Extension\Wikven\SourceFile;
 
 class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook {
-	/** @var Context */
-	private $rlClientContext;
+	private ?Context $rlClientContext = null;
 
-	/**
-	 * @var string The path to the directory contains html files.
-	 */
-	private $htmlDirectory;
+	/** The directory the HTML files are written to. */
+	private string $htmlDirectory;
 
-	/**
-	 * @var string The path to the directory contains style files.
-	 */
-	private $styleDirectory;
+	/** The directory the style files are written to, relative to the HTML one. */
+	private string $styleDirectory;
 
-	/**
-	 * @param Config $config
-	 */
 	public function __construct(Config $config) {
 		$this->htmlDirectory = $config->get('WikvenHtmlDirectory');
 		$this->styleDirectory = $config->get('WikvenStyleDirectory');
@@ -77,11 +69,8 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 	 * characters legal in a title but unsafe in a URL path (spaces, '#', '?',
 	 * '%', non-ASCII) cannot break or truncate the link. The subpage separator
 	 * '/' and the namespace separator ':' are kept readable.
-	 *
-	 * @param Title $title
-	 * @return string
 	 */
-	private function sourceFileParam($title) {
+	private function sourceFileParam(Title $title): string {
 		$file = SourceFile::titleToFilename($title->getPrefixedText());
 		return strtr(rawurlencode($file), ['%2F' => '/', '%3A' => ':']);
 	}
@@ -125,10 +114,7 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 		}
 	}
 
-	/**
-	 * @param string $name
-	 */
-	private function addStyleToList($name) {
+	private function addStyleToList(string $name): void {
 		if (MW_ENTRY_POINT != 'cli') {
 			return;
 		}
@@ -146,11 +132,7 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 		}
 	}
 
-	/**
-	 * @param OutputPage $output
-	 * @return Context
-	 */
-	private function getRlClientContext($output) {
+	private function getRlClientContext(OutputPage $output): Context {
 		if (!$this->rlClientContext) {
 			$query = ResourceLoader::makeLoaderQuery(
 				// modules; not relevant
