@@ -17,6 +17,9 @@
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
 			"phpro/grumphp": true
+		},
+		"platform": {
+			"php": "8.3.0"
 		}
 	}
 }
