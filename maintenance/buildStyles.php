@@ -44,7 +44,7 @@ class BuildStyles extends Maintenance {
 				// version; not relevant
 				null,
 				// inDebugMode
-				null,
+				Context::DEBUG_OFF,
 				// only
 				'styles'
 			);
@@ -79,7 +79,7 @@ class BuildStyles extends Maintenance {
 			// version
 			null,
 			// inDebugMode
-			null,
+			Context::DEBUG_OFF,
 			// only
 			'styles'
 		);
