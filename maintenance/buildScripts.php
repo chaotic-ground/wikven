@@ -103,7 +103,8 @@ class BuildScripts extends Maintenance {
 		if (!class_exists($repoClass)) {
 			return;
 		}
-		$repo = $repoClass::singleton();
+		/** @var \MediaWiki\Extension\Gadgets\GadgetRepo $repo */
+		$repo = MediaWikiServices::getInstance()->getService('GadgetsRepo');
 		foreach ($repo->getGadgetIds() as $id) {
 			$name = \MediaWiki\Extension\Gadgets\Gadget::getModuleName($id);
 			if (!$rl->isModuleRegistered($name)) {
@@ -126,7 +127,8 @@ class BuildScripts extends Maintenance {
 			return [];
 		}
 		$modules = [];
-		$repo = $repoClass::singleton();
+		/** @var \MediaWiki\Extension\Gadgets\GadgetRepo $repo */
+		$repo = MediaWikiServices::getInstance()->getService('GadgetsRepo');
 		foreach ($repo->getGadgetIds() as $id) {
 			$gadget = $repo->getGadget($id);
 			// Styles-only gadgets belong in the CSS dump, not the JS bundle.

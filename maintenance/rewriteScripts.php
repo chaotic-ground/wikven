@@ -148,7 +148,8 @@ class RewriteScripts extends Maintenance {
 			return [];
 		}
 		$modules = [];
-		$repo = $repoClass::singleton();
+		/** @var \MediaWiki\Extension\Gadgets\GadgetRepo $repo */
+		$repo = MediaWikiServices::getInstance()->getService('GadgetsRepo');
 		foreach ($repo->getGadgetIds() as $id) {
 			$gadget = $repo->getGadget($id);
 			// Styles-only gadgets belong in the CSS dump, not the JS bundle.
