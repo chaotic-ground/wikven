@@ -2,9 +2,9 @@
 
 namespace MediaWiki\Extension\Wikven;
 
+use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
-use Maintenance;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\StubObject\StubGlobalUser;
 use MediaWiki\Title\Title;

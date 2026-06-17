@@ -91,10 +91,9 @@ class StoreImages extends Maintenance {
 	}
 
 	/**
-	 * Download a single remote image and return its local reference.
+	 * Download a single remote image ($ref, the reference as written in the HTML,
+	 * possibly protocol-relative) into $dir and return its local reference.
 	 *
-	 * @param string $ref The reference as written in the HTML (may be protocol-relative).
-	 * @param string $dir Output directory.
 	 * @return string|null Local "./img-*.ext" reference, or null on failure.
 	 */
 	private function store(\MediaWiki\Http\HttpRequestFactory $http, string $ref, string $dir): ?string {

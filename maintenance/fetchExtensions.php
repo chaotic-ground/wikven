@@ -155,8 +155,6 @@ class FetchExtensions extends Maintenance {
 	}
 
 	/**
-	 * @param array<string,true> $extensionNames
-	 * @param array<string,true> $skinNames
 	 * @return array{0:string,1:string} [base directory, kind]
 	 */
 	private function target(string $name, array $extensionNames, array $skinNames): array {
@@ -274,9 +272,6 @@ class FetchExtensions extends Maintenance {
 		}
 	}
 
-	/**
-	 * @param array<string,string> $packages package name => constraint
-	 */
 	private function installPackages(string $IP, array $packages): void {
 		// Core's composer.json merges composer.local.json via composer-merge-plugin,
 		// so registering the requirement there and running composer update at the

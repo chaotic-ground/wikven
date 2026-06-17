@@ -119,40 +119,9 @@ if (file_exists("$wikvenSrc/.wikven.yaml")) {
 $wikvenManifest = json_decode(file_get_contents("$IP/extensions/Wikven/extension.json"), true);
 $wikvenKnownConfig = array_keys($wikvenManifest['config'] ?? []);
 
-/**
- * Warn about site-file mistakes the settings system would otherwise drop
- * silently: an unknown top-level key, a wrong-typed config/extensions/skins, or
- * a misspelled Wikven variable. Validation only; it does not alter the data.
- *
- * @param mixed $data Decoded .wikven.yaml/.json contents.
- * @param string $name File name, for the messages.
- * @param string[] $knownConfig Canonical Wikven config variable names.
- */
-function wikvenValidateSiteFile($data, $name, array $knownConfig) {
-	if (!is_array($data)) {
-		error_log("Wikven: $name is not a map; ignoring it.");
-		return;
-	}
-	foreach (array_keys($data) as $key) {
-		if (!in_array($key, ['config', 'extensions', 'skins'], true)) {
-			error_log("Wikven: $name has an unknown top-level key '$key' (expected config/extensions/skins).");
-		}
-	}
-	foreach (['extensions', 'skins'] as $listKey) {
-		if (isset($data[$listKey]) && !is_array($data[$listKey])) {
-			error_log("Wikven: $name '$listKey' must be a list.");
-		}
-	}
-	if (isset($data['config']) && !is_array($data['config'])) {
-		error_log("Wikven: $name 'config' must be a map.");
-		return;
-	}
-	foreach (array_keys($data['config'] ?? []) as $cfgKey) {
-		if (str_starts_with($cfgKey, 'Wikven') && !in_array($cfgKey, $knownConfig, true)) {
-			error_log("Wikven: $name sets unknown config '$cfgKey' (not a Wikven variable; typo?).");
-		}
-	}
-}
+// This runs while LocalSettings.php is read, before the extension registry has
+// activated Wikven's autoloader, so load the (dependency-free) helper directly.
+require_once "$IP/extensions/Wikven/includes/SiteConfig.php";
 
 // The defaults, then the site file on top. For each, hand its "config" map to
 // $wgSettings (so keys merge per their declared strategy) and collect its
@@ -166,7 +135,10 @@ if ($wikvenSiteFile !== null) {
 		? new MediaWiki\Settings\Source\Format\JsonFormat()
 		: new MediaWiki\Settings\Source\Format\YamlFormat();
 	$wikvenSiteData = $wikvenSiteFormat->decode(file_get_contents($wikvenSiteFile));
-	wikvenValidateSiteFile($wikvenSiteData, basename($wikvenSiteFile), $wikvenKnownConfig);
+	$wikvenSiteName = basename($wikvenSiteFile);
+	foreach (MediaWiki\Extension\Wikven\SiteConfig::lint($wikvenSiteData, $wikvenKnownConfig) as $wikvenWarning) {
+		error_log("Wikven: $wikvenSiteName $wikvenWarning");
+	}
 }
 
 foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {

@@ -20,8 +20,8 @@ use MediaWiki\ResourceLoader\ResourceLoader;
  */
 class AssetLocalizer {
 	/**
-	 * @param string $dir Directory the files live in and where images are dumped.
-	 * @param string[] $files Absolute paths of CSS/JS files to rewrite in place.
+	 * Rewrite the image url()s in the given dumped CSS/JS files (absolute paths)
+	 * to point at image copies dumped into $dir.
 	 */
 	public static function localizeImages(
 		ResourceLoader $rl,
@@ -77,9 +77,9 @@ class AssetLocalizer {
 	}
 
 	/**
-	 * Dump a single ResourceLoader image-endpoint URL to a local file.
+	 * Dump a single ResourceLoader image-endpoint URL ($url, a decoded
+	 * /load.php?...image=... reference) to a local file.
 	 *
-	 * @param string $url Decoded /load.php?...image=... reference.
 	 * @return string|null Relative url() target (./img-*.svg), or null if not an image.
 	 */
 	private static function dumpRlImage(
@@ -127,10 +127,10 @@ class AssetLocalizer {
 	}
 
 	/**
-	 * Copy a direct asset path (e.g. /skins/Vector/.../foo.svg) out of the
-	 * MediaWiki install into the output directory.
+	 * Copy a direct asset path ($path, an absolute web path with a leading slash
+	 * and no query, e.g. /skins/Vector/.../foo.svg) out of the MediaWiki install
+	 * into the output directory.
 	 *
-	 * @param string $path Absolute web path (with leading slash, no query).
 	 * @return string|null Relative url() target, or null if the file is missing.
 	 */
 	private static function copyAsset(string $mwRoot, string $path, string $dir): ?string {

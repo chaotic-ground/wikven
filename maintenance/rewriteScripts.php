@@ -196,7 +196,8 @@ class RewriteScripts extends Maintenance {
 	}
 
 	/**
-	 * @param int $start Offset of an opening <div.
+	 * Find the end of the <div> opening at byte offset $start.
+	 *
 	 * @return int Byte offset just past the matching </div>, or -1.
 	 */
 	private function matchingDivEnd(string $html, int $start): int {

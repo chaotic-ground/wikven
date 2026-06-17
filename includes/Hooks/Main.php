@@ -3,14 +3,14 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Request\FauxRequest;
+use MediaWiki\Extension\Wikven\SourceFile;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
-use MediaWiki\Output\OutputPage;
 use MediaWiki\Title\Title;
-use MediaWiki\Extension\Wikven\SourceFile;
 
 class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook {
 	private ?Context $rlClientContext = null;

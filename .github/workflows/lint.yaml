@@ -61,3 +61,19 @@ jobs:
         with:
           persist-credentials: false
       - uses: crate-ci/typos@37bb98842b0d8c4ffebdb75301a13db0267cef89 # v1.47.2
+
+  # MediaWiki coding-standard checks that mago (the formatter) does not cover:
+  # documentation, naming, forbidden patterns, and other semantic rules. The
+  # whitespace sniffs mago owns are excluded in .phpcs.xml.
+  phpcs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: "8.1"
+          tools: composer
+      - run: composer install --no-interaction --no-progress
+      - run: composer phpcs
