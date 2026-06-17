@@ -2,15 +2,15 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-use MediaWiki\CommentStore\CommentStoreComment;
-use MediaWiki\Content\ContentHandler;
 use ImportImages;
 use Maintenance;
+use MediaWiki\CommentStore\CommentStoreComment;
+use MediaWiki\Content\ContentHandler;
 use MediaWiki\Revision\SlotRecord;
-use RebuildFileCache;
-use RunJobs;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
+use RebuildFileCache;
+use RunJobs;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -83,9 +83,8 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * Run one build step as a child maintenance script.
-	 *
-	 * @param array $options Options to set on the child before it runs.
+	 * Run one build step as a child maintenance script, setting $options on the
+	 * child before it runs.
 	 */
 	private function step(string $class, string $file, array $options = []): void {
 		$child = $this->createChild($class, $file);

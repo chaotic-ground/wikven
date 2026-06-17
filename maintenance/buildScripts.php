@@ -2,9 +2,9 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-use MediaWiki\Request\FauxRequest;
 use Maintenance;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 
@@ -157,7 +157,6 @@ class BuildScripts extends Maintenance {
 	}
 
 	/**
-	 * @param string[] $seeds
 	 * @return string[] The full dependency closure, including the base modules.
 	 */
 	private function resolveClosure(ResourceLoader $rl, array $seeds, string $lang, string $skin): array {
@@ -194,9 +193,6 @@ class BuildScripts extends Maintenance {
 		return array_keys($resolved);
 	}
 
-	/**
-	 * @param string[] $modules
-	 */
 	private function dump(
 		ResourceLoader $rl,
 		array $modules,

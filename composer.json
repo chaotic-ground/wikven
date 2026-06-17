@@ -3,14 +3,18 @@
 	"type": "mediawiki-extension",
 	"scripts": {
 		"test": "minus-x check .",
-		"fix": "minus-x fix ."
+		"fix": "minus-x fix .",
+		"phpcs": "phpcs -sp",
+		"phpcbf": "phpcbf"
 	},
 	"require-dev": {
+		"mediawiki/mediawiki-codesniffer": "51.0.0",
 		"mediawiki/minus-x": "2.0.1",
 		"phpro/grumphp": "2.21.0"
 	},
 	"config": {
 		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true,
 			"phpro/grumphp": true
 		}
 	}

@@ -1,7 +1,28 @@
 <?xml version="1.0" ?>
 <ruleset>
-	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki" />
+	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
+		<!--
+			Formatting is owned by mago. mago cannot emit MediaWiki's
+			inner-parenthesis spacing (func( $x )), and keeps a class brace on the
+			declaration line even when an implements list wraps, so leave all
+			whitespace and brace placement to mago and skip the sniffs that fight it.
+		-->
+		<exclude name="MediaWiki.WhiteSpace.SpaceyParenthesis" />
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing" />
+		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeClassBrace" />
+		<!--
+			wikven is a build tool: it shells out to git/composer/curl and to its
+			own maintenance steps (passthru, with escapeshellarg used to do so
+			safely), and uses @ for best-effort filesystem operations whose failure
+			is intentionally ignored.
+		-->
+		<exclude name="MediaWiki.Usage.ForbiddenFunctions.passthru" />
+		<exclude name="MediaWiki.Usage.ForbiddenFunctions.escapeshellarg" />
+		<exclude name="Generic.PHP.NoSilencedErrors.Discouraged" />
+	</rule>
 	<file>.</file>
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
 	<arg name="extensions" value="php" />
 	<arg name="encoding" value="UTF-8" />
 </ruleset>

@@ -40,8 +40,8 @@ empty-line-after-opening-tag = false
 # MediaWiki does not align array tables or assignments.
 array-table-style-alignment = false
 
-# Do not reorder or regroup use statements.
-sort-uses = false
+# Sort use statements, matching mediawiki-codesniffer's UnsortedUseStatements.
+sort-uses = true
 separate-use-types = false
 
 # Preserve author line-breaking decisions to keep the diff minimal.
