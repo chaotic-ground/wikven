@@ -20,3 +20,7 @@ jobs:
           # wikven targets MediaWiki 1.45 (Dockerfile, extension.json), whose
           # namespaced types (e.g. MediaWiki\Skin\Skin) the code uses.
           mediawiki-version: REL1_45
+          # PHP 8.3 images, so the container resolves wikven's dev deps (which
+          # require >= 8.2) — the default php81 images cannot.
+          quibble-docker-image: quibble-bookworm-php83
+          phan-docker-image: mediawiki-phan-php83
