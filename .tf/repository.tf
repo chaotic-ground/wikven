@@ -27,8 +27,6 @@ resource "github_repository" "this" {
   vulnerability_alerts        = var.github_actions ? null : true
   web_commit_signoff_required = false
 
-  # GitHub Pages publishes the site to chaotic-ground.github.io/wikven via the
-  # deploy-docs workflow. Declare it so the configuration does not remove it.
   pages {
     build_type = "workflow"
   }
