@@ -6,19 +6,16 @@ permissions: {}
 
 jobs:
   # phan needs a full MediaWiki environment to resolve core symbols, which neither
-  # mago's analyzer nor a bare phpcs run can provide. Quibble sets that up and runs
-  # phan (via .phan/config.php + mediawiki-phan-config) against the extension.
+  # mago's analyzer nor a bare phpcs run can provide.
   phan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@dc8d9ec9d6c86ba9805a77736c68f974d250aa8f # v1.0.0
+      - uses: femiwiki/quibble-action@961ecc624a6bb53f91747a80054c87fe25d85131 # main
         with:
           stage: phan
-          # wikven targets MediaWiki 1.45 (Dockerfile, extension.json), whose
-          # namespaced types (e.g. MediaWiki\Skin\Skin) the code uses.
           mediawiki-version: REL1_45
           # PHP 8.3 images, so the container resolves wikven's dev deps (which
           # require >= 8.2) — the default php81 images cannot.
