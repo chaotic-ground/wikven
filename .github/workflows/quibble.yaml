@@ -22,8 +22,6 @@ jobs:
           quibble-docker-image: quibble-bookworm-php83
           phan-docker-image: mediawiki-phan-php83
 
-  # Runs `composer test` through Quibble's composer-test stage, the single home
-  # for the project's composer checks (currently minus-x; more will be added).
   composer-test:
     runs-on: ubuntu-latest
     steps:
