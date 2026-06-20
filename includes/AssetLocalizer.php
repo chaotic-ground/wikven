@@ -113,7 +113,7 @@ class AssetLocalizer {
 		$rl->respond(new Context($rl, new FauxRequest($query)));
 		$bytes = ob_get_clean();
 
-		$isSvg = $bytes !== false && strpos($bytes, '<svg') !== false;
+		$isSvg = $bytes !== false && str_contains($bytes, '<svg');
 		$isPng = $bytes !== false && strncmp($bytes, "\x89PNG\r\n\x1a\n", 8) === 0;
 		if (!$isSvg && !$isPng) {
 			return null;

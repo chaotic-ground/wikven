@@ -188,7 +188,7 @@ class RewriteScripts extends Maintenance {
 			if ($tagEnd === false) {
 				return -1;
 			}
-			if (strpos(substr($html, $pos, $tagEnd - $pos), $marker) !== false) {
+			if (str_contains(substr($html, $pos, $tagEnd - $pos), $marker)) {
 				return $pos;
 			}
 			$pos = strpos($html, '<div', $tagEnd + 1);
