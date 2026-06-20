@@ -25,16 +25,20 @@ jobs:
       - run: go vet ./...
         working-directory: caddy
 
-  # Run the extension's PHPUnit tests against a real MediaWiki, matching the
-  # 1.45 base image the build ships on.
+  # Run the extension's PHPUnit tests against a real MediaWiki: the 1.45 base
+  # the build ships on, and master.
   phpunit:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mediawiki-version: [REL1_45, master]
     steps:
       - name: Check out MediaWiki core
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           repository: wikimedia/mediawiki
-          ref: REL1_45
+          ref: ${{ matrix.mediawiki-version }}
           path: mediawiki
           persist-credentials: false
       - name: Check out Wikven into the extension tree

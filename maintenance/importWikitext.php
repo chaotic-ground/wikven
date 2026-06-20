@@ -5,8 +5,8 @@ namespace MediaWiki\Extension\Wikven;
 use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Revision\SlotRecord;
-use MediaWiki\StubObject\StubGlobalUser;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 use WikiRevision;
@@ -31,7 +31,7 @@ class ImportWikitext extends Maintenance {
 		$sourceDirectory = rtrim($wgWikvenSourceDirectory, '/');
 
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
-		StubGlobalUser::setUser($user);
+		RequestContext::getMain()->setUser($user);
 
 		$ok = true;
 		foreach ($this->wikitextFiles($sourceDirectory) as $filename) {
