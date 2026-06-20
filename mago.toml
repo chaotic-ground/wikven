@@ -53,8 +53,7 @@ preserve-breaking-attribute-list = true
 preserve-breaking-conditional-expression = true
 preserve-breaking-condition-expression = true
 
-# mago is primarily a formatter here. Disable lint rules that conflict with the
-# MediaWiki coding style (already enforced by mediawiki-codesniffer) or are noisy
+# Disable lint rules that conflict with the MediaWiki coding style or are noisy
 # metrics, keeping only correctness-oriented rules.
 [linter.rules]
 braced-string-interpolation = { enabled = false }
