@@ -12,6 +12,10 @@ jobs:
   # mago's analyzer nor a bare phpcs run can provide.
   phan:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mediawiki-version: [REL1_45, master]
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
@@ -19,7 +23,7 @@ jobs:
       - uses: femiwiki/quibble-action@614e10a4363fa08ecde20544a540888c6d08b1ef # main
         with:
           stage: phan
-          mediawiki-version: REL1_45
+          mediawiki-version: ${{ matrix.mediawiki-version }}
           # PHP 8.3 images, so the container resolves wikven's dev deps (which
           # require >= 8.2) — the default php81 images cannot.
           quibble-docker-image: quibble-bookworm-php83
