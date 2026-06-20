@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@961ecc624a6bb53f91747a80054c87fe25d85131 # main
+      - uses: femiwiki/quibble-action@614e10a4363fa08ecde20544a540888c6d08b1ef # main
         with:
           stage: phan
           mediawiki-version: REL1_45
@@ -28,9 +28,30 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@961ecc624a6bb53f91747a80054c87fe25d85131 # main
+      - uses: femiwiki/quibble-action@614e10a4363fa08ecde20544a540888c6d08b1ef # main
         with:
           stage: composer-test
           mediawiki-version: REL1_45
           # PHP 8.3 image: wikven's dev deps (minus-x etc.) require >= 8.2.
           quibble-docker-image: quibble-bookworm-php83
+
+  coverage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - id: quibble
+        uses: femiwiki/quibble-action@614e10a4363fa08ecde20544a540888c6d08b1ef # main
+        with:
+          stage: coverage
+          # Coverage tooling lives only on MediaWiki master.
+          mediawiki-version: master
+          quibble-docker-image: quibble-bookworm-php83
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          files: ${{ steps.quibble.outputs.coverage }}/clover.xml
+          use_oidc: true

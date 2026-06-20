@@ -7,6 +7,7 @@
 Read more on <https://chaotic-ground.github.io/wikven/>.
 
 [![Lint](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml/badge.svg)](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml)
+[![codecov](https://codecov.io/gh/chaotic-ground/wikven/graph/badge.svg)](https://codecov.io/gh/chaotic-ground/wikven)
 
 [mediawiki]: https://www.mediawiki.org/
 [wikipedia]: https://www.wikipedia.org/
