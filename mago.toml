@@ -52,3 +52,26 @@ preserve-breaking-parameter-list = true
 preserve-breaking-attribute-list = true
 preserve-breaking-conditional-expression = true
 preserve-breaking-condition-expression = true
+
+# Disable lint rules that conflict with the MediaWiki coding style or are noisy
+# metrics, keeping only correctness-oriented rules.
+[linter.rules]
+braced-string-interpolation = { enabled = false }
+literal-named-argument = { enabled = false }
+no-global = { enabled = false }
+no-isset = { enabled = false }
+no-empty = { enabled = false }
+strict-types = { enabled = false }
+no-else-clause = { enabled = false }
+prefer-early-continue = { enabled = false }
+file-name = { enabled = false }
+explicit-octal = { enabled = false }
+no-shorthand-ternary = { enabled = false }
+cyclomatic-complexity = { enabled = false }
+kan-defect = { enabled = false }
+halstead = { enabled = false }
+too-many-methods = { enabled = false }
+excessive-parameter-list = { enabled = false }
+prefer-arrow-function = { enabled = false }
+no-boolean-flag-parameter = { enabled = false }
+tagged-todo = { enabled = false }

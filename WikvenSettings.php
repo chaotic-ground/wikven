@@ -33,8 +33,8 @@ if ($wikvenWorkEnv !== false && $wikvenWorkEnv !== '') {
 	$wgCacheDirectory = "$wikvenCache/mw";
 	$wgTmpDirectory = "$wikvenCache/tmp";
 	foreach ([$wgUploadDirectory, $wgCacheDirectory, $wgTmpDirectory] as $wikvenDir) {
-		if (!is_dir($wikvenDir)) {
-			@mkdir($wikvenDir, 0777, true);
+		if (!is_dir($wikvenDir) && !mkdir($wikvenDir, 0777, true) && !is_dir($wikvenDir)) {
+			throw new \RuntimeException("Wikven: could not create directory $wikvenDir");
 		}
 	}
 }

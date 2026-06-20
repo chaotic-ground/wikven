@@ -28,7 +28,7 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 
 	/** @inheritDoc */
 	public function onGetLocalURL($title, &$url, $query) {
-		if (MW_ENTRY_POINT != 'cli') {
+		if (MW_ENTRY_POINT !== 'cli') {
 			return;
 		}
 		if ($title->getInterwiki()) {
@@ -96,7 +96,7 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 			if (!$module) {
 				return false;
 			}
-			if (in_array($module->getGroup(), ['site', 'noscript', 'private', 'user'])) {
+			if (in_array($module->getGroup(), ['site', 'noscript', 'private', 'user'], true)) {
 				return false;
 			}
 			return true;
@@ -115,7 +115,7 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 	}
 
 	private function addStyleToList(string $name): void {
-		if (MW_ENTRY_POINT != 'cli') {
+		if (MW_ENTRY_POINT !== 'cli') {
 			return;
 		}
 
