@@ -21,3 +21,16 @@ jobs:
           # require >= 8.2) — the default php81 images cannot.
           quibble-docker-image: quibble-bookworm-php83
           phan-docker-image: mediawiki-phan-php83
+
+  composer-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - uses: femiwiki/quibble-action@961ecc624a6bb53f91747a80054c87fe25d85131 # main
+        with:
+          stage: composer-test
+          mediawiki-version: REL1_45
+          # PHP 8.3 image: wikven's dev deps (minus-x etc.) require >= 8.2.
+          quibble-docker-image: quibble-bookworm-php83
