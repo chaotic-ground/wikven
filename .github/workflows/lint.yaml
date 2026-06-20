@@ -81,3 +81,22 @@ jobs:
       # pulls in phan, which requires ext-ast; phpcs does not need it.
       - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
       - run: composer phpcs
+
+  # minus-x checks that files carry the right executable bits. This is the
+  # project's `composer test` script, run locally by the grumphp pre-commit hook.
+  minus-x:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          # The lint tools require PHP >= 8.2; this is only the environment
+          # minus-x runs in, not wikven's target.
+          php-version: "8.3"
+          tools: composer
+      # mediawiki-phan-config (a dev dep, used only by the Quibble phan job)
+      # pulls in phan, which requires ext-ast; minus-x does not need it.
+      - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
+      - run: composer test
