@@ -1,3 +1,6 @@
+// Codex design tokens, so the skin switcher matches the active skin's theme.
+@import 'mediawiki.skin.variables.less';
+
 // Footer: the project (about/disclaimer/privacy) pages do not exist in the
 // static export, so hide those links. The "disclaimers" id is plural.
 #footer-places-privacy,
@@ -25,4 +28,22 @@
 
 a.new {
   pointer-events: none;
+}
+
+// Skin switcher: a native select styled with design tokens so it reads as a
+// regular MediaWiki form control across skins.
+.wikven-skin-switcher {
+  display: inline-flex;
+  align-items: center;
+
+  select {
+    margin-left: @spacing-50;
+    padding: @spacing-25 @spacing-75;
+    border: @border-width-base @border-style-base @border-color-base;
+    border-radius: @border-radius-base;
+    background-color: @background-color-base;
+    color: @color-base;
+    font: inherit;
+    cursor: pointer;
+  }
 }
