@@ -12,6 +12,14 @@ config:
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1
   WikvenLogos:
     icon: logo.svg
+  # Search results have no thumbnails, so drop the empty thumbnail column from
+  # the typeahead.
+  VectorTypeahead:
+    apiUrl: null
+    recommendationApiUrl: null
+    options:
+      showThumbnail: false
+      showDescription: true
   # Pagefind index: written into the build output (/workspace/dist in the image),
   # served under /wikven on GitHub Pages.
   SifterSearchOutputDir: /workspace/dist/pagefind
