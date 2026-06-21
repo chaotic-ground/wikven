@@ -16,12 +16,12 @@ With {{wikven}}, you can use the following features of MediaWiki.
 * [[JavaScript]] (MediaWiki:Common.js and gadgets)
 * {{ml|Bundled extensions and skins}}
 * Third-party extensions and skins (see [[wikven.yaml|.wikven.yaml]])
+* [[Search]] (client-side, via the SifterSearch extension)
 
 == Unsupported features ==
 
 These need a live wiki, so they are not part of the static export:
 
-* Search
 * All special pages
 * All editors ({{ml|Extension:WikiEditor|WikiEditor}}, <!--
 -->{{ml|Extension:VisualEditor|VisualEditor}} and {{ml|Extension:CodeEditor|CodeEditor}})
