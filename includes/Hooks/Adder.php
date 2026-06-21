@@ -24,6 +24,16 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 			$out->addModules('ext.Wikven.skinSwitcher');
 			$out->addJsConfigVars('wgWikvenMainSkin', $GLOBALS['wgWikvenMainSkin'] ?? '');
 		}
+
+		// Citizen's search is its own REST-backed command palette, which has no
+		// backend on the static export; hide its trigger there. SifterSearch does
+		// not wire Citizen, so there is no Pagefind-backed replacement. A live wiki
+		// (web entry) keeps Citizen's search working, so only hide it on the build.
+		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'citizen') {
+			// !important: the element also carries .citizen-dropdown, whose
+			// display:flex would otherwise win by cascade order.
+			$out->addInlineStyle('.citizen-search { display: none !important; }');
+		}
 	}
 
 	/** @inheritDoc */
