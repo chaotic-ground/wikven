@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 use MediaWiki\Html\Html;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
+use MediaWiki\Title\Title;
 
 class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\SkinAddFooterLinksHook {
 	/** @inheritDoc */
@@ -38,7 +39,7 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 
 	/** @inheritDoc */
 	public function onSkinAddFooterLinks(Skin $skin, string $key, array &$footerItems) {
-		global $wgWikvenFooterUrl, $wgWikvenSkins;
+		global $wgWikvenFooterUrl, $wgWikvenSkins, $wgWikvenVersionPage;
 
 		if ($key !== 'places') {
 			return;
@@ -50,6 +51,17 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 				// TODO: it could not be Github.
 				'View project on Github'
 			);
+		}
+		$versionPage = $wgWikvenVersionPage ?? '';
+		if ($versionPage !== '') {
+			$versionTitle = Title::newFromText($versionPage);
+			if ($versionTitle && $versionTitle->exists()) {
+				$footerItems['version'] = Html::element(
+					'a',
+					['href' => $versionTitle->getLocalURL()],
+					'Version'
+				);
+			}
 		}
 		if (count($wgWikvenSkins ?? []) > 1) {
 			$footerItems['skin-switcher'] = $this->skinSwitcher($wgWikvenSkins, $skin->getSkinName());
