@@ -26,7 +26,8 @@ config:
     TabberNeue:
       repository: https://github.com/StarCitizenTools/mediawiki-extensions-TabberNeue.git
       reference: v4.0.0
-    # The release tarball bundles the Pagefind binary, which a git clone omits.
+    # The rolling nightly tarball bundles the Pagefind binary (a git clone omits
+    # it). No sha256: it rolls, so a SifterSearch change is picked up by
+    # triggering the nightly and rebuilding, with no re-pin here.
     SifterSearch:
-      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.5.0/SifterSearch-linux-x64.tar.gz
-      sha256: 46047e5215d1941d3accc3aaea30bb728e01c8816f9632c9d98fd570cc0647a6
+      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/nightly/SifterSearch-linux-x64.tar.gz
