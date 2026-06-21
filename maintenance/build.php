@@ -6,6 +6,7 @@ use ImportImages;
 use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
@@ -56,6 +57,7 @@ class Build extends Maintenance {
 		$this->importImages("$ip/maintenance/importImages.php");
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
+		$this->setVersionPage();
 		$this->step(RunJobs::class, "$ip/maintenance/runJobs.php");
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
@@ -215,6 +217,56 @@ class Build extends Maintenance {
 		$content = ContentHandler::makeContent($GLOBALS['wgWikvenMainPage'], $title);
 		$updater->setContent(SlotRecord::MAIN, $content);
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Set the main page'));
+	}
+
+	/**
+	 * Generate a Version page (mirroring Special:Version, which a static export
+	 * has no server to serve) listing the installed software, extensions and
+	 * skins. Skipped when $wgWikvenVersionPage is empty or the site already
+	 * provides a same-named page.
+	 */
+	private function setVersionPage(): void {
+		$name = $GLOBALS['wgWikvenVersionPage'] ?? 'Version';
+		if ($name === '') {
+			return;
+		}
+		$title = Title::newFromText($name);
+		if (!$title || $title->exists()) {
+			return;
+		}
+
+		$db = $this->getServiceContainer()->getConnectionProvider()->getReplicaDatabase();
+		$software = [
+			['[https://www.mediawiki.org/ MediaWiki]', MW_VERSION],
+			['[https://www.php.net/ PHP]', PHP_VERSION . ' (' . PHP_SAPI . ')'],
+			[ucfirst($db->getType()), $db->getServerVersion()]
+		];
+
+		$text = "__NOINDEX__\n";
+		$text .= "This site is generated with the following open-source software.\n\n";
+		$text .= "== Installed software ==\n";
+		$text .= "{| class=\"wikitable\"\n! Product !! Version\n";
+		foreach ($software as [$product, $version]) {
+			$text .= "|-\n| $product\n| $version\n";
+		}
+		$text .= "|}\n\n";
+
+		$text .= "== Installed extensions and skins ==\n";
+		$text .= "{| class=\"wikitable\"\n! Name !! Version\n";
+		$things = ExtensionRegistry::getInstance()->getAllThings();
+		ksort($things);
+		foreach ($things as $thingName => $credits) {
+			$url = $credits['url'] ?? '';
+			$label = $url !== '' ? "[$url $thingName]" : $thingName;
+			$text .= "|-\n| $label\n| " . ( $credits['version'] ?? '' ) . "\n";
+		}
+		$text .= "|}\n";
+
+		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
+		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
+		$updater = $page->newPageUpdater($user);
+		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($text, $title));
+		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Generate the version page'));
 	}
 
 	/**
