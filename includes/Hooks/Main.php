@@ -79,7 +79,8 @@ class Main implements
 			return;
 		}
 		$links['views']['wikven-viewsource'] = [
-			'text' => 'View source',
+			// MediaWiki core's existing "View source" label, so it is translated.
+			'text' => $sktemplate->msg('viewsource')->text(),
 			'href' => str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenViewSourceUrl)
 		];
 	}
