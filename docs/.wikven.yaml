@@ -16,6 +16,8 @@ config:
   # served under /wikven on GitHub Pages.
   SifterSearchOutputDir: /workspace/dist/pagefind
   SifterSearchBundlePath: /wikven/pagefind/
+  # No full-text search page on a static export, so hide that affordance.
+  SifterSearchFullText: false
   WikvenRepositories:
     # TabberNeue is not bundled in the image; clone it from Git to show off
     # third-party fetching. (TemplateStyles, which the templates use, is bundled
@@ -25,5 +27,5 @@ config:
       reference: v4.0.0
     # The release tarball bundles the Pagefind binary, which a git clone omits.
     SifterSearch:
-      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.2.0/SifterSearch-linux-x64.tar.gz
-      sha256: d7f8896478195be8597a5426ed724bb011844eeb83abf1afd098b2a7bf5a83b3
+      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.3.0/SifterSearch-linux-x64.tar.gz
+      sha256: e8dea1e3b1c37cc2f48f5bbe41df255b25a517f61982021e31ade4bcaf7183b2
