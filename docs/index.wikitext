@@ -16,7 +16,7 @@ With {{wikven}}, you can use the following features of MediaWiki.
 * [[JavaScript]] (MediaWiki:Common.js and gadgets)
 * {{ml|Bundled extensions and skins}}
 * Third-party extensions and skins (see [[wikven.yaml|.wikven.yaml]])
-* [[Search]] (client-side, via the SifterSearch extension)
+* [[Searching|Search]] (client-side, via the SifterSearch extension)
 
 == Unsupported features ==
 

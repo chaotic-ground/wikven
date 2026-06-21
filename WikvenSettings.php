@@ -24,6 +24,10 @@ $wgFileCacheDirectory = $wikvenDist;
 $wgWikvenSourceDirectory = $wikvenSrc;
 $wgWikvenHtmlDirectory = $wikvenDist;
 
+// Let pages opt out of indexing with __NOINDEX__ in any namespace (by default
+// content namespaces are exempt from user robot control).
+$wgExemptFromUserRobotsControl = [];
+
 // Standalone-binary mode (WIKVEN_WORKDIR set): keep every ephemeral write out of
 // the install dir, which in the embedded binary is an extracted, throwaway tree.
 // In the Docker image WIKVEN_WORKDIR is unset, the install dir is writable, and

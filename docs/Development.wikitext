@@ -57,7 +57,7 @@ The <code>run</code> script:
 ; <code>buildScripts</code>
 : Dumps the JavaScript the pages need into two files: <code>startup-static.js</code> (the loader manifest, with its network auto-load removed) and <code>modules-static.js</code> (the full dependency closure, so every module self-executes). It seeds the <code>site</code> module (<code>MediaWiki:Common.js</code> and the skin's JS) and any default [[JavaScript|gadgets]], which a live wiki pulls in implicitly.
 ; <code>rewriteScripts</code>
-: Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the appearance menu (and the search box, unless [[Search|SifterSearch]] is providing a static index), which need a live API.
+: Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the appearance menu (and the search box, unless [[Searching|SifterSearch]] is providing a static index), which need a live API.
 ; <code>storeImages</code>
 : Copies every referenced image (from Wikimedia Commons via InstantCommons, or from local uploads) to a content-hashed local file and rewrites the URLs, so nothing is fetched over the network at view time.
 ; <code>rename</code>

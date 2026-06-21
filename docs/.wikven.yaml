@@ -18,7 +18,7 @@ config:
   SifterSearchBundlePath: /wikven/pagefind/
   # No full-text search page on a static export, so hide that affordance.
   SifterSearchFullText: false
-  SifterSearchResultsPage: "Search results"
+  SifterSearchResultsPage: "Search"
   WikvenRepositories:
     # TabberNeue is not bundled in the image; clone it from Git to show off
     # third-party fetching. (TemplateStyles, which the templates use, is bundled

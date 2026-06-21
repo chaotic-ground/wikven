@@ -21,5 +21,5 @@ List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put
 
 Only gadgets marked <code>default</code> are loaded: a static site has no logged-in readers to turn other gadgets on. A gadget's own CSS (in the same module) is included, but standalone styles-only gadgets are not yet covered.
 
-{{prevnext|Skins|Search}}
+{{prevnext|Skins|Searching}}
 {{DISPLAYTITLE:JavaScript}}

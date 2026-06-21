@@ -1,0 +1,44 @@
+Static sites have no server to answer queries, so MediaWiki's built-in search does not work in the export. For search on a {{wikven}} site, the recommended option is [https://github.com/chaotic-ground/SifterSearch SifterSearch], which builds a static search index at build time and serves results entirely in the browser. This documentation site uses it.
+
+== How it works ==
+
+SifterSearch indexes the rendered pages with [https://pagefind.app/ Pagefind] and writes a static index bundle into the build output. On each page it feeds those results into the skin's own search box (Vector 2022's typeahead, or the classic suggestions box on other skins), so search runs with no API, database, or <code>load.php</code> behind it.
+
+== Enabling it ==
+
+SifterSearch is not bundled, so fetch it in [[wikven.yaml|.wikven.yaml]] and tell it where to write and serve the index:
+
+<syntaxhighlight lang="yaml">
+extensions:
+  - SifterSearch
+config:
+  # Filesystem path of the index bundle, inside the build output directory.
+  SifterSearchOutputDir: /workspace/dist/pagefind
+  # URL path the bundle is served from.
+  SifterSearchBundlePath: /pagefind/
+  # A static export has no Special:Search, so do not offer it.
+  SifterSearchFullText: false
+  # A content page that shows the full results (see below).
+  SifterSearchResultsPage: "Search"
+  WikvenRepositories:
+    # The release tarball bundles the Pagefind binary, which a git clone omits.
+    # Pick the tarball for the platform the build runs on.
+    SifterSearch:
+      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.2.0/SifterSearch-linux-x64.tar.gz
+</syntaxhighlight>
+
+<code>SifterSearchOutputDir</code> is a filesystem path inside the build output (the image writes the site to <code>/workspace/dist</code>); <code>SifterSearchBundlePath</code> is the URL it is served from. If your site lives in a subdirectory, include it: this site deploys under <code>/wikven</code> on GitHub Pages, so it uses <code>/wikven/pagefind/</code>.
+
+{{note|For a reproducible build, pin a released version and add its <code>sha256</code>, as with any tarball source. See [[wikven.yaml#WikvenRepositories|.wikven.yaml]] for the fetch options.}}
+
+== Full results page ==
+
+The skin's search box shows the top matches as you type. For a page that lists
+all matches, create an (otherwise empty) content page and name it in
+<code>SifterSearchResultsPage</code>. SifterSearch mounts its full search UI
+there and runs the query from the URL, and the search box's "search for pages
+containing…" action and its Enter key go to that page. This site uses a page
+titled <code>Search</code>.
+
+{{prevnext|JavaScript|wikven.yaml}}
+{{DISPLAYTITLE:Searching}}

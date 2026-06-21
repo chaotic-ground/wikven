@@ -7,7 +7,7 @@
 ** Images|Images
 ** Skins|Skins
 ** JavaScript|JavaScript
-** Search|Search
+** Searching|Searching
 * References
 ** wikven.yaml|.wikven.yaml
 ** Development|Development
