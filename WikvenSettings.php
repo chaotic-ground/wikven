@@ -203,6 +203,10 @@ if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, tru
 	if ($wikvenBuildSkin !== $wgWikvenMainSkin) {
 		$wgWikvenHtmlDirectory = "$wikvenDist/$wikvenBuildSkin";
 		$wgFileCacheDirectory = $wgWikvenHtmlDirectory;
+		// Non-main skins are duplicate copies of the main skin's pages, so keep
+		// them out of search indexes (only the main skin at the dist root is
+		// indexed). Read at render time, so RebuildFileCache emits it.
+		$wgDefaultRobotPolicy = 'noindex,follow';
 	}
 }
 
