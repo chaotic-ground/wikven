@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Registration\ExtensionRegistry;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -43,6 +44,11 @@ class RewriteScripts extends Maintenance {
 		$hasSiteStyles = is_file("$htmlDir/site.styles.css") && filesize("$htmlDir/site.styles.css") > 0;
 
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
+
+		// SifterSearch serves search from a static Pagefind bundle and keeps the
+		// native search box working offline (buildScripts bundles its module
+		// closure), so the search box is left in place when it is enabled.
+		$sifterEnabled = ExtensionRegistry::getInstance()->isLoaded('SifterSearch');
 
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);
@@ -121,12 +127,15 @@ class RewriteScripts extends Maintenance {
 				$html
 			);
 
-			// Search cannot work on a static host (it needs the API), and the JS
-			// search widget lazily fetches codex/vue from load.php. Drop the search
-			// boxes, and the skin-vector-search-vue body class that makes the sticky
-			// header load the search module, so nothing mounts and nothing is fetched.
-			$html = $this->removeElements($html, 'vector-search-box-vue');
-			$html = str_replace(' skin-vector-search-vue', '', $html);
+			// Without SifterSearch, search cannot work on a static host (it needs the
+			// API) and the JS search widget lazily fetches codex/vue from load.php, so
+			// drop the search boxes and the skin-vector-search-vue body class that
+			// makes the sticky header load the search module, so nothing mounts and
+			// nothing is fetched. With SifterSearch the box is kept (see above).
+			if (!$sifterEnabled) {
+				$html = $this->removeElements($html, 'vector-search-box-vue');
+				$html = str_replace(' skin-vector-search-vue', '', $html);
+			}
 
 			// The appearance menu (dark mode / width) pulls in codex+vue from
 			// load.php for its widgets, which 404s and cannot work statically.

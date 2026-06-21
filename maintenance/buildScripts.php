@@ -3,7 +3,9 @@
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\HookContainer\HookRunner;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
@@ -68,6 +70,18 @@ class BuildScripts extends Maintenance {
 		// at request time, which the static render does not reproduce, so seed them
 		// so default gadgets are bundled too.
 		$seeds = array_merge($seeds, $this->defaultGadgetModules());
+		// SifterSearch serves search from a static Pagefind bundle, so the native
+		// search module can run offline once it is in the bundle. It is loaded
+		// lazily on search-box focus and so never appears in a page's module queue;
+		// seed the search module mediawiki.page.ready will load (after the
+		// SkinPageReadyConfig hook, which SifterSearch rewrites to its own
+		// Pagefind-backed module) so its closure (codex/vue) is bundled too.
+		if (ExtensionRegistry::getInstance()->isLoaded('SifterSearch')) {
+			$searchModule = $this->resolveSearchModule($rl, $wgLanguageCode, $wgDefaultSkin);
+			if ($searchModule !== null && $rl->isModuleRegistered($searchModule)) {
+				$seeds[] = $searchModule;
+			}
+		}
 		// 2. Expand to the full dependency closure, plus the implicit base modules.
 		$closure = $this->resolveClosure($rl, $seeds, $wgLanguageCode, $wgDefaultSkin);
 
@@ -156,6 +170,22 @@ class BuildScripts extends Maintenance {
 			}
 		}
 		return array_keys($modules);
+	}
+
+	/**
+	 * @return string|null The search module mediawiki.page.ready lazy-loads on
+	 *   focus, after the SkinPageReadyConfig hook (which the active skin and
+	 *   SifterSearch use to point it at their own module), or null if search is off.
+	 */
+	private function resolveSearchModule(ResourceLoader $rl, string $lang, string $skin): ?string {
+		$query = ResourceLoader::makeLoaderQuery([], $lang, $skin, null, null, Context::DEBUG_OFF, null);
+		$context = new Context($rl, new FauxRequest($query));
+		$config = ['search' => true, 'searchModule' => 'mediawiki.searchSuggest'];
+		( new HookRunner(MediaWikiServices::getInstance()->getHookContainer()) )->onSkinPageReadyConfig(
+			$context,
+			$config
+		);
+		return $config['search'] ?? false ? $config['searchModule'] ?? null : null;
 	}
 
 	/**
