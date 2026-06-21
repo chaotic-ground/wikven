@@ -6,6 +6,11 @@
 config:
   Sitename: Wikven
 
+  # Name the project namespace after the site. The installer hardcodes it to the
+  # install-time wiki name ("MediaWiki"), which collides with the MediaWiki
+  # namespace and makes the project namespace fall back to the generic "Project".
+  MetaNamespace: Wikven
+
   # Keep the first letter of page titles as written instead of force-capitalizing
   # it (MediaWiki's default). The entry page is the lowercase "index", which the
   # build writes as index.html, the file a static host (GitHub Pages, and web
