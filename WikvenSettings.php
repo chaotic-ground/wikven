@@ -165,10 +165,11 @@ $wgSettings->apply();
 $config['extensions'] = array_values(array_unique(array_filter($config['extensions'], 'is_string'), SORT_STRING));
 $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_string'), SORT_STRING));
 
-// Skins. Register each named skin and use the first as the default. Only skins
-// bundled in this image can be enabled; an unknown name is skipped with a
+// Skins. Register each named skin and collect its canonical name (e.g. 'minerva'
+// can differ from the directory 'MinervaNeue', so read it from skin.json). Only
+// skins bundled in this image can be enabled; an unknown name is skipped with a
 // warning instead of aborting the whole build.
-$wikvenDefaultSkinChosen = false;
+$wgWikvenSkins = [];
 foreach ($config['skins'] ?? [] as $skin) {
 	if (!is_string($skin)) {
 		continue;
@@ -178,16 +179,30 @@ foreach ($config['skins'] ?? [] as $skin) {
 		continue;
 	}
 	wfLoadSkin($skin);
-	// Set the default unconditionally: the installer already wrote $wgDefaultSkin,
-	// so a !isset guard never fires. A skin's canonical name (e.g. 'minerva') can
-	// differ from its directory ('MinervaNeue'), so read it from its skin.json.
-	if (!$wikvenDefaultSkinChosen) {
-		$wgDefaultSkin = strtolower($skin);
-		$skinMeta = json_decode(file_get_contents("$IP/skins/$skin/skin.json"), true);
-		if (isset($skinMeta['ValidSkinNames']) && is_array($skinMeta['ValidSkinNames'])) {
-			$wgDefaultSkin = (string)array_key_first($skinMeta['ValidSkinNames']);
-		}
-		$wikvenDefaultSkinChosen = true;
+	$wikvenCanonical = strtolower($skin);
+	$skinMeta = json_decode(file_get_contents("$IP/skins/$skin/skin.json"), true);
+	if (isset($skinMeta['ValidSkinNames']) && is_array($skinMeta['ValidSkinNames'])) {
+		$wikvenCanonical = (string)array_key_first($skinMeta['ValidSkinNames']);
+	}
+	$wgWikvenSkins[] = $wikvenCanonical;
+}
+$wgWikvenSkins = array_values(array_unique($wgWikvenSkins));
+
+// The first listed skin is the site default (set unconditionally: the installer
+// has already written $wgDefaultSkin, so a !isset guard would never fire).
+$wgWikvenMainSkin = $wgWikvenSkins[0] ?? $wgDefaultSkin;
+$wgDefaultSkin = $wgWikvenMainSkin;
+
+// Per-skin build pass. The build renders each skin in its own MediaWiki boot,
+// selected by WIKVEN_BUILD_SKIN: the main skin into the dist root, every other
+// skin into a dist/<skin>/ subdirectory. Unset (a normal single-skin build) is a
+// no-op, so the default output is unchanged.
+$wikvenBuildSkin = getenv('WIKVEN_BUILD_SKIN');
+if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, true)) {
+	$wgDefaultSkin = $wikvenBuildSkin;
+	if ($wikvenBuildSkin !== $wgWikvenMainSkin) {
+		$wgWikvenHtmlDirectory = "$wikvenDist/$wikvenBuildSkin";
+		$wgFileCacheDirectory = $wgWikvenHtmlDirectory;
 	}
 }
 
