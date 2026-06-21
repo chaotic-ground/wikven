@@ -7,6 +7,7 @@ extensions:
 skins:
   - Vector
   - Timeless
+  - Citizen
 config:
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
@@ -35,6 +36,12 @@ config:
     TabberNeue:
       repository: https://github.com/StarCitizenTools/mediawiki-extensions-TabberNeue.git
       reference: v4.0.0
+    # Citizen is a third-party skin; its search is its own REST-backed command
+    # palette, which has no backend on a static export, so it is hidden (see
+    # Adder.php). The other skins keep working SifterSearch search.
+    Citizen:
+      repository: https://github.com/StarCitizenTools/mediawiki-skins-Citizen.git
+      reference: v3.17.0
     # The rolling nightly tarball bundles the Pagefind binary (a git clone omits
     # it). No sha256: it rolls, so a SifterSearch change is picked up by
     # triggering the nightly and rebuilding, with no re-pin here.
