@@ -1,4 +1,4 @@
-{{wikven}} is a static site generator built on {{ml|MediaWiki}}, the software
+{{wikven}} is a static site generator built on [https://www.mediawiki.org/ MediaWiki], the software
 behind [https://www.wikipedia.org/ Wikipedia]. It turns a directory of wikitext
 into a plain HTML site you can host anywhere, with no server or database to run.
 This documentation site is itself built with {{wikven}}.
