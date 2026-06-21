@@ -35,7 +35,7 @@
 	},
 	"Hooks": {
 		"ParserOutputPostCacheTransform": "hider",
-		"SkinTemplateNavigation::Universal": "hider",
+		"SkinTemplateNavigation::Universal": ["hider", "main"],
 		"SidebarBeforeOutput": "hider",
 		"SkinAddFooterLinks": "adder",
 		"BeforePageDisplay": "adder",
@@ -90,6 +90,10 @@
 		"WikvenHistoryUrl": {
 			"value": "",
 			"description": "URL template for the per-page \"View history\" link. $1 is replaced with the page's percent-encoded source file name, as for WikvenEditUrl. Empty disables the link."
+		},
+		"WikvenViewSourceUrl": {
+			"value": "",
+			"description": "URL template for the per-page \"View source\" tab, linking to the page's source file in the repository. $1 is replaced with the page's percent-encoded source file name, as for WikvenEditUrl. Empty disables the tab."
 		},
 		"WikvenLogos": {
 			"value": [],

@@ -12,7 +12,10 @@ use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 use MediaWiki\Title\Title;
 
-class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook {
+class Main implements
+	\MediaWiki\Hook\GetLocalURLHook,
+	\MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook,
+	\MediaWiki\Hook\SkinTemplateNavigation__UniversalHook {
 	private ?Context $rlClientContext = null;
 
 	/** The directory the HTML files are written to. */
@@ -54,25 +57,31 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 		// For edit/history, $1 is the page's source filename, so the link lands
 		// on the file to edit rather than the rendered page.
 		if ($action === 'edit' && $wgWikvenEditUrl) {
-			$url = str_replace('$1', $this->sourceFileParam($title), $wgWikvenEditUrl);
+			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenEditUrl);
 		} elseif ($action === 'history' && $wgWikvenHistoryUrl) {
-			$url = str_replace('$1', $this->sourceFileParam($title), $wgWikvenHistoryUrl);
+			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenHistoryUrl);
 		} else {
 			$url = "./$name.html";
 		}
 	}
 
 	/**
-	 * The source file a page imported from, percent-encoded for use as the $1 in
-	 * WikvenEditUrl/WikvenHistoryUrl. Built from the title text (spaces, not the
-	 * DB key's underscores) so it matches the on-disk file name, then encoded so
-	 * characters legal in a title but unsafe in a URL path (spaces, '#', '?',
-	 * '%', non-ASCII) cannot break or truncate the link. The subpage separator
-	 * '/' and the namespace separator ':' are kept readable.
+	 * Add a "View source" tab linking to the page's source file in the repository
+	 * ($wgWikvenViewSourceUrl, with $1 the source file name), the read-only
+	 * counterpart of the Edit tab. Skipped when the URL is not configured.
+	 *
+	 * @inheritDoc
 	 */
-	private function sourceFileParam(Title $title): string {
-		$file = SourceFile::titleToFilename($title->getPrefixedText());
-		return strtr(rawurlencode($file), ['%2F' => '/', '%3A' => ':']);
+	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
+		global $wgWikvenViewSourceUrl;
+		$title = $sktemplate->getTitle();
+		if (!$wgWikvenViewSourceUrl || !$title || !$title->canExist()) {
+			return;
+		}
+		$links['views']['wikven-viewsource'] = [
+			'text' => 'View source',
+			'href' => str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenViewSourceUrl)
+		];
 	}
 
 	/** @inheritDoc */

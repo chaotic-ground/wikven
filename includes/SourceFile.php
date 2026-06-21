@@ -66,6 +66,18 @@ class SourceFile {
 	}
 
 	/**
+	 * The source file name of a page, percent-encoded for use as the $1 in the
+	 * edit/history/view-source URL templates. Built from the prefixed title text
+	 * (spaces, not the DB key's underscores) so it matches the on-disk file name,
+	 * then encoded so characters legal in a title but unsafe in a URL path
+	 * (spaces, '#', '?', '%', non-ASCII) cannot break or truncate the link. The
+	 * subpage separator '/' and the namespace separator ':' are kept readable.
+	 */
+	public static function titleToParam(string $titleText): string {
+		return strtr(rawurlencode(self::titleToFilename($titleText)), ['%2F' => '/', '%3A' => ':']);
+	}
+
+	/**
 	 * Whether MediaWiki resolves a non-wikitext default content model for the
 	 * given title text — i.e. the title (via its extension or namespace) already
 	 * determines the content, so no ".wikitext" marker is needed. Driven by the
