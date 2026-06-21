@@ -168,6 +168,7 @@ $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_
 // Skins. Register each named skin and use the first as the default. Only skins
 // bundled in this image can be enabled; an unknown name is skipped with a
 // warning instead of aborting the whole build.
+$wikvenDefaultSkinChosen = false;
 foreach ($config['skins'] ?? [] as $skin) {
 	if (!is_string($skin)) {
 		continue;
@@ -177,15 +178,16 @@ foreach ($config['skins'] ?? [] as $skin) {
 		continue;
 	}
 	wfLoadSkin($skin);
-	if (!isset($wgDefaultSkin)) {
-		// A skin's default-skin name (e.g. 'minerva') can differ from its
-		// directory name (e.g. 'MinervaNeue'), so read the canonical name from
-		// the skin's own skin.json instead of guessing it.
+	// Set the default unconditionally: the installer already wrote $wgDefaultSkin,
+	// so a !isset guard never fires. A skin's canonical name (e.g. 'minerva') can
+	// differ from its directory ('MinervaNeue'), so read it from its skin.json.
+	if (!$wikvenDefaultSkinChosen) {
 		$wgDefaultSkin = strtolower($skin);
 		$skinMeta = json_decode(file_get_contents("$IP/skins/$skin/skin.json"), true);
 		if (isset($skinMeta['ValidSkinNames']) && is_array($skinMeta['ValidSkinNames'])) {
 			$wgDefaultSkin = (string)array_key_first($skinMeta['ValidSkinNames']);
 		}
+		$wikvenDefaultSkinChosen = true;
 	}
 }
 
