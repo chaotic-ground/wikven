@@ -242,8 +242,7 @@ class Build extends Maintenance {
 			[ucfirst($db->getType()), $db->getServerVersion()]
 		];
 
-		$text = "__NOINDEX__\n";
-		$text .= "This site is generated with the following open-source software.\n\n";
+		$text = "This site is generated with the following open-source software.\n\n";
 		$text .= "== Installed software ==\n";
 		$text .= "{| class=\"wikitable\"\n! Product !! Version\n";
 		foreach ($software as [$product, $version]) {
