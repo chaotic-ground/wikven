@@ -19,6 +19,9 @@
 		"ext.Wikven.pinnableState": {
 			"scripts": ["pinnable-state.js"],
 			"dependencies": ["mediawiki.storage"]
+		},
+		"ext.Wikven.skinSwitcher": {
+			"scripts": ["skin-switcher.js"]
 		}
 	},
 	"ResourceModuleSkinStyles": {

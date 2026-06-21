@@ -6,6 +6,7 @@ extensions:
   - SifterSearch
 skins:
   - Vector
+  - Timeless
 config:
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
