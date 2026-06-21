@@ -45,11 +45,11 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 			return;
 		}
 		if ($wgWikvenFooterUrl) {
-			$footerItems['github'] = Html::element(
+			$host = $this->repoHostName($wgWikvenFooterUrl);
+			$footerItems['source'] = Html::element(
 				'a',
 				['href' => $wgWikvenFooterUrl],
-				// TODO: it could not be Github.
-				'View project on Github'
+				$host !== null ? "View project on $host" : 'View project source'
 			);
 		}
 		$versionPage = $wgWikvenVersionPage ?? '';
@@ -66,6 +66,28 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 		if (count($wgWikvenSkins ?? []) > 1) {
 			$footerItems['skin-switcher'] = $this->skinSwitcher($wgWikvenSkins, $skin->getSkinName());
 		}
+	}
+
+	/**
+	 * A display name for the host of the project URL, so the footer link is not
+	 * hardcoded to GitHub. Known forges are prettified; any other host is shown
+	 * as-is, and a URL with no host yields null (the caller drops the host name).
+	 */
+	private function repoHostName(string $url): ?string {
+		$host = parse_url($url, PHP_URL_HOST);
+		if (!is_string($host) || $host === '') {
+			return null;
+		}
+		$host = preg_replace('/^www\./', '', $host);
+		$known = [
+			'github.com' => 'GitHub',
+			'gitlab.com' => 'GitLab',
+			'codeberg.org' => 'Codeberg',
+			'bitbucket.org' => 'Bitbucket',
+			'gitea.com' => 'Gitea',
+			'sr.ht' => 'sourcehut'
+		];
+		return $known[$host] ?? $host;
 	}
 
 	/**
