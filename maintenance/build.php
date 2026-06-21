@@ -242,30 +242,71 @@ class Build extends Maintenance {
 			[ucfirst($db->getType()), $db->getServerVersion()]
 		];
 
-		$text = "This site is generated with the following open-source software.\n\n";
-		$text .= "== Installed software ==\n";
-		$text .= "{| class=\"wikitable\"\n! Product !! Version\n";
+		$text = $this->contentMsg('wikven-version-intro') . "\n\n";
+		$text .= '== ' . $this->contentMsg('version-software') . " ==\n";
+		$text .=
+			"{| class=\"wikitable\"\n! "
+			. $this->contentMsg('version-software-product')
+			. ' !! '
+			. $this->contentMsg('version-software-version')
+			. "\n";
 		foreach ($software as [$product, $version]) {
 			$text .= "|-\n| $product\n| $version\n";
 		}
 		$text .= "|}\n\n";
 
-		$text .= "== Installed extensions and skins ==\n";
-		$text .= "{| class=\"wikitable\"\n! Name !! Version\n";
-		$things = ExtensionRegistry::getInstance()->getAllThings();
-		ksort($things);
-		foreach ($things as $thingName => $credits) {
-			$url = $credits['url'] ?? '';
-			$label = $url !== '' ? "[$url $thingName]" : $thingName;
-			$text .= "|-\n| $label\n| " . ( $credits['version'] ?? '' ) . "\n";
+		// Split the registered components into extensions and skins (skins live
+		// under skins/), each in its own section as Special:Version does.
+		$extensions = [];
+		$skins = [];
+		foreach (ExtensionRegistry::getInstance()->getAllThings() as $thingName => $credits) {
+			if (str_contains($credits['path'] ?? '', '/skins/')) {
+				$skins[$thingName] = $credits;
+			} else {
+				$extensions[$thingName] = $credits;
+			}
 		}
-		$text .= "|}\n";
+		$text .= $this->componentTable('version-extensions', 'version-ext-colheader-name', $extensions);
+		$text .= $this->componentTable('version-skins', 'version-skin-colheader-name', $skins);
 
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
 		$updater = $page->newPageUpdater($user);
 		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($text, $title));
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Generate the version page'));
+	}
+
+	/**
+	 * A message in the wiki's content language, for the generated version page
+	 * (which is content, not interface chrome, so it follows the site language).
+	 */
+	private function contentMsg(string $key): string {
+		return wfMessage($key)->inContentLanguage()->text();
+	}
+
+	/**
+	 * A wikitext table of installed components (extensions or skins) with their
+	 * versions and project links, under the given section/name-column messages.
+	 */
+	private function componentTable(string $headingKey, string $nameColKey, array $things): string {
+		if (!$things) {
+			return '';
+		}
+		ksort($things);
+		$text = '== ' . $this->contentMsg($headingKey) . " ==\n";
+		$text .=
+			"{| class=\"wikitable\"\n! "
+			. $this->contentMsg($nameColKey)
+			. ' !! '
+			. $this->contentMsg('version-ext-colheader-version')
+			. "\n";
+		foreach ($things as $thingName => $credits) {
+			$url = $credits['url'] ?? '';
+			$label = $url !== '' ? "[$url $thingName]" : $thingName;
+			$text .= "|-\n| $label\n| " . ( $credits['version'] ?? '' ) . "\n";
+		}
+		$text .= "|}\n";
+		return $text;
 	}
 
 	/**

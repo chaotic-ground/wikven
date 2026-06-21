@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"wikven-skin-switcher-label": "Label preceding the skin switcher dropdown in the footer. Followed by {{msg-mw|colon-separator}}.",
+	"wikven-footer-source": "Footer link to the project's source repository. $1 is the repository host name (e.g. GitHub, GitLab) or a bare domain.",
+	"wikven-footer-source-plain": "Footer link to the project's source repository, used when no host can be derived from the URL.",
+	"wikven-version-intro": "Introductory sentence on the generated version page, which mirrors [[Special:Version]]."
+}

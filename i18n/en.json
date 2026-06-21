@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"wikven-skin-switcher-label": "Skin",
+	"wikven-footer-source": "View project on $1",
+	"wikven-footer-source-plain": "View project source",
+	"wikven-version-intro": "This site is generated with the following open-source software."
+}

@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Html\Html;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
@@ -49,7 +50,9 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 			$footerItems['source'] = Html::element(
 				'a',
 				['href' => $wgWikvenFooterUrl],
-				$host !== null ? "View project on $host" : 'View project source'
+				$host !== null
+					? $skin->msg('wikven-footer-source', $host)->text()
+					: $skin->msg('wikven-footer-source-plain')->text()
 			);
 		}
 		$versionPage = $wgWikvenVersionPage ?? '';
@@ -59,12 +62,12 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 				$footerItems['version'] = Html::element(
 					'a',
 					['href' => $versionTitle->getLocalURL()],
-					'Version'
+					$skin->msg('version')->text()
 				);
 			}
 		}
 		if (count($wgWikvenSkins ?? []) > 1) {
-			$footerItems['skin-switcher'] = $this->skinSwitcher($wgWikvenSkins, $skin->getSkinName());
+			$footerItems['skin-switcher'] = $this->skinSwitcher($skin, $wgWikvenSkins, $skin->getSkinName());
 		}
 	}
 
@@ -95,19 +98,22 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 	 * page. The ext.Wikven.skinSwitcher module wires the navigation; without it
 	 * the control is an inert list of the available skins.
 	 */
-	private function skinSwitcher(array $skins, string $current): string {
+	private function skinSwitcher(Skin $skin, array $skins, string $current): string {
+		$displayNames = MediaWikiServices::getInstance()->getSkinFactory()->getInstalledSkins();
 		$options = '';
 		foreach ($skins as $name) {
 			$attribs = ['value' => $name];
 			if ($name === $current) {
 				$attribs['selected'] = '';
 			}
-			$options .= Html::element('option', $attribs, ucwords(str_replace('-', ' ', $name)));
+			$label = $displayNames[$name] ?? ucwords(str_replace('-', ' ', $name));
+			$options .= Html::element('option', $attribs, $label);
 		}
+		$label = $skin->msg('wikven-skin-switcher-label')->escaped() . $skin->msg('colon-separator')->text();
 		return Html::rawElement(
 			'label',
 			['class' => 'wikven-skin-switcher'],
-			'Skin: ' . Html::rawElement('select', [], $options)
+			$label . Html::rawElement('select', [], $options)
 		);
 	}
 }
