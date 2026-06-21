@@ -112,6 +112,24 @@ class Main implements \MediaWiki\Hook\GetLocalURLHook, \MediaWiki\Hook\OutputPag
 				}
 			}
 		}
+
+		// Non-main skins render duplicate copies of every page under dist/<skin>/.
+		// Point their canonical link at the main skin's copy one directory up (the
+		// dist root) so crawlers dedupe to it.
+		$mainSkin = $GLOBALS['wgWikvenMainSkin'] ?? null;
+		$title = $out->getTitle();
+		if (
+			MW_ENTRY_POINT === 'cli'
+			&& $mainSkin
+			&& $title
+			&& $out->getSkin()->getSkinName() !== $mainSkin
+		) {
+			$name = Title::makeName($title->getNamespace(), $title->getDBkey());
+			$tags['link-canonical'] = Html::element('link', [
+				'rel' => 'canonical',
+				'href' => "../$name.html"
+			]);
+		}
 	}
 
 	private function addStyleToList(string $name): void {
