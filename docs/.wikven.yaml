@@ -3,6 +3,7 @@ extensions:
   - ParserFunctions
   - TemplateStyles
   - TabberNeue
+  - SifterSearch
 skins:
   - Vector
 config:
@@ -11,6 +12,10 @@ config:
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1
   WikvenLogos:
     icon: logo.svg
+  # Pagefind index: written into the build output (/workspace/dist in the image),
+  # served under /wikven on GitHub Pages.
+  SifterSearchOutputDir: /workspace/dist/pagefind
+  SifterSearchBundlePath: /wikven/pagefind/
   WikvenRepositories:
     # TabberNeue is not bundled in the image; clone it from Git to show off
     # third-party fetching. (TemplateStyles, which the templates use, is bundled
@@ -18,3 +23,7 @@ config:
     TabberNeue:
       repository: https://github.com/StarCitizenTools/mediawiki-extensions-TabberNeue.git
       reference: v4.0.0
+    # The release tarball bundles the Pagefind binary, which a git clone omits.
+    SifterSearch:
+      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.2.0/SifterSearch-linux-x64.tar.gz
+      sha256: d7f8896478195be8597a5426ed724bb011844eeb83abf1afd098b2a7bf5a83b3
