@@ -27,5 +27,5 @@ config:
       reference: v4.0.0
     # The release tarball bundles the Pagefind binary, which a git clone omits.
     SifterSearch:
-      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.3.0/SifterSearch-linux-x64.tar.gz
-      sha256: e8dea1e3b1c37cc2f48f5bbe41df255b25a517f61982021e31ade4bcaf7183b2
+      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.4.0/SifterSearch-linux-x64.tar.gz
+      sha256: c90d1c25093840b6e36426f87df967a30b042668549de56e17540246e2b962a6
