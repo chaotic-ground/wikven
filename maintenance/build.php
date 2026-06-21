@@ -19,17 +19,19 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 require_once "$IP/maintenance/Maintenance.php";
 
 /**
- * Build the whole static site in a single MediaWiki boot.
+ * Build the whole static site.
  *
- * This replaces the long sequence of separate `php maintenance/run.php ...`
- * invocations the build used to run (a fresh MediaWiki boot per step) with one
- * process that runs every step as a child maintenance script. It keeps the
- * orchestration in PHP instead of shell and avoids paying the bootstrap cost
- * once per step.
+ * Run without WIKVEN_BUILD_SKIN this is the orchestrator: it populates the wiki
+ * once (set the main page, import images and wikitext, run queued jobs) and then
+ * renders each enabled skin, re-invoking itself with WIKVEN_BUILD_SKIN set so
+ * every skin gets a fresh MediaWiki boot and never inherits another skin's
+ * cached state.
  *
- * Steps, in order: set the main page, import the wikitext, run queued jobs,
- * (re)build the file cache, then dump styles and scripts, rewrite them for the
- * static host, store remote images locally, and give the files readable names.
+ * A per-skin pass (WIKVEN_BUILD_SKIN set) renders the already-imported content
+ * into that skin's output directory: (re)build the file cache, dump styles and
+ * scripts, rewrite them for the static host, store images locally, and give the
+ * files readable names. The main skin lands in the dist root, others in
+ * dist/<skin>/ (see WikvenSettings).
  */
 class Build extends Maintenance {
 	public function __construct() {
@@ -38,22 +40,96 @@ class Build extends Maintenance {
 	}
 
 	public function execute() {
+		// A per-skin pass (WIKVEN_BUILD_SKIN set) renders the imported content in
+		// one skin; the orchestrating run populates the wiki, then spawns a pass
+		// per enabled skin.
+		if ((string)getenv('WIKVEN_BUILD_SKIN') !== '') {
+			$this->renderSkin();
+			return;
+		}
+
 		$ip = $GLOBALS['IP'];
 		$own = __DIR__;
 
 		$this->clearOutputDirectory();
 		$this->setMainPage();
-
 		$this->importImages("$ip/maintenance/importImages.php");
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
 		$this->step(RunJobs::class, "$ip/maintenance/runJobs.php");
+
+		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
+		if (!$skins) {
+			$skins = [$GLOBALS['wgDefaultSkin']];
+		}
+		foreach ($skins as $skin) {
+			$this->renderSkinPass($skin);
+		}
+	}
+
+	/**
+	 * Render one enabled skin in a fresh MediaWiki boot by re-invoking this script
+	 * with WIKVEN_BUILD_SKIN set. A fresh process gives the pass its own
+	 * $wgDefaultSkin and output directory without inheriting cached skin or
+	 * ResourceLoader state. Re-invocation mirrors however this process started:
+	 * plain php exposes PHP_BINARY, the embedded FrankenPHP binary leaves it empty
+	 * and is re-run as "<self> php-cli".
+	 */
+	private function renderSkinPass(string $skin): void {
+		$self = PHP_BINARY;
+		$prefix = [$self];
+		if ($self === '' || !is_executable($self)) {
+			$self = is_link('/proc/self/exe') ? ( readlink('/proc/self/exe') ?: '' ) : '';
+			$prefix = [$self, 'php-cli'];
+		}
+		if ($self === '' || !is_executable($self)) {
+			$this->fatalError('Wikven: cannot locate the PHP executable to render skins');
+		}
+
+		// run.php is resolved relative to the install root (required by the binary's
+		// php-cli), so run the child from there; the script itself is absolute.
+		chdir($GLOBALS['IP']);
+		$command = array_merge($prefix, ['maintenance/run.php', __FILE__]);
+
+		$previous = getenv('WIKVEN_BUILD_SKIN');
+		putenv("WIKVEN_BUILD_SKIN=$skin");
+		passthru(implode(' ', array_map('escapeshellarg', $command)), $exit);
+		if ($previous === false) {
+			putenv('WIKVEN_BUILD_SKIN');
+		} else {
+			putenv("WIKVEN_BUILD_SKIN=$previous");
+		}
+
+		if ($exit !== 0) {
+			$this->fatalError("Wikven: build failed for skin '$skin' (exit $exit)");
+		}
+	}
+
+	/**
+	 * Render the already-imported content in the skin selected by
+	 * WIKVEN_BUILD_SKIN, into that skin's output directory.
+	 */
+	private function renderSkin(): void {
+		$ip = $GLOBALS['IP'];
+		$own = __DIR__;
+		$dir = rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/');
+		if ($dir !== '' && !wfMkdirParents($dir)) {
+			$this->fatalError("Wikven: could not create output directory $dir");
+		}
+
 		$this->step(RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", ['overwrite' => true]);
 		$this->step(BuildStyles::class, "$own/buildStyles.php");
 		$this->step(BuildScripts::class, "$own/buildScripts.php");
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");
 		$this->step(Rename::class, "$own/rename.php");
+
+		// RebuildFileCache emits a per-page history/ tree the static host does not
+		// serve; drop it from this pass's output dir.
+		$history = "$dir/history";
+		if (is_dir($history)) {
+			$this->removeDirectory($history);
+		}
 	}
 
 	/**
@@ -80,6 +156,24 @@ class Build extends Maintenance {
 				unlink($entry->getPathname());
 			}
 		}
+	}
+
+	/**
+	 * Recursively delete a directory and everything under it.
+	 */
+	private function removeDirectory(string $dir): void {
+		$entries = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::CHILD_FIRST
+		);
+		foreach ($entries as $entry) {
+			if ($entry->isDir()) {
+				rmdir($entry->getPathname());
+			} else {
+				unlink($entry->getPathname());
+			}
+		}
+		rmdir($dir);
 	}
 
 	/**
