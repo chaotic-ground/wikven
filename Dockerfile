@@ -1,6 +1,6 @@
 # Base images are digest-pinned for reproducible builds; Dependabot keeps the
 # digests current (see .github/dependabot.yml).
-FROM composer:2@sha256:e8fdff913656c23e90ebbe0d7c55ab078c2aefdbb53ff79a73af5cc0921d5b81 AS composer
+FROM composer:2@sha256:7725eb4545c438629ae8bde3ef0bb9a5038ef566126ad878442a69007242d267 AS composer
 
 FROM mediawiki:1.45@sha256:7f9d5c2cc824096367f998e76a00e3f2195546b14fddb268e4218ab7a46c205d
 
