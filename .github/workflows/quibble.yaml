@@ -20,14 +20,14 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@5cec8ccb1468bc91fd3a0e2b97e1ecf2d1506fa3 # main
+      - uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53 # main
         with:
           stage: phan
           mediawiki-version: ${{ matrix.mediawiki-version }}
-          # PHP 8.3 images, so the container resolves wikven's dev deps (which
-          # require >= 8.2) — the default php81 images cannot.
+          # PHP 8.3 image, so the container resolves wikven's dev deps (which
+          # require >= 8.2). phan itself runs in the action's default
+          # mediawiki-phan-testrun image (php-ast 1.1.3, the maintained one).
           quibble-docker-image: quibble-bookworm-php83
-          phan-docker-image: mediawiki-phan-php83
 
   composer-test:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@5cec8ccb1468bc91fd3a0e2b97e1ecf2d1506fa3 # main
+      - uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53 # main
         with:
           stage: composer-test
           mediawiki-version: REL1_45
@@ -52,7 +52,7 @@ jobs:
         with:
           persist-credentials: false
       - id: quibble
-        uses: femiwiki/quibble-action@5cec8ccb1468bc91fd3a0e2b97e1ecf2d1506fa3 # main
+        uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53 # main
         with:
           stage: coverage
           # Coverage tooling lives only on MediaWiki master.
