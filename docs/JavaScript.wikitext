@@ -2,7 +2,7 @@
 
 == MediaWiki:Common.js ==
 
-Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a regular wiki. Create a <code>MediaWiki:Common.js.wikitext</code> file in your source directory and it runs on every page. The skin's <code>MediaWiki:Vector.js</code> (and so on) works the same way.
+Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a regular wiki. Create a <code>MediaWiki:Common.js</code> file in your source directory and it runs on every page. A <code>.js</code> page carries its own content model, so it needs no <code>.wikitext</code> marker. The skin's <code>MediaWiki:Vector.js</code> (and so on) works the same way.
 
 == Gadgets ==
 
@@ -13,13 +13,15 @@ extensions:
   - Gadgets
 </syntaxhighlight>
 
-List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put each gadget's code in <code>MediaWiki:Gadget-<name>.js.wikitext</code>:
+List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put each gadget's code in <code>MediaWiki:Gadget-<name>.js</code>:
 
 <syntaxhighlight lang="wikitext">
 * MyGadget[ResourceLoader|default]|MyGadget.js
 </syntaxhighlight>
 
 Only gadgets marked <code>default</code> are loaded: a static site has no logged-in readers to turn other gadgets on. A gadget's own CSS (in the same module) is included, but standalone styles-only gadgets are not yet covered.
+
+These docs ship one such gadget, <code>PersistTabber</code>, which remembers whether you pick the Docker or the binary tab in the install steps and keeps that choice as you move between pages.
 
 {{prevnext|Skins|Searching}}
 {{DISPLAYTITLE:JavaScript}}

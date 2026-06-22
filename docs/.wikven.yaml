@@ -3,6 +3,7 @@ extensions:
   - ParserFunctions
   - TemplateStyles
   - TabberNeue
+  - Gadgets
   - SifterSearch
 skins:
   - Vector
