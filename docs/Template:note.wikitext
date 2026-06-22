@@ -1,4 +1,4 @@
-<templatestyles src="note/styles.css" /><div class="wikven-note"><!--
+<onlyinclude><templatestyles src="note/styles.css" /><div class="wikven-note"><!--
   --><div>[[File:Xclamation SVG.svg|32px]]</div><!--
   --><div class="wikven-note-text"><p>{{{1|Text here.}}}</p></div>
-</div>
+</div></onlyinclude>
