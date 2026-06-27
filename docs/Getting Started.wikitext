@@ -34,7 +34,22 @@ docker run --rm \
 The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
 </tabber>
 
-Preview the site with <code>wikven serve</code>, then open <code>http://localhost:8080</code> (with Docker, see [[Deploying#Preview locally|Deploying]]). You can also open <code>dist/index.html</code> directly, though some links and assets resolve correctly only when served. To publish it online, see [[Deploying]].
+Preview the site locally, then open <code>http://localhost:8080</code>:
+
+<tabber>
+|-|Binary=
+<syntaxhighlight lang="shell">
+wikven serve
+</syntaxhighlight>
+|-|Docker=
+<syntaxhighlight lang="shell">
+docker run --rm -p 8080:8080 \
+  -v "$(pwd)/dist:/workspace/dist" \
+  ghcr.io/chaotic-ground/wikven serve
+</syntaxhighlight>
+</tabber>
+
+Opening <code>dist/index.html</code> directly also works, though some links and assets resolve correctly only when served. To publish it online, see [[Deploying]].
 
 == Setting the title of the site ==
 
@@ -58,6 +73,17 @@ echo 'This is the help page.' > src/Help.wikitext
 echo 'Read the [[Help]].' >> src/index.wikitext
 </syntaxhighlight>
 
-Build again: the home page now links to <code>Help.html</code>, and the link works with no server. See [[Pages]] for how file names map to page titles and namespaces, and for [[Pages#Templates|templates]].
+Build again: the home page now links to <code>Help.html</code>, and the link works with no server. See [[Pages]] for how file names map to page titles and namespaces.
 
-{{prevnext|Installation|Pages}}
+== Adding a template ==
+
+Templates, the main reason to reach for {{wikven}} over Markdown, let you reuse content. Put a <code>Template:</code> page in your source and transclude it with <code><nowiki>{{...}}</nowiki></code>:
+
+<syntaxhighlight lang="shell">
+echo "'''Note:''' {{{1}}}" > "src/Template:Note.wikitext"
+echo '{{Note|Back up your wiki first.}}' >> src/index.wikitext
+</syntaxhighlight>
+
+Build again: the home page now shows the note. See [[Pages#Templates]] for parameters and more.
+
+{{prevnext|Binary|Pages}}

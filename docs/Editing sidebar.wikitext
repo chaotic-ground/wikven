@@ -20,4 +20,4 @@ Some default sidebar blocks need a live wiki, so {{wikven}} drops them from the 
 
 * {{ml|Manual:Interface/Sidebar}}
 
-{{prevnext|Binary|Images}}
+{{prevnext|Pages|Images}}
