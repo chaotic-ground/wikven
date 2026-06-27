@@ -9,8 +9,10 @@
 ** Skins|Skins
 ** JavaScript|JavaScript
 ** Searching|Searching
+** Deploying|Deploying
+** Troubleshooting|Troubleshooting
 * References
-** wikven.yaml|.wikven.yaml
+** wikven.yaml|Configuration
 ** Development|Development
 *
 ** helppage|help-mediawiki
