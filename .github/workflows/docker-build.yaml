@@ -58,3 +58,7 @@ jobs:
           context: .
           push: ${{ github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main' }}
           tags: ${{ steps.tags.outputs.tags }}
+          # Layer cache shared (scope) with the other image builds, so a PR
+          # reuses main's cached base + apt layers instead of a cold rebuild.
+          cache-from: type=gha,scope=wikven-image
+          cache-to: type=gha,mode=max,scope=wikven-image
