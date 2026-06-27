@@ -20,6 +20,22 @@ tag=$(curl -s https://api.github.com/repos/chaotic-ground/wikven/releases | sed 
 curl -L -o wikven "https://github.com/chaotic-ground/wikven/releases/download/$tag/wikven-linux-x86_64"
 </syntaxhighlight>
 
+== Verify ==
+
+Each release binary is published with a <code>.sha256</code> checksum and a signed build-provenance attestation. To check it before trusting a binary you install onto your <code>PATH</code>, download it under its release name and verify the checksum:
+
+<syntaxhighlight lang="shell">
+curl -LO https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
+curl -LO https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64.sha256
+sha256sum -c wikven-linux-x86_64.sha256
+</syntaxhighlight>
+
+Or verify the provenance, that GitHub Actions built it from this repository, with the [https://cli.github.com/ GitHub CLI]:
+
+<syntaxhighlight lang="shell">
+gh attestation verify wikven-linux-x86_64 --repo chaotic-ground/wikven
+</syntaxhighlight>
+
 == Install ==
 
 The downloaded file already runs as-is — <code>./wikven</code> from the directory you saved it in. To run it as plain <code>wikven</code> from anywhere, install it onto your <code>PATH</code>:
