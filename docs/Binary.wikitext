@@ -38,7 +38,7 @@ The commands below assume it is on your <code>PATH</code>. If you skipped this s
 
 == Building a site ==
 
-Put your wikitext and a [[wikven.yaml|.wikven.yaml]] in a <code>src/</code> directory, then build:
+Put your wikitext and a [[Configuration|.wikven.yaml]] in a <code>src/</code> directory, then build:
 
 <syntaxhighlight lang="shell">
 mkdir -p src
@@ -52,16 +52,16 @@ The rendered site is written to <code>dist/</code>. Preview it with <code>wikven
 WIKVEN_WORKDIR=/path/to/project wikven build
 </syntaxhighlight>
 
-The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same [[wikven.yaml|.wikven.yaml]] layered over {{wikven}}'s defaults.
+The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same [[Configuration|.wikven.yaml]] layered over {{wikven}}'s defaults.
 
 == Optional host tools ==
 
 The binary renders on its own, but uses these host programs when they are present:
 
 * '''ImageMagick''' and '''librsvg''' produce higher-quality thumbnails. Without them the binary uses the built-in GD library for raster images and serves SVG inline. See [[Images]].
-* '''git''' is needed only to fetch [[wikven.yaml#WikvenRepositories|third-party extensions and skins]].
+* '''git''' is needed only to fetch [[Configuration#WikvenRepositories|third-party extensions and skins]].
 
-{{note|Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any [[wikven.yaml#WikvenRepositories|third-party extensions or skins]], relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.}}
+{{note|Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any [[Configuration#WikvenRepositories|third-party extensions or skins]], relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.}}
 
 {{prevnext|Pages|Editing sidebar}}
 {{DISPLAYTITLE:Standalone binary}}

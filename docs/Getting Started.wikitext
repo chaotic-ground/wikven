@@ -38,7 +38,7 @@ Preview the site with <code>wikven serve</code>, then open <code>http://localhos
 
 == Setting the title of the site ==
 
-For configuration, create a [[wikven.yaml|<code>.wikven.yaml</code>]] file in your <code>src</code> directory.
+For configuration, create a [[Configuration|<code>.wikven.yaml</code>]] file in your <code>src</code> directory.
 
 <syntaxhighlight lang="shell">
 cat <<EOF > src/.wikven.yaml

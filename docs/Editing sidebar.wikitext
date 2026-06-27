@@ -9,7 +9,7 @@ Each top-level <code>*</code> line is a heading, and each <code>**</code> line b
 ** Getting Started|Getting Started
 ** Images|Images
 * References
-** wikven.yaml|.wikven.yaml
+** Configuration|.wikven.yaml
 </syntaxhighlight>
 
 == What is removed ==
