@@ -6,6 +6,19 @@ set -euo pipefail; IFS=$'\n\t'
 # it so the PHP maintenance children (which read it via getenv) see any override.
 export WIKVEN_WORKDIR="${WIKVEN_WORKDIR:-/workspace}"
 
+# The image's entry point is this script; the first argument selects the
+# command (default "build"), mirroring the standalone binary's subcommands.
+command="${1:-build}"
+
+if [ "$command" = "serve" ]; then
+  # Serve the already-built site for local preview. The container always
+  # listens on 8080; map it to a host port with `docker run -p 8080:8080`.
+  exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist"
+elif [ "$command" != "build" ]; then
+  echo "wikven: unknown command '$command'; expected 'build' or 'serve'" >&2
+  exit 2
+fi
+
 cd /var/www/html
 
 php maintenance/run.php install \

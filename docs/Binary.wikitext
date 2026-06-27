@@ -46,7 +46,7 @@ echo 'Hello, World!' > src/index.wikitext
 wikven build
 </syntaxhighlight>
 
-The rendered site is written to <code>dist/</code>. The working directory defaults to the current directory; set <code>WIKVEN_WORKDIR</code> to build a project elsewhere:
+The rendered site is written to <code>dist/</code>. Preview it with <code>wikven serve</code> (see [[Deploying#Preview locally|Deploying]]). The working directory defaults to the current directory; set <code>WIKVEN_WORKDIR</code> to build a project elsewhere:
 
 <syntaxhighlight lang="shell">
 WIKVEN_WORKDIR=/path/to/project wikven build
