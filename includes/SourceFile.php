@@ -78,6 +78,20 @@ class SourceFile {
 	}
 
 	/**
+	 * Whether the page with the given prefixed title text was imported from a
+	 * source file, as opposed to generated during the build (like the Version
+	 * page). The edit/history/view-source links point at that source file, so
+	 * there is nothing for them to point at when it does not exist.
+	 */
+	public static function exists(string $titleText): bool {
+		global $wgWikvenSourceDirectory;
+		if ((string)$wgWikvenSourceDirectory === '') {
+			return false;
+		}
+		return is_file(rtrim($wgWikvenSourceDirectory, '/') . '/' . self::titleToFilename($titleText));
+	}
+
+	/**
 	 * Whether MediaWiki resolves a non-wikitext default content model for the
 	 * given title text — i.e. the title (via its extension or namespace) already
 	 * determines the content, so no ".wikitext" marker is needed. Driven by the

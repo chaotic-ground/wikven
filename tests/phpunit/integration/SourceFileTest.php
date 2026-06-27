@@ -52,4 +52,18 @@ class SourceFileTest extends MediaWikiIntegrationTestCase {
 			'dotted title that is not a content model' => ['wikven.yaml.wikitext']
 		];
 	}
+
+	/**
+	 * exists() reports whether a page was imported from a source file (so the
+	 * edit/history/view-source links have something to point at) rather than
+	 * generated during the build, like the Version page.
+	 */
+	public function testExists() {
+		$dir = $this->getNewTempDirectory();
+		file_put_contents($dir . '/Getting Started.wikitext', '');
+		$this->overrideConfigValue('WikvenSourceDirectory', $dir);
+
+		$this->assertTrue(SourceFile::exists('Getting Started'), 'imported page');
+		$this->assertFalse(SourceFile::exists('Version'), 'generated page');
+	}
 }

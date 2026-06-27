@@ -2,6 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
+use MediaWiki\Extension\Wikven\SourceFile;
+
 class Hider implements
 	\MediaWiki\Hook\ParserOutputPostCacheTransformHook,
 	\MediaWiki\Hook\SidebarBeforeOutputHook,
@@ -34,14 +36,17 @@ class Hider implements
 		}
 
 		// The edit and history tabs only make sense when they point at the
-		// external URLs configured via $wgWikvenEditUrl / $wgWikvenHistoryUrl.
-		// Without those, GetLocalURL falls back to a self-link (./Page.html),
-		// so drop the tabs instead of rendering dead links.
+		// external URLs configured via $wgWikvenEditUrl / $wgWikvenHistoryUrl, and
+		// at a page with a source file behind them. A generated page (e.g.
+		// Version) has none, so its links would 404; without the URLs, GetLocalURL
+		// falls back to a self-link (./Page.html). Drop the tabs in either case.
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
-		if (!$wgWikvenEditUrl) {
+		$title = $sktemplate->getTitle();
+		$hasSource = $title && SourceFile::exists($title->getPrefixedText());
+		if (!$wgWikvenEditUrl || !$hasSource) {
 			unset($links['views']['edit'], $links['views']['ve-edit'], $links['views']['viewsource']);
 		}
-		if (!$wgWikvenHistoryUrl) {
+		if (!$wgWikvenHistoryUrl || !$hasSource) {
 			unset($links['views']['history']);
 		}
 	}
