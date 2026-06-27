@@ -1,6 +1,7 @@
 {
 	"name": "chaotic-ground/wikven",
 	"type": "mediawiki-extension",
+	"license": "GPL-3.0-or-later",
 	"scripts": {
 		"test": "minus-x check .",
 		"fix": "minus-x fix .",
