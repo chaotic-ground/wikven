@@ -1,0 +1,4 @@
+__HIDDENCAT__
+A maintenance tracking category added by the Tabber extension. Defining it as a
+hidden category keeps it off the page footer in the static export, so it does
+not show readers a link to a category page the export does not include.
