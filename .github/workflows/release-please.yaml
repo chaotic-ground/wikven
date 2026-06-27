@@ -31,7 +31,9 @@ jobs:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'
     permissions:
-      contents: write
+      contents: write # gh release upload
+      id-token: write # sign the build provenance attestation
+      attestations: write # write the build provenance attestation
     uses: ./.github/workflows/build-binary.yaml
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
