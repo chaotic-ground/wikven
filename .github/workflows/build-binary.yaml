@@ -32,9 +32,21 @@ jobs:
 
       # The standalone binary embeds the same MediaWiki + Wikven tree the image
       # ships, so build that image first, then embed it into a FrankenPHP binary.
-      - name: Build the embedding image
-        run: docker build -t wikven .
+      - uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
+      # Build and load the embedding image with a per-architecture GHA layer
+      # cache, so repeated (e.g. nightly) builds reuse the base + apt layers.
+      - uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          context: .
+          load: true
+          tags: wikven
+          cache-from: type=gha,scope=wikven-image-${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=wikven-image-${{ matrix.arch }}
+
+      # Classic build: it reads the loaded `wikven` image via FROM and exports
+      # the compiled binary (-o type=local); the static PHP compile that
+      # dominates here re-runs whenever the source changes regardless.
       - name: Build the standalone binary
         run: docker build -f Dockerfile.binary --target export -o type=local,dest=out .
 
