@@ -14,7 +14,7 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	 * regex-fragile part of the static export: if they stop matching, the output
 	 * silently points at paths that only exist inside a live MediaWiki. Assert
 	 * that every reference form the build emits is rewritten to a local copy,
-	 * that look-alikes which must NOT match are left untouched, and that the
+	 * that look-alike paths which must NOT match are left untouched, and that the
 	 * referenced bytes are actually copied out.
 	 */
 	public function testLocalizeImagesRewritesDirectAssetPaths() {
