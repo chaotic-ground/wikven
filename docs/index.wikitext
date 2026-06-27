@@ -3,8 +3,9 @@ behind [https://www.wikipedia.org/ Wikipedia]. It turns a directory of wikitext
 into a plain HTML site you can host anywhere, with no server or database to run.
 This documentation site is itself built with {{wikven}}.
 
-Start with [[Getting Started]], which builds a site two ways: as a Docker image,
-or as a standalone [[Binary|binary]].
+Start with [[Getting Started]] to build your first site, or see [[Installation]]
+for the three ways to install {{wikven}}: the standalone [[Installation#Binary|binary]],
+the [[Installation#Docker|Docker image]], or [[Installation#Build from source|from source]].
 
 == Supported features ==
 

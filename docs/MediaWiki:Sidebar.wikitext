@@ -2,6 +2,7 @@
 ** mainpage|mainpage-description
 * Docs
 ** Getting Started|Getting Started
+** Installation|Installation
 ** Binary|Standalone binary
 ** Editing sidebar|Editing sidebar
 ** Images|Images
