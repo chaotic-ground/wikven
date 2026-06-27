@@ -141,7 +141,7 @@ if ($wikvenSiteFile !== null) {
 	$wikvenSiteData = $wikvenSiteFormat->decode(file_get_contents($wikvenSiteFile));
 	$wikvenSiteName = basename($wikvenSiteFile);
 	foreach (MediaWiki\Extension\Wikven\SiteConfig::lint($wikvenSiteData, $wikvenKnownConfig) as $wikvenWarning) {
-		error_log("Wikven: $wikvenSiteName $wikvenWarning");
+		error_log("Wikven: WARNING in $wikvenSiteName: $wikvenWarning");
 	}
 }
 
