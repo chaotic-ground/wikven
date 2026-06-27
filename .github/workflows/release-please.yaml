@@ -32,8 +32,21 @@ jobs:
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
 
+  # Publish a versioned, pinnable image (ghcr.io/.../wikven:1.0.0, :1.0, :1,
+  # :latest) so the Docker install path matches the release, not a rolling
+  # :latest rebuilt on every merge to main.
+  docker:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker-build.yaml
+    with:
+      tag: ${{ needs.release-please.outputs.tag_name }}
+
   publish:
-    needs: [release-please, binary]
+    needs: [release-please, binary, docker]
     if: needs.release-please.outputs.release_created == 'true'
     runs-on: ubuntu-latest
     permissions:
