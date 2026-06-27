@@ -55,10 +55,6 @@
 		}
 	},
 	"config": {
-		"WikvenSourceDirectory": {
-			"value": "/workspace/src",
-			"description": "Path to the source directory where wikitext files are"
-		},
 		"WikvenMainPage": {
 			"value": "index",
 			"description": "Title of the page used as the wiki's main page, i.e. the static site root (written as <value>.html). Must be an imported page."
@@ -67,17 +63,13 @@
 			"value": "Version",
 			"description": "Title of an auto-generated page (mirroring Special:Version) listing the installed software, extensions and skins, linked from the footer. Empty disables it; a same-named source page takes precedence."
 		},
-		"WikvenHtmlDirectory": {
-			"value": "/workspace/dist",
-			"description": "Path to the dist directory of HTML files."
-		},
 		"WikvenStyleDirectory": {
 			"value": ".",
-			"description": "Relative Path to the dist directory of CSS files from $wgWikvenHtmlDirectory."
+			"description": "Relative path to the dist directory of CSS files, under the WIKVEN_WORKDIR output directory."
 		},
 		"WikvenScriptDirectory": {
 			"value": ".",
-			"description": "Relative path to the dist directory of JS files from $wgWikvenHtmlDirectory."
+			"description": "Relative path to the dist directory of JS files, under the WIKVEN_WORKDIR output directory."
 		},
 		"WikvenFooterUrl": {
 			"value": "",
