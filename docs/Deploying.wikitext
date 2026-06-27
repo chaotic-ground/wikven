@@ -43,12 +43,22 @@ Because <code>dist/</code> is just files, you can serve it from any static host 
 
 == Preview locally ==
 
-Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production:
+Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. {{wikven}} has a built-in <code>serve</code> command for this.
+
+With the [[Binary|standalone binary]], it serves <code>dist/</code> on <code>http://localhost:8080</code> (override with <code>--listen</code>):
 
 <syntaxhighlight lang="shell">
-cd dist && python3 -m http.server
+wikven serve
 </syntaxhighlight>
 
-Then browse to <code>http://localhost:8000</code>.
+With the Docker image, run the <code>serve</code> command and publish the port (the build output must already be in the mounted <code>dist/</code>):
+
+<syntaxhighlight lang="shell">
+docker run --rm -p 8080:8080 \
+  -v "$(pwd)/dist:/workspace/dist" \
+  ghcr.io/chaotic-ground/wikven serve
+</syntaxhighlight>
+
+Any static server works too, for example <code>cd dist && python3 -m http.server</code>.
 
 {{prevnext|Searching|Troubleshooting}}

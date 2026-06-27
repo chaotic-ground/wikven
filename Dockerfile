@@ -16,4 +16,7 @@ COPY ./ /var/www/html/extensions/Wikven
 COPY WikvenSettings.php /var/www/html/
 
 COPY run /usr/local/bin/
-CMD ["/usr/local/bin/run"]
+# The entry point is wikven's run script; the command is the subcommand it
+# dispatches on (default "build"), so `docker run ... <image> serve` previews.
+ENTRYPOINT ["/usr/local/bin/run"]
+CMD ["build"]
