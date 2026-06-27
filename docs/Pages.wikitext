@@ -26,6 +26,19 @@ Prefix the file name with a namespace to place the page there:
 * <code>File:Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see [[Images]]).
 * <code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see [[JavaScript]]). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.
 
+== Categories ==
+
+Add <code><nowiki>[[Category:Name]]</nowiki></code> to a page to {{ml|Help:Categories|categorise}} it; the categories show in the page footer, as on any wiki.
+
+The category pages themselves are not exported by default. {{wikven}} counts the main and File: namespaces as content (<code>ContentNamespaces</code>), so a footer category is a red link unless you both add the Category namespace and supply its page. To export category pages, add namespace 14 to the list and put a <code>Category:Name.wikitext</code> file in your source:
+
+<syntaxhighlight lang="yaml">
+config:
+  ContentNamespaces: [0, 6, 14]
+</syntaxhighlight>
+
+To keep a maintenance or tracking category off the footer, mark its category page <code><nowiki>__HIDDENCAT__</nowiki></code>; a logged-out reader of the export does not see hidden categories.
+
 == Templates ==
 
 Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>. For example, this file:
