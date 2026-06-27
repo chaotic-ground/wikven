@@ -25,7 +25,7 @@ A list of skin names to enable. The first one is used as the default skin. As wi
 
 == <code>config</code> ==
 
-A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any {{ml|Manual:Configuration settings|configuration setting}} can be defined here, including Wikven's own variables such as <code>WikvenFooterUrl</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
+A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any {{ml|Manual:Configuration settings|configuration setting}} can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
 
 === <code>WikvenLogos</code> ===
 
@@ -41,9 +41,21 @@ The values are file names rather than URLs because the file's address is decided
 
 Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
 
-=== <code>WikvenEditUrl</code> and <code>WikvenHistoryUrl</code> ===
+=== <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> and <code>WikvenViewSourceUrl</code> ===
 
-The targets the "Edit" and "View history" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave either unset to fall back to the static page itself.
+The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the [[#WikvenVersionPage|Version]] page) has no source file, so these links are omitted for it.
+
+=== <code>WikvenMainPage</code> ===
+
+The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Defaults to <code>index</code>, so naming your entry file <code>index.wikitext</code> works with no configuration. The page must be one you imported; the build fails if it is missing.
+
+=== <code>WikvenVersionPage</code> ===
+
+The title of an auto-generated page (mirroring <code>Special:Version</code>) that lists the installed software, extensions and skins, linked from the footer. Defaults to <code>Version</code>. Set it empty to disable the page; a source page of the same name takes precedence over the generated one.
+
+=== <code>WikvenFooterUrl</code> ===
+
+A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...).
 
 === <code>WikvenRepositories</code> ===
 
