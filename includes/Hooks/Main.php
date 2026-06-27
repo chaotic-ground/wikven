@@ -75,7 +75,11 @@ class Main implements
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
 		global $wgWikvenViewSourceUrl;
 		$title = $sktemplate->getTitle();
-		if (!$wgWikvenViewSourceUrl || !$title || !$title->canExist()) {
+		// A generated page (e.g. Version) has no source file, so its source link
+		// would 404 in the repository; skip it as if the URL were unconfigured.
+		if (!$wgWikvenViewSourceUrl || !$title || !$title->canExist()
+			|| !SourceFile::exists($title->getPrefixedText())
+		) {
 			return;
 		}
 		$links['views']['wikven-viewsource'] = [
