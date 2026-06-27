@@ -77,7 +77,10 @@ class Main implements
 		$title = $sktemplate->getTitle();
 		// A generated page (e.g. Version) has no source file, so its source link
 		// would 404 in the repository; skip it as if the URL were unconfigured.
-		if (!$wgWikvenViewSourceUrl || !$title || !$title->canExist()
+		if (
+			!$wgWikvenViewSourceUrl
+			|| !$title
+			|| !$title->canExist()
 			|| !SourceFile::exists($title->getPrefixedText())
 		) {
 			return;
