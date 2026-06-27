@@ -1,0 +1,23 @@
+__TOC__
+
+{{wikven}} authors content in {{ml|Wikitext}}, MediaWiki's markup, rather than Markdown. If you are coming from a Markdown-based site generator, here is what changes, and why you might want it.
+
+== What wikitext adds ==
+
+* '''{{ml|Help:Templates|Templates}}''' — reusable, parameterised snippets transcluded with <code><nowiki>{{...}}</nowiki></code>. Markdown has no equivalent; you copy and paste instead. See [[Pages#Templates]].
+* '''{{ml|Help:Parser functions|Parser functions}} and magic words''' — light logic and computed values (<code><nowiki>{{#if:}}</nowiki></code>, dates, page info) written in the page itself.
+* '''Structured linking''' — <code><nowiki>[[Page]]</nowiki></code> internal links, {{ml|Help:Categories|categories}} and redirects, managed by the wiki rather than by hand.
+* '''Rich media and references''' — image {{ml|Help:Images|thumbnails and galleries}} and footnotes in one consistent syntax.
+* '''An extension ecosystem''' — syntax highlighting, math and more, added as [[wikven.yaml|extensions]].
+
+== What Markdown does better ==
+
+* '''Simplicity''' — a smaller, more readable syntax with a gentler learning curve, especially for tables and templates.
+* '''Ubiquity''' — Markdown is supported almost everywhere and has a single standard, [https://commonmark.org/ CommonMark]; wikitext has several dialects and thinner editor and linting tooling.
+* '''Lightweight rendering''' — Markdown renders with a small library, whereas wikitext normally needs MediaWiki itself.
+
+== Where {{wikven}} fits ==
+
+That last cost, running MediaWiki, is the one {{wikven}} removes: it renders your wikitext through MediaWiki once, at build time, and ships plain static HTML. You get templates, parser functions and the rest with nothing to run in production. Reach for {{wikven}} when that trade is worth it, typically when your content is already wikitext, or when templates and transclusion would save real work.
+
+{{prevnext|Installation}}

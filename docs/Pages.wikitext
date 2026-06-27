@@ -1,0 +1,33 @@
+__TOC__
+
+Each file in your source directory becomes a page. {{wikven}} derives the page's title, and namespace, from the file's path, so the file name is how you choose them.
+
+== From file name to page ==
+
+A file ending in <code>.wikitext</code> becomes a wiki page whose title is the path with <code>.wikitext</code> removed, so <code>src/Help.wikitext</code> is the page "Help", served at <code>Help.html</code>.
+
+Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
+
+If a file name does not map cleanly to a title (MediaWiki would normalise it differently), the build warns, because the page's edit and history links are derived from the file name and would otherwise not resolve. Rename the file to a title that is already normalised.
+
+== Linking between pages ==
+
+Link with <code><nowiki>[[Title]]</nowiki></code>, or <code><nowiki>[[Title|label]]</nowiki></code>, the standard {{ml|Help:Links|wikitext link}}. {{wikven}} rewrites these to the matching <code>.html</code> paths in the static output, so internal links work with no server.
+
+== Subpages ==
+
+Put a file in a subdirectory to create a {{ml|Help:Subpages|subpage}}: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup".
+
+== Namespaces ==
+
+Prefix the file name with a namespace to place the page there:
+
+* <code>Template:Infobox.wikitext</code> is the template "Template:Infobox" (see [[#Templates]]).
+* <code>File:Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see [[Images]]).
+* <code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see [[JavaScript]]). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.
+
+== Templates ==
+
+Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>, with parameters and {{ml|Help:Parser functions|parser functions}} exactly as in MediaWiki. This site's pages transclude such templates, for example a <code>Template:wikven</code> that renders "{{wikven}}". The syntax itself is standard MediaWiki; see {{ml|Help:Templates}}.
+
+{{prevnext|Getting Started|Binary}}

@@ -1,8 +1,10 @@
 * navigation
 ** mainpage|mainpage-description
 * Docs
-** Getting Started|Getting Started
+** Why wikitext|Why wikitext
 ** Installation|Installation
+** Getting Started|Getting Started
+** Pages|Pages
 ** Binary|Standalone binary
 ** Editing sidebar|Editing sidebar
 ** Images|Images

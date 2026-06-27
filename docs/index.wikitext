@@ -8,18 +8,19 @@ want MediaWiki's templates, parser functions, gadgets and extensions but a stati
 result with nothing to run: a project's documentation site, an archived wiki
 you can browse as plain HTML, or a personal wiki. Unlike a general static-site generator
 such as Hugo or MkDocs, it renders real wikitext through MediaWiki itself, so it
-assumes you are comfortable with wikitext.
+assumes you are comfortable with wikitext (see [[Why wikitext]] for the trade-offs).
 
-Start with [[Getting Started]] to build your first site, or see [[Installation]]
-for the three ways to install {{wikven}}: the standalone [[Installation#Binary|binary]],
-the [[Installation#Docker|Docker image]], or [[Installation#Build from source|from source]].
+See [[Installation]] for the three ways to install {{wikven}}, the standalone
+[[Installation#Binary|binary]], the [[Installation#Docker|Docker image]], or
+[[Installation#Build from source|from source]], then [[Getting Started]] to build
+your first site.
 
 == Supported features ==
 
 With {{wikven}}, you can use the following features of MediaWiki.
 
-* {{ml|Wikitext}}
-* {{ml|Help:Templates|Templates}}
+* {{ml|Wikitext}} pages (see [[Pages]])
+* [[Pages#Templates|Templates]]
 * [[Images]] from Wikimedia Commons or local files
 * [[JavaScript]] (MediaWiki:Common.js and gadgets)
 * {{ml|Bundled extensions and skins}}
@@ -34,5 +35,5 @@ These need a live wiki, so they are not part of the static export:
 * All editors ({{ml|Extension:WikiEditor|WikiEditor}}, <!--
 -->{{ml|Extension:VisualEditor|VisualEditor}} and {{ml|Extension:CodeEditor|CodeEditor}})
 
-{{prevnext|Getting Started}}
+{{prevnext|Why wikitext}}
 {{DISPLAYTITLE:Wikven}}
