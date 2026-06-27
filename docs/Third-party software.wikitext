@@ -1,0 +1,19 @@
+__TOC__
+
+{{wikven}} itself is licensed [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]. The Docker image and the standalone binary it produces redistribute third-party software under that software's own licenses, acknowledged here. (GPL-2.0-or-later and GPL-3.0-or-later are compatible, so this is attribution, not a conflict.)
+
+{| class="wikitable"
+! Component !! License !! Bundled in
+|-
+| [https://www.mediawiki.org/ MediaWiki], with its bundled skins and extensions || GPL-2.0-or-later || image, binary
+|-
+| [https://www.php.net/ PHP] || PHP License 3.01 || binary
+|-
+| [https://frankenphp.dev/ FrankenPHP] || MIT || binary
+|-
+| [https://caddyserver.com/ Caddy] || Apache-2.0 || binary
+|-
+| [https://getcomposer.org/ Composer] || MIT || image
+|}
+
+The standalone binary is compiled with [https://frankenphp.dev/ FrankenPHP], which also links several Caddy modules; see the FrankenPHP project for their licenses. The Docker image keeps MediaWiki's own <code>COPYING</code>, and each component's full license text is available from its project.
