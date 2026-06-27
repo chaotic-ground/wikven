@@ -37,7 +37,7 @@ jobs:
 
 Enable Pages for the repository under '''Settings → Pages → Build and deployment → Source: GitHub Actions'''. This documentation site is published this way.
 
-{{note|A GitHub '''project''' page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because {{wikven}} writes them relative, but anything that needs an absolute path, in particular [[Searching|search]], must be told that base path. A '''user/organization''' page (served at the domain root) needs no such setting.}}
+{{note|A GitHub '''project''' page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because {{wikven}} writes them relative, but anything that needs an absolute path must include that base path: set [[Searching|search]]'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A '''user/organization''' page (served at the domain root) needs no such setting.}}
 
 == Any static host ==
 

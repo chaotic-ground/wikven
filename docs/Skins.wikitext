@@ -20,7 +20,7 @@ skins:
 
 == Third-party skins ==
 
-A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in [[Configuration#WikvenRepositories|<code>WikvenRepositories</code>]]. It is fetched at build time and may be the default like any other.
+A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in [[Configuration#WikvenRepositories|<code>WikvenRepositories</code>]]. It is fetched at build time and may be the default like any other. This documentation site does exactly that with the third-party [https://www.mediawiki.org/wiki/Skin:Citizen Citizen] skin.
 
 <syntaxhighlight lang="yaml">
 skins:
