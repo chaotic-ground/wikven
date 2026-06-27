@@ -42,4 +42,4 @@ saved as <code>Template:Note.wikitext</code> and used on a page as:
 
 renders as "'''Note:''' Back up your wiki first." Templates take positional (<code><nowiki>{{{1}}}</nowiki></code>) and named parameters and run {{ml|Help:Parser functions|parser functions}} exactly as in MediaWiki; this site's own pages transclude a <code>Template:wikven</code> that renders "{{wikven}}". The syntax itself is standard MediaWiki; see {{ml|Help:Templates}}.
 
-{{prevnext|Getting Started|Binary}}
+{{prevnext|Getting Started|Editing sidebar}}

@@ -3,9 +3,9 @@
 * Docs
 ** Why wikitext|Why wikitext
 ** Installation|Installation
+** Binary|Binary
 ** Getting Started|Getting Started
 ** Pages|Pages
-** Binary|Binary
 ** Editing sidebar|Editing sidebar
 ** Images|Images
 ** Skins|Skins
@@ -17,6 +17,6 @@
 ** Configuration|Configuration
 ** Development|Development
 ** Version|Version
-** Third-party software|Third-party software
+** Licenses|Licenses
 *
 ** helppage|help-mediawiki
