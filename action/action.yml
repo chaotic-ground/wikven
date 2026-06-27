@@ -1,0 +1,33 @@
+name: Bake a wiki with wikven
+description: Bake a MediaWiki source tree into a static site with wikven.
+branding:
+  icon: book-open
+  color: blue
+
+inputs:
+  source:
+    description: Directory holding the wiki source files to bake.
+    default: src
+  output:
+    description: Directory the static site is written to.
+    default: dist
+  image:
+    description: >-
+      The wikven image to run. Defaults to the rolling latest; pin a release
+      (e.g. ghcr.io/chaotic-ground/wikven:1.0.0) for reproducible builds.
+    default: ghcr.io/chaotic-ground/wikven:latest
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        SOURCE: ${{ inputs.source }}
+        OUTPUT: ${{ inputs.output }}
+        IMAGE: ${{ inputs.image }}
+      run: |
+        mkdir -p "$OUTPUT"
+        docker run --rm \
+          -v "$PWD/$SOURCE:/workspace/src" \
+          -v "$PWD/$OUTPUT:/workspace/dist" \
+          "$IMAGE"

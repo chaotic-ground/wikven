@@ -6,6 +6,19 @@
 
 Read more on <https://chaotic-ground.github.io/wikven/>.
 
+## Use in a GitHub workflow
+
+Bake a wiki source tree into a static site with the composite action:
+
+```yaml
+- uses: chaotic-ground/wikven/action@v1
+  with:
+    source: docs   # directory of source files (default: src)
+    output: dist   # where the static site is written (default: dist)
+```
+
+It runs the published Docker image; pin a release tag (e.g. `ghcr.io/chaotic-ground/wikven:1.0.0`) via the `image` input for reproducible builds.
+
 [![Lint](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml/badge.svg)](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml)
 [![codecov](https://codecov.io/gh/chaotic-ground/wikven/graph/badge.svg)](https://codecov.io/gh/chaotic-ground/wikven)
 
