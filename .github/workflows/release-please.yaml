@@ -19,9 +19,13 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: release
+        with:
+          # The config is a dotfile to match the manifest (.release-please-manifest.json,
+          # already dot-prefixed by default); the action's config-file input points at it.
+          config-file: .release-please-config.json
 
   # release-please creates the GitHub release as a draft (see
-  # release-please-config.json) so the binaries can be attached before it is
+  # .release-please-config.json) so the binaries can be attached before it is
   # published — immutable releases lock a release's assets at publish time.
   binary:
     needs: release-please
