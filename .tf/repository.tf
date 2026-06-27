@@ -4,9 +4,9 @@ import {
 }
 resource "github_repository" "this" {
   allow_auto_merge            = true
-  allow_merge_commit          = true
+  allow_merge_commit          = false
   allow_rebase_merge          = false
-  allow_squash_merge          = false
+  allow_squash_merge          = true
   allow_update_branch         = true
   archived                    = false
   archive_on_destroy          = true
@@ -22,6 +22,8 @@ resource "github_repository" "this" {
   merge_commit_message        = "PR_BODY"
   merge_commit_title          = "PR_TITLE"
   name                        = "wikven"
+  squash_merge_commit_message = "PR_BODY"
+  squash_merge_commit_title   = "PR_TITLE"
   topics                      = ["docker-image", "mediawiki", "static-site-generator", "wikitext"]
   visibility                  = "public"
   vulnerability_alerts        = var.github_actions ? null : true
