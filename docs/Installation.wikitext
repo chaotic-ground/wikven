@@ -39,4 +39,4 @@ This produces a local <code>wikven</code> image you run exactly like the publish
 
 Once you have {{wikven}}, head to [[Getting Started]] to build your first site.
 
-{{prevnext|Getting Started|Binary}}
+{{prevnext|Why wikitext|Getting Started}}

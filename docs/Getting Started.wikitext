@@ -49,4 +49,4 @@ EOF
 
 Build again with the same command as before, and the site is titled "My Site".
 
-{{prevnext|Installation}}
+{{prevnext|Installation|Pages}}
