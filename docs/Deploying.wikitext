@@ -1,0 +1,54 @@
+__TOC__
+
+{{wikven}} writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
+
+== GitHub Pages ==
+
+This workflow rebuilds and publishes the site on every push. It bakes the source with the {{wikven}} [https://github.com/chaotic-ground/wikven/tree/main/action composite action], then uploads <code>dist/</code> to Pages. Actions are pinned to a full commit SHA, not a tag, so a moved tag cannot swap them under you:
+
+<syntaxhighlight lang="yaml">
+name: Deploy
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
+      - uses: chaotic-ground/wikven/action@19392b75d379de9e349ef2963c11ec5545c3e6ab  # v1.0.0
+        with:
+          source: src
+          output: dist
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with:
+          path: dist
+      - id: deploy
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128  # v5.0.0
+</syntaxhighlight>
+
+Enable Pages for the repository under '''Settings → Pages → Build and deployment → Source: GitHub Actions'''. This documentation site is published this way.
+
+== Any static host ==
+
+Because <code>dist/</code> is just files, you can serve it from any static host (Netlify, Cloudflare Pages, an object store like S3, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
+
+== Preview locally ==
+
+Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production:
+
+<syntaxhighlight lang="shell">
+cd dist && python3 -m http.server
+</syntaxhighlight>
+
+Then browse to <code>http://localhost:8000</code>.
+
+{{prevnext|Searching|Troubleshooting}}

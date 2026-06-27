@@ -34,7 +34,7 @@ docker run --rm \
 The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
 </tabber>
 
-Open <code>dist/index.html</code> in your browser.
+Open <code>dist/index.html</code> in your browser. To publish it online, see [[Deploying]].
 
 == Setting the title of the site ==
 

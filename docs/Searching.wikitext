@@ -40,5 +40,5 @@ there and runs the query from the URL, and the search box's "search for pages
 containing…" action and its Enter key go to that page. This site uses a page
 titled <code>Search</code>.
 
-{{prevnext|JavaScript|wikven.yaml}}
+{{prevnext|JavaScript|Deploying}}
 {{DISPLAYTITLE:Searching}}

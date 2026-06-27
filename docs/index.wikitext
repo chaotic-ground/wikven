@@ -3,6 +3,13 @@ behind [https://www.wikipedia.org/ Wikipedia]. It turns a directory of wikitext
 into a plain HTML site you can host anywhere, with no server or database to run.
 This documentation site is itself built with {{wikven}}.
 
+Reach for {{wikven}} when your content is already MediaWiki wikitext, or when you
+want MediaWiki's templates, parser functions, gadgets and extensions but a static
+result with nothing to run: a project's documentation site, an archived wiki
+you can browse as plain HTML, or a personal wiki. Unlike a general static-site generator
+such as Hugo or MkDocs, it renders real wikitext through MediaWiki itself, so it
+assumes you are comfortable with wikitext.
+
 Start with [[Getting Started]] to build your first site, or see [[Installation]]
 for the three ways to install {{wikven}}: the standalone [[Installation#Binary|binary]],
 the [[Installation#Docker|Docker image]], or [[Installation#Build from source|from source]].

@@ -1,0 +1,25 @@
+__TOC__
+
+Common problems and what to check.
+
+== Thumbnails look low quality ==
+
+The [[Binary|standalone binary]] falls back to the built-in GD library, which produces lower-quality thumbnails and supports fewer formats. Install '''ImageMagick''' and '''librsvg''' on the build host for better output, or use the Docker image, which bundles them. See [[Images]].
+
+== The search box does nothing ==
+
+Search is client-side, provided by the SifterSearch extension. If the box does not respond, the site was built without it: add SifterSearch to your [[wikven.yaml|.wikven.yaml]] and rebuild. See [[Searching]].
+
+== A page is missing from the site ==
+
+The build aborts if any page fails to import, printing <code>Failed to import N page(s)</code> with the file names. A common cause is a file whose name does not map to a valid title; rename it (the build warns when a name does not round-trip). Re-run the build and read the log for the failing file.
+
+== Fetching fails over HTTPS ==
+
+Fetching Wikimedia Commons images and [[wikven.yaml#WikvenRepositories|third-party extensions or skins]] needs your system's CA certificates. On a minimal host without them (common with the standalone binary), install your distribution's CA bundle, for example the <code>ca-certificates</code> package. A site with only local content and images needs no network access.
+
+== The binary will not run on macOS or Windows ==
+
+The standalone binary is Linux-only (x86_64 and arm64). On macOS or Windows, use the Docker image instead. See [[Installation]].
+
+{{prevnext|Deploying|wikven.yaml}}
