@@ -26,7 +26,7 @@ input for reproducible builds.
 
 ## License
 
-[GPL-3.0-or-later](LICENSE).
+[GPL-3.0-or-later](LICENSE). The Docker image and binary bundle third-party software under their own licenses; see [Third-party software](https://chaotic-ground.github.io/wikven/Third-party_software).
 
 [![Lint](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml/badge.svg)](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml)
 [![codecov](https://codecov.io/gh/chaotic-ground/wikven/graph/badge.svg)](https://codecov.io/gh/chaotic-ground/wikven)

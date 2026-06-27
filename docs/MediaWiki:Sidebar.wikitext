@@ -17,5 +17,6 @@
 ** Configuration|Configuration
 ** Development|Development
 ** Version|Version
+** Third-party software|Third-party software
 *
 ** helppage|help-mediawiki
