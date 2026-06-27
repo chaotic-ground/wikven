@@ -59,6 +59,7 @@ class Build extends Maintenance {
 		$this->assertMainPageExists();
 		$this->setVersionPage();
 		$this->dropDeadFooterPlaces();
+		$this->dropDeadCategoryLink();
 		$this->step(RunJobs::class, "$ip/maintenance/runJobs.php");
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
@@ -254,6 +255,23 @@ class Build extends Maintenance {
 			$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent('-', $title));
 			$updater->saveRevision(CommentStoreComment::newUnsavedComment('Disable dead footer link'));
 		}
+	}
+
+	/**
+	 * Drop the dead link from the category footer's "Categories" label, which
+	 * points at the Special:Categories page a static export has no copy of. The
+	 * skin renders the label as plain text when the "pagecategorieslink" message
+	 * resolves to no title, so blank that message. The category entries
+	 * themselves stay as they are: a category with an imported (or exported)
+	 * page keeps its link, one without it is a red link, like any other.
+	 */
+	private function dropDeadCategoryLink(): void {
+		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
+		$title = Title::newFromText('MediaWiki:Pagecategorieslink');
+		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
+		$updater = $page->newPageUpdater($user);
+		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent('', $title));
+		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Drop the dead category link'));
 	}
 
 	/**
