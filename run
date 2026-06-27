@@ -42,3 +42,10 @@ grep -qF "require_once 'WikvenSettings.php';" LocalSettings.php \
 
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/build.php
 rm -rf "$WIKVEN_WORKDIR/dist/history/"
+
+# The build runs as root, so its output is root-owned on the host bind mount.
+# Hand it back to whoever owns the mounted output directory (the invoking user),
+# so they can read, edit, and clean dist/ without sudo.
+if [ -d "$WIKVEN_WORKDIR/dist" ]; then
+  chown -R "$(stat -c '%u:%g' "$WIKVEN_WORKDIR/dist")" "$WIKVEN_WORKDIR/dist"
+fi

@@ -31,6 +31,9 @@ class StoreImages extends Maintenance {
 		$this->addDescription('Make referenced images local and point the pages at the local copies.');
 	}
 
+	/**
+	 * @return bool Whether every referenced image was made local.
+	 */
 	public function execute() {
 		global $wgWikvenHtmlDirectory, $wgUploadPath, $wgUploadDirectory;
 		$dir = rtrim($wgWikvenHtmlDirectory, '/');
@@ -88,6 +91,15 @@ class StoreImages extends Maintenance {
 		$stored = count(array_filter($map));
 		$failed = count($map) - $stored;
 		$this->output("Stored $stored image(s)" . ( $failed ? ", $failed failed" : '' ) . "\n");
+
+		if ($failed) {
+			// The export still hotlinks the images that could not be fetched, so it
+			// is not self-contained; fail so the build (build.php's step()) aborts
+			// rather than publish output that depends on upload.wikimedia.org.
+			$this->error("Wikven: $failed image(s) could not be made local; the output is not self-contained.");
+			return false;
+		}
+		return true;
 	}
 
 	/**
