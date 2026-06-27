@@ -1,0 +1,69 @@
+name: Smoke test
+
+# Bake the docs source with the real image and assert the output is a complete,
+# self-contained site. The unit suite covers only helper classes, so without
+# this a regression anywhere in the bake pipeline (maintenance/, AssetLocalizer,
+# hooks, Dockerfile) would produce a broken site yet pass every other gate.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Dockerfile'
+      - 'run'
+      - 'WikvenSettings.php'
+      - 'extension.json'
+      - 'includes/**'
+      - 'maintenance/**'
+      - 'resources/**'
+      - 'i18n/**'
+      - 'docs/**'
+      - '.github/workflows/smoke.yaml'
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - 'run'
+      - 'WikvenSettings.php'
+      - 'extension.json'
+      - 'includes/**'
+      - 'maintenance/**'
+      - 'resources/**'
+      - 'i18n/**'
+      - 'docs/**'
+      - '.github/workflows/smoke.yaml'
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - name: Bake the docs site
+        run: |
+          docker build -t wikven .
+          mkdir -p dist
+          docker run --rm \
+            -v "$(pwd)/docs:/workspace/src" \
+            -v "$(pwd)/dist:/workspace/dist" \
+            wikven
+
+      - name: Assert the bake produced a complete, self-contained site
+        run: |
+          set -euo pipefail
+          # The main page must land at the dist root (the build aborts on a
+          # failed import, so reaching here already means exit 0).
+          test -s dist/index.html
+
+          # Dumped CSS must not reference load.php: that endpoint only exists in
+          # a live MediaWiki, so a leftover is an AssetLocalizer regression that
+          # leaves the static site fetching styles from a server that is not there.
+          if grep -rIl --include='*.css' 'load\.php' dist; then
+            echo "::error::dumped CSS still references load.php (AssetLocalizer regression)"
+            exit 1
+          fi
+
+          echo "Smoke checks passed."
