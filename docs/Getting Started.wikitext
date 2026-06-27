@@ -34,7 +34,7 @@ docker run --rm \
 The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
 </tabber>
 
-Open <code>dist/index.html</code> in your browser. To publish it online, see [[Deploying]].
+Preview the site with <code>wikven serve</code>, then open <code>http://localhost:8080</code> (with Docker, see [[Deploying#Preview locally|Deploying]]). You can also open <code>dist/index.html</code> directly, though some links and assets resolve correctly only when served. To publish it online, see [[Deploying]].
 
 == Setting the title of the site ==
 
