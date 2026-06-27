@@ -40,13 +40,24 @@ jobs:
         with:
           enablement: true
 
-      - name: Build
-        run: |
-          docker build -t wikven .
-          docker run --rm \
-            -v "$(pwd)/docs:/workspace/src" \
-            -v "$(pwd)/dist:/workspace/dist" \
-            wikven
+      - uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+
+      # Build this commit's image (shared GHA layer cache) and load it locally.
+      - uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          context: .
+          load: true
+          tags: wikven
+          cache-from: type=gha,scope=wikven-image
+          cache-to: type=gha,mode=max,scope=wikven-image
+
+      # Dogfood the published composite action to bake the docs source.
+      - name: Bake the docs site
+        uses: ./action
+        with:
+          source: docs
+          output: dist
+          image: wikven
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
