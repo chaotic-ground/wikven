@@ -1,6 +1,6 @@
 __TOC__
 
-Besides the [[Getting Started|Docker image]], {{wikven}} ships as a single self-contained executable that embeds MediaWiki, so you can build a site without Docker. It is available for Linux on x86_64 and arm64.
+Besides the [[Installation#Docker|Docker image]], {{wikven}} ships as a single self-contained executable that embeds MediaWiki, so you can build a site without Docker. It is available for Linux on x86_64 and arm64.
 
 == Download ==
 
@@ -63,5 +63,5 @@ The binary renders on its own, but uses these host programs when they are presen
 
 {{note|Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any [[wikven.yaml#WikvenRepositories|third-party extensions or skins]], relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.}}
 
-{{prevnext|Getting Started|Editing sidebar}}
+{{prevnext|Installation|Editing sidebar}}
 {{DISPLAYTITLE:Standalone binary}}

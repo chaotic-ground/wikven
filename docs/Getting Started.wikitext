@@ -1,10 +1,10 @@
 On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{wikven}}.
-{{note|This page assumes a unix-like OS.}}
+{{note|This page assumes a unix-like shell. The standalone binary is Linux-only; on macOS or Windows, use the Docker image.}}
 
-{{wikven}} builds a static website from a directory of wikitext. You can run it two ways: as a Docker image, or as a standalone [[Binary|binary]] that needs no Docker. This guide shows both, pick whichever you prefer.
+{{wikven}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[Installation#Binary|binary]], the [[Installation#Docker|Docker image]], or [[Installation#Build from source|built from source]]. This guide uses the binary or Docker, pick whichever you have.
 
 ; Requirement
-:* either [https://www.docker.com/ Docker], or the standalone [[Binary|binary]] for your platform.
+:* the standalone [[Installation#Binary|binary]] (Linux), or [https://www.docker.com/ Docker] (any platform). See [[Installation]] to get either.
 
 ----
 
@@ -18,6 +18,11 @@ echo 'Hello, World!' > src/index.wikitext
 Then build the site. The rendered pages are written to <code>dist/</code>. Pick the tab for how you run {{wikven}}:
 
 <tabber>
+|-|Binary=
+Run it in the directory that holds <code>src/</code> (see [[Installation#Binary|Installation]] to get it):
+<syntaxhighlight lang="shell">
+./wikven build
+</syntaxhighlight>
 |-|Docker=
 Mount the source and output directories into the container:
 <syntaxhighlight lang="shell">
@@ -27,11 +32,6 @@ docker run --rm \
   ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
 The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
-|-|Binary=
-Run it in the directory that holds <code>src/</code> (see [[Binary]] to download it):
-<syntaxhighlight lang="shell">
-./wikven build
-</syntaxhighlight>
 </tabber>
 
 Open <code>dist/index.html</code> in your browser.
@@ -49,4 +49,4 @@ EOF
 
 Build again with the same command as before, and the site is titled "My Site".
 
-{{prevnext|Binary}}
+{{prevnext|Installation}}
