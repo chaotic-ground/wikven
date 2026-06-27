@@ -52,6 +52,10 @@ config:
   JobRunRate: 0
   ResourceLoaderStorageEnabled: false
 
+  # No RSS/Atom feeds: there is no server to regenerate them, and the head link
+  # to the recent-changes feed points at a Special: page that 404s in the export.
+  Feed: false
+
   # Vector 2022 options. The skin itself is selected in .wikven.yaml via skins:;
   # loading "Vector" defaults to its first variant, vector-2022. (The old
   # VectorDefaultSkinVersion no longer exists in Vector and is not set here.)

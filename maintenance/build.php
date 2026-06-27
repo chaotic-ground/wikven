@@ -58,6 +58,7 @@ class Build extends Maintenance {
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
 		$this->setVersionPage();
+		$this->dropDeadFooterPlaces();
 		$this->step(RunJobs::class, "$ip/maintenance/runJobs.php");
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
@@ -222,6 +223,37 @@ class Build extends Maintenance {
 		$content = ContentHandler::makeContent($GLOBALS['wgWikvenMainPage'], $title);
 		$updater->setContent(SlotRecord::MAIN, $content);
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Set the main page'));
+	}
+
+	/**
+	 * Drop footer links whose target page was not imported: the about, privacy
+	 * and disclaimer links point at project pages a static export usually has
+	 * none of, so they would 404. A site that wants one just adds the page (e.g.
+	 * a "Wikven:Privacy policy" source file) and the link is kept. The footer
+	 * omits a link when its label message is disabled, so the missing ones get
+	 * their label message blanked to "-" (the SkinAddFooterLinks hook only adds,
+	 * it cannot remove these defaults). Runs after import so the pages exist.
+	 */
+	private function dropDeadFooterPlaces(): void {
+		// Label message (the MediaWiki: page that controls whether the link
+		// shows) => page-name message (whose page the link points at).
+		$places = [
+			'Privacy' => 'privacypage',
+			'Aboutsite' => 'aboutpage',
+			'Disclaimers' => 'disclaimerpage'
+		];
+		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
+		foreach ($places as $label => $pageMessage) {
+			$target = Title::newFromText(wfMessage($pageMessage)->inContentLanguage()->text());
+			if ($target && $target->exists()) {
+				continue;
+			}
+			$title = Title::newFromText("MediaWiki:$label");
+			$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
+			$updater = $page->newPageUpdater($user);
+			$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent('-', $title));
+			$updater->saveRevision(CommentStoreComment::newUnsavedComment('Disable dead footer link'));
+		}
 	}
 
 	/**
