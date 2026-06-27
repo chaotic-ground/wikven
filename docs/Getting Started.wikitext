@@ -49,4 +49,15 @@ EOF
 
 Build again with the same command as before, and the site is titled "My Site".
 
+== Adding a second page ==
+
+Every <code>.wikitext</code> file becomes a page. Add another one and link to it from the first with <code><nowiki>[[...]]</nowiki></code>:
+
+<syntaxhighlight lang="shell">
+echo 'This is the help page.' > src/Help.wikitext
+echo 'Read the [[Help]].' >> src/index.wikitext
+</syntaxhighlight>
+
+Build again: the home page now links to <code>Help.html</code>, and the link works with no server. See [[Pages]] for how file names map to page titles and namespaces, and for [[Pages#Templates|templates]].
+
 {{prevnext|Installation|Pages}}

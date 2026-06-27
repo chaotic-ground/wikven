@@ -28,6 +28,18 @@ Prefix the file name with a namespace to place the page there:
 
 == Templates ==
 
-Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>, with parameters and {{ml|Help:Parser functions|parser functions}} exactly as in MediaWiki. This site's pages transclude such templates, for example a <code>Template:wikven</code> that renders "{{wikven}}". The syntax itself is standard MediaWiki; see {{ml|Help:Templates}}.
+Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>. For example, this file:
+
+<syntaxhighlight lang="wikitext">
+'''Note:''' {{{1}}}
+</syntaxhighlight>
+
+saved as <code>Template:Note.wikitext</code> and used on a page as:
+
+<syntaxhighlight lang="wikitext">
+{{Note|Back up your wiki first.}}
+</syntaxhighlight>
+
+renders as "'''Note:''' Back up your wiki first." Templates take positional (<code><nowiki>{{{1}}}</nowiki></code>) and named parameters and run {{ml|Help:Parser functions|parser functions}} exactly as in MediaWiki; this site's own pages transclude a <code>Template:wikven</code> that renders "{{wikven}}". The syntax itself is standard MediaWiki; see {{ml|Help:Templates}}.
 
 {{prevnext|Getting Started|Binary}}
