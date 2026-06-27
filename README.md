@@ -24,6 +24,10 @@ want and record its version in the trailing comment. It runs the published Docke
 image; pin a release tag (e.g. `ghcr.io/chaotic-ground/wikven:1.0.0`) via the `image`
 input for reproducible builds.
 
+## License
+
+[GPL-3.0-or-later](LICENSE).
+
 [![Lint](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml/badge.svg)](https://github.com/chaotic-ground/wikven/actions/workflows/lint.yaml)
 [![codecov](https://codecov.io/gh/chaotic-ground/wikven/graph/badge.svg)](https://codecov.io/gh/chaotic-ground/wikven)
 
