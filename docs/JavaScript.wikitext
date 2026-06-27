@@ -6,7 +6,7 @@ Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a r
 
 == Gadgets ==
 
-To use {{ml|Extension:Gadgets|gadgets}}, enable the bundled Gadgets extension in [[wikven.yaml|.wikven.yaml]]:
+To use {{ml|Extension:Gadgets|gadgets}}, enable the bundled Gadgets extension in [[Configuration|.wikven.yaml]]:
 
 <syntaxhighlight lang="yaml">
 extensions:

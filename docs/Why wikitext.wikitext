@@ -8,7 +8,7 @@ __TOC__
 * '''{{ml|Help:Parser functions|Parser functions}} and magic words''' — light logic and computed values (<code><nowiki>{{#if:}}</nowiki></code>, dates, page info) written in the page itself.
 * '''Structured linking''' — <code><nowiki>[[Page]]</nowiki></code> internal links, {{ml|Help:Categories|categories}} and redirects, managed by the wiki rather than by hand.
 * '''Rich media and references''' — image {{ml|Help:Images|thumbnails and galleries}} and footnotes in one consistent syntax.
-* '''An extension ecosystem''' — syntax highlighting, math and more, added as [[wikven.yaml|extensions]].
+* '''An extension ecosystem''' — syntax highlighting, math and more, added as [[Configuration|extensions]].
 
 == What Markdown does better ==
 

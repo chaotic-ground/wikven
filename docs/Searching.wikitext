@@ -6,7 +6,7 @@ SifterSearch indexes the rendered pages with [https://pagefind.app/ Pagefind] an
 
 == Enabling it ==
 
-SifterSearch is not bundled, so fetch it in [[wikven.yaml|.wikven.yaml]] and tell it where to write and serve the index:
+SifterSearch is not bundled, so fetch it in [[Configuration|.wikven.yaml]] and tell it where to write and serve the index:
 
 <syntaxhighlight lang="yaml">
 extensions:
@@ -29,7 +29,7 @@ config:
 
 <code>SifterSearchOutputDir</code> is a filesystem path inside the build output (the image writes the site to <code>/workspace/dist</code>); <code>SifterSearchBundlePath</code> is the URL it is served from. If your site lives in a subdirectory, include it: this site deploys under <code>/wikven</code> on GitHub Pages, so it uses <code>/wikven/pagefind/</code>.
 
-{{note|For a reproducible build, pin a released version and add its <code>sha256</code>, as with any tarball source. See [[wikven.yaml#WikvenRepositories|.wikven.yaml]] for the fetch options.}}
+{{note|For a reproducible build, pin a released version and add its <code>sha256</code>, as with any tarball source. See [[Configuration#WikvenRepositories|.wikven.yaml]] for the fetch options.}}
 
 == Full results page ==
 

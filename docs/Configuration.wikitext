@@ -1,6 +1,6 @@
 __TOC__
 
-The configuration file follows the same shape as {{ml|Manual:YAML settings file format|MediaWiki's own YAML settings format}}: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
+Configuration lives in a <code>.wikven.yaml</code> file in your source directory. It follows the same shape as {{ml|Manual:YAML settings file format|MediaWiki's own YAML settings format}}: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
 
 The file may also be written as <code>.wikven.json</code> with the same structure. When both files are present, <code>.wikven.yaml</code> takes precedence and <code>.wikven.json</code> is ignored (the build logs a warning).
 
@@ -17,8 +17,6 @@ config:
   WikvenEditUrl: https://github.com/yourname/some-repository/edit/branch-name/path/to/$1
   WikvenHistoryUrl: https://github.com/yourname/some-repository/commits/branch-name/path/to/$1
 </syntaxhighlight>
-{{DISPLAYTITLE:.wikven.yaml}}
-
 == <code>extensions</code> ==
 A list of extension names to load. {{ml|Bundled extensions|Bundled extensions}} work by name alone; a name that is not bundled is treated as third-party and fetched from a source you declare in [[#WikvenRepositories|<code>WikvenRepositories</code>]].
 

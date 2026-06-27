@@ -14,7 +14,7 @@
 ** Deploying|Deploying
 ** Troubleshooting|Troubleshooting
 * References
-** wikven.yaml|Configuration
+** Configuration|Configuration
 ** Development|Development
 *
 ** helppage|help-mediawiki
