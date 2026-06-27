@@ -187,7 +187,12 @@ class Build extends Maintenance {
 		foreach ($options as $name => $value) {
 			$child->setOption($name, $value);
 		}
-		$child->execute();
+		// A child that returns false reports failure (e.g. ImportWikitext could
+		// not import every page); abort rather than publish a site missing
+		// content with a success exit code. Steps that return null are unaffected.
+		if ($child->execute() === false) {
+			$this->fatalError("Wikven: $class reported failures; aborting the build.");
+		}
 	}
 
 	/**
