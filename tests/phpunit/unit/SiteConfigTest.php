@@ -13,11 +13,22 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 
 	public function testSoundFileHasNoWarnings() {
 		$data = [
-			'config' => ['WikvenEditUrl' => 'x', 'Sitename' => 'S'],
+			'config' => ['WikvenEditUrl' => 'https://example.org/edit/$1', 'Sitename' => 'S'],
 			'extensions' => ['Foo'],
 			'skins' => ['Vector']
 		];
 		$this->assertSame([], SiteConfig::lint($data, self::KNOWN));
+	}
+
+	public function testUrlTemplateMissingPlaceholderWarns() {
+		$warnings = SiteConfig::lint(['config' => ['WikvenEditUrl' => 'https://example.org/edit']], self::KNOWN);
+		$this->assertCount(1, $warnings);
+		$this->assertStringContainsString("'WikvenEditUrl' should be a URL template containing", $warnings[0]);
+	}
+
+	public function testNonMapValueWarns() {
+		$warnings = SiteConfig::lint(['config' => ['WikvenLogos' => 'logo.png']], self::KNOWN);
+		$this->assertContains("'WikvenLogos' must be a map.", $warnings);
 	}
 
 	public function testNonMapIsRejected() {
