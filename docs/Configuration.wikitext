@@ -91,6 +91,10 @@ Each method needs a host tool present at build time: <code>tarball</code> uses <
 
 This very site fetches {{ml|Extension:TabberNeue|TabberNeue}} this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 
+=== <code>ContentNamespaces</code> ===
+
+A standard MediaWiki setting ({{ml|Manual:$wgContentNamespaces|<code>$wgContentNamespaces</code>}}) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven defaults it to <code>[0, 6]</code>, the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see [[Pages#Categories]]. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
+
 == Defaults ==
 
 Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yaml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
