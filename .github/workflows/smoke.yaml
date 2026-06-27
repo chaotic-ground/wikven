@@ -42,9 +42,20 @@ jobs:
         with:
           persist-credentials: false
 
+      - uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+
+      # Build with the shared GHA layer cache (same scope as docker-build.yaml)
+      # and load the image locally so the bake step below can run it.
+      - uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          context: .
+          load: true
+          tags: wikven
+          cache-from: type=gha,scope=wikven-image
+          cache-to: type=gha,mode=max,scope=wikven-image
+
       - name: Bake the docs site
         run: |
-          docker build -t wikven .
           mkdir -p dist
           docker run --rm \
             -v "$(pwd)/docs:/workspace/src" \
