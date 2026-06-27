@@ -64,4 +64,3 @@ The binary renders on its own, but uses these host programs when they are presen
 {{note|Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any [[Configuration#WikvenRepositories|third-party extensions or skins]], relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.}}
 
 {{prevnext|Pages|Editing sidebar}}
-{{DISPLAYTITLE:Standalone binary}}

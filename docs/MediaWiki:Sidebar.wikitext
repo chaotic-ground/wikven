@@ -5,7 +5,7 @@
 ** Installation|Installation
 ** Getting Started|Getting Started
 ** Pages|Pages
-** Binary|Standalone binary
+** Binary|Binary
 ** Editing sidebar|Editing sidebar
 ** Images|Images
 ** Skins|Skins
@@ -16,5 +16,6 @@
 * References
 ** Configuration|Configuration
 ** Development|Development
+** Version|Version
 *
 ** helppage|help-mediawiki

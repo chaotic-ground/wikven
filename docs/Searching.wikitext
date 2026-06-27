@@ -24,7 +24,7 @@ config:
     # The release tarball bundles the Pagefind binary, which a git clone omits.
     # Pick the tarball for the platform the build runs on.
     SifterSearch:
-      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.2.0/SifterSearch-linux-x64.tar.gz
+      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/v0.5.0/SifterSearch-linux-x64.tar.gz
 </syntaxhighlight>
 
 <code>SifterSearchOutputDir</code> is a filesystem path inside the build output (the image writes the site to <code>/workspace/dist</code>); <code>SifterSearchBundlePath</code> is the URL it is served from. If your site lives in a subdirectory, include it: this site deploys under <code>/wikven</code> on GitHub Pages, so it uses <code>/wikven/pagefind/</code>.
