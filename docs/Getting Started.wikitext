@@ -26,6 +26,7 @@ docker run --rm \
   -v "$(pwd)/dist:/workspace/dist" \
   ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
+The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
 |-|Binary=
 Run it in the directory that holds <code>src/</code> (see [[Binary]] to download it):
 <syntaxhighlight lang="shell">

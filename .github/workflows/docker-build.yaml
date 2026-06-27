@@ -8,6 +8,12 @@ on:
   pull_request:
     paths-ignore:
       - 'docs/**'
+  workflow_call:
+    inputs:
+      tag:
+        description: Release tag to publish a versioned image for (e.g. v1.0.0).
+        type: string
+        required: true
 
 permissions:
   contents: read
@@ -32,8 +38,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # On a release (tag input set) publish the immutable version tags plus
+      # latest; otherwise just latest. inputs.tag is empty for push/PR runs.
+      - name: Compute image tags
+        id: tags
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          img=ghcr.io/chaotic-ground/wikven
+          if [ -n "$TAG" ]; then
+            v=${TAG#v}
+            printf 'tags=%s\n' "$img:$v,$img:${v%.*},$img:${v%%.*},$img:latest" >> "$GITHUB_OUTPUT"
+          else
+            printf 'tags=%s\n' "$img:latest" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           context: .
           push: ${{ github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/chaotic-ground/wikven:latest
+          tags: ${{ steps.tags.outputs.tags }}
