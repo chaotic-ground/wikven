@@ -33,11 +33,12 @@ class ImportWikitext extends Maintenance {
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		RequestContext::getMain()->setUser($user);
 
-		$ok = true;
+		$failed = [];
 		foreach ($this->wikitextFiles($sourceDirectory) as $filename) {
 			$title = Title::newFromText($this->filenameToTitle($filename, $sourceDirectory));
 			if (!$title) {
 				$this->output('Invalid title: ' . basename($filename) . "\n");
+				$failed[] = basename($filename);
 				continue;
 			}
 
@@ -89,11 +90,21 @@ class ImportWikitext extends Maintenance {
 				$this->output(" done\n");
 			} else {
 				$this->output(" failed\n");
-				$ok = false;
+				$failed[] = $relative;
 			}
 		}
 
-		return $ok;
+		if ($failed) {
+			// Report to stderr and signal failure so the caller (build.php's
+			// step()) aborts: a static export that silently drops pages is worse
+			// than no export, and exits 0 either way without this.
+			$this->error(
+				'Failed to import ' . count($failed) . " page(s):\n  " . implode("\n  ", $failed)
+			);
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
