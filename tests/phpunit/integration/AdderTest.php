@@ -40,6 +40,8 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	public function testFooterAddsSourceLink() {
 		$this->overrideConfigValue('WikvenFooterUrl', 'https://github.com/owner/repo');
 		$this->overrideConfigValue('WikvenSkins', ['vector']);
+		// Empty so the footer's version-link branch does not query the database.
+		$this->overrideConfigValue('WikvenVersionPage', '');
 
 		$footerItems = [];
 		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
