@@ -6,7 +6,8 @@
 			"include-component-in-tag": false,
 			"draft": true,
 			"extra-files": [
-				{ "type": "json", "path": "extension.json", "jsonpath": "$.version" }
+				{ "type": "json", "path": "extension.json", "jsonpath": "$.version" },
+				{ "type": "generic", "path": "action/action.yml" }
 			],
 			"changelog-sections": [
 				{ "type": "feat", "section": "Features" },
