@@ -14,19 +14,41 @@ inputs:
     default: dist
   image:
     description: >-
-      The wikven image to run. Defaults to the rolling latest; pin a release
-      (e.g. ghcr.io/chaotic-ground/wikven:1.0.0) for reproducible builds.
-    default: ghcr.io/chaotic-ground/wikven:latest
+      The wikven image to run. Defaults to the release this action was cut from;
+      override to pin a different tag (e.g. ghcr.io/chaotic-ground/wikven:1.2.3).
+    default: ghcr.io/chaotic-ground/wikven:0.1.0  # x-release-please-version
+  cache:
+    description: >-
+      Cache the pulled image between runs, keyed on the image ref. Set to
+      "false" to always pull fresh.
+    default: "true"
 
 runs:
   using: composite
   steps:
+    # The image ref is immutable per tag, so a cache hit needs no re-pull.
+    - if: inputs.cache == 'true'
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+      with:
+        path: ~/.cache/wikven/image.tar
+        key: wikven-image-${{ inputs.image }}
     - shell: bash
       env:
         SOURCE: ${{ inputs.source }}
         OUTPUT: ${{ inputs.output }}
         IMAGE: ${{ inputs.image }}
+        CACHE: ${{ inputs.cache }}
       run: |
+        tar="$HOME/.cache/wikven/image.tar"
+        if [ "$CACHE" = "true" ] && [ -f "$tar" ]; then
+          docker load -i "$tar"
+        else
+          docker pull "$IMAGE"
+          if [ "$CACHE" = "true" ]; then
+            mkdir -p "$(dirname "$tar")"
+            docker save "$IMAGE" -o "$tar"
+          fi
+        fi
         mkdir -p "$OUTPUT"
         docker run --rm \
           -v "$PWD/$SOURCE:/workspace/src" \
