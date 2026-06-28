@@ -86,4 +86,4 @@ echo '{{Note|Back up your wiki first.}}' >> src/index.wikitext
 
 Build again: the home page now shows the note. See [[Pages#Templates]] for parameters and more.
 
-{{prevnext|Binary|Pages}}
+{{prevnext|Installation|Pages}}

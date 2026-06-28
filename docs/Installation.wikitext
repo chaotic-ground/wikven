@@ -11,7 +11,7 @@ curl -L -o wikven https://github.com/chaotic-ground/wikven/releases/latest/downl
 chmod +x wikven
 </syntaxhighlight>
 
-On arm64, use <code>wikven-linux-aarch64</code>. See [[Binary|Standalone binary]] for installing it onto your <code>PATH</code>, nightly builds, and the optional host tools it uses.
+On arm64, use <code>wikven-linux-aarch64</code>. See [[Standalone binary]] for installing it onto your <code>PATH</code>, nightly builds, and the optional host tools it uses.
 
 == Docker ==
 
@@ -39,4 +39,4 @@ This produces a local <code>wikven</code> image you run exactly like the publish
 
 Once you have {{wikven}}, head to [[Getting Started]] to build your first site.
 
-{{prevnext|Why wikitext|Binary}}
+{{prevnext|Why wikitext|Getting Started}}

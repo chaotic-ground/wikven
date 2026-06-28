@@ -47,7 +47,7 @@ Because <code>dist/</code> is just files, you can serve it from any static host 
 
 Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. {{wikven}} has a built-in <code>serve</code> command for this.
 
-With the [[Binary|standalone binary]], it serves <code>dist/</code> on <code>http://localhost:8080</code> (override with <code>--listen</code>):
+With the [[Standalone binary|standalone binary]], it serves <code>dist/</code> on <code>http://localhost:8080</code> (override with <code>--listen</code>):
 
 <syntaxhighlight lang="shell">
 wikven serve
