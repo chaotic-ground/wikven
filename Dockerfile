@@ -2,7 +2,7 @@
 # digests current (see .github/dependabot.yml).
 FROM composer:2@sha256:7725eb4545c438629ae8bde3ef0bb9a5038ef566126ad878442a69007242d267 AS composer
 
-FROM mediawiki:1.45@sha256:7f9d5c2cc824096367f998e76a00e3f2195546b14fddb268e4218ab7a46c205d
+FROM mediawiki:1.45@sha256:6dc859706b561acf90a0f92786280f6e461946c4cc2fa8ea5c74be6c27251d2c
 
 # composer (and unzip, which composer uses to extract dist archives) so that
 # third-party extensions/skins declared in .wikven.yaml can be installed at build

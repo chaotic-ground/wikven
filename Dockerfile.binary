@@ -24,7 +24,7 @@ RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
 # its HTTP/3 (ngtcp2/nghttp3) static libs fail to link, and it is unneeded
 # (MediaWiki/Guzzle uses PHP stream wrappers over openssl).
 # Digest-pinned for reproducible builds; Dependabot keeps it current.
-FROM dunglas/frankenphp:static-builder-musl@sha256:935f8569313813f97f55721a348b7d19ab7a9544e34303d1c8f9d99ac76296cc AS builder
+FROM dunglas/frankenphp:static-builder-musl@sha256:a6b2d40f0fa67d5c7b7fa64d32f818acc93ad5c1e96a95ca4a7a46185c9bdf54 AS builder
 WORKDIR /go/src/app
 COPY --from=app /var/www/html ./dist/app
 # A small Caddy module registers the `build` subcommand, so the binary can be run
