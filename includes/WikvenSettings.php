@@ -120,7 +120,7 @@ require_once "$IP/extensions/Wikven/includes/SiteConfig.php";
 // Pick the highest-precedence config name present; warn about any others.
 $wikvenLocated = MediaWiki\Extension\Wikven\SiteConfig::locate($wikvenSrc);
 $wikvenSiteFile = $wikvenLocated['path'];
-if ($wikvenLocated['ignored'] !== []) {
+if ($wikvenSiteFile !== null && $wikvenLocated['ignored'] !== []) {
 	error_log(
 		'Wikven: multiple site config files present; using ' . basename($wikvenSiteFile) . ' and ignoring '
 			. implode(', ', array_map('basename', $wikvenLocated['ignored']))

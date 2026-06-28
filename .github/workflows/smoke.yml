@@ -11,7 +11,7 @@ on:
     paths:
       - 'Dockerfile'
       - 'bin/run'
-      - 'WikvenSettings.php'
+      - 'default.yml'
       - 'extension.json'
       - 'includes/**'
       - 'maintenance/**'
@@ -23,7 +23,7 @@ on:
     paths:
       - 'Dockerfile'
       - 'bin/run'
-      - 'WikvenSettings.php'
+      - 'default.yml'
       - 'extension.json'
       - 'includes/**'
       - 'maintenance/**'
