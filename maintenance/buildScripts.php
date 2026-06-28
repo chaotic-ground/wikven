@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\Wikven;
 use Maintenance;
 use MediaWiki\HookContainer\HookRunner;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
@@ -50,7 +49,7 @@ class BuildScripts extends Maintenance {
 		// Seed default-on gadgets; the Gadgets hook adds them per-request, not in static render.
 		$seeds = array_merge($seeds, $this->defaultGadgetModules());
 		// Seed the lazy search module (loaded on focus, never in page queue) so its closure bundles.
-		if (ExtensionRegistry::getInstance()->isLoaded('SifterSearch')) {
+		if (Search::isActive()) {
 			$searchModule = $this->resolveSearchModule($rl, $wgLanguageCode, $wgDefaultSkin);
 			if ($searchModule !== null && $rl->isModuleRegistered($searchModule)) {
 				$seeds[] = $searchModule;

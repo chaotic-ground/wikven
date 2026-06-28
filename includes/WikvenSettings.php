@@ -179,6 +179,16 @@ foreach ($config['extensions'] ?? [] as $extension) {
 	}
 }
 
+// SifterSearch ships built in; default its Pagefind index into the build's dist dir, unless the
+// site set the output path itself (an empty value there turns search off).
+$wikvenSiteConfig = is_array($wikvenSiteData['config'] ?? null) ? $wikvenSiteData['config'] : [];
+if (
+	in_array('SifterSearch', $config['extensions'], true)
+	&& !array_key_exists('SifterSearchOutputDir', $wikvenSiteConfig)
+) {
+	$GLOBALS['wgSifterSearchOutputDir'] = "$wikvenDist/pagefind";
+}
+
 // WikvenLogos mirrors $wgLogos but each src is a source-dir file name; resolve to its upload URL.
 if (!empty($wgWikvenLogos) && is_array($wgWikvenLogos)) {
 	// Map a source file name to the flat-storage URL its upload will have.

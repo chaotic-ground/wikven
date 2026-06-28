@@ -2,9 +2,9 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
+use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
 
@@ -15,7 +15,7 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 		$out->addModules('ext.Wikven.pinnableState');
 
 		// No search backend on a static site; hide the box unless SifterSearch serves Pagefind.
-		if (!ExtensionRegistry::getInstance()->isLoaded('SifterSearch')) {
+		if (!Search::isActive()) {
 			$out->addInlineStyle('#p-search { display: none; }');
 		}
 
