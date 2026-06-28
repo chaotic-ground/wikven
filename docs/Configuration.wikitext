@@ -85,7 +85,7 @@ config:
 
 A name in <code>WikvenRepositories</code> that is already bundled with wikven is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
 
-Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and Composer when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[Binary|binary]] they must be on your <code>PATH</code>.
+Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and Composer when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[Standalone binary|binary]] they must be on your <code>PATH</code>.
 
 {{note|The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}
 
@@ -109,4 +109,4 @@ docker run --rm --entrypoint cat ghcr.io/chaotic-ground/wikven extensions/Wikven
 
 It is also in the [https://github.com/chaotic-ground/wikven/blob/main/default.yml repository].
 
-{{prevnext|Troubleshooting|Development}}
+{{prevnext|Troubleshooting|Standalone binary}}

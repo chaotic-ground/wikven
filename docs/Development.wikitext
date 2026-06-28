@@ -28,7 +28,7 @@ docker run --rm \
   wikven
 </syntaxhighlight>
 
-The container mounts the source at <code>/workspace/src</code> and writes the rendered site to <code>/workspace/dist</code>. Both paths derive from <code>WIKVEN_WORKDIR</code> (default <code>/workspace</code>), which also has a <code>.cache/</code> for ephemeral state; the same layout lets the [[Binary|standalone binary]] point everything at a writable host directory.
+The container mounts the source at <code>/workspace/src</code> and writes the rendered site to <code>/workspace/dist</code>. Both paths derive from <code>WIKVEN_WORKDIR</code> (default <code>/workspace</code>), which also has a <code>.cache/</code> for ephemeral state; the same layout lets the [[Standalone binary|standalone binary]] point everything at a writable host directory.
 
 The <code>run</code> script:
 
@@ -77,14 +77,14 @@ Names in <code>extensions</code>/<code>skins</code> that are not bundled with {{
 
 == Standalone binary ==
 
-The same MediaWiki + {{wikven}} tree is embedded into a single [[Binary|FrankenPHP executable]] (see <code>binary.Dockerfile</code>), so a site can be built with no Docker. The binary extracts its app to a writable temporary directory at startup and runs the same pipeline, which is why all writable paths are kept under <code>WIKVEN_WORKDIR</code>.
+The same MediaWiki + {{wikven}} tree is embedded into a single [[Standalone binary|FrankenPHP executable]] (see <code>binary.Dockerfile</code>), so a site can be built with no Docker. The binary extracts its app to a writable temporary directory at startup and runs the same pipeline, which is why all writable paths are kept under <code>WIKVEN_WORKDIR</code>.
 
 == Continuous integration ==
 
 * <code>lint.yml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs).
 * <code>docker-build.yml</code> builds the image and publishes it to <code>ghcr.io/chaotic-ground/wikven</code> on <code>main</code>.
 * <code>deploy-docs.yml</code> builds the <code>docs/</code> directory with the image and deploys the result to GitHub Pages, so this site is itself a {{wikven}} build.
-* <code>build-binary.yml</code> is a reusable workflow that builds the standalone [[Binary|binary]] for each platform. <code>release-please.yml</code> calls it to attach the binaries to a version release, and <code>nightly.yml</code> calls it daily to publish a dated <code>nightly-YYYY-MM-DD</code> pre-release. Both create the release as a draft, attach the binaries, then publish it, because GitHub's immutable releases lock a release's assets once it is published.
+* <code>build-binary.yml</code> is a reusable workflow that builds the standalone [[Standalone binary|binary]] for each platform. <code>release-please.yml</code> calls it to attach the binaries to a version release, and <code>nightly.yml</code> calls it daily to publish a dated <code>nightly-YYYY-MM-DD</code> pre-release. Both create the release as a draft, attach the binaries, then publish it, because GitHub's immutable releases lock a release's assets once it is published.
 * <code>release-please.yml</code> manages versioning and releases (see below).
 
 Versions follow [https://www.conventionalcommits.org/ Conventional Commits], which release-please uses to generate the changelog and bump the version.

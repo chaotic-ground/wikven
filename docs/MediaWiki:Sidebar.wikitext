@@ -3,7 +3,6 @@
 * Docs
 ** Why wikitext|Why wikitext
 ** Installation|Installation
-** Binary|Binary
 ** Getting Started|Getting Started
 ** Pages|Pages
 ** Editing sidebar|Editing sidebar
@@ -15,6 +14,7 @@
 ** Troubleshooting|Troubleshooting
 * References
 ** Configuration|Configuration
+** Standalone binary|Standalone binary
 ** Development|Development
 ** Version|Version
 ** Licenses|Licenses

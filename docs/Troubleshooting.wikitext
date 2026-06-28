@@ -4,7 +4,7 @@ Common problems and what to check.
 
 == Thumbnails look low quality ==
 
-The [[Binary|standalone binary]] falls back to the built-in GD library, which produces lower-quality thumbnails and supports fewer formats. Install '''ImageMagick''' and '''librsvg''' on the build host for better output, or use the Docker image, which bundles them. See [[Images]].
+The [[Standalone binary|standalone binary]] falls back to the built-in GD library, which produces lower-quality thumbnails and supports fewer formats. Install '''ImageMagick''' and '''librsvg''' on the build host for better output, or use the Docker image, which bundles them. See [[Images]].
 
 == The search box does nothing ==
 
