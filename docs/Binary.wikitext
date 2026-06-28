@@ -4,6 +4,8 @@ Besides the [[Installation#Docker|Docker image]], {{wikven}} ships as a single s
 
 On macOS and Windows, use the [[Installation#Docker|Docker image]] instead. {{wikven}} provides no prebuilt macOS binary, for cost reasons: for a downloaded binary to run without Gatekeeper blocking it, Apple requires it to be signed and notarized through a paid Apple Developer Program account (US$99/year), and that cost is not justified for the project yet. The only alternative, telling users to clear the quarantine by hand, trains them to bypass a security check, so it is not offered. A macOS user who wants a binary regardless can compile one from source with [https://frankenphp.dev/docs/static/ FrankenPHP's static build]; a locally built binary is not quarantined.
 
+There is no prebuilt Windows binary either: the toolchain that produces a single self-contained executable does not support Windows yet (see [https://github.com/chaotic-ground/wikven/issues/192 issue #192]).
+
 == Download ==
 
 Download the binary for your architecture from the [https://github.com/chaotic-ground/wikven/releases latest release] and make it executable:
