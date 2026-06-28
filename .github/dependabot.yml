@@ -12,9 +12,6 @@ updates:
       composer:
         patterns:
           - "*"
-    labels:
-      - dependencies
-      - composer
   - package-ecosystem: npm
     directory: /
     schedule:
@@ -26,9 +23,6 @@ updates:
       npm:
         patterns:
           - "*"
-    labels:
-      - dependencies
-      - npm
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -40,9 +34,6 @@ updates:
       github-actions:
         patterns:
           - "*"
-    labels:
-      - dependencies
-      - github-actions
   - package-ecosystem: docker
     directory: /
     schedule:
@@ -54,9 +45,6 @@ updates:
       docker:
         patterns:
           - "*"
-    labels:
-      - dependencies
-      - docker
   - package-ecosystem: gomod
     directory: /caddy
     schedule:
@@ -68,6 +56,3 @@ updates:
       gomod:
         patterns:
           - "*"
-    labels:
-      - dependencies
-      - gomod
