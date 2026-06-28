@@ -9,11 +9,19 @@
 		"phpcbf": "phpcbf"
 	},
 	"require-dev": {
+		"chaotic-ground/mago-mediawiki-style": "^0.1",
 		"mediawiki/mediawiki-codesniffer": "51.0.0",
 		"mediawiki/mediawiki-phan-config": "0.20.0",
 		"mediawiki/minus-x": "2.0.1",
 		"phpro/grumphp": "2.21.0"
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/chaotic-ground/mago-mediawiki-style",
+			"no-api": true
+		}
+	],
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,

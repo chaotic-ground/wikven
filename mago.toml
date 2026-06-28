@@ -1,4 +1,6 @@
-# Approximates MediaWiki coding style; tracked at chaotic-ground/mago-mediawiki-style.
+# Formatter style comes from the shared mago-mediawiki-style package; the linter rules and
+# use-sorting below are wikven's own.
+extends = "vendor/chaotic-ground/mago-mediawiki-style/style.toml"
 
 # MediaWiki 1.45 (base image) needs PHP 8.1+, so lint against 8.1 though the binary runs newer.
 php-version = "8.1"
@@ -7,49 +9,10 @@ php-version = "8.1"
 paths = ["includes", "maintenance", "tests"]
 
 [formatter]
-print-width = 120
-tab-width = 4
-use-tabs = true
-single-quote = true
-
-# MediaWiki does not require trailing commas.
-trailing-comma = false
-
-# MediaWiki places every opening brace on the same line.
-control-brace-style = "same-line"
-closure-brace-style = "same-line"
-function-brace-style = "same-line"
-method-brace-style = "same-line"
-classlike-brace-style = "same-line"
-
-# MediaWiki: `(int)$var`, not `(int) $var`.
-space-after-cast-unary-prefix-operators = false
-
-# MediaWiki puts spaces inside grouping parentheses: `( $a + $b )`.
-space-within-grouping-parenthesis = true
-
-# MediaWiki files start with `<?php` immediately followed by code or a
-# file-level doc comment.
-empty-line-after-opening-tag = false
-
-# MediaWiki does not align array tables or assignments.
-array-table-style-alignment = false
-
-# Sort use statements, matching mediawiki-codesniffer's UnsortedUseStatements.
+# wikven sorts use statements (mediawiki-codesniffer style); the shared config leaves them as-is.
 sort-uses = true
-separate-use-types = false
 
-# Preserve author line-breaking decisions to keep the diff minimal.
-preserve-breaking-member-access-chain = true
-preserve-breaking-member-access-chain-first-method-on-same-line = true
-preserve-breaking-argument-list = true
-preserve-breaking-parameter-list = true
-preserve-breaking-attribute-list = true
-preserve-breaking-conditional-expression = true
-preserve-breaking-condition-expression = true
-
-# Disable lint rules that conflict with the MediaWiki coding style or are noisy
-# metrics, keeping only correctness-oriented rules.
+# Disable noisy metric/style lint rules, keeping only the correctness-oriented ones.
 [linter.rules]
 braced-string-interpolation = { enabled = false }
 literal-named-argument = { enabled = false }
