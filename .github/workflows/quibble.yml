@@ -1,3 +1,4 @@
+---
 name: Quibble
 
 on:
@@ -17,10 +18,10 @@ jobs:
       matrix:
         mediawiki-version: [REL1_45, master]
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53 # main
+      - uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53  # main
         with:
           stage: phan
           mediawiki-version: ${{ matrix.mediawiki-version }}
@@ -32,10 +33,10 @@ jobs:
   composer-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53 # main
+      - uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53  # main
         with:
           stage: composer-test
           mediawiki-version: REL1_45
@@ -48,17 +49,17 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           persist-credentials: false
       - id: quibble
-        uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53 # main
+        uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53  # main
         with:
           stage: coverage
           # Coverage tooling lives only on MediaWiki master.
           mediawiki-version: master
           quibble-docker-image: quibble-bookworm-php83
-      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f  # v7.0.0
         with:
           files: ${{ steps.quibble.outputs.coverage }}/clover.xml
           use_oidc: true

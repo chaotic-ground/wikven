@@ -53,7 +53,7 @@ resource "github_repository_ruleset" "default" {
     }
 
     # Require status checks to pass before a pull request can be merged: the
-    # Lint workflow jobs (.github/workflows/lint.yaml) and the semantic pull
+    # Lint workflow jobs (.github/workflows/lint.yml) and the semantic pull
     # request title check. integration_id 15368 is the GitHub Actions app, so
     # only its check runs satisfy these.
     required_status_checks {
@@ -68,6 +68,7 @@ resource "github_repository_ruleset" "default" {
           "semantic-pull-request",
           "taplo",
           "typos",
+          "yamllint",
           "zizmor",
         ]
         content {

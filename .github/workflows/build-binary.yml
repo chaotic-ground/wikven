@@ -1,3 +1,4 @@
+---
 name: Build binary
 
 # Reusable: build the standalone binary for each architecture and attach it to
@@ -24,21 +25,21 @@ jobs:
             arch: aarch64
     runs-on: ${{ matrix.runner }}
     permissions:
-      contents: write # gh release upload
-      id-token: write # sign the build provenance attestation
-      attestations: write # write the build provenance attestation
+      contents: write  # gh release upload
+      id-token: write  # sign the build provenance attestation
+      attestations: write  # write the build provenance attestation
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           persist-credentials: false
 
       # The standalone binary embeds the same MediaWiki + Wikven tree the image
       # ships, so build that image first, then embed it into a FrankenPHP binary.
-      - uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+      - uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5  # v4.1.0
 
       # Build and load the embedding image with a per-architecture GHA layer
       # cache, so repeated (e.g. nightly) builds reuse the base + apt layers.
-      - uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+      - uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
           context: .
           load: true
@@ -59,7 +60,7 @@ jobs:
         run: sha256sum "wikven-linux-${{ matrix.arch }}" > "wikven-linux-${{ matrix.arch }}.sha256"
 
       # Signed SLSA provenance, so users can `gh attestation verify` the binary.
-      - uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+      - uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373  # v4.1.1
         with:
           subject-path: wikven-linux-${{ matrix.arch }}
 
@@ -67,4 +68,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ inputs.tag }}
-        run: gh release upload "$TAG" "wikven-linux-${{ matrix.arch }}" "wikven-linux-${{ matrix.arch }}.sha256" --clobber
+        run: >-
+          gh release upload "$TAG"
+          "wikven-linux-${{ matrix.arch }}"
+          "wikven-linux-${{ matrix.arch }}.sha256"
+          --clobber

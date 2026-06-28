@@ -2,7 +2,7 @@
 
 wfLoadExtension('Wikven');
 
-// Build mechanics. The user-overridable MediaWiki defaults live in default.yaml;
+// Build mechanics. The user-overridable MediaWiki defaults live in default.yml;
 // only the static-export internals that are not plain config stay here.
 
 // All filesystem locations derive from one working directory so the same build
@@ -62,7 +62,7 @@ unset($wgFooterIcons['poweredby']);
 // SVG. SVG is deliberately never routed through ImageMagick, whose built-in
 // 'ImageMagick' converter calls the `convert` binary that does not exist on
 // ImageMagick-7-only hosts. This runs before the config load below, so an
-// explicit value in .wikven.yaml still wins; default.yaml does not set the
+// explicit value in .wikven.yaml still wins; default.yml does not set the
 // backend. In the Docker image both tools are present, so this reproduces the
 // previous ImageMagick + rsvg configuration exactly.
 $wikvenFindExe = static function (array $names) {
@@ -97,26 +97,16 @@ if ($wikvenConvert === null || $wikvenRsvg === null) {
 	);
 }
 
-// Configuration: wikven's defaults (default.yaml) and then the site's own
+// Configuration: wikven's defaults (default.yml) and then the site's own
 // .wikven.yaml (or .wikven.json) on top, loaded through MediaWiki's own settings
 // system ($wgSettings, available here because LocalSettings.php runs inside it).
 // The "config" map (variables without the "wg" prefix) is fed to $wgSettings so
 // keys merge per their declared strategy and can be schema-validated; the
 // "extensions" and "skins" lists are collected here and loaded leniently below,
 // because the settings loader fatals on a name it cannot find whereas wikven
-// skips an unbundled one. .wikven.json is read only when no .wikven.yaml is
-// present (YAML is a superset of JSON).
+// skips an unbundled one. The site file may be any accepted name (.wikven.yaml,
+// .wikven.yml, .wikven.json, or the plain forms; YAML is a superset of JSON).
 global $wgSettings;
-
-$wikvenSiteFile = null;
-if (file_exists("$wikvenSrc/.wikven.yaml")) {
-	$wikvenSiteFile = "$wikvenSrc/.wikven.yaml";
-	if (file_exists("$wikvenSrc/.wikven.json")) {
-		error_log('Wikven: both .wikven.yaml and .wikven.json exist; using .wikven.yaml and ignoring .wikven.json');
-	}
-} elseif (file_exists("$wikvenSrc/.wikven.json")) {
-	$wikvenSiteFile = "$wikvenSrc/.wikven.json";
-}
 
 // Wikven's own config variables, used to flag a misspelled one (which would set
 // a global nothing reads); the canonical names come from extension.json.
@@ -127,12 +117,22 @@ $wikvenKnownConfig = array_keys($wikvenManifest['config'] ?? []);
 // activated Wikven's autoloader, so load the (dependency-free) helper directly.
 require_once "$IP/extensions/Wikven/includes/SiteConfig.php";
 
+// Pick the highest-precedence config name present; warn about any others.
+$wikvenLocated = MediaWiki\Extension\Wikven\SiteConfig::locate($wikvenSrc);
+$wikvenSiteFile = $wikvenLocated['path'];
+if ($wikvenLocated['ignored'] !== []) {
+	error_log(
+		'Wikven: multiple site config files present; using ' . basename($wikvenSiteFile) . ' and ignoring '
+			. implode(', ', array_map('basename', $wikvenLocated['ignored']))
+	);
+}
+
 // The defaults, then the site file on top. For each, hand its "config" map to
 // $wgSettings (so keys merge per their declared strategy) and collect its
 // extension/skin names for the lenient loading below.
 $config = ['extensions' => [], 'skins' => []];
 $wikvenYaml = new MediaWiki\Settings\Source\Format\YamlFormat();
-$wikvenYamlData = $wikvenYaml->decode(file_get_contents("$IP/extensions/Wikven/default.yaml"));
+$wikvenYamlData = $wikvenYaml->decode(file_get_contents("$IP/extensions/Wikven/default.yml"));
 $wikvenSiteData = [];
 if ($wikvenSiteFile !== null) {
 	$wikvenSiteFormat = str_ends_with($wikvenSiteFile, '.json')
@@ -229,7 +229,7 @@ foreach ($config['extensions'] ?? [] as $extension) {
 // uploaded into the File: namespace at build time like any other source image, so
 // each one already has a URL; we point $wgLogos at it. The upload path is
 // predictable because uploads are stored flat (HashedUploadDirectory: false in
-// default.yaml), so the URL can be built here, at config time, before the file is
+// default.yml), so the URL can be built here, at config time, before the file is
 // actually uploaded later in the build. The static export then localizes that URL
 // to a single shared file alongside the HTML (storeImages.php), so the logo is not
 // inlined into every page. A value is either a file name, or (like

@@ -1,3 +1,4 @@
+---
 # Quibble reports coverage from inside the container, so rewrite its paths to the
 # repository layout.
 fixes:

@@ -115,21 +115,19 @@ class FetchExtensions extends Maintenance {
 	}
 
 	/**
-	 * Read and merge default.yaml + the site's .wikven.yaml/.json, exactly as
+	 * Read and merge default.yml + the site config file, exactly as
 	 * WikvenSettings.php does, so the fetched set matches what will be loaded.
 	 */
 	private function loadConfig(string $IP): array {
 		$yaml = new YamlFormat();
-		$config = $yaml->decode(file_get_contents("$IP/extensions/Wikven/default.yaml"));
+		$config = $yaml->decode(file_get_contents("$IP/extensions/Wikven/default.yml"));
 
+		// This runs before the extension registry has activated Wikven's
+		// autoloader, so load the (dependency-free) helper directly.
+		require_once "$IP/extensions/Wikven/includes/SiteConfig.php";
 		$work = getenv('WIKVEN_WORKDIR');
 		$src = $work !== false && $work !== '' ? "$work/src" : '/workspace/src';
-		$siteFile = null;
-		if (file_exists("$src/.wikven.yaml")) {
-			$siteFile = "$src/.wikven.yaml";
-		} elseif (file_exists("$src/.wikven.json")) {
-			$siteFile = "$src/.wikven.json";
-		}
+		$siteFile = SiteConfig::locate($src)['path'];
 		if ($siteFile !== null) {
 			$format = str_ends_with($siteFile, '.json') ? new JsonFormat() : $yaml;
 			$site = $format->decode(file_get_contents($siteFile));

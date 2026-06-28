@@ -1,3 +1,4 @@
+---
 name: Bake a wiki with wikven
 description: Bake a MediaWiki source tree into a static site with wikven.
 branding:
