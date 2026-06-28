@@ -18,10 +18,10 @@ jobs:
       matrix:
         mediawiki-version: [REL1_45, master]
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53  # main
+      - uses: femiwiki/quibble-action@9964af476e606e1dc7e14ee13db34f99456f3c41  # main
         with:
           stage: phan
           mediawiki-version: ${{ matrix.mediawiki-version }}
@@ -33,10 +33,10 @@ jobs:
   composer-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53  # main
+      - uses: femiwiki/quibble-action@9964af476e606e1dc7e14ee13db34f99456f3c41  # main
         with:
           stage: composer-test
           mediawiki-version: REL1_45
@@ -49,11 +49,11 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
           persist-credentials: false
       - id: quibble
-        uses: femiwiki/quibble-action@ffc9227efa59e085ef82243d81b122ec9c673e53  # main
+        uses: femiwiki/quibble-action@9964af476e606e1dc7e14ee13db34f99456f3c41  # main
         with:
           stage: coverage
           # Coverage tooling lives only on MediaWiki master.
