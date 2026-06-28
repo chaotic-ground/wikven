@@ -1,18 +1,14 @@
 #!/bin/bash
 set -euo pipefail; IFS=$'\n\t'
 
-# Source input and rendered output live under one working dir, matching
-# WikvenSettings.php. Defaults to /workspace, the path the image mounts. Export
-# it so the PHP maintenance children (which read it via getenv) see any override.
+# One working dir for source + output (default /workspace); exported so PHP children inherit it.
 export WIKVEN_WORKDIR="${WIKVEN_WORKDIR:-/workspace}"
 
-# The image's entry point is this script; the first argument selects the
-# command (default "build"), mirroring the standalone binary's subcommands.
+# Entry point of the image; the first arg selects the command (default "build"), like the binary.
 command="${1:-build}"
 
 if [ "$command" = "serve" ]; then
-  # Serve the already-built site for local preview. The container always
-  # listens on 8080; map it to a host port with `docker run -p 8080:8080`.
+  # Serve the built site for local preview; the container listens on 8080.
   exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist"
 elif [ "$command" != "build" ]; then
   echo "wikven: unknown command '$command'; expected 'build' or 'serve'" >&2
@@ -30,22 +26,17 @@ php maintenance/run.php install \
   MediaWiki \
   Admin
 
-# Fetch third-party extensions/skins before WikvenSettings is wired in, so they
-# are on disk when the build boot loads them (and no "not bundled" warnings fire
-# while they are still being fetched).
+# Fetch third-party extensions/skins before WikvenSettings loads, so they're on disk in time.
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/fetchExtensions.php
 
-# Wire in WikvenSettings, but only once: a persistent/mounted install tree would
-# otherwise collect a duplicate require_once on every run.
+# Wire in WikvenSettings once; a persistent install tree would otherwise duplicate require_once.
 grep -qF "require_once 'WikvenSettings.php';" LocalSettings.php \
   || echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
 
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/build.php
 rm -rf "$WIKVEN_WORKDIR/dist/history/"
 
-# The build runs as root, so its output is root-owned on the host bind mount.
-# Hand it back to whoever owns the mounted output directory (the invoking user),
-# so they can read, edit, and clean dist/ without sudo.
+# The build runs as root; hand dist/ back to the mount owner so they can edit it without sudo.
 if [ -d "$WIKVEN_WORKDIR/dist" ]; then
   chown -R "$(stat -c '%u:%g' "$WIKVEN_WORKDIR/dist")" "$WIKVEN_WORKDIR/dist"
 fi

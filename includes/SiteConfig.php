@@ -2,19 +2,12 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-/**
- * Helpers for a site's configuration file (any of the accepted .wikven.yaml /
- * .wikven.yml / .wikven.json names, dotted or plain; see CONFIG_FILENAMES).
- */
+/** Helpers for a site's configuration file (accepted .wikven.* names; see CONFIG_FILENAMES). */
 class SiteConfig {
 	/** Top-level keys the settings format recognises. */
 	private const TOP_LEVEL_KEYS = ['config', 'extensions', 'skins'];
 
-	/**
-	 * The site-config file names wikven accepts in a source directory, in
-	 * precedence order (the first one present wins). Dotted before plain, YAML
-	 * before JSON, and the established ".yaml" spelling before ".yml".
-	 */
+	/** Site-config file names wikven accepts, in precedence order (first present wins). */
 	public const CONFIG_FILENAMES = [
 		'.wikven.yaml',
 		'.wikven.yml',
@@ -25,9 +18,7 @@ class SiteConfig {
 	];
 
 	/**
-	 * Find the site config file in a source directory. Returns the path of the
-	 * highest-precedence accepted name present (or null when none is), together
-	 * with any lower-precedence names also present, which are ignored.
+	 * Find the site config file; return highest-precedence present name and ignored lower ones.
 	 *
 	 * @param string $srcDir The source directory to look in.
 	 * @return array{path: ?string, ignored: string[]}
@@ -47,13 +38,7 @@ class SiteConfig {
 	}
 
 	/**
-	 * Lint decoded site-config contents, returning a warning for each mistake the
-	 * settings system would otherwise drop silently: an unknown top-level key, a
-	 * wrong-typed config/extensions/skins, a misspelled Wikven variable (which
-	 * would set a global nothing reads), or a Wikven value of the wrong shape (a
-	 * URL template missing its $1 placeholder, a non-map logos/repositories).
-	 * Messages are returned rather than logged so the check stays pure and
-	 * unit-testable.
+	 * Lint decoded site-config contents, returning a warning per silently-dropped mistake.
 	 *
 	 * @param mixed $data Decoded .wikven.yaml/.json contents.
 	 * @param string[] $knownConfig Canonical Wikven config variable names, from extension.json.
@@ -85,9 +70,7 @@ class SiteConfig {
 			}
 		}
 
-		// Value-shape checks for the Wikven keys whose shape matters, so a wrong
-		// type or a URL template missing its $1 placeholder is caught here rather
-		// than silently producing broken links or being dropped.
+		// Catch wrong types or URL templates missing the $1 placeholder before they break links.
 		foreach (['WikvenEditUrl', 'WikvenHistoryUrl', 'WikvenViewSourceUrl'] as $urlKey) {
 			$value = $config[$urlKey] ?? '';
 			if ($value !== '' && ( !is_string($value) || !str_contains($value, '$1') )) {

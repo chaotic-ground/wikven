@@ -42,10 +42,7 @@ class ImportWikitext extends Maintenance {
 				continue;
 			}
 
-			// The static export derives a page's edit/history link filename from
-			// its title. If the title does not round-trip back to this source
-			// file name (MediaWiki normalised it), those links would 404; warn so
-			// the author can rename the file to an already-normalised title.
+			// Warn if the title won't round-trip to the filename; export edit/history links would 404.
 			$relative = substr($filename, strlen($sourceDirectory) + 1);
 			if (SourceFile::titleToFilename($title->getPrefixedText()) !== $relative) {
 				$this->output(
@@ -59,13 +56,7 @@ class ImportWikitext extends Maintenance {
 
 			$this->output("Saving... $title");
 
-			// File: description sidecars and MediaWiki: system pages (Common.js, the
-			// gadget definition and gadget code, ...) are saved as the current
-			// revision via a normal edit. For a File: page the upload already created
-			// it with a default description that an old revision would land behind;
-			// for MediaWiki: pages the edit hooks must fire so registries like the
-			// gadget list are invalidated before the pages render. importOldRevision
-			// would skip both.
+			// File:/MediaWiki: pages need a current-revision edit so upload desc and edit hooks apply.
 			if ($title->getNamespace() === NS_FILE || $title->getNamespace() === NS_MEDIAWIKI) {
 				$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
 				$updater = $page->newPageUpdater($user);
@@ -75,10 +66,7 @@ class ImportWikitext extends Maintenance {
 				continue;
 			}
 
-			// Import as an old revision (like core's importTextFiles.php with
-			// --use-timestamp) so the source file's modification time becomes the
-			// revision timestamp and the footer shows the real last-modified date
-			// instead of the build time.
+			// Import as an old revision so the file mtime becomes the footer's last-modified timestamp.
 			$revision = new WikiRevision();
 			$revision->setContent(SlotRecord::MAIN, $content);
 			$revision->setTitle($title);
@@ -95,9 +83,7 @@ class ImportWikitext extends Maintenance {
 		}
 
 		if ($failed) {
-			// Report to stderr and signal failure so the caller (build.php's
-			// step()) aborts: a static export that silently drops pages is worse
-			// than no export, and exits 0 either way without this.
+			// Fail loudly so build.php's step() aborts; a silent partial export is worse than none.
 			$this->error(
 				'Failed to import ' . count($failed) . " page(s):\n  " . implode("\n  ", $failed)
 			);
@@ -108,9 +94,7 @@ class ImportWikitext extends Maintenance {
 	}
 
 	/**
-	 * Find every page file under the source directory, recursing into
-	 * subdirectories so subpages can be supplied as nested files (e.g. a
-	 * template's "Template:Foo/styles.css" in a "Template:Foo/" folder).
+	 * Find every page file under the source directory, recursing into subpages.
 	 *
 	 * @return string[] Absolute paths, sorted for a stable import order.
 	 */
@@ -130,10 +114,7 @@ class ImportWikitext extends Maintenance {
 		return $files;
 	}
 
-	/**
-	 * Map a page file to its title: the path relative to the source directory,
-	 * resolved by SourceFile's naming convention.
-	 */
+	/** Map a page file to its title via SourceFile's naming convention. */
 	private function filenameToTitle(string $name, string $sourceDirectory): string {
 		$relative = substr($name, strlen($sourceDirectory) + 1);
 		return SourceFile::filenameToTitle($relative);

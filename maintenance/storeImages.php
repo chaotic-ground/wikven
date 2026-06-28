@@ -11,20 +11,7 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-/**
- * Make every image the generated pages reference available next to the HTML,
- * and rewrite the references to those local copies, so the static export is
- * self-contained and never depends on a live MediaWiki install or on
- * upload.wikimedia.org being reachable. Two sources are handled:
- *
- *   - Wikimedia Commons hotlinks (via InstantCommons): downloaded over HTTP.
- *   - Local File: namespace uploads: copied from the upload directory.
- *
- * Files are dumped flat next to the HTML using the same img-<hash>.<ext> scheme
- * as AssetLocalizer. The hash is taken over the reference (the storage path for
- * local files), so each srcset candidate and thumbnail (which differ only by
- * width) becomes its own file.
- */
+/** Localize Commons hotlinks and File: uploads next to the HTML for a self-contained export. */
 class StoreImages extends Maintenance {
 	public function __construct() {
 		parent::__construct();
@@ -41,24 +28,16 @@ class StoreImages extends Maintenance {
 
 		$http = MediaWikiServices::getInstance()->getHttpRequestFactory();
 
-		// Reference as it appears in the HTML => local "./img-*.ext" (or null if
-		// it could not be fetched/found), so each distinct reference is handled once.
+		// HTML reference => local "./img-*.ext" (or null on failure), deduping each reference.
 		$map = [];
 
-		// Local upload URLs ($wgUploadPath/...) as they appear in src, srcset, and
-		// the file page's full-resolution links, with an optional scheme and host.
-		// Group 1 is the storage path; a trailing cache-busting ?query (added on
-		// file pages) is matched so the whole URL is replaced, but excluded from
-		// the path used for the disk lookup.
+		// Match $wgUploadPath URLs; group 1 is the storage path, trailing ?query stripped from it.
 		$localPattern = '~(?:(?:https?:)?//[^/\s"]+)?' . preg_quote($wgUploadPath, '~') . '(/[^\s"?]+)(?:\?[^\s"]*)?~';
 
 		foreach (glob("$dir/*.html") as $file) {
 			$html = file_get_contents($file);
 
-			// Wikimedia Commons URLs only ever appear as src/srcset values; matching
-			// up to the next space or quote isolates each candidate (the srcset width
-			// descriptor that follows is separated by a space) while still allowing
-			// commas inside file names.
+			// Match each Commons src/srcset candidate up to the next space or quote.
 			$html = preg_replace_callback(
 				'~(?:https?:)?//upload\.wikimedia\.org/[^\s"]+~',
 				function ($m) use (&$map, $http, $dir) {
@@ -74,8 +53,7 @@ class StoreImages extends Maintenance {
 			$html = preg_replace_callback(
 				$localPattern,
 				function ($m) use (&$map, $uploadDir, $dir) {
-					// Key by the storage path (without the cache-busting ?query) so the
-					// same file referenced at different sizes or timestamps dedupes.
+					// Key by storage path (no ?query) so sizes/timestamps of one file dedupe.
 					$path = $m[1];
 					if (!array_key_exists($path, $map)) {
 						$map[$path] = $this->storeLocal($uploadDir . $path, $path, $dir);
@@ -93,9 +71,7 @@ class StoreImages extends Maintenance {
 		$this->output("Stored $stored image(s)" . ( $failed ? ", $failed failed" : '' ) . "\n");
 
 		if ($failed) {
-			// The export still hotlinks the images that could not be fetched, so it
-			// is not self-contained; fail so the build (build.php's step()) aborts
-			// rather than publish output that depends on upload.wikimedia.org.
+			// Fail so the build aborts rather than publish output that still hotlinks images.
 			$this->error("Wikven: $failed image(s) could not be made local; the output is not self-contained.");
 			return false;
 		}
@@ -103,8 +79,7 @@ class StoreImages extends Maintenance {
 	}
 
 	/**
-	 * Download a single remote image ($ref, the reference as written in the HTML,
-	 * possibly protocol-relative) into $dir and return its local reference.
+	 * Download remote image $ref into $dir and return its local reference.
 	 *
 	 * @return string|null Local "./img-*.ext" reference, or null on failure.
 	 */
@@ -121,8 +96,7 @@ class StoreImages extends Maintenance {
 			'timeout' => 30,
 			'userAgent' => 'wikven static-site builder (https://github.com/chaotic-ground/wikven)'
 		];
-		// Less common srcset widths may not be cached and 4xx/5xx while Commons
-		// generates the thumbnail on the first hit, so retry with a short backoff.
+		// Retry with backoff: Commons may 4xx/5xx while generating an uncached thumbnail.
 		for ($attempt = 1; $attempt <= 3; $attempt++) {
 			$bytes = $http->get($url, $options, __METHOD__);
 			if ($bytes !== null && $bytes !== '') {

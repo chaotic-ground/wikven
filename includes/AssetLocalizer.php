@@ -6,23 +6,9 @@ use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 
-/**
- * Rewrites image references inside dumped CSS and JS bundles to locally dumped
- * image files, so the static output never calls load.php or points at a path
- * that only exists inside a live MediaWiki install. Two reference forms are
- * handled:
- *
- *   - the ResourceLoader image endpoint: url(/load.php?...image=...)
- *   - direct skin/resource asset paths:  url(/skins/...x.svg), url(/resources/...)
- *
- * Both plain CSS and the JSON-escaped form embedded in combined-mode JS bundles
- * (url(\/load.php?a&image=b)) are handled.
- */
+/** Rewrites image url()s in dumped CSS/JS to local copies, avoiding load.php references. */
 class AssetLocalizer {
-	/**
-	 * Rewrite the image url()s in the given dumped CSS/JS files (absolute paths)
-	 * to point at image copies dumped into $dir.
-	 */
+	/** Rewrite image url()s in the given dumped CSS/JS files to point at copies in $dir. */
 	public static function localizeImages(
 		ResourceLoader $rl,
 		string $dir,
@@ -77,8 +63,7 @@ class AssetLocalizer {
 	}
 
 	/**
-	 * Dump a single ResourceLoader image-endpoint URL ($url, a decoded
-	 * /load.php?...image=... reference) to a local file.
+	 * Dump a decoded /load.php?...image=... reference ($url) to a local image file.
 	 *
 	 * @return string|null Relative url() target (./img-*.svg), or null if not an image.
 	 */
@@ -127,9 +112,7 @@ class AssetLocalizer {
 	}
 
 	/**
-	 * Copy a direct asset path ($path, an absolute web path with a leading slash
-	 * and no query, e.g. /skins/Vector/.../foo.svg) out of the MediaWiki install
-	 * into the output directory.
+	 * Copy a direct asset path ($path, absolute web path like /skins/.../foo.svg) into $dir.
 	 *
 	 * @return string|null Relative url() target, or null if the file is missing.
 	 */

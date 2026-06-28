@@ -38,9 +38,7 @@ class Main implements
 			return;
 		}
 
-		// Images come from a foreign repo (Wikimedia Commons via InstantCommons),
-		// so the static export has no local File: page to link to. Point clicks at
-		// the file's real description page on Commons instead of a dead ./File:*.html.
+		// Foreign-repo files (Commons via InstantCommons) have no local File: page; link to Commons.
 		if ($title->getNamespace() === NS_FILE) {
 			$file = MediaWikiServices::getInstance()->getRepoGroup()->findFile($title);
 			if ($file && !$file->isLocal()) {
@@ -51,11 +49,9 @@ class Main implements
 
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
-		// Parse the query into name=>value pairs rather than substring-matching
-		// "action=", which would also fire on e.g. "veaction=edit".
+		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
 		$action = wfCgiToArray($query)['action'] ?? null;
-		// For edit/history, $1 is the page's source filename, so the link lands
-		// on the file to edit rather than the rendered page.
+		// For edit/history, $1 is the source filename so the link targets the editable file.
 		if ($action === 'edit' && $wgWikvenEditUrl) {
 			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenEditUrl);
 		} elseif ($action === 'history' && $wgWikvenHistoryUrl) {
@@ -66,17 +62,14 @@ class Main implements
 	}
 
 	/**
-	 * Add a "View source" tab linking to the page's source file in the repository
-	 * ($wgWikvenViewSourceUrl, with $1 the source file name), the read-only
-	 * counterpart of the Edit tab. Skipped when the URL is not configured.
+	 * Add a "View source" tab linking to the page's source file (read-only counterpart of Edit).
 	 *
 	 * @inheritDoc
 	 */
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
 		global $wgWikvenViewSourceUrl;
 		$title = $sktemplate->getTitle();
-		// A generated page (e.g. Version) has no source file, so its source link
-		// would 404 in the repository; skip it as if the URL were unconfigured.
+		// A generated page (e.g. Version) has no source file; skip rather than emit a 404 link.
 		if (
 			!$wgWikvenViewSourceUrl
 			|| !$title
@@ -130,9 +123,7 @@ class Main implements
 			}
 		}
 
-		// Non-main skins render duplicate copies of every page under dist/<skin>/.
-		// Point their canonical link at the main skin's copy one directory up (the
-		// dist root) so crawlers dedupe to it.
+		// Non-main skins duplicate every page; point canonical at the main skin's copy one dir up.
 		$mainSkin = $GLOBALS['wgWikvenMainSkin'] ?? null;
 		$title = $out->getTitle();
 		if (

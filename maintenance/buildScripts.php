@@ -16,22 +16,7 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-/**
- * Dump the JavaScript needed by the generated pages into two static files so
- * the skin's JS runs without a load.php server:
- *
- *   startup-static.js  the startup module (mw.loader + the register manifest),
- *                      with its trailing auto-load call removed so it does not
- *                      try to fetch the base modules over the network.
- *   modules-static.js  the full dependency closure of the page modules dumped
- *                      in combined mode, so every module is wrapped in a
- *                      self-executing mw.loader.impl() call.
- *
- * This is the JS analogue of buildStyles.php. Unlike CSS, an only=scripts dump
- * is inert (it force-marks modules 'ready', which skips execution), so the
- * closure must be dumped in combined mode and the base modules (jquery,
- * mediawiki.base) must be included explicitly.
- */
+/** Dump page JS (startup + module closure) to static files so the skin runs without load.php. */
 class BuildScripts extends Maintenance {
 	/** Module groups that are never emitted statically (mirrors Main/buildStyles). */
 	private const SKIP_GROUPS = ['noscript', 'private', 'user'];
@@ -54,28 +39,17 @@ class BuildScripts extends Maintenance {
 		}
 
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
-		// Gadgets registers its modules into the ResourceLoader at boot, before the
-		// single build process has imported the gadget definitions, so the modules
-		// are missing here. Re-register them from the (now populated) gadget repo.
+		// Gadgets registers modules at boot, before this build imported defs; re-register them here.
 		$this->registerGadgetModules($rl);
 		MediaWikiServices::getInstance()->getDBLoadBalancerFactory()->disableChronologyProtection();
 
 		// 1. Discover the modules the rendered pages actually queue.
 		$seeds = $this->collectPageModules($htmlDir);
-		// The site module (MediaWiki:Common.js plus the skin's JS) is pulled in by
-		// the startup module on a live wiki, so it never appears in a page's module
-		// queue. Seed it explicitly so that site JS runs on the static pages too.
+		// Seed 'site' (Common.js + skin JS); startup pulls it live so it is never in a page queue.
 		$seeds[] = 'site';
-		// Likewise the gadgets enabled for every reader: the Gadgets hook adds them
-		// at request time, which the static render does not reproduce, so seed them
-		// so default gadgets are bundled too.
+		// Seed default-on gadgets; the Gadgets hook adds them per-request, not in static render.
 		$seeds = array_merge($seeds, $this->defaultGadgetModules());
-		// SifterSearch serves search from a static Pagefind bundle, so the native
-		// search module can run offline once it is in the bundle. It is loaded
-		// lazily on search-box focus and so never appears in a page's module queue;
-		// seed the search module mediawiki.page.ready will load (after the
-		// SkinPageReadyConfig hook, which SifterSearch rewrites to its own
-		// Pagefind-backed module) so its closure (codex/vue) is bundled too.
+		// Seed the lazy search module (loaded on focus, never in page queue) so its closure bundles.
 		if (ExtensionRegistry::getInstance()->isLoaded('SifterSearch')) {
 			$searchModule = $this->resolveSearchModule($rl, $wgLanguageCode, $wgDefaultSkin);
 			if ($searchModule !== null && $rl->isModuleRegistered($searchModule)) {
@@ -85,8 +59,7 @@ class BuildScripts extends Maintenance {
 		// 2. Expand to the full dependency closure, plus the implicit base modules.
 		$closure = $this->resolveClosure($rl, $seeds, $wgLanguageCode, $wgDefaultSkin);
 
-		// 3. Dump startup and neutralise its auto-load of RLPAGEMODULES (which would
-		//    otherwise fetch the base modules from load.php and 404 on a static host).
+		// 3. Dump startup; strip its RLPAGEMODULES auto-load (would 404 fetching base from load.php).
 		$startup = $this->dump($rl, ['startup'], $wgLanguageCode, $wgDefaultSkin, 'scripts', ['raw' => '1']);
 		$startup = str_replace('mw.loader.load(window.RLPAGEMODULES||[]);', '', $startup);
 		file_put_contents("$outDir/startup-static.js", $startup, LOCK_EX);
@@ -95,8 +68,7 @@ class BuildScripts extends Maintenance {
 		$bundle = $this->dump($rl, $closure, $wgLanguageCode, $wgDefaultSkin, null, []);
 		file_put_contents("$outDir/modules-static.js", $bundle, LOCK_EX);
 
-		// The combined bundle embeds icon-module CSS that still points at the
-		// load.php image endpoint; localize those references to local files too.
+		// Combined bundle embeds icon CSS pointing at load.php images; localize them to local files.
 		AssetLocalizer::localizeImages(
 			$rl,
 			$outDir,
@@ -108,10 +80,7 @@ class BuildScripts extends Maintenance {
 		$this->output('Wrote startup-static.js and modules-static.js (' . count($closure) . " modules)\n");
 	}
 
-	/**
-	 * Register every gadget's ResourceLoader module on the given loader, mirroring
-	 * the Gadgets extension's own registration. No-op without the extension.
-	 */
+	/** Register each gadget's RL module, mirroring the Gadgets extension. No-op if absent. */
 	private function registerGadgetModules(ResourceLoader $rl): void {
 		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
 		if (!class_exists($repoClass)) {
@@ -130,11 +99,7 @@ class BuildScripts extends Maintenance {
 		}
 	}
 
-	/**
-	 * @return string[] Module names of the gadgets enabled for every reader (so
-	 *   they can be bundled like the page's own modules), or an empty array when
-	 *   the Gadgets extension is not loaded.
-	 */
+	/** @return string[] Module names of default-on gadgets, or [] without the Gadgets extension. */
 	private function defaultGadgetModules(): array {
 		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
 		if (!class_exists($repoClass)) {
@@ -153,9 +118,7 @@ class BuildScripts extends Maintenance {
 		return $modules;
 	}
 
-	/**
-	 * @return string[] The union of the RLPAGEMODULES lists across all pages.
-	 */
+	/** @return string[] The union of the RLPAGEMODULES lists across all pages. */
 	private function collectPageModules(string $htmlDir): array {
 		$modules = [];
 		foreach (glob("$htmlDir/*.html") as $file) {
@@ -172,11 +135,7 @@ class BuildScripts extends Maintenance {
 		return array_keys($modules);
 	}
 
-	/**
-	 * @return string|null The search module mediawiki.page.ready lazy-loads on
-	 *   focus, after the SkinPageReadyConfig hook (which the active skin and
-	 *   SifterSearch use to point it at their own module), or null if search is off.
-	 */
+	/** @return string|null Search module page.ready lazy-loads on focus, or null if search is off. */
 	private function resolveSearchModule(ResourceLoader $rl, string $lang, string $skin): ?string {
 		$query = ResourceLoader::makeLoaderQuery([], $lang, $skin, null, null, Context::DEBUG_OFF, null);
 		$context = new Context($rl, new FauxRequest($query));
@@ -188,9 +147,7 @@ class BuildScripts extends Maintenance {
 		return $config['search'] ?? false ? $config['searchModule'] ?? null : null;
 	}
 
-	/**
-	 * @return string[] The full dependency closure, including the base modules.
-	 */
+	/** @return string[] The full dependency closure, including the base modules. */
 	private function resolveClosure(ResourceLoader $rl, array $seeds, string $lang, string $skin): array {
 		$query = ResourceLoader::makeLoaderQuery([], $lang, $skin, null, null, Context::DEBUG_OFF, null);
 		$context = new Context($rl, new FauxRequest($query));
@@ -218,8 +175,7 @@ class BuildScripts extends Maintenance {
 			}
 		}
 
-		// jquery and mediawiki.base are implicit base modules; they never appear in
-		// getDependencies() but mw.loader blocks every module until they are ready.
+		// jquery/mediawiki.base are implicit base modules: absent from getDependencies() but required.
 		$resolved['jquery'] = true;
 		$resolved['mediawiki.base'] = true;
 		return array_keys($resolved);

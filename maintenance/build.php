@@ -19,21 +19,7 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-/**
- * Build the whole static site.
- *
- * Run without WIKVEN_BUILD_SKIN this is the orchestrator: it populates the wiki
- * once (set the main page, import images and wikitext, run queued jobs) and then
- * renders each enabled skin, re-invoking itself with WIKVEN_BUILD_SKIN set so
- * every skin gets a fresh MediaWiki boot and never inherits another skin's
- * cached state.
- *
- * A per-skin pass (WIKVEN_BUILD_SKIN set) renders the already-imported content
- * into that skin's output directory: (re)build the file cache, dump styles and
- * scripts, rewrite them for the static host, store images locally, and give the
- * files readable names. The main skin lands in the dist root, others in
- * dist/<skin>/ (see WikvenSettings).
- */
+/** Build the static site: populate the wiki, then render each enabled skin in a fresh boot. */
 class Build extends Maintenance {
 	public function __construct() {
 		parent::__construct();
@@ -41,9 +27,7 @@ class Build extends Maintenance {
 	}
 
 	public function execute() {
-		// A per-skin pass (WIKVEN_BUILD_SKIN set) renders the imported content in
-		// one skin; the orchestrating run populates the wiki, then spawns a pass
-		// per enabled skin.
+		// WIKVEN_BUILD_SKIN set renders one skin; orchestrator populates then spawns a pass per skin.
 		if ((string)getenv('WIKVEN_BUILD_SKIN') !== '') {
 			$this->renderSkin();
 			return;
@@ -71,17 +55,11 @@ class Build extends Maintenance {
 		}
 	}
 
-	/**
-	 * Render one enabled skin in a fresh MediaWiki boot by re-invoking this script
-	 * with WIKVEN_BUILD_SKIN set. A fresh process gives the pass its own
-	 * $wgDefaultSkin and output directory without inheriting cached skin or
-	 * ResourceLoader state. Re-invocation mirrors however this process started:
-	 * plain php exposes PHP_BINARY, the embedded FrankenPHP binary leaves it empty
-	 * and is re-run as "<self> php-cli".
-	 */
+	/** Render one skin in a fresh boot by re-invoking this script with WIKVEN_BUILD_SKIN set. */
 	private function renderSkinPass(string $skin): void {
 		$self = PHP_BINARY;
 		$prefix = [$self];
+		// Embedded FrankenPHP leaves PHP_BINARY empty; re-run the binary itself as "<self> php-cli".
 		if ($self === '' || !is_executable($self)) {
 			$self = is_link('/proc/self/exe') ? ( readlink('/proc/self/exe') ?: '' ) : '';
 			$prefix = [$self, 'php-cli'];
@@ -90,8 +68,7 @@ class Build extends Maintenance {
 			$this->fatalError('Wikven: cannot locate the PHP executable to render skins');
 		}
 
-		// run.php is resolved relative to the install root (required by the binary's
-		// php-cli), so run the child from there; the script itself is absolute.
+		// run.php resolves relative to the install root (binary php-cli needs it), so chdir there.
 		chdir($GLOBALS['IP']);
 		$command = array_merge($prefix, ['maintenance/run.php', __FILE__]);
 
@@ -109,10 +86,7 @@ class Build extends Maintenance {
 		}
 	}
 
-	/**
-	 * Render the already-imported content in the skin selected by
-	 * WIKVEN_BUILD_SKIN, into that skin's output directory.
-	 */
+	/** Render the already-imported content in the WIKVEN_BUILD_SKIN skin's output directory. */
 	private function renderSkin(): void {
 		$ip = $GLOBALS['IP'];
 		$own = __DIR__;
@@ -128,22 +102,14 @@ class Build extends Maintenance {
 		$this->step(StoreImages::class, "$own/storeImages.php");
 		$this->step(Rename::class, "$own/rename.php");
 
-		// RebuildFileCache emits a per-page history/ tree the static host does not
-		// serve; drop it from this pass's output dir.
+		// RebuildFileCache emits a per-page history/ tree the static host won't serve; drop it.
 		$history = "$dir/history";
 		if (is_dir($history)) {
 			$this->removeDirectory($history);
 		}
 	}
 
-	/**
-	 * Empty the output directory so each build starts from a clean slate. The
-	 * dump/rewrite steps edit HTML in place and rename files, so output left by
-	 * an earlier run into a persistent (e.g. mounted) dist would otherwise
-	 * accumulate: orphaned renamed pages, doubly-rewritten image references, and
-	 * never-collected img-* files. The directory itself is kept (it may be a
-	 * mount point); only its contents are removed.
-	 */
+	/** Empty the output dir (kept, may be a mount) so in-place edits don't leave stale output. */
 	private function clearOutputDirectory(): void {
 		$dir = rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/');
 		if ($dir === '' || !is_dir($dir)) {
@@ -162,9 +128,7 @@ class Build extends Maintenance {
 		}
 	}
 
-	/**
-	 * Recursively delete a directory and everything under it.
-	 */
+	/** Recursively delete a directory and everything under it. */
 	private function removeDirectory(string $dir): void {
 		$entries = new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
@@ -180,28 +144,19 @@ class Build extends Maintenance {
 		rmdir($dir);
 	}
 
-	/**
-	 * Run one build step as a child maintenance script, setting $options on the
-	 * child before it runs.
-	 */
+	/** Run one build step as a child maintenance script, applying $options first. */
 	private function step(string $class, string $file, array $options = []): void {
 		$child = $this->createChild($class, $file);
 		foreach ($options as $name => $value) {
 			$child->setOption($name, $value);
 		}
-		// A child that returns false reports failure (e.g. ImportWikitext could
-		// not import every page); abort rather than publish a site missing
-		// content with a success exit code. Steps that return null are unaffected.
+		// A child returning false signals failure (e.g. a page didn't import); abort the build.
 		if ($child->execute() === false) {
 			$this->fatalError("Wikven: $class reported failures; aborting the build.");
 		}
 	}
 
-	/**
-	 * Upload the image files in the source directory into the File: namespace,
-	 * so pages that embed them render with local thumbnails. Runs core's
-	 * importImages.php over the source directory; non-image files are ignored.
-	 */
+	/** Import source-dir images into the File: namespace so pages render with local thumbnails. */
 	private function importImages(string $file): void {
 		$child = $this->createChild(ImportImages::class, $file);
 		$child->setArg(0, rtrim($GLOBALS['wgWikvenSourceDirectory'], '/'));
@@ -210,11 +165,7 @@ class Build extends Maintenance {
 		$child->execute();
 	}
 
-	/**
-	 * Point the wiki's main page at the configured article ($wgWikvenMainPage,
-	 * "index" by default). The article itself is imported afterwards; see
-	 * assertMainPageExists().
-	 */
+	/** Point the wiki's main page at $wgWikvenMainPage (imported later; see assertMainPageExists). */
 	private function setMainPage(): void {
 		$title = Title::newFromText('MediaWiki:Mainpage');
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
@@ -226,18 +177,9 @@ class Build extends Maintenance {
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Set the main page'));
 	}
 
-	/**
-	 * Drop footer links whose target page was not imported: the about, privacy
-	 * and disclaimer links point at project pages a static export usually has
-	 * none of, so they would 404. A site that wants one just adds the page (e.g.
-	 * a "Wikven:Privacy policy" source file) and the link is kept. The footer
-	 * omits a link when its label message is disabled, so the missing ones get
-	 * their label message blanked to "-" (the SkinAddFooterLinks hook only adds,
-	 * it cannot remove these defaults). Runs after import so the pages exist.
-	 */
+	/** Hide about/privacy/disclaimer footer links with no imported target (blank label to "-"). */
 	private function dropDeadFooterPlaces(): void {
-		// Label message (the MediaWiki: page that controls whether the link
-		// shows) => page-name message (whose page the link points at).
+		// Label message (controls whether the link shows) => page-name message (the link's target).
 		$places = [
 			'Privacy' => 'privacypage',
 			'Aboutsite' => 'aboutpage',
@@ -257,14 +199,7 @@ class Build extends Maintenance {
 		}
 	}
 
-	/**
-	 * Drop the dead link from the category footer's "Categories" label, which
-	 * points at the Special:Categories page a static export has no copy of. The
-	 * skin renders the label as plain text when the "pagecategorieslink" message
-	 * resolves to no title, so blank that message. The category entries
-	 * themselves stay as they are: a category with an imported (or exported)
-	 * page keeps its link, one without it is a red link, like any other.
-	 */
+	/** Blank "pagecategorieslink" so the category label isn't a dead Special:Categories link. */
 	private function dropDeadCategoryLink(): void {
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		$title = Title::newFromText('MediaWiki:Pagecategorieslink');
@@ -274,12 +209,7 @@ class Build extends Maintenance {
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Drop the dead category link'));
 	}
 
-	/**
-	 * Generate a Version page (mirroring Special:Version, which a static export
-	 * has no server to serve) listing the installed software, extensions and
-	 * skins. Skipped when $wgWikvenVersionPage is empty or the site already
-	 * provides a same-named page.
-	 */
+	/** Generate a Version page (static Special:Version) listing software, extensions and skins. */
 	private function setVersionPage(): void {
 		$name = $GLOBALS['wgWikvenVersionPage'] ?? 'Version';
 		if ($name === '') {
@@ -310,8 +240,7 @@ class Build extends Maintenance {
 		}
 		$text .= "|}\n\n";
 
-		// Split the registered components into extensions and skins (skins live
-		// under skins/), each in its own section as Special:Version does.
+		// Split components into extensions and skins (skins live under skins/), each in its own section.
 		$extensions = [];
 		$skins = [];
 		foreach (ExtensionRegistry::getInstance()->getAllThings() as $thingName => $credits) {
@@ -331,18 +260,12 @@ class Build extends Maintenance {
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Generate the version page'));
 	}
 
-	/**
-	 * A message in the wiki's content language, for the generated version page
-	 * (which is content, not interface chrome, so it follows the site language).
-	 */
+	/** A message in the wiki's content language (the version page is content, not UI chrome). */
 	private function contentMsg(string $key): string {
 		return wfMessage($key)->inContentLanguage()->text();
 	}
 
-	/**
-	 * A wikitext table of installed components (extensions or skins) with their
-	 * versions and project links, under the given section/name-column messages.
-	 */
+	/** A wikitext table of components with versions and project links, under the given messages. */
 	private function componentTable(string $headingKey, string $nameColKey, array $things): string {
 		if (!$things) {
 			return '';
@@ -364,11 +287,7 @@ class Build extends Maintenance {
 		return $text;
 	}
 
-	/**
-	 * Fail the build if the configured main page was not imported. Without this
-	 * the main page points at a non-existent article, so the static host serves
-	 * no page at the site root while the build otherwise reports success.
-	 */
+	/** Fail the build if the configured main page wasn't imported (else the site root 404s). */
 	private function assertMainPageExists(): void {
 		$name = $GLOBALS['wgWikvenMainPage'];
 		$title = Title::newFromText($name);
