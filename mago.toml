@@ -9,7 +9,7 @@
 php-version = "8.1"
 
 [source]
-paths = ["includes", "maintenance", "tests", "WikvenSettings.php"]
+paths = ["includes", "maintenance", "tests"]
 
 [formatter]
 print-width = 120

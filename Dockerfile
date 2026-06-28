@@ -13,7 +13,7 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 COPY ./ /var/www/html/extensions/Wikven
-COPY WikvenSettings.php /var/www/html/
+COPY includes/WikvenSettings.php /var/www/html/
 
 COPY bin/run /usr/local/bin/run
 # The entry point is wikven's run script; the command is the subcommand it

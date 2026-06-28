@@ -8,7 +8,7 @@ on:
       - 'docs/**'
       - 'Dockerfile'
       - 'bin/run'
-      - 'WikvenSettings.php'
+      - 'default.yml'
       - 'extension.json'
       - 'includes/**'
       - 'maintenance/**'
