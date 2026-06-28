@@ -12,17 +12,7 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-/**
- * Rewrite the cached HTML so the skin JavaScript loads from the static bundle
- * produced by buildScripts.php instead of from load.php (which does not exist
- * on a static host). For each page this:
- *
- *   - empties the inline RLPAGEMODULES queue,
- *   - replaces the async load.php startup <script> with local startup-static.js
- *     + modules-static.js + an explicit mw.loader.load() of the page modules,
- *   - drops the leftover combined load.php stylesheet link (the per-module local
- *     <link>s emitted by the Main hook already cover those styles).
- */
+/** Rewrite cached HTML so skin JS loads from the static bundle instead of load.php. */
 class RewriteScripts extends Maintenance {
 	/** Module groups that are not shipped statically (mirrors Main/buildScripts). */
 	private const SKIP_GROUPS = ['noscript', 'private', 'user'];
@@ -45,16 +35,13 @@ class RewriteScripts extends Maintenance {
 
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
 
-		// SifterSearch serves search from a static Pagefind bundle and keeps the
-		// native search box working offline (buildScripts bundles its module
-		// closure), so the search box is left in place when it is enabled.
+		// With SifterSearch the static Pagefind bundle keeps the native search box working, so keep it.
 		$sifterEnabled = ExtensionRegistry::getInstance()->isLoaded('SifterSearch');
 
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);
 
-			// The modules to re-trigger: the page's own queue minus the groups we do
-			// not ship, so we never load() a module that is not in the bundle.
+			// Modules to re-trigger: page queue minus groups/modules we do not ship.
 			$trigger = [];
 			if (preg_match('/RLPAGEMODULES=(\[[^\]]*\])/', $html, $m)) {
 				$list = json_decode($m[1], true);
@@ -72,9 +59,7 @@ class RewriteScripts extends Maintenance {
 				}
 			}
 
-			// Make sure the site JS (MediaWiki:Common.js plus the skin's JS) and the
-			// gadgets enabled for every reader run: buildScripts bundles them, but
-			// the static render does not queue them, so trigger them here. Dedupe.
+			// Also trigger site JS and default gadgets: bundled but not queued by the static render. Dedupe.
 			$trigger[] = 'site';
 			$trigger = array_merge($trigger, $this->defaultGadgetModules());
 			$trigger = array_values(array_unique($trigger));
@@ -108,9 +93,7 @@ class RewriteScripts extends Maintenance {
 				$html
 			);
 
-			// The dropped combined link carried the site styles (MediaWiki:Common.css
-			// and the skin's site CSS); buildStyles wrote them to their own file.
-			// Link it last, so it wins the cascade over the skin's defaults.
+			// Re-link the site styles last (their own file) so they win the cascade over the skin defaults.
 			if ($hasSiteStyles) {
 				$html = str_replace(
 					'</head>',
@@ -119,27 +102,20 @@ class RewriteScripts extends Maintenance {
 				);
 			}
 
-			// No logo is configured, so the placeholder "change your logo" asset
-			// would 404. Neutralize its reference (the logo itself is CSS-hidden).
+			// No logo configured: neutralize the placeholder asset reference so it does not 404.
 			$html = preg_replace(
 				'#(["\'(])[^"\')]*change-your-logo[^"\')]*\.svg#',
 				'$1data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22/%3E',
 				$html
 			);
 
-			// Without SifterSearch, search cannot work on a static host (it needs the
-			// API) and the JS search widget lazily fetches codex/vue from load.php, so
-			// drop the search boxes and the skin-vector-search-vue body class that
-			// makes the sticky header load the search module, so nothing mounts and
-			// nothing is fetched. With SifterSearch the box is kept (see above).
+			// Without SifterSearch, drop the search boxes and body class so nothing mounts or fetches.
 			if (!$sifterEnabled) {
 				$html = $this->removeElements($html, 'vector-search-box-vue');
 				$html = str_replace(' skin-vector-search-vue', '', $html);
 			}
 
-			// The appearance menu (dark mode / width) pulls in codex+vue from
-			// load.php for its widgets, which 404s and cannot work statically.
-			// Remove it so it stops fetching.
+			// Remove the appearance menu: its widgets pull codex+vue from load.php, which 404s statically.
 			$html = $this->removeElements($html, 'id="vector-appearance"');
 
 			file_put_contents($file, $html, LOCK_EX);
@@ -147,9 +123,7 @@ class RewriteScripts extends Maintenance {
 	}
 
 	/**
-	 * @return string[] Module names of the gadgets enabled for every reader (so
-	 *   they are triggered like the page's own modules), or an empty array when
-	 *   the Gadgets extension is not loaded.
+	 * @return string[] Module names of default-on gadgets, or empty when Gadgets is not loaded.
 	 */
 	private function defaultGadgetModules(): array {
 		$repoClass = 'MediaWiki\\Extension\\Gadgets\\GadgetRepo';
@@ -169,10 +143,7 @@ class RewriteScripts extends Maintenance {
 		return $modules;
 	}
 
-	/**
-	 * Remove every balanced <div ...$marker...>...</div> from the HTML, where
-	 * $marker is a substring of the opening tag. Handles nested <div>s.
-	 */
+	/** Remove every balanced <div ...$marker...>...</div> (nested-aware) from the HTML. */
 	private function removeElements(string $html, string $marker): string {
 		while (true) {
 			$start = $this->findOpeningDiv($html, $marker);
@@ -207,7 +178,6 @@ class RewriteScripts extends Maintenance {
 
 	/**
 	 * Find the end of the <div> opening at byte offset $start.
-	 *
 	 * @return int Byte offset just past the matching </div>, or -1.
 	 */
 	private function matchingDivEnd(string $html, int $start): int {

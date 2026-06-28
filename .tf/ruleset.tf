@@ -8,11 +8,7 @@ resource "github_repository_ruleset" "default" {
   target      = "branch"
   enforcement = "active"
 
-  # Let repository admins and the chaotic-ground/publishers team bypass the
-  # rules. Gated on github_actions: the Actions GITHUB_TOKEN cannot read a
-  # ruleset's bypass actors (they are admin-only), so in CI it sees an empty
-  # set. Declaring them only on local PAT runs keeps both the stateless CI plan
-  # (empty == empty) and local runs (two == two) free of drift.
+  # Declare bypass actors only on local PAT runs; they're admin-only and unreadable by CI's token.
   dynamic "bypass_actors" {
     for_each = var.github_actions ? [] : [
       { actor_id = 5, actor_type = "RepositoryRole" }, # Repository admin
@@ -33,14 +29,12 @@ resource "github_repository_ruleset" "default" {
   }
 
   rules {
-    # Protect the default branch: block deletion and force-pushes, and require a
-    # pull request for every change (so direct pushes to main are not allowed).
+    # Protect default branch: block deletion and force-pushes, and require a PR for every change.
     deletion         = true
     non_fast_forward = true
     update           = false
 
-    # Merge commits are the only allowed merge method, so a linear history must
-    # not be required (requiring it would forbid merge commits).
+    # Merge commits are the only allowed merge method, so linear history must not be required.
     required_linear_history = false
     required_signatures     = false
 
@@ -52,10 +46,7 @@ resource "github_repository_ruleset" "default" {
       required_review_thread_resolution = false
     }
 
-    # Require status checks to pass before a pull request can be merged: the
-    # Lint workflow jobs (.github/workflows/lint.yml) and the semantic pull
-    # request title check. integration_id 15368 is the GitHub Actions app, so
-    # only its check runs satisfy these.
+    # Required: Lint jobs + semantic-pull-request (integration_id 15368 = GitHub Actions app).
     required_status_checks {
       do_not_enforce_on_create             = false
       strict_required_status_checks_policy = false

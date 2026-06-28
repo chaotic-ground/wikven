@@ -2,15 +2,9 @@
 
 wfLoadExtension('Wikven');
 
-// Build mechanics. The user-overridable MediaWiki defaults live in default.yml;
-// only the static-export internals that are not plain config stay here.
+// Static-export build internals; user-overridable defaults live in default.yml.
 
-// All filesystem locations derive from one working directory so the same build
-// works in the Docker image (where /workspace is mounted) and in a standalone
-// binary (where it points at a writable host directory). Layout:
-//   $WIKVEN_WORKDIR/src    input (read-only)
-//   $WIKVEN_WORKDIR/dist   output (the rendered file cache)
-//   $WIKVEN_WORKDIR/.cache ephemeral state (uploads, l10n + object cache, tmp)
+// Paths derive from one workdir (src input, dist output, .cache ephemeral state).
 $wikvenWorkEnv = getenv('WIKVEN_WORKDIR');
 $wikvenWork = $wikvenWorkEnv !== false && $wikvenWorkEnv !== '' ? $wikvenWorkEnv : '/workspace';
 $wikvenSrc = "$wikvenWork/src";
@@ -24,14 +18,10 @@ $wgFileCacheDirectory = $wikvenDist;
 $wgWikvenSourceDirectory = $wikvenSrc;
 $wgWikvenHtmlDirectory = $wikvenDist;
 
-// Let pages opt out of indexing with __NOINDEX__ in any namespace (by default
-// content namespaces are exempt from user robot control).
+// Let pages opt out of indexing with __NOINDEX__ in any namespace.
 $wgExemptFromUserRobotsControl = [];
 
-// Standalone-binary mode (WIKVEN_WORKDIR set): keep every ephemeral write out of
-// the install dir, which in the embedded binary is an extracted, throwaway tree.
-// In the Docker image WIKVEN_WORKDIR is unset, the install dir is writable, and
-// MediaWiki's defaults are left untouched (no behavior change).
+// Standalone-binary mode (WIKVEN_WORKDIR set): keep ephemeral writes out of the install dir.
 if ($wikvenWorkEnv !== false && $wikvenWorkEnv !== '') {
 	$wgUploadDirectory = "$wikvenCache/uploads";
 	$wgCacheDirectory = "$wikvenCache/mw";
@@ -43,8 +33,7 @@ if ($wikvenWorkEnv !== false && $wikvenWorkEnv !== '') {
 	}
 }
 
-// Ship a small built-in favicon so browsers do not 404 on /favicon.ico.
-// Overridable from .wikven.yaml via "config": { "Favicon": "..." }.
+// Built-in favicon so browsers do not 404; overridable via config.Favicon.
 $wgFavicon = 'data:image/svg+xml,'
 . rawurlencode(
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
@@ -55,16 +44,7 @@ $wgFavicon = 'data:image/svg+xml,'
 
 unset($wgFooterIcons['poweredby']);
 
-// Image backend, detected at run time so the build uses whatever the host has.
-// Raster thumbnails (png/jpg/gif/webp) go through ImageMagick when its `convert`
-// (or `magick`) is on PATH, otherwise the GD extension. SVG goes through
-// rsvg-convert when present, otherwise it is served inline as sanitized native
-// SVG. SVG is deliberately never routed through ImageMagick, whose built-in
-// 'ImageMagick' converter calls the `convert` binary that does not exist on
-// ImageMagick-7-only hosts. This runs before the config load below, so an
-// explicit value in .wikven.yaml still wins; default.yml does not set the
-// backend. In the Docker image both tools are present, so this reproduces the
-// previous ImageMagick + rsvg configuration exactly.
+// Detect image backend at run time; SVG never via ImageMagick (IM7 lacks `convert`).
 $wikvenFindExe = static function (array $names) {
 	$path = getenv('PATH') ?: '/usr/local/bin:/usr/bin:/bin';
 	foreach ($names as $name) {
@@ -97,24 +77,14 @@ if ($wikvenConvert === null || $wikvenRsvg === null) {
 	);
 }
 
-// Configuration: wikven's defaults (default.yml) and then the site's own
-// .wikven.yaml (or .wikven.json) on top, loaded through MediaWiki's own settings
-// system ($wgSettings, available here because LocalSettings.php runs inside it).
-// The "config" map (variables without the "wg" prefix) is fed to $wgSettings so
-// keys merge per their declared strategy and can be schema-validated; the
-// "extensions" and "skins" lists are collected here and loaded leniently below,
-// because the settings loader fatals on a name it cannot find whereas wikven
-// skips an unbundled one. The site file may be any accepted name (.wikven.yaml,
-// .wikven.yml, .wikven.json, or the plain forms; YAML is a superset of JSON).
+// Load config: default.yml then the site file via $wgSettings; ext/skin lists loaded leniently.
 global $wgSettings;
 
-// Wikven's own config variables, used to flag a misspelled one (which would set
-// a global nothing reads); the canonical names come from extension.json.
+// Known config names from extension.json, used to flag misspelled keys.
 $wikvenManifest = json_decode(file_get_contents("$IP/extensions/Wikven/extension.json"), true);
 $wikvenKnownConfig = array_keys($wikvenManifest['config'] ?? []);
 
-// This runs while LocalSettings.php is read, before the extension registry has
-// activated Wikven's autoloader, so load the (dependency-free) helper directly.
+// Autoloader not active yet at LocalSettings time; load the helper directly.
 require_once "$IP/extensions/Wikven/includes/SiteConfig.php";
 
 // Pick the highest-precedence config name present; warn about any others.
@@ -127,9 +97,7 @@ if ($wikvenSiteFile !== null && $wikvenLocated['ignored'] !== []) {
 	);
 }
 
-// The defaults, then the site file on top. For each, hand its "config" map to
-// $wgSettings (so keys merge per their declared strategy) and collect its
-// extension/skin names for the lenient loading below.
+// Defaults then site file: feed each "config" map to $wgSettings, collect ext/skin names.
 $config = ['extensions' => [], 'skins' => []];
 $wikvenYaml = new MediaWiki\Settings\Source\Format\YamlFormat();
 $wikvenYamlData = $wikvenYaml->decode(file_get_contents("$IP/extensions/Wikven/default.yml"));
@@ -156,19 +124,14 @@ foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {
 	$config['skins'] = array_merge($config['skins'], (array)( $wikvenData['skins'] ?? [] ));
 }
 
-// Push the merged config into globals so the logo handling below reads the final
-// values.
+// Push merged config into globals so the logo handling below reads final values.
 $wgSettings->apply();
 
-// Load each extension/skin at most once even if it appears in both the defaults
-// and the site file (or twice in one list).
+// Dedupe so each extension/skin loads at most once.
 $config['extensions'] = array_values(array_unique(array_filter($config['extensions'], 'is_string'), SORT_STRING));
 $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_string'), SORT_STRING));
 
-// Skins. Register each named skin and collect its canonical name (e.g. 'minerva'
-// can differ from the directory 'MinervaNeue', so read it from skin.json). Only
-// skins bundled in this image can be enabled; an unknown name is skipped with a
-// warning instead of aborting the whole build.
+// Register each bundled skin; canonical name (may differ from dir) read from skin.json.
 $wgWikvenSkins = [];
 foreach ($config['skins'] ?? [] as $skin) {
 	if (!is_string($skin)) {
@@ -188,31 +151,23 @@ foreach ($config['skins'] ?? [] as $skin) {
 }
 $wgWikvenSkins = array_values(array_unique($wgWikvenSkins));
 
-// The first listed skin is the site default (set unconditionally: the installer
-// has already written $wgDefaultSkin, so a !isset guard would never fire).
+// First listed skin is the site default.
 $wgWikvenMainSkin = $wgWikvenSkins[0] ?? $wgDefaultSkin;
 $wgDefaultSkin = $wgWikvenMainSkin;
 
-// Per-skin build pass. The build renders each skin in its own MediaWiki boot,
-// selected by WIKVEN_BUILD_SKIN: the main skin into the dist root, every other
-// skin into a dist/<skin>/ subdirectory. Unset (a normal single-skin build) is a
-// no-op, so the default output is unchanged.
+// Per-skin build pass: WIKVEN_BUILD_SKIN renders main skin to dist root, others to dist/<skin>/.
 $wikvenBuildSkin = getenv('WIKVEN_BUILD_SKIN');
 if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, true)) {
 	$wgDefaultSkin = $wikvenBuildSkin;
 	if ($wikvenBuildSkin !== $wgWikvenMainSkin) {
 		$wgWikvenHtmlDirectory = "$wikvenDist/$wikvenBuildSkin";
 		$wgFileCacheDirectory = $wgWikvenHtmlDirectory;
-		// Non-main skins are duplicate copies of the main skin's pages, so keep
-		// them out of search indexes (only the main skin at the dist root is
-		// indexed). Read at render time, so RebuildFileCache emits it.
+		// Non-main skins duplicate the main skin's pages; keep them out of search indexes.
 		$wgDefaultRobotPolicy = 'noindex,follow';
 	}
 }
 
-// Extensions. Only extensions bundled in this image can be enabled; a name that
-// is not installed (a typo, or a third-party extension that is not yet
-// supported) is skipped with a warning instead of aborting the whole build.
+// Load each bundled extension; an unknown name is skipped with a warning.
 foreach ($config['extensions'] ?? [] as $extension) {
 	if (!is_string($extension)) {
 		continue;
@@ -224,31 +179,16 @@ foreach ($config['extensions'] ?? [] as $extension) {
 	}
 }
 
-// Logos: WikvenLogos mirrors MediaWiki's $wgLogos, except each source is the name
-// of an image file in the source directory rather than a URL. Those files are
-// uploaded into the File: namespace at build time like any other source image, so
-// each one already has a URL; we point $wgLogos at it. The upload path is
-// predictable because uploads are stored flat (HashedUploadDirectory: false in
-// default.yml), so the URL can be built here, at config time, before the file is
-// actually uploaded later in the build. The static export then localizes that URL
-// to a single shared file alongside the HTML (storeImages.php), so the logo is not
-// inlined into every page. A value is either a file name, or (like
-// $wgLogos['wordmark'] and ['tagline']) a map with a "src" file name plus extra
-// keys such as width and height.
+// WikvenLogos mirrors $wgLogos but each src is a source-dir file name; resolve to its upload URL.
 if (!empty($wgWikvenLogos) && is_array($wgWikvenLogos)) {
-	// Map a source file name to the URL its upload will have. MediaWiki turns the
-	// file name into a File: title (spaces become underscores, and the first letter
-	// is capitalized unless $wgCapitalLinks is off, as Wikven's default keeps it),
-	// then, with flat storage, serves it from $wgUploadPath/<title>.
+	// Map a source file name to the flat-storage URL its upload will have.
 	$wikvenLogoUrl = static function ($name) use ($wikvenSrc) {
 		global $wgUploadPath, $wgScriptPath, $wgCapitalLinks;
 		if (!is_file("$wikvenSrc/" . $name)) {
 			error_log("Wikven: logo file '$name' not found in the source directory");
 			return null;
 		}
-		// $wgUploadPath is still its false default this early (MediaWiki resolves it
-		// to "$wgScriptPath/images" later, in Setup.php); resolve it the same way so
-		// the URL matches what the upload, and storeImages.php, will use.
+		// $wgUploadPath is false this early; resolve to $wgScriptPath/images as Setup.php does.
 		$uploadPath =
 			$wgUploadPath !== false && (string)$wgUploadPath !== ''
 				? $wgUploadPath

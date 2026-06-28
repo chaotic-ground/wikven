@@ -12,35 +12,7 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-/**
- * Fetch third-party extensions and skins before MediaWiki loads them.
- *
- * The `extensions:` and `skins:` lists in .wikven.yaml stay plain name lists, the
- * same shape MediaWiki's own settings format accepts. A name that is not bundled
- * in the image is fetched here, from a source declared in the `WikvenRepositories`
- * config map. Each entry picks a method by which key it carries:
- *
- *   - `tarball:`    download and extract a tarball (e.g. from ExtensionDistributor,
- *                   whose tarballs already bundle their dependencies). Add a
- *                   `sha256:` to verify the download before extracting.
- *   - `repository:` git clone. Pin it with either `commit:` (an exact SHA, the
- *                   reproducible choice) or `reference:` (a mutable tag/branch),
- *                   and `composer: true` to run composer inside the clone.
- *   - `package:`    a Composer "vendor/name:constraint" installed via the core
- *                   composer.local.json (resolved by composer-merge-plugin).
- *
- * The build downloads and runs whatever these sources resolve to (composer
- * scripts and the fetched code itself execute during the subsequent build), so
- * only trusted sources should be declared. `sha256:`/`commit:` make a fetch
- * tamper-evident and reproducible; a mutable `reference:` or a floating package
- * constraint does not.
- *
- * Whether a name is an extension or a skin is inferred from which list it appears
- * in, so it is never written twice. This runs after install but before
- * WikvenSettings is wired into LocalSettings, so its skins/extensions loops do not
- * yet fire and no "not bundled" warning is logged while a component is still being
- * fetched.
- */
+/** Fetch third-party extensions/skins declared in .wikven.yaml before MediaWiki loads them. */
 class FetchExtensions extends Maintenance {
 	public function __construct() {
 		parent::__construct();
@@ -78,8 +50,7 @@ class FetchExtensions extends Maintenance {
 			[$baseDir, $kind] = $this->target($name, $extensionNames, $skinNames);
 
 			if (isset($spec['package'])) {
-				// Composer chooses the install directory from the package, so there
-				// is nothing to place by hand; just collect the requirement.
+				// Composer picks the install dir from the package; just collect the requirement.
 				if (!is_string($spec['package']) || $spec['package'] === '') {
 					$this->fatalError("Wikven: $kind '$name' has an empty 'package'.");
 				}
@@ -91,8 +62,7 @@ class FetchExtensions extends Maintenance {
 
 			$dest = "$baseDir/$name";
 			if (is_dir($dest)) {
-				// Already bundled in the image, or cloned by an earlier run. The
-				// bundled copy wins; we never overwrite it.
+				// Already bundled or cloned by an earlier run; never overwrite it.
 				$this->output("Wikven: $kind '$name' already present, skipping.\n");
 				continue;
 			}
@@ -114,16 +84,12 @@ class FetchExtensions extends Maintenance {
 		}
 	}
 
-	/**
-	 * Read and merge default.yml + the site config file, exactly as
-	 * WikvenSettings.php does, so the fetched set matches what will be loaded.
-	 */
+	/** Merge default.yml + site config like WikvenSettings.php, so fetches match the load. */
 	private function loadConfig(string $IP): array {
 		$yaml = new YamlFormat();
 		$config = $yaml->decode(file_get_contents("$IP/extensions/Wikven/default.yml"));
 
-		// This runs before the extension registry has activated Wikven's
-		// autoloader, so load the (dependency-free) helper directly.
+		// Wikven's autoloader is not active yet; load the dependency-free helper directly.
 		require_once "$IP/extensions/Wikven/includes/SiteConfig.php";
 		$work = getenv('WIKVEN_WORKDIR');
 		$src = $work !== false && $work !== '' ? "$work/src" : '/workspace/src';
@@ -180,9 +146,7 @@ class FetchExtensions extends Maintenance {
 		return [substr($package, 0, $pos), substr($package, $pos + 1)];
 	}
 
-	/**
-	 * The lowercased, validated `sha256:` of a tarball spec, or null if absent.
-	 */
+	/** The lowercased, validated `sha256:` of a tarball spec, or null if absent. */
 	private function validatedSha256(array $spec, string $name, string $kind): ?string {
 		if (!isset($spec['sha256'])) {
 			return null;
@@ -194,10 +158,7 @@ class FetchExtensions extends Maintenance {
 		return $sha;
 	}
 
-	/**
-	 * The validated `commit:` SHA of a repository spec, or null if absent. Errors
-	 * if it is combined with `reference:`, since the two pin differently.
-	 */
+	/** The validated `commit:` SHA, or null; errors if combined with `reference:`. */
 	private function validatedCommit(array $spec, string $name, string $kind): ?string {
 		if (empty($spec['commit'])) {
 			return null;
@@ -238,9 +199,7 @@ class FetchExtensions extends Maintenance {
 		$commit = $this->validatedCommit($spec, $name, $kind);
 
 		if ($commit !== null) {
-			// Pin to an exact commit. `git clone --branch` only accepts a tag or
-			// branch, so fetch the SHA directly into a fresh repo and detach onto
-			// it (GitHub and most hosts allow fetching a reachable SHA).
+			// `git clone --branch` rejects a SHA, so fetch it into a fresh repo and detach.
 			$this->output("Wikven: cloning $kind '$name' from $repo @ $commit\n");
 			$this->run(['git', 'init', '--quiet', '--', $dest], "init $kind '$name'");
 			$this->run(['git', '-C', $dest, 'remote', 'add', 'origin', $repo], "configure $kind '$name'");
@@ -271,9 +230,7 @@ class FetchExtensions extends Maintenance {
 	}
 
 	private function installPackages(string $IP, array $packages): void {
-		// Core's composer.json merges composer.local.json via composer-merge-plugin,
-		// so registering the requirement there and running composer update at the
-		// root pulls each package (and its dependencies) into place.
+		// Core merges composer.local.json via composer-merge-plugin; require there, then update.
 		$localFile = "$IP/composer.local.json";
 		$local = is_file($localFile)
 			? ( json_decode(file_get_contents($localFile), true) ?: [] )
@@ -291,9 +248,7 @@ class FetchExtensions extends Maintenance {
 	}
 
 	/**
-	 * Run an external command, aborting the build if it fails. A declared
-	 * third-party dependency that cannot be fetched must fail loudly rather than
-	 * silently produce a wiki missing the feature.
+	 * Run an external command, aborting the build loudly if it fails.
 	 *
 	 * @param string[] $cmd
 	 */

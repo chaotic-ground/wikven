@@ -1,8 +1,4 @@
-// Package wikvencaddy registers "build" and "serve" subcommands on the wikven
-// binary, so the static site can be built with `./wikven build` and previewed
-// with `./wikven serve` instead of the longer underlying invocations. Both
-// re-invoke this same binary: build through the embedded php-cli, serve through
-// Caddy's built-in file-server.
+// Package wikvencaddy registers the "build" and "serve" subcommands on the wikven binary.
 package wikvencaddy
 
 import (
@@ -47,8 +43,7 @@ func init() {
 	})
 }
 
-// reexec runs this same binary with the given arguments, wiring through the
-// standard streams and the current environment.
+// reexec runs this same binary with the given args, wiring stdio and the current environment.
 func reexec(args ...string) (int, error) {
 	self, err := os.Executable()
 	if err != nil {

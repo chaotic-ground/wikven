@@ -16,17 +16,12 @@ class Hider implements
 
 	/** @inheritDoc */
 	public function onSidebarBeforeOutput($skin, &$sidebar): void {
-		// The toolbox is all server/special-page tools that a static export cannot
-		// serve. The search portlet is dropped too, unless SifterSearch provides
-		// static search and a skin renders its box here (rather than in the header,
-		// like Vector): then keep it so SifterSearch has a box to wire, matching how
-		// the header search box is kept (see Adder and rewriteScripts).
+		// Drop server tools a static export can't serve; keep SEARCH only if SifterSearch wires a box.
 		$keys = ['TOOLBOX'];
 		if (!ExtensionRegistry::getInstance()->isLoaded('SifterSearch')) {
 			$keys[] = 'SEARCH';
 		}
-		// Empty rather than unset: some skins (e.g. Minerva) read these keys and
-		// require them to stay arrays.
+		// Empty rather than unset: some skins (e.g. Minerva) require these keys to stay arrays.
 		foreach ($keys as $key) {
 			if (isset($sidebar[$key])) {
 				$sidebar[$key] = [];
@@ -36,20 +31,14 @@ class Hider implements
 
 	/** @inheritDoc */
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
-		// Hide the personal tools (login, talk, preferences, etc.); this replaces the
-		// removed PersonalUrls hook. Empty the groups rather than unset them: some
-		// skins (e.g. Minerva) read these keys and require them to stay arrays.
+		// Hide personal tools (login, talk, prefs); empty groups so skins like Minerva keep them.
 		foreach (['user-menu', 'user-page', 'user-interface-preferences', 'notifications'] as $key) {
 			if (isset($links[$key])) {
 				$links[$key] = [];
 			}
 		}
 
-		// The edit and history tabs only make sense when they point at the
-		// external URLs configured via $wgWikvenEditUrl / $wgWikvenHistoryUrl, and
-		// at a page with a source file behind them. A generated page (e.g.
-		// Version) has none, so its links would 404; without the URLs, GetLocalURL
-		// falls back to a self-link (./Page.html). Drop the tabs in either case.
+		// Edit/history tabs need configured external URLs and a source file; else they 404 or self-link.
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
 		$title = $sktemplate->getTitle();
 		$hasSource = $title && SourceFile::exists($title->getPrefixedText());

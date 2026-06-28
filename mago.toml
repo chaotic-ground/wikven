@@ -1,11 +1,6 @@
-# A mago configuration that approximates the MediaWiki coding style
-# (mediawiki/mediawiki-codesniffer) as closely as mago allows.
-# Derived from https://github.com/chaotic-ground/mago-mediawiki-style,
-# which tracks how far this configuration is from a zero diff against
-# MediaWiki core and lists the differences that cannot be configured away.
+# Approximates MediaWiki coding style; tracked at chaotic-ground/mago-mediawiki-style.
 
-# MediaWiki 1.45 (the base image, see Dockerfile) requires PHP 8.1+, so lint
-# against 8.1 as the floor even though the shipped binary runs a newer PHP.
+# MediaWiki 1.45 (base image) needs PHP 8.1+, so lint against 8.1 though the binary runs newer.
 php-version = "8.1"
 
 [source]
