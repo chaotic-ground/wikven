@@ -34,8 +34,8 @@ config:
       repository: https://github.com/StarCitizenTools/mediawiki-extensions-TabberNeue.git
       reference: v4.0.0
     # Citizen is a third-party skin; its search is its own REST-backed command
-    # palette, which has no backend on a static export, so it is hidden (see
-    # Adder.php). The other skins keep working SifterSearch search.
+    # palette with no backend on a static export, so MediaWiki:Citizen.css hides
+    # it. The other skins keep working SifterSearch search.
     Citizen:
       repository: https://github.com/StarCitizenTools/mediawiki-skins-Citizen.git
       reference: v3.17.0

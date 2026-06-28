@@ -1,0 +1,22 @@
+/* Static-export fixes for the Citizen skin, which this site fetches rather than wikven bundling
+ * it, so these live here instead of in wikven's own skin handling. */
+
+/* A static site has no login session or REST search backend, so Citizen's personal menu,
+ * preferences dropdown ("Couldn't load preferences"), and command-palette search are dead. */
+.citizen-userMenu,
+.citizen-preferences-dropdown,
+.citizen-search {
+	display: none !important;
+}
+
+/* Common.css recolours the external-link arrow but leaves the skin to size and position it.
+ * Citizen's positioning rule is missing from the export, so the arrow tiles as repeated boxes;
+ * drop it (external links keep their colour, just without the indicator). */
+.mw-parser-output a.external {
+	background: none;
+	padding-inline-end: 0;
+}
+
+.mw-parser-output a.external::after {
+	content: none;
+}
