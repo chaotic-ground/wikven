@@ -7,7 +7,7 @@ on:
     paths:
       - 'docs/**'
       - 'Dockerfile'
-      - 'bin/run'
+      - 'bin/entrypoint'
       - 'default.yml'
       - 'extension.json'
       - 'includes/**'

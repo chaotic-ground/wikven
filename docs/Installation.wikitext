@@ -33,7 +33,7 @@ cd wikven
 docker build -t wikven .
 </syntaxhighlight>
 
-This produces a local <code>wikven</code> image you run exactly like the published one. To build the standalone binary from source instead, see [https://github.com/chaotic-ground/wikven/blob/main/Dockerfile.binary <code>Dockerfile.binary</code>].
+This produces a local <code>wikven</code> image you run exactly like the published one. To build the standalone binary from source instead, see [https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile <code>binary.Dockerfile</code>].
 
 ----
 
