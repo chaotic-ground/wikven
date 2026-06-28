@@ -1,3 +1,4 @@
+---
 name: Nightly binary
 
 # Build the standalone binary from the tip of main every day and publish it as a
@@ -21,7 +22,7 @@ jobs:
     outputs:
       proceed: ${{ steps.check.outputs.proceed }}
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -41,11 +42,11 @@ jobs:
     if: needs.gate.outputs.proceed == 'true'
     runs-on: ubuntu-latest
     permissions:
-      contents: write # create the dated pre-release
+      contents: write  # create the dated pre-release
     outputs:
       tag: ${{ steps.meta.outputs.tag }}
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           persist-credentials: false
 
@@ -72,10 +73,10 @@ jobs:
   binary:
     needs: prepare
     permissions:
-      contents: write # gh release upload
-      id-token: write # sign the build provenance attestation
-      attestations: write # write the build provenance attestation
-    uses: ./.github/workflows/build-binary.yaml
+      contents: write  # gh release upload
+      id-token: write  # sign the build provenance attestation
+      attestations: write  # write the build provenance attestation
+    uses: ./.github/workflows/build-binary.yml
     with:
       tag: ${{ needs.prepare.outputs.tag }}
 
@@ -83,9 +84,9 @@ jobs:
     needs: [prepare, binary]
     runs-on: ubuntu-latest
     permissions:
-      contents: write # publish (un-draft) the release
+      contents: write  # publish (un-draft) the release
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           persist-credentials: false
 

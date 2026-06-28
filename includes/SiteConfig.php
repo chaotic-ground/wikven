@@ -3,11 +3,48 @@
 namespace MediaWiki\Extension\Wikven;
 
 /**
- * Helpers for a site's .wikven.yaml / .wikven.json configuration file.
+ * Helpers for a site's configuration file (any of the accepted .wikven.yaml /
+ * .wikven.yml / .wikven.json names, dotted or plain; see CONFIG_FILENAMES).
  */
 class SiteConfig {
 	/** Top-level keys the settings format recognises. */
 	private const TOP_LEVEL_KEYS = ['config', 'extensions', 'skins'];
+
+	/**
+	 * The site-config file names wikven accepts in a source directory, in
+	 * precedence order (the first one present wins). Dotted before plain, YAML
+	 * before JSON, and the established ".yaml" spelling before ".yml".
+	 */
+	public const CONFIG_FILENAMES = [
+		'.wikven.yaml',
+		'.wikven.yml',
+		'.wikven.json',
+		'wikven.yaml',
+		'wikven.yml',
+		'wikven.json'
+	];
+
+	/**
+	 * Find the site config file in a source directory. Returns the path of the
+	 * highest-precedence accepted name present (or null when none is), together
+	 * with any lower-precedence names also present, which are ignored.
+	 *
+	 * @param string $srcDir The source directory to look in.
+	 * @return array{path: ?string, ignored: string[]}
+	 */
+	public static function locate(string $srcDir): array {
+		$dir = rtrim($srcDir, '/');
+		$found = [];
+		foreach (self::CONFIG_FILENAMES as $name) {
+			if (is_file("$dir/$name")) {
+				$found[] = "$dir/$name";
+			}
+		}
+		return [
+			'path' => $found[0] ?? null,
+			'ignored' => array_slice($found, 1)
+		];
+	}
 
 	/**
 	 * Lint decoded site-config contents, returning a warning for each mistake the

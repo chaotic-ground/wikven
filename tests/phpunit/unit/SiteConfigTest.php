@@ -58,4 +58,50 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 			SiteConfig::lint(['config' => ['Sitename' => 'S', 'Localtimezone' => 'UTC']], self::KNOWN)
 		);
 	}
+
+	public function testLocateFindsNothingInEmptyDir() {
+		$dir = $this->makeTempDir();
+		$this->assertSame(['path' => null, 'ignored' => []], SiteConfig::locate($dir));
+	}
+
+	public function testLocateReturnsTheSingleFilePresent() {
+		$dir = $this->makeTempDir();
+		touch("$dir/wikven.yml");
+		$located = SiteConfig::locate($dir);
+		$this->assertSame("$dir/wikven.yml", $located['path']);
+		$this->assertSame([], $located['ignored']);
+	}
+
+	public function testLocatePrefersHigherPrecedenceAndIgnoresTheRest() {
+		$dir = $this->makeTempDir();
+		// Lowest, a middle one, and the highest-precedence name, out of order.
+		touch("$dir/wikven.json");
+		touch("$dir/.wikven.yml");
+		touch("$dir/.wikven.yaml");
+		$located = SiteConfig::locate($dir);
+		$this->assertSame("$dir/.wikven.yaml", $located['path']);
+		$this->assertSame(["$dir/.wikven.yml", "$dir/wikven.json"], $located['ignored']);
+	}
+
+	private function makeTempDir(): string {
+		$dir = sys_get_temp_dir() . '/wikven-locate-' . uniqid();
+		mkdir($dir);
+		$this->dirsToClean[] = $dir;
+		return $dir;
+	}
+
+	/** @var string[] */
+	private array $dirsToClean = [];
+
+	protected function tearDown(): void {
+		foreach ($this->dirsToClean as $dir) {
+			foreach (SiteConfig::CONFIG_FILENAMES as $name) {
+				if (is_file("$dir/$name")) {
+					unlink("$dir/$name");
+				}
+			}
+			rmdir($dir);
+		}
+		parent::tearDown();
+	}
 }

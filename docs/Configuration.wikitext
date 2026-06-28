@@ -2,9 +2,9 @@ __TOC__
 
 Configuration lives in a <code>.wikven.yaml</code> file in your source directory. It follows the same shape as {{ml|Manual:YAML settings file format|MediaWiki's own YAML settings format}}: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
 
-The file may also be written as <code>.wikven.json</code> with the same structure. When both files are present, <code>.wikven.yaml</code> takes precedence and <code>.wikven.json</code> is ignored (the build logs a warning).
+The file name is flexible. Wikven accepts <code>.wikven.yaml</code>, <code>.wikven.yml</code> or <code>.wikven.json</code>, and the same three without the leading dot (<code>wikven.yaml</code>, <code>wikven.yml</code>, <code>wikven.json</code>); the <code>.json</code> forms use the same structure, since YAML is a superset of JSON. If more than one is present the first wins, in that order, and the rest are ignored with a warning, so a dotted name beats a plain one, YAML beats JSON, and <code>.yaml</code> beats <code>.yml</code>.
 
-Wikven ships its own defaults (a sensible MediaWiki configuration for a static wiki) and loads your file on top of them, so anything you set here overrides the default. The defaults live in a <code>default.yaml</code> that uses this same format; see [[#Defaults]] below.
+Wikven ships its own defaults (a sensible MediaWiki configuration for a static wiki) and loads your file on top of them, so anything you set here overrides the default. The defaults live in a <code>default.yml</code> that uses this same format; see [[#Defaults]] below.
 
 <syntaxhighlight lang="yaml">
 extensions:
@@ -97,16 +97,16 @@ A standard MediaWiki setting ({{ml|Manual:$wgContentNamespaces|<code>$wgContentN
 
 == Defaults ==
 
-Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yaml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
+Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
 
 Titles are kept as written (rather than first-letter-capitalized, MediaWiki's default) so the entry page can be the lowercase <code>index</code>, which the build writes as <code>index.html</code>, the file a static host serves at the site root. The file is otherwise commented; each comment notes why Wikven sets that value.
 
-To see the current defaults, read the bundled <code>default.yaml</code>. From the Docker image:
+To see the current defaults, read the bundled <code>default.yml</code>. From the Docker image:
 
 <syntaxhighlight lang="shell">
-docker run --rm --entrypoint cat ghcr.io/chaotic-ground/wikven extensions/Wikven/default.yaml
+docker run --rm --entrypoint cat ghcr.io/chaotic-ground/wikven extensions/Wikven/default.yml
 </syntaxhighlight>
 
-It is also in the [https://github.com/chaotic-ground/wikven/blob/main/default.yaml repository].
+It is also in the [https://github.com/chaotic-ground/wikven/blob/main/default.yml repository].
 
 {{prevnext|Troubleshooting|Development}}

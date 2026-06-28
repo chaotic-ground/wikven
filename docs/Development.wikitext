@@ -65,7 +65,7 @@ The <code>run</code> script:
 
 == Configuration ==
 
-Configuration is layered. <code>default.yaml</code> ships {{wikven}}'s baseline MediaWiki settings; the site's [[Configuration|.wikven.yaml]] is merged on top. <code>WikvenSettings.php</code> reads both with MediaWiki's own YAML settings parser, applies the merged <code>config</code> map, loads the listed <code>extensions</code> and <code>skins</code>, and points <code>$wgLogos</code> at the uploaded <code>WikvenLogos</code> files. It also detects the thumbnailing backend at run time, ImageMagick and rsvg when available, otherwise the built-in GD library plus native inline SVG, so the same build works in the image and in a binary that has only GD.
+Configuration is layered. <code>default.yml</code> ships {{wikven}}'s baseline MediaWiki settings; the site's [[Configuration|.wikven.yaml]] is merged on top. <code>WikvenSettings.php</code> reads both with MediaWiki's own YAML settings parser, applies the merged <code>config</code> map, loads the listed <code>extensions</code> and <code>skins</code>, and points <code>$wgLogos</code> at the uploaded <code>WikvenLogos</code> files. It also detects the thumbnailing backend at run time, ImageMagick and rsvg when available, otherwise the built-in GD library plus native inline SVG, so the same build works in the image and in a binary that has only GD.
 
 == Why these steps exist ==
 

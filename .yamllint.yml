@@ -1,0 +1,15 @@
+---
+# Strict yamllint: the upstream default ruleset, relaxing only what GitHub
+# Actions makes unavoidable. line-length fits the SHA-pinned `uses:` and the
+# shell `run:` lines; truthy's key check is off so a workflow's `on:` trigger
+# key is not flagged as a boolean. Everything else stays at the strict default.
+extends: default
+
+# Lint only our own files; skip whatever git ignores (vendor/, node_modules/).
+ignore-from-file: .gitignore
+
+rules:
+  line-length:
+    max: 120
+  truthy:
+    check-keys: false
