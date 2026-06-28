@@ -21,13 +21,10 @@ jobs:
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7  # v5.0.0
         id: release
         with:
-          # The config is a dotfile to match the manifest (.release-please-manifest.json,
-          # already dot-prefixed by default); the action's config-file input points at it.
+          # Dotfile config to match the dot-prefixed manifest; config-file points the action at it.
           config-file: .release-please-config.json
 
-  # release-please creates the GitHub release as a draft (see
-  # .release-please-config.json) so the binaries can be attached before it is
-  # published — immutable releases lock a release's assets at publish time.
+  # release-please drafts the release (immutable releases lock assets at publish), so binaries attach first.
   binary:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'
@@ -39,9 +36,7 @@ jobs:
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
 
-  # Publish a versioned, pinnable image (ghcr.io/.../wikven:1.0.0, :1.0, :1,
-  # :latest) so the Docker install path matches the release, not a rolling
-  # :latest rebuilt on every merge to main.
+  # Publish a versioned, pinnable image (:1.0.0, :1.0, :1, :latest) so the install path matches the release.
   docker:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'

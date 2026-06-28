@@ -9,8 +9,7 @@ on:
 permissions: {}
 
 jobs:
-  # phan needs a full MediaWiki environment to resolve core symbols, which neither
-  # mago's analyzer nor a bare phpcs run can provide.
+  # phan needs a full MediaWiki environment to resolve core symbols; mago and phpcs can't provide one.
   phan:
     runs-on: ubuntu-latest
     strategy:
@@ -25,9 +24,7 @@ jobs:
         with:
           stage: phan
           mediawiki-version: ${{ matrix.mediawiki-version }}
-          # PHP 8.3 image, so the container resolves wikven's dev deps (which
-          # require >= 8.2). phan itself runs in the action's default
-          # mediawiki-phan-testrun image (php-ast 1.1.3, the maintained one).
+          # PHP 8.3 image so the container resolves wikven's dev deps (>= 8.2); phan runs in the action's testrun image.
           quibble-docker-image: quibble-bookworm-php83
 
   composer-test:

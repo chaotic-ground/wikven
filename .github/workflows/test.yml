@@ -9,8 +9,7 @@ on:
 permissions: {}
 
 jobs:
-  # Compile the Caddy plugin so a Go build error is caught on the PR rather than
-  # only later, inside the release/nightly binary build.
+  # Compile the Caddy plugin so a Go build error is caught on the PR, not later in the binary build.
   caddy:
     runs-on: ubuntu-latest
     steps:
@@ -26,8 +25,7 @@ jobs:
       - run: go vet ./...
         working-directory: caddy
 
-  # Run the extension's PHPUnit tests against a real MediaWiki: the 1.45 base
-  # the build ships on, and master.
+  # Run the extension's PHPUnit tests against a real MediaWiki: the 1.45 base the build ships on, and master.
   phpunit:
     runs-on: ubuntu-latest
     strategy:

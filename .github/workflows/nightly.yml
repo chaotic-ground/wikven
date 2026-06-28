@@ -15,8 +15,7 @@ on:
 permissions: {}
 
 jobs:
-  # Build only when a feat/fix landed since the last nightly; a scheduled run
-  # after only chores/CI is skipped.
+  # Build only when a feat/fix landed since the last nightly; skip a run with only chores/CI.
   gate:
     runs-on: ubuntu-latest
     outputs:
@@ -54,9 +53,7 @@ jobs:
         id: meta
         run: echo "tag=nightly-$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
 
-      # Create the pre-release as a draft so the binary job can attach assets;
-      # immutable releases only lock once published. Drop any leftover draft from
-      # a failed same-day run first.
+      # A draft stays mutable so the binary job can attach assets; drop any leftover same-day draft first.
       - name: Create the dated draft pre-release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,8 +87,7 @@ jobs:
         with:
           persist-credentials: false
 
-      # Publishing locks the assets under immutable releases, so do it only once
-      # every architecture has been attached.
+      # Publishing locks the assets, so do it only once every architecture has been attached.
       - name: Publish the dated pre-release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
