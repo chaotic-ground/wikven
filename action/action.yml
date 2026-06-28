@@ -42,7 +42,8 @@ runs:
         tar="$HOME/.cache/wikven/image.tar"
         if [ "$CACHE" = "true" ] && [ -f "$tar" ]; then
           docker load -i "$tar"
-        else
+        elif ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+          # Not cached and not already local (a registry ref): pull it. A local build is used as-is.
           docker pull "$IMAGE"
           if [ "$CACHE" = "true" ]; then
             mkdir -p "$(dirname "$tar")"
