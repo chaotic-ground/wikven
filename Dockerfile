@@ -12,7 +12,7 @@ RUN apt-get update \
 COPY ./ /var/www/html/extensions/Wikven
 COPY includes/WikvenSettings.php /var/www/html/
 
-COPY bin/run /usr/local/bin/run
+COPY bin/entrypoint /usr/local/bin/entrypoint
 # Entry point is wikven's run script; the arg is the subcommand (default "build"; "serve" previews).
-ENTRYPOINT ["/usr/local/bin/run"]
+ENTRYPOINT ["/usr/local/bin/entrypoint"]
 CMD ["build"]

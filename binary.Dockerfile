@@ -3,7 +3,7 @@
 # attached to the GitHub release; see .github/workflows/build-binary.yml.
 #
 # Usage (the wikven image must be built first, e.g. `docker build -t wikven .`):
-#   docker build -f Dockerfile.binary --target export -o type=local,dest=out .
+#   docker build -f binary.Dockerfile --target export -o type=local,dest=out .
 #   # -> out/wikven, a single static executable. Run it with:
 #   #    WIKVEN_WORKDIR=. ./wikven build
 

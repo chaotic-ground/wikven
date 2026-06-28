@@ -10,7 +10,7 @@ on:
     branches: [main]
     paths:
       - 'Dockerfile'
-      - 'bin/run'
+      - 'bin/entrypoint'
       - 'default.yml'
       - 'extension.json'
       - 'includes/**'
@@ -22,7 +22,7 @@ on:
   pull_request:
     paths:
       - 'Dockerfile'
-      - 'bin/run'
+      - 'bin/entrypoint'
       - 'default.yml'
       - 'extension.json'
       - 'includes/**'

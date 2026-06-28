@@ -51,7 +51,7 @@ jobs:
       # the compiled binary (-o type=local); the static PHP compile that
       # dominates here re-runs whenever the source changes regardless.
       - name: Build the standalone binary
-        run: docker build -f Dockerfile.binary --target export -o type=local,dest=out .
+        run: docker build -f binary.Dockerfile --target export -o type=local,dest=out .
 
       - name: Name it per architecture
         run: mv out/wikven "wikven-linux-${{ matrix.arch }}"
