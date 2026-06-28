@@ -7,7 +7,7 @@ on:
     paths:
       - 'docs/**'
       - 'Dockerfile'
-      - 'run'
+      - 'bin/run'
       - 'WikvenSettings.php'
       - 'extension.json'
       - 'includes/**'
