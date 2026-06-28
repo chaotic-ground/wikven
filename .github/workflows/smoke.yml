@@ -45,9 +45,9 @@ jobs:
 
       - uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5  # v4.1.0
 
-      # Build with the shared GHA layer cache (same scope as docker-build.yml)
-      # and load the image locally so the bake step below can run it.
-      - uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
+      # Shared GHA layer cache (same scope as docker-build.yml); load locally so the bake can run it.
+      - name: Build and load the wikven image
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
           context: .
           load: true
@@ -66,13 +66,10 @@ jobs:
       - name: Assert the bake produced a complete, self-contained site
         run: |
           set -euo pipefail
-          # The main page must land at the dist root (the build aborts on a
-          # failed import, so reaching here already means exit 0).
+          # The main page must land at the dist root (a failed import already aborted the build).
           test -s dist/index.html
 
-          # Dumped CSS must not reference load.php: that endpoint only exists in
-          # a live MediaWiki, so a leftover is an AssetLocalizer regression that
-          # leaves the static site fetching styles from a server that is not there.
+          # Dumped CSS must not reference load.php (a live-only endpoint); a leftover is an AssetLocalizer regression.
           if grep -rIl --include='*.css' 'load\.php' dist; then
             echo "::error::dumped CSS still references load.php (AssetLocalizer regression)"
             exit 1

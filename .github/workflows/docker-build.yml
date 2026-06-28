@@ -39,8 +39,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # On a release (tag input set) publish the immutable version tags plus
-      # latest; otherwise just latest. inputs.tag is empty for push/PR runs.
+      # On a release (tag input set) publish the immutable version tags plus latest, else just latest.
       - name: Compute image tags
         id: tags
         env:
@@ -54,12 +53,12 @@ jobs:
             printf 'tags=%s\n' "$img:latest" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
+      - name: Build and push the image
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
           context: .
           push: ${{ github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main' }}
           tags: ${{ steps.tags.outputs.tags }}
-          # Layer cache shared (scope) with the other image builds, so a PR
-          # reuses main's cached base + apt layers instead of a cold rebuild.
+          # Layer cache shared with the other image builds, so a PR reuses main's cached layers.
           cache-from: type=gha,scope=wikven-image
           cache-to: type=gha,mode=max,scope=wikven-image
