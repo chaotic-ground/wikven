@@ -5,9 +5,7 @@ extensions:
   - TemplateStyles
   - TabberNeue
   - Gadgets
-  - SifterSearch
 skins:
-  - Vector
   - Timeless
   - Citizen
 config:
@@ -25,12 +23,8 @@ config:
     options:
       showThumbnail: false
       showDescription: true
-  # Pagefind index: written into the build output (/workspace/dist in the image),
-  # served under /wikven on GitHub Pages.
-  SifterSearchOutputDir: /workspace/dist/pagefind
+  # SifterSearch is built in and indexes into dist by default; this site serves under /wikven.
   SifterSearchBundlePath: /wikven/pagefind/
-  # No full-text search page on a static export, so hide that affordance.
-  SifterSearchFullText: false
   SifterSearchResultsPage: "Search"
   WikvenRepositories:
     # TabberNeue is not bundled in the image; clone it from Git to show off
@@ -45,8 +39,3 @@ config:
     Citizen:
       repository: https://github.com/StarCitizenTools/mediawiki-skins-Citizen.git
       reference: v3.17.0
-    # The rolling nightly tarball bundles the Pagefind binary (a git clone omits
-    # it). No sha256: it rolls, so a SifterSearch change is picked up by
-    # triggering the nightly and rebuilding, with no re-pin here.
-    SifterSearch:
-      tarball: https://github.com/chaotic-ground/SifterSearch/releases/download/nightly/SifterSearch-linux-x64.tar.gz

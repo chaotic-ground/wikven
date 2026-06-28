@@ -12,6 +12,15 @@ RUN apt-get update \
 COPY ./ /var/www/html/extensions/Wikven
 COPY includes/WikvenSettings.php /var/www/html/
 
+# SifterSearch (client-side Pagefind search) ships built in. Its release tarball carries the
+# per-arch Pagefind binary a git clone omits, so fetch the one matching this build's architecture.
+ARG TARGETARCH
+ARG SIFTERSEARCH_VERSION=v0.5.0
+RUN arch="$TARGETARCH" \
+ && if [ "$arch" = amd64 ]; then arch=x64; fi \
+ && curl -fsSL "https://github.com/chaotic-ground/SifterSearch/releases/download/${SIFTERSEARCH_VERSION}/SifterSearch-linux-${arch}.tar.gz" \
+  | tar -xz -C /var/www/html/extensions/
+
 COPY bin/entrypoint /usr/local/bin/entrypoint
 # Entry point is wikven's run script; the arg is the subcommand (default "build"; "serve" previews).
 ENTRYPOINT ["/usr/local/bin/entrypoint"]

@@ -4,7 +4,6 @@ namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Registration\ExtensionRegistry;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -36,7 +35,7 @@ class RewriteScripts extends Maintenance {
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
 
 		// With SifterSearch the static Pagefind bundle keeps the native search box working, so keep it.
-		$sifterEnabled = ExtensionRegistry::getInstance()->isLoaded('SifterSearch');
+		$sifterEnabled = Search::isActive();
 
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);

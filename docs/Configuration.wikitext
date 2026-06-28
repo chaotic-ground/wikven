@@ -97,7 +97,7 @@ A standard MediaWiki setting ({{ml|Manual:$wgContentNamespaces|<code>$wgContentN
 
 == Defaults ==
 
-Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
+Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. It also ships an <code>extensions</code> and a <code>skins</code> default, so every site gets [[Searching|SifterSearch]] search and the Vector skin without listing them. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
 
 Titles are kept as written (rather than first-letter-capitalized, MediaWiki's default) so the entry page can be the lowercase <code>index</code>, which the build writes as <code>index.html</code>, the file a static host serves at the site root. The file is otherwise commented; each comment notes why Wikven sets that value.
 

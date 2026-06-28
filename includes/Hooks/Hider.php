@@ -2,8 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
+use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SourceFile;
-use MediaWiki\Registration\ExtensionRegistry;
 
 class Hider implements
 	\MediaWiki\Hook\ParserOutputPostCacheTransformHook,
@@ -18,7 +18,7 @@ class Hider implements
 	public function onSidebarBeforeOutput($skin, &$sidebar): void {
 		// Drop server tools a static export can't serve; keep SEARCH only if SifterSearch wires a box.
 		$keys = ['TOOLBOX'];
-		if (!ExtensionRegistry::getInstance()->isLoaded('SifterSearch')) {
+		if (!Search::isActive()) {
 			$keys[] = 'SEARCH';
 		}
 		// Empty rather than unset: some skins (e.g. Minerva) require these keys to stay arrays.

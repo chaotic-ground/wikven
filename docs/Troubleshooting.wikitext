@@ -8,7 +8,7 @@ The [[Binary|standalone binary]] falls back to the built-in GD library, which pr
 
 == The search box does nothing ==
 
-Search is client-side, provided by the SifterSearch extension. If the box does not respond, the site was built without it: add SifterSearch to your [[Configuration|.wikven.yaml]] and rebuild. See [[Searching]].
+Search is client-side, built into {{wikven}} via SifterSearch and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See [[Searching]].
 
 == A page is missing from the site ==
 
