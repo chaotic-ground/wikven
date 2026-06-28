@@ -2,6 +2,7 @@
 /vendor/
 /composer.lock
 /dist/
+/out/
 
 # OpenTofu / Terraform
 /.tf/.terraform/
