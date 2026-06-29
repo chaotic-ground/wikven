@@ -1,6 +1,6 @@
 {
 	"name": "Wikven",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"author": "[https://meta.wikimedia.org/wiki/User:Lens0021 Lens0021]",
 	"url": "https://github.com/chaotic-ground/wikven",
 	"descriptionmsg": "wikven-desc",
@@ -14,14 +14,22 @@
 	},
 	"ResourceModules": {
 		"ext.Wikven.styles": {
-			"styles": ["ext.Wikven.styles.less"]
+			"styles": [
+				"ext.Wikven.styles.less"
+			]
 		},
 		"ext.Wikven.pinnableState": {
-			"scripts": ["pinnable-state.js"],
-			"dependencies": ["mediawiki.storage"]
+			"scripts": [
+				"pinnable-state.js"
+			],
+			"dependencies": [
+				"mediawiki.storage"
+			]
 		},
 		"ext.Wikven.skinSwitcher": {
-			"scripts": ["skin-switcher.js"]
+			"scripts": [
+				"skin-switcher.js"
+			]
 		}
 	},
 	"ResourceModuleSkinStyles": {
@@ -35,7 +43,10 @@
 	},
 	"Hooks": {
 		"ParserOutputPostCacheTransform": "hider",
-		"SkinTemplateNavigation::Universal": ["hider", "main"],
+		"SkinTemplateNavigation::Universal": [
+			"hider",
+			"main"
+		],
 		"SidebarBeforeOutput": "hider",
 		"SkinAddFooterLinks": "adder",
 		"BeforePageDisplay": "adder",
@@ -45,7 +56,9 @@
 	"HookHandlers": {
 		"main": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Main",
-			"services": ["MainConfig"]
+			"services": [
+				"MainConfig"
+			]
 		},
 		"adder": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Adder"
@@ -97,7 +110,9 @@
 		}
 	},
 	"MessagesDirs": {
-		"Wikven": ["i18n"]
+		"Wikven": [
+			"i18n"
+		]
 	},
 	"TestAutoloadNamespaces": {
 		"MediaWiki\\Extension\\Wikven\\Tests\\Integration\\": "tests/phpunit/integration/",
