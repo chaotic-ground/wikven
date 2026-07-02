@@ -1,0 +1,89 @@
+---
+name: Bump SifterSearch
+
+# Dependabot cannot track a GitHub-release tarball pinned in a Dockerfile ARG, so check weekly
+# and open a bump PR when SifterSearch publishes a new release.
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # push the bump branch
+      pull-requests: write  # open the bump PR
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Compare the pinned version with the latest release
+        id: versions
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          current=$(sed -n 's/^ARG SIFTERSEARCH_VERSION=//p' Dockerfile)
+          latest=$(gh release view --repo chaotic-ground/SifterSearch --json tagName --jq .tagName)
+          echo "current=$current latest=$latest"
+          {
+            echo "current=$current"
+            echo "latest=$latest"
+            echo "bump=$([ -n "$latest" ] && [ "$latest" != "$current" ] && echo true || echo false)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Update the pin
+        if: steps.versions.outputs.bump == 'true'
+        env:
+          LATEST: ${{ steps.versions.outputs.latest }}
+        run: sed -i "s/^ARG SIFTERSEARCH_VERSION=.*/ARG SIFTERSEARCH_VERSION=$LATEST/" Dockerfile
+
+      # A PR opened with GITHUB_TOKEN does not trigger the normal CI, so validate the bump
+      # here: build the image and bake the docs, asserting the search index still builds.
+      - name: Validate the bumped image with a bake
+        if: steps.versions.outputs.bump == 'true'
+        run: |
+          docker build -t wikven .
+          mkdir -p dist
+          docker run --rm \
+            -v "$PWD/docs:/workspace/src" \
+            -v "$PWD/dist:/workspace/dist" \
+            wikven
+          test -s dist/index.html
+          test -s dist/pagefind/pagefind-entry.json
+          echo "Bake with the new SifterSearch succeeded."
+
+      - name: Open the bump PR
+        if: steps.versions.outputs.bump == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CURRENT: ${{ steps.versions.outputs.current }}
+          LATEST: ${{ steps.versions.outputs.latest }}
+        run: |
+          branch="bump-siftersearch-$LATEST"
+          if gh pr list --head "$branch" --state open --json number --jq length | grep -qv '^0$'; then
+            echo "A bump PR for $LATEST is already open."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git commit -am "build(deps): bump SifterSearch from $CURRENT to $LATEST"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}" "HEAD:$branch"
+          {
+            echo "Bumps the bundled SifterSearch release tarball:"
+            echo "https://github.com/chaotic-ground/SifterSearch/releases/tag/$LATEST"
+            echo
+            echo "Validated in this workflow run: the bumped image builds and bakes the docs"
+            echo "with a Pagefind index."
+            echo
+            echo "Note: this PR was opened with GITHUB_TOKEN, so on-PR CI does not start on"
+            echo "its own; close and reopen it to trigger the full suite."
+          } > pr-body.md
+          gh pr create \
+            --head "$branch" \
+            --title "build(deps): bump SifterSearch from $CURRENT to $LATEST" \
+            --body-file pr-body.md
