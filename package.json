@@ -1,0 +1,12 @@
+{
+	"name": "wikven",
+	"description": "Browser end-to-end tests for the wikven static export.",
+	"private": true,
+	"license": "GPL-3.0-or-later",
+	"scripts": {
+		"test:e2e": "playwright test"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.61.1"
+	}
+}
