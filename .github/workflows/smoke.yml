@@ -85,10 +85,9 @@ jobs:
 
           echo "Smoke checks passed."
 
-      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903  # v6.0.0
-        with:
-          node-version: 22
-
+      # Node.js is preinstalled on the runner; no setup-node (its caching trips
+      # the cache-poisoning audit, and this job shares a build cache with the
+      # image-publishing workflow).
       - name: Install the browser test tooling
         run: |
           npm ci
