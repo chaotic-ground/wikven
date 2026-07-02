@@ -3,15 +3,13 @@ name: Tofu
 
 on:
   pull_request:
-    paths:
+    paths: &paths
       - ".tf/**"
       - .github/workflows/tf.yml
   push:
     branches:
       - main
-    paths:
-      - ".tf/**"
-      - .github/workflows/tf.yml
+    paths: *paths
   workflow_dispatch:
 
 permissions: {}
