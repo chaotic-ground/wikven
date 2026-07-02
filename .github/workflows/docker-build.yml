@@ -4,11 +4,10 @@ name: Docker image
 on:
   push:
     branches: [main]
-    paths-ignore:
+    paths-ignore: &paths-ignore
       - 'docs/**'
   pull_request:
-    paths-ignore:
-      - 'docs/**'
+    paths-ignore: *paths-ignore
   workflow_call:
     inputs:
       tag:

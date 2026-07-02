@@ -8,7 +8,7 @@ name: Smoke test
 on:
   push:
     branches: [main]
-    paths:
+    paths: &paths
       - 'Dockerfile'
       - 'bin/entrypoint'
       - 'default.yml'
@@ -24,21 +24,7 @@ on:
       - 'playwright.config.js'
       - 'tests/e2e/**'
   pull_request:
-    paths:
-      - 'Dockerfile'
-      - 'bin/entrypoint'
-      - 'default.yml'
-      - 'extension.json'
-      - 'includes/**'
-      - 'maintenance/**'
-      - 'resources/**'
-      - 'i18n/**'
-      - 'docs/**'
-      - '.github/workflows/smoke.yml'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'playwright.config.js'
-      - 'tests/e2e/**'
+    paths: *paths
 
 permissions:
   contents: read
