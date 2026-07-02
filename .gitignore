@@ -3,6 +3,8 @@
 /composer.lock
 /dist/
 /out/
+/test-results/
+/playwright-report/
 
 # OpenTofu / Terraform
 /.tf/.terraform/
