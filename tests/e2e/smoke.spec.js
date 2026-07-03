@@ -48,3 +48,20 @@ test("the results page mounts the widget and returns results", async ({
 		timeout: 15000,
 	});
 });
+
+test("the search box suggests pages as you type", async ({ page }) => {
+	await page.goto("index.html");
+
+	// Focusing mounts the typeahead app; characters typed while it mounts carry
+	// over into the mounted input, so no explicit wait is needed.
+	await page.locator("#searchInput").click();
+	await page.keyboard.type("binary", { delay: 40 });
+
+	// A title suggestion, plus the "containing..." row aimed at the results page.
+	await expect(
+		page.locator('.cdx-menu-item a[href*="Standalone_binary"]').first(),
+	).toBeVisible({ timeout: 15000 });
+	await expect(
+		page.locator('.cdx-menu-item a[href*="Search.html?search="]').first(),
+	).toBeVisible();
+});
