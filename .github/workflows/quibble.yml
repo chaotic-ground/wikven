@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@9964af476e606e1dc7e14ee13db34f99456f3c41  # main
+      - uses: femiwiki/quibble-action@d799e5bb348756ea1588f2b5f2ca7fc09fdbdac9  # v2.0.1
         with:
           stage: phan
           mediawiki-version: ${{ matrix.mediawiki-version }}
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@9964af476e606e1dc7e14ee13db34f99456f3c41  # main
+      - uses: femiwiki/quibble-action@d799e5bb348756ea1588f2b5f2ca7fc09fdbdac9  # v2.0.1
         with:
           stage: composer-test
           mediawiki-version: REL1_45
@@ -50,7 +50,7 @@ jobs:
         with:
           persist-credentials: false
       - id: quibble
-        uses: femiwiki/quibble-action@9964af476e606e1dc7e14ee13db34f99456f3c41  # main
+        uses: femiwiki/quibble-action@d799e5bb348756ea1588f2b5f2ca7fc09fdbdac9  # v2.0.1
         with:
           stage: coverage
           # Coverage tooling lives only on MediaWiki master.
