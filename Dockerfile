@@ -1,7 +1,7 @@
 # Base images are digest-pinned for reproducible builds; Dependabot keeps them current.
 FROM composer:2@sha256:7725eb4545c438629ae8bde3ef0bb9a5038ef566126ad878442a69007242d267 AS composer
 
-FROM mediawiki:1.45@sha256:6dc859706b561acf90a0f92786280f6e461946c4cc2fa8ea5c74be6c27251d2c
+FROM mediawiki:1.46@sha256:51756779bb215c32842dfa38276813f504111c9624e2e4ec0c52204745d52aba
 
 # composer + unzip to install third-party extensions/skins at build time (git/tar/gzip present).
 COPY --from=composer /usr/bin/composer /usr/bin/composer
