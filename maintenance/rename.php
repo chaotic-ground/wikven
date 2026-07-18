@@ -53,6 +53,21 @@ class Rename extends Maintenance {
 			$newName = preg_replace('/%2E/', '.', $basename);
 			rename("$path/$basename", "$path/$newName");
 		}
+
+		// Subpage titles (e.g. "Manual/Config") cache to a flat "Manual%2FConfig.html", but links to
+		// them keep the slash. Move each into a real subdirectory and rebase its root-relative
+		// references by that depth, so links and files agree when served from a static host.
+		foreach (glob("$path/*%2F*") as $filename) {
+			$basename = basename($filename);
+			$depth = substr_count($basename, '%2F');
+			$destination = "$path/" . str_replace('%2F', '/', $basename);
+			$directory = dirname($destination);
+			if (!wfMkdirParents($directory)) {
+				$this->fatalError("Wikven: could not create directory $directory");
+			}
+			file_put_contents($destination, RelativeUrl::reparent(file_get_contents($filename), $depth), LOCK_EX);
+			unlink($filename);
+		}
 	}
 }
 
