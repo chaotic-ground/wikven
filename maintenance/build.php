@@ -44,6 +44,8 @@ class Build extends Maintenance {
 		$this->setVersionPage();
 		$this->dropDeadFooterPlaces();
 		$this->dropDeadCategoryLink();
+		// Materialize content translations before RunJobs so rendered translation pages get exported.
+		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
 		$this->step(RunJobs::class, "$ip/maintenance/runJobs.php");
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];

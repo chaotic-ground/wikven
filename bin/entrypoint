@@ -6,12 +6,13 @@ export WIKVEN_WORKDIR="${WIKVEN_WORKDIR:-/workspace}"
 
 # Entry point of the image; the first arg selects the command (default "build"), like the binary.
 command="${1:-build}"
+shift || true
 
 if [ "$command" = "serve" ]; then
   # Serve the built site for local preview; the container listens on 8080.
   exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist"
-elif [ "$command" != "build" ]; then
-  echo "wikven: unknown command '$command'; expected 'build' or 'serve'" >&2
+elif [ "$command" != "build" ] && [ "$command" != "check" ] && [ "$command" != "stamp" ]; then
+  echo "wikven: unknown command '$command'; expected 'build', 'check', 'stamp' or 'serve'" >&2
   exit 2
 fi
 
@@ -32,6 +33,27 @@ php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/fetchExtensi
 # Wire in WikvenSettings once; a persistent install tree would otherwise duplicate require_once.
 grep -qF "require_once 'WikvenSettings.php';" LocalSettings.php \
   || echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
+
+# "check" only needs MediaWiki booted (to autoload Translate); it parses src/ files
+# directly and never imports content. Passed-through flags (e.g. --gate) make it exit
+# non-zero when a translation is stale or missing.
+if [ "$command" = "check" ]; then
+  exec php maintenance/run.php \
+    /var/www/html/extensions/Wikven/maintenance/checkTranslations.php \
+    --source "$WIKVEN_WORKDIR/src" "$@"
+fi
+
+# "stamp" rewrites translation markers in src/ to the current source unit hashes; run it after
+# translating so up-to-date units read as fresh. Needs the src mount to be writable.
+if [ "$command" = "stamp" ]; then
+  exec php maintenance/run.php \
+    /var/www/html/extensions/Wikven/maintenance/stampTranslations.php \
+    --source "$WIKVEN_WORKDIR/src" "$@"
+fi
+
+# Apply extension schema updates (e.g. Translate's revtag/translate_* tables) that the installer
+# does not create; a no-op when no bundled extension adds tables.
+php maintenance/run.php update --quick
 
 php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/build.php
 rm -rf "$WIKVEN_WORKDIR/dist/history/"

@@ -63,4 +63,4 @@ docker run --rm -p 8080:8080 \
 
 Any static server works too, for example <code>cd dist && python3 -m http.server</code>.
 
-{{prevnext|Searching|Troubleshooting}}
+{{prevnext|Translating|Troubleshooting}}

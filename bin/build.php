@@ -78,8 +78,9 @@ $run([
 // 2. Wire in WikvenSettings (the extracted root is writable).
 file_put_contents("$ip/LocalSettings.php", "\nrequire_once '$ip/WikvenSettings.php';\n", FILE_APPEND);
 
-// 3. Fetch third-party extensions/skins, then 4. build the static site.
+// 3. Fetch third-party extensions/skins, apply any extension schema updates, then 4. build.
 $run(["$ip/extensions/Wikven/maintenance/fetchExtensions.php"]);
+$run(['update', '--quick']);
 $run(["$ip/extensions/Wikven/maintenance/build.php"]);
 
 // Drop the per-page history the file cache emits, as the Docker run does.
