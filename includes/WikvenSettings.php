@@ -167,6 +167,16 @@ if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, tru
 	}
 }
 
+// Listing Translate turns on content i18n. It hard-depends on UniversalLanguageSelector, so pull
+// that in too (both are bundled in the image); the build's materialize step then discovers
+// translations and renders translated pages and <languages/>.
+if (
+	in_array('Translate', $config['extensions'], true)
+	&& !in_array('UniversalLanguageSelector', $config['extensions'], true)
+) {
+	$config['extensions'][] = 'UniversalLanguageSelector';
+}
+
 // Load each bundled extension; an unknown name is skipped with a warning.
 foreach ($config['extensions'] ?? [] as $extension) {
 	if (!is_string($extension)) {

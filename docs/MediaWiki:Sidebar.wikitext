@@ -10,6 +10,7 @@
 ** Skins|Skins
 ** JavaScript|JavaScript
 ** Searching|Searching
+** Translating|Translating
 ** Deploying|Deploying
 ** Troubleshooting|Troubleshooting
 * References

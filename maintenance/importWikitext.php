@@ -6,6 +6,8 @@ use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
@@ -99,6 +101,18 @@ class ImportWikitext extends Maintenance {
 	 * @return string[] Absolute paths, sorted for a stable import order.
 	 */
 	private function wikitextFiles(string $sourceDirectory): array {
+		// With Translate enabled, translation files (<Page>/<lang>.wikitext) are not imported as
+		// pages; the build's materialize step renders them into the generated <Page>/<lang> pages.
+		$isTranslation = static function (string $unused): bool {
+			return false;
+		};
+		if (ExtensionRegistry::getInstance()->isLoaded('Translate')) {
+			$languageNameUtils = $this->getServiceContainer()->getLanguageNameUtils();
+			$isTranslation = static function (string $path) use ($languageNameUtils): bool {
+				return TranslationSource::isTranslationFile($path, [$languageNameUtils, 'isKnownLanguageTag']);
+			};
+		}
+
 		$iterator = new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator($sourceDirectory, \FilesystemIterator::SKIP_DOTS)
 		);
@@ -106,7 +120,7 @@ class ImportWikitext extends Maintenance {
 		foreach ($iterator as $file) {
 			$pathname = $file->getPathname();
 			$relative = substr($pathname, strlen($sourceDirectory) + 1);
-			if ($file->isFile() && SourceFile::isPageFile($relative)) {
+			if ($file->isFile() && SourceFile::isPageFile($relative) && !$isTranslation($pathname)) {
 				$files[] = $pathname;
 			}
 		}
