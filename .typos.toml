@@ -1,2 +1,6 @@
 [files]
 extend-exclude = ["package-lock.json"]
+
+[default]
+# Translate staleness stamps (<!--T:n @<hex>-->) are md5 fragments, not words.
+extend-ignore-re = ['<!--T:\d+ @[0-9a-f]{8}-->']
