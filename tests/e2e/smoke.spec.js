@@ -48,3 +48,24 @@ test("the results page mounts the widget and returns results", async ({
 		timeout: 15000,
 	});
 });
+
+test("the search box suggests pages as you type", async ({ page }) => {
+	await page.goto("index.html");
+
+	// Focusing the raw search box mounts the Codex typeahead and focuses its input; wait for a
+	// mounted input (there are two on the page) before typing so no keystrokes are dropped mid-mount.
+	await page.locator("#searchInput").click();
+	await page
+		.locator(".cdx-text-input__input")
+		.first()
+		.waitFor({ state: "visible", timeout: 15000 });
+	await page.keyboard.type("binary", { delay: 40 });
+
+	// A title suggestion, plus the "containing..." row aimed at the results page.
+	await expect(
+		page.locator('.cdx-menu-item a[href*="Standalone_binary"]').first(),
+	).toBeVisible({ timeout: 15000 });
+	await expect(
+		page.locator('.cdx-menu-item a[href*="Search.html?search="]').first(),
+	).toBeVisible();
+});
