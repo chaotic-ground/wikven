@@ -67,13 +67,16 @@ class BuildScripts extends Maintenance {
 		$bundle = $this->dump($rl, $closure, $wgLanguageCode, $wgDefaultSkin, null, []);
 		file_put_contents("$outDir/modules-static.js", $bundle, LOCK_EX);
 
-		// Combined bundle embeds icon CSS pointing at load.php images; localize them to local files.
+		// Combined bundle embeds icon CSS pointing at load.php images. The bundle injects its CSS
+		// into the document, so url()s resolve against the page; inline the images as data: URIs
+		// so they load from any page depth (subpages like index/ko.html) and base path.
 		AssetLocalizer::localizeImages(
 			$rl,
 			$outDir,
 			["$outDir/modules-static.js", "$outDir/startup-static.js"],
 			$wgLanguageCode,
-			$wgDefaultSkin
+			$wgDefaultSkin,
+			true
 		);
 
 		$this->output('Wrote startup-static.js and modules-static.js (' . count($closure) . " modules)\n");
