@@ -56,4 +56,30 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		$this->assertCount(1, $copies, 'deduplicated to a single dumped copy');
 		$this->assertSame('<svg>arrow</svg>', file_get_contents($copies[0]), 'asset bytes copied verbatim');
 	}
+
+	/**
+	 * A JS bundle injects its CSS into the document, so a "./img-*.svg" url() would
+	 * resolve against the page and 404 on any subpage. In $inline mode the image
+	 * must instead be embedded as a data: URI (depth- and base-path-safe) with no
+	 * file written out.
+	 */
+	public function testLocalizeImagesInlinesAssetsAsDataUris() {
+		$mwRoot = $this->getNewTempDirectory();
+		mkdir("$mwRoot/skins/Vector/images", 0777, true);
+		file_put_contents("$mwRoot/skins/Vector/images/arrow.svg", '<svg>arrow</svg>');
+		$this->setMwGlobals('IP', $mwRoot);
+
+		$dir = $this->getNewTempDirectory();
+		$js = "$dir/modules-static.js";
+		file_put_contents($js, '.a{background:url(/skins/Vector/images/arrow.svg)}' . "\n");
+
+		$rl = $this->getServiceContainer()->getResourceLoader();
+		AssetLocalizer::localizeImages($rl, $dir, [$js], 'en', 'vector', true);
+
+		$out = file_get_contents($js);
+		$expected = 'url(data:image/svg+xml;base64,' . base64_encode('<svg>arrow</svg>') . ')';
+		$this->assertStringContainsString($expected, $out, 'asset inlined as a data: URI');
+		$this->assertStringNotContainsString('url(./img-', $out, 'no relative file reference emitted');
+		$this->assertCount(0, glob("$dir/img-*.svg"), 'no image file written in inline mode');
+	}
 }

@@ -8,13 +8,21 @@ use MediaWiki\ResourceLoader\ResourceLoader;
 
 /** Rewrites image url()s in dumped CSS/JS to local copies, avoiding load.php references. */
 class AssetLocalizer {
-	/** Rewrite image url()s in the given dumped CSS/JS files to point at copies in $dir. */
+	/**
+	 * Rewrite image url()s in the given dumped CSS/JS files to point at copies in $dir.
+	 *
+	 * A CSS file resolves its url()s relative to itself, so a "./img-*.svg" next to it works from
+	 * any page depth. A JS bundle instead injects its CSS into the document, where url()s resolve
+	 * against the page, breaking on subpages ("index/ko.html" would fetch "index/img-*.svg"). Pass
+	 * $inline for JS bundles to embed the images as data: URIs, which are depth- and base-path-safe.
+	 */
 	public static function localizeImages(
 		ResourceLoader $rl,
 		string $dir,
 		array $files,
 		string $lang,
-		string $skin
+		string $skin,
+		bool $inline = false
 	): void {
 		$mwRoot = rtrim((string)( $GLOBALS['IP'] ?? '' ), '/');
 		$map = [];
@@ -27,7 +35,7 @@ class AssetLocalizer {
 			// (1) ResourceLoader image endpoint.
 			$text = preg_replace_callback(
 				'~url\(\s*[\'"]?([^)\'"]*load\.php\?[^)\'"]*image=[^)\'"]*?)[\'"]?\s*\)~',
-				static function ($m) use (&$map, $rl, $dir, $lang, $skin) {
+				static function ($m) use (&$map, $rl, $dir, $lang, $skin, $inline) {
 					// Decode the JSON-string escapes used inside JS bundles.
 					$url = str_replace(
 						['\\/', '\\u0026', '\\u003d', '\\u003D'],
@@ -35,7 +43,7 @@ class AssetLocalizer {
 						$m[1]
 					);
 					if (!array_key_exists($url, $map)) {
-						$map[$url] = self::dumpRlImage($rl, $url, $dir, $lang, $skin);
+						$map[$url] = self::dumpRlImage($rl, $url, $dir, $lang, $skin, $inline);
 					}
 					return $map[$url] !== null ? 'url(' . $map[$url] . ')' : $m[0];
 				},
@@ -47,10 +55,10 @@ class AssetLocalizer {
 				$text = preg_replace_callback(
 					'~url\(\s*[\'"]?(\\\\?/(?:skins|resources|extensions)/[^)\'"?]+'
 					. '\.(?:svg|png|gif|jpe?g))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
-					static function ($m) use (&$map, $mwRoot, $dir) {
+					static function ($m) use (&$map, $mwRoot, $dir, $inline) {
 						$path = str_replace('\\/', '/', $m[1]);
 						if (!array_key_exists($path, $map)) {
-							$map[$path] = self::copyAsset($mwRoot, $path, $dir);
+							$map[$path] = self::copyAsset($mwRoot, $path, $dir, $inline);
 						}
 						return $map[$path] !== null ? 'url(' . $map[$path] . ')' : $m[0];
 					},
@@ -60,6 +68,11 @@ class AssetLocalizer {
 
 			file_put_contents($file, $text, LOCK_EX);
 		}
+	}
+
+	/** Encode raw image bytes as a data: URI usable unquoted inside url(). */
+	private static function dataUri(string $bytes, string $mime): string {
+		return 'data:' . $mime . ';base64,' . base64_encode($bytes);
 	}
 
 	/**
@@ -72,7 +85,8 @@ class AssetLocalizer {
 		string $url,
 		string $dir,
 		string $lang,
-		string $skin
+		string $skin,
+		bool $inline = false
 	): ?string {
 		$qs = parse_url($url, PHP_URL_QUERY);
 		if (!$qs) {
@@ -104,6 +118,10 @@ class AssetLocalizer {
 			return null;
 		}
 
+		if ($inline) {
+			return self::dataUri($bytes, $isSvg ? 'image/svg+xml' : 'image/png');
+		}
+
 		// Hash without the cache-busting version so filenames are stable across rebuilds.
 		$key = preg_replace('/[&?]version=[^&]*/', '', $url);
 		$name = 'img-' . substr(md5($key), 0, 12) . ( $isSvg ? '.svg' : '.png' );
@@ -116,7 +134,7 @@ class AssetLocalizer {
 	 *
 	 * @return string|null Relative url() target, or null if the file is missing.
 	 */
-	private static function copyAsset(string $mwRoot, string $path, string $dir): ?string {
+	private static function copyAsset(string $mwRoot, string $path, string $dir, bool $inline = false): ?string {
 		$src = $mwRoot . $path;
 		if (!is_readable($src)) {
 			return null;
@@ -126,6 +144,18 @@ class AssetLocalizer {
 			return null;
 		}
 		$ext = pathinfo($path, PATHINFO_EXTENSION) ?: 'svg';
+
+		if ($inline) {
+			$mimes = [
+				'svg' => 'image/svg+xml',
+				'png' => 'image/png',
+				'gif' => 'image/gif',
+				'jpg' => 'image/jpeg',
+				'jpeg' => 'image/jpeg'
+			];
+			return self::dataUri($bytes, $mimes[strtolower($ext)] ?? 'application/octet-stream');
+		}
+
 		$name = 'img-' . substr(md5($path), 0, 12) . ".$ext";
 		file_put_contents("$dir/$name", $bytes, LOCK_EX);
 		return "./$name";
