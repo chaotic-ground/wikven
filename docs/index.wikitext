@@ -1,39 +1,51 @@
+<languages />
+<translate>
+<!--T:1-->
 {{wikven}} is a static site generator built on [https://www.mediawiki.org/ MediaWiki], the software
 behind [https://www.wikipedia.org/ Wikipedia]. It turns a directory of wikitext
 into a plain HTML site you can host anywhere, with no server or database to run.
 This documentation site is itself built with {{wikven}}.
 
+<!--T:2-->
 Reach for {{wikven}} when your content is already MediaWiki wikitext, or when you
 want MediaWiki's templates, parser functions, gadgets and extensions but a static
 result with nothing to run: a project's documentation site, an archived wiki
 you can browse as plain HTML, or a personal wiki. Unlike a general static-site generator
 such as Hugo or MkDocs, it renders real wikitext through MediaWiki itself, so it
-assumes you are comfortable with wikitext (see [[Why wikitext]] for the trade-offs).
+assumes you are comfortable with wikitext (see [[<tvar name="1">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for the trade-offs).
 
-See [[Installation]] for the three ways to install {{wikven}}, the standalone
-[[Installation#Binary|binary]], the [[Installation#Docker|Docker image]], or
-[[Installation#Build from source|from source]], then [[Getting Started]] to build
+<!--T:3-->
+See [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]] for the three ways to install {{wikven}}, the standalone
+[[<tvar name="2">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="3">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or
+[[<tvar name="4">Special:MyLanguage/Installation#Build from source</tvar>|from source]], then [[<tvar name="5">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build
 your first site.
 
+<!--T:4-->
 == Supported features ==
 
+<!--T:5-->
 With {{wikven}}, you can use the following features of MediaWiki.
 
-* {{ml|Wikitext}} pages (see [[Pages]])
-* [[Pages#Templates|Templates]]
-* [[Images]] from Wikimedia Commons or local files
-* [[JavaScript]] (MediaWiki:Common.js and gadgets)
+<!--T:6-->
+* {{ml|Wikitext}} pages (see [[<tvar name="1">Special:MyLanguage/Pages</tvar>|Pages]])
+* [[<tvar name="2">Special:MyLanguage/Pages#Templates</tvar>|Templates]]
+* [[<tvar name="3">Special:MyLanguage/Images</tvar>|Images]] from Wikimedia Commons or local files
+* [[<tvar name="4">Special:MyLanguage/JavaScript</tvar>|JavaScript]] (MediaWiki:Common.js and gadgets)
 * {{ml|Bundled extensions and skins}}
-* Third-party extensions and skins (see [[Configuration|.wikven.yaml]])
-* [[Searching|Search]] (client-side, built in via SifterSearch)
+* Third-party extensions and skins (see [[<tvar name="5">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]])
+* [[<tvar name="6">Special:MyLanguage/Searching</tvar>|Search]] (client-side, built in via SifterSearch)
 
+<!--T:7-->
 == Unsupported features ==
 
+<!--T:8-->
 These need a live wiki, so they are not part of the static export:
 
+<!--T:9-->
 * All special pages
 * All editors ({{ml|Extension:WikiEditor|WikiEditor}}, <!--
 -->{{ml|Extension:VisualEditor|VisualEditor}} and {{ml|Extension:CodeEditor|CodeEditor}})
+</translate>
 
 {{prevnext|Why wikitext}}
 {{DISPLAYTITLE:Wikven}}
