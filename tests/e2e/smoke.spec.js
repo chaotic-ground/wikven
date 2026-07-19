@@ -52,10 +52,12 @@ test("the results page mounts the widget and returns results", async ({
 test("the search box suggests pages as you type", async ({ page }) => {
 	await page.goto("index.html");
 
-	// Focusing mounts the typeahead app; characters typed while it mounts carry
-	// over into the mounted input, so no explicit wait is needed.
+	// Focusing the raw search box mounts the Codex typeahead, which swaps in its own
+	// input; wait for that before typing so no keystrokes are dropped mid-mount.
 	await page.locator("#searchInput").click();
-	await page.keyboard.type("binary", { delay: 40 });
+	const searchInput = page.locator(".cdx-text-input__input");
+	await searchInput.waitFor({ state: "visible", timeout: 15000 });
+	await searchInput.pressSequentially("binary", { delay: 40 });
 
 	// A title suggestion, plus the "containing..." row aimed at the results page.
 	await expect(
