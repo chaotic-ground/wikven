@@ -1,0 +1,2 @@
+# Dependency files under vendor/ are gitignored and not ours to format or validate.
+exclude = ["vendor/**"]
