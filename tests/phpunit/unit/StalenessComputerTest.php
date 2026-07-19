@@ -65,4 +65,33 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		$this->assertContains(StalenessComputer::UNTRANSLATED, $statuses);
 		$this->assertContains(StalenessComputer::ORPHAN, $statuses);
 	}
+
+	public function testScaffoldWritesEmptyMarkersCountedAsUntranslated() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n\n<!--T:2-->\nWorld.\n</translate>";
+		$skeleton = StalenessComputer::scaffold($source);
+		$this->assertSame("<!--T:1-->\n\n<!--T:2-->\n\n", $skeleton);
+		$this->assertSame(
+			[StalenessComputer::UNTRANSLATED, StalenessComputer::UNTRANSLATED],
+			array_column(StalenessComputer::analyze($source, $skeleton), 'status')
+		);
+	}
+
+	public function testScaffoldKeepsTranslatedUnitsAndAppendsOnlyNewOnes() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n\n<!--T:2-->\nWorld.\n</translate>";
+		$existing = "<!--T:1-->\n안녕.\n";
+		$this->assertSame(
+			"<!--T:1-->\n안녕.\n\n<!--T:2-->\n\n",
+			StalenessComputer::scaffold($source, $existing)
+		);
+	}
+
+	public function testAFilledUnitBesideAnEmptyOneIsTranslatedNotUntranslated() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n\n<!--T:2-->\nWorld.\n</translate>";
+		// T:1 filled and stamped, T:2 left empty by the scaffold.
+		$partial = StalenessComputer::restamp($source, "<!--T:1-->\n안녕.\n\n<!--T:2-->\n\n");
+		$this->assertSame(
+			[StalenessComputer::OK, StalenessComputer::UNTRANSLATED],
+			array_column(StalenessComputer::analyze($source, $partial), 'status')
+		);
+	}
 }

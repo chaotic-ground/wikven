@@ -93,7 +93,8 @@ class StalenessComputer {
 
 		$result = [];
 		foreach ($source as $id => $unit) {
-			if (!isset($translation[$id])) {
+			if (!isset($translation[$id]) || trim($translation[$id]['text']) === '') {
+				// Absent, or present but empty (a scaffolded unit not yet filled in).
 				$status = self::UNTRANSLATED;
 			} elseif ($translation[$id]['hash'] !== self::hashUnit($unit['text'])) {
 				$status = self::STALE;
@@ -129,6 +130,29 @@ class StalenessComputer {
 			},
 			$translationText
 		);
+	}
+
+	/**
+	 * Build (or extend) a translation skeleton: a <!--T:n--> marker with an empty body for every
+	 * source unit not already present. Empty bodies read as "not yet translated"; the translator
+	 * fills them and runs stamp. An existing translation is kept intact with only new-unit markers
+	 * appended, so it is safe to re-run as the source gains units.
+	 */
+	public static function scaffold(string $sourceText, ?string $existingTranslation = null): string {
+		$existing = $existingTranslation === null ? [] : self::splitUnits($existingTranslation);
+		$additions = '';
+		foreach (self::splitUnits($sourceText) as $id => $unit) {
+			if (!isset($existing[$id])) {
+				$additions .= '<!--T:' . $id . "-->\n\n";
+			}
+		}
+		if ($additions === '') {
+			return $existingTranslation ?? '';
+		}
+		if ($existingTranslation === null || trim($existingTranslation) === '') {
+			return $additions;
+		}
+		return rtrim($existingTranslation, "\n") . "\n\n" . $additions;
 	}
 
 	/** Strip <translate> wrapper tags and surrounding whitespace so the hash tracks unit content only. */

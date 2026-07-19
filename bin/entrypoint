@@ -16,9 +16,9 @@ elif [ "$command" = "translate" ]; then
   subcommand="${1:-}"
   shift || true
   case "$subcommand" in
-    mark | check | stamp) ;;
+    mark | scaffold | check | stamp) ;;
     *)
-      echo "wikven: 'translate' needs a subcommand: mark, check or stamp" >&2
+      echo "wikven: 'translate' needs a subcommand: mark, scaffold, check or stamp" >&2
       exit 2
       ;;
   esac
@@ -46,18 +46,23 @@ grep -qF "require_once 'WikvenSettings.php';" LocalSettings.php \
   || echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
 
 # Translation helpers run once MediaWiki is booted (to autoload Translate and load config), then
-# work on src/ directly and exit without a build. "mark" numbers unmarked <translate> units and
-# "stamp" refreshes translation stamps (both rewrite src/, so need a writable mount); "check"
-# reads only and passes flags such as --gate through to gate on out-of-date translations.
+# work on src/ directly and exit without a build. "mark"/"scaffold"/"stamp" write into src/ (so
+# need a writable mount); "check" reads only and passes flags such as --gate through.
 if [ "$command" = "translate" ]; then
   case "$subcommand" in
     mark) script=markTranslations.php ;;
+    scaffold) script=scaffoldTranslations.php ;;
     check) script=checkTranslations.php ;;
     stamp) script=stampTranslations.php ;;
   esac
-  exec php maintenance/run.php \
+  php maintenance/run.php \
     "/var/www/html/extensions/Wikven/maintenance/$script" \
     --source "$WIKVEN_WORKDIR/src" "$@"
+  code=$?
+  # These run as root; hand any files they created/edited in src back to the mount owner so the
+  # translator can edit them without sudo. A no-op on a read-only mount (check).
+  chown -R "$(stat -c '%u:%g' "$WIKVEN_WORKDIR/src")" "$WIKVEN_WORKDIR/src" 2>/dev/null || true
+  exit "$code"
 fi
 
 # Apply extension schema updates (e.g. Translate's revtag/translate_* tables) that the installer
