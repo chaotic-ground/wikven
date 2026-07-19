@@ -28,7 +28,13 @@ It runs a real MediaWiki at build time.
 </translate>
 </syntaxhighlight>
 
-The <code><nowiki><!--T:n--></nowiki></code> numbers are the unit identity; keep them stable and unique within the page. The build renders the language bar and, for each language, a page at <code>Page/lang</code>.
+You do not number the units by hand. Wrap the content in <code><nowiki><translate></nowiki></code> and add <code><nowiki><languages/></nowiki></code>, then run the <code>mark</code> command to insert the <code><nowiki><!--T:n--></nowiki></code> markers, mounting your source directory writable:
+
+<syntaxhighlight lang="console">
+$ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven mark --all
+</syntaxhighlight>
+
+Pass a single file instead of <code>--all</code> to mark just that page. Marking is idempotent and stable: it keeps the numbers already there and only adds markers for new units, so re-run it whenever you add content. The numbers are the unit identity; a translation references them to line its units up with the source. The build renders the language bar and, for each language, a page at <code>Page/lang</code>.
 
 == Adding a translation ==
 
