@@ -167,16 +167,6 @@ if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, tru
 	}
 }
 
-// Listing Translate turns on content i18n. It hard-depends on UniversalLanguageSelector, so pull
-// that in too (both are bundled in the image); the build's materialize step then discovers
-// translations and renders translated pages and <languages/>.
-if (
-	in_array('Translate', $config['extensions'], true)
-	&& !in_array('UniversalLanguageSelector', $config['extensions'], true)
-) {
-	$config['extensions'][] = 'UniversalLanguageSelector';
-}
-
 // Load each bundled extension; an unknown name is skipped with a warning.
 foreach ($config['extensions'] ?? [] as $extension) {
 	if (!is_string($extension)) {
@@ -187,6 +177,13 @@ foreach ($config['extensions'] ?? [] as $extension) {
 	} else {
 		error_log("Wikven: skipping extension '$extension' (not bundled in this image)");
 	}
+}
+
+// UniversalLanguageSelector (enabled for content i18n) would have the browser pull its webfont
+// module and font files from load.php, which a static export cannot serve. Turn webfonts off;
+// bundling them into the static site instead is tracked as a separate enhancement.
+if (in_array('UniversalLanguageSelector', $config['extensions'], true)) {
+	$GLOBALS['wgULSWebfontsEnabled'] = false;
 }
 
 // SifterSearch ships built in; default its Pagefind index into the build's dist dir, unless the

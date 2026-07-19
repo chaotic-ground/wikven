@@ -4,12 +4,15 @@ __TOC__
 
 == Enabling translation ==
 
-Add <code>Translate</code> to <code>extensions</code> in your [[Configuration|<code>.wikven.yaml</code>]], the same way you enable any other extension. It is bundled in the {{wikven}} image, along with its UniversalLanguageSelector dependency, which {{wikven}} loads for you, so there is nothing to install.
+Add <code>Translate</code> to <code>extensions</code> in your [[Configuration|<code>.wikven.yaml</code>]], along with <code>UniversalLanguageSelector</code>, which Translate depends on. Both are bundled in the {{wikven}} image, so there is nothing to install.
 
 <syntaxhighlight lang="yaml">
 extensions:
+  - UniversalLanguageSelector
   - Translate
 </syntaxhighlight>
+
+A static export cannot serve UniversalLanguageSelector's runtime webfonts (they load from a live endpoint), so {{wikven}} turns them off; readers see each script in their own system fonts.
 
 You do not list the languages you translate into: as with Translate itself, a language exists as soon as a translation for it does. The language you write your pages in stays the source language.
 
