@@ -60,4 +60,4 @@ runs:
         # --path-prefix makes the annotation file names repo-relative (they resolve under $SOURCE).
         docker run --rm \
           -v "$PWD/$SOURCE:/workspace/src:ro" \
-          "$IMAGE" check "${gate[@]}" --path-prefix "$SOURCE"
+          "$IMAGE" translate check "${gate[@]}" --path-prefix "$SOURCE"

@@ -11,9 +11,19 @@ shift || true
 if [ "$command" = "serve" ]; then
   # Serve the built site for local preview; the container listens on 8080.
   exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist"
-elif [ "$command" != "build" ] && [ "$command" != "check" ] \
-  && [ "$command" != "mark" ] && [ "$command" != "stamp" ]; then
-  echo "wikven: unknown command '$command'; expected 'build', 'check', 'mark', 'stamp' or 'serve'" >&2
+elif [ "$command" = "translate" ]; then
+  # Translation helpers: `translate mark|check|stamp`. Validate before the slow boot below.
+  subcommand="${1:-}"
+  shift || true
+  case "$subcommand" in
+    mark | check | stamp) ;;
+    *)
+      echo "wikven: 'translate' needs a subcommand: mark, check or stamp" >&2
+      exit 2
+      ;;
+  esac
+elif [ "$command" != "build" ]; then
+  echo "wikven: unknown command '$command'; expected 'build', 'translate' or 'serve'" >&2
   exit 2
 fi
 
@@ -35,28 +45,18 @@ php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/fetchExtensi
 grep -qF "require_once 'WikvenSettings.php';" LocalSettings.php \
   || echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
 
-# "mark" numbers the unmarked <translate> units in src/ with <!--T:n--> markers, so translations
-# can reference them. Run it after wrapping content in <translate>. Needs the src mount writable.
-if [ "$command" = "mark" ]; then
+# Translation helpers run once MediaWiki is booted (to autoload Translate and load config), then
+# work on src/ directly and exit without a build. "mark" numbers unmarked <translate> units and
+# "stamp" refreshes translation stamps (both rewrite src/, so need a writable mount); "check"
+# reads only and passes flags such as --gate through to gate on out-of-date translations.
+if [ "$command" = "translate" ]; then
+  case "$subcommand" in
+    mark) script=markTranslations.php ;;
+    check) script=checkTranslations.php ;;
+    stamp) script=stampTranslations.php ;;
+  esac
   exec php maintenance/run.php \
-    /var/www/html/extensions/Wikven/maintenance/markTranslations.php \
-    --source "$WIKVEN_WORKDIR/src" "$@"
-fi
-
-# "check" only needs MediaWiki booted (to autoload Translate); it parses src/ files
-# directly and never imports content. Passed-through flags (e.g. --gate) make it exit
-# non-zero when a translation is stale or missing.
-if [ "$command" = "check" ]; then
-  exec php maintenance/run.php \
-    /var/www/html/extensions/Wikven/maintenance/checkTranslations.php \
-    --source "$WIKVEN_WORKDIR/src" "$@"
-fi
-
-# "stamp" rewrites translation markers in src/ to the current source unit hashes; run it after
-# translating so up-to-date units read as fresh. Needs the src mount to be writable.
-if [ "$command" = "stamp" ]; then
-  exec php maintenance/run.php \
-    /var/www/html/extensions/Wikven/maintenance/stampTranslations.php \
+    "/var/www/html/extensions/Wikven/maintenance/$script" \
     --source "$WIKVEN_WORKDIR/src" "$@"
 fi
 

@@ -28,10 +28,10 @@ It runs a real MediaWiki at build time.
 </translate>
 </syntaxhighlight>
 
-You do not number the units by hand. Wrap the content in <code><nowiki><translate></nowiki></code> and add <code><nowiki><languages/></nowiki></code>, then run the <code>mark</code> command to insert the <code><nowiki><!--T:n--></nowiki></code> markers, mounting your source directory writable:
+You do not number the units by hand. Wrap the content in <code><nowiki><translate></nowiki></code> and add <code><nowiki><languages/></nowiki></code>, then run <code>translate mark</code> to insert the <code><nowiki><!--T:n--></nowiki></code> markers, mounting your source directory writable:
 
 <syntaxhighlight lang="console">
-$ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven mark --all
+$ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate mark --all
 </syntaxhighlight>
 
 Pass a single file instead of <code>--all</code> to mark just that page. Marking is idempotent and stable: it keeps the numbers already there and only adds markers for new units, so re-run it whenever you add content. The numbers are the unit identity; a translation references them to line its units up with the source. The build renders the language bar and, for each language, a page at <code>Page/lang</code>.
@@ -48,14 +48,14 @@ Put a translation next to the page, named <code><Page>/<lang>.wikitext</code>: t
 빌드 시 실제 미디어위키를 실행합니다.
 </syntaxhighlight>
 
-The <code>@a1b2c3d4</code> after each marker is a stamp recording which version of the source unit the translation was made from. You do not write it by hand; add the markers and text, then run <code>stamp</code> (see below) to fill the stamps in. A translation may cover only some units; the rest stay untranslated and are shown in the source language.
+The <code>@a1b2c3d4</code> after each marker is a stamp recording which version of the source unit the translation was made from. You do not write it by hand; add the markers and text, then run <code>translate stamp</code> (see below) to fill the stamps in. A translation may cover only some units; the rest stay untranslated and are shown in the source language.
 
 == Stamping ==
 
-After translating, run the <code>stamp</code> command so every up-to-date unit records the source version it matches. Mount your source directory writable:
+After translating, run <code>translate stamp</code> so every up-to-date unit records the source version it matches. Mount your source directory writable:
 
 <syntaxhighlight lang="console">
-$ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven stamp --all
+$ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate stamp --all
 </syntaxhighlight>
 
 Pass a single file instead of <code>--all</code> to stamp just that translation.
@@ -65,13 +65,13 @@ Pass a single file instead of <code>--all</code> to stamp just that translation.
 When you change a source unit, its translations no longer match their stamp and are '''out of date'''. {{wikven}} does not hide this:
 
 * In the built site, an out-of-date unit is marked as an outdated translation, exactly as it would be on a wiki running Translate.
-* The <code>check</code> command reports every out-of-date or missing translation, and with <code>--gate</code> exits non-zero so continuous integration can fail the build:
+* <code>translate check</code> reports every out-of-date or missing translation, and with <code>--gate</code> exits non-zero so continuous integration can fail the build:
 
 <syntaxhighlight lang="console">
-$ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven check --gate
+$ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate check --gate
 ::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)
 </syntaxhighlight>
 
-A companion GitHub Action runs the same check on pull requests. To bring a translation back up to date, edit it to match the new source, then <code>stamp</code> it again.
+A companion GitHub Action runs the same check on pull requests. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
 
 {{prevnext|Searching|Deploying}}
