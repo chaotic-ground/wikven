@@ -39,6 +39,10 @@ class MarkTranslations extends Maintenance {
 		if ($file === null) {
 			$this->fatalError('Wikven: pass a source file, or --all.');
 		}
+		// A relative path is taken within the source directory (what the src mount maps to).
+		if (!str_starts_with($file, '/')) {
+			$file = "$source/$file";
+		}
 		if (!is_file($file)) {
 			$this->fatalError("Wikven: '$file' does not exist.");
 		}
