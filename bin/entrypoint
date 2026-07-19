@@ -11,8 +11,9 @@ shift || true
 if [ "$command" = "serve" ]; then
   # Serve the built site for local preview; the container listens on 8080.
   exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist"
-elif [ "$command" != "build" ] && [ "$command" != "check" ] && [ "$command" != "stamp" ]; then
-  echo "wikven: unknown command '$command'; expected 'build', 'check', 'stamp' or 'serve'" >&2
+elif [ "$command" != "build" ] && [ "$command" != "check" ] \
+  && [ "$command" != "mark" ] && [ "$command" != "stamp" ]; then
+  echo "wikven: unknown command '$command'; expected 'build', 'check', 'mark', 'stamp' or 'serve'" >&2
   exit 2
 fi
 
@@ -33,6 +34,14 @@ php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/fetchExtensi
 # Wire in WikvenSettings once; a persistent install tree would otherwise duplicate require_once.
 grep -qF "require_once 'WikvenSettings.php';" LocalSettings.php \
   || echo 'require_once '\''WikvenSettings.php'\'';' >> LocalSettings.php
+
+# "mark" numbers the unmarked <translate> units in src/ with <!--T:n--> markers, so translations
+# can reference them. Run it after wrapping content in <translate>. Needs the src mount writable.
+if [ "$command" = "mark" ]; then
+  exec php maintenance/run.php \
+    /var/www/html/extensions/Wikven/maintenance/markTranslations.php \
+    --source "$WIKVEN_WORKDIR/src" "$@"
+fi
 
 # "check" only needs MediaWiki booted (to autoload Translate); it parses src/ files
 # directly and never imports content. Passed-through flags (e.g. --gate) make it exit

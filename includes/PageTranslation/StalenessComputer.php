@@ -25,6 +25,37 @@ class StalenessComputer {
 	}
 
 	/**
+	 * Assign <!--T:n--> markers to the still-unmarked units inside a page's <translate> blocks.
+	 *
+	 * Units are the blank-line-separated blocks Translate segments on; an already-marked unit keeps
+	 * its number and new ones continue from the highest on the page. The marker goes on its own line
+	 * before the unit, which both splitUnits() and Translate's own re-parse honour. Idempotent.
+	 */
+	public static function mark(string $text): string {
+		preg_match_all('/<!--T:(\d+)/', $text, $existing);
+		$next = $existing[1] === [] ? 1 : max(array_map('intval', $existing[1])) + 1;
+
+		return preg_replace_callback(
+			'#(<translate(?:\s[^>]*)?>)(.*?)(</translate>)#s',
+			static function (array $block) use (&$next): string {
+				$units = preg_split('/(\n[ \t]*\n)/', $block[2], -1, PREG_SPLIT_DELIM_CAPTURE);
+				$marked = '';
+				foreach ($units as $index => $segment) {
+					// Odd indices are the blank-line separators between units; keep them verbatim.
+					if (( $index % 2 ) === 1 || trim($segment) === '' || str_contains($segment, '<!--T:')) {
+						$marked .= $segment;
+						continue;
+					}
+					preg_match('/^(\s*)(.*)$/s', $segment, $parts);
+					$marked .= $parts[1] . '<!--T:' . $next++ . "-->\n" . $parts[2];
+				}
+				return $block[1] . $marked . $block[3];
+			},
+			$text
+		);
+	}
+
+	/**
 	 * Split page text into units keyed by their <!--T:n--> marker id.
 	 *
 	 * @return array<string,array{hash:?string,text:string}> id => [synced-source hash (translations only), unit text]
