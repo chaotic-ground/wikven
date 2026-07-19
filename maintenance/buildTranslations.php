@@ -141,11 +141,12 @@ class BuildTranslations extends Maintenance {
 			}
 
 			foreach ($sourceUnits as $id => $sourceUnit) {
-				if (!isset($units[$id])) {
-					// Left untranslated; Translate reports it as such.
+				$text = isset($units[$id]) ? trim($units[$id]['text']) : '';
+				if ($text === '') {
+					// Absent, or an empty (scaffolded, not-yet-filled) unit: leave it untranslated
+					// so Translate renders the source language.
 					continue;
 				}
-				$text = trim($units[$id]['text']);
 				if (( $status[(string)$id] ?? '' ) === StalenessComputer::STALE) {
 					$text = TRANSLATE_FUZZY . $text;
 				}

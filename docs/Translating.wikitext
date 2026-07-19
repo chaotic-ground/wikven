@@ -41,17 +41,25 @@ Pass a single file instead of <code>--all</code> to mark just that page. Marking
 
 == Adding a translation ==
 
-Put a translation next to the page, named <code><Page>/<lang>.wikitext</code>: the Korean translation of <code>Intro.wikitext</code> is <code>Intro/ko.wikitext</code>. Mirror the source's <code><nowiki><!--T:n--></nowiki></code> markers and write each unit's translation under its marker:
+A translation lives next to the page, named <code><Page>/<lang>.wikitext</code>: the Korean translation of <code>Intro.wikitext</code> is <code>Intro/ko.wikitext</code>. Generate its skeleton with <code>translate scaffold</code>, which writes an empty <code><nowiki><!--T:n--></nowiki></code> marker for every source unit and lists each unit's source text as a guide:
+
+<syntaxhighlight lang="console">
+$ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate scaffold ko Intro.wikitext
+</syntaxhighlight>
+
+Pass <code>--all</code> in place of a file to scaffold every translatable page. Re-running is safe: it keeps what you have translated and only appends markers for new units.
+
+Then fill each unit's translation under its marker:
 
 <syntaxhighlight lang="wikitext">
-<!--T:1 @a1b2c3d4-->
+<!--T:1-->
 위크벤은 미디어위키로 정적 사이트를 만듭니다.
 
-<!--T:2 @e5f6a7b8-->
+<!--T:2-->
 빌드 시 실제 미디어위키를 실행합니다.
 </syntaxhighlight>
 
-The <code>@a1b2c3d4</code> after each marker is a stamp recording which version of the source unit the translation was made from. You do not write it by hand; add the markers and text, then run <code>translate stamp</code> (see below) to fill the stamps in. A translation may cover only some units; the rest stay untranslated and are shown in the source language.
+A unit left empty counts as not yet translated: <code>translate check</code> reports it and the build renders it in the source language, so you can translate a page a few units at a time. The <code>@a1b2c3d4</code> stamp is added by <code>translate stamp</code> (see below), not by hand.
 
 == Stamping ==
 
