@@ -43,6 +43,10 @@ class StampTranslations extends Maintenance {
 		if ($translationFile === null) {
 			$this->fatalError('Wikven: pass a translation file, or --all.');
 		}
+		// A relative path is taken within the source directory (what the src mount maps to).
+		if (!str_starts_with($translationFile, '/')) {
+			$translationFile = "$source/$translationFile";
+		}
 		if (!is_file($translationFile)) {
 			$this->fatalError("Wikven: '$translationFile' does not exist.");
 		}
