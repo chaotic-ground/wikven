@@ -1,3 +1,5 @@
+<languages />
+<translate>
 {{wikven}} is a static site generator built on [https://www.mediawiki.org/ MediaWiki], the software
 behind [https://www.wikipedia.org/ Wikipedia]. It turns a directory of wikitext
 into a plain HTML site you can host anywhere, with no server or database to run.
@@ -34,6 +36,7 @@ These need a live wiki, so they are not part of the static export:
 * All special pages
 * All editors ({{ml|Extension:WikiEditor|WikiEditor}}, <!--
 -->{{ml|Extension:VisualEditor|VisualEditor}} and {{ml|Extension:CodeEditor|CodeEditor}})
+</translate>
 
 {{prevnext|Why wikitext}}
 {{DISPLAYTITLE:Wikven}}
