@@ -1,10 +1,12 @@
 ---
 extensions:
-  - SyntaxHighlight_GeSHi
-  - ParserFunctions
-  - TemplateStyles
-  - TabberNeue
   - Gadgets
+  - ParserFunctions
+  - SyntaxHighlight_GeSHi
+  - TabberNeue
+  - TemplateStyles
+  - Translate
+  - UniversalLanguageSelector
 skins:
   - Timeless
   - Citizen
