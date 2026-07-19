@@ -103,6 +103,8 @@ class Build extends Maintenance {
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");
 		$this->step(Rename::class, "$own/rename.php");
+		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
+		$this->step(ResolveTranslationLinks::class, "$own/resolveTranslationLinks.php");
 
 		// RebuildFileCache emits a per-page history/ tree the static host won't serve; drop it.
 		$history = "$dir/history";

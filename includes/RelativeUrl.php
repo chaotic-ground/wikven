@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-/** Rebases a page's root-relative references when it moves into an output subdirectory. */
+/** Rewrites a page's output links: depth reparenting, and Special:MyLanguage resolution. */
 class RelativeUrl {
 	/**
 	 * Add a "../" per level to every root-relative reference in a page moved $depth subdirectories down.
@@ -50,6 +50,27 @@ class RelativeUrl {
 			'#\burl\((["\']?)(\.\.?)/#',
 			static function (array $m) use ($rebase): string {
 				return 'url(' . $m[1] . $rebase($m[2]);
+			},
+			$html
+		);
+	}
+
+	/**
+	 * Resolve Translate's "Special:MyLanguage/Target" links (that special page is not exported) to a
+	 * static target: "Target/<lang>.html" when a translation for the page's language exists, else the
+	 * source "Target.html". The link's existing relative prefix (already depth-correct after reparent)
+	 * and any "#fragment" are kept, so the target stays reachable from any page depth.
+	 *
+	 * @param string $html
+	 * @param string|null $lang The page's language, or null for a source page (always the source target).
+	 * @param callable(string):bool $hasTranslation Whether target page $1 has a translation in $lang.
+	 */
+	public static function resolveMyLanguage(string $html, ?string $lang, callable $hasTranslation): string {
+		return preg_replace_callback(
+			'~(href="(?:\.\./)*(?:\./)?)Special:MyLanguage/([^"#]+)\.html(#[^"]*)?"~',
+			static function (array $m) use ($lang, $hasTranslation): string {
+				$base = $lang !== null && $hasTranslation($m[2]) ? "/$lang.html" : '.html';
+				return $m[1] . $m[2] . $base . ( $m[3] ?? '' ) . '"';
 			},
 			$html
 		);

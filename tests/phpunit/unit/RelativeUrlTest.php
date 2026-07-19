@@ -53,4 +53,60 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 		$html = '<script>var x = {"path": "./y"};</script>';
 		$this->assertSame($html, RelativeUrl::reparent($html, 1));
 	}
+
+	public function testMyLanguageResolvesToTheTranslationWhenItExists() {
+		$this->assertSame(
+			'href="./B/ko.html"',
+			RelativeUrl::resolveMyLanguage('href="./Special:MyLanguage/B.html"', 'ko', static function () {
+				return true;
+			})
+		);
+	}
+
+	public function testMyLanguageFallsBackToTheSourceTargetWithoutATranslation() {
+		$this->assertSame(
+			'href="./B.html"',
+			RelativeUrl::resolveMyLanguage('href="./Special:MyLanguage/B.html"', 'ko', static function () {
+				return false;
+			})
+		);
+	}
+
+	public function testMyLanguageOnASourcePageUsesTheSourceTarget() {
+		$this->assertSame(
+			'href="./B.html"',
+			RelativeUrl::resolveMyLanguage('href="./Special:MyLanguage/B.html"', null, static function () {
+				return true;
+			})
+		);
+	}
+
+	public function testMyLanguageKeepsTheLinksExistingRelativePrefix() {
+		$this->assertSame(
+			'href="../B/ko.html"',
+			RelativeUrl::resolveMyLanguage('href="../Special:MyLanguage/B.html"', 'ko', static function () {
+				return true;
+			})
+		);
+	}
+
+	public function testMyLanguagePreservesASectionFragment() {
+		$this->assertSame(
+			'href="../Installation/ko.html#Binary"',
+			RelativeUrl::resolveMyLanguage(
+				'href="../Special:MyLanguage/Installation.html#Binary"',
+				'ko',
+				static function () {
+					return true;
+				}
+			)
+		);
+	}
+
+	public function testResolveMyLanguageLeavesOrdinaryLinksAlone() {
+		$html = 'href="./B.html" href="https://example.org/Special:MyLanguage/Y"';
+		$this->assertSame($html, RelativeUrl::resolveMyLanguage($html, 'ko', static function () {
+			return true;
+		}));
+	}
 }
