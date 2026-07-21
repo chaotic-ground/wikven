@@ -16,7 +16,7 @@ inputs:
     description: >-
       The wikven image to run. Defaults to the release this action was cut from;
       override to pin a different tag (e.g. ghcr.io/chaotic-ground/wikven:1.2.3).
-    default: ghcr.io/chaotic-ground/wikven:0.1.0  # x-release-please-version
+    default: ghcr.io/chaotic-ground/wikven:1.0.0  # x-release-please-version
   cache:
     description: >-
       Cache the pulled image between runs, keyed on the image ref. Set to
