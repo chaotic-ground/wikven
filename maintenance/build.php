@@ -98,6 +98,8 @@ class Build extends Maintenance {
 		}
 
 		$this->step(RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", ['overwrite' => true]);
+		// RebuildFileCache renders in the content language; re-render translations in their own.
+		$this->step(RetranslateChrome::class, "$own/retranslateChrome.php");
 		$this->step(BuildStyles::class, "$own/buildStyles.php");
 		$this->step(BuildScripts::class, "$own/buildScripts.php");
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");

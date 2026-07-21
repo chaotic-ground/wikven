@@ -67,6 +67,19 @@ class Main implements
 	 * @inheritDoc
 	 */
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
+		// Special pages are not exported. Translate turns the edit tab into a "Translate" link to
+		// Special:Translate, which would 404 statically; drop any nav link targeting it.
+		foreach ($links as $group => $entries) {
+			if (!is_array($entries)) {
+				continue;
+			}
+			foreach ($entries as $key => $link) {
+				if (is_array($link) && isset($link['href']) && str_contains($link['href'], 'Special:Translate')) {
+					unset($links[$group][$key]);
+				}
+			}
+		}
+
 		global $wgWikvenViewSourceUrl;
 		$title = $sktemplate->getTitle();
 		// A generated page (e.g. Version) has no source file; skip rather than emit a 404 link.

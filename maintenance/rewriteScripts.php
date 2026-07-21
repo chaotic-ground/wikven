@@ -117,6 +117,10 @@ class RewriteScripts extends Maintenance {
 			// Remove the appearance menu: its widgets pull codex+vue from load.php, which 404s statically.
 			$html = $this->removeElements($html, 'id="vector-appearance"');
 
+			// Translate's page-translation banner ("translated version"/"translate this page") links to
+			// Special:Translate, which is not exported; drop the banner.
+			$html = $this->removeElements($html, 'mw-pt-translate-header');
+
 			file_put_contents($file, $html, LOCK_EX);
 		}
 	}
