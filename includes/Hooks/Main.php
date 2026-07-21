@@ -48,6 +48,25 @@ class Main implements
 		}
 
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
+
+		// Translate's banner and "Translate" tab link to Special:Translate (the in-wiki translation UI),
+		// which is not exported. Point them at the translation's source file on the edit host: the
+		// query carries "group=page-<base>" and "language=<code>", so "<base>/<code>" is the file.
+		if ($wgWikvenEditUrl && $title->isSpecial('Translate')) {
+			$params = wfCgiToArray($query);
+			if (isset($params['language']) && str_starts_with($params['group'] ?? '', 'page-')) {
+				$translation = Title::newFromText(substr($params['group'], 5) . '/' . $params['language']);
+				if ($translation) {
+					$url = str_replace(
+						'$1',
+						SourceFile::titleToParam($translation->getPrefixedText()),
+						$wgWikvenEditUrl
+					);
+					return;
+				}
+			}
+		}
+
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
 		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
 		$action = wfCgiToArray($query)['action'] ?? null;
@@ -67,19 +86,6 @@ class Main implements
 	 * @inheritDoc
 	 */
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
-		// Special pages are not exported. Translate turns the edit tab into a "Translate" link to
-		// Special:Translate, which would 404 statically; drop any nav link targeting it.
-		foreach ($links as $group => $entries) {
-			if (!is_array($entries)) {
-				continue;
-			}
-			foreach ($entries as $key => $link) {
-				if (is_array($link) && isset($link['href']) && str_contains($link['href'], 'Special:Translate')) {
-					unset($links[$group][$key]);
-				}
-			}
-		}
-
 		global $wgWikvenViewSourceUrl;
 		$title = $sktemplate->getTitle();
 		// A generated page (e.g. Version) has no source file; skip rather than emit a 404 link.
