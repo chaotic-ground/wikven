@@ -48,6 +48,25 @@ class Main implements
 		}
 
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
+
+		// Translate's banner and "Translate" tab link to Special:Translate (the in-wiki translation UI),
+		// which is not exported. Point them at the translation's source file on the edit host: the
+		// query carries "group=page-<base>" and "language=<code>", so "<base>/<code>" is the file.
+		if ($wgWikvenEditUrl && $title->isSpecial('Translate')) {
+			$params = wfCgiToArray($query);
+			if (isset($params['language']) && str_starts_with($params['group'] ?? '', 'page-')) {
+				$translation = Title::newFromText(substr($params['group'], 5) . '/' . $params['language']);
+				if ($translation) {
+					$url = str_replace(
+						'$1',
+						SourceFile::titleToParam($translation->getPrefixedText()),
+						$wgWikvenEditUrl
+					);
+					return;
+				}
+			}
+		}
+
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
 		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
 		$action = wfCgiToArray($query)['action'] ?? null;
