@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\PageTranslation;
 
 use FilesystemIterator;
+use MediaWiki\Parser\Parser;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -15,9 +16,15 @@ use RecursiveIteratorIterator;
  * buildTranslations (materialize) so both agree on what is a base and what is a translation.
  */
 class TranslationSource {
-	/** Whether a page's wikitext marks it as translatable. */
+	/** Whether a page's wikitext marks it as translatable (a real <translate>, not one shown as an example). */
 	public static function isTranslatable(string $text): bool {
-		return str_contains($text, '<translate>');
+		// A <translate> inside a verbatim span -- <syntaxhighlight>, <nowiki>, <pre>, <source> -- is an
+		// example, as on the page documenting page translation, not real markup. Blank those spans with
+		// MediaWiki's own tag extraction (it handles attributes, self-closing tags and comments) before
+		// looking for a real tag, rather than trusting a hand-rolled regex.
+		$matches = [];
+		$stripped = Parser::extractTagsAndParams(['syntaxhighlight', 'source', 'nowiki', 'pre'], $text, $matches);
+		return str_contains($stripped, '<translate>');
 	}
 
 	/** The translation file for a base file in the given language ("Foo.wikitext" -> "Foo/ko.wikitext"). */
