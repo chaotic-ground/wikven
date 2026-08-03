@@ -1,0 +1,20 @@
+<!--T:1 @55b0a81c-->
+{{wikven}} 자체는 [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]로 라이선스됩니다. Docker 이미지와 그것이 만들어 내는 단독 실행 바이너리는 서드파티 소프트웨어를 그 소프트웨어 자체의 라이선스에 따라 재배포하며, 이를 여기서 밝힙니다. (GPL-2.0-or-later와 GPL-3.0-or-later는 호환되므로, 이는 충돌이 아니라 출처 표시입니다.)
+
+<!--T:2 @4e242a51-->
+{| class="wikitable"
+! 구성 요소 !! 라이선스 !! 번들 위치
+|-
+| [https://www.mediawiki.org/ MediaWiki]와 그 번들 스킨 및 확장 기능 || GPL-2.0-or-later || 이미지, 바이너리
+|-
+| [https://www.php.net/ PHP] || PHP License 3.01 || 바이너리
+|-
+| [https://frankenphp.dev/ FrankenPHP] || MIT || 바이너리
+|-
+| [https://caddyserver.com/ Caddy] || Apache-2.0 || 바이너리
+|-
+| [https://getcomposer.org/ Composer] || MIT || 이미지
+|}
+
+<!--T:3 @2bfb4b44-->
+단독 실행 바이너리는 [https://frankenphp.dev/ FrankenPHP]로 컴파일되며, FrankenPHP는 여러 Caddy 모듈도 링크합니다. 그 라이선스는 FrankenPHP 프로젝트에서 확인하십시오. Docker 이미지는 MediaWiki 자체의 <code>COPYING</code>을 보존하며, 각 구성 요소의 전체 라이선스 텍스트는 해당 프로젝트에서 구할 수 있습니다.

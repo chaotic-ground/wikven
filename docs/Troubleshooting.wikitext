@@ -1,25 +1,39 @@
 __TOC__
 
+<languages />
+<translate>
+<!--T:1-->
 Common problems and what to check.
 
+<!--T:2-->
 == Thumbnails look low quality ==
 
-The [[Standalone binary|standalone binary]] falls back to the built-in GD library, which produces lower-quality thumbnails and supports fewer formats. Install '''ImageMagick''' and '''librsvg''' on the build host for better output, or use the Docker image, which bundles them. See [[Images]].
+<!--T:3-->
+The [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] falls back to the built-in GD library, which produces lower-quality thumbnails and supports fewer formats. Install '''ImageMagick''' and '''librsvg''' on the build host for better output, or use the Docker image, which bundles them. See [[<tvar name="2">Special:MyLanguage/Images</tvar>|Images]].
 
+<!--T:4-->
 == The search box does nothing ==
 
-Search is client-side, built into {{wikven}} via SifterSearch and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See [[Searching]].
+<!--T:5-->
+Search is client-side, built into {{wikven}} via SifterSearch and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See [[<tvar name="1">Special:MyLanguage/Searching</tvar>|Searching]].
 
+<!--T:6-->
 == A page is missing from the site ==
 
+<!--T:7-->
 The build aborts if any page fails to import, printing <code>Failed to import N page(s)</code> with the file names. A common cause is a file whose name does not map to a valid title; rename it (the build warns when a name does not round-trip). Re-run the build and read the log for the failing file.
 
+<!--T:8-->
 == Fetching fails over HTTPS ==
 
-Fetching Wikimedia Commons images and [[Configuration#WikvenRepositories|third-party extensions or skins]] needs your system's CA certificates. On a minimal host without them (common with the standalone binary), install your distribution's CA bundle, for example the <code>ca-certificates</code> package. A site with only local content and images needs no network access.
+<!--T:9-->
+Fetching Wikimedia Commons images and [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|third-party extensions or skins]] needs your system's CA certificates. On a minimal host without them (common with the standalone binary), install your distribution's CA bundle, for example the <code>ca-certificates</code> package. A site with only local content and images needs no network access.
 
+<!--T:10-->
 == The binary will not run on macOS or Windows ==
 
-The standalone binary is Linux-only (x86_64 and arm64). On macOS or Windows, use the Docker image instead. See [[Installation]].
+<!--T:11-->
+The standalone binary is Linux-only (x86_64 and arm64). On macOS or Windows, use the Docker image instead. See [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]].
+</translate>
 
 {{prevnext|Deploying|Configuration}}

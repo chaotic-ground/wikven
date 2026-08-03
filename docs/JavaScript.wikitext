@@ -1,27 +1,42 @@
+<languages />
+<translate>
+<!--T:1-->
 {{wikven}} bundles the wiki's own JavaScript into the static export at build time, so site scripts and gadgets run without a live server or <code>load.php</code>.
 
+<!--T:2-->
 == MediaWiki:Common.js ==
 
+<!--T:3-->
 Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a regular wiki. Create a <code>MediaWiki:Common.js</code> file in your source directory and it runs on every page. A <code>.js</code> page carries its own content model, so it needs no <code>.wikitext</code> marker. The skin's <code>MediaWiki:Vector.js</code> (and so on) works the same way.
 
+<!--T:4-->
 == Gadgets ==
 
-To use {{ml|Extension:Gadgets|gadgets}}, enable the bundled Gadgets extension in [[Configuration|.wikven.yaml]]:
+<!--T:5-->
+To use {{ml|Extension:Gadgets|gadgets}}, enable the bundled Gadgets extension in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]]:
+</translate>
 
 <syntaxhighlight lang="yaml">
 extensions:
   - Gadgets
 </syntaxhighlight>
 
+<translate>
+<!--T:6-->
 List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put each gadget's code in <code>MediaWiki:Gadget-<name>.js</code>:
+</translate>
 
 <syntaxhighlight lang="wikitext">
 * MyGadget[ResourceLoader|default]|MyGadget.js
 </syntaxhighlight>
 
+<translate>
+<!--T:7-->
 Only gadgets marked <code>default</code> are loaded: a static site has no logged-in readers to turn other gadgets on. A gadget's own CSS (in the same module) is included, but standalone styles-only gadgets are not yet covered.
 
+<!--T:8-->
 These docs ship one such gadget, <code>PersistTabber</code>, which remembers whether you pick the Docker or the binary tab in the install steps and keeps that choice as you move between pages.
+</translate>
 
 {{prevnext|Skins|Searching}}
 {{DISPLAYTITLE:JavaScript}}

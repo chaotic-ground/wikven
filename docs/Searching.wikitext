@@ -1,42 +1,61 @@
+<languages />
+<translate>
+<!--T:1-->
 Static sites have no server to answer queries, so MediaWiki's built-in search does not work in the export. {{wikven}} ships [https://github.com/chaotic-ground/SifterSearch SifterSearch] built in and enabled by default: it builds a static search index at build time and serves results entirely in the browser, so every site has working search with no setup. This documentation site uses it.
 
+<!--T:2-->
 == How it works ==
 
+<!--T:3-->
 SifterSearch indexes the rendered pages with [https://pagefind.app/ Pagefind] and writes a static index bundle into the build output. On each page it feeds those results into the skin's own search box (Vector 2022's typeahead, or the classic suggestions box on other skins), so search runs with no API, database, or <code>load.php</code> behind it.
 
+<!--T:4-->
 == Configuring it ==
 
-Search needs no configuration: the index is written to a <code>pagefind/</code> directory under the build output and served from <code>/pagefind/</code>. You only adjust it in a few cases, all in [[Configuration|.wikven.yaml]].
+<!--T:5-->
+Search needs no configuration: the index is written to a <code>pagefind/</code> directory under the build output and served from <code>/pagefind/</code>. You only adjust it in a few cases, all in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]].
 
+<!--T:6-->
 If your site lives in a subdirectory, set the bundle path to include it. This site deploys under <code>/wikven</code> on GitHub Pages:
+</translate>
 
 <syntaxhighlight lang="yaml">
 config:
   SifterSearchBundlePath: /wikven/pagefind/
 </syntaxhighlight>
 
+<translate>
+<!--T:7-->
 To list all matches on a page rather than just the typeahead, name a content page (see below):
+</translate>
 
 <syntaxhighlight lang="yaml">
 config:
   SifterSearchResultsPage: "Search"
 </syntaxhighlight>
 
+<translate>
+<!--T:8-->
 To turn search off, point the output directory at nothing:
+</translate>
 
 <syntaxhighlight lang="yaml">
 config:
   SifterSearchOutputDir: ""
 </syntaxhighlight>
 
+<translate>
+<!--T:9-->
 == Full results page ==
 
+<!--T:10-->
 The skin's search box shows the top matches as you type. For a page that lists
 all matches, create an (otherwise empty) content page and name it in
 <code>SifterSearchResultsPage</code>. SifterSearch mounts its full search UI
 there and runs the query from the URL, and the search box's "search for pages
 containing…" action and its Enter key go to that page. This site uses a page
 titled <code>Search</code>.
+</translate>
 
 {{prevnext|JavaScript|Translating}}
 {{DISPLAYTITLE:Searching}}

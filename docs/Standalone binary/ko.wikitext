@@ -1,0 +1,66 @@
+<!--T:1 @be164273-->
+[[$1|Docker 이미지]] 외에도, {{wikven}}은 MediaWiki를 내장한 단일 자체 완결형 실행 파일로 배포되므로 Docker 없이도 사이트를 빌드할 수 있습니다. x86_64와 arm64 Linux용으로 제공됩니다.
+
+<!--T:2 @d20c0e94-->
+macOS와 Windows에서는 대신 [[$1|Docker 이미지]]를 사용하십시오. {{wikven}}은 비용 문제로 미리 빌드된 macOS 바이너리를 제공하지 않습니다. 다운로드한 바이너리가 Gatekeeper에 차단되지 않고 실행되려면 Apple이 유료 Apple Developer Program 계정(연 US$99)을 통한 서명과 공증(notarization)을 요구하는데, 이 비용은 아직 이 프로젝트에 정당화되지 않습니다. 유일한 대안인 사용자에게 격리(quarantine)를 손수 해제하라고 안내하는 방법은 보안 검사를 우회하도록 길들이므로 제공하지 않습니다. 그래도 바이너리를 원하는 macOS 사용자는 [https://frankenphp.dev/docs/static/ FrankenPHP의 정적 빌드]로 소스에서 직접 컴파일할 수 있습니다. 로컬에서 빌드한 바이너리는 격리되지 않습니다.
+
+<!--T:3 @ae941256-->
+미리 빌드된 Windows 바이너리도 없습니다. 단일 자체 완결형 실행 파일을 만들어 내는 툴체인이 아직 Windows를 지원하지 않기 때문입니다 ([https://github.com/chaotic-ground/wikven/issues/192 이슈 #192] 참고).
+
+<!--T:4 @fbddba59-->
+== 다운로드 ==
+
+<!--T:5 @b78eee68-->
+자신의 아키텍처에 맞는 바이너리를 [https://github.com/chaotic-ground/wikven/releases 최신 릴리스]에서 내려받아 실행 가능하게 만드십시오:
+
+<!--T:6 @d23a1128-->
+arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오.
+
+<!--T:7 @833b4685-->
+태그된 릴리스 대신 main 브랜치의 최신 커밋을 따라가려면 나이틀리 빌드를 사용하십시오. 이 빌드는 <code>nightly-YYYY-MM-DD</code>로 태그된 날짜별 프리릴리스로 매일 게시됩니다. [https://github.com/chaotic-ground/wikven/releases 릴리스 페이지]에서 가장 최근 것을 고르거나, 자동으로 알아낼 수도 있습니다:
+
+<!--T:8 @0a0a77d1-->
+== 검증 ==
+
+<!--T:9 @f0e777eb-->
+각 릴리스 바이너리는 <code>.sha256</code> 체크섬과 서명된 빌드 출처(provenance) 증명과 함께 게시됩니다. <code>PATH</code>에 설치하는 바이너리를 신뢰하기 전에 확인하려면, 릴리스 이름 그대로 내려받아 체크섬을 검증하십시오:
+
+<!--T:10 @3efbeeb6-->
+또는 [https://cli.github.com/ GitHub CLI]로 GitHub Actions가 이 저장소에서 빌드했다는 출처를 검증하십시오:
+
+<!--T:11 @ba5e6d08-->
+== 설치 ==
+
+<!--T:12 @1e18ae73-->
+내려받은 파일은 그대로 실행됩니다. 저장한 디렉터리에서 <code>./wikven</code>을 실행하면 됩니다. 어디서나 그냥 <code>wikven</code>으로 실행하려면 <code>PATH</code>에 설치하십시오:
+
+<!--T:13 @f708d7f0-->
+root 권한이 없다면, 대신 <code>PATH</code>에 있는 개인 디렉터리(예: <code>~/.local/bin</code>)에 설치하십시오 (<code>-D</code>는 디렉터리가 없으면 만들어 줍니다):
+
+<!--T:14 @877657da-->
+아래 명령들은 바이너리가 <code>PATH</code>에 있다고 가정합니다. 이 단계를 건너뛰었다면, 내려받은 디렉터리에서 <code>./wikven</code>으로 실행하십시오.
+
+<!--T:15 @2f9a528f-->
+== 사이트 빌드하기 ==
+
+<!--T:16 @9d553e1b-->
+위키텍스트와 [[$1|.wikven.yaml]]을 <code>src/</code> 디렉터리에 넣은 다음 빌드하십시오:
+
+<!--T:17 @7191e8ac-->
+렌더링된 사이트는 <code>dist/</code>에 기록됩니다. <code>wikven serve</code>로 미리 볼 수 있습니다 ([[$1|배포하기]] 참고). 작업 디렉터리는 기본값이 현재 디렉터리이며, 다른 곳의 프로젝트를 빌드하려면 <code>WIKVEN_WORKDIR</code>을 설정하십시오:
+
+<!--T:18 @7f3f64e1-->
+출력물은 Docker 이미지의 것과 동일합니다. 바이너리는 MediaWiki, 번들된 확장 기능과 스킨, 그리고 모든 인터페이스 언어를 내장하며, {{wikven}}의 기본값 위에 겹쳐지는 동일한 [[$1|.wikven.yaml]]을 읽습니다.
+
+<!--T:19 @bdadce97-->
+== 선택적 호스트 도구 ==
+
+<!--T:20 @62a35ee6-->
+바이너리는 자체적으로 렌더링하지만, 다음 호스트 프로그램이 있으면 활용합니다:
+
+<!--T:21 @85f214a2-->
+* '''ImageMagick'''와 '''librsvg'''는 더 높은 품질의 섬네일을 만들어 냅니다. 이들이 없으면 바이너리는 래스터 이미지에 내장 GD 라이브러리를 사용하고 SVG를 인라인으로 제공합니다. [[$1|이미지]] 참고.
+* '''git'''은 [[$2|서드파티 확장 기능과 스킨]]을 가져올 때만 필요합니다.
+
+<!--T:22 @4c40f389-->
+{{note|HTTPS를 통한 가져오기, InstantCommons를 통한 위키미디어 공용 이미지, 그리고 [[$1|서드파티 확장 기능이나 스킨]]은 시스템의 CA 인증서에 의존합니다. 이것이 없는 최소 구성 시스템에서는 배포판의 CA 번들(예: <code>ca-certificates</code> 패키지)을 설치하십시오. 로컬 콘텐츠와 이미지만 있는 사이트는 네트워크 접근이 필요 없습니다.}}

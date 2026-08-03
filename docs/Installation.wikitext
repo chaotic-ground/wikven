@@ -1,31 +1,47 @@
 __TOC__
 
+<languages />
+<translate>
+<!--T:1-->
 {{wikven}} runs in three ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. Build from source if you want to modify {{wikven}} or run an unreleased version.
 
+<!--T:2-->
 == Binary ==
 
+<!--T:3-->
 A single self-contained executable that embeds MediaWiki, for Linux on x86_64 and arm64. Download it and make it executable:
+</translate>
 
 <syntaxhighlight lang="shell">
 curl -L -o wikven https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 chmod +x wikven
 </syntaxhighlight>
 
-On arm64, use <code>wikven-linux-aarch64</code>. See [[Standalone binary]] for installing it onto your <code>PATH</code>, nightly builds, and the optional host tools it uses.
+<translate>
+<!--T:4-->
+On arm64, use <code>wikven-linux-aarch64</code>. See [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|Standalone binary]] for installing it onto your <code>PATH</code>, nightly builds, and the optional host tools it uses.
 
+<!--T:5-->
 == Docker ==
 
+<!--T:6-->
 Works on any platform with [https://www.docker.com/ Docker], so it is the option to use on macOS and Windows. The image is published to the GitHub Container Registry:
+</translate>
 
 <syntaxhighlight lang="shell">
 docker pull ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
 
+<translate>
+<!--T:7-->
 The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
 
+<!--T:8-->
 == Build from source ==
 
+<!--T:9-->
 To modify {{wikven}} or run an unreleased commit, clone the repository and build the image yourself:
+</translate>
 
 <syntaxhighlight lang="shell">
 git clone https://github.com/chaotic-ground/wikven.git
@@ -33,10 +49,16 @@ cd wikven
 docker build -t wikven .
 </syntaxhighlight>
 
+<translate>
+<!--T:10-->
 This produces a local <code>wikven</code> image you run exactly like the published one. To build the standalone binary from source instead, see [https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile <code>binary.Dockerfile</code>].
+</translate>
 
 ----
 
-Once you have {{wikven}}, head to [[Getting Started]] to build your first site.
+<translate>
+<!--T:11-->
+Once you have {{wikven}}, head to [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build your first site.
+</translate>
 
 {{prevnext|Why wikitext|Getting Started}}

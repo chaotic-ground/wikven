@@ -1,10 +1,16 @@
 __TOC__
 
+<languages />
+<translate>
+<!--T:1-->
 Configuration lives in a <code>.wikven.yaml</code> file in your source directory. It follows the same shape as {{ml|Manual:YAML settings file format|MediaWiki's own YAML settings format}}: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
 
+<!--T:2-->
 The file name is flexible. Wikven accepts <code>.wikven.yaml</code>, <code>.wikven.yml</code> or <code>.wikven.json</code>, and the same three without the leading dot (<code>wikven.yaml</code>, <code>wikven.yml</code>, <code>wikven.json</code>); the <code>.json</code> forms use the same structure, since YAML is a superset of JSON. If more than one is present the first wins, in that order, and the rest are ignored with a warning, so a dotted name beats a plain one, YAML beats JSON, and <code>.yaml</code> beats <code>.yml</code>.
 
+<!--T:3-->
 Wikven ships its own defaults (a sensible MediaWiki configuration for a static wiki) and loads your file on top of them, so anything you set here overrides the default. The defaults live in a <code>default.yml</code> that uses this same format; see [[#Defaults]] below.
+</translate>
 
 <syntaxhighlight lang="yaml">
 extensions:
@@ -17,19 +23,27 @@ config:
   WikvenEditUrl: https://github.com/yourname/some-repository/edit/branch-name/path/to/$1
   WikvenHistoryUrl: https://github.com/yourname/some-repository/commits/branch-name/path/to/$1
 </syntaxhighlight>
+<translate>
+<!--T:4-->
 == <code>extensions</code> ==
 A list of extension names to load. {{ml|Bundled extensions|Bundled extensions}} work by name alone; a name that is not bundled is treated as third-party and fetched from a source you declare in [[#WikvenRepositories|<code>WikvenRepositories</code>]].
 
+<!--T:5-->
 == <code>skins</code> ==
-A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from [[#WikvenRepositories|<code>WikvenRepositories</code>]]. See [[Skins]].
+A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from [[#WikvenRepositories|<code>WikvenRepositories</code>]]. See [[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]].
 
+<!--T:6-->
 == <code>config</code> ==
 
+<!--T:7-->
 A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any {{ml|Manual:Configuration settings|configuration setting}} can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
 
+<!--T:8-->
 === <code>WikvenLogos</code> ===
 
+<!--T:9-->
 The site's header logos. It mirrors MediaWiki's {{ml|Manual:$wgLogos|$wgLogos}}, with the same keys (<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code>, and so on), except each value is the name of an image file in your source directory rather than a URL:
+</translate>
 
 <syntaxhighlight lang="yaml">
 config:
@@ -37,31 +51,46 @@ config:
     icon: logo.svg
 </syntaxhighlight>
 
+<translate>
+<!--T:10-->
 The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file next to the HTML and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page.
 
+<!--T:11-->
 Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
 
+<!--T:12-->
 === <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> and <code>WikvenViewSourceUrl</code> ===
 
+<!--T:13-->
 The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the [[#WikvenVersionPage|Version]] page) has no source file, so these links are omitted for it.
 
+<!--T:14-->
 === <code>WikvenMainPage</code> ===
 
+<!--T:15-->
 The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Defaults to <code>index</code>, so naming your entry file <code>index.wikitext</code> works with no configuration. The page must be one you imported; the build fails if it is missing.
 
+<!--T:16-->
 === <code>WikvenVersionPage</code> ===
 
+<!--T:17-->
 The title of an auto-generated page (mirroring <code>Special:Version</code>) that lists the installed software, extensions and skins, linked from the footer. Defaults to <code>Version</code>. Set it empty to disable the page; a source page of the same name takes precedence over the generated one.
 
+<!--T:18-->
 === <code>WikvenFooterUrl</code> ===
 
+<!--T:19-->
 A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...).
 
+<!--T:20-->
 === <code>WikvenRepositories</code> ===
 
+<!--T:21-->
 Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice.
 
+<!--T:22-->
 Each entry chooses one of three methods by the key it carries:
+</translate>
 
 <syntaxhighlight lang="yaml">
 config:
@@ -83,30 +112,45 @@ config:
       package: mediawiki/semantic-media-wiki:~4.1
 </syntaxhighlight>
 
+<translate>
+<!--T:23-->
 A name in <code>WikvenRepositories</code> that is already bundled with wikven is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
 
-Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and Composer when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[Standalone binary|binary]] they must be on your <code>PATH</code>.
+<!--T:24-->
+Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and Composer when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] they must be on your <code>PATH</code>.
 
+<!--T:25-->
 {{note|The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}
 
-This very site fetches {{ml|Extension:TabberNeue|TabberNeue}} this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
+<!--T:26-->
+This very site fetches {{ml|Extension:TabberNeue|TabberNeue}} this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 
+<!--T:27-->
 === <code>ContentNamespaces</code> ===
 
-A standard MediaWiki setting ({{ml|Manual:$wgContentNamespaces|<code>$wgContentNamespaces</code>}}) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven defaults it to <code>[0, 6]</code>, the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see [[Pages#Categories]]. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
+<!--T:28-->
+A standard MediaWiki setting ({{ml|Manual:$wgContentNamespaces|<code>$wgContentNamespaces</code>}}) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven defaults it to <code>[0, 6]</code>, the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see [[<tvar name="1">Special:MyLanguage/Pages#Categories</tvar>|Pages#Categories]]. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
 
+<!--T:29-->
 == Defaults ==
 
-Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. It also ships an <code>extensions</code> and a <code>skins</code> default, so every site gets [[Searching|SifterSearch]] search and the Vector skin without listing them. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
+<!--T:30-->
+Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. It also ships an <code>extensions</code> and a <code>skins</code> default, so every site gets [[<tvar name="1">Special:MyLanguage/Searching</tvar>|SifterSearch]] search and the Vector skin without listing them. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
 
+<!--T:31-->
 Titles are kept as written (rather than first-letter-capitalized, MediaWiki's default) so the entry page can be the lowercase <code>index</code>, which the build writes as <code>index.html</code>, the file a static host serves at the site root. The file is otherwise commented; each comment notes why Wikven sets that value.
 
+<!--T:32-->
 To see the current defaults, read the bundled <code>default.yml</code>. From the Docker image:
+</translate>
 
 <syntaxhighlight lang="shell">
 docker run --rm --entrypoint cat ghcr.io/chaotic-ground/wikven extensions/Wikven/default.yml
 </syntaxhighlight>
 
+<translate>
+<!--T:33-->
 It is also in the [https://github.com/chaotic-ground/wikven/blob/main/default.yml repository].
+</translate>
 
 {{prevnext|Troubleshooting|Standalone binary}}

@@ -1,40 +1,64 @@
+<languages />
+<translate>
+<!--T:1-->
 On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{wikven}}.
 {{note|This page assumes a unix-like shell. The standalone binary is Linux-only; on macOS or Windows, use the Docker image.}}
 
-{{wikven}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[Installation#Binary|binary]], the [[Installation#Docker|Docker image]], or [[Installation#Build from source|built from source]]. This guide uses the binary or Docker, pick whichever you have.
+<!--T:2-->
+{{wikven}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="2">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or [[<tvar name="3">Special:MyLanguage/Installation#Build from source</tvar>|built from source]]. This guide uses the binary or Docker, pick whichever you have.
 
+<!--T:3-->
 ; Requirement
-:* the standalone [[Installation#Binary|binary]] (Linux), or [https://www.docker.com/ Docker] (any platform). See [[Installation]] to get either.
+:* the standalone [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|binary]] (Linux), or [https://www.docker.com/ Docker] (any platform). See [[<tvar name="2">Special:MyLanguage/Installation</tvar>|Installation]] to get either.
+</translate>
 
 ----
 
+<translate>
+<!--T:4-->
 Create a source directory and add a wikitext file. Any file ending in <code>.wikitext</code> becomes a wiki article. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a browser opens at the site root.
+</translate>
 
 <syntaxhighlight lang="shell">
 mkdir src
 echo 'Hello, World!' > src/index.wikitext
 </syntaxhighlight>
 
+<translate>
+<!--T:5-->
 Then build the site. The rendered pages are written to <code>dist/</code>. Pick the tab for how you run {{wikven}}:
+</translate>
 
 <tabber>
 |-|Binary=
-Run it in the directory that holds <code>src/</code> (see [[Installation#Binary|Installation]] to get it):
+<translate>
+<!--T:6-->
+Run it in the directory that holds <code>src/</code> (see [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|Installation]] to get it):
+</translate>
 <syntaxhighlight lang="shell">
 ./wikven build
 </syntaxhighlight>
 |-|Docker=
+<translate>
+<!--T:7-->
 Mount the source and output directories into the container:
+</translate>
 <syntaxhighlight lang="shell">
 docker run --rm \
   -v "$(pwd)/src:/workspace/src" \
   -v "$(pwd)/dist:/workspace/dist" \
   ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
+<translate>
+<!--T:8-->
 The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
+</translate>
 </tabber>
 
+<translate>
+<!--T:9-->
 Preview the site locally, then open <code>http://localhost:8080</code>:
+</translate>
 
 <tabber>
 |-|Binary=
@@ -49,11 +73,16 @@ docker run --rm -p 8080:8080 \
 </syntaxhighlight>
 </tabber>
 
-Opening <code>dist/index.html</code> directly also works, though some links and assets resolve correctly only when served. To publish it online, see [[Deploying]].
+<translate>
+<!--T:10-->
+Opening <code>dist/index.html</code> directly also works, though some links and assets resolve correctly only when served. To publish it online, see [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|Deploying]].
 
+<!--T:11-->
 == Setting the title of the site ==
 
-For configuration, create a [[Configuration|<code>.wikven.yaml</code>]] file in your <code>src</code> directory.
+<!--T:12-->
+For configuration, create a [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]] file in your <code>src</code> directory.
+</translate>
 
 <syntaxhighlight lang="shell">
 cat <<EOF > src/.wikven.yaml
@@ -62,28 +91,41 @@ config:
 EOF
 </syntaxhighlight>
 
+<translate>
+<!--T:13-->
 Build again with the same command as before, and the site is titled "My Site".
 
+<!--T:14-->
 == Adding a second page ==
 
+<!--T:15-->
 Every <code>.wikitext</code> file becomes a page. Add another one and link to it from the first with <code><nowiki>[[...]]</nowiki></code>:
+</translate>
 
 <syntaxhighlight lang="shell">
 echo 'This is the help page.' > src/Help.wikitext
 echo 'Read the [[Help]].' >> src/index.wikitext
 </syntaxhighlight>
 
-Build again: the home page now links to <code>Help.html</code>, and the link works with no server. See [[Pages]] for how file names map to page titles and namespaces.
+<translate>
+<!--T:16-->
+Build again: the home page now links to <code>Help.html</code>, and the link works with no server. See [[<tvar name="1">Special:MyLanguage/Pages</tvar>|Pages]] for how file names map to page titles and namespaces.
 
+<!--T:17-->
 == Adding a template ==
 
+<!--T:18-->
 Templates, the main reason to reach for {{wikven}} over Markdown, let you reuse content. Put a <code>Template:</code> page in your source and transclude it with <code><nowiki>{{...}}</nowiki></code>:
+</translate>
 
 <syntaxhighlight lang="shell">
 echo "'''Note:''' {{{1}}}" > "src/Template:Note.wikitext"
 echo '{{Note|Back up your wiki first.}}' >> src/index.wikitext
 </syntaxhighlight>
 
-Build again: the home page now shows the note. See [[Pages#Templates]] for parameters and more.
+<translate>
+<!--T:19-->
+Build again: the home page now shows the note. See [[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Pages#Templates]] for parameters and more.
+</translate>
 
 {{prevnext|Installation|Pages}}
