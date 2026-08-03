@@ -36,7 +36,7 @@ Then build the site. The rendered pages are written to <code>dist/</code>. Pick 
 Run it in the directory that holds <code>src/</code> (see [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|Installation]] to get it):
 </translate>
 <syntaxhighlight lang="shell">
-./wikven build
+wikven build
 </syntaxhighlight>
 |-|Docker=
 <translate>
