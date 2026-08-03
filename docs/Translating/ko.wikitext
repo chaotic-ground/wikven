@@ -1,0 +1,63 @@
+<!--T:1 @f240c842-->
+{{SITENAME}}은 MediaWiki의 {{ml|Help:Extension:Translate|Translate 확장 기능}}을 사용하여 사이트를 두 개 이상의 언어로 빌드할 수 있습니다. Translate는 보통 번역자가 위키 내 편집기에서 작업하리라 기대하지만, 정적 빌드에는 그럴 공간이 없으므로 {{SITENAME}}은 대신 소스 트리에서 이를 구동합니다. 다른 문서를 쓸 때와 똑같이, 파일을 추가하고 커밋하여 번역합니다.
+
+<!--T:2 @c6a2b946-->
+== 번역 활성화하기 ==
+
+<!--T:3 @fb88aa9b-->
+[[$1|<code>.wikven.yaml</code>]]의 <code>extensions</code>에 <code>Translate</code>를 추가하고, Translate가 의존하는 <code>UniversalLanguageSelector</code>도 함께 추가합니다. 둘 다 {{SITENAME}} 이미지에 번들되어 있으므로 설치할 것은 없습니다.
+
+<!--T:4 @b79a448f-->
+정적 내보내기는 UniversalLanguageSelector의 런타임 웹폰트(라이브 엔드포인트에서 불러옴)를 제공할 수 없으므로 {{SITENAME}}은 이를 끕니다. 독자는 각 문자를 자신의 시스템 글꼴로 보게 됩니다.
+
+<!--T:5 @4bb4feb7-->
+번역할 언어를 나열하지 않습니다. Translate 자체와 마찬가지로, 어떤 언어의 번역이 존재하는 순간 그 언어가 존재하게 됩니다. 문서를 작성하는 언어는 원본 언어로 유지됩니다.
+
+<!--T:6 @5e0ff01d-->
+== 번역할 문서 표시하기 ==
+
+<!--T:7 @15579da2-->
+문서에서 번역해야 할 부분을 <code><nowiki><translate></nowiki></code> 태그로 감싸고, 언어 막대를 두고 싶은 곳에 <code><nowiki><languages/></nowiki></code>를 추가하며, 각 단위에 <code><nowiki><!--T:n--></nowiki></code> 표시자를 붙입니다. 이는 Translate 자체의 {{ml|Help:Extension:Translate/Page translation administration|문서 번역 마크업}}입니다:
+
+<!--T:8 @306e0b25-->
+단위 번호를 손으로 매기지 않습니다. 내용을 <code><nowiki><translate></nowiki></code>로 감싸고 <code><nowiki><languages/></nowiki></code>를 추가한 다음, <code>translate mark</code>를 실행하여 <code><nowiki><!--T:n--></nowiki></code> 표시자를 삽입합니다. 이때 소스 디렉터리를 쓰기 가능하게 마운트합니다:
+
+<!--T:9 @91d58e1f-->
+<code>--all</code> 대신 파일 하나를 전달하면 그 문서만 표시합니다. 표시는 멱등이며 안정적입니다. 이미 있는 번호는 유지하고 새 단위에 대해서만 표시자를 추가하므로, 내용을 추가할 때마다 다시 실행하면 됩니다. 번호는 단위의 정체성입니다. 번역은 이 번호를 참조하여 자신의 단위를 원본과 맞춥니다. 빌드는 언어 막대를 렌더링하고, 각 언어마다 <code>Page/lang</code>에 문서를 렌더링합니다.
+
+<!--T:10 @70fd32d3-->
+== 번역 추가하기 ==
+
+<!--T:11 @d0913d36-->
+번역은 문서 옆에 <code><Page>/<lang>.wikitext</code>라는 이름으로 자리합니다. <code>Intro.wikitext</code>의 한국어 번역은 <code>Intro/ko.wikitext</code>입니다. <code>translate scaffold</code>로 그 골격을 생성하는데, 이는 모든 원본 단위에 대해 빈 <code><nowiki><!--T:n--></nowiki></code> 표시자를 쓰고 각 단위의 원본 텍스트를 안내로 나열합니다:
+
+<!--T:12 @e1cb2e56-->
+파일 대신 <code>--all</code>을 전달하면 번역할 수 있는 모든 문서의 골격을 생성합니다. 다시 실행해도 안전합니다. 번역해 둔 것은 유지하고 새 단위에 대한 표시자만 덧붙입니다.
+
+<!--T:13 @09ecbb46-->
+그런 다음 각 단위의 번역을 그 표시자 아래에 채웁니다:
+
+<!--T:14 @9b71c402-->
+비워 둔 단위는 아직 번역되지 않은 것으로 간주됩니다. <code>translate check</code>가 이를 보고하고 빌드는 이를 원본 언어로 렌더링하므로, 한 문서를 한 번에 몇 단위씩 번역할 수 있습니다. <code>@a1b2c3d4</code> 스탬프는 (아래 참고) 손이 아니라 <code>translate stamp</code>가 추가합니다.
+
+<!--T:15 @a3b9b134-->
+== 스탬프 찍기 ==
+
+<!--T:16 @7a781010-->
+번역을 마친 뒤 <code>translate stamp</code>를 실행하면, 최신 상태인 모든 단위가 자신이 일치하는 원본 버전을 기록합니다. 소스 디렉터리를 쓰기 가능하게 마운트합니다:
+
+<!--T:17 @e7d1ca2a-->
+<code>--all</code> 대신 파일 하나를 전달하면 그 번역만 스탬프를 찍습니다.
+
+<!--T:18 @e391bd1e-->
+== 번역을 최신으로 유지하기 ==
+
+<!--T:19 @681329ba-->
+원본 단위를 바꾸면 그 번역은 더 이상 스탬프와 일치하지 않아 '''오래된''' 상태가 됩니다. {{SITENAME}}은 이를 숨기지 않습니다:
+
+<!--T:20 @b32e5f00-->
+* 빌드된 사이트에서, 오래된 단위는 Translate를 구동하는 위키에서와 똑같이 오래된 번역으로 표시됩니다.
+* <code>translate check</code>는 오래되었거나 누락된 모든 번역을 보고하며, <code>--gate</code>를 주면 0이 아닌 코드로 종료하여 지속적 통합이 빌드를 실패시킬 수 있습니다:
+
+<!--T:21 @122432f4-->
+동반 GitHub Action이 풀 리퀘스트에서 같은 검사를 실행합니다. 번역을 다시 최신으로 되돌리려면, 새 원본에 맞게 편집한 다음 <code>translate stamp</code>로 다시 스탬프를 찍습니다.

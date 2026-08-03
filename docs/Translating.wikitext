@@ -1,10 +1,16 @@
 __TOC__
 
+<languages />
+<translate>
+<!--T:1-->
 {{SITENAME}} can build a site in more than one language using MediaWiki's {{ml|Help:Extension:Translate|Translate extension}}. Translate normally expects translators to work in an in-wiki editor, which a static build has no room for, so {{SITENAME}} drives it from your source tree instead: you translate by adding files and committing them, the same way you write any other page.
 
+<!--T:2-->
 == Enabling translation ==
 
-Add <code>Translate</code> to <code>extensions</code> in your [[Configuration|<code>.wikven.yaml</code>]], along with <code>UniversalLanguageSelector</code>, which Translate depends on. Both are bundled in the {{SITENAME}} image, so there is nothing to install.
+<!--T:3-->
+Add <code>Translate</code> to <code>extensions</code> in your [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]], along with <code>UniversalLanguageSelector</code>, which Translate depends on. Both are bundled in the {{SITENAME}} image, so there is nothing to install.
+</translate>
 
 <syntaxhighlight lang="yaml">
 extensions:
@@ -12,77 +18,134 @@ extensions:
   - Translate
 </syntaxhighlight>
 
+<translate>
+<!--T:4-->
 A static export cannot serve UniversalLanguageSelector's runtime webfonts (they load from a live endpoint), so {{SITENAME}} turns them off; readers see each script in their own system fonts.
 
+<!--T:5-->
 You do not list the languages you translate into: as with Translate itself, a language exists as soon as a translation for it does. The language you write your pages in stays the source language.
 
+<!--T:6-->
 == Marking a page for translation ==
 
-Wrap the parts of a page that should be translated in <code><nowiki><translate></nowiki></code> tags, add <code><nowiki><languages/></nowiki></code> where you want the language bar, and give each unit a <code><nowiki><!--T:n--></nowiki></code> marker. This is Translate's own {{ml|Help:Extension:Translate/Page translation administration|page-translation markup}}:
+<!--T:7-->
+Wrap the parts of a page that should be translated in <code>&lt;translate&gt;</code> tags, add <code>&lt;languages/&gt;</code> where you want the language bar, and give each unit a <code>&lt;!--T:n--&gt;</code> marker. This is Translate's own {{ml|Help:Extension:Translate/Page translation administration|page-translation markup}}:
+</translate>
 
-<syntaxhighlight lang="wikitext">
-<languages/>
+ <nowiki><languages/>
 <translate>
 <!--T:1-->
 {{SITENAME}} builds static sites from MediaWiki.
 
 <!--T:2-->
 It runs a real MediaWiki at build time.
+</translate></nowiki>
+
+<translate>
+<!--T:8-->
+You do not number the units by hand. Wrap the content in <code>&lt;translate&gt;</code> and add <code>&lt;languages/&gt;</code>, then run <code>translate mark</code> to insert the <code>&lt;!--T:n--&gt;</code> markers, mounting your source directory writable:
 </translate>
+
+<tabber>
+|-|Binary=
+<syntaxhighlight lang="console">
+$ wikven translate mark --all
 </syntaxhighlight>
-
-You do not number the units by hand. Wrap the content in <code><nowiki><translate></nowiki></code> and add <code><nowiki><languages/></nowiki></code>, then run <code>translate mark</code> to insert the <code><nowiki><!--T:n--></nowiki></code> markers, mounting your source directory writable:
-
+|-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate mark --all
 </syntaxhighlight>
+</tabber>
 
+<translate>
+<!--T:9-->
 Pass a single file instead of <code>--all</code> to mark just that page. Marking is idempotent and stable: it keeps the numbers already there and only adds markers for new units, so re-run it whenever you add content. The numbers are the unit identity; a translation references them to line its units up with the source. The build renders the language bar and, for each language, a page at <code>Page/lang</code>.
 
+<!--T:10-->
 == Adding a translation ==
 
-A translation lives next to the page, named <code><Page>/<lang>.wikitext</code>: the Korean translation of <code>Intro.wikitext</code> is <code>Intro/ko.wikitext</code>. Generate its skeleton with <code>translate scaffold</code>, which writes an empty <code><nowiki><!--T:n--></nowiki></code> marker for every source unit and lists each unit's source text as a guide:
+<!--T:11-->
+A translation lives next to the page, named <code><Page>/<lang>.wikitext</code>: the Korean translation of <code>Intro.wikitext</code> is <code>Intro/ko.wikitext</code>. Generate its skeleton with <code>translate scaffold</code>, which writes an empty <code>&lt;!--T:n--&gt;</code> marker for every source unit and lists each unit's source text as a guide:
+</translate>
 
+<tabber>
+|-|Binary=
+<syntaxhighlight lang="console">
+$ wikven translate scaffold ko Intro.wikitext
+</syntaxhighlight>
+|-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate scaffold ko Intro.wikitext
 </syntaxhighlight>
+</tabber>
 
+<translate>
+<!--T:12-->
 Pass <code>--all</code> in place of a file to scaffold every translatable page. Re-running is safe: it keeps what you have translated and only appends markers for new units.
 
+<!--T:13-->
 Then fill each unit's translation under its marker:
+</translate>
 
-<syntaxhighlight lang="wikitext">
-<!--T:1-->
+ <nowiki><!--T:1-->
 위크벤은 미디어위키로 정적 사이트를 만듭니다.
 
 <!--T:2-->
-빌드 시 실제 미디어위키를 실행합니다.
-</syntaxhighlight>
+빌드 시 실제 미디어위키를 실행합니다.</nowiki>
 
+<translate>
+<!--T:14-->
 A unit left empty counts as not yet translated: <code>translate check</code> reports it and the build renders it in the source language, so you can translate a page a few units at a time. The <code>@a1b2c3d4</code> stamp is added by <code>translate stamp</code> (see below), not by hand.
 
+<!--T:15-->
 == Stamping ==
 
+<!--T:16-->
 After translating, run <code>translate stamp</code> so every up-to-date unit records the source version it matches. Mount your source directory writable:
+</translate>
 
+<tabber>
+|-|Binary=
+<syntaxhighlight lang="console">
+$ wikven translate stamp --all
+</syntaxhighlight>
+|-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate stamp --all
 </syntaxhighlight>
+</tabber>
 
+<translate>
+<!--T:17-->
 Pass a single file instead of <code>--all</code> to stamp just that translation.
 
+<!--T:18-->
 == Keeping translations up to date ==
 
+<!--T:19-->
 When you change a source unit, its translations no longer match their stamp and are '''out of date'''. {{SITENAME}} does not hide this:
 
+<!--T:20-->
 * In the built site, an out-of-date unit is marked as an outdated translation, exactly as it would be on a wiki running Translate.
 * <code>translate check</code> reports every out-of-date or missing translation, and with <code>--gate</code> exits non-zero so continuous integration can fail the build:
+</translate>
 
+<tabber>
+|-|Binary=
+<syntaxhighlight lang="console">
+$ wikven translate check --gate
+::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)
+</syntaxhighlight>
+|-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate check --gate
 ::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)
 </syntaxhighlight>
+</tabber>
 
+<translate>
+<!--T:21-->
 A companion GitHub Action runs the same check on pull requests. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
+</translate>
 
 {{prevnext|Searching|Deploying}}
