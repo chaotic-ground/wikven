@@ -27,11 +27,13 @@ class TranslationSource {
 	 * str_contains would mistake the page for a real translation source and try to mark it.
 	 */
 	private static function withoutVerbatimRegions(string $text): string {
-		return preg_replace(
-			'#<(syntaxhighlight|source|nowiki|pre)\b[^>]*>.*?</\1>#is',
-			'',
-			$text
-		) ?? $text;
+		return (
+			preg_replace(
+				'#<(syntaxhighlight|source|nowiki|pre)\b[^>]*>.*?</\1>#is',
+				'',
+				$text
+			) ?? $text
+		);
 	}
 
 	/** The translation file for a base file in the given language ("Foo.wikitext" -> "Foo/ko.wikitext"). */
