@@ -76,22 +76,42 @@ test("arriving on a tab's fragment switches every tabber", async ({ page }) => {
 	expect(new URL(page.url()).hash).toBe("#tabber-Docker");
 });
 
-test("jumping to a tab's fragment switches every tabber", async ({ page }) => {
+// TabberNeue answers a hashchange itself, by opening the fragment's panel in
+// that panel's own tabber, so the gadget leaves that tabber alone and lines up
+// only the others. Racing it there ends with the gadget's activation reaching
+// TabberNeue's hash router as a click, which answers by replacing the fragment
+// with the panel's id -- visible only for a fragment that is not already that
+// id, hence an anchor inside the panel rather than the panel itself. The panels
+// on this page carry no such anchor, so add one.
+//
+// Reaching that race also needs TabberNeue's hashchange listener to be
+// registered before the gadget's, which on this export it is not: the gadget
+// registers when its module runs in <head>, TabberNeue's hash router when
+// scan() runs on wikipage.content, which mediawiki.page.ready fires at DOM
+// ready. So this is a guard on the fragment, not a reproduction of the race.
+test("jumping to an anchor inside a panel switches every tabber", async ({
+	page,
+}) => {
 	await page.goto("Getting_Started.html");
 	const [first, second] = await tabbersOf(page);
 	await expect(first.locator(SELECTED)).toHaveText("Binary");
 
-	// TabberNeue answers the same hashchange by opening that panel in its own
-	// tabber; the two must not race each other over that one tabber.
+	await first.evaluate((el) => {
+		const anchor = el.ownerDocument.createElement("span");
+		anchor.id = "deep-anchor";
+		el.querySelector('.tabber__panel[id$="Docker"]').prepend(anchor);
+	});
+
 	await page.evaluate(() => {
-		window.location.hash = "#tabber-Docker";
+		window.location.hash = "#deep-anchor";
 	});
 
 	await expect(first.locator(SELECTED)).toHaveText("Docker");
 	await second.scrollIntoViewIfNeeded();
 	await expect(second.locator(SELECTED)).toHaveText("Docker");
 
-	expect(new URL(page.url()).hash).toBe("#tabber-Docker");
+	// Not rewritten to #tabber-Docker.
+	expect(new URL(page.url()).hash).toBe("#deep-anchor");
 });
 
 test("the choice survives a reload", async ({ page }) => {
