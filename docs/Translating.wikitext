@@ -87,13 +87,11 @@ Pass <code>--all</code> in place of a file to scaffold every translatable page. 
 Then fill each unit's translation under its marker:
 </translate>
 
-<syntaxhighlight lang="wikitext">
-<!--T:1-->
+ <nowiki><!--T:1-->
 위크벤은 미디어위키로 정적 사이트를 만듭니다.
 
 <!--T:2-->
-빌드 시 실제 미디어위키를 실행합니다.
-</syntaxhighlight>
+빌드 시 실제 미디어위키를 실행합니다.</nowiki>
 
 <translate>
 <!--T:14-->
