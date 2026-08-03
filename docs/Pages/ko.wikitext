@@ -1,0 +1,64 @@
+<!--T:1 @8d296a87-->
+소스 디렉터리의 각 파일은 하나의 문서가 됩니다. {{wikven}}은 파일 경로에서 문서의 제목과 이름공간을 이끌어 내므로, 파일 이름이 곧 이를 정하는 방법입니다.
+
+<!--T:2 @445da71e-->
+== 파일 이름에서 문서까지 ==
+
+<!--T:3 @3d152259-->
+<code>.wikitext</code>로 끝나는 파일은 경로에서 <code>.wikitext</code>를 뗀 것이 제목인 위키 문서가 됩니다. 따라서 <code>src/Help.wikitext</code>는 "Help" 문서이며 <code>Help.html</code>로 제공됩니다.
+
+<!--T:4 @54c3bc83-->
+제목은 쓴 그대로 유지됩니다. 공백은 공백으로 남고(밑줄이 아니라 <code>Getting Started.wikitext</code>로 파일 이름을 지으세요), 첫 글자의 대소문자도 그대로입니다. 진입 문서는 <code>index</code>로 이름 지어 <code>index.html</code>로 빌드되게 하세요. 이 파일이 바로 정적 호스트가 사이트 루트에서 제공하는 파일입니다.
+
+<!--T:5 @ad50dcea-->
+파일 이름이 제목으로 깔끔하게 대응되지 않으면(MediaWiki가 이를 다르게 정규화하는 경우), 빌드가 경고를 냅니다. 문서의 편집·역사 링크가 파일 이름에서 만들어지는데, 그렇지 않으면 링크가 제대로 연결되지 않기 때문입니다. 이미 정규화된 제목으로 파일 이름을 바꾸세요.
+
+<!--T:6 @a3ea4731-->
+== 문서 간 링크 ==
+
+<!--T:7 @71147553-->
+표준 {{ml|Help:Links|위키텍스트 링크}}인 <code><nowiki>[[Title]]</nowiki></code>이나 <code><nowiki>[[Title|label]]</nowiki></code>로 링크합니다. {{wikven}}은 정적 출력에서 이를 대응하는 <code>.html</code> 경로로 다시 써 주므로, 내부 링크가 서버 없이도 작동합니다.
+
+<!--T:8 @654ede6a-->
+== 하위 문서 ==
+
+<!--T:9 @0162f051-->
+파일을 하위 디렉터리에 두면 {{ml|Help:Subpages|하위 문서}}가 만들어집니다. <code>src/Guide/Setup.wikitext</code>는 "Guide/Setup" 문서가 됩니다.
+
+<!--T:10 @a802e433-->
+== 이름공간 ==
+
+<!--T:11 @beac209b-->
+파일 이름 앞에 이름공간을 붙이면 문서가 그 이름공간에 놓입니다:
+
+<!--T:12 @e935d2c1-->
+* <code>Template:Infobox.wikitext</code>는 "Template:Infobox" 틀입니다 ([[$1|틀]] 참고).
+* <code>File:Logo.png.wikitext</code>는 업로드된 <code>Logo.png</code>의 설명 문서입니다 ([[$2|이미지]] 참고).
+* <code>MediaWiki:Common.css</code>와 <code>MediaWiki:Common.js</code>는 사이트 전역 스타일시트와 스크립트입니다 ([[$3|자바스크립트]] 참고). 이 파일들은 이름 자체가 콘텐츠 유형을 담고 있으므로 확장자를 그대로 유지하며 <code>.wikitext</code> 표시가 필요 없습니다.
+
+<!--T:13 @624ef152-->
+== 분류 ==
+
+<!--T:14 @0a7e9e56-->
+문서에 <code><nowiki>[[Category:Name]]</nowiki></code>을 추가하면 그 문서를 {{ml|Help:Categories|분류}}할 수 있습니다. 분류는 다른 위키와 마찬가지로 문서 하단에 표시됩니다.
+
+<!--T:15 @245de22e-->
+다만 분류 자체의 문서는 기본적으로 내보내지지 않습니다. {{wikven}}은 정적 사이트에 ''콘텐츠'' 문서만 기록하며, 콘텐츠로 치는 것은 주(main) 이름공간과 File: 이름공간뿐입니다. (이름공간에는 숫자 ID가 있습니다: 주 이름공간은 <code>0</code>, File:은 <code>6</code>, Category는 <code>14</code>입니다.) 그래서 하단의 분류는 정적 호스트가 제공하지 않는 <code>Category:Name.html</code>로 연결되는 죽은 링크가 되며, 이는 분류 문서를 내보내기 전까지 그렇습니다. 그렇게 하려면 [[$1|<code>.wikven.yaml</code>]]에서 <code>ContentNamespaces</code>를 설정하고 소스에 <code>Category:Name.wikitext</code> 파일을 추가하세요:
+
+<!--T:16 @56c45c65-->
+이 키는 기본값을 확장하는 것이 아니라 대체하므로, 목록에 <code>0</code>과 <code>6</code>을 반드시 남겨 두세요. 그러지 않으면 주 이름공간과 File: 문서가 더 이상 내보내지지 않습니다.
+
+<!--T:17 @b117030b-->
+유지보수용이나 추적용 분류를 하단에서 빼려면, 그 분류 문서에 <code><nowiki>__HIDDENCAT__</nowiki></code> {{ml|Help:Magic words|매직 워드}}를 추가하세요. 정적 내보내기에는 로그인한 독자가 없으므로, 숨겨진 분류는 모두에게 하단에서 보이지 않습니다.
+
+<!--T:18 @9d4575a8-->
+== 틀 ==
+
+<!--T:19 @e215d64a-->
+소스에 <code>Template:Name.wikitext</code> 파일을 두고 아무 문서에서나 <code><nowiki>{{Name}}</nowiki></code>으로 사용하세요. 예를 들어 다음 파일을:
+
+<!--T:20 @0d79e8e7-->
+<code>Template:Note.wikitext</code>로 저장하고 문서에서 다음과 같이 사용하면:
+
+<!--T:21 @22658558-->
+"'''Note:''' Back up your wiki first."로 렌더링됩니다. 틀은 위치 매개변수(<code><nowiki>{{{1}}}</nowiki></code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 {{ml|Help:Parser functions|파서 함수}}를 실행합니다. 이 사이트의 문서들도 "{{wikven}}"으로 렌더링되는 <code>Template:wikven</code>을 끼워 넣습니다. 문법 자체는 표준 MediaWiki입니다. {{ml|Help:Templates}} 참고.

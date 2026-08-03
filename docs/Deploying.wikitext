@@ -1,10 +1,16 @@
 __TOC__
 
+<languages />
+<translate>
+<!--T:1-->
 {{wikven}} writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
 
+<!--T:2-->
 == GitHub Pages ==
 
+<!--T:3-->
 This workflow rebuilds and publishes the site on every push. It bakes the source with the {{wikven}} [https://github.com/chaotic-ground/wikven/tree/main/action composite action], then uploads <code>dist/</code> to Pages. Actions are pinned to a full commit SHA, not a tag, so a moved tag cannot swap them under you:
+</translate>
 
 <syntaxhighlight lang="yaml">
 name: Deploy
@@ -35,25 +41,37 @@ jobs:
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128  # v5.0.0
 </syntaxhighlight>
 
+<translate>
+<!--T:4-->
 Enable Pages for the repository under '''Settings → Pages → Build and deployment → Source: GitHub Actions'''. This documentation site is published this way.
 
-{{note|A GitHub '''project''' page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because {{wikven}} writes them relative, but anything that needs an absolute path must include that base path: set [[Searching|search]]'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A '''user/organization''' page (served at the domain root) needs no such setting.}}
+<!--T:5-->
+{{note|A GitHub '''project''' page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because {{wikven}} writes them relative, but anything that needs an absolute path must include that base path: set [[<tvar name="1">Special:MyLanguage/Searching</tvar>|search]]'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A '''user/organization''' page (served at the domain root) needs no such setting.}}
 
+<!--T:6-->
 == Any static host ==
 
+<!--T:7-->
 Because <code>dist/</code> is just files, you can serve it from any static host (Netlify, Cloudflare Pages, an object store like S3, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
 
+<!--T:8-->
 == Preview locally ==
 
+<!--T:9-->
 Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. {{wikven}} has a built-in <code>serve</code> command for this.
 
-With the [[Standalone binary|standalone binary]], it serves <code>dist/</code> on <code>http://localhost:8080</code> (override with <code>--listen</code>):
+<!--T:10-->
+With the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]], it serves <code>dist/</code> on <code>http://localhost:8080</code> (override with <code>--listen</code>):
+</translate>
 
 <syntaxhighlight lang="shell">
 wikven serve
 </syntaxhighlight>
 
+<translate>
+<!--T:11-->
 With the Docker image, run the <code>serve</code> command and publish the port (the build output must already be in the mounted <code>dist/</code>):
+</translate>
 
 <syntaxhighlight lang="shell">
 docker run --rm -p 8080:8080 \
@@ -61,6 +79,9 @@ docker run --rm -p 8080:8080 \
   ghcr.io/chaotic-ground/wikven serve
 </syntaxhighlight>
 
+<translate>
+<!--T:12-->
 Any static server works too, for example <code>cd dist && python3 -m http.server</code>.
+</translate>
 
 {{prevnext|Translating|Troubleshooting}}

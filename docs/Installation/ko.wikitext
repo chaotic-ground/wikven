@@ -1,0 +1,32 @@
+<!--T:1 @de33eb0e-->
+{{wikven}}은 세 가지 방식으로 실행됩니다. Linux에서는 Docker가 필요 없는 단일 파일인 단독 실행 바이너리가 가장 간단합니다. macOS나 Windows에서는 Docker 이미지를 사용하십시오. {{wikven}}을 수정하거나 아직 배포되지 않은 버전을 실행하려면 소스에서 빌드하십시오.
+
+<!--T:2 @9383077a-->
+== 바이너리 ==
+
+<!--T:3 @4aec5749-->
+x86_64와 arm64 Linux용으로 MediaWiki를 내장한 단일 자체 완결형 실행 파일입니다. 내려받은 뒤 실행 권한을 부여하십시오:
+
+<!--T:4 @b679cc4f-->
+arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파일을 <code>PATH</code>에 설치하는 방법, 나이틀리 빌드, 그리고 이 파일이 사용하는 선택적 호스트 도구에 관해서는 [[$1|단독 실행 바이너리]]를 참고하십시오.
+
+<!--T:5 @77dff36a-->
+== Docker ==
+
+<!--T:6 @26976b22-->
+[https://www.docker.com/ Docker]가 설치된 모든 플랫폼에서 동작하므로, macOS와 Windows에서 사용할 선택지입니다. 이미지는 GitHub Container Registry에 게시됩니다:
+
+<!--T:7 @f409f0df-->
+태그가 없는 이미지는 최신 빌드를 따라갑니다. 특정 버전으로 고정하려면 <code>:1.0.0</code> 같은 배포 태그를 붙이십시오.
+
+<!--T:8 @b85c6b45-->
+== 소스에서 빌드 ==
+
+<!--T:9 @30942934-->
+{{wikven}}을 수정하거나 배포되지 않은 커밋을 실행하려면, 저장소를 복제한 뒤 이미지를 직접 빌드하십시오:
+
+<!--T:10 @c2d0a1ec-->
+이렇게 하면 게시된 이미지와 똑같이 실행할 수 있는 로컬 <code>wikven</code> 이미지가 만들어집니다. 대신 단독 실행 바이너리를 소스에서 빌드하려면 [https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile <code>binary.Dockerfile</code>]을 참고하십시오.
+
+<!--T:11 @e54e6ffe-->
+{{wikven}}을 갖추었다면, [[$1|시작하기]]로 이동해 첫 사이트를 만드십시오.

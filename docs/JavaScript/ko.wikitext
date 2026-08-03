@@ -1,0 +1,23 @@
+<!--T:1 @bdb043ec-->
+{{wikven}}은 빌드 시점에 위키 자체의 JavaScript를 정적 내보내기에 번들로 포함하므로, 구동 중인 서버나 <code>load.php</code> 없이도 사이트 스크립트와 소도구가 실행됩니다.
+
+<!--T:2 @4e04a5f5-->
+== MediaWiki:Common.js ==
+
+<!--T:3 @de97939a-->
+사이트 전역 JavaScript는 일반 위키에서와 마찬가지로 <code>MediaWiki:Common.js</code>에 둡니다. 소스 디렉터리에 <code>MediaWiki:Common.js</code> 파일을 만들면 모든 문서에서 실행됩니다. <code>.js</code> 문서는 자체 콘텐츠 모델을 가지므로 <code>.wikitext</code> 표시가 필요 없습니다. 스킨의 <code>MediaWiki:Vector.js</code>(등등)도 같은 방식으로 동작합니다.
+
+<!--T:4 @bf2fc9e7-->
+== 소도구 ==
+
+<!--T:5 @1c5afc7b-->
+{{ml|Extension:Gadgets|소도구}}를 사용하려면 [[$1|.wikven.yaml]]에서 번들된 Gadgets 확장 기능을 활성화합니다:
+
+<!--T:6 @926aae82-->
+소도구는 <code>MediaWiki:Gadgets-definition.wikitext</code>에 나열하고, 각 소도구의 코드는 <code>MediaWiki:Gadget-<name>.js</code>에 둡니다:
+
+<!--T:7 @a97a250a-->
+<code>default</code>로 표시된 소도구만 로드됩니다. 정적 사이트에는 다른 소도구를 켤 로그인한 독자가 없기 때문입니다. 소도구 자체의 CSS(같은 모듈에 있는)는 포함되지만, 스타일만 있는 독립형 소도구는 아직 지원되지 않습니다.
+
+<!--T:8 @665bd9d4-->
+이 문서에는 그러한 소도구 하나인 <code>PersistTabber</code>가 포함되어 있는데, 이는 설치 단계에서 Docker 탭과 바이너리 탭 중 무엇을 선택했는지 기억하고 문서를 오가는 동안 그 선택을 유지합니다.

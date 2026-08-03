@@ -1,0 +1,32 @@
+<!--T:1 @acd93a69-->
+{{ml|Bundled extensions and skins|번들된 스킨}}은 [[$1|.wikven.yaml]]에서 고를 수 있습니다.
+
+<!--T:2 @09b81e9f-->
+== 사용할 수 있는 스킨 ==
+
+<!--T:3 @d959129e-->
+MediaWiki에 번들된 스킨을 사용할 수 있습니다. <code>Vector</code>를 선택하면 Vector 2022(해당 스킨의 <code>vector-2022</code> 변형)가 적용됩니다.
+
+<!--T:4 @94ebf3cb-->
+* {{ml|Skin:Vector|Vector}} (기본값)
+* {{ml|Skin:Timeless|Timeless}}
+* {{ml|Skin:MonoBook|MonoBook}}
+* {{ml|Skin:MinervaNeue|MinervaNeue}} (모바일 지향)
+
+<!--T:5 @1c58d369-->
+== 스킨 설정 ==
+
+<!--T:6 @9c238db2-->
+<code>skins</code>를 설정하여 스킨을 바꿀 수 있습니다. 목록의 첫 번째 스킨이 기본값으로 사용됩니다.
+
+<!--T:7 @bf282a4e-->
+== 서드파티 스킨 ==
+
+<!--T:8 @41deb027-->
+번들되지 않은 스킨도 <code>skins</code>에 나열할 수 있으며, 그 소스는 [[$1|<code>WikvenRepositories</code>]]에 선언합니다. 이 스킨은 빌드 시점에 가져와지며 다른 스킨과 마찬가지로 기본값이 될 수 있습니다. 이 문서 사이트는 이런 방식으로 서드파티 [https://www.mediawiki.org/wiki/Skin:Citizen Citizen] 스킨을 가져와, 바닥글의 스킨 전환기를 통해 Vector와 함께 제공합니다.
+
+<!--T:9 @2d358941-->
+== 스킨별 설정 ==
+
+<!--T:10 @74cd971d-->
+<code>config</code> 맵을 사용합니다.
