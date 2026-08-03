@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\PageTranslation;
 
 use FilesystemIterator;
+use MediaWiki\Parser\Parser;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -17,23 +18,13 @@ use RecursiveIteratorIterator;
 class TranslationSource {
 	/** Whether a page's wikitext marks it as translatable (a real <translate>, not one shown as an example). */
 	public static function isTranslatable(string $text): bool {
-		return str_contains(self::withoutVerbatimRegions($text), '<translate>');
-	}
-
-	/**
-	 * Blank out the spans MediaWiki renders verbatim instead of parsing (<syntaxhighlight>, <nowiki>,
-	 * <pre>, <source>). A page that documents page translation, such as this wiki's Translating page,
-	 * shows <translate> and <!--T:n--> inside those spans as examples; without stripping them a bare
-	 * str_contains would mistake the page for a real translation source and try to mark it.
-	 */
-	private static function withoutVerbatimRegions(string $text): string {
-		return (
-			preg_replace(
-				'#<(syntaxhighlight|source|nowiki|pre)\b[^>]*>.*?</\1>#is',
-				'',
-				$text
-			) ?? $text
-		);
+		// A <translate> inside a verbatim span -- <syntaxhighlight>, <nowiki>, <pre>, <source> -- is an
+		// example, as on the page documenting page translation, not real markup. Blank those spans with
+		// MediaWiki's own tag extraction (it handles attributes, self-closing tags and comments) before
+		// looking for a real tag, rather than trusting a hand-rolled regex.
+		$matches = [];
+		$stripped = Parser::extractTagsAndParams(['syntaxhighlight', 'source', 'nowiki', 'pre'], $text, $matches);
+		return str_contains($stripped, '<translate>');
 	}
 
 	/** The translation file for a base file in the given language ("Foo.wikitext" -> "Foo/ko.wikitext"). */
