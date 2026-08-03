@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mediawiki-version: [REL1_45, master]
+        mediawiki-version: [REL1_46, master]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -36,7 +36,7 @@ jobs:
       - uses: femiwiki/quibble-action@d799e5bb348756ea1588f2b5f2ca7fc09fdbdac9  # v2.0.1
         with:
           stage: composer-test
-          mediawiki-version: REL1_45
+          mediawiki-version: REL1_46
           # PHP 8.3 image: wikven's dev deps (minus-x etc.) require >= 8.2.
           quibble-docker-image: quibble-bookworm-php83
 

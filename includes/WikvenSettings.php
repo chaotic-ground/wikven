@@ -65,6 +65,9 @@ if ($wikvenConvert !== null) {
 if ($wikvenRsvg !== null) {
 	$wgSVGConverter = 'rsvg';
 	$wgSVGConverterPath = dirname($wikvenRsvg);
+	// Native SVG rendering is on by default and bypasses the converter; turn it off so the
+	// rsvg converter configured above rasterizes SVGs into thumbnails.
+	$wgSVGNativeRendering = false;
 } else {
 	$wgSVGNativeRendering = true;
 }
