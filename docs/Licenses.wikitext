@@ -3,7 +3,7 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-{{wikven}} itself is licensed [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]. The Docker image and the standalone binary it produces redistribute third-party software under that software's own licenses, acknowledged here. (GPL-2.0-or-later and GPL-3.0-or-later are compatible, so this is attribution, not a conflict.)
+{{SITENAME}} itself is licensed [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]. The Docker image and the standalone binary it produces redistribute third-party software under that software's own licenses, acknowledged here. (GPL-2.0-or-later and GPL-3.0-or-later are compatible, so this is attribution, not a conflict.)
 
 <!--T:2-->
 {| class="wikitable"

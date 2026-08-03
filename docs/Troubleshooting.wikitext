@@ -15,7 +15,7 @@ The [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone bina
 == The search box does nothing ==
 
 <!--T:5-->
-Search is client-side, built into {{wikven}} via SifterSearch and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See [[<tvar name="1">Special:MyLanguage/Searching</tvar>|Searching]].
+Search is client-side, built into {{SITENAME}} via SifterSearch and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See [[<tvar name="1">Special:MyLanguage/Searching</tvar>|Searching]].
 
 <!--T:6-->
 == A page is missing from the site ==

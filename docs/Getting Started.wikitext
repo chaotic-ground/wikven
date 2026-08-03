@@ -1,11 +1,11 @@
 <languages />
 <translate>
 <!--T:1-->
-On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{wikven}}.
+On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{SITENAME}}.
 {{note|This page assumes a unix-like shell. The standalone binary is Linux-only; on macOS or Windows, use the Docker image.}}
 
 <!--T:2-->
-{{wikven}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="2">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or [[<tvar name="3">Special:MyLanguage/Installation#Build from source</tvar>|built from source]]. This guide uses the binary or Docker, pick whichever you have.
+{{SITENAME}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="2">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or [[<tvar name="3">Special:MyLanguage/Installation#Build from source</tvar>|built from source]]. This guide uses the binary or Docker, pick whichever you have.
 
 <!--T:3-->
 ; Requirement
@@ -26,7 +26,7 @@ echo 'Hello, World!' > src/index.wikitext
 
 <translate>
 <!--T:5-->
-Then build the site. The rendered pages are written to <code>dist/</code>. Pick the tab for how you run {{wikven}}:
+Then build the site. The rendered pages are written to <code>dist/</code>. Pick the tab for how you run {{SITENAME}}:
 </translate>
 
 <tabber>
@@ -115,7 +115,7 @@ Build again: the home page now links to <code>Help.html</code>, and the link wor
 == Adding a template ==
 
 <!--T:18-->
-Templates, the main reason to reach for {{wikven}} over Markdown, let you reuse content. Put a <code>Template:</code> page in your source and transclude it with <code><nowiki>{{...}}</nowiki></code>:
+Templates, the main reason to reach for {{SITENAME}} over Markdown, let you reuse content. Put a <code>Template:</code> page in your source and transclude it with <code><nowiki>{{...}}</nowiki></code>:
 </translate>
 
 <syntaxhighlight lang="shell">

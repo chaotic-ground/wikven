@@ -1,10 +1,10 @@
 __TOC__
 
-{{wikven}} can build a site in more than one language using MediaWiki's {{ml|Help:Extension:Translate|Translate extension}}. Translate normally expects translators to work in an in-wiki editor, which a static build has no room for, so {{wikven}} drives it from your source tree instead: you translate by adding files and committing them, the same way you write any other page.
+{{SITENAME}} can build a site in more than one language using MediaWiki's {{ml|Help:Extension:Translate|Translate extension}}. Translate normally expects translators to work in an in-wiki editor, which a static build has no room for, so {{SITENAME}} drives it from your source tree instead: you translate by adding files and committing them, the same way you write any other page.
 
 == Enabling translation ==
 
-Add <code>Translate</code> to <code>extensions</code> in your [[Configuration|<code>.wikven.yaml</code>]], along with <code>UniversalLanguageSelector</code>, which Translate depends on. Both are bundled in the {{wikven}} image, so there is nothing to install.
+Add <code>Translate</code> to <code>extensions</code> in your [[Configuration|<code>.wikven.yaml</code>]], along with <code>UniversalLanguageSelector</code>, which Translate depends on. Both are bundled in the {{SITENAME}} image, so there is nothing to install.
 
 <syntaxhighlight lang="yaml">
 extensions:
@@ -12,7 +12,7 @@ extensions:
   - Translate
 </syntaxhighlight>
 
-A static export cannot serve UniversalLanguageSelector's runtime webfonts (they load from a live endpoint), so {{wikven}} turns them off; readers see each script in their own system fonts.
+A static export cannot serve UniversalLanguageSelector's runtime webfonts (they load from a live endpoint), so {{SITENAME}} turns them off; readers see each script in their own system fonts.
 
 You do not list the languages you translate into: as with Translate itself, a language exists as soon as a translation for it does. The language you write your pages in stays the source language.
 
@@ -24,7 +24,7 @@ Wrap the parts of a page that should be translated in <code><nowiki><translate><
 <languages/>
 <translate>
 <!--T:1-->
-{{wikven}} builds static sites from MediaWiki.
+{{SITENAME}} builds static sites from MediaWiki.
 
 <!--T:2-->
 It runs a real MediaWiki at build time.
@@ -73,7 +73,7 @@ Pass a single file instead of <code>--all</code> to stamp just that translation.
 
 == Keeping translations up to date ==
 
-When you change a source unit, its translations no longer match their stamp and are '''out of date'''. {{wikven}} does not hide this:
+When you change a source unit, its translations no longer match their stamp and are '''out of date'''. {{SITENAME}} does not hide this:
 
 * In the built site, an out-of-date unit is marked as an outdated translation, exactly as it would be on a wiki running Translate.
 * <code>translate check</code> reports every out-of-date or missing translation, and with <code>--gate</code> exits non-zero so continuous integration can fail the build:

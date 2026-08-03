@@ -1,13 +1,13 @@
 <languages />
 <translate>
 <!--T:1-->
-{{wikven}} is a static site generator built on [https://www.mediawiki.org/ MediaWiki], the software
+{{SITENAME}} is a static site generator built on [https://www.mediawiki.org/ MediaWiki], the software
 behind [https://www.wikipedia.org/ Wikipedia]. It turns a directory of wikitext
 into a plain HTML site you can host anywhere, with no server or database to run.
-This documentation site is itself built with {{wikven}}.
+This documentation site is itself built with {{SITENAME}}.
 
 <!--T:2-->
-Reach for {{wikven}} when your content is already MediaWiki wikitext, or when you
+Reach for {{SITENAME}} when your content is already MediaWiki wikitext, or when you
 want MediaWiki's templates, parser functions, gadgets and extensions but a static
 result with nothing to run: a project's documentation site, an archived wiki
 you can browse as plain HTML, or a personal wiki. Unlike a general static-site generator
@@ -15,7 +15,7 @@ such as Hugo or MkDocs, it renders real wikitext through MediaWiki itself, so it
 assumes you are comfortable with wikitext (see [[<tvar name="1">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for the trade-offs).
 
 <!--T:3-->
-See [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]] for the three ways to install {{wikven}}, the standalone
+See [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]] for the three ways to install {{SITENAME}}, the standalone
 [[<tvar name="2">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="3">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or
 [[<tvar name="4">Special:MyLanguage/Installation#Build from source</tvar>|from source]], then [[<tvar name="5">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build
 your first site.
@@ -24,7 +24,7 @@ your first site.
 == Supported features ==
 
 <!--T:5-->
-With {{wikven}}, you can use the following features of MediaWiki.
+With {{SITENAME}}, you can use the following features of MediaWiki.
 
 <!--T:6-->
 * {{ml|Wikitext}} pages (see [[<tvar name="1">Special:MyLanguage/Pages</tvar>|Pages]])

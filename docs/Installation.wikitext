@@ -3,7 +3,7 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-{{wikven}} runs in three ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. Build from source if you want to modify {{wikven}} or run an unreleased version.
+{{SITENAME}} runs in three ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. Build from source if you want to modify {{SITENAME}} or run an unreleased version.
 
 <!--T:2-->
 == Binary ==
@@ -40,7 +40,7 @@ The untagged image tracks the latest build; append a release tag such as <code>:
 == Build from source ==
 
 <!--T:9-->
-To modify {{wikven}} or run an unreleased commit, clone the repository and build the image yourself:
+To modify {{SITENAME}} or run an unreleased commit, clone the repository and build the image yourself:
 </translate>
 
 <syntaxhighlight lang="shell">
@@ -58,7 +58,7 @@ This produces a local <code>wikven</code> image you run exactly like the publish
 
 <translate>
 <!--T:11-->
-Once you have {{wikven}}, head to [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build your first site.
+Once you have {{SITENAME}}, head to [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build your first site.
 </translate>
 
 {{prevnext|Why wikitext|Getting Started}}

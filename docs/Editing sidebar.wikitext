@@ -22,7 +22,7 @@ Each top-level <code>*</code> line is a heading, and each <code>**</code> line b
 == What is removed ==
 
 <!--T:4-->
-Some default sidebar blocks need a live wiki, so {{wikven}} drops them from the static export: the '''toolbox''' (What links here, Special pages, Printable version, and so on) and the '''search''' box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
+Some default sidebar blocks need a live wiki, so {{SITENAME}} drops them from the static export: the '''toolbox''' (What links here, Special pages, Printable version, and so on) and the '''search''' box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 
 <!--T:5-->
 == See also ==

@@ -3,7 +3,7 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-{{wikven}} authors content in {{ml|Wikitext}}, MediaWiki's markup, rather than Markdown. If you are coming from a Markdown-based site generator, here is what changes, and why you might want it.
+{{SITENAME}} authors content in {{ml|Wikitext}}, MediaWiki's markup, rather than Markdown. If you are coming from a Markdown-based site generator, here is what changes, and why you might want it.
 
 <!--T:2-->
 == What wikitext adds ==
@@ -24,10 +24,10 @@ __TOC__
 * '''Lightweight rendering''' — Markdown renders with a small library, whereas wikitext normally needs MediaWiki itself.
 
 <!--T:6-->
-== Where {{wikven}} fits ==
+== Where {{SITENAME}} fits ==
 
 <!--T:7-->
-That last cost, running MediaWiki, is the one {{wikven}} removes: it renders your wikitext through MediaWiki once, at build time, and ships plain static HTML. You get templates, parser functions and the rest with nothing to run in production. Reach for {{wikven}} when that trade is worth it, typically when your content is already wikitext, or when templates and transclusion would save real work.
+That last cost, running MediaWiki, is the one {{SITENAME}} removes: it renders your wikitext through MediaWiki once, at build time, and ships plain static HTML. You get templates, parser functions and the rest with nothing to run in production. Reach for {{SITENAME}} when that trade is worth it, typically when your content is already wikitext, or when templates and transclusion would save real work.
 </translate>
 
 {{prevnext|Installation}}

@@ -3,13 +3,13 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-{{wikven}} writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
+{{SITENAME}} writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
 
 <!--T:2-->
 == GitHub Pages ==
 
 <!--T:3-->
-This workflow rebuilds and publishes the site on every push. It bakes the source with the {{wikven}} [https://github.com/chaotic-ground/wikven/tree/main/action composite action], then uploads <code>dist/</code> to Pages. Actions are pinned to a full commit SHA, not a tag, so a moved tag cannot swap them under you:
+This workflow rebuilds and publishes the site on every push. It bakes the source with the {{SITENAME}} [https://github.com/chaotic-ground/wikven/tree/main/action composite action], then uploads <code>dist/</code> to Pages. Actions are pinned to a full commit SHA, not a tag, so a moved tag cannot swap them under you:
 </translate>
 
 <syntaxhighlight lang="yaml">
@@ -46,7 +46,7 @@ jobs:
 Enable Pages for the repository under '''Settings → Pages → Build and deployment → Source: GitHub Actions'''. This documentation site is published this way.
 
 <!--T:5-->
-{{note|A GitHub '''project''' page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because {{wikven}} writes them relative, but anything that needs an absolute path must include that base path: set [[<tvar name="1">Special:MyLanguage/Searching</tvar>|search]]'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A '''user/organization''' page (served at the domain root) needs no such setting.}}
+{{note|A GitHub '''project''' page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because {{SITENAME}} writes them relative, but anything that needs an absolute path must include that base path: set [[<tvar name="1">Special:MyLanguage/Searching</tvar>|search]]'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A '''user/organization''' page (served at the domain root) needs no such setting.}}
 
 <!--T:6-->
 == Any static host ==
@@ -58,7 +58,7 @@ Because <code>dist/</code> is just files, you can serve it from any static host 
 == Preview locally ==
 
 <!--T:9-->
-Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. {{wikven}} has a built-in <code>serve</code> command for this.
+Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. {{SITENAME}} has a built-in <code>serve</code> command for this.
 
 <!--T:10-->
 With the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]], it serves <code>dist/</code> on <code>http://localhost:8080</code> (override with <code>--listen</code>):

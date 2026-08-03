@@ -1,7 +1,7 @@
 <languages />
 <translate>
 <!--T:1-->
-{{wikven}} bundles the wiki's own JavaScript into the static export at build time, so site scripts and gadgets run without a live server or <code>load.php</code>.
+{{SITENAME}} bundles the wiki's own JavaScript into the static export at build time, so site scripts and gadgets run without a live server or <code>load.php</code>.
 
 <!--T:2-->
 == MediaWiki:Common.js ==
