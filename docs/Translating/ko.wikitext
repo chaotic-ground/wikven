@@ -16,10 +16,10 @@
 <!--T:6 @5e0ff01d-->
 == 번역할 문서 표시하기 ==
 
-<!--T:7 @4812624e-->
+<!--T:7 @033485b3-->
 문서에서 번역해야 할 부분을 <code><nowiki><translate></nowiki></code> 태그로 감싸고, 언어 막대를 두고 싶은 곳에 <code><nowiki><languages/></nowiki></code>를 추가하며, 각 단위에 <code><nowiki><!--T:n--></nowiki></code> 표시자를 붙입니다. 이는 Translate 자체의 {{ml|Help:Extension:Translate/Page translation administration|문서 번역 마크업}}입니다:
 
-<!--T:8 @9b331141-->
+<!--T:8 @306e0b25-->
 단위 번호를 손으로 매기지 않습니다. 내용을 <code><nowiki><translate></nowiki></code>로 감싸고 <code><nowiki><languages/></nowiki></code>를 추가한 다음, <code>translate mark</code>를 실행하여 <code><nowiki><!--T:n--></nowiki></code> 표시자를 삽입합니다. 이때 소스 디렉터리를 쓰기 가능하게 마운트합니다:
 
 <!--T:9 @91d58e1f-->
@@ -28,7 +28,7 @@
 <!--T:10 @70fd32d3-->
 == 번역 추가하기 ==
 
-<!--T:11 @ce57c163-->
+<!--T:11 @d0913d36-->
 번역은 문서 옆에 <code><Page>/<lang>.wikitext</code>라는 이름으로 자리합니다. <code>Intro.wikitext</code>의 한국어 번역은 <code>Intro/ko.wikitext</code>입니다. <code>translate scaffold</code>로 그 골격을 생성하는데, 이는 모든 원본 단위에 대해 빈 <code><nowiki><!--T:n--></nowiki></code> 표시자를 쓰고 각 단위의 원본 텍스트를 안내로 나열합니다:
 
 <!--T:12 @e1cb2e56-->

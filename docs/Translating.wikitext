@@ -29,7 +29,7 @@ You do not list the languages you translate into: as with Translate itself, a la
 == Marking a page for translation ==
 
 <!--T:7-->
-Wrap the parts of a page that should be translated in <code><nowiki><translate></nowiki></code> tags, add <code><nowiki><languages/></nowiki></code> where you want the language bar, and give each unit a <code><nowiki><!--T:n--></nowiki></code> marker. This is Translate's own {{ml|Help:Extension:Translate/Page translation administration|page-translation markup}}:
+Wrap the parts of a page that should be translated in <code>&lt;translate&gt;</code> tags, add <code>&lt;languages/&gt;</code> where you want the language bar, and give each unit a <code>&lt;!--T:n--&gt;</code> marker. This is Translate's own {{ml|Help:Extension:Translate/Page translation administration|page-translation markup}}:
 </translate>
 
  <nowiki><languages/>
@@ -43,7 +43,7 @@ It runs a real MediaWiki at build time.
 
 <translate>
 <!--T:8-->
-You do not number the units by hand. Wrap the content in <code><nowiki><translate></nowiki></code> and add <code><nowiki><languages/></nowiki></code>, then run <code>translate mark</code> to insert the <code><nowiki><!--T:n--></nowiki></code> markers, mounting your source directory writable:
+You do not number the units by hand. Wrap the content in <code>&lt;translate&gt;</code> and add <code>&lt;languages/&gt;</code>, then run <code>translate mark</code> to insert the <code>&lt;!--T:n--&gt;</code> markers, mounting your source directory writable:
 </translate>
 
 <tabber>
@@ -65,7 +65,7 @@ Pass a single file instead of <code>--all</code> to mark just that page. Marking
 == Adding a translation ==
 
 <!--T:11-->
-A translation lives next to the page, named <code><Page>/<lang>.wikitext</code>: the Korean translation of <code>Intro.wikitext</code> is <code>Intro/ko.wikitext</code>. Generate its skeleton with <code>translate scaffold</code>, which writes an empty <code><nowiki><!--T:n--></nowiki></code> marker for every source unit and lists each unit's source text as a guide:
+A translation lives next to the page, named <code><Page>/<lang>.wikitext</code>: the Korean translation of <code>Intro.wikitext</code> is <code>Intro/ko.wikitext</code>. Generate its skeleton with <code>translate scaffold</code>, which writes an empty <code>&lt;!--T:n--&gt;</code> marker for every source unit and lists each unit's source text as a guide:
 </translate>
 
 <tabber>
