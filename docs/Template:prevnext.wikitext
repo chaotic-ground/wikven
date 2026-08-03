@@ -6,7 +6,7 @@ Usage:
 
 --><templatestyles src="prevnext/styles.css" /><div class="wikven-prevnext"><!--
   -->{{#if:{{{2|}}}|
-    <div class="wikven-prevnext-prev">&larr;&nbsp;[[{{{1|}}}]]</div>
+    <div class="wikven-prevnext-prev">&larr;&nbsp;[[Special:MyLanguage/{{{1|}}}|{{{1|}}}]]</div>
   }}<!--
-  --><div class="wikven-prevnext-next">[[{{{2|{{{1|}}}}}}]]&nbsp;&rarr;</div><!--
+  --><div class="wikven-prevnext-next">[[Special:MyLanguage/{{{2|{{{1|}}}}}}|{{{2|{{{1|}}}}}}]]&nbsp;&rarr;</div><!--
 --></div>
