@@ -1,7 +1,8 @@
 /**
  * Remember which tab a reader picks and apply it to every tabber, including on
  * later pages. The install steps are shown in a Docker/Binary <tabber>; once a
- * reader picks one, that choice should follow them across the site.
+ * reader picks one, that choice should follow them across the site and across
+ * every tabber on the page.
  *
  * The choice is stored by tab label, so tabbers that share a label (Docker,
  * Binary, ...) stay in sync. TabberNeue dispatches a "tabber:tabchange" event
@@ -33,10 +34,21 @@
 
 	const tabLabel = (tab) => (tab.textContent || "").trim();
 
+	// The header tab a tabber carries for the given label, or null when it has
+	// no such tab.
+	const tabForLabel = (tabber, label) => {
+		for (const tab of tabber.querySelectorAll(
+			":scope > .tabber__header > .tabber__tabs > .tabber__tab",
+		)) {
+			if (tabLabel(tab) === label) {
+				return tab;
+			}
+		}
+		return null;
+	};
+
 	// Activate a tab the way a click would, minus the header link's default jump
-	// to the panel anchor (which would scroll the page). TabberNeue binds its
-	// click handler lazily, when a tabber first scrolls into view, so an early
-	// call is a harmless no-op and the caller retries until it takes.
+	// to the panel anchor (which would scroll the page).
 	const selectTab = (tab) => {
 		const href = tab.getAttribute("href");
 		if (href !== null) {
@@ -51,28 +63,40 @@
 		return tab.getAttribute("aria-selected") === "true";
 	};
 
-	const applyChoice = (label, attempt) => {
+	// Line one tabber up with the chosen label. TabberNeue binds a tabber's click
+	// handler lazily, when it first scrolls into view, so a call can land a frame
+	// or two before the handler is ready; retry over a few frames until it takes.
+	const applyToTabber = (tabber, label, attempt) => {
 		if (!label) {
 			return;
 		}
-		let pending = false;
-		for (const tab of document.querySelectorAll(".tabber__tab")) {
-			if (
-				tabLabel(tab) !== label ||
-				tab.getAttribute("aria-selected") === "true"
-			) {
-				continue;
-			}
-			if (!selectTab(tab)) {
-				pending = true;
-			}
+		const tab = tabForLabel(tabber, label);
+		if (!tab || tab.getAttribute("aria-selected") === "true") {
+			return;
 		}
-		// A wanted tab has not switched yet: its tabber is not live. Retry for a
-		// short while (about half a second at 60fps), then give up.
-		if (pending && attempt < 30) {
-			requestAnimationFrame(() => applyChoice(label, attempt + 1));
+		if (!selectTab(tab) && attempt < 30) {
+			requestAnimationFrame(() => applyToTabber(tabber, label, attempt + 1));
 		}
 	};
+
+	// Line every tabber on the page up with the chosen label.
+	const applyChoice = (label) => {
+		for (const tabber of document.querySelectorAll(".tabber")) {
+			applyToTabber(tabber, label, 0);
+		}
+	};
+
+	// A tabber is clickable only once it has scrolled into view, so a live
+	// selection reaches only the tabbers on screen at that moment. Watch every
+	// tabber and line it up with the stored choice as it becomes visible, so one
+	// that was off screen when the reader picked a tab catches up on reveal.
+	const visibility = new IntersectionObserver((entries) => {
+		for (const entry of entries) {
+			if (entry.isIntersecting) {
+				applyToTabber(entry.target, readChoice(), 0);
+			}
+		}
+	});
 
 	// Save and propagate the reader's own selection.
 	document.documentElement.addEventListener("tabber:tabchange", (e) => {
@@ -91,9 +115,15 @@
 		}
 		const label = tabLabel(tab);
 		writeChoice(label);
-		applyChoice(label, 0);
+		applyChoice(label);
 	});
 
-	// Line every tabber up with the stored choice on each (re)render.
-	mw.hook("wikipage.content").add(() => applyChoice(readChoice(), 0));
+	// On each (re)render, watch every tabber for visibility and line the ones
+	// already on screen up with the stored choice.
+	mw.hook("wikipage.content").add(() => {
+		for (const tabber of document.querySelectorAll(".tabber")) {
+			visibility.observe(tabber);
+		}
+		applyChoice(readChoice());
+	});
 })();
