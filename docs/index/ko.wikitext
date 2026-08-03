@@ -1,5 +1,5 @@
 <!--T:1 @eacf4810-->
-{{wikven}}은 [https://www.wikipedia.org/ Wikipedia]를 구동하는 소프트웨어인 [https://www.mediawiki.org/ MediaWiki]를 기반으로 한 정적 사이트 생성기입니다. 위키텍스트 디렉터리를 어디서나 호스팅할 수 있는 평범한 HTML 사이트로 바꿔 주며, 구동할 서버나 데이터베이스가 필요 없습니다. 이 문서 사이트 또한 {{wikven}}으로 만들었습니다.
+{{wikven}}은 [https://www.wikipedia.org/ Wikipedia]를 구동하는 소프트웨어인 [https://www.mediawiki.org/ MediaWiki]를 기반으로 한 정적 사이트 생성기입니다. 위키텍스트 디렉터리를 평범한 HTML 사이트로 바꿔 주는데, 어디서나 호스팅할 수 있고 구동할 서버나 데이터베이스가 필요 없습니다. 이 문서 사이트 또한 {{wikven}}으로 만들었습니다.
 
 <!--T:2 @8d00f501-->
 콘텐츠가 이미 MediaWiki 위키텍스트이거나, MediaWiki의 틀·파서 함수·소도구·확장 기능은 그대로 쓰면서 실행할 것이 없는 정적 결과물을 원할 때 {{wikven}}이 제격입니다. 프로젝트 문서 사이트, 평범한 HTML로 열람하는 보관용 위키, 개인 위키 같은 용도죠. Hugo나 MkDocs 같은 범용 정적 사이트 생성기와 달리 {{wikven}}은 MediaWiki로 진짜 위키텍스트를 렌더링하므로, 위키텍스트에 익숙하다는 것을 전제합니다 (장단점은 [[$1|위키텍스트를 쓰는 이유]] 참고).
