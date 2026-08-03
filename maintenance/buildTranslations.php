@@ -58,6 +58,7 @@ class BuildTranslations extends Maintenance {
 		RequestContext::getMain()->setUser($user);
 		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
+		$prepared = [];
 		foreach (TranslationSource::baseFiles($source) as $baseFile) {
 			$relative = substr($baseFile, strlen($source) + 1);
 			$title = Title::newFromText(SourceFile::filenameToTitle($relative));
@@ -66,14 +67,28 @@ class BuildTranslations extends Maintenance {
 				continue;
 			}
 			$languages = TranslationSource::translationLanguages($baseFile, $isKnownLanguage);
-			$this->materialize($title, (string)file_get_contents($baseFile), $languages, $user);
+			if ($this->prepare($title, (string)file_get_contents($baseFile), $languages, $user)) {
+				$prepared[] = $title;
+			}
+		}
+
+		// Render the translated pages only once every page is marked and its units are loaded. Rendering
+		// inline per page let the page marked just before another (the main page sorts last) render before
+		// the shared message index caught up, silently producing no <Page>/<lang> page for it.
+		$this->drainJobs();
+		foreach ($prepared as $title) {
+			$this->render($title);
 		}
 
 		return true;
 	}
 
-	/** Mark one page for translation, load its translations, and render the translated pages. */
-	private function materialize(Title $title, string $sourceText, array $languages, User $user): void {
+	/**
+	 * Mark one page for translation and load its translations from the source files.
+	 *
+	 * @return bool Whether the page was marked (false if it could not be loaded or had invalid units).
+	 */
+	private function prepare(Title $title, string $sourceText, array $languages, User $user): bool {
 		$services = $this->getServiceContainer();
 
 		// importWikitext saved the base as an old revision, which bypasses the PageSaveComplete hook
@@ -87,12 +102,12 @@ class BuildTranslations extends Maintenance {
 		$record = $services->getPageStore()->getPageByReference($title, IDBAccessObject::READ_LATEST);
 		if (!$record) {
 			$this->output("Wikven: could not load {$title->getPrefixedText()} for translation; skipping\n");
-			return;
+			return false;
 		}
 		$operation = $marker->getMarkOperation($record, null, true);
 		if (!$operation->getUnitValidationStatus()->isOK()) {
 			$this->output("Wikven: {$title->getPrefixedText()} has invalid translation units; skipping\n");
-			return;
+			return false;
 		}
 		// Body units only: the file model has no place to author a title translation, and a
 		// translatable title would leave every page short of 100%. No priority languages,
@@ -105,8 +120,11 @@ class BuildTranslations extends Maintenance {
 		$this->drainJobs();
 
 		$this->loadTranslations($title, $sourceText, $languages, $user);
+		return true;
+	}
 
-		// Render translated pages and refresh stats now that the units are in place.
+	/** Render one marked page's translated pages and refresh its stats. */
+	private function render(Title $title): void {
 		$translatable = TranslatablePage::newFromTitle($title);
 		foreach (UpdateTranslatablePageJob::getRenderJobs($translatable, true) as $job) {
 			$job->run();
