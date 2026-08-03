@@ -61,4 +61,4 @@
 <code>Template:Note.wikitext</code>로 저장하고 문서에서 다음과 같이 사용하면:
 
 <!--T:21 @22658558-->
-"'''Note:''' Back up your wiki first."로 렌더링됩니다. 틀은 위치 매개변수(<code><nowiki>{{{1}}}</nowiki></code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 {{ml|Help:Parser functions|파서 함수}}를 실행합니다. 이 사이트의 문서들도 "{{wikven}}"으로 렌더링되는 <code>Template:wikven</code>을 끼워넣습니다. 문법 자체는 표준 MediaWiki입니다. {{ml|Help:Templates}} 참고.
+"'''Note:''' Back up your wiki first."로 렌더링됩니다. 틀은 위치 매개변수(<code><nowiki>{{{1}}}</nowiki></code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 {{ml|Help:Parser functions|파서 함수}}를 실행합니다. 이 사이트의 문서들도 "{{wikven}}"으로 렌더링되는 <code>Template:wikven</code>을 끼워 넣습니다. 문법 자체는 표준 MediaWiki입니다. {{ml|Help:Templates}} 참고.

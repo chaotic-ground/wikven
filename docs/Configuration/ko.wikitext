@@ -91,7 +91,7 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 여러분의 <code>.wikven.yaml</code>을 읽기 전에 Wikven은 wikven에 번들된 <code>default.yml</code>의 자체 기본값을 적용합니다. 이는 여러분의 설정과 같은 형식으로 작성되어 있어, Wikven이 여러분을 위해 무엇을 설정하는지 알려 주는 레퍼런스 역할도 겸합니다. 사이트 이름, 그대로 유지되는 문서 제목, InstantCommons, (SVG를 포함한) 로컬 이미지 업로드, Vector 2022 스킨 옵션 등입니다. 또한 <code>extensions</code>와 <code>skins</code> 기본값도 제공하므로, 모든 사이트가 따로 나열하지 않아도 [[$1|SifterSearch]] 검색과 Vector 스킨을 얻습니다. 여러분의 <code>.wikven.yaml</code>이 그 위에 병합되어, 여러분의 <code>config</code> 키가 기본값을 덮어쓰고 여러분의 <code>extensions</code>와 <code>skins</code>가 뒤에 덧붙습니다.
 
 <!--T:31 @afdeb77f-->
-제목은 (MediaWiki 기본값인 첫 글자 대문자화가 아니라) 작성된 그대로 유지되므로, 진입 문서를 소문자 <code>index</code>로 둘 수 있습니다. 빌드는 이를 <code>index.html</code>로 작성하며, 이는 정적 호스트가 사이트 루트에서 제공하는 파일입니다. 그 밖에 파일에는 주석이 달려 있으며, 각 주석은 Wikven이 그 값을 설정하는 이유를 적어 둡니다.
+제목은 (MediaWiki 기본값인 첫 글자 대문자화가 아니라) 작성된 그대로 유지되므로, 진입 문서를 소문자 <code>index</code>로 둘 수 있습니다. 빌드는 이를 <code>index.html</code>로 작성하며, 이는 정적 호스트가 사이트 루트에서 제공하는 파일입니다. 그 밖의 파일에는 주석이 달려 있으며, 각 주석은 Wikven이 그 값을 설정하는 이유를 적어 둡니다.
 
 <!--T:32 @705dca82-->
 현재 기본값을 보려면 번들된 <code>default.yml</code>을 읽으십시오. Docker 이미지에서:
