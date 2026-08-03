@@ -15,9 +15,23 @@ use RecursiveIteratorIterator;
  * buildTranslations (materialize) so both agree on what is a base and what is a translation.
  */
 class TranslationSource {
-	/** Whether a page's wikitext marks it as translatable. */
+	/** Whether a page's wikitext marks it as translatable (a real <translate>, not one shown as an example). */
 	public static function isTranslatable(string $text): bool {
-		return str_contains($text, '<translate>');
+		return str_contains(self::withoutVerbatimRegions($text), '<translate>');
+	}
+
+	/**
+	 * Blank out the spans MediaWiki renders verbatim instead of parsing (<syntaxhighlight>, <nowiki>,
+	 * <pre>, <source>). A page that documents page translation, such as this wiki's Translating page,
+	 * shows <translate> and <!--T:n--> inside those spans as examples; without stripping them a bare
+	 * str_contains would mistake the page for a real translation source and try to mark it.
+	 */
+	private static function withoutVerbatimRegions(string $text): string {
+		return preg_replace(
+			'#<(syntaxhighlight|source|nowiki|pre)\b[^>]*>.*?</\1>#is',
+			'',
+			$text
+		) ?? $text;
 	}
 
 	/** The translation file for a base file in the given language ("Foo.wikitext" -> "Foo/ko.wikitext"). */
