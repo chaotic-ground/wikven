@@ -71,12 +71,12 @@
 		return panel === null ? null : tabForPanel(panel);
 	};
 
-	// The label of the tab whose panel the URL fragment points into, or "" when
-	// the fragment names no tab panel.
-	const labelFromHash = () => {
+	// The tab panel the URL fragment points into, or null when the fragment
+	// names nothing inside one.
+	const panelFromHash = () => {
 		const fragment = location.hash.slice(1);
 		if (!fragment) {
-			return "";
+			return null;
 		}
 		let id = fragment;
 		try {
@@ -85,8 +85,7 @@
 			// A malformed escape is no id of ours; try the fragment as written.
 		}
 		const target = document.getElementById(id);
-		const panel = target === null ? null : target.closest(".tabber__panel");
-		return panel === null ? "" : tabLabel(tabForPanel(panel));
+		return target === null ? null : target.closest(".tabber__panel");
 	};
 
 	// Tabs we activated ourselves, each awaiting the change TabberNeue reports
@@ -122,11 +121,14 @@
 		}
 	};
 
-	// Line every tabber the reader can see up with the chosen label; the rest
-	// catch up as they scroll into view.
-	const applyChoice = () => {
+	// Line every tabber the reader can see up with the chosen label, skipping
+	// one TabberNeue is already handling; the rest catch up as they scroll into
+	// view.
+	const applyChoice = (except) => {
 		for (const tabber of onScreen) {
-			applyToTabber(tabber);
+			if (tabber !== except) {
+				applyToTabber(tabber);
+			}
 		}
 	};
 
@@ -180,17 +182,28 @@
 	// own tabber, and TabberNeue follows the fragment as it changes. Read it the
 	// same way, so the rest of the page follows too.
 	window.addEventListener("hashchange", () => {
-		const label = labelFromHash();
-		if (label && label !== choice) {
-			setChoice(label);
-			applyChoice();
+		const panel = panelFromHash();
+		if (panel === null) {
+			return;
 		}
+		const label = tabLabel(tabForPanel(panel));
+		if (!label || label === choice) {
+			return;
+		}
+		setChoice(label);
+		// TabberNeue activates the fragment's own tabber from this same event.
+		// Leave that one to it: a click of ours would land while its activation
+		// is still in flight behind a view transition, cancel it, and hand its
+		// tab back as a click the hash router would answer by moving the
+		// fragment onto that tabber's own panel.
+		applyChoice(panel.closest(".tabber"));
 	});
 
 	// On each (re)render, adopt the fragment the reader arrived on and watch
 	// every tabber; each is lined up with the choice as it becomes visible.
 	mw.hook("wikipage.content").add(() => {
-		const label = labelFromHash();
+		const panel = panelFromHash();
+		const label = panel === null ? "" : tabLabel(tabForPanel(panel));
 		if (label) {
 			setChoice(label);
 		}

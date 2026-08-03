@@ -8,13 +8,25 @@ const { test, expect } = require("@playwright/test");
 
 const SELECTED = '.tabber__tab[aria-selected="true"]';
 
-// The Getting Started page shows the install and preview steps in one
+// The Getting Started page shows the install and the preview steps in one
 // Binary/Docker tabber each.
 const tabbersOf = async (page) => {
 	const tabbers = page.locator(".tabber");
 	await expect(tabbers.first()).toBeVisible();
 	expect(await tabbers.count()).toBeGreaterThan(1);
 	return [tabbers.nth(0), tabbers.nth(1)];
+};
+
+// The two tabbers are only a few lines of markup apart, so on any ordinary
+// viewport both are on screen at once and the case that actually broke -- a
+// tabber TabberNeue has not wired for clicks, because it wires one only while
+// it is on screen -- never arises. Push them a couple of screens apart.
+const separate = async (second) => {
+	await second.evaluate((el) => {
+		const spacer = el.ownerDocument.createElement("div");
+		spacer.style.height = "200vh";
+		el.parentNode.insertBefore(spacer, el);
+	});
 };
 
 test("the site's gadgets are served as runnable code", async ({ page }) => {
@@ -35,12 +47,16 @@ test("the site's gadgets are served as runnable code", async ({ page }) => {
 test("picking a tab switches every tabber on the page", async ({ page }) => {
 	await page.goto("Getting_Started.html");
 	const [first, second] = await tabbersOf(page);
+	await separate(second);
+
+	await first.scrollIntoViewIfNeeded();
+	await expect(second).not.toBeInViewport();
 
 	await first.getByRole("tab", { name: "Docker" }).click();
 	await expect(first.locator(SELECTED)).toHaveText("Docker");
+	// Off screen, so nothing to click: it has to catch up on reveal.
+	await expect(second.locator(SELECTED)).toHaveText("Binary");
 
-	// A tabber below the fold is not wired for clicks until it scrolls in, so it
-	// catches up on reveal rather than at the moment of the choice.
 	await second.scrollIntoViewIfNeeded();
 	await expect(second.locator(SELECTED)).toHaveText("Docker");
 
@@ -52,6 +68,24 @@ test("picking a tab switches every tabber on the page", async ({ page }) => {
 test("arriving on a tab's fragment switches every tabber", async ({ page }) => {
 	await page.goto("Getting_Started.html#tabber-Docker");
 	const [first, second] = await tabbersOf(page);
+
+	await expect(first.locator(SELECTED)).toHaveText("Docker");
+	await second.scrollIntoViewIfNeeded();
+	await expect(second.locator(SELECTED)).toHaveText("Docker");
+
+	expect(new URL(page.url()).hash).toBe("#tabber-Docker");
+});
+
+test("jumping to a tab's fragment switches every tabber", async ({ page }) => {
+	await page.goto("Getting_Started.html");
+	const [first, second] = await tabbersOf(page);
+	await expect(first.locator(SELECTED)).toHaveText("Binary");
+
+	// TabberNeue answers the same hashchange by opening that panel in its own
+	// tabber; the two must not race each other over that one tabber.
+	await page.evaluate(() => {
+		window.location.hash = "#tabber-Docker";
+	});
 
 	await expect(first.locator(SELECTED)).toHaveText("Docker");
 	await second.scrollIntoViewIfNeeded();
