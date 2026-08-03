@@ -1,7 +1,7 @@
 <languages />
 <translate>
 <!--T:1-->
-Static sites have no server to answer queries, so MediaWiki's built-in search does not work in the export. {{wikven}} ships [https://github.com/chaotic-ground/SifterSearch SifterSearch] built in and enabled by default: it builds a static search index at build time and serves results entirely in the browser, so every site has working search with no setup. This documentation site uses it.
+Static sites have no server to answer queries, so MediaWiki's built-in search does not work in the export. {{SITENAME}} ships [https://github.com/chaotic-ground/SifterSearch SifterSearch] built in and enabled by default: it builds a static search index at build time and serves results entirely in the browser, so every site has working search with no setup. This documentation site uses it.
 
 <!--T:2-->
 == How it works ==
