@@ -69,7 +69,7 @@ config:
     # 1. A tarball, e.g. from Special:ExtensionDistributor, whose archive already
     #    bundles the extension's dependencies. Add sha256 to verify the download.
     Foo:
-      tarball: https://extdist.wmflabs.org/dist/extensions/Foo-REL1_45-abc1234.tar.gz
+      tarball: https://extdist.wmflabs.org/dist/extensions/Foo-REL1_46-abc1234.tar.gz
       sha256: 4f5e...  # 64 hex characters; the build aborts on a mismatch
     # 2. A Git repository. Pin it with commit (an exact SHA, reproducible) or
     #    reference (a tag or branch). Add composer: true to run Composer inside

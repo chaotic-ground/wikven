@@ -29,7 +29,7 @@ config:
   WikvenRepositories:
     Example:
       repository: https://github.com/example/Example.git
-      reference: REL1_45
+      reference: REL1_46
 </syntaxhighlight>
 
 == Skin-specific configuration ==

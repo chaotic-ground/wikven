@@ -1,7 +1,7 @@
 # Base images are digest-pinned for reproducible builds; Dependabot keeps them current.
 FROM composer:2@sha256:5946476338742b200bb9ff88f8be56275ddae4b3949c72305cb0dbf10cfcb760 AS composer
 
-FROM mediawiki:1.45@sha256:6dc859706b561acf90a0f92786280f6e461946c4cc2fa8ea5c74be6c27251d2c
+FROM mediawiki:1.46@sha256:38989f476fd3226bd608816547e2f8eee88c1582d656e9b39c65a2e5ddbdacc6
 
 # composer + unzip to install third-party extensions/skins at build time (git/tar/gzip present).
 COPY --from=composer /usr/bin/composer /usr/bin/composer
@@ -26,8 +26,8 @@ RUN arch="$TARGETARCH" \
 # image's MediaWiki branch. Translate pulls its runtime Composer deps (spyc) into its own vendor/,
 # which its load_composer_autoloader then loads.
 ENV COMPOSER_ALLOW_SUPERUSER=1
-ARG TRANSLATE_VERSION=REL1_45
-ARG ULS_VERSION=REL1_45
+ARG TRANSLATE_VERSION=REL1_46
+ARG ULS_VERSION=REL1_46
 RUN git clone --depth 1 --branch "$ULS_VERSION" \
       https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector.git \
       /var/www/html/extensions/UniversalLanguageSelector \

@@ -25,14 +25,13 @@ jobs:
       - run: go vet ./...
         working-directory: caddy
 
-  # Run the extension's PHPUnit tests against a real MediaWiki: the 1.45 base the build ships on,
-  # the 1.46 branch we're preparing to move to, and master.
+  # Run the extension's PHPUnit tests against a real MediaWiki: the 1.46 base the build ships on, and master.
   phpunit:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        mediawiki-version: [REL1_45, REL1_46, master]
+        mediawiki-version: [REL1_46, master]
     steps:
       - name: Check out MediaWiki core
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1

@@ -2,8 +2,8 @@
 # use-sorting below are wikven's own.
 extends = "vendor/chaotic-ground/mago-mediawiki-style/style.toml"
 
-# MediaWiki 1.45 (base image) needs PHP 8.1+, so lint against 8.1 though the binary runs newer.
-php-version = "8.1"
+# MediaWiki 1.46 (base image) needs PHP 8.3+, so lint against 8.3 though the binary runs newer.
+php-version = "8.3"
 
 [source]
 paths = ["includes", "maintenance", "tests"]
