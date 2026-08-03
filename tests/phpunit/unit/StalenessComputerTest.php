@@ -94,4 +94,36 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 			array_column(StalenessComputer::analyze($source, $partial), 'status')
 		);
 	}
+
+	public function testSplitUnitsIgnoresMarkersShownInsideACodeExample() {
+		// The page documenting page translation shows <!--T:n--> markers in code examples; those are
+		// not real units, so a marker inside a verbatim span never becomes one.
+		$text =
+			"<translate>\n<!--T:1-->\nReal.\n</translate>\n\n"
+			. "<syntaxhighlight lang=\"wikitext\">\n<!--T:2-->\nExample.\n</syntaxhighlight>";
+		$this->assertSame([1], array_keys(StalenessComputer::splitUnits($text)));
+	}
+
+	public function testMarkLeavesATranslatePairShownInsideACodeExampleUntouched() {
+		// A <translate>...</translate> pair inside a code example must be copied verbatim, and the
+		// <!--T:1--> it contains must not push the real unit's number along.
+		$example =
+			"<syntaxhighlight lang=\"wikitext\">\n"
+			. "<translate>\n<!--T:1-->\nExample.\n</translate>\n</syntaxhighlight>";
+		$this->assertSame(
+			"<translate>\n<!--T:1-->\nReal.\n</translate>\n\n" . $example,
+			StalenessComputer::mark("<translate>\nReal.\n</translate>\n\n" . $example)
+		);
+	}
+
+	public function testAnalyzeIgnoresAnExampleMarkerInACodeBlock() {
+		// A translation covering only the real unit is fully up to date; the example marker shown in
+		// the code block is neither a missing source unit nor an orphan.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>\n" . "<pre>\n<!--T:2-->\nExample.\n</pre>";
+		$fresh = StalenessComputer::restamp($source, "<!--T:1-->\n안녕.\n");
+		$this->assertSame(
+			[StalenessComputer::OK],
+			array_column(StalenessComputer::analyze($source, $fresh), 'status')
+		);
+	}
 }

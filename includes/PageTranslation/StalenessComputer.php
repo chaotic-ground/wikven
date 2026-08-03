@@ -19,6 +19,14 @@ class StalenessComputer {
 
 	private const HASH_LENGTH = 8;
 
+	/**
+	 * Verbatim spans whose contents are shown, not parsed. A <!--T:n--> or <translate> that appears
+	 * inside one -- as on the page documenting page translation -- is an example, not real markup, so
+	 * unit splitting and marking skip it. This mirrors the tags TranslationSource::isTranslatable and
+	 * #239 treat as verbatim.
+	 */
+	private const VERBATIM_TAGS = 'syntaxhighlight|source|nowiki|pre';
+
 	/** Short content hash of a source unit; the value carried as @<hash> in a translation marker. */
 	public static function hashUnit(string $unitText): string {
 		return substr(hash('sha256', self::normalize($unitText)), 0, self::HASH_LENGTH);
@@ -32,13 +40,27 @@ class StalenessComputer {
 	 * before the unit, which both splitUnits() and Translate's own re-parse honour. Idempotent.
 	 */
 	public static function mark(string $text): string {
-		preg_match_all('/<!--T:(\d+)/', $text, $existing);
-		$next = $existing[1] === [] ? 1 : max(array_map('intval', $existing[1])) + 1;
+		$verbatim = self::verbatimRanges($text);
+
+		// Only count real markers when picking the next number; a <!--T:n--> shown inside an example
+		// must not push the numbering of the actual units along.
+		preg_match_all('/<!--T:(\d+)/', $text, $existing, PREG_OFFSET_CAPTURE);
+		$numbers = [];
+		foreach ($existing[0] as $i => $marker) {
+			if (!self::insideVerbatim($marker[1], $verbatim)) {
+				$numbers[] = (int)$existing[1][$i][0];
+			}
+		}
+		$next = $numbers === [] ? 1 : max($numbers) + 1;
 
 		return preg_replace_callback(
 			'#(<translate(?:\s[^>]*)?>)(.*?)(</translate>)#s',
-			static function (array $block) use (&$next): string {
-				$units = preg_split('/(\n[ \t]*\n)/', $block[2], -1, PREG_SPLIT_DELIM_CAPTURE);
+			static function (array $block) use (&$next, $verbatim): string {
+				// A <translate> pair inside a verbatim span is an example; leave it exactly as written.
+				if (self::insideVerbatim($block[0][1], $verbatim)) {
+					return $block[0][0];
+				}
+				$units = preg_split('/(\n[ \t]*\n)/', $block[2][0], -1, PREG_SPLIT_DELIM_CAPTURE);
 				$marked = '';
 				foreach ($units as $index => $segment) {
 					// Odd indices are the blank-line separators between units; keep them verbatim.
@@ -49,9 +71,12 @@ class StalenessComputer {
 					preg_match('/^(\s*)(.*)$/s', $segment, $parts);
 					$marked .= $parts[1] . '<!--T:' . $next++ . "-->\n" . $parts[2];
 				}
-				return $block[1] . $marked . $block[3];
+				return $block[1][0] . $marked . $block[3][0];
 			},
-			$text
+			$text,
+			-1,
+			$count,
+			PREG_OFFSET_CAPTURE
 		);
 	}
 
@@ -66,12 +91,23 @@ class StalenessComputer {
 			return [];
 		}
 
+		// Drop markers that sit inside a verbatim span: they are shown as an example, not real units.
+		// A real unit's body still spans any verbatim block that falls between two real markers, so an
+		// existing translation's boundaries -- and its @<hash> stamps -- are unchanged.
+		$verbatim = self::verbatimRanges($text);
+		$markers = [];
+		foreach ($matches as $marker) {
+			if (!self::insideVerbatim($marker[0][1], $verbatim)) {
+				$markers[] = $marker;
+			}
+		}
+
 		$units = [];
-		$count = count($matches);
+		$count = count($markers);
 		for ($i = 0; $i < $count; $i++) {
-			$marker = $matches[$i];
+			$marker = $markers[$i];
 			$bodyStart = $marker[0][1] + strlen($marker[0][0]);
-			$bodyEnd = ( $i + 1 ) < $count ? $matches[$i + 1][0][1] : strlen($text);
+			$bodyEnd = ( $i + 1 ) < $count ? $markers[$i + 1][0][1] : strlen($text);
 			// An unstamped marker (source page, or a not-yet-stamped translation) has no hash group.
 			$stamped = isset($marker['hash']) && $marker['hash'][1] !== -1;
 			$units[$marker['id'][0]] = [
@@ -153,6 +189,40 @@ class StalenessComputer {
 			return $additions;
 		}
 		return rtrim($existingTranslation, "\n") . "\n\n" . $additions;
+	}
+
+	/**
+	 * Byte ranges of the verbatim spans in a page, each as [start, endExclusive].
+	 *
+	 * A self-contained regex rather than MediaWiki's tag extractor, so this class stays pure string
+	 * work usable outside a MediaWiki bootstrap; it recognises paired and self-closing forms with
+	 * optional attributes, which is all the docs pages use.
+	 *
+	 * @return list<array{int,int}>
+	 */
+	private static function verbatimRanges(string $text): array {
+		$pattern = '#<(' . self::VERBATIM_TAGS . ')(?:\s[^>]*)?(?:/\s*>|>.*?</\1\s*>)#is';
+		if (!preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE)) {
+			return [];
+		}
+		$ranges = [];
+		foreach ($matches[0] as $match) {
+			$ranges[] = [$match[1], $match[1] + strlen($match[0])];
+		}
+		return $ranges;
+	}
+
+	/**
+	 * @param int $offset
+	 * @param list<array{int,int}> $ranges
+	 */
+	private static function insideVerbatim(int $offset, array $ranges): bool {
+		foreach ($ranges as [$start, $end]) {
+			if ($offset >= $start && $offset < $end) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Strip <translate> wrapper tags and surrounding whitespace so the hash tracks unit content only. */
