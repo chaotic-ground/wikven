@@ -196,12 +196,18 @@ class StalenessComputer {
 	 *
 	 * A self-contained regex rather than MediaWiki's tag extractor, so this class stays pure string
 	 * work usable outside a MediaWiki bootstrap; it recognises paired and self-closing forms with
-	 * optional attributes, which is all the docs pages use.
+	 * optional attributes, in any letter case, which is all the docs pages use.
+	 *
+	 * An unclosed verbatim tag runs to the end of the page, matching how MediaWiki renders it. That
+	 * is the safer reading: the alternative -- treating the span as absent -- would hand the rest of
+	 * the page back to the marker scan, turning example text into counted units.
 	 *
 	 * @return list<array{int,int}>
 	 */
 	private static function verbatimRanges(string $text): array {
-		$pattern = '#<(' . self::VERBATIM_TAGS . ')(?:\s[^>]*)?(?:/\s*>|>.*?</\1\s*>)#is';
+		// The attribute run is lazy so a self-closing tag closes on its own "/>" instead of the
+		// attributes swallowing the slash and leaving the tag to match as unclosed.
+		$pattern = '#<(' . self::VERBATIM_TAGS . ')(?:\s[^>]*?)?(?:/\s*>|>.*?</\1\s*>|>.*)#is';
 		if (!preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE)) {
 			return [];
 		}

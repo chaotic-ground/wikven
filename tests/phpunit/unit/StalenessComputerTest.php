@@ -126,4 +126,77 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 			array_column(StalenessComputer::analyze($source, $fresh), 'status')
 		);
 	}
+
+	/**
+	 * Every verbatim tag hides a marker, not just the ones the docs happen to use. <nowiki> matters
+	 * most: it is the only span Translate's own parser armours, so it is what the Translating page
+	 * wraps its examples in.
+	 *
+	 * @dataProvider provideVerbatimTags
+	 */
+	public function testSplitUnitsIgnoresMarkersInsideEveryVerbatimTag(string $example) {
+		$text = "<translate>\n<!--T:1-->\nReal.\n</translate>\n\n" . $example;
+		$this->assertSame([1], array_keys(StalenessComputer::splitUnits($text)));
+	}
+
+	public static function provideVerbatimTags(): array {
+		return [
+			'nowiki' => ["<nowiki><!--T:2-->\nExample.</nowiki>"],
+			'source' => ["<source lang=\"wikitext\">\n<!--T:2-->\nExample.\n</source>"],
+			'pre' => ["<pre>\n<!--T:2-->\nExample.\n</pre>"],
+			'syntaxhighlight' => ["<syntaxhighlight>\n<!--T:2-->\nExample.\n</syntaxhighlight>"],
+			// MediaWiki tag names are case-insensitive, so the scan must be too.
+			'uppercase' => ["<NOWIKI><!--T:2-->\nExample.</NOWIKI>"],
+			'mixed case' => ["<SyntaxHighlight>\n<!--T:2-->\nExample.\n</SyntaxHighlight>"],
+			'self-closing' => ['<nowiki />']
+		];
+	}
+
+	public function testSplitUnitsIgnoresMarkersAcrossSeveralVerbatimRegions() {
+		// Each verbatim span is skipped independently, and real units between them still count.
+		$text =
+			"<translate>\n<!--T:1-->\nOne.\n</translate>\n"
+			. "<pre>\n<!--T:8-->\nExample.\n</pre>\n"
+			. "<translate>\n<!--T:2-->\nTwo.\n</translate>\n"
+			. "<nowiki><!--T:9--></nowiki>\n"
+			. "<translate>\n<!--T:3-->\nThree.\n</translate>";
+		$this->assertSame([1, 2, 3], array_keys(StalenessComputer::splitUnits($text)));
+	}
+
+	public function testAnUnclosedVerbatimTagRunsToTheEndOfThePage() {
+		// MediaWiki renders an unclosed <nowiki> as verbatim to the end of the page, and reading it
+		// that way is the safer failure mode: the text after it stays examples rather than becoming
+		// counted units.
+		$text = "<translate>\n<!--T:1-->\nReal.\n</translate>\n<nowiki>\n<!--T:2-->\nStill an example.";
+		$this->assertSame([1], array_keys(StalenessComputer::splitUnits($text)));
+	}
+
+	/**
+	 * A closed or self-closing verbatim tag ends where it ends. Only a genuinely unclosed one runs
+	 * on, so a later real unit is still counted.
+	 *
+	 * @dataProvider provideSelfContainedVerbatim
+	 */
+	public function testAClosedVerbatimSpanDoesNotSwallowLaterUnits(string $span) {
+		$text =
+			"<translate>\n<!--T:1-->\nOne.\n</translate>\n" . $span . "\n<translate>\n<!--T:2-->\nTwo.\n</translate>";
+		$this->assertSame([1, 2], array_keys(StalenessComputer::splitUnits($text)));
+	}
+
+	public static function provideSelfContainedVerbatim(): array {
+		return [
+			'self-closing' => ['<nowiki />'],
+			'closed pair' => ['<nowiki>x</nowiki>'],
+			'with attributes' => ['<syntaxhighlight lang="yaml">a</syntaxhighlight>']
+		];
+	}
+
+	public function testMarkIgnoresATranslatePairAfterAnUnclosedVerbatimTag() {
+		// The same rule applies to marking: nothing after the unclosed tag is numbered.
+		$text = "<translate>\nReal.\n</translate>\n<pre>\n<translate>\nExample.\n</translate>";
+		$this->assertSame(
+			"<translate>\n<!--T:1-->\nReal.\n</translate>\n<pre>\n<translate>\nExample.\n</translate>",
+			StalenessComputer::mark($text)
+		);
+	}
 }
