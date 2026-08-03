@@ -34,6 +34,7 @@ With {{wikven}}, you can use the following features of MediaWiki.
 * {{ml|Bundled extensions and skins}}
 * Third-party extensions and skins (see [[<tvar name="5">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]])
 * [[<tvar name="6">Special:MyLanguage/Searching</tvar>|Search]] (client-side, built in via SifterSearch)
+* [[<tvar name="7">Special:MyLanguage/Translating</tvar>|Translation]] into multiple languages (via the Translate extension)
 
 <!--T:7-->
 == Unsupported features ==
