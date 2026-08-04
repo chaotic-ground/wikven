@@ -51,6 +51,17 @@ class RetrierTest extends MediaWikiUnitTestCase {
 		$this->assertArrayNotHasKey('class', $repos[2]);
 	}
 
+	public function testTheDeprecatedUnqualifiedClassNameCountsToo() {
+		// Core registers the qualified name, but its class_alias keeps this spelling working.
+		$repos = Retrier::retrying([
+			['class' => 'ForeignAPIRepo', 'name' => 'unqualified'],
+			['class' => '\\' . ForeignAPIRepo::class, 'name' => 'leading-backslash']
+		]);
+
+		$this->assertSame(RetryingForeignRepo::class, $repos[0]['class']);
+		$this->assertSame(RetryingForeignRepo::class, $repos[1]['class']);
+	}
+
 	public function testEveryForeignApiRepositoryIsMadeRetrying() {
 		$second = ['class' => ForeignAPIRepo::class, 'name' => 'otherwiki'];
 		$repos = Retrier::retrying([$this->instantCommons(), $second]);
