@@ -35,7 +35,7 @@ List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put
 Only gadgets marked <code>default</code> are loaded: a static site has no logged-in readers to turn other gadgets on. A gadget's own CSS (in the same module) is included, but standalone styles-only gadgets are not yet covered.
 
 <!--T:8-->
-These docs ship one such gadget, <code>PersistTabber</code>, which remembers whether you pick the Docker or the binary tab in the install steps and keeps that choice as you move between pages.
+These docs ship one such gadget, <code>PersistTabber</code>, which remembers whether you pick the Docker or the binary tab in the install steps. Every other tabber on the page switches to the tab you picked, and the choice is still there when you move to another page.
 </translate>
 
 {{prevnext|Skins|Searching}}
