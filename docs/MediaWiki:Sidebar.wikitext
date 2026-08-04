@@ -18,6 +18,8 @@
 ** Standalone binary|sidebar-standalone-binary
 ** Development|sidebar-development
 ** Version|sidebar-version
-** Licenses|sidebar-licenses
+<!-- ":Licenses", not "Licenses": a target is read as a message name first, and MediaWiki defines
+     "licenses" (the upload form's license list) as "-", which drops the entry from the sidebar. -->
+** :Licenses|sidebar-licenses
 *
 ** helppage|help-mediawiki
