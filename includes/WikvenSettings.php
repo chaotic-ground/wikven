@@ -18,6 +18,30 @@ $wgFileCacheDirectory = $wikvenDist;
 $wgWikvenSourceDirectory = $wikvenSrc;
 $wgWikvenHtmlDirectory = $wikvenDist;
 
+// A build parses every page many times over (the import, the job queue, the translated pages, one
+// pass per skin), and each parse of a page embedding a Wikimedia Commons image asks
+// commons.wikimedia.org for that image's thumbnail URL again. MediaWiki caches those lookups in
+// the main object cache, which the installer leaves at CACHE_NONE; all that is left then is a
+// three-entry per-process cache, which a site using more than three distinct Commons URLs
+// immediately thrashes. Point the main cache at the build's own database so each lookup is made
+// once per build instead of once per parse. The parser cache is unaffected: CACHE_ANYTHING already
+// resolved to the database.
+$wgMainCacheType = CACHE_DB;
+
+// Let a remote repository (Commons through InstantCommons, and any other api.php repo a site
+// configures) retry a request rather than treat the first failure as final; see
+// RetryingForeignRepo for why one failed request is fatal. Core fills in the rest of each
+// repository's settings during Setup, after this file has run, so the class is swapped once that
+// is done rather than the repository being declared here.
+$wgHooks['SetupAfterCache'][] = static function (): void {
+	foreach ($GLOBALS['wgForeignFileRepos'] as &$wikvenRepo) {
+		if (( $wikvenRepo['class'] ?? null ) === MediaWiki\FileRepo\ForeignAPIRepo::class) {
+			$wikvenRepo['class'] = MediaWiki\Extension\Wikven\RetryingForeignRepo::class;
+		}
+	}
+	unset($wikvenRepo);
+};
+
 // Let pages opt out of indexing with __NOINDEX__ in any namespace.
 $wgExemptFromUserRobotsControl = [];
 
