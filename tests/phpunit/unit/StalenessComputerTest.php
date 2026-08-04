@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
+use InvalidArgumentException;
 use MediaWiki\Extension\Wikven\PageTranslation\StalenessComputer;
 use MediaWikiUnitTestCase;
 
@@ -152,6 +153,38 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		$units = StalenessComputer::sourceUnits($source, 'Getting Started');
 		$this->assertSame([StalenessComputer::TITLE_UNIT_ID, 1], array_keys($units));
 		$this->assertSame('Getting Started', $units[StalenessComputer::TITLE_UNIT_ID]['text']);
+	}
+
+	public function testASourcePageMayNotMarkAUnitWithTheReservedTitleId() {
+		// mark() only ever writes numbers, but the marker grammar accepts any alphanumeric id, so a
+		// hand-written <!--T:title--> can reach here. Merging it with the page title would drop one
+		// of the two without a word, so it is refused instead.
+		$source = "<translate>\n<!--T:title-->\nReal content, not a page title.\n</translate>";
+		$this->assertTrue(StalenessComputer::usesReservedId($source));
+
+		$this->expectException(InvalidArgumentException::class);
+		StalenessComputer::sourceUnits($source, 'Some Page');
+	}
+
+	public function testTheReservedIdIsRefusedEvenWithoutATranslatableTitle() {
+		// A page that fixes its own display title has no title unit today, but it must not be able to
+		// keep a unit that would vanish the moment the page gained one.
+		$source = "<translate>\n<!--T:title-->\nReal content, not a page title.\n</translate>";
+		$this->expectException(InvalidArgumentException::class);
+		StalenessComputer::sourceUnits($source);
+	}
+
+	public function testTheReservedIdShownInACodeExampleIsNotAClaim() {
+		// The page documenting page translation shows <!--T:title--> in a <nowiki> example; that is
+		// prose, so it neither trips the check nor blocks the page's own title unit.
+		$source =
+			"<translate>\n<!--T:1-->\nHello.\n</translate>\n"
+			. "<nowiki><!--T:title-->\n소개</nowiki>";
+		$this->assertFalse(StalenessComputer::usesReservedId($source));
+		$this->assertSame(
+			[StalenessComputer::TITLE_UNIT_ID, 1],
+			array_keys(StalenessComputer::sourceUnits($source, 'Getting Started'))
+		);
 	}
 
 	public function testScaffoldAddsTheTitleToATranslationThatPredatesIt() {

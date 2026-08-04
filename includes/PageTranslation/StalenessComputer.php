@@ -2,6 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\PageTranslation;
 
+use InvalidArgumentException;
+
 /**
  * Unit-level staleness of a translation against its source page.
  *
@@ -27,8 +29,12 @@ class StalenessComputer {
 	 *
 	 * Like Translate's, this unit is not part of the page contents: its source text is the page's
 	 * own title, which the source wikitext never repeats, so it exists only in a translation file
-	 * ("<!--T:title @<hash>-->" followed by the translated title). mark() never hands the id out --
-	 * it numbers units and this id is not a number -- so nothing else can claim it.
+	 * ("<!--T:title @<hash>-->" followed by the translated title).
+	 *
+	 * mark() only ever hands out numbers, so the tooling never produces this id; splitUnits() does
+	 * accept it, though, so a source page could still carry a hand-written "<!--T:title-->". That
+	 * unit would collide with the page title and be lost, so sourceUnits() rejects it outright and
+	 * usesReservedId() lets the check report it.
 	 */
 	public const TITLE_UNIT_ID = 'title';
 
@@ -134,6 +140,16 @@ class StalenessComputer {
 	}
 
 	/**
+	 * Whether a source page marks one of its own units with the reserved title id.
+	 *
+	 * No source page may: that id belongs to the page title, which is not part of the wikitext, so
+	 * a unit wearing it has nowhere to go. Reported by the check, and refused by sourceUnits().
+	 */
+	public static function usesReservedId(string $sourceText): bool {
+		return isset(self::splitUnits($sourceText)[self::TITLE_UNIT_ID]);
+	}
+
+	/**
 	 * Every unit a translation of this page owes: the page-title unit, when the page has a
 	 * translatable title, followed by the <!--T:n--> units of its wikitext.
 	 *
@@ -143,9 +159,19 @@ class StalenessComputer {
 	 * @param string $sourceText
 	 * @param ?string $pageTitle The page's own title, or null for a page with no translatable title.
 	 * @return array<string,array{hash:?string,text:string}> id => [synced-source hash (null here), unit text]
+	 * @throws InvalidArgumentException If the source page marks a unit with the reserved title id.
 	 */
 	public static function sourceUnits(string $sourceText, ?string $pageTitle = null): array {
 		$units = self::splitUnits($sourceText);
+		// Refused whether or not this page has a translatable title: merging the two would drop one
+		// of them silently, and a page that gains a translatable title later must not lose a unit
+		// the moment it does.
+		if (isset($units[self::TITLE_UNIT_ID])) {
+			throw new InvalidArgumentException(
+				'<!--T:' . self::TITLE_UNIT_ID . '--> is reserved for the page title and cannot mark a unit of a '
+				. 'source page; renumber that unit.'
+			);
+		}
 		if ($pageTitle === null) {
 			return $units;
 		}

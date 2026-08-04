@@ -43,6 +43,19 @@ class CheckTranslations extends Maintenance {
 		$problems = 0;
 		foreach (TranslationSource::baseFiles($source) as $baseFile) {
 			$sourceText = (string)file_get_contents($baseFile);
+			// A source page that marks a unit <!--T:title--> collides with the page-title unit, which
+			// sourceUnits() refuses outright. Report the source file here rather than let every
+			// translation of it fail, since the page is what has to be fixed.
+			if (StalenessComputer::usesReservedId($sourceText)) {
+				$problems++;
+				$this->output(
+					'::error file=' . $prefix . substr($baseFile, strlen($source) + 1) . '::'
+					. 'Reserved translation unit id T:' . StalenessComputer::TITLE_UNIT_ID
+					. ' (it belongs to the page title); renumber that unit'
+					. "\n"
+				);
+				continue;
+			}
 			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
 			foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
 				$translationFile = TranslationSource::translationPath($baseFile, $lang);
