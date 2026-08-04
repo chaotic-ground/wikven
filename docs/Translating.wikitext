@@ -97,6 +97,29 @@ Then fill each unit's translation under its marker:
 <!--T:14-->
 A unit left empty counts as not yet translated: <code>translate check</code> reports it and the build renders it in the source language, so you can translate a page a few units at a time. The <code>@a1b2c3d4</code> stamp is added by <code>translate stamp</code> (see below), not by hand.
 
+<!--T:22-->
+== Translating the page title ==
+
+<!--T:23-->
+A page's title is a unit too, under the reserved marker <code>&lt;!--T:title--&gt;</code>. It is the one unit that is not part of the page's wikitext: its source text is the page's own title, so nothing is added to the source page and pages in the source language render exactly as they did. This is Translate's own page display title; {{SITENAME}} only spells the marker shorter.
+
+<!--T:24-->
+Write the translated title at the top of the translation file, ahead of the numbered units, where <code>translate scaffold</code> puts its marker:
+</translate>
+
+ <nowiki><!--T:title-->
+소개
+
+<!--T:1-->
+위크벤은 미디어위키로 정적 사이트를 만듭니다.</nowiki>
+
+<translate>
+<!--T:25-->
+The translated page then shows that title in its heading and in the browser tab, in place of the <code>Page/lang</code> subpage name. Nothing else changes: <code>translate check</code> reports a missing or out-of-date title like any other unit, <code>translate stamp</code> stamps it, and renaming the source page puts every translated title out of date, exactly as editing a paragraph does.
+
+<!--T:26-->
+A page that sets its own title with the <code>DISPLAYTITLE</code> magic word is the exception. That magic word sits outside <code>&lt;translate&gt;</code>, so it is copied into every translation of the page and fixes the same title in every language; such a page has no title unit to translate.
+
 <!--T:15-->
 == Stamping ==
 

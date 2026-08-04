@@ -1,3 +1,6 @@
+<!--T:title @840d9c40-->
+사이드바 편집
+
 <!--T:1 @9d465705-->
 탐색 사이드바는 MediaWiki에서와 같은 방식으로, <code>MediaWiki:Sidebar</code> 시스템 메시지를 통해 설정합니다. 소스 디렉터리에 다른 문서들과 나란히 <code>MediaWiki:Sidebar.wikitext</code> 파일을 만드세요.
 

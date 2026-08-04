@@ -39,7 +39,7 @@ class ScaffoldTranslations extends Maintenance {
 				$this->fatalError("Wikven: source directory '$source' does not exist.");
 			}
 			foreach (TranslationSource::baseFiles($source) as $baseFile) {
-				$this->scaffoldFile($baseFile, $language);
+				$this->scaffoldFile($baseFile, $language, $source);
 			}
 			return;
 		}
@@ -54,20 +54,21 @@ class ScaffoldTranslations extends Maintenance {
 		if (!is_file($file)) {
 			$this->fatalError("Wikven: '$file' does not exist.");
 		}
-		$this->scaffoldFile($file, $language);
+		$this->scaffoldFile($file, $language, $source);
 	}
 
 	/** Scaffold one base page's translation for the language, then list its source units as a guide. */
-	private function scaffoldFile(string $baseFile, string $language): void {
+	private function scaffoldFile(string $baseFile, string $language, string $source): void {
 		$sourceText = (string)file_get_contents($baseFile);
 		if (!TranslationSource::isTranslatable($sourceText)) {
 			$this->output("not translatable, skipped: $baseFile\n");
 			return;
 		}
+		$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
 
 		$translationFile = TranslationSource::translationPath($baseFile, $language);
 		$existing = is_file($translationFile) ? (string)file_get_contents($translationFile) : null;
-		$scaffolded = StalenessComputer::scaffold($sourceText, $existing);
+		$scaffolded = StalenessComputer::scaffold($sourceText, $existing, $pageTitle);
 		if ($existing !== null && $scaffolded === $existing) {
 			$this->output("unchanged: $translationFile\n");
 			return;
@@ -81,7 +82,7 @@ class ScaffoldTranslations extends Maintenance {
 		$this->output("scaffolded: $translationFile\n");
 
 		// List each source unit so the translator knows what each marker is for.
-		foreach (StalenessComputer::splitUnits($sourceText) as $id => $unit) {
+		foreach (StalenessComputer::sourceUnits($sourceText, $pageTitle) as $id => $unit) {
 			$text = preg_replace('/<\/?translate[^>]*>/', '', $unit['text']);
 			$preview = trim(preg_replace('/\s+/', ' ', $text));
 			if (mb_strlen($preview) > 80) {

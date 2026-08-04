@@ -1,3 +1,6 @@
+<!--T:title @d00eca1b-->
+시작하기
+
 <!--T:1 @e97aed4f-->
 이 문서에서는 {{SITENAME}}으로 기본적인 [[mw:en:"Hello, World!" program|Hello World]] 문서를 만듭니다.
 {{note|이 문서는 유닉스 계열 셸을 전제합니다. 단독 실행 바이너리는 Linux 전용이므로, macOS나 Windows에서는 Docker 이미지를 사용하십시오.}}

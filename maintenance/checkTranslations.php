@@ -43,12 +43,13 @@ class CheckTranslations extends Maintenance {
 		$problems = 0;
 		foreach (TranslationSource::baseFiles($source) as $baseFile) {
 			$sourceText = (string)file_get_contents($baseFile);
+			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
 			foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
 				$translationFile = TranslationSource::translationPath($baseFile, $lang);
 				$translationText = (string)file_get_contents($translationFile);
 				$reportFile = $prefix . substr($translationFile, strlen($source) + 1);
 
-				foreach (StalenessComputer::analyze($sourceText, $translationText) as $unit) {
+				foreach (StalenessComputer::analyze($sourceText, $translationText, $pageTitle) as $unit) {
 					if ($unit['status'] === StalenessComputer::OK) {
 						continue;
 					}

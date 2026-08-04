@@ -1,3 +1,6 @@
+<!--T:title @03bd6fca-->
+검색
+
 <!--T:1 @c5414aa8-->
 정적 사이트에는 질의에 응답할 서버가 없으므로 MediaWiki의 내장 검색은 내보내기에서 동작하지 않습니다. {{SITENAME}}은 [https://github.com/chaotic-ground/SifterSearch SifterSearch]를 내장하여 기본적으로 활성화된 상태로 제공합니다. SifterSearch는 빌드 시점에 정적 검색 색인을 만들고 결과를 전적으로 브라우저에서 제공하므로, 모든 사이트가 별도 설정 없이 동작하는 검색을 갖추게 됩니다. 이 문서 사이트도 이것을 사용합니다.
 
@@ -25,5 +28,5 @@ SifterSearch는 [https://pagefind.app/ Pagefind]로 렌더링된 문서를 색�
 <!--T:9 @2be0b038-->
 == 전체 결과 문서 ==
 
-<!--T:10 @5578e55f-->
+<!--T:10 @0c3742dc-->
 스킨의 검색 상자는 입력하는 동안 상위 일치 항목을 보여줍니다. 모든 일치 항목을 나열하는 문서를 만들려면 (그 외에는 비어 있는) 콘텐츠 문서를 만들고 <code>SifterSearchResultsPage</code>에 그 이름을 지정합니다. SifterSearch는 거기에 전체 검색 UI를 마운트하고 URL에서 받은 질의를 실행하며, 검색 상자의 "…을(를) 포함하는 문서 찾기" 동작과 Enter 키가 그 문서로 이동합니다. 이 사이트는 <code>Search</code>라는 제목의 문서를 사용합니다.

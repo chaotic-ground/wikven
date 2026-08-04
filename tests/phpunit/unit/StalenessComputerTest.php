@@ -95,6 +95,75 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	public function testScaffoldPutsThePageTitleAheadOfTheNumberedUnits() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$this->assertSame(
+			"<!--T:title-->\n\n<!--T:1-->\n\n",
+			StalenessComputer::scaffold($source, null, 'Getting Started')
+		);
+	}
+
+	public function testAnUnfilledPageTitleIsUntranslated() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$skeleton = StalenessComputer::scaffold($source, null, 'Getting Started');
+		$this->assertSame(
+			[
+				['id' => StalenessComputer::TITLE_UNIT_ID, 'status' => StalenessComputer::UNTRANSLATED],
+				['id' => '1', 'status' => StalenessComputer::UNTRANSLATED]
+			],
+			StalenessComputer::analyze($source, $skeleton, 'Getting Started')
+		);
+	}
+
+	public function testRenamingThePageMakesTheTranslatedTitleStale() {
+		// The title unit's source text is the page title itself, so a rename is what dates it, the
+		// way editing a paragraph dates the unit that holds it.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$draft = "<!--T:title-->\n시작하기\n\n<!--T:1-->\n안녕.\n";
+		$translation = StalenessComputer::restamp($source, $draft, 'Getting Started');
+		$this->assertStringContainsString('<!--T:title @', $translation);
+		$this->assertSame(
+			[StalenessComputer::OK, StalenessComputer::OK],
+			array_column(StalenessComputer::analyze($source, $translation, 'Getting Started'), 'status')
+		);
+		$this->assertSame(
+			[StalenessComputer::STALE, StalenessComputer::OK],
+			array_column(StalenessComputer::analyze($source, $translation, 'Starting Out'), 'status')
+		);
+	}
+
+	public function testATitleUnitIsAnOrphanWhenThePageTitleIsNotTranslatable() {
+		// A page that fixes its own display title asks for no title unit, so one left in a
+		// translation is reported rather than silently applied.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$translation = StalenessComputer::restamp($source, "<!--T:title @00000000-->\n시작하기\n\n<!--T:1-->\n안녕.\n");
+		$this->assertSame(
+			[
+				['id' => '1', 'status' => StalenessComputer::OK],
+				['id' => StalenessComputer::TITLE_UNIT_ID, 'status' => StalenessComputer::ORPHAN]
+			],
+			StalenessComputer::analyze($source, $translation)
+		);
+	}
+
+	public function testSourceUnitsAddTheTitleOnlyWhenOneIsGiven() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$this->assertSame([1], array_keys(StalenessComputer::sourceUnits($source)));
+		$units = StalenessComputer::sourceUnits($source, 'Getting Started');
+		$this->assertSame([StalenessComputer::TITLE_UNIT_ID, 1], array_keys($units));
+		$this->assertSame('Getting Started', $units[StalenessComputer::TITLE_UNIT_ID]['text']);
+	}
+
+	public function testScaffoldAddsTheTitleToATranslationThatPredatesIt() {
+		// Re-scaffolding an existing translation appends the missing title marker, as it does for any
+		// other new unit, without disturbing what is already translated.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$this->assertSame(
+			"<!--T:1-->\n안녕.\n\n<!--T:title-->\n\n",
+			StalenessComputer::scaffold($source, "<!--T:1-->\n안녕.\n", 'Getting Started')
+		);
+	}
+
 	public function testSplitUnitsIgnoresMarkersShownInsideACodeExample() {
 		// The page documenting page translation shows <!--T:n--> markers in code examples; those are
 		// not real units, so a marker inside a verbatim span never becomes one.

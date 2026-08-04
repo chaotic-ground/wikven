@@ -32,8 +32,9 @@ class StampTranslations extends Maintenance {
 			$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 			foreach (TranslationSource::baseFiles($source) as $baseFile) {
 				$sourceText = (string)file_get_contents($baseFile);
+				$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
 				foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
-					$this->restampFile($sourceText, TranslationSource::translationPath($baseFile, $lang));
+					$this->restampFile($sourceText, TranslationSource::translationPath($baseFile, $lang), $pageTitle);
 				}
 			}
 			return;
@@ -55,13 +56,18 @@ class StampTranslations extends Maintenance {
 		if ($baseFile === $translationFile || !is_file($baseFile)) {
 			$this->fatalError("Wikven: no base page found for '$translationFile'.");
 		}
-		$this->restampFile((string)file_get_contents($baseFile), $translationFile);
+		$sourceText = (string)file_get_contents($baseFile);
+		$this->restampFile(
+			$sourceText,
+			$translationFile,
+			TranslationSource::translatableTitle($baseFile, $source, $sourceText)
+		);
 	}
 
 	/** Restamp one translation file in place, reporting whether it changed. */
-	private function restampFile(string $sourceText, string $translationFile): void {
+	private function restampFile(string $sourceText, string $translationFile, ?string $pageTitle): void {
 		$before = (string)file_get_contents($translationFile);
-		$after = StalenessComputer::restamp($sourceText, $before);
+		$after = StalenessComputer::restamp($sourceText, $before, $pageTitle);
 		if ($after === $before) {
 			$this->output("unchanged: $translationFile\n");
 			return;
