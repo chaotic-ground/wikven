@@ -10,8 +10,8 @@
 <!--T:4 @d65d1197-->
 == 검색 상자가 아무 반응이 없어요 ==
 
-<!--T:5 @a4af9b72-->
-검색은 클라이언트 사이드로, SifterSearch를 통해 {{wikven}}에 내장되어 있으며 기본적으로 켜져 있습니다. 상자가 반응하지 않는다면, 검색이 꺼져 있거나(<code>SifterSearchOutputDir</code>가 비어 있음), 번들 경로가 사이트가 제공되는 위치와 맞지 않는 것입니다(하위 디렉터리 배포에서는 <code>SifterSearchBundlePath</code>를 설정하세요). [[$1|검색]] 참고.
+<!--T:5 @1ee67845-->
+검색은 클라이언트 사이드로, SifterSearch를 통해 {{SITENAME}}에 내장되어 있으며 기본적으로 켜져 있습니다. 상자가 반응하지 않는다면, 검색이 꺼져 있거나(<code>SifterSearchOutputDir</code>가 비어 있음), 번들 경로가 사이트가 제공되는 위치와 맞지 않는 것입니다(하위 디렉터리 배포에서는 <code>SifterSearchBundlePath</code>를 설정하세요). [[$1|검색]] 참고.
 
 <!--T:6 @01ea83b2-->
 == 사이트에서 문서가 하나 빠져 있어요 ==
