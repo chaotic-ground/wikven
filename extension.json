@@ -40,7 +40,8 @@
 		"SkinAddFooterLinks": "adder",
 		"BeforePageDisplay": "adder",
 		"GetLocalURL": "main",
-		"OutputPageAfterGetHeadLinksArray": "main"
+		"OutputPageAfterGetHeadLinksArray": "main",
+		"SetupAfterCache": "retrier"
 	},
 	"HookHandlers": {
 		"main": {
@@ -52,6 +53,9 @@
 		},
 		"hider": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Hider"
+		},
+		"retrier": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Retrier"
 		}
 	},
 	"config": {

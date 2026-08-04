@@ -25,22 +25,9 @@ $wgWikvenHtmlDirectory = $wikvenDist;
 // three-entry per-process cache, which a site using more than three distinct Commons URLs
 // immediately thrashes. Point the main cache at the build's own database so each lookup is made
 // once per build instead of once per parse. The parser cache is unaffected: CACHE_ANYTHING already
-// resolved to the database.
+// resolved to the database. The lookups still left are worth retrying rather than trusting to one
+// attempt; the Retrier hook handler sees to that.
 $wgMainCacheType = CACHE_DB;
-
-// Let a remote repository (Commons through InstantCommons, and any other api.php repo a site
-// configures) retry a request rather than treat the first failure as final; see
-// RetryingForeignRepo for why one failed request is fatal. Core fills in the rest of each
-// repository's settings during Setup, after this file has run, so the class is swapped once that
-// is done rather than the repository being declared here.
-$wgHooks['SetupAfterCache'][] = static function (): void {
-	foreach ($GLOBALS['wgForeignFileRepos'] as &$wikvenRepo) {
-		if (( $wikvenRepo['class'] ?? null ) === MediaWiki\FileRepo\ForeignAPIRepo::class) {
-			$wikvenRepo['class'] = MediaWiki\Extension\Wikven\RetryingForeignRepo::class;
-		}
-	}
-	unset($wikvenRepo);
-};
 
 // Let pages opt out of indexing with __NOINDEX__ in any namespace.
 $wgExemptFromUserRobotsControl = [];
