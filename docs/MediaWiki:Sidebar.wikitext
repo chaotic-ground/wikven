@@ -1,23 +1,23 @@
 * navigation
 ** mainpage|mainpage-description
-* Docs
-** Why wikitext|Why wikitext
-** Installation|Installation
-** Getting Started|Getting Started
-** Pages|Pages
-** Editing sidebar|Editing sidebar
-** Images|Images
-** Skins|Skins
-** JavaScript|JavaScript
-** Searching|Searching
-** Translating|Translating
-** Deploying|Deploying
-** Troubleshooting|Troubleshooting
-* References
-** Configuration|Configuration
-** Standalone binary|Standalone binary
-** Development|Development
-** Version|Version
-** Licenses|Licenses
+* sidebar-docs
+** Why wikitext|sidebar-why-wikitext
+** Installation|sidebar-installation
+** Getting Started|sidebar-getting-started
+** Pages|sidebar-pages
+** Editing sidebar|sidebar-editing-sidebar
+** Images|sidebar-images
+** Skins|sidebar-skins
+** JavaScript|sidebar-javascript
+** Searching|sidebar-searching
+** Translating|sidebar-translating
+** Deploying|sidebar-deploying
+** Troubleshooting|sidebar-troubleshooting
+* sidebar-references
+** Configuration|sidebar-configuration
+** Standalone binary|sidebar-standalone-binary
+** Development|sidebar-development
+** Version|sidebar-version
+** Licenses|sidebar-licenses
 *
 ** helppage|help-mediawiki
