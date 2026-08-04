@@ -9,7 +9,7 @@ __TOC__
 == GitHub Pages ==
 
 <!--T:3-->
-This workflow rebuilds and publishes the site on every push. It bakes the source with the {{SITENAME}} [https://github.com/chaotic-ground/wikven/tree/main/action composite action], then uploads <code>dist/</code> to Pages. Actions are pinned to a full commit SHA, not a tag, so a moved tag cannot swap them under you:
+This workflow rebuilds and publishes the site on every push. It bakes the source with the {{SITENAME}} [https://github.com/chaotic-ground/wikven/tree/main/action composite action], then uploads <code>dist/</code> to Pages.
 </translate>
 
 <syntaxhighlight lang="yaml">
