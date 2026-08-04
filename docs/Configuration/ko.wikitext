@@ -63,8 +63,22 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:21 @e3d7e14f-->
 <code>extensions</code>와 <code>skins</code>에 나열한 서드파티 확장 기능과 스킨의 소스입니다. 목록은 평범한 이름 그대로 유지되고(MediaWiki 자체가 쓰는 형태), 이 맵은 wikven에 번들되지 않은 것들을 어디서 가져올지 지정합니다. 이들은 MediaWiki가 불러오기 전에 빌드 시점에 가져옵니다. 항목이 확장 기능인지 스킨인지는 그 이름이 어느 목록에 나타나는지에 따라 정해지므로 이름을 두 번 쓸 일이 없습니다.
 
-<!--T:22 @9cddf146-->
+<!--T:22 @e205de74-->
 각 항목은 지닌 키에 따라 세 가지 방법 중 하나를 고릅니다:
+
+<!--T:34 @14d9022d-->
+<syntaxhighlight lang="yaml">
+$1
+    # 1. 타르볼. 예를 들어 Special:ExtensionDistributor에서 받은, 확장 기능의 의존성이
+    #    이미 아카이브에 들어 있는 것. 내려받은 파일을 검증하려면 sha256을 추가하십시오.
+    $2  # 16진수 64자. 일치하지 않으면 빌드가 중단됩니다
+    # 2. Git 리포지터리. commit(정확한 SHA, 재현 가능)이나 reference(태그나 브랜치)로
+    #    고정하십시오. 복제된 디렉터리 안에서 Composer를 실행하려면
+    #    composer: true를 추가하십시오.
+    $3
+    # 3. Composer 패키지. MediaWiki의 composer.local.json을 통해 해결됩니다.
+    $4
+</syntaxhighlight>
 
 <!--T:23 @cae25472-->
 이미 wikven에 번들된 <code>WikvenRepositories</code> 속 이름은 건드리지 않습니다. <code>extensions</code>나 <code>skins</code>에도 나열되지 않은 이름은 오류입니다.
