@@ -15,19 +15,33 @@
 	const main = mw.config.get("wgWikvenMainSkin");
 	const current = mw.config.get("skin");
 
-	// Map the current page's URL to the same page under another skin. The skin
-	// dir is the only segment that differs: the main skin has none, others sit in
-	// a "<skin>/" subdirectory right under the shared base.
+	// How many trailing path segments the page itself owns. Every slash in a title
+	// becomes a real directory in the export ("Getting Started/ko" is written to
+	// "Getting_Started/ko.html"), so the page owns one segment per slash plus the
+	// file; a namespace colon makes no directory ("File:logo.svg.html" is a single
+	// segment). Only the count is read, so the title's underscores and any
+	// percent-encoding of non-ASCII characters do not matter. This is the signal
+	// the build places the file by, and the only one to hand: a static export
+	// publishes no base path (no wgScriptPath/wgArticlePath in mw.config).
+	const owned = (mw.config.get("wgPageName") || "").split("/").length;
+
+	// Map the current page's URL to the same page under another skin. The skin dir
+	// is the only segment that differs: the main skin has none, others sit in a
+	// "<skin>/" subdirectory directly under the shared base. That base is not
+	// "everything before the file name" -- the page's own path may be several
+	// segments deep -- so drop the segments the page owns to find where it ends.
 	const targetUrl = (target) => {
-		const path = location.pathname;
-		const slash = path.lastIndexOf("/");
-		const file = path.slice(slash + 1);
-		let base = path.slice(0, slash + 1);
-		if (current !== main && base.endsWith(`/${current}/`)) {
-			base = base.slice(0, base.length - current.length - 1);
+		const segments = location.pathname.split("/");
+		const page = segments.splice(Math.max(segments.length - owned, 0), owned);
+		// What is left is "<base>" or "<base>/<skin>".
+		if (current !== main && segments[segments.length - 1] === current) {
+			segments.pop();
 		}
-		const prefix = target === main ? "" : `${target}/`;
-		return base + prefix + file + location.search + location.hash;
+		if (target !== main) {
+			segments.push(target);
+		}
+		const path = segments.concat(page).join("/");
+		return path + location.search + location.hash;
 	};
 
 	const init = () => {
