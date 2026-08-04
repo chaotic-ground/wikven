@@ -18,6 +18,17 @@ $wgFileCacheDirectory = $wikvenDist;
 $wgWikvenSourceDirectory = $wikvenSrc;
 $wgWikvenHtmlDirectory = $wikvenDist;
 
+// A build parses every page many times over (the import, the job queue, the translated pages, one
+// pass per skin), and each parse of a page embedding a Wikimedia Commons image asks
+// commons.wikimedia.org for that image's thumbnail URL again. MediaWiki caches those lookups in
+// the main object cache, which the installer leaves at CACHE_NONE; all that is left then is a
+// three-entry per-process cache, which a site using more than three distinct Commons URLs
+// immediately thrashes. Point the main cache at the build's own database so each lookup is made
+// once per build instead of once per parse. The parser cache is unaffected: CACHE_ANYTHING already
+// resolved to the database. The lookups still left are worth retrying rather than trusting to one
+// attempt; the Retrier hook handler sees to that.
+$wgMainCacheType = CACHE_DB;
+
 // Let pages opt out of indexing with __NOINDEX__ in any namespace.
 $wgExemptFromUserRobotsControl = [];
 
