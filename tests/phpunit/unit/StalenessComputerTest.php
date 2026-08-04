@@ -177,9 +177,7 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	public function testTheReservedIdShownInACodeExampleIsNotAClaim() {
 		// The page documenting page translation shows <!--T:title--> in a <nowiki> example; that is
 		// prose, so it neither trips the check nor blocks the page's own title unit.
-		$source =
-			"<translate>\n<!--T:1-->\nHello.\n</translate>\n"
-			. "<nowiki><!--T:title-->\n소개</nowiki>";
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>\n<nowiki><!--T:title-->\n소개</nowiki>";
 		$this->assertFalse(StalenessComputer::usesReservedId($source));
 		$this->assertSame(
 			[StalenessComputer::TITLE_UNIT_ID, 1],

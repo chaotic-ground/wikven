@@ -167,9 +167,10 @@ class StalenessComputer {
 		// of them silently, and a page that gains a translatable title later must not lose a unit
 		// the moment it does.
 		if (isset($units[self::TITLE_UNIT_ID])) {
+			$reserved = self::TITLE_UNIT_ID;
 			throw new InvalidArgumentException(
-				'<!--T:' . self::TITLE_UNIT_ID . '--> is reserved for the page title and cannot mark a unit of a '
-				. 'source page; renumber that unit.'
+				"<!--T:{$reserved}--> is reserved for the page title and cannot mark a unit of a source page;"
+				. ' renumber that unit.'
 			);
 		}
 		if ($pageTitle === null) {

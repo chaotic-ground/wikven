@@ -48,11 +48,11 @@ class CheckTranslations extends Maintenance {
 			// translation of it fail, since the page is what has to be fixed.
 			if (StalenessComputer::usesReservedId($sourceText)) {
 				$problems++;
+				$reportSource = $prefix . substr($baseFile, strlen($source) + 1);
+				$reserved = StalenessComputer::TITLE_UNIT_ID;
 				$this->output(
-					'::error file=' . $prefix . substr($baseFile, strlen($source) + 1) . '::'
-					. 'Reserved translation unit id T:' . StalenessComputer::TITLE_UNIT_ID
-					. ' (it belongs to the page title); renumber that unit'
-					. "\n"
+					"::error file=$reportSource::Reserved translation unit id T:$reserved"
+					. " (it belongs to the page title); renumber that unit\n"
 				);
 				continue;
 			}
