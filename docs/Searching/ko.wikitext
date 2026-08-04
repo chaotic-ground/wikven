@@ -1,5 +1,5 @@
-<!--T:1 @de390a28-->
-정적 사이트에는 질의에 응답할 서버가 없으므로 MediaWiki의 내장 검색은 내보내기에서 동작하지 않습니다. {{wikven}}은 [https://github.com/chaotic-ground/SifterSearch SifterSearch]를 내장하여 기본적으로 활성화된 상태로 제공합니다. SifterSearch는 빌드 시점에 정적 검색 색인을 만들고 결과를 전적으로 브라우저에서 제공하므로, 모든 사이트가 별도 설정 없이 동작하는 검색을 갖추게 됩니다. 이 문서 사이트도 이것을 사용합니다.
+<!--T:1 @c5414aa8-->
+정적 사이트에는 질의에 응답할 서버가 없으므로 MediaWiki의 내장 검색은 내보내기에서 동작하지 않습니다. {{SITENAME}}은 [https://github.com/chaotic-ground/SifterSearch SifterSearch]를 내장하여 기본적으로 활성화된 상태로 제공합니다. SifterSearch는 빌드 시점에 정적 검색 색인을 만들고 결과를 전적으로 브라우저에서 제공하므로, 모든 사이트가 별도 설정 없이 동작하는 검색을 갖추게 됩니다. 이 문서 사이트도 이것을 사용합니다.
 
 <!--T:2 @88782a36-->
 == 동작 방식 ==

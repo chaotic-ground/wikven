@@ -1,16 +1,16 @@
-<!--T:1 @634417ca-->
-이 문서는 {{wikven}}에 작업하고자 하는 사람들을 위해 {{wikven}}이 어떻게 만들어지는지 설명합니다. {{wikven}}은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 {{ml|MediaWiki}} 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다.
+<!--T:1 @e7d4038c-->
+이 문서는 {{SITENAME}}에 작업하고자 하는 사람들을 위해 {{SITENAME}}이 어떻게 만들어지는지 설명합니다. {{SITENAME}}은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 {{ml|MediaWiki}} 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다.
 
 <!--T:2 @8583e922-->
 == 구조 ==
 
-<!--T:3 @f4719565-->
-{{wikven}} 빌드는 네 개의 구성 요소로 이루어집니다:
+<!--T:3 @5f38d2c5-->
+{{SITENAME}} 빌드는 네 개의 구성 요소로 이루어집니다:
 
-<!--T:4 @a75633b3-->
-* '''확장 기능'''(<code>extension.json</code>, <code>includes/</code>). {{wikven}}의 설정과, MediaWiki의 출력을 정적 호스트에 맞게 조정하는 몇 가지 훅을 등록합니다. 편집/역사 UI와 사이드바의 위키 전용 링크를 숨기고, 푸터 링크를 설정된 <code>WikvenFooterUrl</code>/<code>WikvenEditUrl</code>/<code>WikvenHistoryUrl</code>로 바꾸며, 내부 URL이 <code>index.php?title=</code> 대신 <code>.html</code> 파일을 가리키도록 다시 씁니다.
+<!--T:4 @986b5ef8-->
+* '''확장 기능'''(<code>extension.json</code>, <code>includes/</code>). {{SITENAME}}의 설정과, MediaWiki의 출력을 정적 호스트에 맞게 조정하는 몇 가지 훅을 등록합니다. 편집/역사 UI와 사이드바의 위키 전용 링크를 숨기고, 푸터 링크를 설정된 <code>WikvenFooterUrl</code>/<code>WikvenEditUrl</code>/<code>WikvenHistoryUrl</code>로 바꾸며, 내부 URL이 <code>index.php?title=</code> 대신 <code>.html</code> 파일을 가리키도록 다시 씁니다.
 * '''관리 스크립트'''(<code>maintenance/</code>). 아래에서 설명하는 빌드 파이프라인입니다.
-* '''<code>WikvenSettings.php</code>'''. 빌드가 그 아래에서 실행되는 <code>LocalSettings.php</code>입니다. 설정을 불러오고, 이미지 백엔드를 감지하며, {{wikven}}의 기본값을 적용합니다.
+* '''<code>WikvenSettings.php</code>'''. 빌드가 그 아래에서 실행되는 <code>LocalSettings.php</code>입니다. 설정을 불러오고, 이미지 백엔드를 감지하며, {{SITENAME}}의 기본값을 적용합니다.
 * '''<code>bin/entrypoint</code>''' 스크립트와 '''<code>Dockerfile</code>'''. MediaWiki 1.46과 확장 기능을, 기본 명령이 빌드 한 번을 실행하는 이미지로 패키징합니다.
 
 <!--T:5 @a1622c55-->
@@ -41,7 +41,7 @@
 <!--T:12 @4f9fb5e1-->
 <code>maintenance/build.php</code>는 단계마다 부트스트랩 비용을 치르는 대신 MediaWiki를 '''한 번'''만 부팅하고 모든 단계를 자식 관리 스크립트로 실행합니다. 순서대로:
 
-<!--T:13 @876ad97a-->
+<!--T:13 @3fd6dc99-->
 ; <code>setMainPage</code>
 : <code>MediaWiki:Mainpage</code>를 가져온 <code>index</code> 문서로 지정하여, 사이트 루트가 <code>index.html</code>로 해석되도록 합니다.
 ; <code>importImages</code>
@@ -51,7 +51,7 @@
 ; <code>RunJobs</code>
 : MediaWiki의 작업 큐를 실행하며, 주로 섬네일 생성과 링크 테이블 갱신입니다.
 ; <code>RebuildFileCache</code>
-: 모든 콘텐츠 문서를 <code>dist/</code> 아래의 HTML 파일로 렌더링합니다. 이것은 MediaWiki 자체의 파일 캐시입니다. {{wikven}}은 <code>File:</code>도 콘텐츠 네임스페이스로 취급하므로, 모든 틀을 덤프하지 않고도 파일 설명 문서가 내보내집니다.
+: 모든 콘텐츠 문서를 <code>dist/</code> 아래의 HTML 파일로 렌더링합니다. 이것은 MediaWiki 자체의 파일 캐시입니다. {{SITENAME}}은 <code>File:</code>도 콘텐츠 네임스페이스로 취급하므로, 모든 틀을 덤프하지 않고도 파일 설명 문서가 내보내집니다.
 ; <code>buildStyles</code>
 : 문서가 참조하는 각 CSS 모듈을 로컬 파일로 다시 렌더링하고, <code>site.styles</code> 모듈(<code>MediaWiki:Common.css</code>와 스킨의 사이트 CSS)을 별도 파일로 렌더링합니다.
 ; <code>buildScripts</code>
@@ -66,8 +66,8 @@
 <!--T:14 @f2a6bdad-->
 == 설정 ==
 
-<!--T:15 @8c655d5a-->
-설정은 계층으로 이루어집니다. <code>default.yml</code>은 {{wikven}}의 기본 MediaWiki 설정을 제공하고, 사이트의 [[$1|.wikven.yaml]]이 그 위에 병합됩니다. <code>WikvenSettings.php</code>는 둘 다를 MediaWiki 자체의 YAML 설정 파서로 읽어, 병합된 <code>config</code> 맵을 적용하고, 나열된 <code>extensions</code>와 <code>skins</code>를 불러오며, <code>$wgLogos</code>를 업로드된 <code>WikvenLogos</code> 파일로 향하게 합니다. 또한 실행 시점에 섬네일 백엔드를 감지하는데, 가능하면 ImageMagick과 rsvg를, 그렇지 않으면 내장 GD 라이브러리와 네이티브 인라인 SVG를 사용하므로, 동일한 빌드가 이미지에서도 GD만 있는 바이너리에서도 동작합니다.
+<!--T:15 @4b4bbf1d-->
+설정은 계층으로 이루어집니다. <code>default.yml</code>은 {{SITENAME}}의 기본 MediaWiki 설정을 제공하고, 사이트의 [[$1|.wikven.yaml]]이 그 위에 병합됩니다. <code>WikvenSettings.php</code>는 둘 다를 MediaWiki 자체의 YAML 설정 파서로 읽어, 병합된 <code>config</code> 맵을 적용하고, 나열된 <code>extensions</code>와 <code>skins</code>를 불러오며, <code>$wgLogos</code>를 업로드된 <code>WikvenLogos</code> 파일로 향하게 합니다. 또한 실행 시점에 섬네일 백엔드를 감지하는데, 가능하면 ImageMagick과 rsvg를, 그렇지 않으면 내장 GD 라이브러리와 네이티브 인라인 SVG를 사용하므로, 동일한 빌드가 이미지에서도 GD만 있는 바이너리에서도 동작합니다.
 
 <!--T:16 @164e97f8-->
 == 이 단계들이 존재하는 이유 ==
@@ -78,22 +78,22 @@
 <!--T:18 @a7473987-->
 == 서드파티 확장 기능과 스킨 ==
 
-<!--T:19 @cfdee9ae-->
-<code>extensions</code>/<code>skins</code>에 있는 이름 중 {{wikven}}에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 [[$1|<code>WikvenRepositories</code>]]에 선언된 소스(tarball, Git 저장소, 또는 Composer 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
+<!--T:19 @6c9159a3-->
+<code>extensions</code>/<code>skins</code>에 있는 이름 중 {{SITENAME}}에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 [[$1|<code>WikvenRepositories</code>]]에 선언된 소스(tarball, Git 저장소, 또는 Composer 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
 
 <!--T:20 @a974dfaf-->
 == 단독 실행 바이너리 ==
 
-<!--T:21 @4fe017c7-->
-동일한 MediaWiki + {{wikven}} 트리가 단일 [[$1|FrankenPHP 실행 파일]]로 내장되어(<code>binary.Dockerfile</code> 참고), Docker 없이도 사이트를 빌드할 수 있습니다. 바이너리는 시작 시 자신의 앱을 쓰기 가능한 임시 디렉터리로 추출하고 동일한 파이프라인을 실행하는데, 이것이 모든 쓰기 가능한 경로를 <code>WIKVEN_WORKDIR</code> 아래에 두는 이유입니다.
+<!--T:21 @8b6db22f-->
+동일한 MediaWiki + {{SITENAME}} 트리가 단일 [[$1|FrankenPHP 실행 파일]]로 내장되어(<code>binary.Dockerfile</code> 참고), Docker 없이도 사이트를 빌드할 수 있습니다. 바이너리는 시작 시 자신의 앱을 쓰기 가능한 임시 디렉터리로 추출하고 동일한 파이프라인을 실행하는데, 이것이 모든 쓰기 가능한 경로를 <code>WIKVEN_WORKDIR</code> 아래에 두는 이유입니다.
 
 <!--T:22 @9c7c0fee-->
 == 지속적 통합 ==
 
-<!--T:23 @2f14a624-->
+<!--T:23 @89a2af99-->
 * <code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행합니다.
 * <code>docker-build.yml</code>은 이미지를 빌드하고 <code>main</code>에서 <code>ghcr.io/chaotic-ground/wikven</code>에 게시합니다.
-* <code>deploy-docs.yml</code>은 이미지로 <code>docs/</code> 디렉터리를 빌드하고 그 결과를 GitHub Pages에 배포하므로, 이 사이트 자체가 하나의 {{wikven}} 빌드입니다.
+* <code>deploy-docs.yml</code>은 이미지로 <code>docs/</code> 디렉터리를 빌드하고 그 결과를 GitHub Pages에 배포하므로, 이 사이트 자체가 하나의 {{SITENAME}} 빌드입니다.
 * <code>build-binary.yml</code>은 각 플랫폼용 단독 실행 [[$1|바이너리]]를 빌드하는 재사용 가능한 워크플로입니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다.
 
 <!--T:24 @b9edc4cf-->
