@@ -18,6 +18,9 @@ Each top-level <code>*</code> line is a heading, and each <code>**</code> line b
 </syntaxhighlight>
 
 <translate>
+<!--T:7-->
+A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
+
 <!--T:3-->
 == What is removed ==
 
