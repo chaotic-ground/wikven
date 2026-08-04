@@ -2,6 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\PageTranslation;
 
+use InvalidArgumentException;
+
 /**
  * Unit-level staleness of a translation against its source page.
  *
@@ -10,12 +12,31 @@ namespace MediaWiki\Extension\Wikven\PageTranslation;
  * was synced to (<!--T:n @<hash>-->). A translation unit is stale when the current
  * source unit no longer hashes to that stamp. This is pure string work, shared by the
  * CI check and the build-time materialize step, so both judge staleness identically.
+ *
+ * A page's title is a unit too, under the reserved id "title": it behaves like every other unit
+ * except that its source text is the page's own title rather than a span of the wikitext, so the
+ * callers that know which page they are looking at pass that title in.
  */
 class StalenessComputer {
 	public const OK = 'ok';
 	public const STALE = 'stale';
 	public const UNTRANSLATED = 'untranslated';
 	public const ORPHAN = 'orphan';
+
+	/**
+	 * Reserved unit id for a page's translated title, wikven's spelling of Translate's own
+	 * "Page display title" unit.
+	 *
+	 * Like Translate's, this unit is not part of the page contents: its source text is the page's
+	 * own title, which the source wikitext never repeats, so it exists only in a translation file
+	 * ("<!--T:title @<hash>-->" followed by the translated title).
+	 *
+	 * mark() only ever hands out numbers, so the tooling never produces this id; splitUnits() does
+	 * accept it, though, so a source page could still carry a hand-written "<!--T:title-->". That
+	 * unit would collide with the page title and be lost, so sourceUnits() rejects it outright and
+	 * usesReservedId() lets the check report it.
+	 */
+	public const TITLE_UNIT_ID = 'title';
 
 	private const HASH_LENGTH = 8;
 
@@ -119,12 +140,55 @@ class StalenessComputer {
 	}
 
 	/**
+	 * Whether a source page marks one of its own units with the reserved title id.
+	 *
+	 * No source page may: that id belongs to the page title, which is not part of the wikitext, so
+	 * a unit wearing it has nowhere to go. Reported by the check, and refused by sourceUnits().
+	 */
+	public static function usesReservedId(string $sourceText): bool {
+		return isset(self::splitUnits($sourceText)[self::TITLE_UNIT_ID]);
+	}
+
+	/**
+	 * Every unit a translation of this page owes: the page-title unit, when the page has a
+	 * translatable title, followed by the <!--T:n--> units of its wikitext.
+	 *
+	 * The title unit comes first, as it does in Translate, and carries the page title as its source
+	 * text, so renaming the page restamps to a different hash and the translated title goes stale.
+	 *
+	 * @param string $sourceText
+	 * @param ?string $pageTitle The page's own title, or null for a page with no translatable title.
+	 * @return array<string,array{hash:?string,text:string}> id => [synced-source hash (null here), unit text]
+	 * @throws InvalidArgumentException If the source page marks a unit with the reserved title id.
+	 */
+	public static function sourceUnits(string $sourceText, ?string $pageTitle = null): array {
+		$units = self::splitUnits($sourceText);
+		// Refused whether or not this page has a translatable title: merging the two would drop one
+		// of them silently, and a page that gains a translatable title later must not lose a unit
+		// the moment it does.
+		if (isset($units[self::TITLE_UNIT_ID])) {
+			$reserved = self::TITLE_UNIT_ID;
+			throw new InvalidArgumentException(
+				"<!--T:{$reserved}--> is reserved for the page title and cannot mark a unit of a source page;"
+				. ' renumber that unit.'
+			);
+		}
+		if ($pageTitle === null) {
+			return $units;
+		}
+		return [self::TITLE_UNIT_ID => ['hash' => null, 'text' => $pageTitle]] + $units;
+	}
+
+	/**
 	 * Compare a source page and one translation, unit by unit.
 	 *
+	 * @param string $sourceText
+	 * @param ?string $translationText
+	 * @param ?string $pageTitle The page's own title, when its title is translatable too.
 	 * @return list<array{id:string,status:string}> source units in order, then any orphans
 	 */
-	public static function analyze(string $sourceText, ?string $translationText): array {
-		$source = self::splitUnits($sourceText);
+	public static function analyze(string $sourceText, ?string $translationText, ?string $pageTitle = null): array {
+		$source = self::sourceUnits($sourceText, $pageTitle);
 		$translation = $translationText === null ? [] : self::splitUnits($translationText);
 
 		$result = [];
@@ -152,9 +216,13 @@ class StalenessComputer {
 	 *
 	 * Run after translating so every unit reads as up to date; orphan units (no matching source
 	 * unit) keep their marker untouched for the author to resolve.
+	 *
+	 * @param string $sourceText
+	 * @param string $translationText
+	 * @param ?string $pageTitle The page's own title, when its title is translatable too.
 	 */
-	public static function restamp(string $sourceText, string $translationText): string {
-		$source = self::splitUnits($sourceText);
+	public static function restamp(string $sourceText, string $translationText, ?string $pageTitle = null): string {
+		$source = self::sourceUnits($sourceText, $pageTitle);
 		return preg_replace_callback(
 			'/<!--T:(?<id>[A-Za-z0-9]+)(?:\s+@[0-9a-f]{' . self::HASH_LENGTH . '})?\s*-->/',
 			static function ($marker) use ($source) {
@@ -173,11 +241,19 @@ class StalenessComputer {
 	 * source unit not already present. Empty bodies read as "not yet translated"; the translator
 	 * fills them and runs stamp. An existing translation is kept intact with only new-unit markers
 	 * appended, so it is safe to re-run as the source gains units.
+	 *
+	 * @param string $sourceText
+	 * @param ?string $existingTranslation
+	 * @param ?string $pageTitle The page's own title, when its title is translatable too.
 	 */
-	public static function scaffold(string $sourceText, ?string $existingTranslation = null): string {
+	public static function scaffold(
+		string $sourceText,
+		?string $existingTranslation = null,
+		?string $pageTitle = null
+	): string {
 		$existing = $existingTranslation === null ? [] : self::splitUnits($existingTranslation);
 		$additions = '';
-		foreach (self::splitUnits($sourceText) as $id => $unit) {
+		foreach (self::sourceUnits($sourceText, $pageTitle) as $id => $unit) {
 			if (!isset($existing[$id])) {
 				$additions .= '<!--T:' . $id . "-->\n\n";
 			}

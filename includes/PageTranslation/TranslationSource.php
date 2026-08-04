@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\PageTranslation;
 
 use FilesystemIterator;
+use MediaWiki\Extension\Wikven\SourceFile;
 use MediaWiki\Parser\Parser;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -25,6 +26,39 @@ class TranslationSource {
 		$matches = [];
 		$stripped = Parser::extractTagsAndParams(['syntaxhighlight', 'source', 'nowiki', 'pre'], $text, $matches);
 		return str_contains($stripped, '<translate>');
+	}
+
+	/**
+	 * The source text of a page's title translation unit, or null when its title is not translatable.
+	 *
+	 * The unit's source text is the page's own title, exactly as Translate synthesizes its
+	 * "Page display title" unit from the page name: nothing is added to the source wikitext, so an
+	 * English page renders as it did before and a rename is what makes the translated title stale.
+	 *
+	 * A page that sets {{DISPLAYTITLE:}} itself is excluded. That magic word sits outside
+	 * <translate>, so it is copied verbatim into every translation page and runs there too, fixing
+	 * the same title in every language; asking for a translation Translate could not apply would
+	 * only invite one that silently does nothing.
+	 *
+	 * @param string $baseFile Absolute path of the base page's source file.
+	 * @param string $sourceDir Source directory the file lives under; the title is relative to it.
+	 * @param string $text The base page's wikitext.
+	 */
+	public static function translatableTitle(string $baseFile, string $sourceDir, string $text): ?string {
+		$sourceDir = rtrim($sourceDir, '/') . '/';
+		if (!str_starts_with($baseFile, $sourceDir) || self::hasFixedDisplayTitle($text)) {
+			return null;
+		}
+		return SourceFile::filenameToTitle(substr($baseFile, strlen($sourceDir)));
+	}
+
+	/** Whether a page's wikitext sets its own display title (a real magic word, not one shown as an example). */
+	public static function hasFixedDisplayTitle(string $text): bool {
+		// As in isTranslatable: a {{DISPLAYTITLE:}} shown inside a verbatim span -- as on the page
+		// documenting page translation -- is an example, not a magic word the parser ever runs.
+		$matches = [];
+		$stripped = Parser::extractTagsAndParams(['syntaxhighlight', 'source', 'nowiki', 'pre'], $text, $matches);
+		return preg_match('/\{\{\s*DISPLAYTITLE\s*:/i', $stripped) === 1;
 	}
 
 	/** The translation file for a base file in the given language ("Foo.wikitext" -> "Foo/ko.wikitext"). */

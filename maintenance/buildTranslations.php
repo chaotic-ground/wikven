@@ -37,6 +37,10 @@ require_once "$IP/maintenance/Maintenance.php";
  * Materialize content translations: mark each <translate> base page for translation, load the
  * translated units from "<Page>/<lang>.wikitext" source files (flagging stale ones fuzzy), and
  * render the translated pages so Translate's <languages/> and stats reflect them in the export.
+ *
+ * A page's translated title rides along as one more unit: the file's reserved "title" unit is
+ * written to Translate's own "Page display title" unit, which Translate then applies as the
+ * translation page's display title.
  */
 class BuildTranslations extends Maintenance {
 	public function __construct() {
@@ -66,8 +70,10 @@ class BuildTranslations extends Maintenance {
 				$this->output("Wikven: skipping translatable page with invalid title: $relative\n");
 				continue;
 			}
+			$sourceText = (string)file_get_contents($baseFile);
 			$languages = TranslationSource::translationLanguages($baseFile, $isKnownLanguage);
-			if ($this->prepare($title, (string)file_get_contents($baseFile), $languages, $user)) {
+			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
+			if ($this->prepare($title, $sourceText, $languages, $pageTitle, $user)) {
 				$prepared[] = $title;
 			}
 		}
@@ -86,9 +92,20 @@ class BuildTranslations extends Maintenance {
 	/**
 	 * Mark one page for translation and load its translations from the source files.
 	 *
+	 * @param Title $title
+	 * @param string $sourceText
+	 * @param string[] $languages
+	 * @param ?string $pageTitle Source text of the page's title unit, or null if its title is fixed.
+	 * @param User $user
 	 * @return bool Whether the page was marked (false if it could not be loaded or had invalid units).
 	 */
-	private function prepare(Title $title, string $sourceText, array $languages, User $user): bool {
+	private function prepare(
+		Title $title,
+		string $sourceText,
+		array $languages,
+		?string $pageTitle,
+		User $user
+	): bool {
 		$services = $this->getServiceContainer();
 
 		// importWikitext saved the base as an old revision, which bypasses the PageSaveComplete hook
@@ -104,22 +121,22 @@ class BuildTranslations extends Maintenance {
 			$this->output("Wikven: could not load {$title->getPrefixedText()} for translation; skipping\n");
 			return false;
 		}
-		$operation = $marker->getMarkOperation($record, null, true);
+		$operation = $marker->getMarkOperation($record, null, $pageTitle !== null);
 		if (!$operation->getUnitValidationStatus()->isOK()) {
 			$this->output("Wikven: {$title->getPrefixedText()} has invalid translation units; skipping\n");
 			return false;
 		}
-		// Body units only: the file model has no place to author a title translation, and a
-		// translatable title would leave every page short of 100%. No priority languages,
-		// transclusion, or forced syntax upgrade either.
-		$settings = new TranslatablePageSettings([], false, '', [], false, false, false);
+		// Keep Translate's "Page display title" unit only for a page whose title is translatable;
+		// a page that fixes its own display title has nothing to translate and would otherwise sit
+		// short of 100% forever. No priority languages, transclusion, or forced syntax upgrade.
+		$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
 		$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
 
 		// markForTranslation only queues the update job; run the queue so the source units exist
 		// before we fill in translations.
 		$this->drainJobs();
 
-		$this->loadTranslations($title, $sourceText, $languages, $user);
+		$this->loadTranslations($title, $sourceText, $languages, $pageTitle, $user);
 		return true;
 	}
 
@@ -136,10 +153,24 @@ class BuildTranslations extends Maintenance {
 		$this->output("Wikven: translated {$title->getPrefixedText()}\n");
 	}
 
-	/** Write each translated unit to its Translations: page, prefixing stale ones with !!FUZZY!!. */
-	private function loadTranslations(Title $title, string $sourceText, array $languages, User $user): void {
+	/**
+	 * Write each translated unit to its Translations: page, prefixing stale ones with !!FUZZY!!.
+	 *
+	 * @param Title $title
+	 * @param string $sourceText
+	 * @param string[] $languages
+	 * @param ?string $pageTitle Source text of the page's title unit, or null if its title is fixed.
+	 * @param User $user
+	 */
+	private function loadTranslations(
+		Title $title,
+		string $sourceText,
+		array $languages,
+		?string $pageTitle,
+		User $user
+	): void {
 		$services = $this->getServiceContainer();
-		$sourceUnits = StalenessComputer::splitUnits($sourceText);
+		$sourceUnits = StalenessComputer::sourceUnits($sourceText, $pageTitle);
 		$prefixed = $title->getPrefixedText();
 
 		foreach ($languages as $lang) {
@@ -154,11 +185,12 @@ class BuildTranslations extends Maintenance {
 			$units = StalenessComputer::splitUnits($translationText);
 
 			$status = [];
-			foreach (StalenessComputer::analyze($sourceText, $translationText) as $unit) {
+			foreach (StalenessComputer::analyze($sourceText, $translationText, $pageTitle) as $unit) {
 				$status[$unit['id']] = $unit['status'];
 			}
 
 			foreach ($sourceUnits as $id => $sourceUnit) {
+				$isTitle = (string)$id === StalenessComputer::TITLE_UNIT_ID;
 				$text = isset($units[$id]) ? trim($units[$id]['text']) : '';
 				if ($text === '') {
 					// Absent, or an empty (scaffolded, not-yet-filled) unit: leave it untranslated
@@ -166,9 +198,18 @@ class BuildTranslations extends Maintenance {
 					continue;
 				}
 				if (( $status[(string)$id] ?? '' ) === StalenessComputer::STALE) {
+					// Translate reads the title unit straight into the page title, without the fuzzy
+					// handling it gives body units, so a !!FUZZY!! prefix would show up in <h1> and
+					// <title>. Leave a stale title out instead and let the page fall back to its
+					// untranslated title, the way a page with no translated title already renders.
+					if ($isTitle) {
+						continue;
+					}
 					$text = TRANSLATE_FUZZY . $text;
 				}
-				$unitTitle = Title::makeTitle(NS_TRANSLATIONS, "$prefixed/$id/$lang");
+				// The title unit is Translate's "Page display title"; wikven only spells its id shorter.
+				$unitId = $isTitle ? TranslatablePage::DISPLAY_TITLE_UNIT_ID : (string)$id;
+				$unitTitle = Title::makeTitle(NS_TRANSLATIONS, "$prefixed/$unitId/$lang");
 				$unitPage = $services->getWikiPageFactory()->newFromTitle($unitTitle);
 				$unitUpdater = $unitPage->newPageUpdater($user);
 				$unitUpdater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($text, $unitTitle));

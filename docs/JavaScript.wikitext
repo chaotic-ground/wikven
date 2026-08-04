@@ -39,4 +39,3 @@ These docs ship one such gadget, <code>PersistTabber</code>, which remembers whe
 </translate>
 
 {{prevnext|Skins|Searching}}
-{{DISPLAYTITLE:JavaScript}}

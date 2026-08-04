@@ -58,4 +58,3 @@ titled <code>Search</code>.
 </translate>
 
 {{prevnext|JavaScript|Translating}}
-{{DISPLAYTITLE:Searching}}

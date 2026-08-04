@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
+use InvalidArgumentException;
 use MediaWiki\Extension\Wikven\PageTranslation\StalenessComputer;
 use MediaWikiUnitTestCase;
 
@@ -92,6 +93,105 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		$this->assertSame(
 			[StalenessComputer::OK, StalenessComputer::UNTRANSLATED],
 			array_column(StalenessComputer::analyze($source, $partial), 'status')
+		);
+	}
+
+	public function testScaffoldPutsThePageTitleAheadOfTheNumberedUnits() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$this->assertSame(
+			"<!--T:title-->\n\n<!--T:1-->\n\n",
+			StalenessComputer::scaffold($source, null, 'Getting Started')
+		);
+	}
+
+	public function testAnUnfilledPageTitleIsUntranslated() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$skeleton = StalenessComputer::scaffold($source, null, 'Getting Started');
+		$this->assertSame(
+			[
+				['id' => StalenessComputer::TITLE_UNIT_ID, 'status' => StalenessComputer::UNTRANSLATED],
+				['id' => '1', 'status' => StalenessComputer::UNTRANSLATED]
+			],
+			StalenessComputer::analyze($source, $skeleton, 'Getting Started')
+		);
+	}
+
+	public function testRenamingThePageMakesTheTranslatedTitleStale() {
+		// The title unit's source text is the page title itself, so a rename is what dates it, the
+		// way editing a paragraph dates the unit that holds it.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$draft = "<!--T:title-->\n시작하기\n\n<!--T:1-->\n안녕.\n";
+		$translation = StalenessComputer::restamp($source, $draft, 'Getting Started');
+		$this->assertStringContainsString('<!--T:title @', $translation);
+		$this->assertSame(
+			[StalenessComputer::OK, StalenessComputer::OK],
+			array_column(StalenessComputer::analyze($source, $translation, 'Getting Started'), 'status')
+		);
+		$this->assertSame(
+			[StalenessComputer::STALE, StalenessComputer::OK],
+			array_column(StalenessComputer::analyze($source, $translation, 'Starting Out'), 'status')
+		);
+	}
+
+	public function testATitleUnitIsAnOrphanWhenThePageTitleIsNotTranslatable() {
+		// A page that fixes its own display title asks for no title unit, so one left in a
+		// translation is reported rather than silently applied.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$translation = StalenessComputer::restamp($source, "<!--T:title @00000000-->\n시작하기\n\n<!--T:1-->\n안녕.\n");
+		$this->assertSame(
+			[
+				['id' => '1', 'status' => StalenessComputer::OK],
+				['id' => StalenessComputer::TITLE_UNIT_ID, 'status' => StalenessComputer::ORPHAN]
+			],
+			StalenessComputer::analyze($source, $translation)
+		);
+	}
+
+	public function testSourceUnitsAddTheTitleOnlyWhenOneIsGiven() {
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$this->assertSame([1], array_keys(StalenessComputer::sourceUnits($source)));
+		$units = StalenessComputer::sourceUnits($source, 'Getting Started');
+		$this->assertSame([StalenessComputer::TITLE_UNIT_ID, 1], array_keys($units));
+		$this->assertSame('Getting Started', $units[StalenessComputer::TITLE_UNIT_ID]['text']);
+	}
+
+	public function testASourcePageMayNotMarkAUnitWithTheReservedTitleId() {
+		// mark() only ever writes numbers, but the marker grammar accepts any alphanumeric id, so a
+		// hand-written <!--T:title--> can reach here. Merging it with the page title would drop one
+		// of the two without a word, so it is refused instead.
+		$source = "<translate>\n<!--T:title-->\nReal content, not a page title.\n</translate>";
+		$this->assertTrue(StalenessComputer::usesReservedId($source));
+
+		$this->expectException(InvalidArgumentException::class);
+		StalenessComputer::sourceUnits($source, 'Some Page');
+	}
+
+	public function testTheReservedIdIsRefusedEvenWithoutATranslatableTitle() {
+		// A page that fixes its own display title has no title unit today, but it must not be able to
+		// keep a unit that would vanish the moment the page gained one.
+		$source = "<translate>\n<!--T:title-->\nReal content, not a page title.\n</translate>";
+		$this->expectException(InvalidArgumentException::class);
+		StalenessComputer::sourceUnits($source);
+	}
+
+	public function testTheReservedIdShownInACodeExampleIsNotAClaim() {
+		// The page documenting page translation shows <!--T:title--> in a <nowiki> example; that is
+		// prose, so it neither trips the check nor blocks the page's own title unit.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>\n<nowiki><!--T:title-->\n소개</nowiki>";
+		$this->assertFalse(StalenessComputer::usesReservedId($source));
+		$this->assertSame(
+			[StalenessComputer::TITLE_UNIT_ID, 1],
+			array_keys(StalenessComputer::sourceUnits($source, 'Getting Started'))
+		);
+	}
+
+	public function testScaffoldAddsTheTitleToATranslationThatPredatesIt() {
+		// Re-scaffolding an existing translation appends the missing title marker, as it does for any
+		// other new unit, without disturbing what is already translated.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$this->assertSame(
+			"<!--T:1-->\n안녕.\n\n<!--T:title-->\n\n",
+			StalenessComputer::scaffold($source, "<!--T:1-->\n안녕.\n", 'Getting Started')
 		);
 	}
 

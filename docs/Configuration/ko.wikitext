@@ -1,3 +1,6 @@
+<!--T:title @b332c349-->
+설정
+
 <!--T:1 @3b17083c-->
 설정은 소스 디렉터리의 <code>.wikven.yaml</code> 파일에 담깁니다. 이 파일은 {{ml|Manual:YAML settings file format|MediaWiki 자체의 YAML 설정 형식}}과 같은 구조를 따릅니다. 최상위 <code>extensions</code> 목록, <code>skins</code> 목록, 그리고 <code>config</code> 맵으로 이루어집니다.
 

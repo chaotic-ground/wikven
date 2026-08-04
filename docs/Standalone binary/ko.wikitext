@@ -1,3 +1,6 @@
+<!--T:title @da7faeab-->
+단독 실행 바이너리
+
 <!--T:1 @f488a045-->
 [[$1|Docker 이미지]] 외에도, {{SITENAME}}은 MediaWiki를 내장한 단일 자체 완결형 실행 파일로 배포되므로 Docker 없이도 사이트를 빌드할 수 있습니다. x86_64와 arm64 Linux용으로 제공됩니다.
 

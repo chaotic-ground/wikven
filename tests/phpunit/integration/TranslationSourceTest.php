@@ -35,4 +35,53 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 			]
 		];
 	}
+
+	/**
+	 * hasFixedDisplayTitle() shares isTranslatable()'s tag extraction, so it is an integration test too.
+	 *
+	 * @dataProvider provideHasFixedDisplayTitle
+	 */
+	public function testHasFixedDisplayTitle(string $text, bool $expected) {
+		$this->assertSame($expected, TranslationSource::hasFixedDisplayTitle($text));
+	}
+
+	public static function provideHasFixedDisplayTitle(): array {
+		return [
+			'no magic word' => ["<translate>\n<!--T:1-->\nHi.\n</translate>", false],
+			'a real magic word' => ["<translate>Hi.</translate>\n{{DISPLAYTITLE:Wikven}}", true],
+			'spaced out' => ['{{ DISPLAYTITLE : Wikven }}', true],
+			// The page documenting page translation shows the magic word; that is prose, not a title.
+			'shown inside nowiki' => ['Set it with <nowiki>{{DISPLAYTITLE:Wikven}}</nowiki>.', false],
+			'shown inside syntaxhighlight' => [
+				"<syntaxhighlight lang=\"wikitext\">\n{{DISPLAYTITLE:Wikven}}\n</syntaxhighlight>",
+				false
+			]
+		];
+	}
+
+	/** @dataProvider provideTranslatableTitle */
+	public function testTranslatableTitle(string $baseFile, string $text, ?string $expected) {
+		$this->assertSame($expected, TranslationSource::translatableTitle($baseFile, '/src', $text));
+	}
+
+	public static function provideTranslatableTitle(): array {
+		$page = "<translate>\n<!--T:1-->\nHi.\n</translate>";
+		return [
+			'the title the file imports as' => ['/src/Getting Started.wikitext', $page, 'Getting Started'],
+			'a one-word title' => ['/src/Pages.wikitext', $page, 'Pages'],
+			'a namespaced page keeps its prefix' => [
+				'/src/MediaWiki:Sidebar-docs.wikitext',
+				$page,
+				'MediaWiki:Sidebar-docs'
+			],
+			// A page that fixes its own display title fixes it in every language, so nothing is asked for.
+			'a page with its own display title' => [
+				'/src/index.wikitext',
+				$page . "\n{{DISPLAYTITLE:Wikven}}",
+				null
+			],
+			// Nothing to be relative to, so no title can be derived.
+			'a file outside the source directory' => ['/elsewhere/Pages.wikitext', $page, null]
+		];
+	}
 }
