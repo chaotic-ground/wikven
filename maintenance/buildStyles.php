@@ -54,9 +54,7 @@ class BuildStyles extends Maintenance {
 				new FauxRequest($query)
 			);
 
-			ob_start();
-			$resourceLoader->respond($context);
-			$text = ob_get_clean();
+			$text = ModuleRenderer::render($resourceLoader, $context);
 
 			if (file_put_contents($filename, $text, LOCK_EX) === false) {
 				wfDebug(__METHOD__ . '() failed saving ' . $filename);
@@ -81,9 +79,7 @@ class BuildStyles extends Maintenance {
 			'styles'
 		);
 		$context = new Context($resourceLoader, new FauxRequest($query));
-		ob_start();
-		$resourceLoader->respond($context);
-		$siteStyles = ob_get_clean();
+		$siteStyles = ModuleRenderer::render($resourceLoader, $context);
 		if (trim($siteStyles) !== '') {
 			file_put_contents("$cssDir/site.styles.css", $siteStyles, LOCK_EX);
 		}
