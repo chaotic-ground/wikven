@@ -14,7 +14,6 @@ resource "github_repository" "this" {
   delete_branch_on_merge      = true
   description                 = "A static web site generator using MediaWiki."
   has_discussions             = false
-  has_downloads               = true
   has_issues                  = true
   has_projects                = false
   has_wiki                    = false
