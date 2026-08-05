@@ -30,7 +30,12 @@ resource "github_repository" "this" {
   web_commit_signoff_required = false
 
   pages {
-    build_type = "workflow"
+    build_type = "legacy"
+
+    source {
+      branch = "gh-pages"
+      path   = "/"
+    }
   }
 
   dynamic "security_and_analysis" {
