@@ -99,18 +99,16 @@ class ModuleRenderer {
 		$rl->setLogger($collector);
 		try {
 			$body = $rl->makeModuleResponse($context, $modules, $missing);
+			if ($collector->failures !== []) {
+				throw new RuntimeException(
+					'Wikven: ResourceLoader failed to build ' . implode(', ', array_keys($modules)) . ":\n"
+						. implode("\n", $collector->failures)
+				);
+			}
+			return self::noteMissingModules($context, $missing) . $body;
 		} finally {
 			$rl->setLogger($previousLogger);
 		}
-
-		if ($collector->failures !== []) {
-			throw new RuntimeException(
-				'Wikven: ResourceLoader failed to build ' . implode(', ', array_keys($modules)) . ":\n"
-					. implode("\n", $collector->failures)
-			);
-		}
-
-		return self::noteMissingModules($context, $missing) . $body;
 	}
 
 	/**

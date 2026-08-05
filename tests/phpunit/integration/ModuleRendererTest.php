@@ -18,6 +18,18 @@ use RuntimeException;
  * @covers \MediaWiki\Extension\Wikven\ModuleRenderer
  */
 class ModuleRendererTest extends MediaWikiIntegrationTestCase {
+	protected function setUp(): void {
+		parent::setUp();
+		// Hooks\Main's constructor reads WikvenHtmlDirectory, which WikvenSettings.php defines for
+		// a build but extension.json does not declare, so a bare wfLoadExtension() wiki (what the
+		// phpunit job installs) throws from every GetLocalURL hook -- including the ones
+		// ResourceLoader runs while calculating module versions. respond() catches that and dumps
+		// the backtrace into the response body, which is precisely the debris this class asserts
+		// render() no longer produces; give the wiki the value so the comparison is between two
+		// healthy responses rather than against error output.
+		$this->setMwGlobals('wgWikvenHtmlDirectory', $this->getNewTempDirectory());
+	}
+
 	/** Every response shape the build dumps, as (modules, only, extra query) for makeLoaderQuery. */
 	public static function provideResponseShapes(): array {
 		return [
@@ -139,10 +151,16 @@ class ModuleRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertNotSame([], $warnings, 'respond() is what used to warn');
 	}
 
-	/** A module that cannot be built must stop the build, not be dumped as a broken file. */
+	/**
+	 * The one place the two paths are meant to differ, pinned on purpose.
+	 *
+	 * A module that throws is caught by makeModuleResponse(), which logs it and leaves an "error"
+	 * load state. respond() then writes the exception text and its backtrace into the response --
+	 * so the build used to dump a CSS or JS asset with a stack trace inside it and carry on.
+	 * render() stops instead.
+	 */
 	public function testRenderThrowsOnAModuleThatCannotBeBuilt() {
 		$rl = $this->getServiceContainer()->getResourceLoader();
-		// makeModuleResponse() catches this, logs it and leaves an "error" load state in the body.
 		$rl->register('wikven.test.broken', [
 			'factory' => static function () {
 				return new class extends FileModule {
@@ -161,6 +179,14 @@ class ModuleRendererTest extends MediaWikiIntegrationTestCase {
 			null,
 			Context::DEBUG_OFF,
 			null
+		);
+
+		// What the build used to write to disk.
+		$dumped = $this->viaRespond($rl, new Context($rl, new FauxRequest($query)));
+		$this->assertStringContainsString(
+			'this module cannot be built',
+			$dumped,
+			'respond() puts the exception in the response body'
 		);
 
 		$this->expectException(RuntimeException::class);
