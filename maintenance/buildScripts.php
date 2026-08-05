@@ -204,9 +204,7 @@ class BuildScripts extends Maintenance {
 			$extra
 		);
 		$context = new Context($rl, new FauxRequest($query));
-		ob_start();
-		$rl->respond($context);
-		return ob_get_clean();
+		return ModuleRenderer::render($rl, $context);
 	}
 }
 

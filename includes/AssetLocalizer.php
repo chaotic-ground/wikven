@@ -108,12 +108,10 @@ class AssetLocalizer {
 			$query['variant'] = $p['variant'];
 		}
 
-		ob_start();
-		$rl->respond(new Context($rl, new FauxRequest($query)));
-		$bytes = ob_get_clean();
+		$bytes = ModuleRenderer::render($rl, new Context($rl, new FauxRequest($query)));
 
-		$isSvg = $bytes !== false && str_contains($bytes, '<svg');
-		$isPng = $bytes !== false && strncmp($bytes, "\x89PNG\r\n\x1a\n", 8) === 0;
+		$isSvg = str_contains($bytes, '<svg');
+		$isPng = strncmp($bytes, "\x89PNG\r\n\x1a\n", 8) === 0;
 		if (!$isSvg && !$isPng) {
 			return null;
 		}
