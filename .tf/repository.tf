@@ -25,17 +25,7 @@ resource "github_repository" "this" {
   squash_merge_commit_title   = "PR_TITLE"
   topics                      = ["docker-image", "mediawiki", "static-site-generator", "wikitext"]
   visibility                  = "public"
-  vulnerability_alerts        = var.github_actions ? null : true
   web_commit_signoff_required = false
-
-  pages {
-    build_type = "legacy"
-
-    source {
-      branch = "gh-pages"
-      path   = "/"
-    }
-  }
 
   dynamic "security_and_analysis" {
     for_each = var.github_actions ? [] : [true]
@@ -53,8 +43,6 @@ resource "github_repository" "this" {
     ignore_changes = [
       # Cannot be imported
       archive_on_destroy,
-      # Deprecated
-      ignore_vulnerability_alerts_during_read,
     ]
   }
 }
