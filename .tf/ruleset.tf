@@ -46,8 +46,8 @@ resource "github_repository_ruleset" "default" {
       required_review_thread_resolution = false
     }
 
-    # Required: lint jobs, semantic-pull-request and the quibble jobs, which are the ones that
-    # run the extension against a real MediaWiki (integration_id 15368 = GitHub Actions app).
+    # Required: lint jobs, semantic-pull-request, and every job that runs the extension against a
+    # real MediaWiki (integration_id 15368 = GitHub Actions app).
     required_status_checks {
       do_not_enforce_on_create             = false
       strict_required_status_checks_policy = false
@@ -60,6 +60,8 @@ resource "github_repository_ruleset" "default" {
           "mago",
           "phan (REL1_46)",
           "phan (master)",
+          "phpunit (REL1_46)",
+          "phpunit (master)",
           "rumdl",
           "semantic-pull-request",
           "taplo",
