@@ -10,15 +10,20 @@ use MediaWikiIntegrationTestCase;
  * @covers \MediaWiki\Extension\Wikven\Hooks\Main
  */
 class MainTest extends MediaWikiIntegrationTestCase {
-	protected function setUp(): void {
-		parent::setUp();
-		// Read by Main's constructor; not set outside a build.
-		$this->overrideConfigValue('WikvenHtmlDirectory', $this->getNewTempDirectory());
-		$this->overrideConfigValue('WikvenStyleDirectory', '.');
-	}
-
 	private function main(): Main {
 		return new Main($this->getServiceContainer()->getMainConfig());
+	}
+
+	/**
+	 * The handler is constructible on a wiki that only ran wfLoadExtension(), without the
+	 * build's WikvenSettings.php: the directories it reads are declared in extension.json,
+	 * and default to empty, meaning "no static site to write".
+	 */
+	public function testConstructibleWithoutBuildSettings() {
+		$config = $this->getServiceContainer()->getMainConfig();
+		$this->assertSame('', $config->get('WikvenHtmlDirectory'));
+		$this->assertSame('', $config->get('WikvenSourceDirectory'));
+		$this->main();
 	}
 
 	/**

@@ -67,6 +67,14 @@
 			"value": "Version",
 			"description": "Title of an auto-generated page (mirroring Special:Version) listing the installed software, extensions and skins, linked from the footer. Empty disables it; a same-named source page takes precedence."
 		},
+		"WikvenSourceDirectory": {
+			"value": "",
+			"description": "Absolute path to the directory the build reads pages and images from. Set by WikvenSettings.php from WIKVEN_WORKDIR; empty means no source directory, which is what a wiki running the extension outside a build has."
+		},
+		"WikvenHtmlDirectory": {
+			"value": "",
+			"description": "Absolute path to the directory the build writes the static site to. Set by WikvenSettings.php from WIKVEN_WORKDIR (per-skin passes point it at a subdirectory); empty means nothing is written, which is what a wiki running the extension outside a build has."
+		},
 		"WikvenStyleDirectory": {
 			"value": ".",
 			"description": "Relative path to the dist directory of CSS files, under the WIKVEN_WORKDIR output directory."

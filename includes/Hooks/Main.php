@@ -160,7 +160,8 @@ class Main implements
 	}
 
 	private function addStyleToList(string $name): void {
-		if (MW_ENTRY_POINT !== 'cli') {
+		// Empty outside a build: there is no static site to place the file in.
+		if (MW_ENTRY_POINT !== 'cli' || $this->htmlDirectory === '') {
 			return;
 		}
 

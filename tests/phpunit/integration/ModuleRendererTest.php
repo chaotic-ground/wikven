@@ -18,18 +18,6 @@ use RuntimeException;
  * @covers \MediaWiki\Extension\Wikven\ModuleRenderer
  */
 class ModuleRendererTest extends MediaWikiIntegrationTestCase {
-	protected function setUp(): void {
-		parent::setUp();
-		// Hooks\Main's constructor reads WikvenHtmlDirectory, which WikvenSettings.php defines for
-		// a build but extension.json does not declare, so a bare wfLoadExtension() wiki (what the
-		// phpunit job installs) throws from every GetLocalURL hook -- including the ones
-		// ResourceLoader runs while calculating module versions. respond() catches that and dumps
-		// the backtrace into the response body, which is precisely the debris this class asserts
-		// render() no longer produces; give the wiki the value so the comparison is between two
-		// healthy responses rather than against error output.
-		$this->setMwGlobals('wgWikvenHtmlDirectory', $this->getNewTempDirectory());
-	}
-
 	/** Every response shape the build dumps, as (modules, only, extra query) for makeLoaderQuery. */
 	public static function provideResponseShapes(): array {
 		return [
