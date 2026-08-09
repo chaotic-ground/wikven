@@ -9,9 +9,11 @@ use MediaWiki\Content\ContentHandler;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
+use MediaWiki\Title\TitleValue;
 use MediaWiki\User\User;
 use RebuildFileCache;
 use RunJobs;
+use Wikimedia\Rdbms\Platform\ISQLPlatform;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -21,6 +23,9 @@ require_once "$IP/maintenance/Maintenance.php";
 
 /** Build the static site: populate the wiki, then render each enabled skin in a fresh boot. */
 class Build extends Maintenance {
+	/** The page_touched every page is frozen to, chosen only for being a constant. */
+	private const FROZEN_TOUCHED = '20000101000000';
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Run the full wikven static-site build in a single process.');
@@ -55,6 +60,30 @@ class Build extends Maintenance {
 		foreach ($skins as $skin) {
 			$this->renderSkinPass($skin);
 		}
+	}
+
+	/** Freeze page_touched once content is final; wiki-page modules fold it into their version hash. */
+	private function freezePageTouched(): void {
+		$dbw = $this->getPrimaryDB();
+		$dbw->newUpdateQueryBuilder()
+			->update('page')
+			->set(['page_touched' => $dbw->timestamp(self::FROZEN_TOUCHED)])
+			->where(ISQLPlatform::ALL_ROWS)
+			->caller(__METHOD__)
+			->execute();
+
+		// The modules read page_touched through LinkCache, not the row just written: it is warmed in
+		// process while the pages render, and MediaWiki: pages are cached in the object cache too.
+		$linkCache = $this->getServiceContainer()->getLinkCache();
+		$pages = $dbw->newSelectQueryBuilder()
+			->select(['page_namespace', 'page_title'])
+			->from('page')
+			->caller(__METHOD__)
+			->fetchResultSet();
+		foreach ($pages as $page) {
+			$linkCache->invalidateTitle(new TitleValue((int)$page->page_namespace, $page->page_title));
+		}
+		$linkCache->clear();
 	}
 
 	/** Render one skin in a fresh boot by re-invoking this script with WIKVEN_BUILD_SKIN set. */
@@ -100,6 +129,8 @@ class Build extends Maintenance {
 		$this->step(RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", ['overwrite' => true]);
 		// RebuildFileCache renders in the content language; re-render translations in their own.
 		$this->step(RetranslateChrome::class, "$own/retranslateChrome.php");
+		// Every page is rendered by now, so freezing costs no staleness; the asset dumps below read it.
+		$this->freezePageTouched();
 		$this->step(BuildStyles::class, "$own/buildStyles.php");
 		$this->step(BuildScripts::class, "$own/buildScripts.php");
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
