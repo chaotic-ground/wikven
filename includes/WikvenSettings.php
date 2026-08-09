@@ -18,6 +18,10 @@ $wgFileCacheDirectory = $wikvenDist;
 $wgWikvenSourceDirectory = $wikvenSrc;
 $wgWikvenHtmlDirectory = $wikvenDist;
 
+// $wgCacheEpoch would otherwise follow LocalSettings.php's mtime, which the entrypoint rewrites
+// every bake, and it is a version input of any module carrying a versionCallback.
+$wgInvalidateCacheOnLocalSettingsChange = false;
+
 // A build parses every page many times over (the import, the job queue, the translated pages, one
 // pass per skin), and each parse of a page embedding a Wikimedia Commons image asks
 // commons.wikimedia.org for that image's thumbnail URL again. MediaWiki caches those lookups in
