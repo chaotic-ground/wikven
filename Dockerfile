@@ -1,5 +1,5 @@
 # Base images are digest-pinned for reproducible builds; Dependabot keeps them current.
-FROM composer:2@sha256:5946476338742b200bb9ff88f8be56275ddae4b3949c72305cb0dbf10cfcb760 AS composer
+FROM composer:2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040 AS composer
 
 FROM mediawiki:1.46@sha256:38989f476fd3226bd608816547e2f8eee88c1582d656e9b39c65a2e5ddbdacc6
 
