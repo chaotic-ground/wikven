@@ -128,9 +128,20 @@ class StoreImages extends Maintenance {
 		$name = 'img-' . substr(md5($path), 0, 12) . '.' . $this->extension($path);
 		$dest = "$dir/$name";
 		if (!file_exists($dest)) {
-			copy($src, $dest);
+			$this->copyWithoutTimestamps($src, $dest);
 		}
 		return "./$name";
+	}
+
+	/** Copy a file, dropping the PNG chunks that record when it was written. */
+	private function copyWithoutTimestamps(string $src, string $dest): void {
+		$data = file_get_contents($src);
+		$stripped = $data === false ? null : Png::withoutTimestamps($data);
+		if ($stripped === null) {
+			copy($src, $dest);
+			return;
+		}
+		file_put_contents($dest, $stripped, LOCK_EX);
 	}
 
 	/**
