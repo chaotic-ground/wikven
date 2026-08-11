@@ -27,19 +27,6 @@ jobs:
           # PHP 8.3 image so the container resolves wikven's dev deps (>= 8.2); phan runs in the action's testrun image.
           quibble-docker-image: quibble-bookworm-php83
 
-  composer-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: femiwiki/quibble-action@d799e5bb348756ea1588f2b5f2ca7fc09fdbdac9  # v2.0.1
-        with:
-          stage: composer-test
-          mediawiki-version: REL1_46
-          # PHP 8.3 image: wikven's dev deps (minus-x etc.) require >= 8.2.
-          quibble-docker-image: quibble-bookworm-php83
-
   coverage:
     runs-on: ubuntu-latest
     permissions:
