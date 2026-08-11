@@ -22,6 +22,13 @@ $wgWikvenHtmlDirectory = $wikvenDist;
 // every bake, and it is a version input of any module carrying a versionCallback.
 $wgInvalidateCacheOnLocalSettingsChange = false;
 
+// The database queue pops jobs in random order by default (JobQueueDB::optimalOrder), to spread
+// concurrent runners over different rows. A build has one runner and wants a fixed order: the jobs
+// that render translated pages create those pages, so a random order gives them different page and
+// revision ids on every bake.
+// Only the order is overridden, so the class and claimTTL core picked stay as they are.
+$GLOBALS['wgJobTypeConf']['default']['order'] = 'fifo';
+
 // A build parses every page many times over (the import, the job queue, the translated pages, one
 // pass per skin), and each parse of a page embedding a Wikimedia Commons image asks
 // commons.wikimedia.org for that image's thumbnail URL again. MediaWiki caches those lookups in
