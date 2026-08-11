@@ -23,8 +23,8 @@ require_once "$IP/maintenance/Maintenance.php";
 
 /** Build the static site: populate the wiki, then render each enabled skin in a fresh boot. */
 class Build extends Maintenance {
-	/** The page_touched every page is frozen to, chosen only for being a constant. */
-	private const FROZEN_TOUCHED = '20000101000000';
+	/** Fallback for the frozen timestamps when the caller names none; chosen only for being fixed. */
+	private const FROZEN_TIMESTAMP = '20000101000000';
 
 	public function __construct() {
 		parent::__construct();
@@ -84,7 +84,7 @@ class Build extends Maintenance {
 		$dbw = $this->getPrimaryDB();
 		$dbw->newUpdateQueryBuilder()
 			->update('page')
-			->set(['page_touched' => $dbw->timestamp(self::FROZEN_TOUCHED)])
+			->set(['page_touched' => $dbw->timestamp(self::FROZEN_TIMESTAMP)])
 			->where(ISQLPlatform::ALL_ROWS)
 			->caller(__METHOD__)
 			->execute();
@@ -146,7 +146,9 @@ class Build extends Maintenance {
 		$this->step(RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", ['overwrite' => true]);
 		// RebuildFileCache renders in the content language; re-render translations in their own.
 		$this->step(RetranslateChrome::class, "$own/retranslateChrome.php");
-		// Every page is rendered by now, so freezing costs no staleness; the asset dumps below read it.
+		// Every page is rendered by now: drop what each one recorded about the request that made it.
+		$this->step(StripBuildStamps::class, "$own/stripBuildStamps.php");
+		// Nothing is rendered after this, so freezing costs no staleness; the asset dumps below read it.
 		$this->freezePageTouched();
 		$this->step(BuildStyles::class, "$own/buildStyles.php");
 		$this->step(BuildScripts::class, "$own/buildScripts.php");
@@ -221,6 +223,9 @@ class Build extends Maintenance {
 
 	/** Point the wiki's main page at $wgWikvenMainPage (imported later; see assertMainPageExists). */
 	private function setMainPage(): void {
+		// Whatever the installer made the main page, before the message below repoints it.
+		$installed = Title::newMainPage();
+
 		$title = Title::newFromText('MediaWiki:Mainpage');
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
@@ -229,6 +234,32 @@ class Build extends Maintenance {
 		$content = ContentHandler::makeContent($GLOBALS['wgWikvenMainPage'], $title);
 		$updater->setContent(SlotRecord::MAIN, $content);
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Set the main page'));
+
+		$this->dropInstalledMainPage($installed, $user);
+	}
+
+	/**
+	 * Delete the page the installer wrote, unless the source provides one by that name.
+	 *
+	 * It holds MediaWiki's "MediaWiki has been installed" boilerplate, which every bake was
+	 * exporting as a page of the site. It is also the one page created before wikven's settings
+	 * load, so its revision keeps the real clock and made the export differ between bakes.
+	 */
+	private function dropInstalledMainPage(Title $installed, User $user): void {
+		if (!$installed->canExist() || !$installed->exists()) {
+			return;
+		}
+		if (SourceFile::exists($installed->getPrefixedText())) {
+			return;
+		}
+		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($installed);
+		$status = $this->getServiceContainer()
+			->getDeletePageFactory()
+			->newDeletePage($page, $user)
+			->deleteUnsafe('Wikven: installer page, not part of the source');
+		if (!$status->isOK()) {
+			$this->output("Wikven: could not delete the installer's main page {$installed->getPrefixedText()}\n");
+		}
 	}
 
 	/** Hide about/privacy/disclaimer footer links with no imported target (blank label to "-"). */

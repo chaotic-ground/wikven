@@ -29,6 +29,23 @@ $wgInvalidateCacheOnLocalSettingsChange = false;
 // Only the order is overridden, so the class and claimTTL core picked stay as they are.
 $GLOBALS['wgJobTypeConf']['default']['order'] = 'fifo';
 
+// The NewPP limit report is a wall-clock measurement of the parse, so it differs between bakes.
+// It is addressed to someone debugging a live wiki, and nothing in an export can act on it.
+$wgEnableParserLimitReporting = false;
+
+// Run the whole build as of one instant. Every revision and upload is created while the build runs,
+// so with a live clock the pages report themselves as edited seconds ago, differently in each bake:
+// "last edited" lines, File: history, {{CURRENTTIMESTAMP}}, page_touched, cache stamps. Freezing the
+// clock settles all of them at the source, which is what SOURCE_DATE_EPOCH means
+// (https://reproducible-builds.org/docs/source-date-epoch/); wikven's GitHub action passes the
+// commit being built, so the dates are true of it. Without it a fixed date is used, a wrong-but-
+// fixed one being easier to live with than a wrong-and-moving one.
+$wikvenEpoch = getenv('SOURCE_DATE_EPOCH');
+$wikvenEpoch = is_string($wikvenEpoch) && preg_match('/^\d+$/', trim($wikvenEpoch))
+	? (int)trim($wikvenEpoch)
+	: 946684800;
+Wikimedia\Timestamp\ConvertibleTimestamp::setFakeTime($wikvenEpoch);
+
 // A build parses every page many times over (the import, the job queue, the translated pages, one
 // pass per skin), and each parse of a page embedding a Wikimedia Commons image asks
 // commons.wikimedia.org for that image's thumbnail URL again. MediaWiki caches those lookups in

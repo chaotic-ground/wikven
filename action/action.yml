@@ -22,6 +22,14 @@ inputs:
       Cache the pulled image between runs, keyed on the image ref. Set to
       "false" to always pull fresh.
     default: "true"
+  date-epoch:
+    description: >-
+      Unix time the built site should claim its content was last written, as
+      SOURCE_DATE_EPOCH (https://reproducible-builds.org/docs/source-date-epoch/).
+      Defaults to the commit date of HEAD, which makes the "last edited" dates
+      true of the commit and identical for every bake of it. Left unset if the
+      checkout has no git history, and the bake then uses a fixed date.
+    default: ""
 
 runs:
   using: composite
@@ -38,6 +46,7 @@ runs:
         OUTPUT: ${{ inputs.output }}
         IMAGE: ${{ inputs.image }}
         CACHE: ${{ inputs.cache }}
+        DATE_EPOCH: ${{ inputs.date-epoch }}
       run: |
         tar="$HOME/.cache/wikven/image.tar"
         if [ "$CACHE" = "true" ] && [ -f "$tar" ]; then
@@ -51,7 +60,17 @@ runs:
           fi
         fi
         mkdir -p "$OUTPUT"
+        # Unset unless resolved: the bake falls back to a fixed date rather than the build clock.
+        if [ -z "$DATE_EPOCH" ]; then
+          DATE_EPOCH=$(git log -1 --format=%ct 2>/dev/null || true)
+        fi
+        epoch=()
+        case "$DATE_EPOCH" in
+          '' | *[!0-9]*) ;;
+          *) epoch=(-e "SOURCE_DATE_EPOCH=$DATE_EPOCH") ;;
+        esac
         docker run --rm \
           -v "$PWD/$SOURCE:/workspace/src" \
           -v "$PWD/$OUTPUT:/workspace/dist" \
+          "${epoch[@]}" \
           "$IMAGE"
