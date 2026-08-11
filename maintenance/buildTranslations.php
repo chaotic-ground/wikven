@@ -224,11 +224,23 @@ class BuildTranslations extends Maintenance {
 	/** Run every queued job synchronously (the export has no background runner). */
 	private function drainJobs(): void {
 		$group = $this->getServiceContainer()->getJobQueueGroup();
-		$job = $group->pop();
-		while ($job) {
-			$job->run();
-			$group->ack($job);
-			$job = $group->pop();
+		// pop() with no type shuffles the queue types to avoid starvation, and these jobs create the
+		// translated pages, so a shuffled order hands them different page and revision ids on every
+		// bake. Drain one type at a time, in name order, until nothing is left anywhere.
+		while (true) {
+			$types = $group->getQueuesWithJobs();
+			if (!$types) {
+				return;
+			}
+			sort($types);
+			foreach ($types as $type) {
+				$job = $group->pop($type);
+				while ($job) {
+					$job->run();
+					$group->ack($job);
+					$job = $group->pop($type);
+				}
+			}
 		}
 	}
 }

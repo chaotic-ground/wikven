@@ -51,7 +51,7 @@ class Build extends Maintenance {
 		$this->dropDeadCategoryLink();
 		// Materialize content translations before RunJobs so rendered translation pages get exported.
 		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
-		$this->step(RunJobs::class, "$ip/maintenance/runJobs.php");
+		$this->runJobs("$ip/maintenance/runJobs.php");
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
 		if (!$skins) {
@@ -59,6 +59,23 @@ class Build extends Maintenance {
 		}
 		foreach ($skins as $skin) {
 			$this->renderSkinPass($skin);
+		}
+	}
+
+	/** Run the queue one type at a time, in name order: the runner otherwise shuffles the types. */
+	private function runJobs(string $file): void {
+		$group = $this->getServiceContainer()->getJobQueueGroup();
+		while (true) {
+			$types = $group->getQueuesWithJobs();
+			if (!$types) {
+				return;
+			}
+			sort($types);
+			foreach ($types as $type) {
+				$child = $this->createChild(RunJobs::class, $file);
+				$child->setOption('type', $type);
+				$child->execute();
+			}
 		}
 	}
 
