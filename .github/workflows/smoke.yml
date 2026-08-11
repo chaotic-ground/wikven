@@ -5,10 +5,13 @@ name: Smoke test
 # self-contained site. The unit suite covers only helper classes, so without
 # this a regression anywhere in the bake pipeline (maintenance/, AssetLocalizer,
 # hooks, Dockerfile) would produce a broken site yet pass every other gate.
+# Runs on every pull request, with no path filter: this is a required check, and a required check
+# that does not report leaves the pull request unmergeable for good. Pushes to main stay filtered,
+# since a change outside these paths cannot alter the bake.
 on:
   push:
     branches: [main]
-    paths: &paths
+    paths:
       - 'Dockerfile'
       - 'bin/entrypoint'
       - 'default.yml'
@@ -24,7 +27,6 @@ on:
       - 'playwright.config.js'
       - 'tests/e2e/**'
   pull_request:
-    paths: *paths
 
 permissions:
   contents: read
