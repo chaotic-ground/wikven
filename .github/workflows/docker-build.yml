@@ -1,13 +1,15 @@
 ---
 name: Docker image
 
+# Runs on every pull request, with no path filter: this is a required check, and a required check
+# that does not report leaves the pull request unmergeable for good. Pushes to main keep skipping
+# docs-only changes, which cannot affect the image and would only republish an identical one.
 on:
   push:
     branches: [main]
-    paths-ignore: &paths-ignore
+    paths-ignore:
       - 'docs/**'
   pull_request:
-    paths-ignore: *paths-ignore
   workflow_call:
     inputs:
       tag:

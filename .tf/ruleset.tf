@@ -55,11 +55,15 @@ resource "github_repository_ruleset" "default" {
       dynamic "required_check" {
         for_each = [
           "biome",
+          "build",
+          "build-and-check",
+          "caddy",
           "composer-test",
           "coverage",
           "mago",
           "phan (REL1_46)",
           "phan (master)",
+          "phpcs",
           "phpunit (REL1_46)",
           "phpunit (master)",
           "rumdl",
