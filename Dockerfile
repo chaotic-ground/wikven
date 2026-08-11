@@ -28,13 +28,18 @@ RUN arch="$TARGETARCH" \
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ARG TRANSLATE_VERSION=REL1_46
 ARG ULS_VERSION=REL1_46
-RUN git clone --depth 1 --branch "$ULS_VERSION" \
+# Composer refuses to resolve at all when any package in the tree carries a security advisory,
+# including a require-dev one that --no-dev then never installs. Translate's dev requirements pin
+# a phpcs release that has one, which broke every build reaching this layer without a warm cache.
+# The audit still reports on what is installed; only the hard stop is off.
+RUN composer config --global policy.advisories.block false \
+ && git clone --depth 1 --branch "$ULS_VERSION" \
       https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector.git \
       /var/www/html/extensions/UniversalLanguageSelector \
  && git clone --depth 1 --branch "$TRANSLATE_VERSION" \
       https://github.com/wikimedia/mediawiki-extensions-Translate.git \
       /var/www/html/extensions/Translate \
- && composer update --no-dev --no-interaction \
+ && composer install --no-dev --no-interaction \
       --working-dir=/var/www/html/extensions/Translate
 
 COPY ./ /var/www/html/extensions/Wikven
