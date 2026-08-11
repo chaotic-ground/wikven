@@ -52,8 +52,8 @@ jobs:
           context: .
           load: true
           tags: wikven
+          # Reader only; docker-build.yml exports this cache. See the note in smoke.yml.
           cache-from: type=gha,scope=wikven-image
-          cache-to: type=gha,mode=max,scope=wikven-image
 
       - name: Bake the docs site
         if: github.event.action != 'closed'
