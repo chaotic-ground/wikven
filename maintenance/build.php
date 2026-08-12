@@ -169,6 +169,7 @@ class Build extends Maintenance {
 		$this->step(BuildScripts::class, "$own/buildScripts.php");
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");
+		$this->step(StoreWebfonts::class, "$own/storeWebfonts.php");
 		$this->step(Rename::class, "$own/rename.php");
 		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
 		$this->step(ResolveTranslationLinks::class, "$own/resolveTranslationLinks.php");

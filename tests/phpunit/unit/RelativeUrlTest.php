@@ -109,4 +109,24 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 			return true;
 		}));
 	}
+
+	/**
+	 * ULS reads its webfont directory from a config value that rewriteScripts writes next to the
+	 * bundle, so it is neither an attribute nor a url(), and a moved page still has to find it.
+	 */
+	public function testTheWebfontBasePathIsReparented() {
+		$this->assertSame(
+			'mw.config.set({"wgULSFontRepositoryBasePath":"../fonts/uls/"});',
+			RelativeUrl::reparent('mw.config.set({"wgULSFontRepositoryBasePath":"./fonts/uls/"});', 1)
+		);
+		$this->assertSame(
+			'mw.config.set({"wgULSFontRepositoryBasePath":"../../fonts/uls/"});',
+			RelativeUrl::reparent('mw.config.set({"wgULSFontRepositoryBasePath":"./fonts/uls/"});', 2)
+		);
+	}
+
+	public function testAnAbsoluteWebfontBasePathIsLeftAlone() {
+		$html = 'mw.config.set({"wgULSFontRepositoryBasePath":"/fonts/uls/"});';
+		$this->assertSame($html, RelativeUrl::reparent($html, 2));
+	}
 }

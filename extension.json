@@ -99,6 +99,10 @@
 			"value": "",
 			"description": "URL template for the per-page \"View source\" tab, linking to the page's source file in the repository. $1 is replaced with the page's percent-encoded source file name, as for WikvenEditUrl. Empty disables the tab."
 		},
+		"WikvenULSWebfonts": {
+			"value": false,
+			"description": "Carry UniversalLanguageSelector's webfonts in the export, so a script with no font on the reader's system renders as text rather than boxes. Off by default because it adds payload: only languages ULS has no system font for are shipped, typically 2 KiB to a few hundred KiB each, and the site then redistributes those fonts under their own licenses, which are copied alongside them."
+		},
 		"WikvenLogos": {
 			"value": [],
 			"description": "Header logos, mirroring $wgLogos but keyed to image file names in the source directory (each inlined as a data URI)."

@@ -222,10 +222,17 @@ foreach ($config['extensions'] ?? [] as $extension) {
 }
 
 // UniversalLanguageSelector (enabled for content i18n) would have the browser pull its webfont
-// module and font files from load.php, which a static export cannot serve. Turn webfonts off;
-// bundling them into the static site instead is tracked as a separate enhancement.
+// module and font files from load.php, which a static export cannot serve. Off unless the site asks
+// for them, in which case storeWebfonts.php copies the ones its languages need next to the HTML and
+// the repository base path below points the browser at that copy instead of at load.php.
 if (in_array('UniversalLanguageSelector', $config['extensions'], true)) {
-	$GLOBALS['wgULSWebfontsEnabled'] = false;
+	$wikvenWebfonts = (bool)( $GLOBALS['wgWikvenULSWebfonts'] ?? false );
+	$GLOBALS['wgULSWebfontsEnabled'] = $wikvenWebfonts;
+	if ($wikvenWebfonts) {
+		// Relative to the page, so it works under any base path; RelativeUrl reparents it per depth.
+		require_once "$IP/extensions/Wikven/includes/Webfonts.php";
+		$GLOBALS['wgULSFontRepositoryBasePath'] = './' . MediaWiki\Extension\Wikven\Webfonts::OUTPUT_DIR . '/';
+	}
 }
 
 // SifterSearch ships built in; default its Pagefind index into the build's dist dir, unless the

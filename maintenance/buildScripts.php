@@ -55,6 +55,11 @@ class BuildScripts extends Maintenance {
 				$seeds[] = $searchModule;
 			}
 		}
+		// Seed the webfont repository: ULS loads it with mw.loader.using() the first time it applies a
+		// font, so it is in no page's queue, and without it the export asks load.php for it.
+		if (( $GLOBALS['wgULSWebfontsEnabled'] ?? false ) && $rl->isModuleRegistered(Webfonts::REPOSITORY_MODULE)) {
+			$seeds[] = Webfonts::REPOSITORY_MODULE;
+		}
 		// 2. Expand to the full dependency closure, plus the implicit base modules.
 		$closure = $this->resolveClosure($rl, $seeds, $wgLanguageCode, $wgDefaultSkin);
 

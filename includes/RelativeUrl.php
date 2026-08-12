@@ -46,10 +46,20 @@ class RelativeUrl {
 			},
 			$html
 		);
-		return preg_replace_callback(
+		$html = preg_replace_callback(
 			'#\burl\((["\']?)(\.\.?)/#',
 			static function (array $m) use ($rebase): string {
 				return 'url(' . $m[1] . $rebase($m[2]);
+			},
+			$html
+		);
+		// ULS reads its webfont directory from a config value, which rewriteScripts sets next to the
+		// bundle. It is not an attribute or a url(), so none of the patterns above reach it, and the
+		// browser resolves it against the document like any other relative URL.
+		return preg_replace_callback(
+			'#("wgULSFontRepositoryBasePath":")(\.\.?)/#',
+			static function (array $m) use ($rebase): string {
+				return $m[1] . $rebase($m[2]);
 			},
 			$html
 		);

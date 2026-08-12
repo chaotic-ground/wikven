@@ -74,6 +74,7 @@ class RewriteScripts extends Maintenance {
 				. '<script src="'
 				. $prefix
 				. '/modules-static.js"></script>'
+				. $this->webfontBase($prefix)
 				. '<script>mw.loader.load('
 				. json_encode($trigger)
 				. ');</script>';
@@ -201,6 +202,27 @@ class RewriteScripts extends Maintenance {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * Point ULS's webfont base at this page's copy of the fonts.
+	 *
+	 * The base path is a ResourceLoader config var, so it is set once in the shared bundle and cannot
+	 * be relative to a page: every page at depth would resolve "./fonts/uls/" inside its own
+	 * directory. This runs after the bundle, with the same depth-correct prefix used for the script
+	 * tags above, so the last writer is the one that knows where the page sits.
+	 */
+	private function webfontBase(string $prefix): string {
+		if (!( $GLOBALS['wgULSWebfontsEnabled'] ?? false )) {
+			return '';
+		}
+		$base = $prefix . '/' . Webfonts::OUTPUT_DIR . '/';
+		// Unescaped slashes so RelativeUrl::reparent can see the path when rename moves the page down.
+		return (
+			'<script>mw.config.set('
+			. json_encode(['wgULSFontRepositoryBasePath' => $base], JSON_UNESCAPED_SLASHES)
+			. ');</script>'
+		);
 	}
 }
 
