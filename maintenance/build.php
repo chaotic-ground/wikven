@@ -166,6 +166,8 @@ class Build extends Maintenance {
 		// Nothing is rendered after this, so freezing costs no staleness; the asset dumps below read it.
 		$this->freezePageTouched();
 		$this->step(BuildStyles::class, "$own/buildStyles.php");
+		// Opt-in: bake ULS webfonts into a static stylesheet rewriteScripts links below.
+		$this->step(BakeWebfonts::class, "$own/bakeWebfonts.php");
 		$this->step(BuildScripts::class, "$own/buildScripts.php");
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");

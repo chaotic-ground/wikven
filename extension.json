@@ -106,6 +106,10 @@
 		"WikvenRepositories": {
 			"value": [],
 			"description": "Sources for third-party extensions and skins listed in extensions/skins. A map of component name to a tarball/repository/package source, fetched by maintenance/fetchExtensions.php before MediaWiki loads them."
+		},
+		"WikvenBundleWebfonts": {
+			"value": false,
+			"description": "When true and UniversalLanguageSelector is installed, bake its webfonts for the export's languages into a static stylesheet, so readers of a script their system lacks a font for see the intended typeface instead of tofu. Off by default because it adds font payload to the output."
 		}
 	},
 	"MessagesDirs": {

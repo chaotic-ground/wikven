@@ -20,7 +20,7 @@ extensions:
 
 <translate>
 <!--T:4-->
-A static export cannot serve UniversalLanguageSelector's runtime webfonts (they load from a live endpoint), so {{SITENAME}} turns them off; readers see each script in their own system fonts.
+A static export cannot serve UniversalLanguageSelector's runtime webfonts (they load from a live endpoint), so by default {{SITENAME}} turns them off and readers see each script in their own system fonts. Set <code>WikvenBundleWebfonts</code> to bake the fonts into the site instead, so a reader whose system lacks a font for a script still sees the intended typeface.
 
 <!--T:5-->
 You do not list the languages you translate into: as with Translate itself, a language exists as soon as a translation for it does. The language you write your pages in stays the source language.
