@@ -219,7 +219,7 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	public function testAnalyzeIgnoresAnExampleMarkerInACodeBlock() {
 		// A translation covering only the real unit is fully up to date; the example marker shown in
 		// the code block is neither a missing source unit nor an orphan.
-		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>\n" . "<pre>\n<!--T:2-->\nExample.\n</pre>";
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>\n<pre>\n<!--T:2-->\nExample.\n</pre>";
 		$fresh = StalenessComputer::restamp($source, "<!--T:1-->\n안녕.\n");
 		$this->assertSame(
 			[StalenessComputer::OK],
