@@ -228,7 +228,8 @@ class BuildTranslations extends Maintenance {
 		// translated pages, so a shuffled order hands them different page and revision ids on every
 		// bake. Drain one type at a time, in name order, until nothing is left anywhere.
 		while (true) {
-			$types = $group->getQueuesWithJobs();
+			// The search index is left for the end of the build; see Search::INDEX_JOB.
+			$types = array_diff($group->getQueuesWithJobs(), [Search::INDEX_JOB]);
 			if (!$types) {
 				return;
 			}

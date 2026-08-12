@@ -62,21 +62,36 @@ class Build extends Maintenance {
 		}
 	}
 
-	/** Run the queue one type at a time, in name order: the runner otherwise shuffles the types. */
+	/**
+	 * Run the queue one type at a time, in name order: the runner otherwise shuffles the types.
+	 *
+	 * The search index is held back to the end. SifterSearch enqueues a rebuild for every revision
+	 * inserted, and although a pending one absorbs the rest, each pass of the queue picks up
+	 * whichever has arrived since. A bake was running Pagefind 21 times and leaving 20 dead
+	 * generations of hashed index files in the output, since Pagefind writes into a directory rather
+	 * than replacing it. Held back, it runs once, over the finished content.
+	 */
 	private function runJobs(string $file): void {
 		$group = $this->getServiceContainer()->getJobQueueGroup();
 		while (true) {
-			$types = $group->getQueuesWithJobs();
+			$types = array_diff($group->getQueuesWithJobs(), [Search::INDEX_JOB]);
 			if (!$types) {
-				return;
+				break;
 			}
 			sort($types);
 			foreach ($types as $type) {
-				$child = $this->createChild(RunJobs::class, $file);
-				$child->setOption('type', $type);
-				$child->execute();
+				$this->runJobsOfType($file, $type);
 			}
 		}
+		if (in_array(Search::INDEX_JOB, $group->getQueuesWithJobs(), true)) {
+			$this->runJobsOfType($file, Search::INDEX_JOB);
+		}
+	}
+
+	private function runJobsOfType(string $file, string $type): void {
+		$child = $this->createChild(RunJobs::class, $file);
+		$child->setOption('type', $type);
+		$child->execute();
 	}
 
 	/** Freeze page_touched once content is final; wiki-page modules fold it into their version hash. */
