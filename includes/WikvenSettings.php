@@ -222,8 +222,9 @@ foreach ($config['extensions'] ?? [] as $extension) {
 }
 
 // UniversalLanguageSelector (enabled for content i18n) would have the browser pull its webfont
-// module and font files from load.php, which a static export cannot serve. Turn webfonts off;
-// bundling them into the static site instead is tracked as a separate enhancement.
+// module and font files from load.php, which a static export cannot serve. Turn its runtime
+// webfonts off; when $wgWikvenBundleWebfonts is set, maintenance/bakeWebfonts.php instead bakes
+// the same fonts into a static stylesheet (see includes/Webfonts/FontRepository.php).
 if (in_array('UniversalLanguageSelector', $config['extensions'], true)) {
 	$GLOBALS['wgULSWebfontsEnabled'] = false;
 }

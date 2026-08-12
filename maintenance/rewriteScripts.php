@@ -32,6 +32,11 @@ class RewriteScripts extends Maintenance {
 		$siteStylesHref = './' . rtrim($wgWikvenStyleDirectory, '/') . '/site.styles.css';
 		$hasSiteStyles = is_file("$htmlDir/site.styles.css") && filesize("$htmlDir/site.styles.css") > 0;
 
+		// Bundled webfonts (opt-in; bakeWebfonts wrote it): link ahead of site styles so a site can
+		// still override the font-family, and let rename's reparenting fix the href on subpages.
+		$webfontsHref = './' . rtrim($wgWikvenStyleDirectory, '/') . '/webfonts.css';
+		$hasWebfonts = is_file("$htmlDir/webfonts.css") && filesize("$htmlDir/webfonts.css") > 0;
+
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
 
 		// With SifterSearch the static Pagefind bundle keeps the native search box working, so keep it.
@@ -91,6 +96,15 @@ class RewriteScripts extends Maintenance {
 				'',
 				$html
 			);
+
+			// Link the bundled webfonts, before the site styles injected below.
+			if ($hasWebfonts) {
+				$html = str_replace(
+					'</head>',
+					'<link rel="stylesheet" href="' . $webfontsHref . '"></head>',
+					$html
+				);
+			}
 
 			// Re-link the site styles last (their own file) so they win the cascade over the skin defaults.
 			if ($hasSiteStyles) {
