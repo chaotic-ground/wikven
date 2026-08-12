@@ -43,7 +43,7 @@ $wgEnableParserLimitReporting = false;
 $wikvenEpoch = getenv('SOURCE_DATE_EPOCH');
 $wikvenEpoch = is_string($wikvenEpoch) && preg_match('/^\d+$/', trim($wikvenEpoch))
 	? (int)trim($wikvenEpoch)
-	: 946684800;
+	: 946_684_800;
 Wikimedia\Timestamp\ConvertibleTimestamp::setFakeTime($wikvenEpoch);
 
 // A build parses every page many times over (the import, the job queue, the translated pages, one

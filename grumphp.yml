@@ -1,12 +1,16 @@
 ---
 grumphp:
     tasks:
+        # Mago has native tasks as of GrumPHP 2.22: they scope to the staged PHP files, skip when
+        # none are staged, and offer to re-run with fixes applied when they fail.
+        mago_format: ~
+        mago_lint: ~
+        # No native task exists for these, so they run as they do in CI.
         shell:
             scripts:
                 - ["-c", "biome ci"]
                 - ["-c", "rumdl check ."]
                 - ["-c", "taplo fmt --check"]
                 - ["-c", "taplo check"]
-                - ["-c", "mago format --check"]
                 - ["-c", "vendor/bin/minus-x check ."]
             triggered_by: [php, json, css, less, js, ts, md, toml]
