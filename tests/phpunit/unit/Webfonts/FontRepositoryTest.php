@@ -18,14 +18,14 @@ class FontRepositoryTest extends MediaWikiUnitTestCase {
 				'ti' => ['AbyssinicaSIL'],
 				'he' => ['Alef'],
 				'af' => ['system', 'OpenDyslexic'],
-				'xx' => ['MissingFont'],
+				'xx' => ['MissingFont']
 			],
 			'fonts' => [
 				'AbyssinicaSIL' => ['woff2' => 'AbyssinicaSIL/AbyssinicaSIL-R.woff2?2942e'],
 				'Alef' => ['woff2' => 'Alef/Alef-Regular.woff2?a2499', 'variants' => ['bold' => 'Alef Bold']],
 				'Alef Bold' => ['fontweight' => 'bold', 'woff2' => 'Alef/Alef-Bold.woff2?7c873'],
-				'OpenDyslexic' => ['woff2' => 'OpenDyslexic/OpenDyslexic.woff2?9f0e1'],
-			],
+				'OpenDyslexic' => ['woff2' => 'OpenDyslexic/OpenDyslexic.woff2?9f0e1']
+			]
 		];
 	}
 
@@ -46,8 +46,7 @@ class FontRepositoryTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testBuildEmitsFacesApplyRulesAndFileList() {
-		$built = ( new FontRepository($this->repository() ) )
-			->build(['am', 'he', 'af', 'xx', 'ti'], 'fonts/uls/');
+		$built = ( new FontRepository($this->repository()) )->build(['am', 'he', 'af', 'xx', 'ti'], 'fonts/uls/');
 
 		$css = $built['css'];
 
@@ -72,24 +71,24 @@ class FontRepositoryTest extends MediaWikiUnitTestCase {
 			[
 				'AbyssinicaSIL/AbyssinicaSIL-R.woff2',
 				'Alef/Alef-Bold.woff2',
-				'Alef/Alef-Regular.woff2',
+				'Alef/Alef-Regular.woff2'
 			],
 			$built['files']
 		);
 	}
 
 	public function testSystemDefaultLanguagesContributeNothing() {
-		$built = ( new FontRepository($this->repository() ) )->build(['af', 'xx'], 'fonts/uls/');
+		$built = ( new FontRepository($this->repository()) )->build(['af', 'xx'], 'fonts/uls/');
 		$this->assertSame('', $built['css']);
 		$this->assertSame([], $built['files']);
 	}
 
 	public function testAFontSharedByTwoLanguagesIsDefinedOnce() {
 		// Both "am" and "ti" default to AbyssinicaSIL.
-		$built = ( new FontRepository($this->repository() ) )->build(['am', 'ti'], 'fonts/uls/');
+		$built = ( new FontRepository($this->repository()) )->build(['am', 'ti'], 'fonts/uls/');
 		$this->assertSame(1, substr_count($built['css'], "@font-face{font-family:'AbyssinicaSIL';"));
-		$this->assertStringContainsString(":lang(am),[lang=\"am\"]", $built['css']);
-		$this->assertStringContainsString(":lang(ti),[lang=\"ti\"]", $built['css']);
+		$this->assertStringContainsString(':lang(am),[lang="am"]', $built['css']);
+		$this->assertStringContainsString(':lang(ti),[lang="ti"]', $built['css']);
 	}
 
 	public function testBuildIsDeterministicRegardlessOfLanguageOrder() {
@@ -101,7 +100,7 @@ class FontRepositoryTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testBasePathIsNormalisedWithASingleTrailingSlash() {
-		$built = ( new FontRepository($this->repository() ) )->build(['am'], '../fonts/uls');
+		$built = ( new FontRepository($this->repository()) )->build(['am'], '../fonts/uls');
 		$this->assertStringContainsString("url('../fonts/uls/AbyssinicaSIL/AbyssinicaSIL-R.woff2')", $built['css']);
 	}
 }

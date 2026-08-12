@@ -146,10 +146,15 @@ class FontRepository {
 		$style = isset($config['fontstyle']) && is_string($config['fontstyle']) ? $config['fontstyle'] : 'normal';
 		$name = $this->escape($family);
 
-		return "@font-face{font-family:'$name';"
+		return (
+			"@font-face{font-family:'$name';"
 			. "font-weight:$weight;font-style:$style;font-display:swap;"
 			. "src:local('$name'),"
-			. "url('" . $prefix . $path . "') format('woff2');}\n";
+			. "url('"
+			. $prefix
+			. $path
+			. "') format('woff2');}\n"
+		);
 	}
 
 	/**
@@ -160,8 +165,16 @@ class FontRepository {
 	 * @return string
 	 */
 	private function applyRule(string $lang, string $family): string {
-		return ':lang(' . $lang . '),[lang="' . $lang . '"]'
-			. "{font-family:'" . $this->escape($family) . "',sans-serif;}\n";
+		return (
+			':lang('
+			. $lang
+			. '),[lang="'
+			. $lang
+			. '"]'
+			. "{font-family:'"
+			. $this->escape($family)
+			. "',sans-serif;}\n"
+		);
 	}
 
 	/**
