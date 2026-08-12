@@ -23,7 +23,7 @@ on:
 
 permissions:
   contents: write  # push the preview to the gh-pages branch
-  pull-requests: write  # post and update the sticky preview comment
+  deployments: write  # record the preview as a native GitHub deployment (shown on the PR)
 
 # One preview build per PR; a new push supersedes an in-flight one.
 concurrency:
@@ -65,9 +65,65 @@ jobs:
           cache: false  # the image was just built locally; nothing to cache or pull
 
       # Deploy dist/ to pr-preview/pr-<N>/ on gh-pages on open/sync, and remove it on close.
+      # comment: false - the preview surfaces as a native GitHub deployment (below), not a comment.
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9  # v1.8.1
         with:
           source-dir: dist
           preview-branch: gh-pages
           umbrella-dir: pr-preview
+          comment: false
+
+      # Surface the preview as a native GitHub deployment, so the PR shows a "View deployment"
+      # button and an environment badge instead of a comment. The URL matches the umbrella path
+      # the action deploys to. auto-inactive is off so each open PR's preview stays active
+      # independently (one shared "preview" environment, one deployment per PR head).
+      - name: Record preview deployment
+        if: success() && github.event.action != 'closed'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # v7.0.1
+        with:
+          script: |
+            const number = context.payload.number;
+            const url = `https://${context.repo.owner}.github.io/`
+              + `${context.repo.repo}/pr-preview/pr-${number}/`;
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.pull_request.head.sha,
+              environment: 'preview',
+              transient_environment: true,
+              auto_merge: false,
+              required_contexts: [],
+              description: `Preview for PR #${number}`,
+            });
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'success',
+              environment_url: url,
+              auto_inactive: false,
+              description: 'Preview is live',
+            });
+
+      # On close, mark this PR's preview deployment inactive, matching the torn-down files.
+      - name: Deactivate preview deployment
+        if: always() && github.event.action == 'closed'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # v7.0.1
+        with:
+          script: |
+            const { data: deployments } = await github.rest.repos.listDeployments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment: 'preview',
+              ref: context.payload.pull_request.head.sha,
+            });
+            for (const deployment of deployments) {
+              await github.rest.repos.createDeploymentStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: deployment.id,
+                state: 'inactive',
+                description: 'Preview removed',
+              });
+            }
