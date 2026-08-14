@@ -7,11 +7,11 @@ use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
+use MediaWiki\Import\WikiRevision;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
-use WikiRevision;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -76,7 +76,9 @@ class ImportWikitext extends Maintenance {
 			$revision->setComment('');
 			$revision->setTimestamp(wfTimestamp(TS_UNIX, filemtime($filename)));
 
-			if ($revision->importOldRevision()) {
+			// WikiRevision::importOldRevision() has been a deprecated shim for this service since 1.31.
+			$importer = $this->getServiceContainer()->getWikiRevisionOldRevisionImporter();
+			if ($importer->import($revision)) {
 				$this->output(" done\n");
 			} else {
 				$this->output(" failed\n");
