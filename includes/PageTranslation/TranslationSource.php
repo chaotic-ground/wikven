@@ -97,8 +97,14 @@ class TranslationSource {
 			return [];
 		}
 		$languages = [];
-		foreach (glob("$directory/*.wikitext") ?: [] as $file) {
-			$lang = basename($file, '.wikitext');
+		// The directory name comes from a page title, and *, ? and [ are legal there; a glob pattern
+		// built from it would expand them in every path component, so "C*-algebra" would also match the
+		// translations of "Clifford-algebra" and import their units into the wrong page.
+		foreach (new FilesystemIterator($directory, FilesystemIterator::SKIP_DOTS) as $file) {
+			if (!$file->isFile() || $file->getExtension() !== 'wikitext') {
+				continue;
+			}
+			$lang = $file->getBasename('.wikitext');
 			if ($isKnownLanguage($lang)) {
 				$languages[] = $lang;
 			}
