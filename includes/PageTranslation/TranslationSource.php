@@ -17,6 +17,13 @@ use RecursiveIteratorIterator;
  * buildTranslations (materialize) so both agree on what is a base and what is a translation.
  */
 class TranslationSource {
+	/**
+	 * An opening <translate> tag, attributes and all. Translate accepts <translate nowrap>, and
+	 * StalenessComputer::mark() matches the same shape, so both halves of the pipeline agree on
+	 * what counts as a translatable page.
+	 */
+	private const TRANSLATE_TAG = '#<translate(?:\s[^>]*)?>#';
+
 	/** Whether a page's wikitext marks it as translatable (a real <translate>, not one shown as an example). */
 	public static function isTranslatable(string $text): bool {
 		// A <translate> inside a verbatim span -- <syntaxhighlight>, <nowiki>, <pre>, <source> -- is an
@@ -25,7 +32,10 @@ class TranslationSource {
 		// looking for a real tag, rather than trusting a hand-rolled regex.
 		$matches = [];
 		$stripped = Parser::extractTagsAndParams(['syntaxhighlight', 'source', 'nowiki', 'pre'], $text, $matches);
-		return str_contains($stripped, '<translate>');
+		// Match the tag the way Translate itself does, attributes included: <translate nowrap> is a real
+		// translatable page, and StalenessComputer::mark() accepts the same shape, so the two agree on
+		// what marks a page for CI checks and the translated build.
+		return preg_match(self::TRANSLATE_TAG, $stripped) === 1;
 	}
 
 	/**
