@@ -131,18 +131,26 @@ class Build extends Maintenance {
 			$this->fatalError('Wikven: cannot locate the PHP executable to render skins');
 		}
 
-		// run.php resolves relative to the install root (binary php-cli needs it), so chdir there.
-		chdir($GLOBALS['IP']);
 		$command = array_merge($prefix, ['maintenance/run.php', __FILE__]);
 
-		$previous = getenv('WIKVEN_BUILD_SKIN');
-		putenv("WIKVEN_BUILD_SKIN=$skin");
-		passthru(implode(' ', array_map('escapeshellarg', $command)), $exit);
-		if ($previous === false) {
-			putenv('WIKVEN_BUILD_SKIN');
-		} else {
-			putenv("WIKVEN_BUILD_SKIN=$previous");
+		// The skin and the working directory are passed as arguments, scoped to the child alone, so
+		// this process's own environment and cwd stay untouched while a skin renders. run.php resolves
+		// relative to the install root, which the binary's php-cli requires, hence $GLOBALS['IP'] as
+		// the child's cwd. An array argv also means the arguments never pass through a shell to be
+		// quoted for.
+		$descriptors = [0 => STDIN, 1 => STDOUT, 2 => STDERR];
+		$pipes = [];
+		$process = proc_open(
+			$command,
+			$descriptors,
+			$pipes,
+			$GLOBALS['IP'],
+			['WIKVEN_BUILD_SKIN' => $skin] + getenv()
+		);
+		if ($process === false) {
+			$this->fatalError("Wikven: could not start the build for skin '$skin'");
 		}
+		$exit = proc_close($process);
 
 		if ($exit !== 0) {
 			$this->fatalError("Wikven: build failed for skin '$skin' (exit $exit)");
