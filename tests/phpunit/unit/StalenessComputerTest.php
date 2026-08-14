@@ -24,6 +24,14 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	public function testMarkDoesNotSplitOnALineThatOnlyLooksBlank() {
+		// Translate's sectioniser needs the two newlines adjacent, so it reads this as one unit.
+		$this->assertSame(
+			"<translate>\n<!--T:1-->\nFirst.\n \nSecond.\n</translate>",
+			StalenessComputer::mark("<translate>\nFirst.\n \nSecond.\n</translate>")
+		);
+	}
+
 	public function testMarkKeepsExistingNumbersAndContinuesFromTheHighest() {
 		$this->assertSame(
 			"<translate>\n<!--T:5-->\nOld.\n\n<!--T:6-->\nNew.\n</translate>",
