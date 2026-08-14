@@ -33,8 +33,8 @@ class BuildScripts extends Maintenance {
 
 		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
 		$outDir = $htmlDir . '/' . rtrim($wgWikvenScriptDirectory, '/');
-		if (!is_dir($outDir)) {
-			mkdir($outDir, 0777, true);
+		if (!wfMkdirParents($outDir, null, __METHOD__)) {
+			$this->fatalError("Could not create script directory $outDir");
 		}
 
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
