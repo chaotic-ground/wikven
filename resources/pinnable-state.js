@@ -30,10 +30,16 @@
 
 	// A feature Vector already persists client-side carries a
 	// "vector-feature-<name>-clientpref-*" html class; leave those to Vector.
-	const isClientPreference = (feature) =>
-		new RegExp(`(?:^| )${FEATURE_PREFIX}${feature}-clientpref-`).test(
-			html.className,
+	// The class attribute is split on any ASCII whitespace, so a pretty-printed
+	// page whose classes are separated by a newline still has to match here,
+	// and a feature name is a data attribute we do not control, so it must not
+	// be interpolated into a regex where a metacharacter could change the match.
+	const isClientPreference = (feature) => {
+		const prefix = `${FEATURE_PREFIX}${feature}-clientpref-`;
+		return Array.prototype.some.call(html.classList, (name) =>
+			name.startsWith(prefix),
 		);
+	};
 
 	const setFeatureClass = (feature, pinned) => {
 		html.classList.remove(`${FEATURE_PREFIX}${feature}-enabled`);
