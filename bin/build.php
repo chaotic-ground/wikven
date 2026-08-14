@@ -83,10 +83,28 @@ $run(["$ip/extensions/Wikven/maintenance/fetchExtensions.php"]);
 $run(['update', '--quick']);
 $run(["$ip/extensions/Wikven/maintenance/build.php"]);
 
-// Drop the per-page history the file cache emits, as the Docker run does.
+// Drop the per-page history the file cache emits, as the Docker run does. Done without a shell: this
+// is the entry point that has to work on a host with no distro toolchain -- it hunts for its own
+// executable and a CA bundle above for the same reason -- and each removal's result is checked so a
+// failure here is reported instead of leaving dist/history/ published under a misleading "done".
 $history = "$work/dist/history";
 if (is_dir($history)) {
-	passthru('rm -rf ' . escapeshellarg($history));
+	$entries = new RecursiveIteratorIterator(
+		new RecursiveDirectoryIterator($history, FilesystemIterator::SKIP_DOTS),
+		RecursiveIteratorIterator::CHILD_FIRST
+	);
+	foreach ($entries as $entry) {
+		// isDir() follows symlinks and rmdir() would then fail on the link itself; unlink handles both.
+		$ok = ( $entry->isDir() && !$entry->isLink() ) ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
+		if (!$ok) {
+			fwrite(STDERR, 'wikven: could not remove ' . $entry->getPathname() . "\n");
+			exit(1);
+		}
+	}
+	if (!rmdir($history)) {
+		fwrite(STDERR, "wikven: could not remove $history\n");
+		exit(1);
+	}
 }
 
 fwrite(STDERR, "wikven: done -> $work/dist\n");
