@@ -34,14 +34,13 @@ class AssetLocalizer {
 
 			// (1) ResourceLoader image endpoint.
 			$text = preg_replace_callback(
-				'~url\(\s*[\'"]?([^)\'"]*load\.php\?[^)\'"]*image=[^)\'"]*?)[\'"]?\s*\)~',
+				// The delimiter is a literal quote in a plain stylesheet, but inside a JS bundle it is the
+				// escaped " / ' CSSMin emits whenever a url() has to be quoted.
+				'~url\(\s*(?:\\\\u002[27]|[\'"])?([^)\'"]*load\.php\?[^)\'"]*image=[^)\'"]*?)'
+				. '(?:\\\\u002[27]|[\'"])?\s*\)~',
 				static function ($m) use (&$map, $rl, $dir, $lang, $skin, $inline) {
 					// Decode the JSON-string escapes used inside JS bundles.
-					$url = str_replace(
-						['\\/', '\\u0026', '\\u003d', '\\u003D'],
-						['/', '&', '=', '='],
-						$m[1]
-					);
+					$url = self::decodeJsonString($m[1]);
 					if (!array_key_exists($url, $map)) {
 						$map[$url] = self::dumpRlImage($rl, $url, $dir, $lang, $skin, $inline);
 					}
@@ -56,7 +55,7 @@ class AssetLocalizer {
 					'~url\(\s*[\'"]?(\\\\?/(?:skins|resources|extensions)/[^)\'"?]+'
 					. '\.(?:svg|png|gif|jpe?g))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
 					static function ($m) use (&$map, $mwRoot, $dir, $inline) {
-						$path = str_replace('\\/', '/', $m[1]);
+						$path = self::decodeJsonString($m[1]);
 						if (!array_key_exists($path, $map)) {
 							$map[$path] = self::copyAsset($mwRoot, $path, $dir, $inline);
 						}
@@ -68,6 +67,19 @@ class AssetLocalizer {
 
 			file_put_contents($file, $text, LOCK_EX);
 		}
+	}
+
+	/**
+	 * Undo the escaping a URL picked up from being embedded in a JS bundle's JSON string literal.
+	 *
+	 * ResourceLoader escapes those with JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT, so
+	 * json_decode is the exact inverse and covers every escape those flags produce. Text that is not a
+	 * JSON string body -- a plain CSS file, where nothing was escaped in the first place -- passes
+	 * through unchanged.
+	 */
+	private static function decodeJsonString(string $text): string {
+		$decoded = json_decode('"' . $text . '"');
+		return is_string($decoded) ? $decoded : $text;
 	}
 
 	/** Encode raw image bytes as a data: URI usable unquoted inside url(). */
