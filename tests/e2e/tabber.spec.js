@@ -13,7 +13,10 @@ const SELECTED = '.tabber__tab[aria-selected="true"]';
 const tabbersOf = async (page) => {
 	const tabbers = page.locator(".tabber");
 	await expect(tabbers.first()).toBeVisible();
-	expect(await tabbers.count()).toBeGreaterThan(1);
+	// TabberNeue wires a tabber only while it is on screen -- the very behaviour these tests exercise
+	// -- so the second wrapper can still be arriving when the first is already visible; toHaveCount
+	// retries until it appears.
+	await expect(tabbers).toHaveCount(2);
 	return [tabbers.nth(0), tabbers.nth(1)];
 };
 
