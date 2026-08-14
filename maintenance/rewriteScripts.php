@@ -68,8 +68,10 @@ class RewriteScripts extends Maintenance {
 			$trigger = array_merge($trigger, $this->defaultGadgetModules());
 			$trigger = array_values(array_unique($trigger));
 
-			// Stop the startup module from auto-loading anything over the network.
-			$html = preg_replace('/RLPAGEMODULES=\[[^\]]*\]/', 'RLPAGEMODULES=[]', $html);
+			// Stop the startup module from auto-loading anything over the network. Only the first match:
+			// the assignment lives in the RLQ script near the top of the page, and the same string can
+			// legitimately recur in the article body, e.g. a page documenting this pattern.
+			$html = preg_replace('/RLPAGEMODULES=\[[^\]]*\]/', 'RLPAGEMODULES=[]', $html, 1);
 
 			// Swap the async load.php startup tag for the local bundle + trigger.
 			$tags =
