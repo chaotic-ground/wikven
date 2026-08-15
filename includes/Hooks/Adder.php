@@ -8,7 +8,88 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
 
-class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\SkinAddFooterLinksHook {
+class Adder implements
+	\MediaWiki\Hook\BeforePageDisplayHook,
+	\MediaWiki\Language\Hook\MessageCacheFetchOverridesHook,
+	\MediaWiki\Hook\SidebarBeforeOutputHook,
+	\MediaWiki\Hook\SkinAddFooterLinksHook {
+	/**
+	 * Message keys for the toolbox heading. Core's is 'toolbox'; Vector 2022 ignores it and labels
+	 * the menu itself (VectorComponentPageTools::getMenus), so its own key is listed too.
+	 */
+	private const TOOLBOX_HEADING_KEYS = ['toolbox', 'vector-page-tools-general-label'];
+
+	/**
+	 * Skins whose toolbox is a page-actions menu: Minerva's builder keeps only entries carrying an
+	 * icon, and hands every one of those to SingleMenuEntry, whose $url is typed string -- so an
+	 * entry with an icon and no href fatals the bake. There the current skin is a self-link.
+	 */
+	private const PAGE_ACTIONS_TOOLBOX = ['minerva' => 'listBullet'];
+
+	/**
+	 * Offer each enabled skin's copy of this page in the toolbox, which Hider has just emptied.
+	 *
+	 * The href is the same root-relative form every other link is written in ("./x" from the main
+	 * skin's output, "../x" from a skin subdirectory), so rename.php reparents these by the page's
+	 * own depth along with the rest and a subpage's links stay correct.
+	 *
+	 * @inheritDoc
+	 */
+	public function onSidebarBeforeOutput($skin, &$sidebar): void {
+		global $wgWikvenSkins, $wgWikvenMainSkin;
+
+		$skins = $wgWikvenSkins ?? [];
+		$title = $skin->getTitle();
+		if (count($skins) < 2 || !isset($sidebar['TOOLBOX']) || !$title || !$title->canExist()) {
+			return;
+		}
+
+		$current = $skin->getSkinName();
+		$page = Title::makeName($title->getNamespace(), $title->getDBkey()) . '.html';
+		$root = $current === $wgWikvenMainSkin ? './' : '../';
+		$icon = self::PAGE_ACTIONS_TOOLBOX[$current] ?? null;
+
+		foreach ($skins as $target) {
+			$entry = ['id' => "t-wikven-skin-$target", 'text' => $this->skinLabel($skin, $target)];
+			if ($icon !== null) {
+				$entry['icon'] = $icon;
+			}
+			if ($target !== $current || $icon !== null) {
+				$entry['href'] = $root . ( $target === $wgWikvenMainSkin ? '' : "$target/" ) . $page;
+			}
+			if ($target === $current) {
+				$entry['active'] = true;
+			}
+			$sidebar['TOOLBOX']["wikven-skin-$target"] = $entry;
+		}
+	}
+
+	/**
+	 * Name the toolbox for what it holds. Hider empties it and the loop above refills it with
+	 * nothing but the skin list, so "Tools" (or Vector's "General") names a menu that no longer
+	 * exists; a reader would see two product names under a heading that explains neither.
+	 *
+	 * @inheritDoc
+	 */
+	public function onMessageCacheFetchOverrides(array &$keys): void {
+		if (count($GLOBALS['wgWikvenSkins'] ?? []) < 2) {
+			return;
+		}
+		foreach (self::TOOLBOX_HEADING_KEYS as $key) {
+			$keys[$key] = 'wikven-skins-label';
+		}
+	}
+
+	/** A skin's human-readable name; getInstalledSkins() only resolves an explicit displayname. */
+	private function skinLabel(Skin $skin, string $name): string {
+		$message = $skin->msg("skinname-$name");
+		if (!$message->isDisabled() && $message->exists()) {
+			return $message->text();
+		}
+		$installed = MediaWikiServices::getInstance()->getSkinFactory()->getInstalledSkins();
+		return $installed[$name] ?? ucwords(str_replace('-', ' ', $name));
+	}
+
 	/** @inheritDoc */
 	public function onBeforePageDisplay($out, $skin): void {
 		$out->addModuleStyles('ext.Wikven.styles');
@@ -19,10 +100,9 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 			$out->addInlineStyle('#p-search { display: none; }');
 		}
 
-		// With more than one enabled skin, the footer carries a skin switcher.
-		if (count($GLOBALS['wgWikvenSkins'] ?? []) > 1) {
-			$out->addModules('ext.Wikven.skinSwitcher');
-			$out->addJsConfigVars('wgWikvenMainSkin', $GLOBALS['wgWikvenMainSkin'] ?? '');
+		// One skin means no skin list, so nothing refills the toolbox and its box stays empty.
+		if (count($GLOBALS['wgWikvenSkins'] ?? []) < 2) {
+			$out->addModuleStyles('ext.Wikven.emptyToolbox');
 		}
 
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
@@ -35,7 +115,7 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 
 	/** @inheritDoc */
 	public function onSkinAddFooterLinks(Skin $skin, string $key, array &$footerItems) {
-		global $wgWikvenFooterUrl, $wgWikvenSkins, $wgWikvenVersionPage;
+		global $wgWikvenFooterUrl, $wgWikvenVersionPage;
 
 		if ($key !== 'places') {
 			return;
@@ -61,9 +141,6 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 				);
 			}
 		}
-		if (count($wgWikvenSkins ?? []) > 1) {
-			$footerItems['skin-switcher'] = $this->skinSwitcher($skin, $wgWikvenSkins, $skin->getSkinName());
-		}
 	}
 
 	/** Display name for the project URL's host; forges prettified, others as-is, no host null. */
@@ -82,25 +159,5 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 			'sr.ht' => 'sourcehut'
 		];
 		return $known[$host] ?? $host;
-	}
-
-	/** Footer <select> linking to other skins' copies; ext.Wikven.skinSwitcher wires navigation. */
-	private function skinSwitcher(Skin $skin, array $skins, string $current): string {
-		$displayNames = MediaWikiServices::getInstance()->getSkinFactory()->getInstalledSkins();
-		$options = '';
-		foreach ($skins as $name) {
-			$attribs = ['value' => $name];
-			if ($name === $current) {
-				$attribs['selected'] = '';
-			}
-			$label = $displayNames[$name] ?? ucwords(str_replace('-', ' ', $name));
-			$options .= Html::element('option', $attribs, $label);
-		}
-		$label = $skin->msg('wikven-skin-switcher-label')->escaped() . $skin->msg('colon-separator')->text();
-		return Html::rawElement(
-			'label',
-			['class' => 'wikven-skin-switcher'],
-			$label . Html::rawElement('select', [], $options)
-		);
 	}
 }

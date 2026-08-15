@@ -1,0 +1,18 @@
+// Loaded only when the toolbox stays empty (see Hooks\Adder), so these can never
+// hide a box that has the skin list in it.
+@import 'mediawiki.skin.variables.less';
+
+// Core hides the emptied portlet itself; these are the boxes the skins keep
+// drawing around it, headings and all.
+#site-tools,
+#citizen-page-more-dropdown {
+  display: none;
+}
+
+// Vector's box also carries the page tabs, but only below the width at which it
+// hides the tab row.
+@media ( min-width: @min-width-breakpoint-tablet ) {
+  .vector-page-tools-landmark {
+    display: none;
+  }
+}
