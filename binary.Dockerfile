@@ -24,7 +24,8 @@ RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
 # Stage 2: compile a static PHP + FrankenPHP and embed the app. curl is omitted:
 # its HTTP/3 (ngtcp2/nghttp3) static libs fail to link, and it is unneeded
 # (MediaWiki/Guzzle uses PHP stream wrappers over openssl).
-# Digest-pinned for reproducible builds, version-tagged so Dependabot's bumps read as versions.
+# Digest-pinned, version-tagged so Dependabot's bumps read as versions. The pin fixes the toolchain
+# but not the build: build-static.sh fetches a nightly static-php-cli, which picks the library versions.
 FROM dunglas/frankenphp:static-builder-musl-1.12.6@sha256:e83b6dc244b8e170c5324cb8db32817b88703da495d40d14ce7751456e448a0d AS builder
 WORKDIR /go/src/app
 COPY --from=app /var/www/html ./dist/app
