@@ -16,8 +16,10 @@ const KOREAN_HEADING = "시작하기";
 // What each skin puts the toolbox behind, where it takes a control to reveal.
 // Minerva is the odd one: its toolbox is the page-actions overflow menu, so the
 // entries are anchors in that menu rather than sidebar list items.
+// Vector's dropdown is a checkbox the label sits under, so the label is not what a
+// click lands on; Citizen's is a <details> and Minerva's toggle is its own control.
 const OPENERS = {
-	"vector-2022": "#vector-page-tools-dropdown-label",
+	"vector-2022": "#vector-page-tools-dropdown-checkbox",
 	citizen: "#citizen-page-more-dropdown summary",
 	timeless: null,
 	minerva: "#page-actions-overflow-toggle",
