@@ -20,7 +20,21 @@ class Adder implements
 	private const PAGE_ACTIONS_TOOLBOX = ['minerva' => 'listBullet'];
 
 	/**
-	 * Offer each enabled skin's copy of this page in the toolbox, which Hider has just emptied.
+	 * Skins that move every sidebar section from the toolbox onward into their page-tools menu
+	 * (SkinVector22::extractPageToolsFromSidebar splices from the toolbox to the end), so a section
+	 * of our own lands there beside it, under a heading naming what it holds. Everywhere else the
+	 * skin list goes in the toolbox: Citizen splices the toolbox alone and Minerva reads no other
+	 * section, so a section of our own would leave their page-tools menus for the sidebar drawer,
+	 * or vanish.
+	 */
+	private const OWN_SECTION_SKINS = ['vector-2022'];
+
+	/** The sidebar section for the skin list, when it does not go in the toolbox. */
+	private const SECTION = 'wikven-skins';
+
+	/**
+	 * Offer each enabled skin's copy of this page, in the toolbox Hider has just emptied or in a
+	 * section of our own.
 	 *
 	 * The href is the same root-relative form every other link is written in ("./x" from the main
 	 * skin's output, "../x" from a skin subdirectory), so rename.php reparents these by the page's
@@ -41,6 +55,9 @@ class Adder implements
 		$page = Title::makeName($title->getNamespace(), $title->getDBkey()) . '.html';
 		$root = $current === $wgWikvenMainSkin ? './' : '../';
 		$icon = self::PAGE_ACTIONS_TOOLBOX[$current] ?? null;
+		// Appended, so it follows the toolbox: core drops SEARCH and LANGUAGES from the section
+		// list, leaving the toolbox last and this section right after it.
+		$section = in_array($current, self::OWN_SECTION_SKINS, true) ? self::SECTION : 'TOOLBOX';
 
 		foreach ($skins as $target) {
 			$entry = ['id' => "t-wikven-skin-$target", 'text' => $this->skinLabel($skin, $target)];
@@ -53,7 +70,7 @@ class Adder implements
 			if ($target === $current) {
 				$entry['active'] = true;
 			}
-			$sidebar['TOOLBOX']["wikven-skin-$target"] = $entry;
+			$sidebar[$section]["wikven-skin-$target"] = $entry;
 		}
 	}
 
