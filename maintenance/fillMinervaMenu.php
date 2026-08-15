@@ -117,17 +117,16 @@ class FillMinervaMenu extends Maintenance {
 			if ($entry['active']) {
 				$classes[] = 'active';
 			}
-			$markup .= Html::rawElement(
-				'li',
-				['class' => $classes, 'id' => $entry['id']],
-				$entry['href'] === null
-					? $label
-					: Html::rawElement(
-						'a',
-						['class' => 'toggle-list-item__anchor', 'href' => $entry['href']],
-						$label
-					)
-			);
+			// The skin being read is not a link, but it is still a row: the anchor's class carries
+			// the box, so a span in its place lines the label up with the ones beside it.
+			$row = $entry['href'] === null
+				? Html::rawElement('span', ['class' => 'toggle-list-item__anchor'], $label)
+				: Html::rawElement(
+					'a',
+					['class' => 'toggle-list-item__anchor', 'href' => $entry['href']],
+					$label
+				);
+			$markup .= Html::rawElement('li', ['class' => $classes, 'id' => $entry['id']], $row);
 		}
 		return $markup;
 	}
