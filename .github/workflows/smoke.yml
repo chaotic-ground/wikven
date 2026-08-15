@@ -103,8 +103,8 @@ jobs:
             fi
             expected=$(( expected + langs * ( langs + 1 ) ))
           done
-          # Once per skin the site renders: the default plus the one docs/.wikven.yml adds.
-          expected=$(( expected * 2 ))
+          # Once per skin the site renders: the default plus the two docs/.wikven.yml adds.
+          expected=$(( expected * 3 ))
           found=$(find dist -name '*.html' -exec grep -ho 'mw-pt-progress--' {} + | wc -l)
           if [ "$found" -ne "$expected" ]; then
             echo "::error::$found language-bar entries across dist, expected $expected"
