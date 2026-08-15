@@ -111,9 +111,14 @@ test.beforeAll(async ({ browser }) => {
 	const page = await browser.newPage();
 	await page.goto("index.html");
 	const listed = await skinsOn(page);
-	main = listed.find((s) => s.current).skin;
+	main = listed.find((s) => s.current)?.skin;
 	others = listed.filter((s) => !s.current).map((s) => s.skin);
 	await page.close();
+});
+
+// One skin means no switcher to follow, so there is nothing here to assert.
+test.beforeEach(() => {
+	test.skip(!main, "a single-skin export lists no skins");
 });
 
 test("every skin's copy lists every skin, and marks the one being read", async ({
@@ -124,8 +129,11 @@ test("every skin's copy lists every skin, and marks the one being read", async (
 
 	expect(listed.map((s) => s.skin).sort()).toEqual([main, ...others].sort());
 	expect(listed.length).toBeGreaterThan(1);
-	// The skin the page is already in is not offered as a link to itself.
-	await expect(entry(page, main)).not.toHaveAttribute("href", /./);
+	// The skin the page is already in is not offered as a link to itself. The anchor
+	// inside the entry, not the entry: the list item never carries an href, so
+	// asserting on it would pass however the entry is rendered. (Minerva is the one
+	// skin whose current entry does link to itself, but it is never the main skin.)
+	await expect(entry(page, main).locator("a")).toHaveCount(0);
 });
 
 // The reported order: language first, then skin. (Skin first, then language,
