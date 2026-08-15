@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SourceFile;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
@@ -94,6 +95,8 @@ class Main implements
 	 * @inheritDoc
 	 */
 	public function onSetupAfterCache(): void {
+		$this->restoreCitizenSearchWiring();
+
 		$wikvenLogos = $this->config->get('WikvenLogos');
 		if (!is_array($wikvenLogos) || $wikvenLogos === []) {
 			return;
@@ -121,6 +124,36 @@ class Main implements
 			}
 		}
 		$GLOBALS['wgLogos'] = $logos;
+	}
+
+	/**
+	 * Let core wire up Citizen's search box again, so SifterSearch's typeahead reaches it.
+	 *
+	 * Citizen sets SkinPageReadyConfig's "search" to false, because its own search is the command
+	 * palette rather than the box core would attach to. An export has no backend for the palette,
+	 * so rewriteScripts leaves the plain form the skin renders underneath it standing instead --
+	 * and that form is what core's wiring, and through it the Pagefind typeahead SifterSearch
+	 * substitutes, attaches to. Everything else the flag governs is the box we are keeping.
+	 *
+	 * Registered at run time rather than in extension.json because order decides this: handlers
+	 * declared there run in load order, and wikven loads before the skins do, so a handler of ours
+	 * would be overruled by Citizen's. HookContainer::register() appends after every extension and
+	 * skin handler, which is the only place a correction can sit.
+	 */
+	private function restoreCitizenSearchWiring(): void {
+		if (!Search::isActive()) {
+			return;
+		}
+		MediaWikiServices::getInstance()
+			->getHookContainer()
+			->register(
+				'SkinPageReadyConfig',
+				static function (Context $context, array &$config): void {
+					if ($context->getSkin() === 'citizen') {
+						$config['search'] = true;
+					}
+				}
+			);
 	}
 
 	/**

@@ -22,6 +22,10 @@
 		"ext.Wikven.pinnableState": {
 			"scripts": ["pinnable-state.js"],
 			"dependencies": ["mediawiki.storage"]
+		},
+		"ext.Wikven.citizenSkins": {
+			"scripts": ["citizen-skins.js"],
+			"messages": ["wikven-skin", "wikven-skin-description"]
 		}
 	},
 	"ResourceModuleSkinStyles": {

@@ -109,6 +109,18 @@ class Adder implements
 			$out->addJsConfigVars('wgScriptPath', null);
 		}
 
+		// Citizen's preferences panel is where its readers change how a page looks, so the skin list
+		// moves there from the toolbox. The module reads the entries the toolbox already holds and
+		// takes them with it, so this needs no second copy of them and leaves the plain links for a
+		// reader without JavaScript.
+		if (
+			$skin->getSkinName() === 'citizen'
+			&& count($GLOBALS['wgWikvenSkins'] ?? []) > 1
+			&& ( $GLOBALS['wgCitizenEnablePreferences'] ?? false )
+		) {
+			$out->addModules('ext.Wikven.citizenSkins');
+		}
+
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
 		// and its "Page tools" sidebar (page actions, Special:Log) are dead; hide them on cli export.
 		// !important: the skin stylesheet loads after this inline rule and would otherwise win.

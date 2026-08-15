@@ -23,6 +23,13 @@ class BuildScripts extends Maintenance {
 	/** Per-user / styles-only modules that have no place in the static JS bundle. */
 	private const SKIP_MODULES = ['site.styles', 'user', 'user.styles', 'user.options'];
 
+	/**
+	 * Modules pulled in at run time rather than queued by the page that needs them, so nothing in
+	 * the rendered HTML names them and collectPageModules() cannot find them. TabberNeue loads its
+	 * arrow icons the moment it finds a tabber. Unseeded, the browser asks load.php and gets a 404.
+	 */
+	private const RUNTIME_MODULES = ['ext.tabberNeue.icons'];
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Dump the static JS bundle (startup + module closure) for the generated pages.');
@@ -65,6 +72,11 @@ class BuildScripts extends Maintenance {
 			&& $rl->isModuleRegistered($preferences)
 		) {
 			$seeds[] = $preferences;
+		}
+		foreach (self::RUNTIME_MODULES as $runtimeModule) {
+			if ($rl->isModuleRegistered($runtimeModule)) {
+				$seeds[] = $runtimeModule;
+			}
 		}
 		// 2. Expand to the full dependency closure, plus the implicit base modules.
 		$closure = $this->resolveClosure($rl, $seeds, $wgLanguageCode, $wgDefaultSkin);

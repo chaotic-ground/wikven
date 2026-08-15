@@ -93,10 +93,63 @@ test("a Citizen page gets everything it asks for, and asks no backend", async ({
 	expect(errors, errors.join("; ")).toEqual([]);
 });
 
-test("the current skin lines up with the other entries in the toolbox", async ({
+test("the skin chooser sits in the preferences panel and takes the reader there", async ({
 	page,
 }) => {
+	// A translated subpage, two directories down, so the link it follows has had to be
+	// reparented for the page's own depth. Its skin names are read from the main skin's copy,
+	// which still renders them as links, rather than restated in whatever language it is in.
+	await page.goto("Getting_Started/ko.html");
+	const names = Object.fromEntries(
+		await page.evaluate(() =>
+			Array.from(document.querySelectorAll('[id^="t-wikven-skin-"]')).map(
+				(element) => [
+					element.id.replace("t-wikven-skin-", ""),
+					element.textContent.trim(),
+				],
+			),
+		),
+	);
+
+	await page.goto("citizen/Getting_Started/ko.html");
+
+	// The panel is where a reader changes how the page looks, so the toolbox copy is gone --
+	// and with it the "More actions" card, which held nothing else.
+	await expect(page.locator("#p-tb")).toHaveCount(0);
+	await expect(page.locator("#citizen-page-more-dropdown")).toHaveCount(0);
+
+	await page.locator(".citizen-preferences-dropdown summary").click();
+	const field = page.locator(".cdx-field").filter({ hasText: "Skin" });
+	await field.waitFor({ timeout: 15000 });
+	// The skin being read is the one shown as chosen, not whichever happens to be listed first.
+	await expect(field.locator(".cdx-select-vue__handle")).toContainText(
+		names.citizen,
+	);
+
+	await field.locator(".cdx-select-vue__handle").click();
+	await field
+		.locator(".cdx-menu-item")
+		.filter({ hasText: names["vector-2022"] })
+		.first()
+		.click();
+
+	await expect(page).toHaveURL("Getting_Started/ko.html");
+	await expect(page.locator("#firstHeading")).toHaveText("시작하기");
+});
+
+test("without JavaScript the toolbox still lists the skins, lined up", async ({
+	browser,
+	baseURL,
+}) => {
+	// Nothing moves the list without JavaScript, which is why the chooser reads the toolbox
+	// rather than replacing it: the server-rendered links stay the fallback.
+	const context = await browser.newContext({
+		javaScriptEnabled: false,
+		baseURL,
+	});
+	const page = await context.newPage();
 	await page.goto(PAGE);
+
 	// Citizen clones the page-actions bar into its sticky header, so ids appear twice; the copy
 	// in the page header is the one on screen at the top of the page.
 	await page.locator("#citizen-page-more-dropdown summary").first().click();
@@ -104,6 +157,9 @@ test("the current skin lines up with the other entries in the toolbox", async ({
 	const current = "#p-tb .mw-list-item.active > span";
 	const link = "#p-tb .mw-list-item:not(.active) a > span";
 	await expect(page.locator(current).first()).toBeVisible();
+	await expect(
+		page.locator("#p-tb .mw-list-item:not(.active) a").first(),
+	).toHaveAttribute("href", /Installation\.html$/);
 
 	// Citizen hangs a menu item's box off the <a>, and the current skin is text rather than a
 	// link, so without a box of its own its name sits flush against the card edge.
@@ -111,4 +167,5 @@ test("the current skin lines up with the other entries in the toolbox", async ({
 		await labelLeft(page, link),
 		1,
 	);
+	await context.close();
 });

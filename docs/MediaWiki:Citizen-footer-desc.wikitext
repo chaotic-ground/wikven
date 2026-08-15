@@ -1,0 +1,1 @@
+{{SITENAME}} turns a directory of wikitext into a static site, with no server or database to run.

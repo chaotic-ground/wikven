@@ -34,6 +34,14 @@
   font-weight: @font-weight-bold;
 }
 
+// Citizen counts the wiki in its drawer. Pages and files are facts about the exported site; the
+// user count is the build's own admin account, and the edit count is how many revisions building
+// it happened to take. Neither says anything about the site a reader is looking at.
+#citizen-siteStats__item--users,
+#citizen-siteStats__item--edits {
+  display: none;
+}
+
 // Citizen hangs a menu item's box off the <a>, so the entry above needs one of its own or its
 // name sits flush against the card edge beside the padded links. Mirrors the skin's
 // `.citizen-menu .mw-list-item a`, in its custom properties: those follow its light/dark theme,
@@ -47,6 +55,29 @@
   min-height: 2.25rem;
   padding-inline: var( --space-md );
   color: var( --color-base );
+}
+
+// The typeahead SifterSearch feeds is core's jquery.suggestions widget, whose panel is a
+// hardcoded white box with a blue selection bar. Citizen's palette lives in custom properties
+// that follow its theme, so in dark mode the panel stays white while the text in it turns light.
+// Restated in the skin's own properties. The .skin-citizen prefix is also what outranks the
+// widget's own rules, which the JS bundle injects after this stylesheet is linked.
+.skin-citizen {
+  .suggestions-results,
+  .suggestions-special {
+    color: var( --color-base );
+    background-color: var( --color-surface-1 );
+    border-color: var( --border-color-base );
+  }
+
+  .suggestions-result {
+    color: var( --color-base );
+  }
+
+  .suggestions-result-current {
+    color: var( --color-emphasized );
+    background-color: var( --background-color-button-quiet--hover );
+  }
 }
 
 a.new {
