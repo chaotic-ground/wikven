@@ -1,0 +1,43 @@
+---
+name: "build(deps): bump mago"
+pipelineid: mago
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+sources:
+  release:
+    name: Latest mago release
+    kind: githubrelease
+    spec:
+      owner: carthage-software
+      repository: mago
+      versionfilter:
+        kind: semver
+
+targets:
+  # Not the json kind: it reserialises the whole file, indentation and key order included.
+  composer:
+    name: 'build(deps): bump mago to {{ source "release" }}'
+    kind: file
+    scmid: default
+    sourceid: release
+    spec:
+      file: composer.json
+      matchpattern: '"mago-version": "[^"]*"'
+      replacepattern: '"mago-version": "{{ source "release" }}"'

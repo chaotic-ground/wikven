@@ -1,0 +1,43 @@
+---
+name: "build(deps): bump SifterSearch"
+pipelineid: siftersearch
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+sources:
+  release:
+    name: Latest SifterSearch release
+    kind: githubrelease
+    spec:
+      owner: chaotic-ground
+      repository: SifterSearch
+      versionfilter:
+        kind: semver
+
+targets:
+  dockerfile:
+    name: 'build(deps): bump SifterSearch to {{ source "release" }}'
+    kind: dockerfile
+    scmid: default
+    sourceid: release
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: ARG
+        matcher: SIFTERSEARCH_VERSION
