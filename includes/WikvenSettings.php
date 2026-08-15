@@ -57,6 +57,11 @@ Wikimedia\Timestamp\ConvertibleTimestamp::setFakeTime($wikvenEpoch);
 // attempt; the Retrier hook handler sees to that.
 $wgMainCacheType = CACHE_DB;
 
+// The frozen clock makes this one impossible to invalidate: CacheTime::expired() tests
+// getCacheTime() < page_touched strictly and setFakeTime gives both the same value, so a parse
+// taken mid-build never looks stale (#333). Costs a parse per skin instead of one per bake.
+$wgParserCacheType = CACHE_NONE;
+
 // Let pages opt out of indexing with __NOINDEX__ in any namespace.
 $wgExemptFromUserRobotsControl = [];
 
