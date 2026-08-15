@@ -92,28 +92,25 @@ Sources for the third-party extensions and skins you list in <code>extensions</c
 Each entry chooses one of three methods by the key it carries:
 </translate>
 
-<translate nowrap>
-<!--T:34-->
 <syntaxhighlight lang="yaml">
-<tvar name="1">config:
-  WikvenRepositories:</tvar>
+config:
+  WikvenRepositories:
     # 1. A tarball, e.g. from Special:ExtensionDistributor, whose archive already
     #    bundles the extension's dependencies. Add sha256 to verify the download.
-    <tvar name="2">Foo:
+    Foo:
       tarball: https://extdist.wmflabs.org/dist/extensions/Foo-REL1_46-abc1234.tar.gz
-      sha256: 4f5e...</tvar>  # 64 hex characters; the build aborts on a mismatch
+      sha256: 4f5e...  # 64 hex characters; the build aborts on a mismatch
     # 2. A Git repository. Pin it with commit (an exact SHA, reproducible) or
     #    reference (a tag or branch). Add composer: true to run Composer inside
     #    the cloned directory.
-    <tvar name="3">Bar:
+    Bar:
       repository: https://github.com/example/Bar.git
       commit: 1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b
-      composer: true</tvar>
+      composer: true
     # 3. A Composer package, resolved through MediaWiki's composer.local.json.
-    <tvar name="4">SemanticMediaWiki:
-      package: mediawiki/semantic-media-wiki:~4.1</tvar>
+    SemanticMediaWiki:
+      package: mediawiki/semantic-media-wiki:~4.1
 </syntaxhighlight>
-</translate>
 
 <translate>
 <!--T:23-->
