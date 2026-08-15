@@ -24,7 +24,10 @@ updates:
         patterns:
           - "*"
   - package-ecosystem: github-actions
-    directory: /
+    # "/" is the workflows only. The composite actions pin their own uses: and need naming.
+    directories:
+      - /
+      - /actions/*
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
