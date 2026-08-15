@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven\Tests\Integration;
 use MediaWiki\Extension\Wikven\Hooks\Adder;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Skin\Skin;
+use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\TestingAccessWrapper;
 
@@ -70,37 +71,58 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * The toolbox holds the skin list and nothing else, so its heading is renamed. Vector 2022
-	 * labels that menu with a key of its own, so core's key alone would leave it reading "General".
+	 * Vector moves every section from the toolbox onward into its page-tools menu, so the skin list
+	 * gets a section of its own there and the toolbox stays as Hider left it.
 	 */
-	public function testToolboxHeadingNamesTheSkinList() {
-		$this->overrideConfigValue('WikvenSkins', ['vector-2022', 'citizen']);
+	public function testVectorGetsTheSkinListInItsOwnSection() {
+		$sidebar = $this->sidebarFor('vector-2022');
 
-		$keys = [];
-		( new Adder() )->onMessageCacheFetchOverrides($keys);
-
+		$this->assertSame([], $sidebar['TOOLBOX'], 'the toolbox is left empty');
 		$this->assertSame(
-			['toolbox' => 'wikven-skins-label', 'vector-page-tools-general-label' => 'wikven-skins-label'],
-			$keys
+			['wikven-skin-vector-2022', 'wikven-skin-citizen'],
+			array_keys($sidebar['wikven-skins'])
+		);
+		$this->assertSame(
+			'./citizen/Installation.html',
+			$sidebar['wikven-skins']['wikven-skin-citizen']['href']
+		);
+		$this->assertArrayNotHasKey('href', $sidebar['wikven-skins']['wikven-skin-vector-2022']);
+	}
+
+	/**
+	 * Every other skin keeps it in the toolbox: Citizen takes only the toolbox into its page-tools
+	 * menu and Minerva reads no other section, so a section of our own would not reach either.
+	 */
+	public function testOtherSkinsKeepTheSkinListInTheToolbox() {
+		$sidebar = $this->sidebarFor('citizen');
+
+		$this->assertArrayNotHasKey('wikven-skins', $sidebar);
+		$this->assertSame(
+			['wikven-skin-vector-2022', 'wikven-skin-citizen'],
+			array_keys($sidebar['TOOLBOX'])
+		);
+		$this->assertSame(
+			'../Installation.html',
+			$sidebar['TOOLBOX']['wikven-skin-vector-2022']['href']
 		);
 	}
 
-	/** One skin puts nothing in the toolbox, so the heading is left alone. */
-	public function testToolboxHeadingKeptForASingleSkin() {
-		$this->overrideConfigValue('WikvenSkins', ['vector-2022']);
-
-		$keys = [];
-		( new Adder() )->onMessageCacheFetchOverrides($keys);
-
-		$this->assertSame([], $keys);
+	/** The sidebar a two-skin export builds for one of them, on a page at the export root. */
+	private function sidebarFor(string $name): array {
+		$this->overrideConfigValue('WikvenSkins', ['vector-2022', 'citizen']);
+		$this->overrideConfigValue('WikvenMainSkin', 'vector-2022');
+		$sidebar = ['TOOLBOX' => []];
+		( new Adder() )->onSidebarBeforeOutput($this->skin($name), $sidebar);
+		return $sidebar;
 	}
 
-	private function skin(): Skin {
+	private function skin(string $name = 'vector'): Skin {
 		$skin = $this->createMock(Skin::class);
 		$skin->method('msg')->willReturnCallback(static function (string $key, ...$params) {
 			return wfMessage($key, ...$params);
 		});
-		$skin->method('getSkinName')->willReturn('vector');
+		$skin->method('getSkinName')->willReturn($name);
+		$skin->method('getTitle')->willReturn(Title::makeTitle(NS_MAIN, 'Installation'));
 		return $skin;
 	}
 }
