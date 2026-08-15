@@ -126,12 +126,17 @@ class RewriteScripts extends Maintenance {
 
 			// Without SifterSearch, drop the search boxes and body class so nothing mounts or fetches.
 			if (!$sifterEnabled) {
-				$html = $this->removeElements($html, 'vector-search-box-vue');
+				$html = HtmlElementRemover::remove($html, static function ($unusedName, array $attrs) {
+					$classes = isset($attrs['class']) ? preg_split('/\s+/', trim($attrs['class'])) : [];
+					return in_array('vector-search-box-vue', $classes, true);
+				});
 				$html = str_replace(' skin-vector-search-vue', '', $html);
 			}
 
 			// Remove the appearance menu: its widgets pull codex+vue from load.php, which 404s statically.
-			$html = $this->removeElements($html, 'id="vector-appearance"');
+			$html = HtmlElementRemover::remove($html, static function ($unusedName, array $attrs) {
+				return ( $attrs['id'] ?? null ) === 'vector-appearance';
+			});
 
 			file_put_contents($file, $html, LOCK_EX);
 		}
@@ -156,67 +161,6 @@ class RewriteScripts extends Maintenance {
 			}
 		}
 		return $modules;
-	}
-
-	/** Remove every balanced <div ...$marker...>...</div> (nested-aware) from the HTML. */
-	private function removeElements(string $html, string $marker): string {
-		while (true) {
-			$start = $this->findOpeningDiv($html, $marker);
-			if ($start === -1) {
-				return $html;
-			}
-			$end = $this->matchingDivEnd($html, $start);
-			if ($end === -1) {
-				return $html;
-			}
-			$html = substr($html, 0, $start) . substr($html, $end);
-		}
-	}
-
-	/**
-	 * @return int Byte offset of the opening <div, or -1.
-	 */
-	private function findOpeningDiv(string $html, string $marker): int {
-		$pos = strpos($html, '<div');
-		while ($pos !== false) {
-			$tagEnd = strpos($html, '>', $pos);
-			if ($tagEnd === false) {
-				return -1;
-			}
-			if (str_contains(substr($html, $pos, $tagEnd - $pos), $marker)) {
-				return $pos;
-			}
-			$pos = strpos($html, '<div', $tagEnd + 1);
-		}
-		return -1;
-	}
-
-	/**
-	 * Find the end of the <div> opening at byte offset $start.
-	 * @return int Byte offset just past the matching </div>, or -1.
-	 */
-	private function matchingDivEnd(string $html, int $start): int {
-		$depth = 0;
-		$len = strlen($html);
-		$i = $start;
-		while ($i < $len) {
-			$open = strpos($html, '<div', $i);
-			$close = strpos($html, '</div>', $i);
-			if ($close === false) {
-				return -1;
-			}
-			if ($open !== false && $open < $close) {
-				$depth++;
-				$i = $open + 4;
-			} else {
-				$depth--;
-				$i = $close + 6;
-				if ($depth === 0) {
-					return $i;
-				}
-			}
-		}
-		return -1;
 	}
 }
 
