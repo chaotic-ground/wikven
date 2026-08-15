@@ -11,6 +11,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
     paths:
+      - 'actions/bake/**'  # the preview build is the only thing that runs it
       - 'docs/**'
       - 'Dockerfile'
       - 'bin/entrypoint'
@@ -57,7 +58,7 @@ jobs:
 
       - name: Bake the docs site
         if: github.event.action != 'closed'
-        uses: ./action
+        uses: ./actions/bake
         with:
           source: docs
           output: dist

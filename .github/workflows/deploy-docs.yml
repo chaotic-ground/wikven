@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'actions/bake/**'
       - 'docs/**'
       - 'Dockerfile'
       - 'bin/entrypoint'
@@ -45,7 +46,7 @@ jobs:
 
       # Dogfood the published composite action to bake the docs source.
       - name: Bake the docs site
-        uses: ./action
+        uses: ./actions/bake
         with:
           source: docs
           output: dist
