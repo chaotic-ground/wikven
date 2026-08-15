@@ -96,12 +96,30 @@ class StoreImages extends Maintenance {
 			'timeout' => 30,
 			'userAgent' => 'wikven static-site builder (https://github.com/chaotic-ground/wikven)'
 		];
-		// Retry with backoff: Commons may 4xx/5xx while generating an uncached thumbnail.
+		$tmp = "$dest.tmp";
+		// Retry with backoff: Commons may 5xx while generating an uncached thumbnail. A 4xx (e.g. a
+		// dead File: link) won't change on retry, so stop as soon as one comes back.
 		for ($attempt = 1; $attempt <= 3; $attempt++) {
-			$bytes = $http->get($url, $options, __METHOD__);
-			if ($bytes !== null && $bytes !== '') {
-				file_put_contents($dest, $bytes, LOCK_EX);
+			$req = $http->create($url, $options, __METHOD__);
+			$fh = fopen($tmp, 'wb');
+			if ($fh === false) {
+				break;
+			}
+			$req->setCallback(static function ($resource, $buffer) use ($fh) {
+				return fwrite($fh, $buffer);
+			});
+			$status = $req->execute();
+			fclose($fh);
+
+			$httpStatus = $req->getStatus();
+			if ($status->isOK() && $httpStatus >= 200 && $httpStatus < 300 && filesize($tmp) > 0) {
+				rename($tmp, $dest);
 				return "./$name";
+			}
+
+			unlink($tmp);
+			if ($httpStatus >= 400 && $httpStatus < 500) {
+				break;
 			}
 			if ($attempt < 3) {
 				sleep($attempt);
