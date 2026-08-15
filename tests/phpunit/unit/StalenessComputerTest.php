@@ -203,25 +203,80 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	public function testSplitUnitsIgnoresMarkersShownInsideACodeExample() {
-		// The page documenting page translation shows <!--T:n--> markers in code examples; those are
-		// not real units, so a marker inside a verbatim span never becomes one.
+	public function testASourceMarkerOutsideEveryBlockIsNotAUnit() {
+		// Translate reads markers only inside a <translate> block, so one shown in a code example --
+		// as the page documenting page translation does -- is prose wherever it sits.
 		$text =
 			"<translate>\n<!--T:1-->\nReal.\n</translate>\n\n"
 			. "<syntaxhighlight lang=\"wikitext\">\n<!--T:2-->\nExample.\n</syntaxhighlight>";
-		$this->assertSame([1], array_keys(StalenessComputer::splitUnits($text)));
+		$this->assertSame([1], array_keys(StalenessComputer::sourceUnits($text)));
 	}
 
-	public function testMarkLeavesATranslatePairShownInsideACodeExampleUntouched() {
-		// A <translate>...</translate> pair inside a code example must be copied verbatim, and the
-		// <!--T:1--> it contains must not push the real unit's number along.
-		$example =
-			"<syntaxhighlight lang=\"wikitext\">\n"
-			. "<translate>\n<!--T:1-->\nExample.\n</translate>\n</syntaxhighlight>";
+	public function testASourceBlockInsideACodeExampleStillCounts() {
+		// Translate's parser hook runs before <syntaxhighlight> is stripped, so a whole pair written
+		// there is one it parses.
+		$text = "<syntaxhighlight>\n<translate>\n<!--T:1-->\nBody\n</translate>\n</syntaxhighlight>";
+		$this->assertSame([1], array_keys(StalenessComputer::sourceUnits($text)));
+	}
+
+	public function testNowikiInsideABlockHidesNothing() {
+		// parse() unarmours a block's contents before segmenting them, so <nowiki> shelters a marker
+		// from the block scan but not from the unit scan. Translate rejects the page; wikven must see
+		// the same two units for the check to be able to say so.
+		$text = "<translate>\n<!--T:1-->\nUse <nowiki><!--T:9--></nowiki> here.\n</translate>";
+		$this->assertSame([1, 9], array_keys(StalenessComputer::sourceUnits($text)));
+	}
+
+	public function testAWholeBlockArmouredByNowikiIsInvisible() {
+		// armourNowiki() runs before the block scan, so a pair shown in <nowiki> is no block at all --
+		// and its <!--T:1--> must not shadow the real unit 1, which the body assertion is what catches.
+		$text =
+			"<translate>\n<!--T:1-->\nReal.\n</translate>\n"
+			. "<nowiki><translate>\n<!--T:1-->\nShown.\n</translate></nowiki>";
+		$units = StalenessComputer::sourceUnits($text);
+		$this->assertSame([1], array_keys($units));
+		$this->assertStringStartsWith("\nReal.\n", $units[1]['text']);
+	}
+
+	public function testMarkNumbersABlockShownInACodeExample() {
+		// Translate numbers it and saves the result back to the wiki, so wikven must number it too.
+		$example = "<syntaxhighlight>\n<translate>\nExample.\n</translate>\n</syntaxhighlight>";
 		$this->assertSame(
-			"<translate>\n<!--T:1-->\nReal.\n</translate>\n\n" . $example,
+			"<translate>\n<!--T:1-->\nReal.\n</translate>\n\n"
+			. "<syntaxhighlight>\n<translate>\n<!--T:2-->\nExample.\n</translate>\n</syntaxhighlight>",
 			StalenessComputer::mark("<translate>\nReal.\n</translate>\n\n" . $example)
 		);
+	}
+
+	public function testMarkLeavesABlockArmouredByNowikiAlone() {
+		$text = "<translate>\nReal.\n</translate>\n<nowiki><translate>\nShown.\n</translate></nowiki>";
+		$this->assertSame(
+			"<translate>\n<!--T:1-->\nReal.\n</translate>\n<nowiki><translate>\nShown.\n</translate></nowiki>",
+			StalenessComputer::mark($text)
+		);
+	}
+
+	public function testAnUnclosedCodeTagDoesNotStopLaterBlocksBeingRead() {
+		// Only <nowiki> armours anything for Translate, so an unclosed <pre> earlier on the page leaves
+		// every later block, and every marker in one, exactly as real.
+		$text = "<pre>\n<translate>\nShown.\n</translate>\n<translate>\n<!--T:4-->\nReal.\n</translate>";
+		$this->assertSame([4], array_keys(StalenessComputer::sourceUnits($text)));
+		$this->assertStringEndsWith(
+			"<translate>\n<!--T:4-->\nReal.\n</translate>",
+			StalenessComputer::mark($text)
+		);
+	}
+
+	public function testSourceUnitsSpanSeveralBlocksAndIgnoreMarkersBetweenThem() {
+		// Each block contributes its own units; a marker written between two of them belongs to
+		// neither, so the numbering of the real ones is untouched.
+		$text =
+			"<translate>\n<!--T:1-->\nOne.\n</translate>\n"
+			. "<pre>\n<!--T:8-->\nExample.\n</pre>\n"
+			. "<translate>\n<!--T:2-->\nTwo.\n</translate>\n"
+			. "<nowiki><!--T:9--></nowiki>\n"
+			. "<translate>\n<!--T:3-->\nThree.\n</translate>";
+		$this->assertSame([1, 2, 3], array_keys(StalenessComputer::sourceUnits($text)));
 	}
 
 	public function testAnalyzeIgnoresAnExampleMarkerInACodeBlock() {
@@ -235,16 +290,25 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	public function testRestampLeavesAMarkerTheTranslationMerelyShowsAlone() {
+		// Stamping one would edit the sentence around it whenever its id matched a real unit.
+		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";
+		$translation = "<!--T:1-->\n안녕.\n\n<code><nowiki><!--T:1--></nowiki></code> 표시자.";
+		$this->assertStringEndsWith(
+			'<code><nowiki><!--T:1--></nowiki></code> 표시자.',
+			StalenessComputer::restamp($source, $translation)
+		);
+	}
+
 	/**
-	 * Every verbatim tag hides a marker, not just the ones the docs happen to use. <nowiki> matters
-	 * most: it is the only span Translate's own parser armours, so it is what the Translating page
-	 * wraps its examples in.
+	 * A translation file carries bare markers and no <translate> block, so it is wikven's own format:
+	 * every verbatim tag hides a marker there, not just the <nowiki> Translate armours.
 	 *
 	 * @dataProvider provideVerbatimTags
 	 */
-	public function testSplitUnitsIgnoresMarkersInsideEveryVerbatimTag(string $example) {
-		$text = "<translate>\n<!--T:1-->\nReal.\n</translate>\n\n" . $example;
-		$this->assertSame([1], array_keys(StalenessComputer::splitUnits($text)));
+	public function testTranslationUnitsIgnoreMarkersInsideEveryVerbatimTag(string $example) {
+		$text = "<!--T:1-->\n안녕.\n\n" . $example;
+		$this->assertSame([1], array_keys(StalenessComputer::translationUnits($text)));
 	}
 
 	public static function provideVerbatimTags(): array {
@@ -260,23 +324,12 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		];
 	}
 
-	public function testSplitUnitsIgnoresMarkersAcrossSeveralVerbatimRegions() {
-		// Each verbatim span is skipped independently, and real units between them still count.
-		$text =
-			"<translate>\n<!--T:1-->\nOne.\n</translate>\n"
-			. "<pre>\n<!--T:8-->\nExample.\n</pre>\n"
-			. "<translate>\n<!--T:2-->\nTwo.\n</translate>\n"
-			. "<nowiki><!--T:9--></nowiki>\n"
-			. "<translate>\n<!--T:3-->\nThree.\n</translate>";
-		$this->assertSame([1, 2, 3], array_keys(StalenessComputer::splitUnits($text)));
-	}
-
-	public function testAnUnclosedVerbatimTagRunsToTheEndOfThePage() {
+	public function testAnUnclosedVerbatimTagRunsToTheEndOfATranslation() {
 		// MediaWiki renders an unclosed <nowiki> as verbatim to the end of the page, and reading it
 		// that way is the safer failure mode: the text after it stays examples rather than becoming
 		// counted units.
-		$text = "<translate>\n<!--T:1-->\nReal.\n</translate>\n<nowiki>\n<!--T:2-->\nStill an example.";
-		$this->assertSame([1], array_keys(StalenessComputer::splitUnits($text)));
+		$text = "<!--T:1-->\n안녕.\n<nowiki>\n<!--T:2-->\nStill an example.";
+		$this->assertSame([1], array_keys(StalenessComputer::translationUnits($text)));
 	}
 
 	/**
@@ -286,9 +339,8 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideSelfContainedVerbatim
 	 */
 	public function testAClosedVerbatimSpanDoesNotSwallowLaterUnits(string $span) {
-		$text =
-			"<translate>\n<!--T:1-->\nOne.\n</translate>\n" . $span . "\n<translate>\n<!--T:2-->\nTwo.\n</translate>";
-		$this->assertSame([1, 2], array_keys(StalenessComputer::splitUnits($text)));
+		$text = "<!--T:1-->\n하나.\n" . $span . "\n<!--T:2-->\n둘.";
+		$this->assertSame([1, 2], array_keys(StalenessComputer::translationUnits($text)));
 	}
 
 	public static function provideSelfContainedVerbatim(): array {
@@ -302,20 +354,8 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	public function testACommentMerelyMentioningAVerbatimTagDoesNotSwallowLaterUnits() {
 		// An HTML comment is inert to MediaWiki's parser, so a tag name it merely mentions -- as a
 		// reviewer note might -- must not read as a real, unclosed opener; that would otherwise run
-		// to the end of the page and hide the second <translate> block entirely.
-		$text =
-			"<translate>\n<!--T:1-->\nOne.\n</translate>\n"
-			. "<!-- reviewer: do not wrap this in <nowiki> -->\n"
-			. "<translate>\n<!--T:2-->\nTwo.\n</translate>";
-		$this->assertSame([1, 2], array_keys(StalenessComputer::splitUnits($text)));
-	}
-
-	public function testMarkIgnoresATranslatePairAfterAnUnclosedVerbatimTag() {
-		// The same rule applies to marking: nothing after the unclosed tag is numbered.
-		$text = "<translate>\nReal.\n</translate>\n<pre>\n<translate>\nExample.\n</translate>";
-		$this->assertSame(
-			"<translate>\n<!--T:1-->\nReal.\n</translate>\n<pre>\n<translate>\nExample.\n</translate>",
-			StalenessComputer::mark($text)
-		);
+		// to the end of the page and hide every later unit.
+		$text = "<!--T:1-->\n하나.\n<!-- reviewer: do not wrap this in <nowiki> -->\n<!--T:2-->\n둘.";
+		$this->assertSame([1, 2], array_keys(StalenessComputer::translationUnits($text)));
 	}
 }

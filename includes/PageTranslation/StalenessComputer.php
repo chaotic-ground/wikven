@@ -31,7 +31,7 @@ class StalenessComputer {
 	 * own title, which the source wikitext never repeats, so it exists only in a translation file
 	 * ("<!--T:title @<hash>-->" followed by the translated title).
 	 *
-	 * mark() only ever hands out numbers, so the tooling never produces this id; splitUnits() does
+	 * mark() only ever hands out numbers, so the tooling never produces this id; the unit scan does
 	 * accept it, though, so a source page could still carry a hand-written "<!--T:title-->". That
 	 * unit would collide with the page title and be lost, so sourceUnits() rejects it outright and
 	 * usesReservedId() lets the check report it.
@@ -41,12 +41,21 @@ class StalenessComputer {
 	private const HASH_LENGTH = 8;
 
 	/**
-	 * Verbatim spans whose contents are shown, not parsed. A <!--T:n--> or <translate> that appears
-	 * inside one -- as on the page documenting page translation -- is an example, not real markup, so
-	 * unit splitting and marking skip it. This mirrors the tags TranslationSource::isTranslatable and
-	 * #239 treat as verbatim.
+	 * Verbatim spans in a translation file, whose contents are shown rather than read as units. A
+	 * translation carries bare markers and no <translate> block, so it is wikven's own format and
+	 * this is wikven's own rule; source pages go by Translate's, which is blockRanges().
 	 */
 	private const VERBATIM_TAGS = 'syntaxhighlight|source|nowiki|pre';
+
+	/**
+	 * A <translate> block, its contents captured. Exactly the two spellings parse() accepts: any other
+	 * attribute makes a tag it opens no block for, and reading one here would put markers where the
+	 * engine sees none. checkTranslations compares the two readings and reports where they differ.
+	 */
+	private const TRANSLATE_BLOCK = '#(<translate(?: nowrap)?>)(.*?)(</translate>)#s';
+
+	/** What TranslatablePageParser::armourNowiki() hides: exactly this, no attributes, no other tag. */
+	private const ARMOURED_NOWIKI = '#<nowiki>.*?</nowiki>#s';
 
 	/** Short content hash of a source unit; the value carried as @<hash> in a translation marker. */
 	public static function hashUnit(string $unitText): string {
@@ -58,71 +67,93 @@ class StalenessComputer {
 	 *
 	 * Units are the blank-line-separated blocks Translate segments on; an already-marked unit keeps
 	 * its number and new ones continue from the highest on the page. The marker goes on its own line
-	 * before the unit, which both splitUnits() and Translate's own re-parse honour. Idempotent.
+	 * before the unit, which both the unit scan and Translate's own re-parse honour. Idempotent.
 	 */
 	public static function mark(string $text): string {
-		$verbatim = self::verbatimRanges($text);
+		$blocks = self::blockRanges($text);
 
-		// Only count real markers when picking the next number; a <!--T:n--> shown inside an example
-		// must not push the numbering of the actual units along.
+		// Only a marker inside a block is a unit, so only those numbers are taken; one shown elsewhere
+		// on the page must not push the real units along.
 		preg_match_all('/<!--T:(\d+)/', $text, $existing, PREG_OFFSET_CAPTURE);
 		$numbers = [];
 		foreach ($existing[0] as $i => $marker) {
-			if (!self::insideVerbatim($marker[1], $verbatim)) {
+			if (self::containingRange($marker[1], $blocks) !== null) {
 				$numbers[] = (int)$existing[1][$i][0];
 			}
 		}
 		$next = $numbers === [] ? 1 : max($numbers) + 1;
 
-		return preg_replace_callback(
-			'#(<translate(?:\s[^>]*)?>)(.*?)(</translate>)#s',
-			static function (array $block) use (&$next, $verbatim): string {
-				// A <translate> pair inside a verbatim span is an example; leave it exactly as written.
-				if (self::insideVerbatim($block[0][1], $verbatim)) {
-					return $block[0][0];
-				}
-				// The two newlines must be adjacent, matching Translate's own sectioniser
-				// ('~(^\s*|\s*\n\n\s*|\s*$)~'): a line of spaces or tabs between them is still the same
-				// unit to Translate, and marking it as two would put a <!--T:n--> mid-unit, which
-				// Translate rejects (pt-shake-position).
-				$units = preg_split('/(\n\n)/', $block[2][0], -1, PREG_SPLIT_DELIM_CAPTURE);
-				$marked = '';
-				foreach ($units as $index => $segment) {
-					// Odd indices are the blank-line separators between units; keep them verbatim.
-					if (( $index % 2 ) === 1 || trim($segment) === '' || str_contains($segment, '<!--T:')) {
-						$marked .= $segment;
-						continue;
-					}
-					preg_match('/^(\s*)(.*)$/s', $segment, $parts);
-					$marked .= $parts[1] . '<!--T:' . $next++ . "-->\n" . $parts[2];
-				}
-				return $block[1][0] . $marked . $block[3][0];
-			},
-			$text,
-			-1,
-			$count,
-			PREG_OFFSET_CAPTURE
-		);
+		$marked = '';
+		$offset = 0;
+		foreach ($blocks as [$start, $end]) {
+			$marked .=
+				substr($text, $offset, $start - $offset) . self::markBlock(substr($text, $start, $end - $start), $next);
+			$offset = $end;
+		}
+		return $marked . substr($text, $offset);
+	}
+
+	/** Number the still-unmarked units of one <translate> block's contents, continuing from $next. */
+	private static function markBlock(string $contents, int &$next): string {
+		// The two newlines must be adjacent, matching Translate's own sectioniser
+		// ('~(^\s*|\s*\n\n\s*|\s*$)~'): a line of spaces or tabs between them is still the same unit to
+		// Translate, and marking it as two would put a <!--T:n--> mid-unit, which Translate rejects
+		// (pt-shake-position).
+		$units = preg_split('/(\n\n)/', $contents, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$marked = '';
+		foreach ($units as $index => $segment) {
+			// Odd indices are the blank-line separators between units; keep them verbatim.
+			if (( $index % 2 ) === 1 || trim($segment) === '' || str_contains($segment, '<!--T:')) {
+				$marked .= $segment;
+				continue;
+			}
+			preg_match('/^(\s*)(.*)$/s', $segment, $parts);
+			$marked .= $parts[1] . '<!--T:' . $next++ . "-->\n" . $parts[2];
+		}
+		return $marked;
 	}
 
 	/**
-	 * Split page text into units keyed by their <!--T:n--> marker id.
+	 * Split a translation file into units keyed by their <!--T:n--> marker id.
 	 *
-	 * @return array<string,array{hash:?string,text:string}> id => [synced-source hash (translations only), unit text]
+	 * @return array<string,array{hash:?string,text:string}> id => [synced-source hash, unit text]
 	 */
-	public static function splitUnits(string $text): array {
+	public static function translationUnits(string $text): array {
+		$verbatim = self::verbatimRanges($text);
+		return self::unitsAt($text, static function (int $offset) use ($verbatim): bool {
+			return !self::insideVerbatim($offset, $verbatim);
+		});
+	}
+
+	/**
+	 * Split a source page into units keyed by their <!--T:n--> marker id.
+	 *
+	 * @return array<string,array{hash:?string,text:string}> id => [null, unit text]
+	 */
+	private static function sourcePageUnits(string $text): array {
+		$blocks = self::blockRanges($text);
+		return self::unitsAt($text, static function (int $offset) use ($blocks): bool {
+			return self::containingRange($offset, $blocks) !== null;
+		});
+	}
+
+	/**
+	 * Units keyed by marker id, counting only the markers whose offset $keep accepts. A unit's body
+	 * runs to the next counted marker, so a skipped one leaves the surrounding unit whole.
+	 *
+	 * @param string $text
+	 * @param callable(int):bool $keep
+	 * @return array<string,array{hash:?string,text:string}>
+	 */
+	private static function unitsAt(string $text, callable $keep): array {
 		$pattern = '/<!--T:(?<id>[A-Za-z0-9]+)(?:\s+@(?<hash>[0-9a-f]{' . self::HASH_LENGTH . '}))?\s*-->/';
 		if (!preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
 			return [];
 		}
 
-		// Drop markers that sit inside a verbatim span: they are shown as an example, not real units.
-		// A real unit's body still spans any verbatim block that falls between two real markers, so an
-		// existing translation's boundaries -- and its @<hash> stamps -- are unchanged.
-		$verbatim = self::verbatimRanges($text);
 		$markers = [];
 		foreach ($matches as $marker) {
-			if (!self::insideVerbatim($marker[0][1], $verbatim)) {
+			if ($keep($marker[0][1])) {
 				$markers[] = $marker;
 			}
 		}
@@ -150,7 +181,7 @@ class StalenessComputer {
 	 * a unit wearing it has nowhere to go. Reported by the check, and refused by sourceUnits().
 	 */
 	public static function usesReservedId(string $sourceText): bool {
-		return isset(self::splitUnits($sourceText)[self::TITLE_UNIT_ID]);
+		return isset(self::sourcePageUnits($sourceText)[self::TITLE_UNIT_ID]);
 	}
 
 	/**
@@ -166,7 +197,7 @@ class StalenessComputer {
 	 * @throws InvalidArgumentException If the source page marks a unit with the reserved title id.
 	 */
 	public static function sourceUnits(string $sourceText, ?string $pageTitle = null): array {
-		$units = self::splitUnits($sourceText);
+		$units = self::sourcePageUnits($sourceText);
 		// Refused whether or not this page has a translatable title: merging the two would drop one
 		// of them silently, and a page that gains a translatable title later must not lose a unit
 		// the moment it does.
@@ -193,7 +224,7 @@ class StalenessComputer {
 	 */
 	public static function analyze(string $sourceText, ?string $translationText, ?string $pageTitle = null): array {
 		$source = self::sourceUnits($sourceText, $pageTitle);
-		$translation = $translationText === null ? [] : self::splitUnits($translationText);
+		$translation = $translationText === null ? [] : self::translationUnits($translationText);
 
 		$result = [];
 		foreach ($source as $id => $unit) {
@@ -227,16 +258,22 @@ class StalenessComputer {
 	 */
 	public static function restamp(string $sourceText, string $translationText, ?string $pageTitle = null): string {
 		$source = self::sourceUnits($sourceText, $pageTitle);
+		// A marker the translation merely shows is prose, not a unit: stamping one would edit the
+		// sentence around it whenever its id happened to match a real unit.
+		$verbatim = self::verbatimRanges($translationText);
 		return preg_replace_callback(
 			'/<!--T:(?<id>[A-Za-z0-9]+)(?:\s+@[0-9a-f]{' . self::HASH_LENGTH . '})?\s*-->/',
-			static function ($marker) use ($source) {
-				$id = $marker['id'];
-				if (!isset($source[$id])) {
-					return $marker[0];
+			static function ($marker) use ($source, $verbatim) {
+				$id = $marker['id'][0];
+				if (!isset($source[$id]) || self::insideVerbatim($marker[0][1], $verbatim)) {
+					return $marker[0][0];
 				}
 				return '<!--T:' . $id . ' @' . self::hashUnit($source[$id]['text']) . '-->';
 			},
-			$translationText
+			$translationText,
+			-1,
+			$count,
+			PREG_OFFSET_CAPTURE
 		);
 	}
 
@@ -255,7 +292,7 @@ class StalenessComputer {
 		?string $existingTranslation = null,
 		?string $pageTitle = null
 	): string {
-		$existing = $existingTranslation === null ? [] : self::splitUnits($existingTranslation);
+		$existing = $existingTranslation === null ? [] : self::translationUnits($existingTranslation);
 		$additions = '';
 		foreach (self::sourceUnits($sourceText, $pageTitle) as $id => $unit) {
 			if (!isset($existing[$id])) {
@@ -269,6 +306,35 @@ class StalenessComputer {
 			return $additions;
 		}
 		return rtrim($existingTranslation, "\n") . "\n\n" . $additions;
+	}
+
+	/**
+	 * Byte ranges of the <translate> block contents in a source page, each as [start, endExclusive].
+	 *
+	 * Translate armours <nowiki> before it looks for a block, so a whole pair shown in one is
+	 * invisible to it; blanking the span with a same-length filler keeps every offset the page's own.
+	 * A <nowiki> merely inside a block still yields its markers, because Translate unarmours a block's
+	 * contents before segmenting them.
+	 *
+	 * @return list<array{int,int}>
+	 */
+	private static function blockRanges(string $text): array {
+		$masked = preg_replace_callback(
+			self::ARMOURED_NOWIKI,
+			static function (array $span): string {
+				return str_repeat("\x00", strlen($span[0]));
+			},
+			$text
+		);
+
+		$ranges = [];
+		$offset = 0;
+		$length = strlen($masked);
+		while ($offset < $length && preg_match(self::TRANSLATE_BLOCK, $masked, $match, PREG_OFFSET_CAPTURE, $offset)) {
+			$ranges[] = [$match[2][1], $match[2][1] + strlen($match[2][0])];
+			$offset = $match[0][1] + strlen($match[0][0]);
+		}
+		return $ranges;
 	}
 
 	/**

@@ -1,8 +1,18 @@
 <?php
+/**
+ * Translate is an optional, image-bundled dependency that phan does not analyse, so its symbols
+ * are undeclared to static analysis here. Reading a page with Translate's own parser only happens
+ * when Translate is loaded.
+ *
+ * @phan-file-suppress PhanUndeclaredClassMethod
+ * @phan-file-suppress PhanUndeclaredClassCatch
+ */
 
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\Extension\Translate\PageTranslation\ParsingFailure;
+use MediaWiki\Extension\Translate\Services as TranslateServices;
 use MediaWiki\Extension\Wikven\PageTranslation\StalenessComputer;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -56,6 +66,7 @@ class CheckTranslations extends Maintenance {
 				);
 				continue;
 			}
+			$problems += $this->checkSourcePage($prefix . substr($baseFile, strlen($source) + 1), $sourceText);
 			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
 			foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
 				$translationFile = TranslationSource::translationPath($baseFile, $lang);
@@ -87,6 +98,58 @@ class CheckTranslations extends Maintenance {
 			$this->fatalError('Wikven: translations are out of date or missing (see annotations above).');
 		}
 		return true;
+	}
+
+	/**
+	 * Read a source page with Translate's own parser and report where wikven would read it
+	 * differently, so the author hears it here rather than from a page that bakes wrong.
+	 *
+	 * @return int Problems found.
+	 */
+	private function checkSourcePage(string $reportFile, string $sourceText): int {
+		try {
+			$output = TranslateServices::getInstance()->getTranslatablePageParser()->parse($sourceText);
+		} catch (ParsingFailure $failure) {
+			// The bake skips such a page, leaving it untranslated; nothing downstream would say why.
+			$this->output(
+				"::error file=$reportFile::Translate cannot parse this page: {$failure->getMessage()}\n"
+			);
+			return 1;
+		}
+
+		$ids = [];
+		$unmarked = 0;
+		foreach ($output->units() as $unit) {
+			if ((string)$unit->id === '-1') {
+				$unmarked++;
+			} else {
+				$ids[] = (string)$unit->id;
+			}
+		}
+
+		$problems = 0;
+		if ($unmarked > 0) {
+			$problems++;
+			$this->output(
+				"::error file=$reportFile::$unmarked translation unit(s) have no <!--T:n--> marker;"
+				. " run translate mark\n"
+			);
+		}
+		// The two readings agreeing is what makes every check below it mean anything: a unit only
+		// wikven sees is never translated on the wiki, and one only Translate sees is never gated.
+		// No page title is passed, so the title unit Translate has no counterpart for is never added.
+		$wikven = array_map('strval', array_keys(StalenessComputer::sourceUnits($sourceText)));
+		if ($wikven !== $ids) {
+			$problems++;
+			$this->output(
+				"::error file=$reportFile::Translate reads units "
+				. ( $ids ? implode(', ', $ids) : '(none)' )
+				. ' where wikven reads '
+				. ( $wikven ? implode(', ', $wikven) : '(none)' )
+				. "\n"
+			);
+		}
+		return $problems;
 	}
 }
 

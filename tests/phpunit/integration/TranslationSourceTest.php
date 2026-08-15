@@ -21,22 +21,22 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 	public static function provideIsTranslatable(): array {
 		return [
 			'a real translate block' => ["<languages/>\n<translate>\n<!--T:1-->\nHi.\n</translate>", true],
-			// Translate accepts attributes on the tag.
+			// containsMarkup() matches any translate tag, so nowrap is one it offers for marking.
 			'a translate block with an attribute' => [
 				"<languages/>\n<translate nowrap>\n<!--T:1-->\nHi.\n</translate>",
 				true
 			],
 			'a tag that merely starts the same way' => ['<translatex>Hi.</translatex>', false],
 			'plain text' => ['Just prose, no markup.', false],
-			// The page documenting page translation shows <translate> as an example; it is not a source.
+			// Translate's parser hook runs on raw wikitext, so only <nowiki> hides a tag from it.
 			'translate inside syntaxhighlight' => [
 				"x\n<syntaxhighlight>\n<translate>\n<!--T:1-->\nBody\n</translate>\n</syntaxhighlight>",
-				false
+				true
 			],
 			'translate inside nowiki' => ['Wrap it in <code><nowiki><translate></nowiki></code>.', false],
-			'translate inside pre' => ['<pre><translate>example</translate></pre>', false],
-			'a real block alongside an example' => [
-				"<translate>Real</translate>\n<syntaxhighlight><translate>x</translate></syntaxhighlight>",
+			'translate inside pre' => ['<pre><translate>example</translate></pre>', true],
+			'a real block beside one shown in nowiki' => [
+				"<translate>Real</translate>\n<nowiki><translate>x</translate></nowiki>",
 				true
 			]
 		];
