@@ -6,6 +6,7 @@
 #   docker build -f binary.Dockerfile --target export -o type=local,dest=out .
 #   # -> out/wikven, a single static executable. Run it with:
 #   #    WIKVEN_WORKDIR=. ./wikven build
+#   # On a GitHub API rate limit, add: --secret id=github-token,env=GITHUB_TOKEN
 
 # Stage 1: the app tree to embed = the wikven image + the binary entry point,
 # minus what the build never needs (keeping all locales, so the binary is not
@@ -35,7 +36,11 @@ ENV SPC_CMD_VAR_FRANKENPHP_XCADDY_MODULES="--with github.com/dunglas/mercure/cad
 ENV PHP_VERSION=8.3
 ENV PHP_EXTENSIONS="gd,intl,pdo_sqlite,sqlite3,mbstring,dom,xml,simplexml,xmlreader,xmlwriter,fileinfo,iconv,ctype,filter,tokenizer,phar,session,calendar,opcache,openssl,sodium,zlib,bcmath,exif"
 ENV PHP_EXTENSION_LIBS="libpng,libjpeg,freetype,libwebp"
-RUN EMBED=dist/app ./build-static.sh
+# static-php-cli resolves most sources through api.github.com, which is 60 requests/hour per IP when
+# anonymous and shared with every other runner on that IP. The token raises it to 1000/hour per repo.
+RUN --mount=type=secret,id=github-token \
+    GITHUB_TOKEN="$(cat /run/secrets/github-token 2>/dev/null || true)" \
+    EMBED=dist/app ./build-static.sh
 
 # Stage 3: expose just the binary (named per arch by build-static.sh) for
 # `docker build --target export -o`.

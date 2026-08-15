@@ -57,7 +57,11 @@ jobs:
 
       # binary.Dockerfile's export target FROMs the loaded image and writes out the compiled binary.
       - name: Build the standalone binary
-        run: docker build -f binary.Dockerfile --target export -o type=local,dest=out .
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          docker build -f binary.Dockerfile --target export
+          --secret id=github-token,env=GITHUB_TOKEN -o type=local,dest=out .
 
       - name: Name it per architecture
         env:
