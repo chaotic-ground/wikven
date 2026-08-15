@@ -206,11 +206,11 @@ Wikven
 </div>
 
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><a href="../Deploying.html" class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" title="Deploying (100% translated)" lang="en" dir="ltr">English</a></li>
-<li><a href="../Deploying/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="배포하기 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="../Deploying/ko.html" class="mw-pt-progress mw-pt-progress--high" title="배포하기 (92% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="GitHub_Pages">GitHub Pages</h2></div>
-<p>This workflow rebuilds and publishes the site on every push. It bakes the source with the Wikven <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/action">composite action</a>, then uploads <code>dist/</code> to Pages.
+<p>This workflow rebuilds and publishes the site on every push. It bakes the source with the Wikven <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/bake">composite action</a>, then uploads <code>dist/</code> to Pages.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
 <span class="nt">on</span><span class="p">:</span>
@@ -229,7 +229,7 @@ Wikven
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10</span><span class="w">  </span><span class="c1"># v6.0.3</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d</span><span class="w">  </span><span class="c1"># v6.0.0</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/action@19392b75d379de9e349ef2963c11ec5545c3e6ab</span><span class="w">  </span><span class="c1"># v1.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@19392b75d379de9e349ef2963c11ec5545c3e6ab</span><span class="w">  </span><span class="c1"># v1.0.0</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
 <span class="w">          </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
@@ -277,8 +277,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="FuzzyBot"
   				data-user-gender="unknown"
-  				data-timestamp="1786810908">
-  				<span>Last edited on 15 August 2026, at 16:21</span>
+  				data-timestamp="1786811073">
+  				<span>Last edited on 15 August 2026, at 16:24</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -301,7 +301,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 16:21.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 16:24.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
