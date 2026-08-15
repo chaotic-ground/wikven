@@ -14,6 +14,13 @@ on:
 
 permissions: {}
 
+# Cancel a superseded run -- a force-push lands a new commit while CI is still building the old
+# one -- instead of finishing a commit nobody will merge. Pushes to main are left to run: each
+# merged commit should keep its own CI result.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
 jobs:
   plan:
     runs-on: ubuntu-latest

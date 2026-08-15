@@ -21,6 +21,13 @@ permissions:
   contents: read
   packages: write
 
+# Cancel a superseded run -- a force-push lands a new commit while CI is still building the old
+# one -- instead of finishing a commit nobody will merge. Pushes to main are left to run, which
+# also covers the workflow_call path from release-please: a release build is never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest

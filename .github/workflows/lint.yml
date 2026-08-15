@@ -8,15 +8,63 @@ on:
 
 permissions: {}
 
+# A superseded push (a force-push while CI is mid-flight) leaves a run building a commit nobody
+# will merge. Keyed on the PR number rather than github.ref so it also holds for pull_request_target,
+# where github.ref is the base branch and every PR would otherwise share one group. Pushes to main
+# are left to finish: each merged commit should keep its own CI result.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
+# biome and mago are installed by hand rather than through their setup-* actions on purpose. Each
+# of those actions spends two GitHub REST calls per run to resolve a download URL that the pinned
+# version already determines, and caches nothing, so it pays them every time. They come out of the
+# 1,000/hour GITHUB_TOKEN budget that every run in this repository shares, which a burst of pull
+# requests exhausts -- the jobs then fail on a 403 with nothing wrong in the code. Fetching the
+# release asset directly touches the CDN, not the REST API, and a cache hit skips even that. Caches
+# written by main runs are readable from every pull request branch, so a miss is rare.
+
 jobs:
   biome:
     runs-on: ubuntu-latest
+    env:
+      # Must match biome.json's $schema URL; the guard step below fails if the two drift apart.
+      BIOME_VERSION: "2.4.16"
+      BIOME_SHA256: "f6904c208ce8884cf859460178f32f885250b375da1810c551912a029f4abf79"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      # The version is autodetected from the $schema URL in biome.json.
-      - uses: biomejs/setup-biome@4c91541eaada48f67d7dbd7833600ce162b68f51  # v2.7.1
+
+      # biome.json is where the version is chosen; this job only mirrors it, so say so out loud
+      # rather than silently linting with a different biome than the editor uses.
+      - name: Check the pinned version still matches biome.json
+        run: |
+          schema=$(sed -n 's#.*biomejs\.dev/schemas/\([^/]*\)/.*#\1#p' biome.json)
+          if [ "$schema" != "$BIOME_VERSION" ]; then
+            echo "::error file=biome.json::biome.json asks for $schema, lint.yml pins $BIOME_VERSION"
+            exit 1
+          fi
+
+      - id: cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
+        with:
+          path: ~/.local/bin/biome
+          key: biome-${{ runner.os }}-${{ env.BIOME_VERSION }}
+
+      - if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          base=https://github.com/biomejs/biome/releases/download
+          tmp=$(mktemp -d)
+          curl -fsSL -o "$tmp/biome" "$base/@biomejs/biome@${BIOME_VERSION}/biome-linux-x64"
+          echo "${BIOME_SHA256}  $tmp/biome" | sha256sum -c -
+          mkdir -p ~/.local/bin
+          mv "$tmp/biome" ~/.local/bin/biome
+
+      - run: |
+          chmod +x ~/.local/bin/biome
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
       - run: biome ci
 
   rumdl:
@@ -50,6 +98,9 @@ jobs:
 
   mago:
     runs-on: ubuntu-latest
+    env:
+      MAGO_VERSION: "1.29.0"
+      MAGO_SHA256: "5e99d1232fa93e6adc6feaaddaf2b46c148b2990173cdcf18400b474646bf046"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -60,9 +111,28 @@ jobs:
           tools: composer
       # mago.toml extends the shared style config installed under vendor/, so install it first.
       - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
-      - uses: nhedger/setup-mago@473d3a2bfe0b32a62c8b910059d7f03a16519f2e  # v2.0.0
+
+      - id: cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
         with:
-          version: "1.29.0"
+          path: ~/.local/bin/mago
+          key: mago-${{ runner.os }}-${{ env.MAGO_VERSION }}
+
+      - if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          base=https://github.com/carthage-software/mago/releases/download
+          dir="mago-${MAGO_VERSION}-x86_64-unknown-linux-musl"
+          tmp=$(mktemp -d)
+          curl -fsSL -o "$tmp/mago.tar.gz" "$base/${MAGO_VERSION}/${dir}.tar.gz"
+          echo "${MAGO_SHA256}  $tmp/mago.tar.gz" | sha256sum -c -
+          tar -xzf "$tmp/mago.tar.gz" -C "$tmp"
+          mkdir -p ~/.local/bin
+          mv "$tmp/$dir/mago" ~/.local/bin/mago
+
+      - run: |
+          chmod +x ~/.local/bin/mago
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
       - run: mago format --check
       - run: mago lint
 

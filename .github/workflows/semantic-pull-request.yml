@@ -13,6 +13,13 @@ on:
 
 permissions: {}
 
+# Cancel a superseded run instead of finishing one for a commit nobody will merge. Keyed on the
+# pull request number rather than github.ref: under pull_request_target github.ref is the base
+# branch, so every pull request would land in one group and cancel the others.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
 jobs:
   semantic-pull-request:
     runs-on: ubuntu-latest
