@@ -457,12 +457,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><b><code>WikvenSettings.php</code></b>. The <code>LocalSettings.php</code> the build runs under: it loads the configuration, detects the image backend, and applies Wikven's defaults.</li>
 <li>The <b><code>bin/entrypoint</code></b> script and <b><code>Dockerfile</code></b>. They package MediaWiki 1.46 plus the extension into an image whose default command runs one build.</li></ul>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Building_the_image">Building the image</h2></div><section id="citizen-section-2" class="citizen-section">
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span>wikven<span class="w"> </span>.
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span>wikven<span class="w"> </span>.
 </pre></div>
 <p>The <code>Dockerfile</code> is <code>FROM mediawiki:1.46</code>. It adds Composer and unzip (needed when fetching third-party extensions), copies the extension into <code>/var/www/html/extensions/Wikven</code>, copies <code>WikvenSettings.php</code> into the MediaWiki root, and sets the <code>bin/entrypoint</code> script as the image's default command (<code>CMD</code>).
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Running_a_build">Running a build</h2></div><section id="citizen-section-3" class="citizen-section">
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/docs:/workspace/src"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>wikven
@@ -534,7 +534,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="./Development.html" title="This page was last edited on 15 August 2026, at 18:42." data-timestamp="1786819362"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="./Development.html" title="This page was last edited on 15 August 2026, at 19:01." data-timestamp="1786820485"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -705,7 +705,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 18:42.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 19:01.</div>
 		    </section>
 		</div>
 </footer>		</div>

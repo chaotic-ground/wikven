@@ -459,7 +459,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <hr/>
 <p>Create a source directory and add a wikitext file. Any file ending in <code>.wikitext</code> becomes a wiki article. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a browser opens at the site root.
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>src
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>src
 <span class="nb">echo</span><span class="w"> </span><span class="s1">'Hello, World!'</span><span class="w"> </span>><span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>Then build the site. The rendered pages are written to <code>dist/</code>. Pick the tab for how you run Wikven:
@@ -467,12 +467,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
 </p><p>Run it in the directory that holds <code>src/</code> (see <a href="./Installation.html#Binary" title="Special:MyLanguage/Installation">Installation</a> to get it):
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
 </pre></div>
 <p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
 </p><p>Mount the source and output directories into the container:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven
@@ -483,10 +483,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>Preview the site locally, then open <code><a rel="nofollow" class="external free" href="http://localhost:8080">http://localhost:8080</a></code>:
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
-</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
+</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
 </pre></div>
 <p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
-</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
+</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>serve
 </pre></div>
@@ -496,7 +496,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Setting_the_title_of_the_site">Setting the title of the site</h2></div><section id="citizen-section-1" class="citizen-section">
 <p>For configuration, create a <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code></a> file in your <code>src</code> directory.
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF > src/.wikven.yaml</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF > src/.wikven.yaml</span>
 <span class="s">config:</span>
 <span class="s">  Sitename: My Site</span>
 <span class="s">EOF</span>
@@ -506,7 +506,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Adding_a_second_page">Adding a second page</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>Every <code>.wikitext</code> file becomes a page. Add another one and link to it from the first with <code>[[...]]</code>:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'This is the help page.'</span><span class="w"> </span>><span class="w"> </span>src/Help.wikitext
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'This is the help page.'</span><span class="w"> </span>><span class="w"> </span>src/Help.wikitext
 <span class="nb">echo</span><span class="w"> </span><span class="s1">'Read the [[Help]].'</span><span class="w"> </span>>><span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>Build again: the home page now links to <code>Help.html</code>, and the link works with no server. See <a href="./Pages.html" title="Special:MyLanguage/Pages">Pages</a> for how file names map to page titles and namespaces.
@@ -514,7 +514,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Adding_a_template">Adding a template</h2></div><section id="citizen-section-3" class="citizen-section">
 <p>Templates, the main reason to reach for Wikven over Markdown, let you reuse content. Put a <code>Template:</code> page in your source and transclude it with <code>{{...}}</code>:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">"'''Note:''' {{{1}}}"</span><span class="w"> </span>><span class="w"> </span><span class="s2">"src/Template:Note.wikitext"</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">"'''Note:''' {{{1}}}"</span><span class="w"> </span>><span class="w"> </span><span class="s2">"src/Template:Note.wikitext"</span>
 <span class="nb">echo</span><span class="w"> </span><span class="s1">'{{Note|Back up your wiki first.}}'</span><span class="w"> </span>>><span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>Build again: the home page now shows the note. See <a href="./Pages.html#Templates" title="Special:MyLanguage/Pages">Pages#Templates</a> for parameters and more.
@@ -538,7 +538,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="./Getting_Started.html" title="This page was last edited on 15 August 2026, at 18:42." data-timestamp="1786819362"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="./Getting_Started.html" title="This page was last edited on 15 August 2026, at 19:01." data-timestamp="1786820485"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -619,7 +619,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 18:42.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 19:01.</div>
 		    </section>
 		</div>
 </footer>		</div>

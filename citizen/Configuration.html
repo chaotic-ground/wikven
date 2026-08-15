@@ -451,7 +451,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>The file name is flexible. Wikven accepts <code>.wikven.yaml</code>, <code>.wikven.yml</code> or <code>.wikven.json</code>, and the same three without the leading dot (<code>wikven.yaml</code>, <code>wikven.yml</code>, <code>wikven.json</code>); the <code>.json</code> forms use the same structure, since YAML is a superset of JSON. If more than one is present the first wins, in that order, and the rest are ignored with a warning, so a dotted name beats a plain one, YAML beats JSON, and <code>.yaml</code> beats <code>.yml</code>.
 </p><p>Wikven ships its own defaults (a sensible MediaWiki configuration for a static wiki) and loads your file on top of them, so anything you set here overrides the default. The defaults live in a <code>default.yml</code> that uses this same format; see <a href="#Defaults">#Defaults</a> below.
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SyntaxHighlight_GeSHi</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ParserFunctions</span>
 <span class="nt">skins</span><span class="p">:</span>
@@ -473,7 +473,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading3"><h3 id="WikvenLogos"><code>WikvenLogos</code></h3></div>
 <p>The site's header logos. It mirrors MediaWiki's <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgLogos" class="extiw" title="mw:Special:MyLanguage/Manual:$wgLogos">$wgLogos</a>, with the same keys (<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code>, and so on), except each value is the name of an image file in your source directory rather than a URL:
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">WikvenLogos</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logo.svg</span>
 </pre></div>
@@ -496,7 +496,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice.
 </p><p>Each entry chooses one of three methods by the key it carries:
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">WikvenRepositories</span><span class="p">:</span>
 <span class="w">    </span><span class="c1"># 1. A tarball, e.g. from Special:ExtensionDistributor, whose archive already</span>
 <span class="w">    </span><span class="c1">#    bundles the extension's dependencies. Add sha256 to verify the download.</span>
@@ -529,7 +529,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>Titles are kept as written (rather than first-letter-capitalized, MediaWiki's default) so the entry page can be the lowercase <code>index</code>, which the build writes as <code>index.html</code>, the file a static host serves at the site root. The file is otherwise commented; each comment notes why Wikven sets that value.
 </p><p>To see the current defaults, read the bundled <code>default.yml</code>. From the Docker image:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--entrypoint<span class="w"> </span>cat<span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>extensions/Wikven/default.yml
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--entrypoint<span class="w"> </span>cat<span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>extensions/Wikven/default.yml
 </pre></div>
 <p>It is also in the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/default.yml">repository</a>.
 </p>
@@ -552,7 +552,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="./Configuration.html" title="This page was last edited on 15 August 2026, at 18:42." data-timestamp="1786819362"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="./Configuration.html" title="This page was last edited on 15 August 2026, at 19:01." data-timestamp="1786820485"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -758,7 +758,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 18:42.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 19:01.</div>
 		    </section>
 		</div>
 </footer>		</div>

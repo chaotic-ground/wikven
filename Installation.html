@@ -538,7 +538,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading2"><h2 id="Binary">Binary</h2></div>
 <p>A single self-contained executable that embeds MediaWiki, for Linux on x86_64 and arm64. Download it and make it executable:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </pre></div>
 <p>On arm64, use <code>wikven-linux-aarch64</code>. See <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a> for installing it onto your <code>PATH</code>, nightly builds, and the optional host tools it uses.
@@ -546,14 +546,14 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 <div class="mw-heading mw-heading2"><h2 id="Docker">Docker</h2></div>
 <p>Works on any platform with <a rel="nofollow" class="external text" href="https://www.docker.com/">Docker</a>, so it is the option to use on macOS and Windows. The image is published to the GitHub Container Registry:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
 <p>The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Build_from_source">Build from source</h2></div>
 <p>To modify Wikven or run an unreleased commit, clone the repository and build the image yourself:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/chaotic-ground/wikven.git
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/chaotic-ground/wikven.git
 <span class="nb">cd</span><span class="w"> </span>wikven
 docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>wikven<span class="w"> </span>.
 </pre></div>
@@ -575,7 +575,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 18:42.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 19:01.</li>
 </ul>
 
 	<ul id="footer-places">

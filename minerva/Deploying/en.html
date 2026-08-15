@@ -227,13 +227,13 @@ Wikven
 </div>
 
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><a href="../Deploying.html" class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" title="Deploying (100% translated)" lang="en" dir="ltr">English</a></li>
-<li><a href="../Deploying/ko.html" class="mw-pt-progress mw-pt-progress--high" title="배포하기 (92% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="../Deploying/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="배포하기 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="GitHub_Pages">GitHub Pages</h2></div>
 <p>This workflow rebuilds and publishes the site on every push. It bakes the source with the Wikven <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/bake">composite action</a>, then uploads <code>dist/</code> to Pages.
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
 <span class="nt">on</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">push</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
@@ -271,11 +271,11 @@ Wikven
 <p>Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. Wikven has a built-in <code>serve</code> command for this.
 </p><p>With the <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">standalone binary</a>, it serves <code>dist/</code> on <code><a rel="nofollow" class="external free" href="http://localhost:8080">http://localhost:8080</a></code> (override with <code>--listen</code>):
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
 </pre></div>
 <p>With the Docker image, run the <code>serve</code> command and publish the port (the build output must already be in the mounted <code>dist/</code>):
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>serve
 </pre></div>
@@ -298,8 +298,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="FuzzyBot"
   				data-user-gender="unknown"
-  				data-timestamp="1786819362">
-  				<span>Last edited on 15 August 2026, at 18:42</span>
+  				data-timestamp="1786820485">
+  				<span>Last edited on 15 August 2026, at 19:01</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -322,7 +322,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 18:42.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 19:01.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
