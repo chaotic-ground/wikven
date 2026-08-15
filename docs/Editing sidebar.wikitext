@@ -4,7 +4,7 @@
 The navigation sidebar is configured the same way as on MediaWiki, through the <code>MediaWiki:Sidebar</code> system message. Create a <code>MediaWiki:Sidebar.wikitext</code> file in your source directory, alongside your other pages.
 
 <!--T:2-->
-Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the English wording goes in <code>MediaWiki:Sidebar-docs.wikitext</code> and the Korean in <code>MediaWiki:Sidebar-docs/ko.wikitext</code>, next to your other pages. This site's sidebar, for example:
+Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the English wording goes in <code>MediaWiki:Sidebar-docs.wikitext</code> and the Korean in <code>MediaWiki:Sidebar-docs/ko.wikitext</code>, next to your other pages. A sidebar then reads like this:
 </translate>
 
 <syntaxhighlight lang="wikitext" copy>
