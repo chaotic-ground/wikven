@@ -170,8 +170,10 @@ class Main implements
 			$path = rtrim($path, '/');
 		}
 		$path .= '/' . $this->styleDirectory;
-		if (!is_dir($path)) {
-			mkdir($path, 0777, true);
+		// Honours $wgDirectoryMode, tolerates a concurrent create (build.php renders one process per
+		// skin) and logs a real failure instead of printing a warning into the page.
+		if (!wfMkdirParents($path, null, __METHOD__)) {
+			return;
 		}
 		if (!file_exists("$path/$name.css")) {
 			touch("$path/$name.css");

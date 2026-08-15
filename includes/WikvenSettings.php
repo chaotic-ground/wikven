@@ -66,7 +66,9 @@ if ($wikvenWorkEnv !== false && $wikvenWorkEnv !== '') {
 	$wgCacheDirectory = "$wikvenCache/mw";
 	$wgTmpDirectory = "$wikvenCache/tmp";
 	foreach ([$wgUploadDirectory, $wgCacheDirectory, $wgTmpDirectory] as $wikvenDir) {
-		if (!is_dir($wikvenDir) && !mkdir($wikvenDir, 0777, true) && !is_dir($wikvenDir)) {
+		// Honours $wgDirectoryMode and re-checks is_dir() itself after a losing race, which the
+		// standalone binary can hit when two builds share one workdir.
+		if (!wfMkdirParents($wikvenDir, null, __FILE__)) {
 			throw new \RuntimeException("Wikven: could not create directory $wikvenDir");
 		}
 	}
