@@ -17,6 +17,9 @@ config:
   WikvenViewSourceUrl: https://github.com/chaotic-ground/wikven/blob/main/docs/$1
   WikvenLogos:
     icon: logo.svg
+  # The Khmer translation is the only page in a script most systems have no font for; bundling
+  # keeps it readable, and makes the bake exercise the path that produces webfonts.css.
+  WikvenBundleWebfonts: true
   # Search results have no thumbnails, so drop the empty thumbnail column from
   # the typeahead.
   VectorTypeahead:
