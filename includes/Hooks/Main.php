@@ -74,11 +74,17 @@ class Main implements
 
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
 		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
-		$action = wfCgiToArray($query)['action'] ?? null;
+		$params = wfCgiToArray($query);
+		$action = $params['action'] ?? null;
+		// A diff is history too. The export holds one revision of a page, so what changed is only
+		// in the repository, and a link asking to see it belongs where the history link goes:
+		// Citizen's "last modified" button asks for the latest diff ("diff" with no value), and
+		// without this it resolves to the page it is already on.
+		$wantsHistory = $action === 'history' || array_key_exists('diff', $params);
 		// For edit/history, $1 is the source filename so the link targets the editable file.
 		if ($action === 'edit' && $wgWikvenEditUrl) {
 			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenEditUrl);
-		} elseif ($action === 'history' && $wgWikvenHistoryUrl) {
+		} elseif ($wantsHistory && $wgWikvenHistoryUrl) {
 			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenHistoryUrl);
 		} else {
 			$url = "./$name.html";

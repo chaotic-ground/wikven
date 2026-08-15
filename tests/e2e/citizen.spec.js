@@ -93,6 +93,23 @@ test("Citizen's preferences panel loads and switches the theme", async ({
 	await expect(page.locator("html")).toHaveClass(/skin-theme-clientpref-night/);
 });
 
+test("Citizen's last-modified button leads to what changed", async ({
+	page,
+}) => {
+	await page.goto(PAGE);
+
+	// The skin asks for the latest diff, which an export holding one revision of a page cannot
+	// show; the repository can, and that is where the history link already goes. Left alone it
+	// resolves to the page it is already on.
+	const lastmod = page.locator("#citizen-lastmod-relative").first();
+	await expect(lastmod).toBeVisible();
+	const href = await lastmod.getAttribute("href");
+	expect(href).not.toMatch(/Installation\.html$/);
+	expect(href).toBe(
+		await page.locator("#ca-history a").first().getAttribute("href"),
+	);
+});
+
 test("a Citizen page gets everything it asks for, and asks no backend", async ({
 	page,
 }) => {
