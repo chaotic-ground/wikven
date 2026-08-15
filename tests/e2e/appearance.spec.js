@@ -83,3 +83,43 @@ test("width and text size are applied as chosen", async ({ page }) => {
 		.poll(() => clientPrefClasses(page))
 		.toContain("vector-feature-custom-font-size-clientpref-2");
 });
+
+test("hiding the menu leaves it reachable, and it can be put back", async ({
+	page,
+}) => {
+	await page.goto("index.html");
+	await page
+		.locator("#vector-appearance .vector-pinnable-header-unpin-button")
+		.click();
+
+	// Unpinning is itself a client preference, so the reader arrives at the next page with the
+	// menu already moved into the header dropdown -- the state this has to keep working in.
+	await page.reload();
+
+	// Vector lays a transparent checkbox over the dropdown's own label, so the click goes there.
+	await page.locator("#vector-appearance-dropdown-checkbox").click();
+	const menu = page.locator(
+		"#vector-appearance-unpinned-container #vector-appearance",
+	);
+	await expect(menu).toBeVisible();
+	await expect(menu.locator("input[type=radio]")).toHaveCount(8);
+
+	await page
+		.locator("#vector-appearance .vector-pinnable-header-pin-button")
+		.click();
+	await expect(
+		page.locator("#vector-appearance-pinned-container #vector-appearance"),
+	).toBeVisible();
+});
+
+test("the icons the JS bundle carries render", async ({ page }) => {
+	await page.goto("index.html");
+
+	// The bundle injects its own CSS, so its images are inlined as data: URIs rather than written
+	// out as files. A URI that lands in the unquoted url() malformed leaves a valid-looking button
+	// with a blank icon, which no layout or visibility assertion would catch.
+	const mask = await page
+		.locator("#vector-appearance-dropdown-label .vector-icon")
+		.evaluate((element) => getComputedStyle(element).maskImage);
+	expect(mask).toContain("data:image/svg+xml");
+});

@@ -14,10 +14,9 @@
   display: none;
 }
 
-// Wiki chrome that is meaningless on a static, read-only, single-language site:
-// the personal/preferences menu, the language switcher, and the watch action.
-.vector-user-links,
-#p-vector-user-menu-preferences,
+// Wiki chrome that is meaningless on a static, read-only, single-language site: the personal
+// menu, the language switcher, and the watch action. Vector's personal menu is a rule of its
+// own below, having to spare the appearance menu.
 // Citizen's, which also carries the language trigger the .mw-portlet-lang rule hides elsewhere.
 .citizen-userMenu,
 #p-lang-btn,
@@ -25,6 +24,15 @@
 .mw-watchlink,
 #ca-watch,
 #ca-unwatch {
+  display: none;
+}
+
+// Vector's user links are account chrome, with one exception: unpinning the appearance
+// menu ("hide") moves it into this nav, behind its dropdown button. Hiding the nav would
+// take the menu and its opener with it, leaving no way to get the menu back, so hide the
+// siblings instead.
+.vector-user-links > *:not(.vector-user-links-main),
+.vector-user-links-main > *:not(.vector-appearance-landmark) {
   display: none;
 }
 

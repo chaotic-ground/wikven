@@ -119,4 +119,37 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 			'left alone rather than inlined into the bundle'
 		);
 	}
+
+	/**
+	 * A real icon SVG carries attributes, so the inlined URI has spaces between them. CSSMin leaves
+	 * those bare because it quotes the url() it builds itself; the one emitted here is unquoted (a
+	 * quote inside a JS bundle's CSS string would need escaping), and a bare space makes the whole
+	 * declaration invalid -- the browser drops it and the icon renders blank.
+	 */
+	public function testLocalizeAssetsEncodesSpacesInInlinedAssets() {
+		$mwRoot = $this->getNewTempDirectory();
+		mkdir("$mwRoot/skins/Vector/images", 0777, true);
+		file_put_contents("$mwRoot/skins/Vector/images/icon.svg", '<svg width="20" height="20"/>');
+		$this->setMwGlobals('IP', $mwRoot);
+
+		$dir = $this->getNewTempDirectory();
+		$js = "$dir/modules-static.js";
+		file_put_contents($js, '.a{mask-image:url(/skins/Vector/images/icon.svg)}' . "\n");
+
+		$rl = $this->getServiceContainer()->getResourceLoader();
+		AssetLocalizer::localizeAssets($rl, $dir, [$js], 'en', 'vector', true);
+
+		$out = file_get_contents($js);
+		$this->assertSame(
+			1,
+			preg_match('~url\((data:[^)]*)\)~', $out, $m),
+			'the reference is still a single url()'
+		);
+		$this->assertStringNotContainsString(' ', $m[1], 'no bare space inside the url()');
+		$this->assertSame(
+			'<svg width="20" height="20"/>',
+			rawurldecode(substr($m[1], strlen('data:image/svg+xml,'))),
+			'and it still decodes back to the asset'
+		);
+	}
 }

@@ -93,9 +93,12 @@ class AssetLocalizer {
 	 *
 	 * CSSMin percent-encodes printable text (an SVG, typically) instead of base64-encoding it, which
 	 * is what ResourceLoader itself does for the same images when it inlines them into a CSS bundle.
+	 * It leaves the spaces bare though, because it quotes the url() it builds; here the URI goes in
+	 * unquoted (a quote inside a JS bundle's CSS string would have to be escaped), and a bare space
+	 * makes the whole declaration invalid, so put those back. Base64 output has none to put back.
 	 */
 	private static function dataUri(string $bytes, string $mime): string {
-		return CSSMin::encodeStringAsDataURI($bytes, $mime);
+		return str_replace(' ', '%20', CSSMin::encodeStringAsDataURI($bytes, $mime));
 	}
 
 	/**
