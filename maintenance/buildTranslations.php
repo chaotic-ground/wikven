@@ -92,9 +92,9 @@ class BuildTranslations extends Maintenance {
 		return true;
 	}
 
-	/** Report a page Translate refused, and answer prepare()'s "was it marked" with no. */
-	private function skipUnmarkable(Title $title, string $reason): bool {
-		$this->output("Wikven: {$title->getPrefixedText()} cannot be marked for translation ($reason); skipping\n");
+	/** Report a page Translate would not take, and answer prepare()'s "was it marked" with no. */
+	private function skipUnmarkable(Title $title, string $what, string $reason): bool {
+		$this->output("Wikven: {$title->getPrefixedText()} $what ($reason); skipping\n");
 		return false;
 	}
 
@@ -145,9 +145,9 @@ class BuildTranslations extends Maintenance {
 			$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
 			$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
 		} catch (ParsingFailure $failure) {
-			return $this->skipUnmarkable($title, $failure->getMessage());
+			return $this->skipUnmarkable($title, 'is not wikitext Translate can parse', $failure->getMessage());
 		} catch (TranslatablePageMarkException $failure) {
-			return $this->skipUnmarkable($title, $failure->getMessage());
+			return $this->skipUnmarkable($title, 'was refused for translation', $failure->getMessage());
 		}
 
 		// markForTranslation only queues the update job; run the queue so the source units exist
