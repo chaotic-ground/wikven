@@ -13,6 +13,12 @@ on:
 
 permissions: {}
 
+# Cancel superseded runs. Keyed on the pull request number, not github.ref: under
+# pull_request_target that is the base branch, so every pull request would share one group.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
 jobs:
   semantic-pull-request:
     runs-on: ubuntu-latest

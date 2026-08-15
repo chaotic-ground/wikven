@@ -21,6 +21,11 @@ permissions:
   contents: read
   packages: write
 
+# Cancel superseded runs; pushes to main (including release-please's workflow_call) are left alone.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest

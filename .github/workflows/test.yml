@@ -8,6 +8,11 @@ on:
 
 permissions: {}
 
+# Cancel superseded runs; pushes to main are left to finish, keeping a result per merged commit.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
 jobs:
   # Compile the Caddy plugin so a Go build error is caught on the PR, not later in the binary build.
   caddy:

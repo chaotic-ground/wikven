@@ -14,6 +14,11 @@ on:
 
 permissions: {}
 
+# Cancel superseded runs; pushes to main are left to finish, keeping a result per merged commit.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
 jobs:
   plan:
     runs-on: ubuntu-latest
