@@ -1,5 +1,6 @@
-# Base images are digest-pinned for reproducible builds and version-tagged so Dependabot's bumps
-# read as version numbers rather than digests. Dependabot keeps them current.
+# Base images are digest-pinned and version-tagged so Dependabot's bumps read as version numbers
+# rather than digests. Dependabot keeps them current. The pin fixes the base images alone: apk,
+# codeload and Packagist below are all read at build time, so the image is not reproducible.
 FROM composer:2.10.2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040 AS composer
 
 # The alpine variant, because nothing here serves over HTTP: `build` runs a maintenance script and
@@ -21,7 +22,7 @@ RUN apk add --no-cache rsvg-convert imagemagick-jpeg imagemagick-webp
 # SifterSearch (client-side Pagefind search) ships built in. Its release tarball carries the
 # per-arch Pagefind binary a git clone omits, so fetch the one matching this build's architecture.
 ARG TARGETARCH
-# renovate: datasource=github-releases depName=chaotic-ground/SifterSearch
+# Bumped by updatecli, see updatecli/updatecli.d/siftersearch.yaml; no package manager reads this.
 ARG SIFTERSEARCH_VERSION=v0.6.1
 RUN arch="$TARGETARCH" \
  && if [ "$arch" = amd64 ]; then arch=x64; fi \
