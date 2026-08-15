@@ -23,6 +23,13 @@ class BuildScripts extends Maintenance {
 	/** Per-user / styles-only modules that have no place in the static JS bundle. */
 	private const SKIP_MODULES = ['site.styles', 'user', 'user.styles', 'user.options'];
 
+	/**
+	 * Modules pulled in at run time rather than queued by the page that needs them, so nothing in
+	 * the rendered HTML names them and collectPageModules() cannot find them. TabberNeue loads its
+	 * arrow icons the moment it finds a tabber. Unseeded, the browser asks load.php and gets a 404.
+	 */
+	private const RUNTIME_MODULES = ['ext.tabberNeue.icons'];
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Dump the static JS bundle (startup + module closure) for the generated pages.');
@@ -55,6 +62,22 @@ class BuildScripts extends Maintenance {
 				$seeds[] = $searchModule;
 			}
 		}
+		// Same for Citizen's preferences panel (theme, font size, page width), lazy-loaded when the
+		// dropdown is first opened. Seeding it is what makes the panel work statically; unseeded it
+		// reports "Couldn't load preferences". Vue and its Codex components come along with it.
+		$preferences = 'skins.citizen.preferences';
+		if (
+			$wgDefaultSkin === 'citizen'
+			&& ( $GLOBALS['wgCitizenEnablePreferences'] ?? false )
+			&& $rl->isModuleRegistered($preferences)
+		) {
+			$seeds[] = $preferences;
+		}
+		foreach (self::RUNTIME_MODULES as $runtimeModule) {
+			if ($rl->isModuleRegistered($runtimeModule)) {
+				$seeds[] = $runtimeModule;
+			}
+		}
 		// 2. Expand to the full dependency closure, plus the implicit base modules.
 		$closure = $this->resolveClosure($rl, $seeds, $wgLanguageCode, $wgDefaultSkin);
 
@@ -70,7 +93,7 @@ class BuildScripts extends Maintenance {
 		// Combined bundle embeds icon CSS pointing at load.php images. The bundle injects its CSS
 		// into the document, so url()s resolve against the page; inline the images as data: URIs
 		// so they load from any page depth (subpages like index/ko.html) and base path.
-		AssetLocalizer::localizeImages(
+		AssetLocalizer::localizeAssets(
 			$rl,
 			$outDir,
 			["$outDir/modules-static.js", "$outDir/startup-static.js"],

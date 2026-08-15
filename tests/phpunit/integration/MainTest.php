@@ -57,6 +57,29 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * A diff goes where the history goes. The export holds one revision of a page, so what changed
+	 * is only in the repository: Citizen's "last modified" button asks for the latest diff, with a
+	 * "diff" parameter carrying no value, and would otherwise resolve to the page it is already on.
+	 *
+	 * @dataProvider provideDiffQueries
+	 */
+	public function testDiffLinksGoToTheHistory(string $query) {
+		$this->overrideConfigValue('WikvenHistoryUrl', 'https://repo/history/$1');
+		$title = Title::newFromText('Getting Started');
+
+		$url = '/x';
+		$this->main()->onGetLocalURL($title, $url, $query);
+		$this->assertSame('https://repo/history/Getting%20Started.wikitext', $url);
+	}
+
+	public static function provideDiffQueries() {
+		return [
+			"Citizen's latest diff" => ['diff='],
+			'a diff between revisions' => ['diff=1234&oldid=1233']
+		];
+	}
+
+	/**
 	 * With no edit URL configured, even an action=edit link falls back to the
 	 * static page rather than a dead query string.
 	 */
@@ -64,6 +87,14 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$title = Title::newFromText('Getting Started');
 		$url = '/x';
 		$this->main()->onGetLocalURL($title, $url, 'action=edit');
+		$this->assertSame('./Getting_Started.html', $url);
+	}
+
+	/** And with no history URL, a diff link is a page link rather than a dead query string. */
+	public function testDiffFallsBackWithoutUrl() {
+		$title = Title::newFromText('Getting Started');
+		$url = '/x';
+		$this->main()->onGetLocalURL($title, $url, 'diff=');
 		$this->assertSame('./Getting_Started.html', $url);
 	}
 }

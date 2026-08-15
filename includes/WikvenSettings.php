@@ -216,6 +216,11 @@ $wgDefaultSkin = $wgWikvenMainSkin;
 $wikvenBuildSkin = getenv('WIKVEN_BUILD_SKIN');
 if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, true)) {
 	$wgDefaultSkin = $wikvenBuildSkin;
+	// Source images are uploaded by the pass that populates the wiki, so by the time a skin
+	// renders there is nothing left to upload -- and an "Upload file" link in the rendered
+	// chrome would point at a Special: page the export does not have. Citizen's is the visible
+	// one: it moves the entry out of the toolbox (which Hider empties) into the sidebar.
+	$wgEnableUploads = false;
 	if ($wikvenBuildSkin !== $wgWikvenMainSkin) {
 		$wgWikvenHtmlDirectory = "$wikvenDist/$wikvenBuildSkin";
 		$wgFileCacheDirectory = $wgWikvenHtmlDirectory;
@@ -240,8 +245,19 @@ foreach ($config['extensions'] ?? [] as $extension) {
 // module and font files from load.php, which a static export cannot serve. Turn its runtime
 // webfonts off; when $wgWikvenBundleWebfonts is set, maintenance/bakeWebfonts.php instead bakes
 // the same fonts into a static stylesheet (see includes/Webfonts/FontRepository.php).
+// Its input methods go the same way: focusing any text input -- the search box, most visibly --
+// has the browser fetch ext.uls.ime and jquery.ime from load.php. Nothing in an export takes
+// typed input anywhere, so there is nothing for a transliteration keyboard to type into.
 if (in_array('UniversalLanguageSelector', $config['extensions'], true)) {
 	$GLOBALS['wgULSWebfontsEnabled'] = false;
+	$GLOBALS['wgULSIMEEnabled'] = false;
+}
+
+// Citizen points its web app manifest at api.php, which the export has no server for: the tag
+// would carry the build host's own URL ("http://localhost:4000/api.php?action=appmanifest") into
+// every page. Nothing else in the skin depends on the manifest.
+if (in_array('citizen', $wgWikvenSkins, true)) {
+	$GLOBALS['wgCitizenEnableManifest'] = false;
 }
 
 // SifterSearch ships built in; default its Pagefind index into the build's dist dir, unless the

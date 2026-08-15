@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SourceFile;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
@@ -73,11 +74,17 @@ class Main implements
 
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
 		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
-		$action = wfCgiToArray($query)['action'] ?? null;
+		$params = wfCgiToArray($query);
+		$action = $params['action'] ?? null;
+		// A diff is history too. The export holds one revision of a page, so what changed is only
+		// in the repository, and a link asking to see it belongs where the history link goes:
+		// Citizen's "last modified" button asks for the latest diff ("diff" with no value), and
+		// without this it resolves to the page it is already on.
+		$wantsHistory = $action === 'history' || array_key_exists('diff', $params);
 		// For edit/history, $1 is the source filename so the link targets the editable file.
 		if ($action === 'edit' && $wgWikvenEditUrl) {
 			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenEditUrl);
-		} elseif ($action === 'history' && $wgWikvenHistoryUrl) {
+		} elseif ($wantsHistory && $wgWikvenHistoryUrl) {
 			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenHistoryUrl);
 		} else {
 			$url = "./$name.html";
@@ -94,6 +101,8 @@ class Main implements
 	 * @inheritDoc
 	 */
 	public function onSetupAfterCache(): void {
+		$this->restoreCitizenSearchWiring();
+
 		$wikvenLogos = $this->config->get('WikvenLogos');
 		if (!is_array($wikvenLogos) || $wikvenLogos === []) {
 			return;
@@ -121,6 +130,41 @@ class Main implements
 			}
 		}
 		$GLOBALS['wgLogos'] = $logos;
+	}
+
+	/**
+	 * Let core wire up Citizen's search box again, so SifterSearch's typeahead reaches it.
+	 *
+	 * Citizen sets SkinPageReadyConfig's "search" to false, because its own search is the command
+	 * palette rather than the box core would attach to. An export has no backend for the palette,
+	 * so rewriteScripts leaves the plain form the skin renders underneath it standing instead --
+	 * and that form is what core's wiring, and through it the Pagefind typeahead SifterSearch
+	 * substitutes, attaches to. Everything else the flag governs is the box we are keeping.
+	 *
+	 * Registered at run time rather than in extension.json because order decides this: handlers
+	 * declared there run in load order, and wikven loads before the skins do, so a handler of ours
+	 * would be overruled by Citizen's. HookContainer::register() appends after every extension and
+	 * skin handler, which is the only place a correction can sit.
+	 */
+	private function restoreCitizenSearchWiring(): void {
+		if (!Search::isActive()) {
+			return;
+		}
+		MediaWikiServices::getInstance()
+			->getHookContainer()
+			->register('SkinPageReadyConfig', [$this, 'enableCitizenSearch']);
+	}
+
+	/**
+	 * Turn core's search wiring back on, for Citizen alone.
+	 *
+	 * @internal Registered as a hook handler by restoreCitizenSearchWiring(); public so that it is
+	 *   callable, and so that what it decides can be asserted without a hook run around it.
+	 */
+	public function enableCitizenSearch(Context $context, array &$config): void {
+		if ($context->getSkin() === 'citizen') {
+			$config['search'] = true;
+		}
 	}
 
 	/**

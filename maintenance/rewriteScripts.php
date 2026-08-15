@@ -25,7 +25,7 @@ class RewriteScripts extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenScriptDirectory, $wgWikvenStyleDirectory;
+		global $wgWikvenHtmlDirectory, $wgWikvenScriptDirectory, $wgWikvenStyleDirectory, $wgDefaultSkin;
 
 		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
 		$prefix = './' . rtrim($wgWikvenScriptDirectory, '/');
@@ -41,6 +41,8 @@ class RewriteScripts extends Maintenance {
 
 		// With SifterSearch the static Pagefind bundle keeps the native search box working, so keep it.
 		$sifterEnabled = Search::isActive();
+		$isCitizen = $wgDefaultSkin === 'citizen';
+		$citizenSearchWorks = Search::hasResultsPage();
 
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);
@@ -133,6 +135,10 @@ class RewriteScripts extends Maintenance {
 				$html = str_replace(' skin-vector-search-vue', '', $html);
 			}
 
+			if ($isCitizen) {
+				$html = $this->citizenSearch($html, $citizenSearchWorks);
+			}
+
 			// Remove the appearance menu: its widgets pull codex+vue from load.php, which 404s statically.
 			$html = HtmlElementRemover::remove($html, static function ($unusedName, array $attrs) {
 				return ( $attrs['id'] ?? null ) === 'vector-appearance';
@@ -140,6 +146,27 @@ class RewriteScripts extends Maintenance {
 
 			file_put_contents($file, $html, LOCK_EX);
 		}
+	}
+
+	/**
+	 * Leave Citizen with the search its no-JS fallback gives it, or with none at all.
+	 *
+	 * Citizen's own search is a command palette backed by the REST API, which an export has no
+	 * server for. Underneath it the skin renders an ordinary search form, meant for readers without
+	 * JavaScript, and that one works: SifterSearch's ext.sifter.retarget points it at the static
+	 * results page. commandPalette.js deletes that form the moment it finds its trigger by id, so
+	 * dropping the id is what leaves the working search standing. Where the form leads nowhere --
+	 * no SifterSearch, or no results page for it to be retargeted at, Citizen having no typeahead
+	 * to carry the submit instead -- the whole box goes, as Vector's does above.
+	 */
+	private function citizenSearch(string $html, bool $searchWorks): string {
+		if ($searchWorks) {
+			return str_replace('id="citizen-search-summary"', '', $html);
+		}
+		return HtmlElementRemover::remove($html, static function ($unusedName, array $attrs) {
+			$classes = isset($attrs['class']) ? preg_split('/\s+/', trim($attrs['class'])) : [];
+			return in_array('citizen-search', $classes, true);
+		});
 	}
 
 	/**

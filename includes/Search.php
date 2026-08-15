@@ -21,4 +21,16 @@ class Search {
 			&& (string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' ) !== ''
 		);
 	}
+
+	/**
+	 * Whether submitting a plain search form reaches results.
+	 *
+	 * SifterSearch retargets the skin's form at its results page, and only when one is configured
+	 * (it is not by default). Skins whose box is wired up by the on-focus typeahead do not care:
+	 * that module takes the submit to the top Pagefind result instead. A skin left with nothing
+	 * but the form -- Citizen, whose own search is its command palette -- has only this path.
+	 */
+	public static function hasResultsPage(): bool {
+		return self::isActive() && (string)( $GLOBALS['wgSifterSearchResultsPage'] ?? '' ) !== '';
+	}
 }

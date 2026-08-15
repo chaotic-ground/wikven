@@ -85,7 +85,7 @@ class BuildStyles extends Maintenance {
 		}
 
 		// Dumped CSS points icons at load.php images that 404 on static hosts; localize them.
-		AssetLocalizer::localizeImages(
+		AssetLocalizer::localizeAssets(
 			$resourceLoader,
 			$cssDir,
 			glob("$cssDir/*.css"),

@@ -15,10 +15,10 @@ const KOREAN_HEADING = "시작하기";
 
 // What each skin puts the toolbox behind, where it takes a control to reveal.
 // Vector and Minerva both disclose with a transparent checkbox laid over its own
-// label, so a click aimed at the label lands on the checkbox; Citizen uses <details>.
+// label, so a click aimed at the label lands on the checkbox. Citizen is not here:
+// its list moves into the preferences panel, and is followed by choosePreference().
 const OPENERS = {
 	"vector-2022": "#vector-page-tools-dropdown-checkbox",
-	citizen: "#citizen-page-more-dropdown summary",
 	timeless: null,
 	minerva: "#page-actions-overflow-checkbox",
 };
@@ -81,7 +81,30 @@ const revealTools = async (page, skin) => {
 // returning the response so a test can assert the page was actually served.
 // The sidebar skins wrap the anchor in a list item wider than itself, so a click
 // on the entry can land beside the link; Minerva's entry is the anchor already.
+// Citizen's chooser is a Codex select in the preferences panel. Its options carry each
+// skin's display name in the page's own language, so they are picked by position, which
+// is the order of the entries the chooser was built from. That the right name is on the
+// right option is citizen.spec.js's assertion, not this file's; here it is the journey.
+const choosePreference = async (page, to) => {
+	await page.locator(".citizen-preferences-dropdown summary").click();
+	const field = page.locator(".cdx-field").filter({ hasText: "Skin" });
+	await field.waitFor({ timeout: 15000 });
+	await field.locator(".cdx-select-vue__handle").click();
+	return field.locator(".cdx-menu-item").nth(order.indexOf(to));
+};
+
 const chooseSkin = async (page, from, to) => {
+	if (from === "citizen") {
+		const option = await choosePreference(page, to);
+		const navigation = page.waitForResponse((response) =>
+			response.request().isNavigationRequest(),
+		);
+		await option.click();
+		const response = await navigation;
+		await page.waitForLoadState("domcontentloaded");
+		return response;
+	}
+
 	await revealTools(page, from);
 	const item = entry(page, to);
 	const anchor = item.locator("a");
@@ -104,6 +127,8 @@ const expectKoreanArticle = async (page) => {
 // follow docs/.wikven.yml rather than restating it.
 let main;
 let others;
+// The order the skins are listed in, which every skin's copy of the list shares.
+let order;
 
 test.beforeAll(async ({ browser }) => {
 	const page = await browser.newPage();
@@ -111,6 +136,7 @@ test.beforeAll(async ({ browser }) => {
 	const listed = await skinsOn(page);
 	main = listed.find((s) => s.current)?.skin;
 	others = listed.filter((s) => !s.current).map((s) => s.skin);
+	order = listed.map((s) => s.skin);
 	await page.close();
 });
 

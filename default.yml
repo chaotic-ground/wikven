@@ -56,6 +56,13 @@ config:
   # description pages too, without dumping every Template:/MediaWiki: page.
   ContentNamespaces: [0, 6]
 
+  # Count every content page, rather than only those carrying an internal link
+  # (MediaWiki's default, "link"). That rule exists to keep stubs out of a live
+  # wiki's article count; here it silently counts nothing, because a translated
+  # site links through Special:MyLanguage/, and links to a special page are not
+  # recorded. This is what {{NUMBEROFARTICLES}} and a skin's page count read.
+  ArticleCountMethod: any
+
   # The static export runs its own jobs and ships its own module bundle.
   JobRunRate: 0
   ResourceLoaderStorageEnabled: false

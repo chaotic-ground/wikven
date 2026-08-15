@@ -4,6 +4,8 @@ namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\Hooks\Main;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Request\FauxRequest;
+use MediaWiki\ResourceLoader\Context;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -85,5 +87,30 @@ class MainSetupAfterCacheTest extends MediaWikiIntegrationTestCase {
 		$this->setMwGlobals('wgLogos', ['wordmark' => '/existing.svg']);
 		$this->main()->onSetupAfterCache();
 		$this->assertSame('/existing.svg', $GLOBALS['wgLogos']['wordmark']);
+	}
+
+	/**
+	 * Citizen turns core's search wiring off, because its own search is the command palette; the
+	 * export keeps the plain form the skin renders under it, and that is what the wiring attaches
+	 * to. Only Citizen's answer is corrected, so no other skin's choice is disturbed.
+	 *
+	 * @dataProvider provideSearchWiringSkins
+	 */
+	public function testCitizenSearchWiringIsRestored(string $skin, ?bool $expected) {
+		$resourceLoader = $this->getServiceContainer()->getResourceLoader();
+		$context = new Context($resourceLoader, new FauxRequest(['skin' => $skin]));
+
+		$config = ['search' => false, 'searchModule' => 'ext.sifter'];
+		$this->main()->enableCitizenSearch($context, $config);
+
+		$this->assertSame($expected, $config['search']);
+		$this->assertSame('ext.sifter', $config['searchModule'], 'the module chosen is left alone');
+	}
+
+	public static function provideSearchWiringSkins() {
+		return [
+			'citizen' => ['citizen', true],
+			'another skin keeps its own answer' => ['vector-2022', false]
+		];
 	}
 }
