@@ -132,9 +132,17 @@ class StalenessComputer {
 	 */
 	private static function sourcePageUnits(string $text): array {
 		$blocks = self::blockRanges($text);
-		return self::unitsAt($text, static function (int $offset) use ($blocks): bool {
-			return self::containingRange($offset, $blocks) !== null;
-		});
+		return self::unitsAt(
+			$text,
+			static function (int $offset) use ($blocks): bool {
+				return self::containingRange($offset, $blocks) !== null;
+			},
+			// Translate segments each block's contents on their own, so no unit outlives its block.
+			static function (int $offset) use ($text, $blocks): int {
+				$block = self::containingRange($offset, $blocks);
+				return $block === null ? strlen($text) : $block[1];
+			}
+		);
 	}
 
 	/**
@@ -143,9 +151,10 @@ class StalenessComputer {
 	 *
 	 * @param string $text
 	 * @param callable(int):bool $keep
+	 * @param ?callable(int):int $limit Offset a unit marked there may not run past, if it is bounded.
 	 * @return array<string,array{hash:?string,text:string}>
 	 */
-	private static function unitsAt(string $text, callable $keep): array {
+	private static function unitsAt(string $text, callable $keep, ?callable $limit = null): array {
 		$pattern = '/<!--T:(?<id>[A-Za-z0-9]+)(?:\s+@(?<hash>[0-9a-f]{' . self::HASH_LENGTH . '}))?\s*-->/';
 		if (!preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
 			return [];
@@ -164,6 +173,9 @@ class StalenessComputer {
 			$marker = $markers[$i];
 			$bodyStart = $marker[0][1] + strlen($marker[0][0]);
 			$bodyEnd = ( $i + 1 ) < $count ? $markers[$i + 1][0][1] : strlen($text);
+			if ($limit !== null) {
+				$bodyEnd = min($bodyEnd, $limit($marker[0][1]));
+			}
 			// An unstamped marker (source page, or a not-yet-stamped translation) has no hash group.
 			$stamped = isset($marker['hash']) && $marker['hash'][1] !== -1;
 			$units[$marker['id'][0]] = [

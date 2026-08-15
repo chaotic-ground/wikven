@@ -29,7 +29,7 @@
 <!--T:8 @3521a8e6-->
 다음 기능은 실제로 구동 중인 위키가 있어야 하므로 정적 내보내기에는 포함되지 않습니다:
 
-<!--T:9 @5cacf909-->
+<!--T:9 @5ff4af8e-->
 * 모든 특수 문서
 * 모든 편집기 ({{ml|Extension:WikiEditor|WikiEditor}}, <!--
 -->{{ml|Extension:VisualEditor|시각편집기}}, {{ml|Extension:CodeEditor|CodeEditor}})

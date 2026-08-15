@@ -7,7 +7,7 @@
 <!--T:2 @c6a2b946-->
 == 번역 활성화하기 ==
 
-<!--T:3 @75ded9e6-->
+<!--T:3 @0b8a17f5-->
 [[$1|<code>.wikven.yaml</code>]]의 <code>extensions</code>에 <code>Translate</code>를 추가하고, Translate가 의존하는 <code>UniversalLanguageSelector</code>도 함께 추가합니다. 둘 다 {{SITENAME}} 이미지에 번들되어 있으므로 설치할 것은 없습니다.
 
 <!--T:4 @4641fec3-->
@@ -19,10 +19,10 @@
 <!--T:6 @5e0ff01d-->
 == 번역할 문서 표시하기 ==
 
-<!--T:7 @15579da2-->
+<!--T:7 @c817f09b-->
 문서에서 번역해야 할 부분을 <code><nowiki><translate></nowiki></code> 태그로 감싸고, 언어 막대를 두고 싶은 곳에 <code><nowiki><languages/></nowiki></code>를 추가하며, 각 단위에 <code><nowiki><!--T:n--></nowiki></code> 표시자를 붙입니다. 이는 Translate 자체의 {{ml|Help:Extension:Translate/Page translation administration|문서 번역 마크업}}입니다:
 
-<!--T:8 @306e0b25-->
+<!--T:8 @90849f36-->
 단위 번호를 손으로 매기지 않습니다. 내용을 <code><nowiki><translate></nowiki></code>로 감싸고 <code><nowiki><languages/></nowiki></code>를 추가한 다음, <code>translate mark</code>를 실행하여 <code><nowiki><!--T:n--></nowiki></code> 표시자를 삽입합니다. 이때 소스 디렉터리를 쓰기 가능하게 마운트합니다:
 
 <!--T:9 @91d58e1f-->
@@ -31,13 +31,13 @@
 <!--T:10 @70fd32d3-->
 == 번역 추가하기 ==
 
-<!--T:11 @d0913d36-->
+<!--T:11 @5c928d59-->
 번역은 문서 옆에 <code><Page>/<lang>.wikitext</code>라는 이름으로 자리합니다. <code>Intro.wikitext</code>의 한국어 번역은 <code>Intro/ko.wikitext</code>입니다. <code>translate scaffold</code>로 그 골격을 생성하는데, 이는 모든 원본 단위에 대해 빈 <code><nowiki><!--T:n--></nowiki></code> 표시자를 쓰고 각 단위의 원본 텍스트를 안내로 나열합니다:
 
 <!--T:12 @e1cb2e56-->
 파일 대신 <code>--all</code>을 전달하면 번역할 수 있는 모든 문서의 골격을 생성합니다. 다시 실행해도 안전합니다. 번역해 둔 것은 유지하고 새 단위에 대한 표시자만 덧붙입니다.
 
-<!--T:13 @09ecbb46-->
+<!--T:13 @63a6d08f-->
 그런 다음 각 단위의 번역을 그 표시자 아래에 채웁니다:
 
 <!--T:14 @9b71c402-->
@@ -49,7 +49,7 @@
 <!--T:23 @37a3aeb4-->
 문서의 제목도 하나의 단위이며, 예약된 표시자 <code>&lt;!--T:title--&gt;</code>를 씁니다. 이 단위만은 문서 위키텍스트의 일부가 아닙니다. 원본 텍스트가 문서 자신의 제목이므로, 원본 문서에는 아무것도 덧붙지 않고 원본 언어로 쓴 문서는 그대로 렌더링됩니다. 이는 Translate 자체의 문서 표시 제목이며, {{SITENAME}}은 표시자만 더 짧게 씁니다.
 
-<!--T:24 @d57114dd-->
+<!--T:24 @44a75230-->
 번역한 제목은 번역 파일 맨 위, 번호가 붙은 단위들보다 앞에 씁니다. <code>translate scaffold</code>가 표시자를 두는 자리와 같습니다:
 
 <!--T:25 @d4e35b40-->
@@ -61,7 +61,7 @@
 <!--T:15 @a3b9b134-->
 == 스탬프 찍기 ==
 
-<!--T:16 @7a781010-->
+<!--T:16 @716cb144-->
 번역을 마친 뒤 <code>translate stamp</code>를 실행하면, 최신 상태인 모든 단위가 자신이 일치하는 원본 버전을 기록합니다. 소스 디렉터리를 쓰기 가능하게 마운트합니다:
 
 <!--T:17 @e7d1ca2a-->
@@ -73,7 +73,7 @@
 <!--T:19 @681329ba-->
 원본 단위를 바꾸면 그 번역은 더 이상 스탬프와 일치하지 않아 '''오래된''' 상태가 됩니다. {{SITENAME}}은 이를 숨기지 않습니다:
 
-<!--T:20 @b32e5f00-->
+<!--T:20 @3e7dc6a9-->
 * 빌드된 사이트에서, 오래된 단위는 Translate를 구동하는 위키에서와 똑같이 오래된 번역으로 표시됩니다.
 * <code>translate check</code>는 오래되었거나 누락된 모든 번역을 보고하며, <code>--gate</code>를 주면 0이 아닌 코드로 종료하여 지속적 통합이 빌드를 실패시킬 수 있습니다:
 
