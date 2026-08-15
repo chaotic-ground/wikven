@@ -69,6 +69,32 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		( new Adder() )->onBeforePageDisplay($out, $skin);
 	}
 
+	/**
+	 * The toolbox holds the skin list and nothing else, so its heading is renamed. Vector 2022
+	 * labels that menu with a key of its own, so core's key alone would leave it reading "General".
+	 */
+	public function testToolboxHeadingNamesTheSkinList() {
+		$this->overrideConfigValue('WikvenSkins', ['vector-2022', 'citizen']);
+
+		$keys = [];
+		( new Adder() )->onMessageCacheFetchOverrides($keys);
+
+		$this->assertSame(
+			['toolbox' => 'wikven-skins-label', 'vector-page-tools-general-label' => 'wikven-skins-label'],
+			$keys
+		);
+	}
+
+	/** One skin puts nothing in the toolbox, so the heading is left alone. */
+	public function testToolboxHeadingKeptForASingleSkin() {
+		$this->overrideConfigValue('WikvenSkins', ['vector-2022']);
+
+		$keys = [];
+		( new Adder() )->onMessageCacheFetchOverrides($keys);
+
+		$this->assertSame([], $keys);
+	}
+
 	private function skin(): Skin {
 		$skin = $this->createMock(Skin::class);
 		$skin->method('msg')->willReturnCallback(static function (string $key, ...$params) {
