@@ -57,12 +57,17 @@ Wikimedia\Timestamp\ConvertibleTimestamp::setFakeTime($wikvenEpoch);
 // attempt; the Retrier hook handler sees to that.
 $wgMainCacheType = CACHE_DB;
 
-// The parser cache, though, has to go. A build keeps changing the wiki under itself: pages are
-// marked for translation, units are written, jobs settle stats. A parse made before that finished
-// stays valid as far as the cache is concerned, so the render pass served one and baked a
-// <languages/> bar short of the languages that landed after it. Which pages that hit moved with
-// the job order, so two bakes of the same source disagreed. Every page here is parsed a fixed
-// number of times and thrown away, so the cache was buying little to begin with.
+// The parser cache, though, cannot be left on, because the frozen clock below disables the only
+// thing that would invalidate it. CacheTime::expired() asks whether getCacheTime() < page_touched,
+// strictly, and setFakeTime gives a parse and the edit that follows it the same timestamp. So a
+// parse taken while the build is still changing the wiki, which it does all through
+// buildTranslations, never looks stale. freezePageTouched() then writes page_touched back to a
+// constant in the past, so the skin passes cannot expire anything either. The symptom was a
+// <languages/> bar baked short of the languages that landed after the parse it was served from.
+//
+// This costs the passes the cache was paying for: every page is parsed once per skin now, plus
+// once more per translated page for RetranslateChrome, rather than once per bake. On the wikis
+// this builds that is inside the noise; on one with heavy templates it would not be.
 $wgParserCacheType = CACHE_NONE;
 
 // Let pages opt out of indexing with __NOINDEX__ in any namespace.

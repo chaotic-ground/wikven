@@ -90,6 +90,28 @@ jobs:
                 test -f "dist/$ref" || { echo "::error::webfonts.css references missing $ref"; exit 1; }
               done
 
+          # Every <languages/> bar must list every language the source has, on every copy of the
+          # page. A page with N languages is emitted N+1 times (X.html plus X/<lang>.html) and each
+          # carries N entries, so the target comes from the source tree rather than a fixed number.
+          # This is the shape #333 broke: bars came out short, silently, and differently per bake.
+          expected=0
+          for f in src/*.wikitext; do
+            grep -q '<languages */>' "$f" || continue
+            base=$(basename "$f" .wikitext)
+            langs=1
+            if [ -d "src/$base" ]; then
+              langs=$(( langs + $(ls "src/$base"/*.wikitext 2>/dev/null | wc -l) ))
+            fi
+            expected=$(( expected + langs * ( langs + 1 ) ))
+          done
+          # Once per skin the site renders: the default plus the two docs/.wikven.yml adds.
+          expected=$(( expected * 3 ))
+          found=$(find dist -name '*.html' -exec grep -ho 'mw-pt-progress--' {} + | wc -l)
+          if [ "$found" -ne "$expected" ]; then
+            echo "::error::$found language-bar entries across dist, expected $expected"
+            exit 1
+          fi
+
           echo "Smoke checks passed."
 
       # Node.js is preinstalled on the runner; no setup-node (its caching trips
