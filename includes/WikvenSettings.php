@@ -87,9 +87,17 @@ unset($wgFooterIcons['poweredby']);
 
 // Detect image backend at run time; SVG never via ImageMagick (IM7 lacks `convert`).
 $wikvenFindExe = static function (array $names) {
+	// Core's own environment checks locate the very same binaries with this, so the two agree on where
+	// they are: it splits PATH on PATH_SEPARATOR and also searches the standard bin directories a
+	// stripped-down PATH omits (/usr/local/bin, /opt/csw/bin, ...). It reaches nothing but getenv() and
+	// is_executable() at this point, so it is safe this early; guarded anyway, since LocalSettings runs
+	// before the extension can assume anything about the core it was dropped into.
+	if (class_exists(\MediaWiki\Utils\ExecutableFinder::class)) {
+		return \MediaWiki\Utils\ExecutableFinder::findInDefaultPaths($names) ?: null;
+	}
 	$path = getenv('PATH') ?: '/usr/local/bin:/usr/bin:/bin';
 	foreach ($names as $name) {
-		foreach (explode(':', $path) as $dir) {
+		foreach (explode(PATH_SEPARATOR, $path) as $dir) {
 			if ($dir !== '' && is_executable(rtrim($dir, '/') . '/' . $name)) {
 				return rtrim($dir, '/') . '/' . $name;
 			}
