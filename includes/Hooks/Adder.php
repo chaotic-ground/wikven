@@ -100,7 +100,7 @@ class Adder implements
 		// switches from, and without it the appearance panel would have nothing to set.
 		if ($skin->getSkinName() === 'minerva') {
 			$out->getRequest()->setVal('minervanightmode', 'day');
-			$out->addModules('ext.Wikven.minervaAppearance');
+			$out->addModules('ext.Wikven.appearance');
 		}
 
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown

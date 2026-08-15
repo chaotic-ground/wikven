@@ -11,5 +11,7 @@
 	"wikven-appearance": "Colour",
 	"wikven-appearance-day": "Light",
 	"wikven-appearance-night": "Dark",
-	"wikven-appearance-os": "Automatic"
+	"wikven-appearance-os": "Automatic",
+	"wikven-settings": "Settings",
+	"wikven-settings-intro": "These choices are kept in this browser. They apply to this site only, and no account is involved."
 }

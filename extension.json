@@ -27,8 +27,13 @@
 			"scripts": ["citizen-skins.js"],
 			"messages": ["wikven-skin", "wikven-skin-description"]
 		},
-		"ext.Wikven.minervaAppearance": {
-			"scripts": ["minerva-appearance.js"],
+		"ext.Wikven.appearance": {
+			"scripts": ["appearance.js"],
+			"messages": [
+				"wikven-appearance-day",
+				"wikven-appearance-night",
+				"wikven-appearance-os"
+			],
 			"dependencies": ["mediawiki.user"]
 		}
 	},
@@ -70,6 +75,10 @@
 		"WikvenMainPage": {
 			"value": "index",
 			"description": "Title of the page used as the wiki's main page, i.e. the static site root (written as <value>.html). Must be an imported page."
+		},
+		"WikvenSettingsPage": {
+			"value": "Settings",
+			"description": "Title of an auto-generated page holding the reader's display choices (colour theme, and the skin to read the site in), which a static export keeps in the browser. Stands in for Special:MobileOptions, which no bake writes. Empty disables it; a same-named source page takes precedence."
 		},
 		"WikvenVersionPage": {
 			"value": "Version",

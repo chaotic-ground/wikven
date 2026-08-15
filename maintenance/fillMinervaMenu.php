@@ -46,10 +46,10 @@ class FillMinervaMenu extends Maintenance {
 			return;
 		}
 
-		// The navigation and the theme control are the same on every page; the switcher is not,
+		// The navigation and the settings link are the same on every page; the switcher is not,
 		// since each page links to its own copy in the other skins.
 		$navigation = $this->list('p-wikven-navigation', $this->navigationMarkup());
-		$theme = $this->themeMarkup();
+		$settings = $this->settingsMarkup();
 
 		$changed = 0;
 		foreach (new FilesystemIterator($dir, FilesystemIterator::SKIP_DOTS) as $file) {
@@ -57,8 +57,7 @@ class FillMinervaMenu extends Maintenance {
 				continue;
 			}
 			// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
-			$groups =
-				$navigation . $this->list('p-wikven-appearance', $theme . $this->skinMarkup($file->getFilename()));
+			$groups = $navigation . $this->list('p-wikven-skins', $this->skinMarkup($file->getFilename()) . $settings);
 			$html = (string)file_get_contents($file->getPathname());
 			$filled = HtmlListInserter::after($html, self::AFTER_LIST, $groups);
 			if ($filled !== $html) {
@@ -70,40 +69,27 @@ class FillMinervaMenu extends Maintenance {
 	}
 
 	/**
-	 * The colour theme, as the radios Minerva's own settings page would have offered. The classes
-	 * are Codex's, which the skin already styles; ext.Wikven.minervaAppearance wires them to
-	 * mw.user.clientPrefs, the one place a static export can keep a reader's choice.
+	 * The entry Minerva would have pointed at Special:MobileOptions, pointed at the page build.php
+	 * generates in its place. Empty when the site has turned that page off.
 	 */
-	private function themeMarkup(): string {
-		$options = '';
-		foreach (['day', 'night', 'os'] as $value) {
-			$id = "wikven-theme-$value";
-			$options .= Html::rawElement(
-				'span',
-				['class' => 'cdx-radio wikven-appearance-option'],
-				Html::element('input', [
-					'class' => 'cdx-radio__input',
-					'type' => 'radio',
-					'name' => 'wikven-skin-theme',
-					'id' => $id,
-					'value' => $value
-				]) . Html::element('span', ['class' => 'cdx-radio__icon'])
-					. Html::element(
-						'label',
-						['class' => 'cdx-radio__label', 'for' => $id],
-						wfMessage("wikven-appearance-$value")->text()
-					)
-			);
+	private function settingsMarkup(): string {
+		$name = (string)( $GLOBALS['wgWikvenSettingsPage'] ?? '' );
+		$title = $name === '' ? null : Title::newFromText($name);
+		if (!$title) {
+			return '';
 		}
 		return Html::rawElement(
 			'li',
-			['class' => 'toggle-list-item wikven-appearance-item'],
-			Html::element(
-				'span',
-				['class' => 'wikven-appearance-heading'],
-				wfMessage('wikven-appearance')->text()
+			['class' => 'toggle-list-item wikven-nav-item', 'id' => 't-wikven-settings'],
+			Html::rawElement(
+				'a',
+				['class' => 'toggle-list-item__anchor', 'href' => $title->getLocalURL()],
+				Html::element(
+					'span',
+					['class' => 'toggle-list-item__label'],
+					wfMessage('wikven-settings')->text()
+				)
 			)
-				. $options
 		);
 	}
 

@@ -47,6 +47,7 @@ class Build extends Maintenance {
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
 		$this->setVersionPage();
+		$this->setSettingsPage();
 		$this->dropDeadPlaceLinks();
 		$this->dropDeadCategoryLink();
 		// Materialize content translations before RunJobs so rendered translation pages get exported.
@@ -325,6 +326,40 @@ class Build extends Maintenance {
 	}
 
 	/** Generate a Version page (static Special:Version) listing software, extensions and skins. */
+	/**
+	 * Generate a Settings page: the reader's own display choices, which a static export keeps in
+	 * the browser rather than in a user account. It stands in for Special:MobileOptions, which is
+	 * MobileFrontend's and which no bake writes, and it is a page rather than a panel so every
+	 * skin can link to it.
+	 *
+	 * The controls themselves are drawn by ext.Wikven.appearance into the placeholders below;
+	 * wikitext cannot carry a radio, and the choices mean nothing without the script anyway.
+	 */
+	private function setSettingsPage(): void {
+		$name = $GLOBALS['wgWikvenSettingsPage'] ?? '';
+		if ($name === '') {
+			return;
+		}
+		$title = Title::newFromText($name);
+		if (!$title || $title->exists()) {
+			return;
+		}
+
+		$text = $this->contentMsg('wikven-settings-intro') . "\n\n";
+		$text .= '== ' . $this->contentMsg('wikven-appearance') . " ==\n";
+		$text .= "<div class=\"wikven-appearance-theme\"></div>\n\n";
+		if (count($GLOBALS['wgWikvenSkins'] ?? []) > 1) {
+			$text .= '== ' . $this->contentMsg('wikven-skins') . " ==\n";
+			$text .= "<div class=\"wikven-appearance-skins\"></div>\n";
+		}
+
+		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
+		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
+		$updater = $page->newPageUpdater($user);
+		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($text, $title));
+		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Generate the settings page'));
+	}
+
 	private function setVersionPage(): void {
 		$name = $GLOBALS['wgWikvenVersionPage'] ?? 'Version';
 		if ($name === '') {
