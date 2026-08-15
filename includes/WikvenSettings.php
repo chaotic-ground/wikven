@@ -57,6 +57,14 @@ Wikimedia\Timestamp\ConvertibleTimestamp::setFakeTime($wikvenEpoch);
 // attempt; the Retrier hook handler sees to that.
 $wgMainCacheType = CACHE_DB;
 
+// The parser cache, though, has to go. A build keeps changing the wiki under itself: pages are
+// marked for translation, units are written, jobs settle stats. A parse made before that finished
+// stays valid as far as the cache is concerned, so the render pass served one and baked a
+// <languages/> bar short of the languages that landed after it. Which pages that hit moved with
+// the job order, so two bakes of the same source disagreed. Every page here is parsed a fixed
+// number of times and thrown away, so the cache was buying little to begin with.
+$wgParserCacheType = CACHE_NONE;
+
 // Let pages opt out of indexing with __NOINDEX__ in any namespace.
 $wgExemptFromUserRobotsControl = [];
 
