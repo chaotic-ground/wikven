@@ -10,47 +10,89 @@ use MediaWikiUnitTestCase;
  */
 class RelativeUrlTest extends MediaWikiUnitTestCase {
 	public function testDepthZeroLeavesTheHtmlUntouched() {
-		$html = 'href="./index.html" src="././modules-static.js"';
+		$html = '<a href="./index.html"><script src="././modules-static.js"></script></a>';
 		$this->assertSame($html, RelativeUrl::reparent($html, 0));
 	}
 
 	public function testRootRelativeLinksGainOneLevelPerDepth() {
-		$this->assertSame('href="../index.html"', RelativeUrl::reparent('href="./index.html"', 1));
-		$this->assertSame('href="../../index.html"', RelativeUrl::reparent('href="./index.html"', 2));
+		$this->assertSame(
+			'<a href="../index.html">',
+			RelativeUrl::reparent('<a href="./index.html">', 1)
+		);
+		$this->assertSame(
+			'<a href="../../index.html">',
+			RelativeUrl::reparent('<a href="./index.html">', 2)
+		);
 	}
 
 	public function testParentRelativeCanonicalGainsAFurtherLevel() {
-		$this->assertSame('href="../../Intro.html"', RelativeUrl::reparent('href="../Intro.html"', 1));
+		$this->assertSame(
+			'<link href="../../Intro.html">',
+			RelativeUrl::reparent('<link href="../Intro.html">', 1)
+		);
 	}
 
 	public function testScriptAndStyleReferencesAreRebased() {
-		$this->assertSame('src=".././modules-static.js"', RelativeUrl::reparent('src="././modules-static.js"', 1));
 		$this->assertSame(
-			'href=".././skins.vector.styles.css"',
-			RelativeUrl::reparent('href="././skins.vector.styles.css"', 1)
+			'<script src=".././modules-static.js">',
+			RelativeUrl::reparent('<script src="././modules-static.js">', 1)
+		);
+		$this->assertSame(
+			'<link href=".././skins.vector.styles.css">',
+			RelativeUrl::reparent('<link href="././skins.vector.styles.css">', 1)
 		);
 	}
 
 	public function testEachSrcsetCandidateIsRebased() {
 		$this->assertSame(
-			'srcset="../img-a.png 1.5x, ../img-b.png 2x"',
-			RelativeUrl::reparent('srcset="./img-a.png 1.5x, ./img-b.png 2x"', 1)
+			'<img srcset="../img-a.png 1.5x, ../img-b.png 2x">',
+			RelativeUrl::reparent('<img srcset="./img-a.png 1.5x, ./img-b.png 2x">', 1)
 		);
 	}
 
-	public function testCssUrlIsRebased() {
-		$this->assertSame('url(../logo.png)', RelativeUrl::reparent('url(./logo.png)', 1));
+	public function testCssUrlIsRebasedInAStyleBlock() {
+		$this->assertSame(
+			'<style>.a{background:url(../logo.png)}</style>',
+			RelativeUrl::reparent('<style>.a{background:url(./logo.png)}</style>', 1)
+		);
+	}
+
+	public function testCssUrlIsRebasedInAStyleAttribute() {
+		$this->assertSame(
+			'<div style="background:url(../logo.png)">',
+			RelativeUrl::reparent('<div style="background:url(./logo.png)">', 1)
+		);
 	}
 
 	public function testAbsoluteProtocolRelativeAnchorAndDataUrlsAreLeftAlone() {
 		$html =
-			'href="https://example.org/x" href="//cdn/x" href="/images/logo.png" '
-			. 'href="#top" src="data:image/svg+xml,%3Csvg/%3E"';
+			'<a href="https://example.org/x"><a href="//cdn/x"><a href="/images/logo.png">'
+			. '<a href="#top"><img src="data:image/svg+xml,%3Csvg/%3E">';
 		$this->assertSame($html, RelativeUrl::reparent($html, 2));
 	}
 
 	public function testNonAttributeDotSlashInScriptIsNotRewritten() {
 		$html = '<script>var x = {"path": "./y"};</script>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
+	public function testAnEscapedAttributeShownAsACodeExampleIsNotRewritten() {
+		// htmlspecialchars(..., ENT_NOQUOTES), which MediaWiki uses for preformatted text, escapes the
+		// angle brackets but not the quotes: the example reads like a real href="./intro" but sits in
+		// no real "<...>" tag span, so it must be left exactly as written.
+		$html = '<pre>&lt;a href="./intro"&gt;Intro&lt;/a&gt;</pre>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
+	public function testCssUrlShownAsACodeExampleIsNotRewritten() {
+		$html = '<pre>.a{background:url(./bg.png)}</pre>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
+	public function testDataHrefAndXlinkHrefAreNotRewritten() {
+		// \b before "href" also matches inside "data-href" and "xlink:href", neither of which is the
+		// href attribute; only a real, whitespace-preceded href/src is a rewrite target.
+		$html = '<div data-href="./x"><svg><use xlink:href="./y"></use></svg></div>';
 		$this->assertSame($html, RelativeUrl::reparent($html, 1));
 	}
 
