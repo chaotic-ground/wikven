@@ -3,12 +3,27 @@
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\AssetLocalizer;
+use MediaWiki\ResourceLoader\ResourceLoader;
 use MediaWikiIntegrationTestCase;
 
 /**
  * @covers \MediaWiki\Extension\Wikven\AssetLocalizer
  */
 class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
+	/**
+	 * The ResourceLoader service, with $GLOBALS['IP'] then pointed at a fixture install root.
+	 *
+	 * AssetLocalizer resolves a direct asset path against $IP, so these tests have to move it. The
+	 * service container reads the real install the first time it builds the ResourceLoader, to
+	 * register core's own modules, and errors out on a fixture root that has none of them -- so
+	 * build it first, while $IP is still the real one.
+	 */
+	private function resourceLoaderRootedAt(string $mwRoot): ResourceLoader {
+		$rl = $this->getServiceContainer()->getResourceLoader();
+		$this->setMwGlobals('IP', $mwRoot);
+		return $rl;
+	}
+
 	/**
 	 * Direct skin/resource/extension asset url()s in dumped CSS are the most
 	 * regex-fragile part of the static export: if they stop matching, the output
@@ -21,8 +36,7 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		$mwRoot = $this->getNewTempDirectory();
 		mkdir("$mwRoot/skins/Vector/images", 0777, true);
 		file_put_contents("$mwRoot/skins/Vector/images/arrow.svg", '<svg>arrow</svg>');
-		// AssetLocalizer reads the install root from $GLOBALS['IP'].
-		$this->setMwGlobals('IP', $mwRoot);
+		$rl = $this->resourceLoaderRootedAt($mwRoot);
 
 		$dir = $this->getNewTempDirectory();
 		$css = "$dir/styles.css";
@@ -38,7 +52,6 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		])
 			. "\n");
 
-		$rl = $this->getServiceContainer()->getResourceLoader();
 		AssetLocalizer::localizeAssets($rl, $dir, [$css], 'en', 'vector');
 
 		$out = file_get_contents($css);
@@ -67,13 +80,12 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		$mwRoot = $this->getNewTempDirectory();
 		mkdir("$mwRoot/skins/Vector/images", 0777, true);
 		file_put_contents("$mwRoot/skins/Vector/images/arrow.svg", '<svg>arrow</svg>');
-		$this->setMwGlobals('IP', $mwRoot);
+		$rl = $this->resourceLoaderRootedAt($mwRoot);
 
 		$dir = $this->getNewTempDirectory();
 		$js = "$dir/modules-static.js";
 		file_put_contents($js, '.a{background:url(/skins/Vector/images/arrow.svg)}' . "\n");
 
-		$rl = $this->getServiceContainer()->getResourceLoader();
 		AssetLocalizer::localizeAssets($rl, $dir, [$js], 'en', 'vector', true);
 
 		$out = file_get_contents($js);
@@ -94,10 +106,9 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		$mwRoot = $this->getNewTempDirectory();
 		mkdir("$mwRoot/skins/Citizen/resources/fonts", 0777, true);
 		file_put_contents("$mwRoot/skins/Citizen/resources/fonts/Roboto.woff2", 'wOF2fake');
-		$this->setMwGlobals('IP', $mwRoot);
+		$rl = $this->resourceLoaderRootedAt($mwRoot);
 
 		$rule = '@font-face{src:url(/skins/Citizen/resources/fonts/Roboto.woff2) format("woff2")}';
-		$rl = $this->getServiceContainer()->getResourceLoader();
 
 		$cssDir = $this->getNewTempDirectory();
 		file_put_contents("$cssDir/styles.css", $rule . "\n");
@@ -130,13 +141,12 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		$mwRoot = $this->getNewTempDirectory();
 		mkdir("$mwRoot/skins/Vector/images", 0777, true);
 		file_put_contents("$mwRoot/skins/Vector/images/icon.svg", '<svg width="20" height="20"/>');
-		$this->setMwGlobals('IP', $mwRoot);
+		$rl = $this->resourceLoaderRootedAt($mwRoot);
 
 		$dir = $this->getNewTempDirectory();
 		$js = "$dir/modules-static.js";
 		file_put_contents($js, '.a{mask-image:url(/skins/Vector/images/icon.svg)}' . "\n");
 
-		$rl = $this->getServiceContainer()->getResourceLoader();
 		AssetLocalizer::localizeAssets($rl, $dir, [$js], 'en', 'vector', true);
 
 		$out = file_get_contents($js);
