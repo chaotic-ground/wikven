@@ -38,7 +38,8 @@ class ScaffoldTranslations extends Maintenance {
 			if ($source === '' || !is_dir($source)) {
 				$this->fatalError("Wikven: source directory '$source' does not exist.");
 			}
-			foreach (TranslationSource::baseFiles($source) as $baseFile) {
+			$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
+			foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
 				$this->scaffoldFile($baseFile, $language, $source);
 			}
 			return;

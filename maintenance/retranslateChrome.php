@@ -43,7 +43,7 @@ class RetranslateChrome extends Maintenance {
 		$contentLang = $services->getContentLanguage()->getCode();
 		$isKnownLanguage = [$services->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
-		foreach (TranslationSource::baseFiles($source) as $baseFile) {
+		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
 			$relative = substr($baseFile, strlen($source) + 1);
 			$baseTitle = SourceFile::filenameToTitle($relative);
 			foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
