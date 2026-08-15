@@ -1,0 +1,3 @@
+The icon shown beside a note, in the wikven teal.
+
+Drawn for wikven, and under its licence: [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later].
