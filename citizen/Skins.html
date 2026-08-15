@@ -445,7 +445,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				
 				
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><section id="citizen-section-0" class="citizen-section"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="스킨 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--high" title="스킨 (82% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>You can choose <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins" class="extiw" title="mw:Special:MyLanguage/Bundled extensions and skins">bundled skins</a> in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p>
 <meta property="mw:PageProp/toc"/>
@@ -453,14 +453,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>The skins bundled with MediaWiki are available. Selecting <code>Vector</code> gives Vector 2022 (the skin's <code>vector-2022</code> variant).
 </p>
 <ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector" class="extiw" title="mw:Special:MyLanguage/Skin:Vector">Vector</a> (default)</li>
-<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Timeless" class="extiw" title="mw:Special:MyLanguage/Skin:Timeless">Timeless</a></li>
 <li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MonoBook" class="extiw" title="mw:Special:MyLanguage/Skin:MonoBook">MonoBook</a></li>
 <li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MinervaNeue" class="extiw" title="mw:Special:MyLanguage/Skin:MinervaNeue">MinervaNeue</a> (mobile-oriented)</li></ul>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Configuring_the_skin">Configuring the skin</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>You can change the skin by setting <code>skins</code>. The first skin in the list is used as the default.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Timeless</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
 </pre></div>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Third-party_skins">Third-party skins</h2></div><section id="citizen-section-3" class="citizen-section">
 <p>A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>. It is fetched at build time and may be the default like any other. This documentation site fetches the third-party <a class="external text" href="https://www.mediawiki.org/wiki/Skin:Citizen">Citizen</a> skin this way, offered alongside Vector through the footer skin switcher.
@@ -498,7 +497,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="./Skins.html" title="This page was last edited on 15 August 2026, at 14:24." data-timestamp="1786803842"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="./Skins.html" title="This page was last edited on 15 August 2026, at 15:23." data-timestamp="1786807386"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -594,7 +593,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 14:24.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 15:23.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -617,7 +616,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<ul>
 		<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 		<li id="footer-places-version"><a href="./Version.html">Version</a></li>
-		<li id="footer-places-skin-switcher"><label class="wikven-skin-switcher">Skin: <select><option value="vector-2022">vector-2022</option><option value="timeless">Timeless</option><option value="citizen" selected="">citizen</option></select></label></li>
+		<li id="footer-places-skin-switcher"><label class="wikven-skin-switcher">Skin: <select><option value="vector-2022">vector-2022</option><option value="citizen" selected="">citizen</option></select></label></li>
 	</ul>
 </nav>
 		</section>
