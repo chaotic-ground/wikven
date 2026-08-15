@@ -1,13 +1,18 @@
 # Base images are digest-pinned for reproducible builds; Dependabot keeps them current.
 FROM composer:2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040 AS composer
 
-FROM mediawiki:1.46@sha256:38989f476fd3226bd608816547e2f8eee88c1582d656e9b39c65a2e5ddbdacc6
+# The alpine variant, because nothing here serves over HTTP: `build` runs a maintenance script and
+# `serve` runs PHP's own server, so the Apache the default variant carries is never started. Same
+# PHP extensions, 873MB against 1.5GB.
+FROM mediawiki:1.46-fpm-alpine@sha256:b0e9413c015268322cfb67908e5f92121372c7407f09f97a4ce8938a4351e4ad
 
-# composer + unzip to install third-party extensions/skins at build time (git/tar/gzip present).
+# composer to install third-party extensions/skins at bake time (git/tar/gzip/unzip present).
+# rsvg-convert renders SVG thumbnails, and alpine splits ImageMagick's delegates out, so its
+# convert reads only the PNG family until these are added. Together they cover every type
+# FileExtensions allows: png and gif are built in, svg goes through rsvg, and these two are the
+# rest. The formats still absent (TIFF, PDF, HEIC, camera RAW) are ones uploads reject anyway.
 COPY --from=composer /usr/bin/composer /usr/bin/composer
-RUN apt-get update \
- && apt-get install -y --no-install-recommends unzip \
- && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache rsvg-convert imagemagick-jpeg imagemagick-webp
 
 # Bundled extensions come from stable external sources; fetch them before copying wikven's own
 # code so edits to that code do not bust the (slow) download/clone layers.

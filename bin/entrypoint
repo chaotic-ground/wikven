@@ -1,5 +1,7 @@
-#!/bin/bash
-set -euo pipefail; IFS=$'\n\t'
+#!/bin/sh
+# POSIX sh, so it runs under whatever /bin/sh the base provides. pipefail and $'\n\t' are not in
+# POSIX; there are no pipelines here to need the former, and printf spells the latter portably.
+set -eu; IFS=$(printf '\n\t')
 
 # One working dir for source + output (default /workspace); exported so PHP children inherit it.
 export WIKVEN_WORKDIR="${WIKVEN_WORKDIR:-/workspace}"
