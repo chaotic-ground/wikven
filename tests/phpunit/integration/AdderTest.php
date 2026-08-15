@@ -150,32 +150,42 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 
 		$this->assertSame([], $sidebar['TOOLBOX'], 'the toolbox is left empty');
 		$this->assertSame(
-			['wikven-skin-vector-2022', 'wikven-skin-citizen'],
+			['t-wikven-skin-vector-2022', 't-wikven-skin-citizen'],
 			array_keys($sidebar['wikven-skins'])
 		);
 		$this->assertSame(
 			'./citizen/Installation.html',
-			$sidebar['wikven-skins']['wikven-skin-citizen']['href']
+			$sidebar['wikven-skins']['t-wikven-skin-citizen']['href']
 		);
-		$this->assertArrayNotHasKey('href', $sidebar['wikven-skins']['wikven-skin-vector-2022']);
+		$this->assertArrayNotHasKey('href', $sidebar['wikven-skins']['t-wikven-skin-vector-2022']);
 	}
 
 	/**
-	 * Every other skin keeps it in the toolbox: Citizen takes only the toolbox into its page-tools
-	 * menu and Minerva reads no other section, so a section of our own would not reach either.
+	 * Citizen keeps it in the toolbox: it takes only the toolbox into its page-tools menu, so a
+	 * section of our own would land in the sidebar drawer instead.
 	 */
-	public function testOtherSkinsKeepTheSkinListInTheToolbox() {
+	public function testCitizenKeepsTheSkinListInTheToolbox() {
 		$sidebar = $this->sidebarFor('citizen');
 
 		$this->assertArrayNotHasKey('wikven-skins', $sidebar);
 		$this->assertSame(
-			['wikven-skin-vector-2022', 'wikven-skin-citizen'],
+			['t-wikven-skin-vector-2022', 't-wikven-skin-citizen'],
 			array_keys($sidebar['TOOLBOX'])
 		);
 		$this->assertSame(
 			'../Installation.html',
-			$sidebar['TOOLBOX']['wikven-skin-vector-2022']['href']
+			$sidebar['TOOLBOX']['t-wikven-skin-vector-2022']['href']
 		);
+	}
+
+	/**
+	 * Minerva gets nothing here. Its toolbox is the page-actions menu, which is not where a
+	 * site-wide setting belongs, so fillMinervaMenu.php writes these into its main menu instead.
+	 */
+	public function testMinervaIsLeftToItsMainMenu() {
+		$sidebar = $this->sidebarFor('minerva');
+
+		$this->assertSame(['TOOLBOX' => []], $sidebar);
 	}
 
 	/** The sidebar a two-skin export builds for one of them, on a page at the export root. */

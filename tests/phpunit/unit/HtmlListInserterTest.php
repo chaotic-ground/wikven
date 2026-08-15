@@ -11,9 +11,11 @@ use MediaWikiUnitTestCase;
 class HtmlListInserterTest extends MediaWikiUnitTestCase {
 	/** Two lists, so a match has to be the one asked for rather than the first one in the page. */
 	private function page(): string {
-		return '<body><ul id="p-personal"><li>a</li></ul>'
+		return (
+			'<body><ul id="p-personal"><li>a</li></ul>'
 			. '<ul id="p-navigation" class="toggle-list__list"><li>Home</li></ul>'
-			. '<ul id="p-interaction"><li>b</li></ul></body>';
+			. '<ul id="p-interaction"><li>b</li></ul></body>'
+		);
 	}
 
 	public function testInsertsAfterTheListAsked() {

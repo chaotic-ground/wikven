@@ -47,7 +47,8 @@ class FillMinervaMenu extends Maintenance {
 		}
 
 		// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
-		$groups = $this->list('p-wikven-navigation', $this->navigationMarkup())
+		$groups =
+			$this->list('p-wikven-navigation', $this->navigationMarkup())
 			. $this->list('p-wikven-skins', $this->skinMarkup());
 		if ($groups === '') {
 			$this->output("Nothing to add to Minerva's main menu\n");
@@ -71,9 +72,11 @@ class FillMinervaMenu extends Maintenance {
 
 	/** One menu group, or "" when it would hold nothing. */
 	private function list(string $id, string $items): string {
-		return $items === ''
-			? ''
-			: Html::rawElement('ul', ['id' => $id, 'class' => self::LIST_CLASS], $items);
+		return (
+			$items === ''
+				? ''
+				: Html::rawElement('ul', ['id' => $id, 'class' => self::LIST_CLASS], $items)
+		);
 	}
 
 	/** The sidebar's links as Minerva's own list items, or "" when there are none to add. */
