@@ -22,7 +22,12 @@ for (const [skin, path, box] of SKINS) {
 
 		// Still emitted, so the assertions below are about what is shown, not what is built.
 		await expect(page.locator("#p-tb")).toBeAttached();
-		for (const element of await page.locator(`#p-tb, ${box}`).all()) {
+		await expect(page.locator("#p-tb")).toBeHidden();
+
+		// The box is what this rule hides, and toBeHidden() passes for an element that
+		// is not there, so a renamed box has to fail here rather than assert nothing.
+		await expect(page.locator(box)).not.toHaveCount(0);
+		for (const element of await page.locator(box).all()) {
 			await expect(element).toBeHidden();
 		}
 	});
