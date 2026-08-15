@@ -1,11 +1,22 @@
+// Codex design tokens, so these rules follow the skin's theme.
+@import 'mediawiki.skin.variables.less';
+
 // Minerva builds its main menu from its own Menu\Definitions rather than the sidebar, so Hider
-// never reaches it and these four are inserted unconditionally. Every one is a Special: page an
+// never reaches these and they are inserted unconditionally. Every one is a Special: page an
 // export cannot serve. Community portal is not here: it has a lever, and build.php pulls it.
-// By item rather than by group, so a site's own entries in the same group survive.
+// By item rather than by group, so a site's own entries in the same groups survive.
+.toggle-list-item:has( > .menu__item--random ),
+.toggle-list-item:has( > .menu__item--recentchanges ),
+.toggle-list-item:has( > .menu__item--specialPages ),
+.toggle-list-item:has( > .menu__item--preferences ) {
+  display: none;
+}
+
 // Minerva collapses the table of contents whenever .client-js is set, and initMobile.js draws the
-// chevron that says so on the wikipage.content hook, which a static export never fires: the
-// collapse arrives, the affordance does not. Undo the half that did, and drop the toggle with it,
-// since without the icon it is an invisible control over the heading.
+// chevron that says so on the wikipage.content hook. setup.js runs that file only when
+// MobileFrontend is installed, so in an export the collapse arrives and the affordance never does.
+// Undo the half that did, and drop the toggle with it: without the icon it is an invisible control
+// sitting over the heading.
 .client-js .toc {
   .toctogglecheckbox ~ ul {
     visibility: visible;
@@ -17,15 +28,21 @@
   }
 }
 
-// The site's navigation, written into the menu by fillMinervaMenu.php. Minerva indents a label by
-// the icon beside it, and these have no icon, so the indent is theirs to keep the column straight.
+// The site's navigation and the skin switcher, written into the menu by fillMinervaMenu.php.
+// Minerva indents a label by the icon beside it, and these have no icon, so the indent is theirs
+// to keep the column straight.
 .wikven-nav-item .toggle-list-item__label {
   padding-left: 26px; // Minerva's icon, 20px, plus the 6px between it and the label.
 }
 
-.toggle-list-item:has( > .menu__item--random ),
-.toggle-list-item:has( > .menu__item--recentchanges ),
-.toggle-list-item:has( > .menu__item--specialPages ),
-.toggle-list-item:has( > .menu__item--preferences ) {
-  display: none;
+// The switcher shares the navigation list, so a rule sets it off rather than a heading.
+.wikven-skin-item:first-of-type {
+  border-top: @border-width-base @border-style-base @border-color-muted;
+}
+
+// The skin being read is listed, marked, and not a link, as in every other skin.
+.wikven-skin-item.active .toggle-list-item__label {
+  display: block;
+  padding: @spacing-50 0 @spacing-50 26px;
+  font-weight: @font-weight-bold;
 }

@@ -13,22 +13,18 @@ const { test, expect } = require("@playwright/test");
 const ENGLISH_HEADING = "Getting Started";
 const KOREAN_HEADING = "시작하기";
 
-// What each skin puts the toolbox behind, where it takes a control to reveal.
-// Vector and Minerva both disclose with a transparent checkbox laid over its own
-// label, so a click aimed at the label lands on the checkbox. Citizen is not here:
-// its list moves into the preferences panel, and is followed by choosePreference().
+// What each skin puts the switcher behind, where it takes a control to reveal. Vector and Minerva
+// both disclose with a transparent checkbox laid over its own label, so a click aimed at the label
+// lands on the checkbox. Minerva's is the main menu rather than a page tools menu, since it takes
+// no sidebar section that reaches one. Citizen is not here: its list moves into the preferences
+// panel, and is followed by choosePreference().
 const OPENERS = {
 	"vector-2022": "#vector-page-tools-dropdown-checkbox",
 	timeless: null,
-	minerva: "#page-actions-overflow-checkbox",
+	minerva: "#main-menu-input",
 };
 
-const entry = (page, skin) =>
-	page
-		.locator(
-			`#t-wikven-skin-${skin}, .menu__item--page-actions-overflow-wikven-skin-${skin}`,
-		)
-		.first();
+const entry = (page, skin) => page.locator(`#t-wikven-skin-${skin}`).first();
 
 // Record every page the browser is sent to that the export does not have, so a
 // switch to a nonexistent path fails as the 404 it is.
@@ -46,25 +42,15 @@ const watchForMissingPages = (page) => {
 };
 
 // The skin the current page was rendered in, and the skins it offers.
-const skinsOn = async (page) => {
-	const ids = await page.evaluate(() =>
-		Array.from(
-			document.querySelectorAll(
-				'[id^="t-wikven-skin-"], [class*="page-actions-overflow-wikven-skin-"]',
-			),
-		).map((element) => {
-			const id = element.id.replace("t-wikven-skin-", "");
-			if (id) {
-				return { skin: id, current: element.classList.contains("active") };
-			}
-			const match = element.className.match(
-				/page-actions-overflow-wikven-skin-([a-z0-9-]+)/,
-			);
-			return { skin: match[1], current: false };
-		}),
+const skinsOn = (page) =>
+	page.evaluate(() =>
+		Array.from(document.querySelectorAll('[id^="t-wikven-skin-"]')).map(
+			(element) => ({
+				skin: element.id.replace("t-wikven-skin-", ""),
+				current: element.classList.contains("active"),
+			}),
+		),
 	);
-	return ids;
-};
 
 const revealTools = async (page, skin) => {
 	const opener = OPENERS[skin];

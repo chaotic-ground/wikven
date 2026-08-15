@@ -43,9 +43,9 @@ class FillMinervaMenu extends Maintenance {
 			return;
 		}
 
-		$items = $this->navigationMarkup();
+		$items = $this->navigationMarkup() . $this->skinMarkup();
 		if ($items === '') {
-			$this->output("No sidebar navigation to add\n");
+			$this->output("Nothing to add to Minerva's main menu\n");
 			return;
 		}
 
@@ -84,6 +84,34 @@ class FillMinervaMenu extends Maintenance {
 					['class' => 'toggle-list-item__anchor', 'href' => $href],
 					Html::element('span', ['class' => 'toggle-list-item__label'], $text)
 				)
+			);
+		}
+		return $markup;
+	}
+
+	/**
+	 * The skin switcher, which every other skin gets through the sidebar. Minerva would take it in
+	 * the toolbox, but that is its page-actions menu, and which skin to read the site in is not an
+	 * action on a page.
+	 */
+	private function skinMarkup(): string {
+		$markup = '';
+		foreach (SkinList::entries(RequestContext::getMain()->getSkin()) as $entry) {
+			$label = Html::element('span', ['class' => 'toggle-list-item__label'], $entry['text']);
+			$classes = ['toggle-list-item', 'wikven-nav-item', 'wikven-skin-item'];
+			if ($entry['active']) {
+				$classes[] = 'active';
+			}
+			$markup .= Html::rawElement(
+				'li',
+				['class' => $classes, 'id' => $entry['id']],
+				$entry['href'] === null
+					? $label
+					: Html::rawElement(
+						'a',
+						['class' => 'toggle-list-item__anchor', 'href' => $entry['href']],
+						$label
+					)
 			);
 		}
 		return $markup;

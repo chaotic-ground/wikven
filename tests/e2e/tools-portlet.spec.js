@@ -1,12 +1,10 @@
-// The toolbox is the only skin switcher the export has, so in every skin it must be
-// somewhere a reader can actually get to -- not merely present in the DOM. Each skin
-// puts it somewhere different, and behind a different control: Vector in the "Tools"
-// dropdown, Citizen in the "More actions" card, Minerva in the page-actions overflow
-// menu. Only a rendered page shows whether opening that control reveals the links.
+// The switcher is the only one the export has, so in every skin it must be somewhere a reader can
+// actually get to -- not merely present in the DOM. Each skin puts it somewhere different, and
+// behind a different control: Vector in the "Tools" dropdown and Minerva in the main menu.
+// Only a rendered page shows whether opening that control reveals it.
 //
-// A single-skin export has nothing to put in the toolbox and hides the empty box
-// instead (ext.Wikven.emptyToolbox); docs/ enables several, so that path is not
-// exercised here.
+// A single-skin export has nothing to switch to and hides the empty box instead
+// (ext.Wikven.emptyToolbox); docs/ enables several, so that path is not exercised here.
 //
 // Citizen is the exception, and has its own spec: with JavaScript its skin list moves
 // into the preferences panel and takes the toolbox with it (citizen.spec.js covers
@@ -14,21 +12,16 @@
 
 const { test, expect } = require("@playwright/test");
 
-// What each skin puts the toolbox behind, where it takes a control to reveal.
-// Vector and Minerva both disclose with a transparent checkbox laid over its own
-// label, so a click aimed at the label lands on the checkbox.
+// What each skin puts the switcher behind, where it takes a control to reveal. Vector and Minerva
+// both disclose with a transparent checkbox laid over its own label, so a click aimed at the label
+// lands on the checkbox.
 const OPENERS = {
 	"vector-2022": "#vector-page-tools-dropdown-checkbox",
 	timeless: null,
-	minerva: "#page-actions-overflow-checkbox",
+	minerva: "#main-menu-input",
 };
 
-const entry = (page, skin) =>
-	page
-		.locator(
-			`#t-wikven-skin-${skin}, .menu__item--page-actions-overflow-wikven-skin-${skin}`,
-		)
-		.first();
+const entry = (page, skin) => page.locator(`#t-wikven-skin-${skin}`).first();
 
 let skins;
 let main;
