@@ -1,6 +1,13 @@
 ---
 name: Tofu
 
+run-name: |-
+  ${{ case(
+    github.event_name == 'workflow_dispatch',
+    format('Tofu: manual run on {0} by @{1}', github.ref_name, github.actor),
+    ' '
+  ) }}
+
 on:
   pull_request:
     paths: &paths
