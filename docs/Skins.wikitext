@@ -4,15 +4,18 @@
 You can choose {{ml|Bundled extensions and skins|bundled skins}} in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]].
 
 <!--T:2-->
-== Available skins ==
+== Supported skins ==
 
 <!--T:3-->
-The skins bundled with MediaWiki are available. Selecting <code>Vector</code> gives Vector 2022 (the skin's <code>vector-2022</code> variant).
+Wikven supports three skins. This documentation site is built with all three, so every change is exercised in each of them.
 
 <!--T:4-->
-* {{ml|Skin:Vector|Vector}} (default)
-* {{ml|Skin:MonoBook|MonoBook}}
+* {{ml|Skin:Vector|Vector}} (default; <code>Vector</code> selects the skin's <code>vector-2022</code> variant, Vector 2022)
 * {{ml|Skin:MinervaNeue|MinervaNeue}} (mobile-oriented)
+* {{ml|Skin:Citizen|Citizen}} (third-party, fetched at build time)
+
+<!--T:11-->
+Any other skin is untested rather than refused: every skin bundled with MediaWiki is available by name, MonoBook among them, and a third-party skin can be fetched like Citizen is.
 
 <!--T:5-->
 == Configuring the skin ==
@@ -31,7 +34,7 @@ skins:
 == Third-party skins ==
 
 <!--T:8-->
-A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]]. It is fetched at build time and may be the default like any other. This documentation site fetches the third-party [https://www.mediawiki.org/wiki/Skin:Citizen Citizen] skin this way, offered alongside Vector through the footer skin switcher.
+A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]]. It is fetched at build time and may be the default like any other. This documentation site fetches Citizen this way, offered alongside the other two.
 </translate>
 
 <syntaxhighlight lang="yaml">
