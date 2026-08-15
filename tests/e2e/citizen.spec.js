@@ -42,6 +42,36 @@ test("Citizen's search box reaches the static results page", async ({
 	});
 });
 
+test("Citizen's search box suggests pages as you type", async ({ page }) => {
+	await page.goto(PAGE);
+
+	// The skin turns core's search wiring off for its own command palette, and wikven turns it
+	// back on (Hooks\Main) now that the palette is gone: this is what that buys.
+	await page.locator(".citizen-search summary").click();
+	await page.locator("#searchInput").click();
+	await page.keyboard.type("binary", { delay: 40 });
+
+	// Core's widget builds each suggestion's href from the search form, which SifterSearch has
+	// pointed at the results page, so a suggestion arrives there with its own title as the query
+	// rather than at the page itself. Matching on what the reader sees, not on that.
+	await expect(
+		page
+			.locator(".suggestions-results a", { hasText: "Standalone binary" })
+			.first(),
+	).toBeVisible({ timeout: 15000 });
+
+	// The panel is core's jquery.suggestions, whose own colours are hardcoded light; restated in
+	// Citizen's custom properties, it has to follow the skin rather than stay white in the dark.
+	const surface = await page.evaluate(() => {
+		const results = document.querySelector(".suggestions-results");
+		return getComputedStyle(results).backgroundColor;
+	});
+	expect(
+		surface,
+		"the suggestion panel keeps jquery.suggestions' own white",
+	).not.toBe("rgb(255, 255, 255)");
+});
+
 test("Citizen's preferences panel loads and switches the theme", async ({
 	page,
 }) => {

@@ -105,6 +105,43 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * The chooser that carries the skin list into Citizen's preferences panel is only worth
+	 * loading where there is a panel to put it in and more than one skin to choose between.
+	 *
+	 * @dataProvider provideSkinChooserCases
+	 */
+	public function testSkinChooserIsLoadedForCitizenOnly(
+		string $skin,
+		array $skins,
+		bool $preferences,
+		bool $expected
+	) {
+		$this->overrideConfigValue('WikvenSkins', $skins);
+		$this->setMwGlobals('wgCitizenEnablePreferences', $preferences);
+		$modules = [];
+		$out = $this->createMock(OutputPage::class);
+		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
+			$modules[] = $name;
+		});
+		$skinMock = $this->createMock(Skin::class);
+		$skinMock->method('getSkinName')->willReturn($skin);
+
+		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+
+		$this->assertSame($expected, in_array('ext.Wikven.citizenSkins', $modules, true));
+	}
+
+	public static function provideSkinChooserCases() {
+		$two = ['vector-2022', 'citizen'];
+		return [
+			'citizen with a panel and a choice' => ['citizen', $two, true, true],
+			'citizen with the panel turned off' => ['citizen', $two, false, false],
+			'citizen with nothing to choose between' => ['citizen', ['citizen'], true, false],
+			'another skin' => ['vector-2022', $two, true, false]
+		];
+	}
+
+	/**
 	 * Vector moves every section from the toolbox onward into its page-tools menu, so the skin list
 	 * gets a section of its own there and the toolbox stays as Hider left it.
 	 */

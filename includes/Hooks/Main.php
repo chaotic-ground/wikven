@@ -146,14 +146,19 @@ class Main implements
 		}
 		MediaWikiServices::getInstance()
 			->getHookContainer()
-			->register(
-				'SkinPageReadyConfig',
-				static function (Context $context, array &$config): void {
-					if ($context->getSkin() === 'citizen') {
-						$config['search'] = true;
-					}
-				}
-			);
+			->register('SkinPageReadyConfig', [$this, 'enableCitizenSearch']);
+	}
+
+	/**
+	 * Turn core's search wiring back on, for Citizen alone.
+	 *
+	 * @internal Registered as a hook handler by restoreCitizenSearchWiring(); public so that it is
+	 *   callable, and so that what it decides can be asserted without a hook run around it.
+	 */
+	public function enableCitizenSearch(Context $context, array &$config): void {
+		if ($context->getSkin() === 'citizen') {
+			$config['search'] = true;
+		}
 	}
 
 	/**
