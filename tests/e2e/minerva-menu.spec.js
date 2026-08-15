@@ -42,9 +42,11 @@ test("minerva's main menu carries the same navigation as the main skin", async (
 	page,
 }) => {
 	await page.goto("Installation.html");
-	const expected = await page
-		.locator('[id^="n-"] a:not([href$="index.html"])')
-		.allInnerTexts();
+	// Labelled entries only: the main skin's sidebar also carries icon-only links, which have
+	// nothing to look for on the other side.
+	const expected = (
+		await page.locator('[id^="n-"] a:not([href$="index.html"])').allInnerTexts()
+	).filter(Boolean);
 	expect(
 		expected.length,
 		"the main skin has a sidebar to compare against",

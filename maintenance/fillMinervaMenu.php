@@ -46,20 +46,19 @@ class FillMinervaMenu extends Maintenance {
 			return;
 		}
 
-		// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
-		$groups =
-			$this->list('p-wikven-navigation', $this->navigationMarkup())
-			. $this->list('p-wikven-appearance', $this->themeMarkup() . $this->skinMarkup());
-		if ($groups === '') {
-			$this->output("Nothing to add to Minerva's main menu\n");
-			return;
-		}
+		// The navigation and the theme control are the same on every page; the switcher is not,
+		// since each page links to its own copy in the other skins.
+		$navigation = $this->list('p-wikven-navigation', $this->navigationMarkup());
+		$theme = $this->themeMarkup();
 
 		$changed = 0;
 		foreach (new FilesystemIterator($dir, FilesystemIterator::SKIP_DOTS) as $file) {
 			if (!$file->isFile() || $file->getExtension() !== 'html') {
 				continue;
 			}
+			// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
+			$groups =
+				$navigation . $this->list('p-wikven-appearance', $theme . $this->skinMarkup($file->getFilename()));
 			$html = (string)file_get_contents($file->getPathname());
 			$filled = HtmlListInserter::after($html, self::AFTER_LIST, $groups);
 			if ($filled !== $html) {
@@ -147,9 +146,12 @@ class FillMinervaMenu extends Maintenance {
 	 * the toolbox, but that is its page-actions menu, and which skin to read the site in is not an
 	 * action on a page.
 	 */
-	private function skinMarkup(): string {
+	private function skinMarkup(string $page): string {
+		global $wgDefaultSkin;
+
 		$markup = '';
-		foreach (SkinList::entries(RequestContext::getMain()->getSkin()) as $entry) {
+		$skin = RequestContext::getMain()->getSkin();
+		foreach (SkinList::forPage($skin, $page, $wgDefaultSkin) as $entry) {
 			$label = Html::element('span', ['class' => 'toggle-list-item__label'], $entry['text']);
 			$classes = ['toggle-list-item', 'wikven-nav-item', 'wikven-skin-item'];
 			if ($entry['active']) {

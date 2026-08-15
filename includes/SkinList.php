@@ -17,16 +17,29 @@ class SkinList {
 	 *   entry has no href. Empty when there is nothing to switch between.
 	 */
 	public static function entries(Skin $skin): array {
+		$title = $skin->getTitle();
+		if (!$title || !$title->canExist()) {
+			return [];
+		}
+		$page = Title::makeName($title->getNamespace(), $title->getDBkey()) . '.html';
+		return self::forPage($skin, $page, $skin->getSkinName());
+	}
+
+	/**
+	 * The same entries for a named output file, which is how the build reaches a page it is not
+	 * rendering: fillMinervaMenu.php writes these into pages one at a time, and each page's links
+	 * have to be that page's.
+	 *
+	 * @param string $page An output file name, e.g. "Getting_Started.html".
+	 * @return list<array{id:string,text:string,href:?string,active:bool}>
+	 */
+	public static function forPage(Skin $skin, string $page, string $current): array {
 		global $wgWikvenSkins, $wgWikvenMainSkin;
 
 		$skins = $wgWikvenSkins ?? [];
-		$title = $skin->getTitle();
-		if (count($skins) < 2 || !$title || !$title->canExist()) {
+		if (count($skins) < 2) {
 			return [];
 		}
-
-		$current = $skin->getSkinName();
-		$page = Title::makeName($title->getNamespace(), $title->getDBkey()) . '.html';
 		$root = $current === $wgWikvenMainSkin ? './' : '../';
 
 		$entries = [];
