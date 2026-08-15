@@ -35,9 +35,13 @@
   padding-left: 26px; // Minerva's icon, 20px, plus the 6px between it and the label.
 }
 
-// The switcher shares the navigation list, so a rule sets it off rather than a heading.
-.wikven-skin-item:first-of-type {
-  border-top: @border-width-base @border-style-base @border-color-muted;
+// Nothing is left in these once their dead entries are hidden, and an empty group is a grey band
+// of its own: page actions unless the site has a community portal, preferences always, and the
+// sitelinks footer whenever build.php found no About or Disclaimers page to point it at.
+#pt-preferences,
+#p-interaction:not(:has( > .toggle-list-item > .menu__item--speechBubbles )),
+#mw-mf-page-left .hlist:not(:has( > li )) {
+  display: none;
 }
 
 // The skin being read is listed, marked, and not a link, as in every other skin.

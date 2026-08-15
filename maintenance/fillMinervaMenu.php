@@ -27,8 +27,11 @@ require_once "$IP/maintenance/Maintenance.php";
  * every other link on the page.
  */
 class FillMinervaMenu extends Maintenance {
-	/** The list Minerva renders its own discovery entries into. */
-	private const LIST_ID = 'p-navigation';
+	/** The list Minerva renders its own discovery entries into; ours follow it. */
+	private const AFTER_LIST = 'p-navigation';
+
+	/** Minerva's own class for a menu group, which is what draws the gap between two of them. */
+	private const LIST_CLASS = 'toggle-list__list';
 
 	public function __construct() {
 		parent::__construct();
@@ -43,8 +46,10 @@ class FillMinervaMenu extends Maintenance {
 			return;
 		}
 
-		$items = $this->navigationMarkup() . $this->skinMarkup();
-		if ($items === '') {
+		// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
+		$groups = $this->list('p-wikven-navigation', $this->navigationMarkup())
+			. $this->list('p-wikven-skins', $this->skinMarkup());
+		if ($groups === '') {
 			$this->output("Nothing to add to Minerva's main menu\n");
 			return;
 		}
@@ -55,13 +60,20 @@ class FillMinervaMenu extends Maintenance {
 				continue;
 			}
 			$html = (string)file_get_contents($file->getPathname());
-			$filled = HtmlListAppender::append($html, self::LIST_ID, $items);
+			$filled = HtmlListInserter::after($html, self::AFTER_LIST, $groups);
 			if ($filled !== $html) {
 				file_put_contents($file, $filled, LOCK_EX);
 				$changed++;
 			}
 		}
 		$this->output("Filled Minerva's main menu on $changed page(s)\n");
+	}
+
+	/** One menu group, or "" when it would hold nothing. */
+	private function list(string $id, string $items): string {
+		return $items === ''
+			? ''
+			: Html::rawElement('ul', ['id' => $id, 'class' => self::LIST_CLASS], $items);
 	}
 
 	/** The sidebar's links as Minerva's own list items, or "" when there are none to add. */
