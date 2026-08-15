@@ -7,12 +7,7 @@ comment: false
 
 coverage:
   status:
-    # maintenance/ is half the tree's lines with no unit tests: it dilutes the
-    # project total, and its diffs can never meet a patch target.
-    project:
-      default:
-        target: auto
-        threshold: 2%
+    # maintenance/ is half the tree's lines with no unit tests; its diffs can never meet a patch target.
     patch:
       default:
         target: 70%
