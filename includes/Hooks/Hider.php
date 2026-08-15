@@ -21,7 +21,7 @@ class Hider implements
 		if (!Search::isActive()) {
 			$keys[] = 'SEARCH';
 		}
-		// Empty rather than unset: some skins (e.g. Minerva) require these keys to stay arrays.
+		// Empty rather than unset: Minerva passes $sidebar['TOOLBOX'] to an array parameter; null is fatal.
 		foreach ($keys as $key) {
 			if (isset($sidebar[$key])) {
 				$sidebar[$key] = [];
