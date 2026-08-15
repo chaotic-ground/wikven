@@ -325,7 +325,6 @@ class Build extends Maintenance {
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Drop the dead category link'));
 	}
 
-	/** Generate a Version page (static Special:Version) listing software, extensions and skins. */
 	/**
 	 * Generate a Settings page: the reader's own display choices, which a static export keeps in
 	 * the browser rather than in a user account. It stands in for Special:MobileOptions, which is
@@ -360,6 +359,7 @@ class Build extends Maintenance {
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Generate the settings page'));
 	}
 
+	/** Generate a Version page (static Special:Version) listing software, extensions and skins. */
 	private function setVersionPage(): void {
 		$name = $GLOBALS['wgWikvenVersionPage'] ?? 'Version';
 		if ($name === '') {

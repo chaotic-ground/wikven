@@ -30,7 +30,9 @@ class SkinList {
 	 * rendering: fillMinervaMenu.php writes these into pages one at a time, and each page's links
 	 * have to be that page's.
 	 *
+	 * @param Skin $skin Any skin, read for the labels alone.
 	 * @param string $page An output file name, e.g. "Getting_Started.html".
+	 * @param string $current The skin the page being written is rendered in.
 	 * @return list<array{id:string,text:string,href:?string,active:bool}>
 	 */
 	public static function forPage(Skin $skin, string $page, string $current): array {

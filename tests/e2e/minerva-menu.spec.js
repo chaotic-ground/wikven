@@ -42,18 +42,25 @@ test("minerva's main menu carries the same navigation as the main skin", async (
 	page,
 }) => {
 	await page.goto("Installation.html");
-	// Labelled entries only: the main skin's sidebar also carries icon-only links, which have
-	// nothing to look for on the other side.
+	// By text content rather than by innerText: the main skin keeps its menu in a dropdown, and
+	// innerText is empty for anything not on screen. Labelled entries only, since the sidebar also
+	// carries icon-only links, which have nothing to look for on the other side.
 	const expected = (
-		await page.locator('[id^="n-"] a:not([href$="index.html"])').allInnerTexts()
-	).filter(Boolean);
+		await page
+			.locator('[id^="n-"] a:not([href$="index.html"])')
+			.allTextContents()
+	)
+		.map((label) => label.trim())
+		.filter(Boolean);
 	expect(
 		expected.length,
 		"the main skin has a sidebar to compare against",
 	).toBeGreaterThan(1);
 
 	await page.goto("minerva/Installation.html");
-	const shown = await (await openDrawer(page)).allInnerTexts();
+	const shown = (await (await openDrawer(page)).allTextContents()).map(
+		(label) => label.trim(),
+	);
 
 	for (const label of expected) {
 		expect(shown, `${label} is missing from Minerva's menu`).toContain(label);
