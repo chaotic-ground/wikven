@@ -92,6 +92,12 @@ class BuildTranslations extends Maintenance {
 		return true;
 	}
 
+	/** Report a page Translate refused, and answer prepare()'s "was it marked" with no. */
+	private function skipUnmarkable(Title $title, string $reason): bool {
+		$this->output("Wikven: {$title->getPrefixedText()} cannot be marked for translation ($reason); skipping\n");
+		return false;
+	}
+
 	/**
 	 * Mark one page for translation and load its translations from the source files.
 	 *
@@ -138,12 +144,10 @@ class BuildTranslations extends Maintenance {
 			// short of 100% forever. No priority languages, transclusion, or forced syntax upgrade.
 			$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
 			$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
-		} catch (ParsingFailure|TranslatablePageMarkException $failure) {
-			$this->output(
-				"Wikven: {$title->getPrefixedText()} cannot be marked for translation"
-				. " ({$failure->getMessage()}); skipping\n"
-			);
-			return false;
+		} catch (ParsingFailure $failure) {
+			return $this->skipUnmarkable($title, $failure->getMessage());
+		} catch (TranslatablePageMarkException $failure) {
+			return $this->skipUnmarkable($title, $failure->getMessage());
 		}
 
 		// markForTranslation only queues the update job; run the queue so the source units exist

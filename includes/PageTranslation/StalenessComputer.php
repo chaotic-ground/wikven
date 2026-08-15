@@ -47,8 +47,12 @@ class StalenessComputer {
 	 */
 	private const VERBATIM_TAGS = 'syntaxhighlight|source|nowiki|pre';
 
-	/** A <translate> block, its contents captured. Translate accepts attributes on the opening tag. */
-	private const TRANSLATE_BLOCK = '#(<translate(?:\s[^>]*)?>)(.*?)(</translate>)#s';
+	/**
+	 * A <translate> block, its contents captured. Exactly the two spellings parse() accepts: it takes
+	 * no other attribute, so anything else is a tag containsMarkup() offers for marking and parse()
+	 * then refuses, which checkTranslations reports rather than this quietly reading as a block.
+	 */
+	private const TRANSLATE_BLOCK = '#(<translate(?: nowrap)?>)(.*?)(</translate>)#s';
 
 	/** What TranslatablePageParser::armourNowiki() hides: exactly this, no attributes, no other tag. */
 	private const ARMOURED_NOWIKI = '#<nowiki>.*?</nowiki>#s';
@@ -116,7 +120,9 @@ class StalenessComputer {
 	 */
 	public static function translationUnits(string $text): array {
 		$verbatim = self::verbatimRanges($text);
-		return self::unitsAt($text, static fn(int $offset): bool => !self::insideVerbatim($offset, $verbatim));
+		return self::unitsAt($text, static function (int $offset) use ($verbatim): bool {
+			return !self::insideVerbatim($offset, $verbatim);
+		});
 	}
 
 	/**
@@ -126,7 +132,9 @@ class StalenessComputer {
 	 */
 	private static function sourcePageUnits(string $text): array {
 		$blocks = self::blockRanges($text);
-		return self::unitsAt($text, static fn(int $offset): bool => self::containingRange($offset, $blocks) !== null);
+		return self::unitsAt($text, static function (int $offset) use ($blocks): bool {
+			return self::containingRange($offset, $blocks) !== null;
+		});
 	}
 
 	/**
@@ -313,7 +321,9 @@ class StalenessComputer {
 	private static function blockRanges(string $text): array {
 		$masked = preg_replace_callback(
 			self::ARMOURED_NOWIKI,
-			static fn(array $span): string => str_repeat("\x00", strlen($span[0])),
+			static function (array $span): string {
+				return str_repeat("\x00", strlen($span[0]));
+			},
 			$text
 		);
 

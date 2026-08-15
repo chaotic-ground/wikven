@@ -214,7 +214,7 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 
 	public function testASourceBlockInsideACodeExampleStillCounts() {
 		// Translate's parser hook runs before <syntaxhighlight> is stripped, so a whole pair written
-		// there is one it parses. Reading it as an example is what used to disagree with the engine.
+		// there is one it parses.
 		$text = "<syntaxhighlight>\n<translate>\n<!--T:1-->\nBody\n</translate>\n</syntaxhighlight>";
 		$this->assertSame([1], array_keys(StalenessComputer::sourceUnits($text)));
 	}
@@ -239,8 +239,7 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testMarkNumbersABlockShownInACodeExample() {
-		// Translate would number it, so wikven does too; leaving it alone is what let the wiki copy
-		// and the source file drift apart.
+		// Translate numbers it and saves the result back to the wiki, so wikven must number it too.
 		$example = "<syntaxhighlight>\n<translate>\nExample.\n</translate>\n</syntaxhighlight>";
 		$this->assertSame(
 			"<translate>\n<!--T:1-->\nReal.\n</translate>\n\n"
@@ -255,6 +254,29 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 			"<translate>\n<!--T:1-->\nReal.\n</translate>\n<nowiki><translate>\nShown.\n</translate></nowiki>",
 			StalenessComputer::mark($text)
 		);
+	}
+
+	public function testAnUnclosedCodeTagDoesNotStopLaterBlocksBeingRead() {
+		// Only <nowiki> armours anything for Translate, so an unclosed <pre> earlier on the page leaves
+		// every later block, and every marker in one, exactly as real.
+		$text = "<pre>\n<translate>\nShown.\n</translate>\n<translate>\n<!--T:4-->\nReal.\n</translate>";
+		$this->assertSame([4], array_keys(StalenessComputer::sourceUnits($text)));
+		$this->assertStringEndsWith(
+			"<translate>\n<!--T:4-->\nReal.\n</translate>",
+			StalenessComputer::mark($text)
+		);
+	}
+
+	public function testSourceUnitsSpanSeveralBlocksAndIgnoreMarkersBetweenThem() {
+		// Each block contributes its own units; a marker written between two of them belongs to
+		// neither, so the numbering of the real ones is untouched.
+		$text =
+			"<translate>\n<!--T:1-->\nOne.\n</translate>\n"
+			. "<pre>\n<!--T:8-->\nExample.\n</pre>\n"
+			. "<translate>\n<!--T:2-->\nTwo.\n</translate>\n"
+			. "<nowiki><!--T:9--></nowiki>\n"
+			. "<translate>\n<!--T:3-->\nThree.\n</translate>";
+		$this->assertSame([1, 2, 3], array_keys(StalenessComputer::sourceUnits($text)));
 	}
 
 	public function testAnalyzeIgnoresAnExampleMarkerInACodeBlock() {
@@ -333,7 +355,7 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		// An HTML comment is inert to MediaWiki's parser, so a tag name it merely mentions -- as a
 		// reviewer note might -- must not read as a real, unclosed opener; that would otherwise run
 		// to the end of the page and hide every later unit.
-		$text = "<!--T:1-->\n하나.\n" . "<!-- reviewer: do not wrap this in <nowiki> -->\n" . "<!--T:2-->\n둘.";
+		$text = "<!--T:1-->\n하나.\n<!-- reviewer: do not wrap this in <nowiki> -->\n<!--T:2-->\n둘.";
 		$this->assertSame([1, 2], array_keys(StalenessComputer::translationUnits($text)));
 	}
 }

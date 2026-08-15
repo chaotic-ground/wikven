@@ -25,8 +25,12 @@ class TranslationSource {
 	/** What TranslatablePageParser::armourNowiki() hides: exactly this, no attributes, no other tag. */
 	private const ARMOURED_NOWIKI = '#<nowiki>.*?</nowiki>#s';
 
-	/** Tags MediaWiki hands to an extension unparsed, so a magic word inside one never runs. */
-	private const UNEXPANDED_TAGS = ['nowiki', 'pre'];
+	/**
+	 * Tags whose contents MediaWiki hands over unparsed, so a magic word inside one never runs.
+	 * <pre> and <nowiki> always; <syntaxhighlight> and <source> only where that extension is loaded,
+	 * which is the common case and the one wikven's own docs run under.
+	 */
+	private const UNEXPANDED_TAGS = ['syntaxhighlight', 'source', 'nowiki', 'pre'];
 
 	/** Whether a page's wikitext marks it as translatable (a real <translate>, not one shown as an example). */
 	public static function isTranslatable(string $text): bool {
@@ -62,9 +66,7 @@ class TranslationSource {
 
 	/** Whether a page's wikitext sets its own display title (a real magic word, not one shown as an example). */
 	public static function hasFixedDisplayTitle(string $text): bool {
-		// Unlike isTranslatable, this asks what MediaWiki expands. <pre> and <nowiki> are core tag
-		// hooks, so a magic word inside one never runs; <syntaxhighlight> is only a tag where that
-		// extension is loaded, and reading it as verbatim would blank a real one on a site without it.
+		// Unlike isTranslatable, this asks what MediaWiki expands rather than what Translate parses.
 		$matches = [];
 		$stripped = Parser::extractTagsAndParams(self::UNEXPANDED_TAGS, $text, $matches);
 		// DISPLAYTITLE is a localized magic word: on a de-content wiki the working spelling is

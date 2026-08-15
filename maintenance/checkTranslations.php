@@ -137,10 +137,8 @@ class CheckTranslations extends Maintenance {
 		}
 		// The two readings agreeing is what makes every check below it mean anything: a unit only
 		// wikven sees is never translated on the wiki, and one only Translate sees is never gated.
-		$wikven = array_values(array_diff(
-			array_map('strval', array_keys(StalenessComputer::sourceUnits($sourceText))),
-			[StalenessComputer::TITLE_UNIT_ID]
-		));
+		// No page title is passed, so the title unit Translate has no counterpart for is never added.
+		$wikven = array_map('strval', array_keys(StalenessComputer::sourceUnits($sourceText)));
 		if ($wikven !== $ids) {
 			$problems++;
 			$this->output(
@@ -154,3 +152,6 @@ class CheckTranslations extends Maintenance {
 		return $problems;
 	}
 }
+
+$maintClass = CheckTranslations::class;
+require_once RUN_MAINTENANCE_IF_MAIN;
