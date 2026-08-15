@@ -1,0 +1,45 @@
+---
+name: "build(deps): bump mago"
+pipelineid: mago
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: updatecli
+      email: updatecli@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+sources:
+  release:
+    name: Latest mago release
+    kind: githubrelease
+    spec:
+      owner: carthage-software
+      repository: mago
+      versionfilter:
+        kind: semver
+
+targets:
+  # setup-mago reads this key itself, so the Lint workflow states no version. Replaced as text
+  # rather than with the json kind: that one reserialises the whole file, turning the tabs into
+  # spaces and sorting every key, which is a rewrite of composer.json on each bump.
+  composer:
+    name: 'build(deps): bump mago to {{ source "release" }}'
+    kind: file
+    scmid: default
+    sourceid: release
+    spec:
+      file: composer.json
+      matchpattern: '"mago-version": "[^"]*"'
+      replacepattern: '"mago-version": "{{ source "release" }}"'

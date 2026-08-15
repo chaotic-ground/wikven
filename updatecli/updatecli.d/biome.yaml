@@ -1,0 +1,43 @@
+---
+name: "build(deps): bump biome"
+pipelineid: biome
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: updatecli
+      email: updatecli@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+sources:
+  npm:
+    name: Latest biome release
+    kind: npm
+    spec:
+      name: "@biomejs/biome"
+      versionfilter:
+        kind: semver
+
+targets:
+  # The $schema URL is the only place the version appears; the Lint workflow reads the binary
+  # version back out of it, so the schema and the binary cannot drift apart.
+  schema:
+    name: 'build(deps): bump biome to {{ source "npm" }}'
+    kind: file
+    scmid: default
+    sourceid: npm
+    spec:
+      file: biome.json
+      matchpattern: 'biomejs\.dev/schemas/[^/]+/schema\.json'
+      replacepattern: 'biomejs.dev/schemas/{{ source "npm" }}/schema.json'

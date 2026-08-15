@@ -1,0 +1,34 @@
+---
+name: Updatecli
+
+# Bump the version pins no package manager can see: the SifterSearch release tarball in the
+# Dockerfile, the mago binary in composer.json, and the biome binary in biome.json. The five real
+# ecosystems are Dependabot's, in .github/dependabot.yml.
+#
+# The app is what makes the bump testable: a pull request opened with GITHUB_TOKEN starts no
+# workflows, so the bump would reach main unbuilt. Its own identity gets the full suite.
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  updatecli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: updatecli/updatecli-action@41b9c8d707830a9daebaeaa84c1b62d60b779564  # v3.6.0
+        with:
+          version: v0.120.1
+
+      - run: updatecli apply --config updatecli/updatecli.d
+        env:
+          UPDATECLI_GITHUB_APP_CLIENT_ID: ${{ secrets.UPDATECLI_APP_CLIENT_ID }}
+          UPDATECLI_GITHUB_APP_PRIVATE_KEY: ${{ secrets.UPDATECLI_APP_PRIVATE_KEY }}
+          UPDATECLI_GITHUB_APP_INSTALLATION_ID: ${{ secrets.UPDATECLI_APP_INSTALLATION_ID }}
