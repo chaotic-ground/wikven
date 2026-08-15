@@ -6,6 +6,7 @@
  * @phan-file-suppress PhanUndeclaredClassMethod
  * @phan-file-suppress PhanUndeclaredClassConstant
  * @phan-file-suppress PhanUndeclaredConstant
+ * @phan-file-suppress PhanUndeclaredClassCatch
  */
 
 namespace MediaWiki\Extension\Wikven;
@@ -14,7 +15,9 @@ use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\Translate\PageTranslation\ParsingFailure;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
+use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageMarkException;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageSettings;
 use MediaWiki\Extension\Translate\PageTranslation\UpdateTranslatablePageJob;
 use MediaWiki\Extension\Translate\Services as TranslateServices;
@@ -97,7 +100,7 @@ class BuildTranslations extends Maintenance {
 	 * @param string[] $languages
 	 * @param ?string $pageTitle Source text of the page's title unit, or null if its title is fixed.
 	 * @param User $user
-	 * @return bool Whether the page was marked (false if it could not be loaded or had invalid units).
+	 * @return bool Whether the page was marked (false if it could not be loaded, parsed or validated).
 	 */
 	private function prepare(
 		Title $title,
@@ -121,16 +124,27 @@ class BuildTranslations extends Maintenance {
 			$this->output("Wikven: could not load {$title->getPrefixedText()} for translation; skipping\n");
 			return false;
 		}
-		$operation = $marker->getMarkOperation($record, null, $pageTitle !== null);
-		if (!$operation->getUnitValidationStatus()->isOK()) {
-			$this->output("Wikven: {$title->getPrefixedText()} has invalid translation units; skipping\n");
+		// A page Translate cannot parse -- an unclosed <translate>, two markers in one unit -- throws
+		// out of the marker. One page must not end the bake, so report it and leave it untranslated;
+		// checkTranslations reports the same page, which is where the author is meant to see it.
+		try {
+			$operation = $marker->getMarkOperation($record, null, $pageTitle !== null);
+			if (!$operation->getUnitValidationStatus()->isOK()) {
+				$this->output("Wikven: {$title->getPrefixedText()} has invalid translation units; skipping\n");
+				return false;
+			}
+			// Keep Translate's "Page display title" unit only for a page whose title is translatable;
+			// a page that fixes its own display title has nothing to translate and would otherwise sit
+			// short of 100% forever. No priority languages, transclusion, or forced syntax upgrade.
+			$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
+			$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
+		} catch (ParsingFailure|TranslatablePageMarkException $failure) {
+			$this->output(
+				"Wikven: {$title->getPrefixedText()} cannot be marked for translation"
+				. " ({$failure->getMessage()}); skipping\n"
+			);
 			return false;
 		}
-		// Keep Translate's "Page display title" unit only for a page whose title is translatable;
-		// a page that fixes its own display title has nothing to translate and would otherwise sit
-		// short of 100% forever. No priority languages, transclusion, or forced syntax upgrade.
-		$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
-		$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
 
 		// markForTranslation only queues the update job; run the queue so the source units exist
 		// before we fill in translations.
@@ -182,7 +196,7 @@ class BuildTranslations extends Maintenance {
 				continue;
 			}
 			$translationText = (string)file_get_contents($translationFile);
-			$units = StalenessComputer::splitUnits($translationText);
+			$units = StalenessComputer::translationUnits($translationText);
 
 			$status = [];
 			foreach (StalenessComputer::analyze($sourceText, $translationText, $pageTitle) as $unit) {

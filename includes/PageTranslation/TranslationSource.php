@@ -19,25 +19,21 @@ use Throwable;
  * buildTranslations (materialize) so both agree on what is a base and what is a translation.
  */
 class TranslationSource {
-	/**
-	 * An opening <translate> tag, attributes and all. Translate accepts <translate nowrap>, and
-	 * StalenessComputer::mark() matches the same shape, so both halves of the pipeline agree on
-	 * what counts as a translatable page.
-	 */
-	private const TRANSLATE_TAG = '#<translate(?:\s[^>]*)?>#';
+	/** A translate tag of either half, as Translate's own containsMarkup() looks for one. */
+	private const TRANSLATE_TAG = '#</?translate[ >]#';
+
+	/** What TranslatablePageParser::armourNowiki() hides: exactly this, no attributes, no other tag. */
+	private const ARMOURED_NOWIKI = '#<nowiki>.*?</nowiki>#s';
+
+	/** Tags MediaWiki hands to an extension unparsed, so a magic word inside one never runs. */
+	private const UNEXPANDED_TAGS = ['nowiki', 'pre'];
 
 	/** Whether a page's wikitext marks it as translatable (a real <translate>, not one shown as an example). */
 	public static function isTranslatable(string $text): bool {
-		// A <translate> inside a verbatim span -- <syntaxhighlight>, <nowiki>, <pre>, <source> -- is an
-		// example, as on the page documenting page translation, not real markup. Blank those spans with
-		// MediaWiki's own tag extraction (it handles attributes, self-closing tags and comments) before
-		// looking for a real tag, rather than trusting a hand-rolled regex.
-		$matches = [];
-		$stripped = Parser::extractTagsAndParams(['syntaxhighlight', 'source', 'nowiki', 'pre'], $text, $matches);
-		// Match the tag the way Translate itself does, attributes included: <translate nowrap> is a real
-		// translatable page, and StalenessComputer::mark() accepts the same shape, so the two agree on
-		// what marks a page for CI checks and the translated build.
-		return preg_match(self::TRANSLATE_TAG, $stripped) === 1;
+		// Translate's parser hook runs on raw wikitext, before any extension tag is stripped, so a
+		// <translate> shown in a <syntaxhighlight> is one it parses. Only <nowiki> hides a tag from it.
+		// A placeholder rather than an empty string: removing the span could splice "</" onto "translate>".
+		return preg_match(self::TRANSLATE_TAG, preg_replace(self::ARMOURED_NOWIKI, "\x7f", $text)) === 1;
 	}
 
 	/**
@@ -66,10 +62,11 @@ class TranslationSource {
 
 	/** Whether a page's wikitext sets its own display title (a real magic word, not one shown as an example). */
 	public static function hasFixedDisplayTitle(string $text): bool {
-		// As in isTranslatable: a {{DISPLAYTITLE:}} shown inside a verbatim span -- as on the page
-		// documenting page translation -- is an example, not a magic word the parser ever runs.
+		// Unlike isTranslatable, this asks what MediaWiki expands. <pre> and <nowiki> are core tag
+		// hooks, so a magic word inside one never runs; <syntaxhighlight> is only a tag where that
+		// extension is loaded, and reading it as verbatim would blank a real one on a site without it.
 		$matches = [];
-		$stripped = Parser::extractTagsAndParams(['syntaxhighlight', 'source', 'nowiki', 'pre'], $text, $matches);
+		$stripped = Parser::extractTagsAndParams(self::UNEXPANDED_TAGS, $text, $matches);
 		// DISPLAYTITLE is a localized magic word: on a de-content wiki the working spelling is
 		// {{ANZEIGETITEL:}}. Checking every synonym in the content language covers that, or such a page
 		// is handed a title unit its own magic word then overrides.
