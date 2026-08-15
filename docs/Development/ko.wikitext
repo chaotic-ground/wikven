@@ -44,7 +44,7 @@
 <!--T:12 @4f9fb5e1-->
 <code>maintenance/build.php</code>는 단계마다 부트스트랩 비용을 치르는 대신 MediaWiki를 '''한 번'''만 부팅하고 모든 단계를 자식 관리 스크립트로 실행합니다. 순서대로:
 
-<!--T:13 @3fd6dc99-->
+<!--T:13 @b44d8247-->
 ; <code>setMainPage</code>
 : <code>MediaWiki:Mainpage</code>를 가져온 <code>index</code> 문서로 지정하여, 사이트 루트가 <code>index.html</code>로 해석되도록 합니다.
 ; <code>importImages</code>
@@ -60,7 +60,7 @@
 ; <code>buildScripts</code>
 : 문서에 필요한 JavaScript를 두 파일로 덤프합니다. <code>startup-static.js</code>(네트워크 자동 로드를 제거한 로더 매니페스트)와 <code>modules-static.js</code>(전체 의존성 폐포로, 모든 모듈이 스스로 실행됨)입니다. <code>site</code> 모듈(<code>MediaWiki:Common.js</code>와 스킨의 JS)과, 실제 위키가 암묵적으로 끌어오는 기본 [[$1|소도구]]를 심어 둡니다.
 ; <code>rewriteScripts</code>
-: 캐시된 HTML이 <code>load.php</code> 대신 로컬 번들을 불러오도록 다시 씁니다. 비동기 startup 태그를 정적 파일과 명시적인 <code>mw.loader.load()</code>로 바꾸고, 사이트 스타일을 마지막에 링크해 캐스케이드에서 이기게 하며, 실제 API가 필요한 외관 메뉴(그리고 [[$2|SifterSearch]]가 정적 색인을 제공하지 않는 한 검색 상자)를 제거합니다.
+: 캐시된 HTML이 <code>load.php</code> 대신 로컬 번들을 불러오도록 다시 씁니다. 비동기 startup 태그를 정적 파일과 명시적인 <code>mw.loader.load()</code>로 바꾸고, 사이트 스타일을 마지막에 링크해 캐스케이드에서 이기게 하며, [[$2|SifterSearch]]가 정적 색인을 제공하지 않는 한 실제 API가 필요한 검색 상자를 제거합니다.
 ; <code>storeImages</code>
 : 참조된 모든 이미지(InstantCommons를 통한 위키미디어 공용, 또는 로컬 업로드)를 콘텐츠 해시된 로컬 파일로 복사하고 URL을 다시 써서, 열람 시점에 네트워크로 아무것도 가져오지 않도록 합니다.
 ; <code>rename</code>

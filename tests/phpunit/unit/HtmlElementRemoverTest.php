@@ -11,12 +11,12 @@ use MediaWikiUnitTestCase;
 class HtmlElementRemoverTest extends MediaWikiUnitTestCase {
 	private function byId(): callable {
 		return static function ($name, array $attrs) {
-			return ( $attrs['id'] ?? null ) === 'vector-appearance';
+			return ( $attrs['id'] ?? null ) === 'removable';
 		};
 	}
 
 	public function testRemovesAMatchedElementAndItsSubtree() {
-		$html = '<body><div id="vector-appearance"><div>nested</div>text</div><p>keep</p></body>';
+		$html = '<body><div id="removable"><div>nested</div>text</div><p>keep</p></body>';
 		$this->assertSame(
 			'<body><p>keep</p></body>',
 			HtmlElementRemover::remove($html, $this->byId())
@@ -26,7 +26,7 @@ class HtmlElementRemoverTest extends MediaWikiUnitTestCase {
 	public function testMatchesRegardlessOfTagName() {
 		// Vector may render the targeted chrome as <nav>, <aside>, or <form> instead of <div>; a
 		// matcher hardcoded to "<div" would silently leave it in place.
-		$html = '<body><nav id="vector-appearance"><span>x</span></nav><p>keep</p></body>';
+		$html = '<body><nav id="removable"><span>x</span></nav><p>keep</p></body>';
 		$this->assertSame(
 			'<body><p>keep</p></body>',
 			HtmlElementRemover::remove($html, $this->byId())
@@ -34,7 +34,7 @@ class HtmlElementRemoverTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testAGreaterThanInsideAnAttributeValueIsNotTheTagEnd() {
-		$html = '<body><div id="vector-appearance" data-note="a > b">x</div><p>keep</p></body>';
+		$html = '<body><div id="removable" data-note="a > b">x</div><p>keep</p></body>';
 		$this->assertSame(
 			'<body><p>keep</p></body>',
 			HtmlElementRemover::remove($html, $this->byId())
@@ -42,9 +42,7 @@ class HtmlElementRemoverTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testAVoidOrSelfClosedElementInsideTheSubtreeDoesNotDesyncDepth() {
-		$html =
-			'<body><div id="vector-appearance"><input type="search"><svg><path d="M0 0"/></svg></div>'
-			. '<p>keep</p></body>';
+		$html = '<body><div id="removable"><input type="search"><svg><path d="M0 0"/></svg></div><p>keep</p></body>';
 		$this->assertSame(
 			'<body><p>keep</p></body>',
 			HtmlElementRemover::remove($html, $this->byId())
@@ -66,7 +64,7 @@ class HtmlElementRemoverTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testTwoSiblingMatchesAreBothRemoved() {
-		$html = '<body><div id="vector-appearance">a</div><p>mid</p><div id="vector-appearance">b</div></body>';
+		$html = '<body><div id="removable">a</div><p>mid</p><div id="removable">b</div></body>';
 		$this->assertSame(
 			'<body><p>mid</p></body>',
 			HtmlElementRemover::remove($html, $this->byId())
