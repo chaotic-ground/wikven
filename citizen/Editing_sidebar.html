@@ -107,7 +107,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="edits">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>675</span>
+		<span>679</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -429,7 +429,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><section id="citizen-section-0" class="citizen-section"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
 <li><a href="./Editing_sidebar/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="사이드바 편집 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>The navigation sidebar is configured the same way as on MediaWiki, through the <code>MediaWiki:Sidebar</code> system message. Create a <code>MediaWiki:Sidebar.wikitext</code> file in your source directory, alongside your other pages.
-</p><p>Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the English wording goes in <code>MediaWiki:Sidebar-docs.wikitext</code> and the Korean in <code>MediaWiki:Sidebar-docs/ko.wikitext</code>, next to your other pages. This site's sidebar, for example:
+</p><p>Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the English wording goes in <code>MediaWiki:Sidebar-docs.wikitext</code> and the Korean in <code>MediaWiki:Sidebar-docs/ko.wikitext</code>, next to your other pages. A sidebar then reads like this:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
 <span class="k">**</span> mainpage|mainpage-description
@@ -441,10 +441,21 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
 </p>
-</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="What_is_removed">What is removed</h2></div><section id="citizen-section-1" class="citizen-section">
+</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div><section id="citizen-section-1" class="citizen-section">
+<p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The main page is a target like any other (<code>index</code>, unless <code>WikvenMainPage</code> says otherwise), and the prefix keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+</p>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
+<span class="k">**</span> Special:MyLanguage/index|mainpage-description
+<span class="k">*</span> sidebar-docs
+<span class="k">**</span> Special:MyLanguage/Getting Started|sidebar-getting-started
+<span class="k">**</span> Special:MyLanguage/Images|sidebar-images
+<span class="k">*</span> sidebar-references
+<span class="k">**</span> Special:MyLanguage/Licenses|sidebar-licenses
+</pre></div>
+</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="What_is_removed">What is removed</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>Some default sidebar blocks need a live wiki, so Wikven drops them from the static export: the <b>toolbox</b> (What links here, Special pages, Printable version, and so on) and the <b>search</b> box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 </p>
-</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="See_also">See also</h2></div><section id="citizen-section-2" class="citizen-section">
+</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="See_also">See also</h2></div><section id="citizen-section-3" class="citizen-section">
 <ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar" class="extiw" title="mw:Special:MyLanguage/Manual:Interface/Sidebar">Manual:Interface/Sidebar</a></li></ul>
 <style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Pages.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="./Images.html" title="Special:MyLanguage/Images">Images</a> →</div></div>
 
@@ -465,7 +476,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Editing%20sidebar.wikitext" title="This page was last edited on 15 August 2026, at 20:00." data-timestamp="1786824007"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Editing%20sidebar.wikitext" title="This page was last edited on 15 August 2026, at 20:12." data-timestamp="1786824769"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -491,12 +502,27 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				<div class="citizen-toc-contents" id="mw-panel-toc-list">
 				<div class="citizen-toc-indicator"></div>
 				<ul class="citizen-toc-list">
-					<li id="toc-What_is_removed"
+					<li id="toc-Linking_on_a_translated_site"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Linking_on_a_translated_site" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">1</span>
+						<span class="citizen-toc-heading">Linking on a translated site</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Linking_on_a_translated_site-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+		<li id="toc-What_is_removed"
 			class="citizen-toc-list-item citizen-toc-level-1">
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#What_is_removed" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">1</span>
+						<span class="citizen-toc-numb">2</span>
 						<span class="citizen-toc-heading">What is removed</span>
 					</div>
 					
@@ -511,7 +537,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#See_also" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">2</span>
+						<span class="citizen-toc-numb">3</span>
 						<span class="citizen-toc-heading">See also</span>
 					</div>
 					
@@ -531,7 +557,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 20:00.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 20:12.</div>
 		    </section>
 		</div>
 </footer>		</div>
