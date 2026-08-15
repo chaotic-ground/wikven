@@ -1,0 +1,64 @@
+---
+name: "build(deps): bump Translate's runtime dependencies"
+pipelineid: translate-deps
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+# Translate requires both by range, so the Dockerfile pins them exactly and passes the pins to
+# composer as temporary constraints. Tag shapes differ between the two projects; both are copied
+# verbatim into the ARG, which is what composer is given.
+sources:
+  spyc:
+    name: Latest spyc release
+    kind: githubrelease
+    spec:
+      owner: mustangostang
+      repository: spyc
+      versionfilter:
+        kind: semver
+  installers:
+    name: Latest composer/installers release
+    kind: githubrelease
+    spec:
+      owner: composer
+      repository: installers
+      versionfilter:
+        kind: semver
+
+targets:
+  spyc:
+    name: 'build(deps): bump spyc to {{ source "spyc" }}'
+    kind: dockerfile
+    scmid: default
+    sourceid: spyc
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: ARG
+        matcher: SPYC_VERSION
+  installers:
+    name: 'build(deps): bump composer/installers to {{ source "installers" }}'
+    kind: dockerfile
+    scmid: default
+    sourceid: installers
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: ARG
+        matcher: COMPOSER_INSTALLERS_VERSION
