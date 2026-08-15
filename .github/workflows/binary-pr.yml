@@ -2,6 +2,7 @@
 name: Standalone binary
 
 # Path-filtered, so it must stay non-required: a required check that never reports blocks merging.
+# Hence `binary`, not `build`: that name is a required context, owned by docker-build.yml.
 on:
   pull_request:
     paths:
@@ -22,7 +23,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  binary:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
