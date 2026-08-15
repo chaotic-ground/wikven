@@ -3,10 +3,8 @@
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\RetryingForeignRepo;
-use MediaWiki\Http\HttpRequestFactory;
-use MediaWiki\Http\MWHttpRequest;
-use MediaWiki\Status\Status;
 use MediaWikiIntegrationTestCase;
+use MockHttpTrait;
 use RuntimeException;
 use Wikimedia\FileBackend\FSFileBackend;
 use Wikimedia\ObjectCache\WANObjectCache;
@@ -17,6 +15,8 @@ use Wikimedia\ObjectCache\WANObjectCache;
  * @covers \MediaWiki\Extension\Wikven\RetryingForeignRepo
  */
 class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
+	use MockHttpTrait;
+
 	/** A repository with its own empty cache, so one test's lookups cannot answer another's. */
 	private function newRepo(): RetryingForeignRepo {
 		return new RetryingForeignRepo([
@@ -43,23 +43,19 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 	 */
 	private function answerWith(array $responses, &$made): void {
 		$made = 0;
-		$factory = $this->createMock(HttpRequestFactory::class);
-		$factory->method('create')
-			->willReturnCallback(
-				function () use ($responses, &$made): MWHttpRequest {
-					$response = $responses[min($made, count($responses) - 1)];
-					$made++;
-					$request = $this->createMock(MWHttpRequest::class);
-					$request->method('execute')
-						->willReturn(
-							isset($response['body']) ? Status::newGood() : Status::newFatal('http-timed-out')
-						);
-					$request->method('getContent')->willReturn($response['body'] ?? '');
-					$request->method('getResponseHeader')->willReturn($response['lastModified'] ?? null);
-					return $request;
-				}
-			);
-		$this->setService('HttpRequestFactory', $factory);
+		// installMockHttp builds a real HttpRequestFactory and fails the test by name on any request
+		// path this mock does not answer.
+		$this->installMockHttp(function () use ($responses, &$made) {
+			$response = $responses[min($made, count($responses) - 1)];
+			$made++;
+			if (!isset($response['body'])) {
+				return $this->makeFakeTimeoutRequest();
+			}
+			$headers = isset($response['lastModified'])
+				? ['Last-Modified' => $response['lastModified']]
+				: [];
+			return $this->makeFakeHttpRequest($response['body'], 200, $headers);
+		});
 	}
 
 	/** An imageinfo response body, with a thumbnail URL unless $thumbUrl is null. */
