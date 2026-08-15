@@ -24,7 +24,7 @@ Any other skin is untested rather than refused: every skin bundled with MediaWik
 You can change the skin by setting <code>skins</code>. The first skin in the list is used as the default.
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 skins:
   - MinervaNeue
 </syntaxhighlight>
@@ -37,7 +37,7 @@ skins:
 A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]]. It is fetched at build time and may be the default like any other. This documentation site fetches Citizen this way, offered alongside the other two.
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 skins:
   - Example
 config:
@@ -55,7 +55,7 @@ config:
 Use the <code>config</code> map.
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 config:
   VectorResponsive: false
 </syntaxhighlight>

@@ -50,7 +50,7 @@ Add <code><nowiki>[[Category:Name]]</nowiki></code> to a page to {{ml|Help:Categ
 A category's own page is not exported by default, though. {{SITENAME}} writes only ''content'' pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your [[<tvar name="1">Special:MyLanguage/Configuration#ContentNamespaces</tvar>|<code>.wikven.yaml</code>]] and add a <code>Category:Name.wikitext</code> file to your source:
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 config:
   ContentNamespaces: [0, 6, 14]
 </syntaxhighlight>
@@ -69,7 +69,7 @@ To keep a maintenance or tracking category out of the footer instead, add the <c
 Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>. For example, this file:
 </translate>
 
-<syntaxhighlight lang="wikitext">
+<syntaxhighlight lang="wikitext" copy>
 '''Note:''' {{{1}}}
 </syntaxhighlight>
 
@@ -78,7 +78,7 @@ Put a <code>Template:Name.wikitext</code> file in your source and use it on any 
 saved as <code>Template:Note.wikitext</code> and used on a page as:
 </translate>
 
-<syntaxhighlight lang="wikitext">
+<syntaxhighlight lang="wikitext" copy>
 {{Note|Back up your wiki first.}}
 </syntaxhighlight>
 

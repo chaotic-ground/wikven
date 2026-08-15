@@ -7,7 +7,7 @@
 <!--T:2 @9383077a-->
 == 바이너리 ==
 
-<!--T:3 @4aec5749-->
+<!--T:3 @8e2a879a-->
 x86_64와 arm64 Linux용으로 MediaWiki를 내장한 단일 자체 완결형 실행 파일입니다. 내려받은 뒤 실행 권한을 부여하십시오:
 
 <!--T:4 @b679cc4f-->
@@ -16,7 +16,7 @@ arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파�
 <!--T:5 @77dff36a-->
 == Docker ==
 
-<!--T:6 @26976b22-->
+<!--T:6 @21cc2aba-->
 [https://www.docker.com/ Docker]가 설치된 모든 플랫폼에서 동작하므로, macOS와 Windows에서 사용할 선택지입니다. 이미지는 GitHub Container Registry에 게시됩니다:
 
 <!--T:7 @f409f0df-->
@@ -25,7 +25,7 @@ arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파�
 <!--T:8 @b85c6b45-->
 == 소스에서 빌드 ==
 
-<!--T:9 @06f65ce2-->
+<!--T:9 @811580ed-->
 {{SITENAME}}을 수정하거나 배포되지 않은 커밋을 실행하려면, 저장소를 복제한 뒤 이미지를 직접 빌드하십시오:
 
 <!--T:10 @c2d0a1ec-->

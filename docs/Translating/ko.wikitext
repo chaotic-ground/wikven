@@ -7,7 +7,7 @@
 <!--T:2 @c6a2b946-->
 == 번역 활성화하기 ==
 
-<!--T:3 @fb88aa9b-->
+<!--T:3 @75ded9e6-->
 [[$1|<code>.wikven.yaml</code>]]의 <code>extensions</code>에 <code>Translate</code>를 추가하고, Translate가 의존하는 <code>UniversalLanguageSelector</code>도 함께 추가합니다. 둘 다 {{SITENAME}} 이미지에 번들되어 있으므로 설치할 것은 없습니다.
 
 <!--T:4 @4641fec3-->

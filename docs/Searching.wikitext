@@ -19,7 +19,7 @@ Search needs no configuration: the index is written to a <code>pagefind/</code> 
 If your site lives in a subdirectory, set the bundle path to include it. This site deploys under <code>/wikven</code> on GitHub Pages:
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 config:
   SifterSearchBundlePath: /wikven/pagefind/
 </syntaxhighlight>
@@ -29,7 +29,7 @@ config:
 To list all matches on a page rather than just the typeahead, name a content page (see below):
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 config:
   SifterSearchResultsPage: "Search"
 </syntaxhighlight>
@@ -39,7 +39,7 @@ config:
 To turn search off, point the output directory at nothing:
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 config:
   SifterSearchOutputDir: ""
 </syntaxhighlight>
