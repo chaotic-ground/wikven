@@ -5,19 +5,24 @@
 // never reaches these and they are inserted unconditionally. Every one is a Special: page an
 // export cannot serve. Community portal is not here: it has a lever, and build.php pulls it.
 // By item rather than by group, so a site's own entries in the same groups survive.
+// Nearby and settings (Special:MobileOptions) only appear with MobileFrontend installed, which a
+// wikven site may well have; they are as unservable as the rest.
 .toggle-list-item:has( > .menu__item--random ),
 .toggle-list-item:has( > .menu__item--recentchanges ),
 .toggle-list-item:has( > .menu__item--specialPages ),
-.toggle-list-item:has( > .menu__item--preferences ) {
+.toggle-list-item:has( > .menu__item--preferences ),
+.toggle-list-item:has( > .menu__item--nearby ),
+.toggle-list-item:has( > .menu__item--settings ) {
   display: none;
 }
 
 // Minerva collapses the table of contents whenever .client-js is set, and initMobile.js draws the
 // chevron that says so on the wikipage.content hook. setup.js runs that file only when
-// MobileFrontend is installed, so in an export the collapse arrives and the affordance never does.
+// MobileFrontend is installed, so without it the collapse arrives and the affordance never does.
 // Undo the half that did, and drop the toggle with it: without the icon it is an invisible control
-// sitting over the heading.
-.client-js .toc {
+// sitting over the heading. Keyed on the icon, so a site that does have MobileFrontend keeps the
+// collapse it can see -- the selector stops matching the moment the script adds the span.
+.client-js .toc:not(:has( > .toctitle > .toc-title-state-icon )) {
   .toctogglecheckbox ~ ul {
     visibility: visible;
     height: auto;
