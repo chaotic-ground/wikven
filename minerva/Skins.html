@@ -211,24 +211,26 @@ Wikven
 			</div>
 			<div id="bodyContent" class="content">
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--high" title="스킨 (82% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--med" title="스킨 (50% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>You can choose <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins" class="extiw" title="mw:Special:MyLanguage/Bundled extensions and skins">bundled skins</a> in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p>
 <div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="en" dir="ltr"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Available_skins"><span class="tocnumber">1</span> <span class="toctext">Available skins</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Supported_skins"><span class="tocnumber">1</span> <span class="toctext">Supported skins</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Configuring_the_skin"><span class="tocnumber">2</span> <span class="toctext">Configuring the skin</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Third-party_skins"><span class="tocnumber">3</span> <span class="toctext">Third-party skins</span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#Skin-specific_configuration"><span class="tocnumber">4</span> <span class="toctext">Skin-specific configuration</span></a></li>
 </ul>
 </div>
 
-<div class="mw-heading mw-heading2"><h2 id="Available_skins">Available skins</h2></div>
-<p>The skins bundled with MediaWiki are available. Selecting <code>Vector</code> gives Vector 2022 (the skin's <code>vector-2022</code> variant).
+<div class="mw-heading mw-heading2"><h2 id="Supported_skins">Supported skins</h2></div>
+<p>Wikven supports three skins. This documentation site is built with all three, so every change is exercised in each of them.
 </p>
-<ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector" class="extiw" title="mw:Special:MyLanguage/Skin:Vector">Vector</a> (default)</li>
-<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MonoBook" class="extiw" title="mw:Special:MyLanguage/Skin:MonoBook">MonoBook</a></li>
-<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MinervaNeue" class="extiw" title="mw:Special:MyLanguage/Skin:MinervaNeue">MinervaNeue</a> (mobile-oriented)</li></ul>
+<ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector" class="extiw" title="mw:Special:MyLanguage/Skin:Vector">Vector</a> (default; <code>Vector</code> selects the skin's <code>vector-2022</code> variant, Vector 2022)</li>
+<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MinervaNeue" class="extiw" title="mw:Special:MyLanguage/Skin:MinervaNeue">MinervaNeue</a> (mobile-oriented)</li>
+<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Citizen" class="extiw" title="mw:Special:MyLanguage/Skin:Citizen">Citizen</a> (third-party, fetched at build time)</li></ul>
+<p>Any other skin is untested rather than refused: every skin bundled with MediaWiki is available by name, MonoBook among them, and a third-party skin can be fetched like Citizen is.
+</p>
 <div class="mw-heading mw-heading2"><h2 id="Configuring_the_skin">Configuring the skin</h2></div>
 <p>You can change the skin by setting <code>skins</code>. The first skin in the list is used as the default.
 </p>
@@ -236,7 +238,7 @@ Wikven
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
 </pre></div>
 <div class="mw-heading mw-heading2"><h2 id="Third-party_skins">Third-party skins</h2></div>
-<p>A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>. It is fetched at build time and may be the default like any other. This documentation site fetches the third-party <a class="external text" href="https://www.mediawiki.org/wiki/Skin:Citizen">Citizen</a> skin this way, offered alongside Vector through the footer skin switcher.
+<p>A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>. It is fetched at build time and may be the default like any other. This documentation site fetches Citizen this way, offered alongside the other two.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example</span>
@@ -269,8 +271,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786808193">
-  				<span>Last edited on 15 August 2026, at 15:36</span>
+  				data-timestamp="1786810412">
+  				<span>Last edited on 15 August 2026, at 16:13</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -293,7 +295,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 15:36.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 16:13.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
