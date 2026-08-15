@@ -8,24 +8,15 @@ on:
 
 permissions: {}
 
-# A superseded push (a force-push while CI is mid-flight) leaves a run building a commit nobody
-# will merge. Keyed on the PR number rather than github.ref so it also holds for pull_request_target,
-# where github.ref is the base branch and every PR would otherwise share one group. Pushes to main
-# are left to finish: each merged commit should keep its own CI result.
+# Cancel superseded runs; pushes to main are left to finish, keeping a result per merged commit.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name != 'push' }}
 
-# biome and mago are installed by hand rather than through their setup-* actions on purpose. Each
-# of those actions spends two GitHub REST calls per run to resolve a download URL that the pinned
-# version already determines, and caches nothing, so it pays them every time. They come out of the
-# 1,000/hour GITHUB_TOKEN budget that every run in this repository shares, which a burst of pull
-# requests exhausts -- the jobs then fail on a 403 with nothing wrong in the code. Fetching the
-# release asset directly touches the CDN, not the REST API, and a cache hit skips even that. Caches
-# written by main runs are readable from every pull request branch, so a miss is rare.
-#
-# Neither version is written down here: biome's comes from biome.json's $schema, which is what an
-# editor reads too, and mago's from composer.json, beside the rest of the PHP tooling.
+# biome and mago are installed by hand, not via their setup-* actions: those spend two GitHub REST
+# calls per run to resolve a fixed download URL and cache nothing, exhausting the 1,000/hour
+# GITHUB_TOKEN budget the whole repository shares. Versions come from biome.json's $schema and,
+# since mago has none of its own, composer.json.
 
 jobs:
   biome:
@@ -35,8 +26,6 @@ jobs:
         with:
           persist-credentials: false
 
-      # biome.json's $schema already names the version, and it is the one an editor honours, so it
-      # stays the only place the version is written down.
       - id: version
         run: |
           v=$(sed -n 's#.*biomejs\.dev/schemas/\([^/]*\)/.*#\1#p' biome.json)
@@ -110,8 +99,6 @@ jobs:
       # mago.toml extends the shared style config installed under vendor/, so install it first.
       - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
 
-      # mago has no config file of its own that carries a version, so the pin lives beside the
-      # other PHP tooling in composer.json rather than here.
       - id: version
         run: |
           php -r '$e = json_decode(file_get_contents("composer.json"), true)["extra"];
