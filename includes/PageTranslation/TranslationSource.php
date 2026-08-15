@@ -4,9 +4,11 @@ namespace MediaWiki\Extension\Wikven\PageTranslation;
 
 use FilesystemIterator;
 use MediaWiki\Extension\Wikven\SourceFile;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Parser;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Throwable;
 
 /**
  * Locates translatable source pages and their translations by wikven's naming convention.
@@ -58,7 +60,41 @@ class TranslationSource {
 		// documenting page translation -- is an example, not a magic word the parser ever runs.
 		$matches = [];
 		$stripped = Parser::extractTagsAndParams(['syntaxhighlight', 'source', 'nowiki', 'pre'], $text, $matches);
-		return preg_match('/\{\{\s*DISPLAYTITLE\s*:/i', $stripped) === 1;
+		// DISPLAYTITLE is a localized magic word: on a de-content wiki the working spelling is
+		// {{ANZEIGETITEL:}}. Checking every synonym in the content language covers that, or such a page
+		// is handed a title unit its own magic word then overrides.
+		foreach (self::displayTitleSynonyms() as $synonym) {
+			if (preg_match('/\{\{\s*' . preg_quote($synonym, '/') . '\s*:/i', $stripped) === 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Every spelling of the DISPLAYTITLE magic word in the content language, English always included.
+	 *
+	 * @return string[]
+	 */
+	private static function displayTitleSynonyms(): array {
+		try {
+			$synonyms = MediaWikiServices::getInstance()
+				->getMagicWordFactory()
+				->get('displaytitle')
+				->getSynonyms();
+		} catch (Throwable) {
+			// Callers include maintenance scripts that run before the container is usable; the English
+			// spelling works on the wikis wikven itself ships, so a missing registry is not fatal.
+			$synonyms = [];
+		}
+		$synonyms[] = 'DISPLAYTITLE';
+		$unique = [];
+		foreach ($synonyms as $synonym) {
+			if ($synonym !== '' && !in_array($synonym, $unique, true)) {
+				$unique[] = $synonym;
+			}
+		}
+		return $unique;
 	}
 
 	/** The translation file for a base file in the given language ("Foo.wikitext" -> "Foo/ko.wikitext"). */
