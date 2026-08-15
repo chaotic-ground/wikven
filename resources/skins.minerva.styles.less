@@ -2,6 +2,12 @@
 // never reaches it and these four are inserted unconditionally. Every one is a Special: page an
 // export cannot serve. Community portal is not here: it has a lever, and build.php pulls it.
 // By item rather than by group, so a site's own entries in the same group survive.
+// The site's navigation, written into the menu by fillMinervaMenu.php. Minerva indents a label by
+// the icon beside it, and these have no icon, so the indent is theirs to keep the column straight.
+.wikven-nav-item .toggle-list-item__label {
+  padding-left: 26px; // Minerva's icon, 20px, plus the 6px between it and the label.
+}
+
 .toggle-list-item:has( > .menu__item--random ),
 .toggle-list-item:has( > .menu__item--recentchanges ),
 .toggle-list-item:has( > .menu__item--specialPages ),

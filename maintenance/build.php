@@ -178,6 +178,8 @@ class Build extends Maintenance {
 		$this->step(BakeWebfonts::class, "$own/bakeWebfonts.php");
 		$this->step(BuildScripts::class, "$own/buildScripts.php");
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
+		// Minerva takes no navigation from the sidebar, so its menu is filled in the rendered pages.
+		$this->step(FillMinervaMenu::class, "$own/fillMinervaMenu.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");
 		$this->step(Rename::class, "$own/rename.php");
 		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
