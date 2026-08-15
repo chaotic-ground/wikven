@@ -33,13 +33,26 @@ for (const [skin, path, box] of SKINS) {
 	});
 }
 
-// Below the width at which Vector hides the tab row it moves the tabs into that
-// box, which is then the only way to reach them, so there it has to stay.
-test("vector-2022 keeps its tools box below the tab-row breakpoint", async ({
+// Below the width at which Vector hides the tab row it moves the tabs into that box,
+// which is then the only way to reach them, so there it has to stay. Both sides of
+// that edge are pinned: the two rules keying off the same breakpoint is what keeps a
+// width with neither the tabs nor the box from opening up between them.
+test("vector-2022 keeps its tools box where Vector hides the tab row", async ({
 	page,
 }) => {
-	await page.setViewportSize({ width: 480, height: 800 });
+	await page.setViewportSize({ width: 639, height: 800 });
 	await page.goto("Installation.html");
 
+	await expect(page.locator(".mw-portlet-views")).toBeHidden();
 	await expect(page.locator("#vector-page-tools-dropdown")).toBeVisible();
+});
+
+test("vector-2022 drops its tools box where the tab row is back", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 640, height: 800 });
+	await page.goto("Installation.html");
+
+	await expect(page.locator(".mw-portlet-views")).toBeVisible();
+	await expect(page.locator("#vector-page-tools-dropdown")).toBeHidden();
 });
