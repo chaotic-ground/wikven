@@ -45,6 +45,19 @@ updates:
       docker:
         patterns:
           - "*"
+    # Full version tags dropped the stream guard the floating tags carried, so restore it here.
+    # MediaWiki holds its minor too: moving to 1.47 has to be deliberate.
+    ignore:
+      - dependency-name: composer
+        update-types:
+          - version-update:semver-major
+      - dependency-name: dunglas/frankenphp
+        update-types:
+          - version-update:semver-major
+      - dependency-name: mediawiki
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
   - package-ecosystem: uv
     directory: /
     schedule:

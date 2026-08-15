@@ -23,8 +23,8 @@ RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
 # Stage 2: compile a static PHP + FrankenPHP and embed the app. curl is omitted:
 # its HTTP/3 (ngtcp2/nghttp3) static libs fail to link, and it is unneeded
 # (MediaWiki/Guzzle uses PHP stream wrappers over openssl).
-# Digest-pinned for reproducible builds; Dependabot keeps it current.
-FROM dunglas/frankenphp:static-builder-musl@sha256:f839cbec0d140c3be234dde7a9fcbd9d9dbca6882d8fb288d8d3e84c88822cd2 AS builder
+# Digest-pinned for reproducible builds, version-tagged so Dependabot's bumps read as versions.
+FROM dunglas/frankenphp:static-builder-musl-1.12.4@sha256:f839cbec0d140c3be234dde7a9fcbd9d9dbca6882d8fb288d8d3e84c88822cd2 AS builder
 WORKDIR /go/src/app
 COPY --from=app /var/www/html ./dist/app
 # A small Caddy module registers the `build` subcommand, so the binary can be run
