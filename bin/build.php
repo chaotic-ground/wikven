@@ -23,17 +23,28 @@ putenv("WIKVEN_WORKDIR=$work");
 $_ENV['WIKVEN_WORKDIR'] = $work;
 
 // Static binaries ship no CA certs; point openssl at the host bundle for HTTPS unless already set.
-if (getenv('SSL_CERT_FILE') === false) {
-	foreach ([
+if (getenv('SSL_CERT_FILE') === false && getenv('SSL_CERT_DIR') === false) {
+	// openssl reports the exact bundle path/dir it was compiled to look for, ahead of the guessed
+	// distro paths below, which cover systems where that compiled-in default isn't actually there.
+	$locations = function_exists('openssl_get_cert_locations') ? openssl_get_cert_locations() : [];
+	$candidates = array_filter([
+		$locations['default_cert_file'] ?? null,
 		'/etc/ssl/certs/ca-certificates.crt',
 		'/etc/pki/tls/certs/ca-bundle.crt',
 		'/etc/ssl/cert.pem'
-	] as $ca) {
+	]);
+	foreach ($candidates as $ca) {
 		if (is_file($ca)) {
 			putenv("SSL_CERT_FILE=$ca");
 			$_ENV['SSL_CERT_FILE'] = $ca;
 			break;
 		}
+	}
+	// No single bundle file found; fall back to openssl's compiled-in certs directory, if present.
+	$certDir = $locations['default_cert_dir'] ?? '';
+	if (getenv('SSL_CERT_FILE') === false && $certDir !== '' && is_dir($certDir)) {
+		putenv("SSL_CERT_DIR=$certDir");
+		$_ENV['SSL_CERT_DIR'] = $certDir;
 	}
 }
 
