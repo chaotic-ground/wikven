@@ -43,7 +43,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/docker-build.yml
+    uses: ./.github/workflows/docker-image.yml
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
 

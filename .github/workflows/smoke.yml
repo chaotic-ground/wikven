@@ -37,7 +37,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name != 'push' }}
 
 jobs:
-  build-and-check:
+  smoke:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -46,7 +46,7 @@ jobs:
 
       - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
 
-      # Reads the layer cache docker-build.yml writes. Three jobs build this image per pull request;
+      # Reads the layer cache docker-image.yml writes. Three jobs build this image per pull request;
       # only that one exports, since concurrent mode=max writers each upload the whole cache to
       # overwrite one another, and a reader gets the same layers either way.
       - name: Build and load the wikven image
