@@ -1,6 +1,6 @@
 # Build a standalone FrankenPHP binary that embeds MediaWiki + Wikven, so the
 # static-site build runs without Docker. Built in CI per target architecture and
-# attached to the GitHub release; see .github/workflows/build-binary.yml.
+# attached to the GitHub release; see .github/workflows/binary.yml.
 #
 # Usage (the wikven image must be built first, e.g. `docker build -t wikven .`):
 #   docker build -f binary.Dockerfile --target export -o type=local,dest=out .

@@ -52,7 +52,7 @@ jobs:
           context: .
           load: true
           tags: wikven
-          # Reader only; docker-build.yml exports this cache. See the note in smoke.yml.
+          # Reader only; docker-image.yml exports this cache. See the note in smoke.yml.
           cache-from: type=gha,scope=wikven-image
 
       - name: Bake the docs site
@@ -80,7 +80,7 @@ jobs:
       # independently (one shared "preview" environment, one deployment per PR head).
       - name: Record preview deployment
         if: success() && github.event.action != 'closed'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # v7.0.1
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
         with:
           script: |
             const number = context.payload.number;
@@ -109,7 +109,7 @@ jobs:
       # On close, mark this PR's preview deployment inactive, matching the torn-down files.
       - name: Deactivate preview deployment
         if: always() && github.event.action == 'closed'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # v7.0.1
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
         with:
           script: |
             const { data: deployments } = await github.rest.repos.listDeployments({

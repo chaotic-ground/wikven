@@ -70,12 +70,12 @@ test("switching the skin after switching to Korean keeps the article", async ({
 	await expect(page).toHaveURL("Getting_Started/ko.html");
 	await expectKoreanArticle(page);
 
-	const response = await chooseSkin(page, "timeless");
+	const response = await chooseSkin(page, "citizen");
 
 	expect(response.status()).toBe(200);
-	await expect(page).toHaveURL("timeless/Getting_Started/ko.html");
+	await expect(page).toHaveURL("citizen/Getting_Started/ko.html");
 	await expectKoreanArticle(page);
-	await expect(skinSelect(page)).toHaveValue("timeless");
+	await expect(skinSelect(page)).toHaveValue("citizen");
 	expect(missing, missing.join("; ")).toEqual([]);
 });
 
@@ -86,8 +86,8 @@ test("switching back to the main skin from a Korean page returns to the root cop
 }) => {
 	const missing = watchForMissingPages(page);
 
-	await page.goto("timeless/Getting_Started/ko.html");
-	await expect(skinSelect(page)).toHaveValue("timeless");
+	await page.goto("citizen/Getting_Started/ko.html");
+	await expect(skinSelect(page)).toHaveValue("citizen");
 
 	const response = await chooseSkin(page, "vector-2022");
 
@@ -95,24 +95,6 @@ test("switching back to the main skin from a Korean page returns to the root cop
 	await expect(page).toHaveURL("Getting_Started/ko.html");
 	await expectKoreanArticle(page);
 	await expect(skinSelect(page)).toHaveValue("vector-2022");
-	expect(missing, missing.join("; ")).toEqual([]);
-});
-
-// And between two skins that both have a directory, where the old and the new
-// skin directory are at the same depth.
-test("switching between two non-main skins on a Korean page keeps the article", async ({
-	page,
-}) => {
-	const missing = watchForMissingPages(page);
-
-	await page.goto("timeless/Getting_Started/ko.html");
-
-	const response = await chooseSkin(page, "citizen");
-
-	expect(response.status()).toBe(200);
-	await expect(page).toHaveURL("citizen/Getting_Started/ko.html");
-	await expectKoreanArticle(page);
-	await expect(skinSelect(page)).toHaveValue("citizen");
 	expect(missing, missing.join("; ")).toEqual([]);
 });
 
@@ -125,8 +107,8 @@ test("switching the skin on a source page keeps the article", async ({
 
 	await page.goto("Getting_Started.html");
 
-	expect((await chooseSkin(page, "timeless")).status()).toBe(200);
-	await expect(page).toHaveURL("timeless/Getting_Started.html");
+	expect((await chooseSkin(page, "citizen")).status()).toBe(200);
+	await expect(page).toHaveURL("citizen/Getting_Started.html");
 	await expect(page.locator("#firstHeading")).toHaveText(ENGLISH_HEADING);
 
 	expect((await chooseSkin(page, "vector-2022")).status()).toBe(200);

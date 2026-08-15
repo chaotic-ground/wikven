@@ -5,7 +5,7 @@ on:
   pull_request:
     paths: &paths
       - ".tf/**"
-      - .github/workflows/tf.yml
+      - .github/workflows/tofu.yml
   push:
     branches:
       - main
