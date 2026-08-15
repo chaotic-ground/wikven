@@ -301,16 +301,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				<div class="vector-toc-text">Beginning</div>
 			</a>
 		</li>
-		<li id="toc-Available_skins"
+		<li id="toc-Supported_skins"
 		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
-		<a class="vector-toc-link" href="#Available_skins">
+		<a class="vector-toc-link" href="#Supported_skins">
 			<div class="vector-toc-text">
 				<span class="vector-toc-numb">1</span>
-				<span>Available skins</span>
+				<span>Supported skins</span>
 			</div>
 		</a>
 		
-		<ul id="toc-Available_skins-sublist" class="vector-toc-list">
+		<ul id="toc-Supported_skins-sublist" class="vector-toc-list">
 		</ul>
 	</li>
 	<li id="toc-Configuring_the_skin"
@@ -528,16 +528,18 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					
 					
 					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Skins/en.wikitext" title="Special:Translate">Translate this page</a></div><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><a href="../Skins.html" class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" title="Skins (100% translated)" lang="en" dir="ltr">English</a></li>
-<li><a href="../Skins/ko.html" class="mw-pt-progress mw-pt-progress--high" title="스킨 (82% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="../Skins/ko.html" class="mw-pt-progress mw-pt-progress--med" title="스킨 (50% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>You can choose <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins" class="extiw" title="mw:Special:MyLanguage/Bundled extensions and skins">bundled skins</a> in <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p>
 <meta property="mw:PageProp/toc" />
-<div class="mw-heading mw-heading2"><h2 id="Available_skins">Available skins</h2></div>
-<p>The skins bundled with MediaWiki are available. Selecting <code>Vector</code> gives Vector 2022 (the skin's <code>vector-2022</code> variant).
+<div class="mw-heading mw-heading2"><h2 id="Supported_skins">Supported skins</h2></div>
+<p>Wikven supports three skins. This documentation site is built with all three, so every change is exercised in each of them.
 </p>
-<ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector" class="extiw" title="mw:Special:MyLanguage/Skin:Vector">Vector</a> (default)</li>
-<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MonoBook" class="extiw" title="mw:Special:MyLanguage/Skin:MonoBook">MonoBook</a></li>
-<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MinervaNeue" class="extiw" title="mw:Special:MyLanguage/Skin:MinervaNeue">MinervaNeue</a> (mobile-oriented)</li></ul>
+<ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector" class="extiw" title="mw:Special:MyLanguage/Skin:Vector">Vector</a> (default; <code>Vector</code> selects the skin's <code>vector-2022</code> variant, Vector 2022)</li>
+<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MinervaNeue" class="extiw" title="mw:Special:MyLanguage/Skin:MinervaNeue">MinervaNeue</a> (mobile-oriented)</li>
+<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Citizen" class="extiw" title="mw:Special:MyLanguage/Skin:Citizen">Citizen</a> (third-party, fetched at build time)</li></ul>
+<p>Any other skin is untested rather than refused: every skin bundled with MediaWiki is available by name, MonoBook among them, and a third-party skin can be fetched like Citizen is.
+</p>
 <div class="mw-heading mw-heading2"><h2 id="Configuring_the_skin">Configuring the skin</h2></div>
 <p>You can change the skin by setting <code>skins</code>. The first skin in the list is used as the default.
 </p>
@@ -545,7 +547,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
 </pre></div>
 <div class="mw-heading mw-heading2"><h2 id="Third-party_skins">Third-party skins</h2></div>
-<p>A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in <a href="../Configuration/en.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>. It is fetched at build time and may be the default like any other. This documentation site fetches the third-party <a class="external text" href="https://www.mediawiki.org/wiki/Skin:Citizen">Citizen</a> skin this way, offered alongside Vector through the footer skin switcher.
+<p>A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in <a href="../Configuration/en.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>. It is fetched at build time and may be the default like any other. This documentation site fetches Citizen this way, offered alongside the other two.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example</span>
@@ -574,7 +576,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 15:42.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 16:18.</li>
 </ul>
 
 	<ul id="footer-places">
