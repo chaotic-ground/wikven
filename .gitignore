@@ -6,6 +6,9 @@
 /test-results/
 /playwright-report/
 
+# uv
+/.venv/
+
 # OpenTofu / Terraform
 /.tf/.terraform/
 /.tf/terraform.tfstate
