@@ -12,6 +12,12 @@ class RelativeUrl {
 	 * is exported into a real "Manual/" directory; its references then need a "../" per level so links
 	 * and files agree on a static host. Absolute, protocol-relative and data: URLs carry no leading
 	 * "./" and are left alone. Covers href/src/srcset attributes and CSS url().
+	 *
+	 * Each candidate is required to sit inside a real "<tag ...>" span (or, for url(), inside a
+	 * <style> block too): MediaWiki escapes preformatted text with htmlspecialchars(..., ENT_NOQUOTES),
+	 * which turns a documentation example's own "<a href=\"./intro\">" into "&lt;a href=\"./intro\"&gt;"
+	 * -- the quotes survive, but neither escaped angle bracket is a real "<" or ">", so nothing there
+	 * reads as a tag span and the example's href is correctly left alone.
 	 */
 	public static function reparent(string $html, int $depth): string {
 		if ($depth < 1) {
@@ -22,37 +28,92 @@ class RelativeUrl {
 			return $dots === '..' ? $up . '../' : $up;
 		};
 
+		$tags = self::tagRanges($html);
 		$html = preg_replace_callback(
-			'#\b(href|src)="(\.\.?)/#',
-			static function (array $m) use ($rebase): string {
-				return $m[1] . '="' . $rebase($m[2]);
+			'#(\s)(href|src)="(\.\.?)/#',
+			static function (array $m) use ($rebase, $tags): string {
+				if (!self::insideAny($m[0][1], $tags)) {
+					return $m[0][0];
+				}
+				return $m[1][0] . $m[2][0] . '="' . $rebase($m[3][0]);
 			},
-			$html
+			$html,
+			-1,
+			$count,
+			PREG_OFFSET_CAPTURE
 		);
+
+		$tags = self::tagRanges($html);
 		$html = preg_replace_callback(
-			'#\bsrcset="([^"]*)"#',
-			static function (array $m) use ($rebase): string {
+			'#(\s)srcset="([^"]*)"#',
+			static function (array $m) use ($rebase, $tags): string {
+				if (!self::insideAny($m[0][1], $tags)) {
+					return $m[0][0];
+				}
 				return (
-					'srcset="'
+					$m[1][0] . 'srcset="'
 					. preg_replace_callback(
 						'#(^|,\s*)(\.\.?)/#',
 						static function (array $u) use ($rebase): string {
 							return $u[1] . $rebase($u[2]);
 						},
-						$m[1]
+						$m[2][0]
 					)
 					. '"'
 				);
 			},
-			$html
+			$html,
+			-1,
+			$count,
+			PREG_OFFSET_CAPTURE
 		);
+
+		$styleContexts = array_merge(self::tagRanges($html), self::ranges($html, '#<style\b[^>]*>.*?</style>#is'));
 		return preg_replace_callback(
-			'#\burl\((["\']?)(\.\.?)/#',
-			static function (array $m) use ($rebase): string {
-				return 'url(' . $m[1] . $rebase($m[2]);
+			'#url\((["\']?)(\.\.?)/#',
+			static function (array $m) use ($rebase, $styleContexts): string {
+				if (!self::insideAny($m[0][1], $styleContexts)) {
+					return $m[0][0];
+				}
+				return 'url(' . $m[1][0] . $rebase($m[2][0]);
 			},
-			$html
+			$html,
+			-1,
+			$count,
+			PREG_OFFSET_CAPTURE
 		);
+	}
+
+	/** Byte ranges of the raw "<tag ...>" spans in $html, each as [start, endExclusive]. */
+	private static function tagRanges(string $html): array {
+		return self::ranges($html, '#<[a-zA-Z][^<>]*>#s');
+	}
+
+	/**
+	 * @return list<array{int,int}>
+	 */
+	private static function ranges(string $text, string $pattern): array {
+		if (!preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE)) {
+			return [];
+		}
+		$ranges = [];
+		foreach ($matches[0] as $match) {
+			$ranges[] = [$match[1], $match[1] + strlen($match[0])];
+		}
+		return $ranges;
+	}
+
+	/**
+	 * @param int $offset
+	 * @param list<array{int,int}> $ranges
+	 */
+	private static function insideAny(int $offset, array $ranges): bool {
+		foreach ($ranges as [$start, $end]) {
+			if ($offset >= $start && $offset < $end) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
