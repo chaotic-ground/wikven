@@ -33,7 +33,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
-		<a href="../index.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="Visit the main page">
+		<a href="../index/en.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="Visit the main page">
 			<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="32" width="32">
 			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
@@ -86,7 +86,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<div id="citizen-drawer__card" class="citizen-drawer__card citizen-menu__card">
 			<div class="citizen-menu__card-content">
 				<header class="citizen-drawer__header">
-					<a href="../index.html" class="mw-logo citizen-drawer__logo" title="Visit the main page">
+					<a href="../index/en.html" class="mw-logo citizen-drawer__logo" title="Visit the main page">
 					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="80" width="80" loading="lazy">
 				</a>
@@ -106,7 +106,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="edits">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>679</span>
+		<span>682</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -441,22 +441,24 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div><section id="citizen-section-1" class="citizen-section">
-<p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The main page is a target like any other (<code>index</code>, unless <code>WikvenMainPage</code> says otherwise), and the prefix keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+<p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
-<span class="k">**</span> Special:MyLanguage/index|mainpage-description
+<span class="k">**</span> mainpage|mainpage-description
 <span class="k">*</span> sidebar-docs
 <span class="k">**</span> Special:MyLanguage/Getting Started|sidebar-getting-started
 <span class="k">**</span> Special:MyLanguage/Images|sidebar-images
 <span class="k">*</span> sidebar-references
 <span class="k">**</span> Special:MyLanguage/Licenses|sidebar-licenses
 </pre></div>
+<p>The main page keeps its plain <code>mainpage</code> entry, because that target is a message: the prefix goes in the message instead. Write <code>Special:MyLanguage/index</code> in <code>MediaWiki:Mainpage.wikitext</code> (<code>index</code> being whatever <code>WikvenMainPage</code> names), as Meta-Wiki does. Every skin points its logo at that same message, so the logo follows the reader's language too. The cost is that the wiki stops recognising the page as its main page: the page title shows in the browser tab, and MinervaNeue leaves out its main-page styling.
+</p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="What_is_removed">What is removed</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>Some default sidebar blocks need a live wiki, so Wikven drops them from the static export: the <b>toolbox</b> (What links here, Special pages, Printable version, and so on) and the <b>search</b> box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="See_also">See also</h2></div><section id="citizen-section-3" class="citizen-section">
 <ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar" class="extiw" title="mw:Special:MyLanguage/Manual:Interface/Sidebar">Manual:Interface/Sidebar</a></li></ul>
-<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Pages/en.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="../Images/en.html" title="Special:MyLanguage/Images">Images</a> →</div></div>
+<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Pages/en.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="../Images/en.html" title="Special:MyLanguage/Images">Images</a> →</div></div>
 
 </section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Editing_sidebar/en.html">Editing_sidebar/en.html</a>"</div></div>
@@ -475,7 +477,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Editing%20sidebar/en.wikitext" title="This page was last edited on 15 August 2026, at 20:26." data-timestamp="1786825564"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Editing%20sidebar/en.wikitext" title="This page was last edited on 15 August 2026, at 20:46." data-timestamp="1786826814"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -556,7 +558,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 20:26.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 20:46.</div>
 		    </section>
 		</div>
 </footer>		</div>
