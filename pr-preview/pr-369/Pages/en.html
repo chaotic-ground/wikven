@@ -577,7 +577,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>Add <code>[[Category:Name]]</code> to a page to <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories" class="extiw" title="mw:Special:MyLanguage/Help:Categories">categorise</a> it; the categories show in the page footer, as on any wiki.
 </p><p>A category's own page is not exported by default, though. Wikven writes only <i>content</i> pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your <a href="../Configuration/en.html#ContentNamespaces" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code></a> and add a <code>Category:Name.wikitext</code> file to your source:
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">ContentNamespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">14</span><span class="p p-Indicator">]</span>
 </pre></div>
 <p>This key replaces the default rather than extending it, so keep <code>0</code> and <code>6</code> in the list, or the main and File: pages stop being exported.
@@ -586,11 +586,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading2"><h2 id="Templates">Templates</h2></div>
 <p>Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code>{{Name}}</code>. For example, this file:
 </p>
-<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr" dir="ltr"><pre><span></span><span class="gs">&#39;&#39;&#39;Note:&#39;&#39;&#39;</span> <span class="p">{{{</span><span class="nv">1</span><span class="p">}}}</span>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="gs">&#39;&#39;&#39;Note:&#39;&#39;&#39;</span> <span class="p">{{{</span><span class="nv">1</span><span class="p">}}}</span>
 </pre></div>
 <p>saved as <code>Template:Note.wikitext</code> and used on a page as:
 </p>
-<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nt">Note</span><span class="p">|</span>Back up your wiki first.<span class="p">}}</span>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nt">Note</span><span class="p">|</span>Back up your wiki first.<span class="p">}}</span>
 </pre></div>
 <p>renders as "<b>Note:</b> Back up your wiki first." Templates take positional (<code>{{{1}}}</code>) and named parameters and run <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions" class="extiw" title="mw:Special:MyLanguage/Help:Parser functions">parser functions</a> exactly as in MediaWiki. The syntax itself is standard MediaWiki; see <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates" class="extiw" title="mw:Special:MyLanguage/Help:Templates">Help:Templates</a>.
 </p>
@@ -607,7 +607,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 18:59.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 19:39.</li>
 </ul>
 
 	<ul id="footer-places">

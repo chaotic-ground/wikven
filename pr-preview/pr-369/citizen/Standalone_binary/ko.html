@@ -436,13 +436,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="다운로드"><span id=".EB.8B.A4.EC.9A.B4.EB.A1.9C.EB.93.9C"></span>다운로드</h2></div><section id="citizen-section-1" class="citizen-section">
 <p>자신의 아키텍처에 맞는 바이너리를 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">최신 릴리스</a>에서 내려받아 실행 가능하게 만드십시오:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </pre></div>
 <p>arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오.
 </p><p>태그된 릴리스 대신 main 브랜치의 최신 커밋을 따라가려면 나이틀리 빌드를 사용하십시오. 이 빌드는 <code>nightly-YYYY-MM-DD</code>로 태그된 날짜별 프리릴리스로 매일 게시됩니다. <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">릴리스 페이지</a>에서 가장 최근 것을 고르거나, 자동으로 알아낼 수도 있습니다:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span><span class="nv">tag</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/chaotic-ground/wikven/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'s/.*"tag_name": *"\(nightly-[^"]*\)".*/\1/p'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n1<span class="k">)</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nv">tag</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/chaotic-ground/wikven/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'s/.*"tag_name": *"\(nightly-[^"]*\)".*/\1/p'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n1<span class="k">)</span>
 curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span><span class="s2">"https://github.com/chaotic-ground/wikven/releases/download/</span><span class="nv">$tag</span><span class="s2">/wikven-linux-x86_64"</span>
 </pre></div>
 <p><span id="Verify"></span>
@@ -450,24 +450,24 @@ curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="검증"><span id=".EA.B2.80.EC.A6.9D"></span>검증</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>각 릴리스 바이너리는 <code>.sha256</code> 체크섬과 서명된 빌드 출처(provenance) 증명과 함께 게시됩니다. <code>PATH</code>에 설치하는 바이너리를 신뢰하기 전에 확인하려면, 릴리스 이름 그대로 내려받아 체크섬을 검증하십시오:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>curl<span class="w"> </span>-LO<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-LO<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 curl<span class="w"> </span>-LO<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64.sha256
 sha256sum<span class="w"> </span>-c<span class="w"> </span>wikven-linux-x86_64.sha256
 </pre></div>
 <p>또는 <a rel="nofollow" class="external text" href="https://cli.github.com/">GitHub CLI</a>로 GitHub Actions가 이 저장소에서 빌드했다는 출처를 검증하십시오:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>gh<span class="w"> </span>attestation<span class="w"> </span>verify<span class="w"> </span>wikven-linux-x86_64<span class="w"> </span>--repo<span class="w"> </span>chaotic-ground/wikven
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>gh<span class="w"> </span>attestation<span class="w"> </span>verify<span class="w"> </span>wikven-linux-x86_64<span class="w"> </span>--repo<span class="w"> </span>chaotic-ground/wikven
 </pre></div>
 <p><span id="Install"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="설치"><span id=".EC.84.A4.EC.B9.98"></span>설치</h2></div><section id="citizen-section-3" class="citizen-section">
 <p>내려받은 파일은 그대로 실행됩니다. 저장한 디렉터리에서 <code>./wikven</code>을 실행하면 됩니다. 어디서나 그냥 <code>wikven</code>으로 실행하려면 <code>PATH</code>에 설치하십시오:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>sudo<span class="w"> </span>install<span class="w"> </span>wikven<span class="w"> </span>/usr/local/bin/
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>sudo<span class="w"> </span>install<span class="w"> </span>wikven<span class="w"> </span>/usr/local/bin/
 </pre></div>
 <p>root 권한이 없다면, 대신 <code>PATH</code>에 있는 개인 디렉터리(예: <code>~/.local/bin</code>)에 설치하십시오 (<code>-D</code>는 디렉터리가 없으면 만들어 줍니다):
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>install<span class="w"> </span>-D<span class="w"> </span>wikven<span class="w"> </span>~/.local/bin/wikven
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>install<span class="w"> </span>-D<span class="w"> </span>wikven<span class="w"> </span>~/.local/bin/wikven
 </pre></div>
 <p>아래 명령들은 바이너리가 <code>PATH</code>에 있다고 가정합니다. 이 단계를 건너뛰었다면, 내려받은 디렉터리에서 <code>./wikven</code>으로 실행하십시오.
 </p><p><span id="Building_a_site"></span>
@@ -475,13 +475,13 @@ sha256sum<span class="w"> </span>-c<span class="w"> </span>wikven-linux-x86_64.s
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="사이트_빌드하기"><span id=".EC.82.AC.EC.9D.B4.ED.8A.B8_.EB.B9.8C.EB.93.9C.ED.95.98.EA.B8.B0"></span>사이트 빌드하기</h2></div><section id="citizen-section-4" class="citizen-section">
 <p>위키텍스트와 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>을 <code>src/</code> 디렉터리에 넣은 다음 빌드하십시오:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>src
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>src
 <span class="nb">echo</span><span class="w"> </span><span class="s1">'Hello, World!'</span><span class="w"> </span>><span class="w"> </span>src/index.wikitext
 wikven<span class="w"> </span>build
 </pre></div>
 <p>렌더링된 사이트는 <code>dist/</code>에 기록됩니다. <code>wikven serve</code>로 미리 볼 수 있습니다 (<a href="../Deploying/ko.html#Preview_locally" title="Special:MyLanguage/Deploying">배포하기</a> 참고). 작업 디렉터리는 기본값이 현재 디렉터리이며, 다른 곳의 프로젝트를 빌드하려면 <code>WIKVEN_WORKDIR</code>을 설정하십시오:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span><span class="nv">WIKVEN_WORKDIR</span><span class="o">=</span>/path/to/project<span class="w"> </span>wikven<span class="w"> </span>build
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nv">WIKVEN_WORKDIR</span><span class="o">=</span>/path/to/project<span class="w"> </span>wikven<span class="w"> </span>build
 </pre></div>
 <p>출력물은 Docker 이미지의 것과 동일합니다. 바이너리는 MediaWiki, 번들된 확장 기능과 스킨, 그리고 모든 인터페이스 언어를 내장하며, Wikven의 기본값 위에 겹쳐지는 동일한 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>을 읽습니다.
 </p><p><span id="Optional_host_tools"></span>
@@ -512,7 +512,7 @@ wikven<span class="w"> </span>build
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Standalone_binary/ko.html" title="이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다." data-timestamp="1786820390"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Standalone%20binary/ko.wikitext" title="이 문서는 2026년 8월 15일 (토) 19:39에 마지막으로 편집되었습니다." data-timestamp="1786822743"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
 			
 		</ul>
 		
@@ -623,7 +623,7 @@ wikven<span class="w"> </span>build
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 19:39에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

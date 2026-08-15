@@ -434,7 +434,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="바이너리"><span id=".EB.B0.94.EC.9D.B4.EB.84.88.EB.A6.AC"></span>바이너리</h2></div><section id="citizen-section-1" class="citizen-section">
 <p>x86_64와 arm64 Linux용으로 MediaWiki를 내장한 단일 자체 완결형 실행 파일입니다. 내려받은 뒤 실행 권한을 부여하십시오:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </pre></div>
 <p>arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파일을 <code>PATH</code>에 설치하는 방법, 나이틀리 빌드, 그리고 이 파일이 사용하는 선택적 호스트 도구에 관해서는 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>를 참고하십시오.
@@ -442,7 +442,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Docker">Docker</h2></div><section id="citizen-section-2" class="citizen-section">
 <p><a rel="nofollow" class="external text" href="https://www.docker.com/">Docker</a>가 설치된 모든 플랫폼에서 동작하므로, macOS와 Windows에서 사용할 선택지입니다. 이미지는 GitHub Container Registry에 게시됩니다:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
 <p>태그가 없는 이미지는 최신 빌드를 따라갑니다. 특정 버전으로 고정하려면 <code>:1.0.0</code> 같은 배포 태그를 붙이십시오.
 </p><p><span id="Build_from_source"></span>
@@ -450,7 +450,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="소스에서_빌드"><span id=".EC.86.8C.EC.8A.A4.EC.97.90.EC.84.9C_.EB.B9.8C.EB.93.9C"></span>소스에서 빌드</h2></div><section id="citizen-section-3" class="citizen-section">
 <p>Wikven을 수정하거나 배포되지 않은 커밋을 실행하려면, 저장소를 복제한 뒤 이미지를 직접 빌드하십시오:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/chaotic-ground/wikven.git
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/chaotic-ground/wikven.git
 <span class="nb">cd</span><span class="w"> </span>wikven
 docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>wikven<span class="w"> </span>.
 </pre></div>
@@ -478,7 +478,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Installation/ko.html" title="이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다." data-timestamp="1786820390"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Installation/ko.wikitext" title="이 문서는 2026년 8월 15일 (토) 19:39에 마지막으로 편집되었습니다." data-timestamp="1786822743"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
 			
 		</ul>
 		
@@ -559,7 +559,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 19:39에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
