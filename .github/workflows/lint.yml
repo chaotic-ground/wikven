@@ -13,8 +13,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name != 'push' }}
 
-# biome and mago are installed by hand: their setup-* actions spend two GitHub REST calls per run
-# on a fixed download URL and cache nothing, exhausting the repository's shared 1,000/hour budget.
+# biome is installed by hand, mago via our own action: upstream setup-* actions spend two REST
+# calls per run on a fixed download URL and cache nothing, draining the shared 1,000/hour budget.
 
 jobs:
   biome:
@@ -102,29 +102,10 @@ jobs:
           php -r '$e = json_decode(file_get_contents("composer.json"), true)["extra"];
                   echo "v=", $e["mago-version"], "\nsha=", $e["mago-sha256"], "\n";' >> "$GITHUB_OUTPUT"
 
-      - id: cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
+      - uses: chaotic-ground/setup-mago@34ad32c9df581171351b549e5ab1c3a52bcedded  # v1.0.0
         with:
-          path: ~/.local/bin/mago
-          key: mago-${{ runner.os }}-${{ steps.version.outputs.v }}
-
-      - if: steps.cache.outputs.cache-hit != 'true'
-        env:
-          MAGO_VERSION: ${{ steps.version.outputs.v }}
-          MAGO_SHA256: ${{ steps.version.outputs.sha }}
-        run: |
-          base=https://github.com/carthage-software/mago/releases/download
-          dir="mago-${MAGO_VERSION}-x86_64-unknown-linux-musl"
-          tmp=$(mktemp -d)
-          curl -fsSL -o "$tmp/mago.tar.gz" "$base/${MAGO_VERSION}/${dir}.tar.gz"
-          echo "${MAGO_SHA256}  $tmp/mago.tar.gz" | sha256sum -c -
-          tar -xzf "$tmp/mago.tar.gz" -C "$tmp"
-          mkdir -p ~/.local/bin
-          mv "$tmp/$dir/mago" ~/.local/bin/mago
-
-      - run: |
-          chmod +x ~/.local/bin/mago
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          version: ${{ steps.version.outputs.v }}
+          sha256: ${{ steps.version.outputs.sha }}
 
       - run: mago format --check
       - run: mago lint
