@@ -81,12 +81,17 @@ const revealTools = async (page, skin) => {
 
 // Follow the switcher to another skin and wait out the navigation it triggers,
 // returning the response so a test can assert the page was actually served.
+// The sidebar skins wrap the anchor in a list item wider than itself, so a click
+// on the entry can land beside the link; Minerva's entry is the anchor already.
 const chooseSkin = async (page, from, to) => {
 	await revealTools(page, from);
+	const item = entry(page, to);
+	const anchor = item.locator("a");
+	const target = (await anchor.count()) ? anchor.first() : item;
 	const navigation = page.waitForResponse((response) =>
 		response.request().isNavigationRequest(),
 	);
-	await entry(page, to).click();
+	await target.click();
 	const response = await navigation;
 	await page.waitForLoadState("domcontentloaded");
 	return response;
