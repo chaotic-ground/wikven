@@ -117,8 +117,7 @@ class CheckTranslations extends Maintenance {
 			return 1;
 		}
 
-		// Same ids and same hashes means the readings agree on every byte staleness turns on; comparing
-		// ids alone passed a page whose unit bodies wikven cut in the wrong place (#376).
+		// Same ids and same hashes means the two readings agree on every byte staleness turns on.
 		// No page title is passed, so the title unit Translate has no counterpart for is never added.
 		$translate = [];
 		$unmarked = 0;
