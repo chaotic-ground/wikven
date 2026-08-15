@@ -55,11 +55,10 @@ resource "github_repository_ruleset" "default" {
       dynamic "required_check" {
         for_each = [
           "biome",
-          "build",
-          "build-and-check",
           "caddy",
           "composer-test",
           "coverage",
+          "docker-image",
           "mago",
           "phan (REL1_46)",
           "phan (master)",
@@ -68,6 +67,7 @@ resource "github_repository_ruleset" "default" {
           "phpunit (master)",
           "rumdl",
           "semantic-pull-request",
+          "smoke",
           "taplo",
           "typos",
           "yamllint",
