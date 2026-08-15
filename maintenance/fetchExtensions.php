@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Settings\Source\Format\JsonFormat;
 use MediaWiki\Settings\Source\Format\YamlFormat;
 
@@ -176,7 +177,7 @@ class FetchExtensions extends Maintenance {
 	private function fetchTarball(string $url, string $dest, string $name, string $kind, ?string $sha256 = null): void {
 		$this->output("Wikven: downloading $kind '$name' from $url\n");
 		$tmp = tempnam(sys_get_temp_dir(), 'wikven');
-		$this->run(['curl', '-sSL', '-f', '-o', $tmp, '--', $url], "download $kind '$name'");
+		$this->download($url, $tmp, "download $kind '$name'");
 		if ($sha256 !== null) {
 			$actual = hash_file('sha256', $tmp);
 			if (!hash_equals($sha256, (string)$actual)) {
@@ -245,6 +246,28 @@ class FetchExtensions extends Maintenance {
 			['composer', 'update', '--no-dev', '--no-interaction', '--working-dir=' . $IP],
 			'composer update'
 		);
+	}
+
+	/** Download $url to $dest, streaming the body to disk instead of buffering it in memory. */
+	private function download(string $url, string $dest, string $what): void {
+		$http = MediaWikiServices::getInstance()->getHttpRequestFactory();
+		$req = $http->create($url, ['followRedirects' => true], __METHOD__);
+
+		$fh = fopen($dest, 'wb');
+		if ($fh === false) {
+			$this->fatalError("Wikven: could not open '$dest' for writing.");
+		}
+		$req->setCallback(static function ($resource, $buffer) use ($fh) {
+			return fwrite($fh, $buffer);
+		});
+		$status = $req->execute();
+		fclose($fh);
+
+		$httpStatus = $req->getStatus();
+		if (!$status->isOK() || $httpStatus < 200 || $httpStatus >= 300) {
+			unlink($dest);
+			$this->fatalError("Wikven: failed to $what (HTTP $httpStatus).");
+		}
 	}
 
 	/**
