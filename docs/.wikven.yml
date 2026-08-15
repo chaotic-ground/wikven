@@ -8,7 +8,6 @@ extensions:
   - Translate
   - UniversalLanguageSelector
 skins:
-  - Timeless
   - Citizen
 config:
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
