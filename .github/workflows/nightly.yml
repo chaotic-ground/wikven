@@ -73,7 +73,7 @@ jobs:
       contents: write  # gh release upload
       id-token: write  # sign the build provenance attestation
       attestations: write  # write the build provenance attestation
-    uses: ./.github/workflows/build-binary.yml
+    uses: ./.github/workflows/binary.yml
     with:
       tag: ${{ needs.prepare.outputs.tag }}
 

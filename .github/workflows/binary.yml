@@ -1,0 +1,114 @@
+---
+name: Standalone binary
+
+# Path-filtered, so this must stay non-required: a required check that never reports leaves the pull
+# request unmergeable for good. release-please.yml and nightly.yml call the same job with a tag, which
+# is what tells a release build (both architectures, attested and uploaded) from a pull request one.
+on:
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'binary.Dockerfile'
+      - 'bin/build.php'
+      - 'caddy/**'
+      - '.github/workflows/binary.yml'
+  workflow_call:
+    inputs:
+      tag:
+        description: The release tag to upload the binaries to.
+        required: true
+        type: string
+
+permissions: {}
+
+# Cancel superseded pull request runs; a release or nightly build is left to finish.
+concurrency:
+  group: binary-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  binary:
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: ${{ inputs.tag != '' && fromJSON('["x86_64", "aarch64"]') || fromJSON('["x86_64"]') }}
+    runs-on: ${{ matrix.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    permissions:
+      contents: write  # gh release upload
+      id-token: write  # sign the build provenance attestation
+      attestations: write  # write the build provenance attestation
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+
+      - name: Build the wikven image
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a  # v7.3.0
+        with:
+          context: .
+          load: true
+          tags: wikven
+          # A pull request reads the layer cache the image build shares, and writes nothing back.
+          cache-from: type=gha,scope=wikven-image${{ inputs.tag != '' && format('-{0}', matrix.arch) || '' }}
+          cache-to: ${{ inputs.tag != '' && format('type=gha,mode=max,scope=wikven-image-{0}', matrix.arch) || '' }}
+
+      # binary.Dockerfile's export target FROMs the loaded image and writes out the compiled binary.
+      - name: Build the standalone binary
+        run: docker build -f binary.Dockerfile --target export -o type=local,dest=out .
+
+      - name: Name it per architecture
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: mv out/wikven "wikven-linux-$ARCH"
+
+      - name: Generate the checksum
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: sha256sum "wikven-linux-$ARCH" > "wikven-linux-$ARCH.sha256"
+
+      - name: Report what was built
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          bin="wikven-linux-$ARCH"
+          size=$(stat -c %s "$bin")
+          sum=$(cut -d ' ' -f1 < "$bin.sha256")
+          # Running it is the test: static linking fails at execution, not at compilation. php-cli reads
+          # its first argument as a path inside the embedded app, so PHP's version comes off this line.
+          out=$(./"$bin" version)
+          frankenphp=${out%%$'\n'*}
+          php=${frankenphp##*PHP }
+          php=${php%% *}
+          {
+            echo "### Standalone binary: \`$bin\`"
+            echo
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            printf '| Size | %s bytes (%s) |\n' "$size" "$(numfmt --to=iec "$size")"
+            printf '| sha256 | `%s` |\n' "$sum"
+            printf '| FrankenPHP | `%s` |\n' "$frankenphp"
+            printf '| PHP | `%s` |\n' "$php"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Sign the build provenance so users can `gh attestation verify` the binary.
+      - name: Attest the binary
+        if: inputs.tag != ''
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8  # v4.2.2
+        with:
+          subject-path: wikven-linux-${{ matrix.arch }}
+
+      - name: Attach to the release
+        if: inputs.tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+          ARCH: ${{ matrix.arch }}
+        run: >-
+          gh release upload "$TAG"
+          "wikven-linux-$ARCH"
+          "wikven-linux-$ARCH.sha256"
+          --clobber
