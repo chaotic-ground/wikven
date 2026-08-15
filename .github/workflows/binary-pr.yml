@@ -1,0 +1,45 @@
+---
+name: Standalone binary
+
+# Build binary.Dockerfile on pull requests that can break it. Nothing else did: docker-build.yml and
+# smoke.yml only build the root Dockerfile, and the binary was compiled solely by release-please.yml
+# and nightly.yml, whose gate skips a run with no feat/fix commit since the last nightly. A
+# build(deps) digest bump of the static builder therefore reached main with no build behind it.
+#
+# One architecture, no upload and no attestation: this is a pre-merge signal, not a release, so it
+# needs no write scopes. Path-filtered, so it must stay a non-required check. A required check that
+# does not report leaves a pull request unmergeable for good, which is why docker-build.yml and
+# smoke.yml run unfiltered on pull requests instead.
+on:
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'binary.Dockerfile'
+      - 'bin/build.php'
+      - 'caddy/**'
+      - '.github/actions/build-binary/action.yml'
+      - '.github/workflows/binary-pr.yml'
+      - '.github/workflows/build-binary.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Reads the layer cache docker-build.yml writes on main and exports none of its own, the same
+      # way smoke.yml does: concurrent mode=max writers only overwrite one another's upload.
+      - uses: ./.github/actions/build-binary
+        with:
+          arch: x86_64
+          cache-from: type=gha,scope=wikven-image

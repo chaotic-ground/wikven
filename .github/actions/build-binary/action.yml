@@ -1,0 +1,82 @@
+---
+name: Build the standalone binary
+description: >-
+  Build the wikven image, compile the standalone binary from binary.Dockerfile, and report what came
+  out. Shared by build-binary.yml (release and nightly) and binary-pr.yml (pull requests), which
+  differ only in what they do with the binary afterwards.
+
+inputs:
+  arch:
+    description: Target architecture, used to name the binary. The runner must be native to it.
+    required: true
+  cache-from:
+    description: buildx cache-from for the wikven image build.
+    required: true
+  cache-to:
+    description: buildx cache-to for the wikven image build. Empty writes no cache back.
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+
+    - name: Build the wikven image
+      uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a  # v7.3.0
+      with:
+        context: .
+        load: true
+        tags: wikven
+        cache-from: ${{ inputs.cache-from }}
+        cache-to: ${{ inputs.cache-to }}
+
+    # binary.Dockerfile's export target FROMs the loaded image and writes out the compiled binary.
+    - name: Build the standalone binary
+      shell: bash
+      run: docker build -f binary.Dockerfile --target export -o type=local,dest=out .
+
+    - name: Name it per architecture
+      shell: bash
+      env:
+        ARCH: ${{ inputs.arch }}
+      run: mv out/wikven "wikven-linux-$ARCH"
+
+    - name: Generate the checksum
+      shell: bash
+      env:
+        ARCH: ${{ inputs.arch }}
+      run: sha256sum "wikven-linux-$ARCH" > "wikven-linux-$ARCH.sha256"
+
+    # Size and checksum give a reviewer something to compare against; the two version lines double as
+    # a smoke test, since a binary that answers them at all linked and booted PHP. They are reported,
+    # not asserted: the subcommands come from FrankenPHP, so a rename upstream should not fail a build.
+    - name: Report what was built
+      shell: bash
+      env:
+        ARCH: ${{ inputs.arch }}
+      run: |
+        set -euo pipefail
+        bin="wikven-linux-$ARCH"
+        size=$(stat -c %s "$bin")
+        sum=$(cut -d ' ' -f1 < "$bin.sha256")
+        if out=$(./"$bin" version 2>&1); then
+          frankenphp=$(printf '%s\n' "$out" | head -1)
+        else
+          frankenphp="(version not reported)"
+        fi
+        if out=$(./"$bin" php-cli --version 2>&1); then
+          php=$(printf '%s\n' "$out" | head -1)
+        else
+          php="(php-cli version not reported)"
+        fi
+        {
+          echo "### Standalone binary: \`$bin\`"
+          echo
+          echo "| Field | Value |"
+          echo "| --- | --- |"
+          printf '| Size | %s bytes (%s) |\n' "$size" "$(numfmt --to=iec "$size")"
+          printf '| sha256 | `%s` |\n' "$sum"
+          printf '| FrankenPHP | `%s` |\n' "$frankenphp"
+          printf '| PHP | `%s` |\n' "$php"
+        } >> "$GITHUB_STEP_SUMMARY"
