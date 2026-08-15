@@ -2,6 +2,7 @@
 package wikvencaddy
 
 import (
+	"errors"
 	"flag"
 	"os"
 	"os/exec"
@@ -55,6 +56,16 @@ func reexec(args ...string) (int, error) {
 	cmd.Stderr = os.Stderr
 	cmd.Env = os.Environ()
 	if err := cmd.Run(); err != nil {
+		// Propagate the child's own exit code so a caller scripting on `wikven build` can tell one
+		// failure from another, and return a nil error so Caddy does not also print "exit status N"
+		// on top of the diagnostic the child already wrote. A signalled child reports -1; call that 1.
+		var exit *exec.ExitError
+		if errors.As(err, &exit) {
+			if code := exit.ExitCode(); code > 0 {
+				return code, nil
+			}
+			return 1, nil
+		}
 		return 1, err
 	}
 	return 0, nil
