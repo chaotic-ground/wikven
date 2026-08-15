@@ -94,12 +94,12 @@ jobs:
           # A page with N languages is emitted N+1 times and each copy carries N entries, so the
           # target is derived from the source tree rather than pinned to a number.
           expected=0
-          for f in src/*.wikitext; do
+          for f in docs/*.wikitext; do
             grep -q '<languages */>' "$f" || continue
             base=$(basename "$f" .wikitext)
             langs=1
-            if [ -d "src/$base" ]; then
-              langs=$(( langs + $(ls "src/$base"/*.wikitext 2>/dev/null | wc -l) ))
+            if [ -d "docs/$base" ]; then
+              langs=$(( langs + $(ls "docs/$base"/*.wikitext 2>/dev/null | wc -l) ))
             fi
             expected=$(( expected + langs * ( langs + 1 ) ))
           done
