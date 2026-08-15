@@ -3,11 +3,18 @@
 fixes:
   - "/workspace/src/extensions/Wikven/::"
 
+comment: false
+
 coverage:
   status:
+    # maintenance/ is half the tree's lines with no unit tests: it dilutes the
+    # project total, and its diffs can never meet a patch target.
     project:
       default:
-        informational: true
+        target: auto
+        threshold: 2%
     patch:
       default:
-        informational: true
+        target: 70%
+        paths:
+          - includes/
