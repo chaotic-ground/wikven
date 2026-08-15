@@ -57,6 +57,20 @@ class StalenessComputer {
 	/** What TranslatablePageParser::armourNowiki() hides: exactly this, no attributes, no other tag. */
 	private const ARMOURED_NOWIKI = '#<nowiki>.*?</nowiki>#s';
 
+	/** A unit marker, with the source-unit hash a translation's marker also carries. */
+	private const MARKER = '/<!--T:(?<id>[A-Za-z0-9]+)(?:\s+@(?<hash>[0-9a-f]{' . self::HASH_LENGTH . '}))?\s*-->/';
+
+	/** How TranslatablePageParser::parseSection() cuts a block's contents into units. */
+	private const SEGMENT = '~(^\s*|\s*\n\n\s*|\s*$)~';
+
+	/**
+	 * The two marker positions parseUnit() strips, and so the two it accepts: at the very start of a
+	 * unit, or at the end of any line in one. Anything else is pt-shake-position, which the check
+	 * reports as a page Translate cannot parse.
+	 */
+	private const MARKER_AT_START = '/^<!--T:.*?-->( |\n)/';
+	private const MARKER_AT_LINE_END = '/\s*<!--T:.*?-->$/m';
+
 	/** Short content hash of a source unit; the value carried as @<hash> in a translation marker. */
 	public static function hashUnit(string $unitText): string {
 		return substr(hash('sha256', self::normalize($unitText)), 0, self::HASH_LENGTH);
@@ -95,10 +109,10 @@ class StalenessComputer {
 
 	/** Number the still-unmarked units of one <translate> block's contents, continuing from $next. */
 	private static function markBlock(string $contents, int &$next): string {
-		// The two newlines must be adjacent, matching Translate's own sectioniser
-		// ('~(^\s*|\s*\n\n\s*|\s*$)~'): a line of spaces or tabs between them is still the same unit to
-		// Translate, and marking it as two would put a <!--T:n--> mid-unit, which Translate rejects
-		// (pt-shake-position).
+		// The two newlines must be adjacent, as they must for self::SEGMENT: a line of spaces or tabs
+		// between them is still the same unit to Translate, and marking it as two would put a
+		// <!--T:n--> mid-unit, which Translate rejects (pt-shake-position). Split here keeps the
+		// separators, which SEGMENT drops, because this rebuilds the page.
 		$units = preg_split('/(\n\n)/', $contents, -1, PREG_SPLIT_DELIM_CAPTURE);
 		$marked = '';
 		foreach ($units as $index => $segment) {
@@ -119,49 +133,16 @@ class StalenessComputer {
 	 * @return array<string,array{hash:?string,text:string}> id => [synced-source hash, unit text]
 	 */
 	public static function translationUnits(string $text): array {
-		$verbatim = self::verbatimRanges($text);
-		$length = strlen($text);
-		return self::unitsAt($text, static function (int $offset) use ($verbatim, $length): ?int {
-			return self::insideVerbatim($offset, $verbatim) ? null : $length;
-		});
-	}
-
-	/**
-	 * Split a source page into units keyed by their <!--T:n--> marker id.
-	 *
-	 * @return array<string,array{hash:?string,text:string}> id => [null, unit text]
-	 */
-	private static function sourcePageUnits(string $text): array {
-		$blocks = self::blockRanges($text);
-		// Translate segments each block's contents on their own, so no unit outlives its block.
-		return self::unitsAt($text, static function (int $offset) use ($blocks): ?int {
-			$block = self::containingRange($offset, $blocks);
-			return $block === null ? null : $block[1];
-		});
-	}
-
-	/**
-	 * Units keyed by marker id. $bound says both which markers count and how far each one's body may
-	 * run: null skips the marker, leaving the surrounding unit whole. A body otherwise runs to the
-	 * next counted marker.
-	 *
-	 * @param string $text
-	 * @param callable(int):(?int) $bound
-	 * @return array<string,array{hash:?string,text:string}>
-	 */
-	private static function unitsAt(string $text, callable $bound): array {
-		$pattern = '/<!--T:(?<id>[A-Za-z0-9]+)(?:\s+@(?<hash>[0-9a-f]{' . self::HASH_LENGTH . '}))?\s*-->/';
-		if (!preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
+		// A translation is wikven's own format: bare markers, no blocks to segment, so a unit simply
+		// runs from its marker to the next one.
+		if (!preg_match_all(self::MARKER, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
 			return [];
 		}
-
+		$verbatim = self::verbatimRanges($text);
 		$markers = [];
-		$limits = [];
 		foreach ($matches as $marker) {
-			$limit = $bound($marker[0][1]);
-			if ($limit !== null) {
+			if (!self::insideVerbatim($marker[0][1], $verbatim)) {
 				$markers[] = $marker;
-				$limits[] = $limit;
 			}
 		}
 
@@ -170,13 +151,38 @@ class StalenessComputer {
 		for ($i = 0; $i < $count; $i++) {
 			$marker = $markers[$i];
 			$bodyStart = $marker[0][1] + strlen($marker[0][0]);
-			$bodyEnd = min($limits[$i], ( $i + 1 ) < $count ? $markers[$i + 1][0][1] : strlen($text));
-			// An unstamped marker (source page, or a not-yet-stamped translation) has no hash group.
+			$bodyEnd = ( $i + 1 ) < $count ? $markers[$i + 1][0][1] : strlen($text);
+			// A not-yet-stamped marker has no hash group.
 			$stamped = isset($marker['hash']) && $marker['hash'][1] !== -1;
 			$units[$marker['id'][0]] = [
 				'hash' => $stamped ? $marker['hash'][0] : null,
 				'text' => substr($text, $bodyStart, $bodyEnd - $bodyStart)
 			];
+		}
+		return $units;
+	}
+
+	/**
+	 * Split a source page into units keyed by their <!--T:n--> marker id.
+	 *
+	 * A source page is Translate's format, so it is read Translate's way round: cut each <translate>
+	 * block into units first, then find the marker inside one. Scanning for markers first and cutting
+	 * between them would put the marker at a unit's edge, which is only where parseUnit() finds it
+	 * when the unit is written in the ordinary form.
+	 *
+	 * @return array<string,array{hash:?string,text:string}> id => [null, unit text]
+	 */
+	private static function sourcePageUnits(string $text): array {
+		$units = [];
+		foreach (self::blockRanges($text) as [$start, $end]) {
+			$contents = substr($text, $start, $end - $start);
+			foreach (preg_split(self::SEGMENT, $contents, -1, PREG_SPLIT_NO_EMPTY) as $segment) {
+				if (!preg_match(self::MARKER, $segment, $marker)) {
+					continue;
+				}
+				$body = preg_replace(self::MARKER_AT_START, '', $segment);
+				$units[$marker['id']] = ['hash' => null, 'text' => preg_replace(self::MARKER_AT_LINE_END, '', $body)];
+			}
 		}
 		return $units;
 	}

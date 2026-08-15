@@ -221,10 +221,13 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 
 	public function testNowikiInsideABlockHidesNothing() {
 		// parse() unarmours a block's contents before segmenting them, so <nowiki> shelters a marker
-		// from the block scan but not from the unit scan. Translate rejects the page; wikven must see
-		// the same two units for the check to be able to say so.
+		// from the block scan but not from the unit it lands in. One segment is one unit however many
+		// markers it holds, and Translate refuses this one outright (pt-shake-multiple), which the
+		// check reports on its own.
 		$text = "<translate>\n<!--T:1-->\nUse <nowiki><!--T:9--></nowiki> here.\n</translate>";
-		$this->assertSame([1, 9], array_keys(StalenessComputer::sourceUnits($text)));
+		$units = StalenessComputer::sourceUnits($text);
+		$this->assertSame([1], array_keys($units));
+		$this->assertSame('Use <nowiki><!--T:9--></nowiki> here.', $units[1]['text']);
 	}
 
 	public function testAWholeBlockArmouredByNowikiIsInvisible() {
@@ -235,7 +238,7 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 			. "<nowiki><translate>\n<!--T:1-->\nShown.\n</translate></nowiki>";
 		$units = StalenessComputer::sourceUnits($text);
 		$this->assertSame([1], array_keys($units));
-		$this->assertStringStartsWith("\nReal.\n", $units[1]['text']);
+		$this->assertSame('Real.', $units[1]['text']);
 	}
 
 	public function testMarkNumbersABlockShownInACodeExample() {
@@ -287,8 +290,18 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 			. "{{DISPLAYTITLE:Wikven}}\n"
 			. "<translate>\n<!--T:2-->\nTwo.\n</translate>\n[[Category:Docs]]";
 		$units = StalenessComputer::sourceUnits($text);
-		$this->assertSame("\nOne.\n", $units[1]['text']);
-		$this->assertSame("\nTwo.\n", $units[2]['text']);
+		$this->assertSame('One.', $units[1]['text']);
+		$this->assertSame('Two.', $units[2]['text']);
+	}
+
+	public function testASourceMarkerAtTheEndOfALineBelongsToTheLineBeforeIt() {
+		// parseUnit() strips a marker at the end of any line, not only a heading's, and keeps the text
+		// on both sides of it. Reading the unit as starting after the marker would lose everything
+		// before it.
+		$text = "<translate>\nfoo\n<!--T:1-->\nbar\n\n== Heading == <!--T:2-->\n</translate>";
+		$units = StalenessComputer::sourceUnits($text);
+		$this->assertSame("foo\nbar", $units[1]['text']);
+		$this->assertSame('== Heading ==', $units[2]['text']);
 	}
 
 	public function testEditingOutsideEveryBlockStalesNothing() {
