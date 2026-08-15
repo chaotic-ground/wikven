@@ -55,6 +55,8 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 		$this->assertArrayHasKey('history', $imported['views']);
 		$this->assertArrayHasKey('view', $imported['views'], 'unrelated tabs are left alone');
 
+		$this->assertSame([], $imported['actions'], 'the watch star has no watchlist to reach');
+
 		$generated = $this->navigationFor('Version');
 		$this->assertArrayNotHasKey('edit', $generated['views'], 'source-less page drops edit');
 		$this->assertArrayNotHasKey('ve-edit', $generated['views']);
@@ -77,7 +79,8 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 				've-edit' => ['x'],
 				'viewsource' => ['x'],
 				'history' => ['x']
-			]
+			],
+			'actions' => ['watch' => ['x'], 'unwatch' => ['x']]
 		];
 		( new Hider() )->onSkinTemplateNavigation__Universal($sktemplate, $links);
 		return $links;

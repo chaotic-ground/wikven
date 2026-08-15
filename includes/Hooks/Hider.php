@@ -38,6 +38,10 @@ class Hider implements
 			}
 		}
 
+		// A static export has no watchlist. Minerva puts the star back for anonymous readers,
+		// pointing at the login page, so ext.Wikven.styles still hides what it re-adds.
+		unset($links['actions']['watch'], $links['actions']['unwatch']);
+
 		// Edit/history tabs need configured external URLs and a source file; else they 404 or self-link.
 		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
 		$title = $sktemplate->getTitle();
