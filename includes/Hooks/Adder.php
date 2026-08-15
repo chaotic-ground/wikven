@@ -24,6 +24,13 @@ class Adder implements \MediaWiki\Hook\BeforePageDisplayHook, \MediaWiki\Hook\Sk
 			$out->addModules('ext.Wikven.skinSwitcher');
 			$out->addJsConfigVars('wgWikvenMainSkin', $GLOBALS['wgWikvenMainSkin'] ?? '');
 		}
+
+		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
+		// and its "Page tools" sidebar (page actions, Special:Log) are dead; hide them on cli export.
+		// !important: the skin stylesheet loads after this inline rule and would otherwise win.
+		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'timeless') {
+			$out->addInlineStyle('#user-tools, #page-tools { display: none !important; }');
+		}
 	}
 
 	/** @inheritDoc */
