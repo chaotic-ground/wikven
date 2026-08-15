@@ -21,6 +21,12 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 	public static function provideIsTranslatable(): array {
 		return [
 			'a real translate block' => ["<languages/>\n<translate>\n<!--T:1-->\nHi.\n</translate>", true],
+			// Translate accepts attributes on the tag.
+			'a translate block with an attribute' => [
+				"<languages/>\n<translate nowrap>\n<!--T:1-->\nHi.\n</translate>",
+				true
+			],
+			'a tag that merely starts the same way' => ['<translatex>Hi.</translatex>', false],
 			'plain text' => ['Just prose, no markup.', false],
 			// The page documenting page translation shows <translate> as an example; it is not a source.
 			'translate inside syntaxhighlight' => [
