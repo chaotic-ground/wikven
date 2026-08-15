@@ -98,6 +98,26 @@ test("switching back to the main skin from a Korean page returns to the root cop
 	expect(missing, missing.join("; ")).toEqual([]);
 });
 
+// And between two skins that both have a directory, where the old and the new
+// skin directory are at the same depth, then back out to the root copy.
+test("switching between two non-main skins on a Korean page keeps the article", async ({
+	page,
+}) => {
+	const missing = watchForMissingPages(page);
+
+	await page.goto("citizen/Getting_Started/ko.html");
+
+	expect((await chooseSkin(page, "minerva")).status()).toBe(200);
+	await expect(page).toHaveURL("minerva/Getting_Started/ko.html");
+	await expectKoreanArticle(page);
+	await expect(skinSelect(page)).toHaveValue("minerva");
+
+	expect((await chooseSkin(page, "vector-2022")).status()).toBe(200);
+	await expect(page).toHaveURL("Getting_Started/ko.html");
+	await expectKoreanArticle(page);
+	expect(missing, missing.join("; ")).toEqual([]);
+});
+
 // A source page sits one directory higher than its translations; it worked
 // before and has to keep working.
 test("switching the skin on a source page keeps the article", async ({
