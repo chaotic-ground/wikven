@@ -50,6 +50,7 @@ class FillMinervaMenu extends Maintenance {
 		// since each page links to its own copy in the other skins.
 		$navigation = $this->list('p-wikven-navigation', $this->navigationMarkup());
 		$settings = $this->settingsMarkup();
+		$language = $this->getServiceContainer()->getContentLanguage();
 
 		$changed = 0;
 		foreach (new FilesystemIterator($dir, FilesystemIterator::SKIP_DOTS) as $file) {
@@ -57,7 +58,10 @@ class FillMinervaMenu extends Maintenance {
 				continue;
 			}
 			// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
-			$groups = $navigation . $this->list('p-wikven-skins', $this->skinMarkup($file->getFilename()) . $settings);
+			// The file is still under its cache name here; the link has to name it as rename.php
+			// will leave it, since that pass runs after this one.
+			$page = CacheName::toOutputPath($file->getFilename(), $language);
+			$groups = $navigation . $this->list('p-wikven-skins', $this->skinMarkup($page) . $settings);
 			$html = (string)file_get_contents($file->getPathname());
 			$filled = HtmlListInserter::after($html, self::AFTER_LIST, $groups);
 			if ($filled !== $html) {
