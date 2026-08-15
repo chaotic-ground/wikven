@@ -225,7 +225,7 @@ Wikven
 </div>
 
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Development/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="개발 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Development/ko.html" class="mw-pt-progress mw-pt-progress--high" title="개발 (96% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>This page explains how Wikven is built, for people who want to work on it. Wikven is a <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki" class="extiw" title="mw:Special:MyLanguage/MediaWiki">MediaWiki</a> extension plus a handful of maintenance scripts that turn a directory of wikitext into a static website; it does not add a new rendering engine, it drives MediaWiki itself and then captures the result.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Architecture">Architecture</h2></div>
@@ -291,9 +291,9 @@ Wikven
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Continuous_integration">Continuous integration</h2></div>
 <ul><li><code>lint.yml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs).</li>
-<li><code>docker-build.yml</code> builds the image and publishes it to <code>ghcr.io/chaotic-ground/wikven</code> on <code>main</code>.</li>
+<li><code>docker-image.yml</code> builds the image and publishes it to <code>ghcr.io/chaotic-ground/wikven</code> on <code>main</code>.</li>
 <li><code>deploy-docs.yml</code> builds the <code>docs/</code> directory with the image and deploys the result to GitHub Pages, so this site is itself a Wikven build.</li>
-<li><code>build-binary.yml</code> is a reusable workflow that builds the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> for each platform. <code>release-please.yml</code> calls it to attach the binaries to a version release, and <code>nightly.yml</code> calls it daily to publish a dated <code>nightly-YYYY-MM-DD</code> pre-release. Both create the release as a draft, attach the binaries, then publish it, because GitHub's immutable releases lock a release's assets once it is published.</li></ul>
+<li><code>binary.yml</code> builds the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a>, on pull requests that touch it and for each platform on a release. <code>release-please.yml</code> calls it to attach the binaries to a version release, and <code>nightly.yml</code> calls it daily to publish a dated <code>nightly-YYYY-MM-DD</code> pre-release. Both create the release as a draft, attach the binaries, then publish it, because GitHub's immutable releases lock a release's assets once it is published.</li></ul>
 <p>Versions follow <a rel="nofollow" class="external text" href="https://www.conventionalcommits.org/">Conventional Commits</a>, which release-please uses to generate the changelog and bump the version.
 </p>
 </div>
@@ -311,8 +311,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786804231">
-  				<span>Last edited on 15 August 2026, at 14:30</span>
+  				data-timestamp="1786808519">
+  				<span>Last edited on 15 August 2026, at 15:41</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -335,7 +335,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 14:30.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 15:41.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

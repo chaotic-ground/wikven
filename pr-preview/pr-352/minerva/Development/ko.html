@@ -209,7 +209,7 @@ Wikven
 				<div id="mw-content-subtitle" lang="ko" dir="ltr"></div>
 			</div>
 			<div id="bodyContent" class="content">
-				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="ko" dir="ltr"><h2 id="mw-toc-heading">목차</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 96% 완료했습니다.</div><div class="mw-pt-translate-header" dir="ltr" lang="ko"><span class="mw-translate-fuzzy">오래된 번역은 이렇게 표시됩니다.</span></div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="ko" dir="ltr"><h2 id="mw-toc-heading">목차</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#구조"><span class="tocnumber">1</span> <span class="toctext">구조</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#이미지_빌드하기"><span class="tocnumber">2</span> <span class="toctext">이미지 빌드하기</span></a></li>
@@ -224,7 +224,7 @@ Wikven
 </div>
 
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Development.html" class="mw-pt-progress mw-pt-progress--complete" title="Development (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>이 문서는 Wikven에 작업하고자 하는 사람들을 위해 Wikven이 어떻게 만들어지는지 설명합니다. Wikven은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki" class="extiw" title="mw:Special:MyLanguage/MediaWiki">MediaWiki</a> 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다.
 </p><p><span id="Architecture"></span>
 </p>
@@ -301,10 +301,12 @@ Wikven
 </p><p><span id="Continuous&#95;integration"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="지속적_통합"><span id=".EC.A7.80.EC.86.8D.EC.A0.81_.ED.86.B5.ED.95.A9"></span>지속적 통합</h2></div>
+<div class="mw-translate-fuzzy">
 <ul><li><code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행합니다.</li>
 <li><code>docker-build.yml</code>은 이미지를 빌드하고 <code>main</code>에서 <code>ghcr.io/chaotic-ground/wikven</code>에 게시합니다.</li>
 <li><code>deploy-docs.yml</code>은 이미지로 <code>docs/</code> 디렉터리를 빌드하고 그 결과를 GitHub Pages에 배포하므로, 이 사이트 자체가 하나의 Wikven 빌드입니다.</li>
 <li><code>build-binary.yml</code>은 각 플랫폼용 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>를 빌드하는 재사용 가능한 워크플로입니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다.</li></ul>
+</div>
 <p>버전은 <a rel="nofollow" class="external text" href="https://www.conventionalcommits.org/">Conventional Commits</a>를 따르며, release-please가 이를 사용해 변경 로그를 생성하고 버전을 올립니다.
 </p>
 </div>
@@ -322,8 +324,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786804231">
-  				<span>2026년 8월 15일 (토) 14:30에 마지막으로 편집됨</span>
+  				data-timestamp="1786808519">
+  				<span>2026년 8월 15일 (토) 15:41에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -346,7 +348,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 14:30에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 15:41에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
