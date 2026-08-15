@@ -81,7 +81,11 @@ class StalenessComputer {
 				if (self::insideVerbatim($block[0][1], $verbatim)) {
 					return $block[0][0];
 				}
-				$units = preg_split('/(\n[ \t]*\n)/', $block[2][0], -1, PREG_SPLIT_DELIM_CAPTURE);
+				// The two newlines must be adjacent, matching Translate's own sectioniser
+				// ('~(^\s*|\s*\n\n\s*|\s*$)~'): a line of spaces or tabs between them is still the same
+				// unit to Translate, and marking it as two would put a <!--T:n--> mid-unit, which
+				// Translate rejects (pt-shake-position).
+				$units = preg_split('/(\n\n)/', $block[2][0], -1, PREG_SPLIT_DELIM_CAPTURE);
 				$marked = '';
 				foreach ($units as $index => $segment) {
 					// Odd indices are the blank-line separators between units; keep them verbatim.
