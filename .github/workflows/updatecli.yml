@@ -1,12 +1,8 @@
 ---
 name: Updatecli
 
-# Bump the version pins no package manager can see: the SifterSearch release tarball in the
-# Dockerfile, the mago binary in composer.json, and the biome binary in biome.json. The five real
-# ecosystems are Dependabot's, in .github/dependabot.yml.
-#
-# A pull request opened with GITHUB_TOKEN starts no workflows, so close and reopen a bump PR to
-# run the suite against it.
+# The version pins no package manager sees; Dependabot has the rest.
+# A pull request opened with GITHUB_TOKEN starts no workflows: close and reopen one to run CI.
 
 on:
   schedule:
@@ -19,8 +15,8 @@ jobs:
   updatecli:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # push the bump branch
-      pull-requests: write  # open the bump PR
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:

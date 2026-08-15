@@ -30,8 +30,7 @@ sources:
         kind: semver
 
 targets:
-  # The $schema URL is the only place the version appears; the Lint workflow reads the binary
-  # version back out of it, so the schema and the binary cannot drift apart.
+  # The $schema URL is the only place the version appears; Lint reads the binary version from it.
   schema:
     name: 'build(deps): bump biome to {{ source "npm" }}'
     kind: file

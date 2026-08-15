@@ -31,9 +31,7 @@ sources:
         kind: semver
 
 targets:
-  # setup-mago reads this key itself, so the Lint workflow states no version. Replaced as text
-  # rather than with the json kind: that one reserialises the whole file, turning the tabs into
-  # spaces and sorting every key, which is a rewrite of composer.json on each bump.
+  # Not the json kind: it reserialises the whole file, indentation and key order included.
   composer:
     name: 'build(deps): bump mago to {{ source "release" }}'
     kind: file
