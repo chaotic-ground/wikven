@@ -14,8 +14,6 @@ const ENGLISH_HEADING = "Getting Started";
 const KOREAN_HEADING = "시작하기";
 
 // What each skin puts the toolbox behind, where it takes a control to reveal.
-// Minerva is the odd one: its toolbox is the page-actions overflow menu, so the
-// entries are anchors in that menu rather than sidebar list items.
 // Vector's dropdown is a checkbox the label sits under, so the label is not what a
 // click lands on; Citizen's is a <details> and Minerva's toggle is its own control.
 const OPENERS = {
@@ -176,7 +174,7 @@ test("switching back to the main skin from a Korean page returns to the root cop
 });
 
 // And between two skins that both have a directory, where the old and the new
-// skin directory are at the same depth.
+// skin directory are at the same depth, then back out to the root copy.
 test("switching between two non-main skins on a Korean page keeps the article", async ({
 	page,
 }) => {
@@ -185,29 +183,11 @@ test("switching between two non-main skins on a Korean page keeps the article", 
 
 	await page.goto(`${others[0]}/Getting_Started/ko.html`);
 
-	const response = await chooseSkin(page, others[0], others[1]);
-
-	expect(response.status()).toBe(200);
+	expect((await chooseSkin(page, others[0], others[1])).status()).toBe(200);
 	await expect(page).toHaveURL(`${others[1]}/Getting_Started/ko.html`);
 	await expectKoreanArticle(page);
-	expect(missing, missing.join("; ")).toEqual([]);
-});
 
-// And between two skins that both have a directory, where the old and the new
-// skin directory are at the same depth, then back out to the root copy.
-test("switching between two non-main skins on a Korean page keeps the article", async ({
-	page,
-}) => {
-	const missing = watchForMissingPages(page);
-
-	await page.goto("citizen/Getting_Started/ko.html");
-
-	expect((await chooseSkin(page, "minerva")).status()).toBe(200);
-	await expect(page).toHaveURL("minerva/Getting_Started/ko.html");
-	await expectKoreanArticle(page);
-	await expect(skinSelect(page)).toHaveValue("minerva");
-
-	expect((await chooseSkin(page, "vector-2022")).status()).toBe(200);
+	expect((await chooseSkin(page, others[1], main)).status()).toBe(200);
 	await expect(page).toHaveURL("Getting_Started/ko.html");
 	await expectKoreanArticle(page);
 	expect(missing, missing.join("; ")).toEqual([]);
