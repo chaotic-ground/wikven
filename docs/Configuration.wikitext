@@ -17,7 +17,7 @@ extensions:
   - SyntaxHighlight_GeSHi
   - ParserFunctions
 skins:
-  - Timeless
+  - MinervaNeue
 config:
   Sitename: Wikven
   WikvenEditUrl: https://github.com/yourname/some-repository/edit/branch-name/path/to/$1

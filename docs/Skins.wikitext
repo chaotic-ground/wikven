@@ -11,7 +11,6 @@ The skins bundled with MediaWiki are available. Selecting <code>Vector</code> gi
 
 <!--T:4-->
 * {{ml|Skin:Vector|Vector}} (default)
-* {{ml|Skin:Timeless|Timeless}}
 * {{ml|Skin:MonoBook|MonoBook}}
 * {{ml|Skin:MinervaNeue|MinervaNeue}} (mobile-oriented)
 
@@ -24,7 +23,7 @@ You can change the skin by setting <code>skins</code>. The first skin in the lis
 
 <syntaxhighlight lang="yaml">
 skins:
-  - Timeless
+  - MinervaNeue
 </syntaxhighlight>
 
 <translate>
