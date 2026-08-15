@@ -5,9 +5,14 @@
 		<exclude name="MediaWiki.WhiteSpace.SpaceyParenthesis" />
 		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeClassBrace" />
-		<!-- wikven shells out (passthru) and uses @ for best-effort filesystem ops; allow both. -->
+		<!-- wikven shells out and uses @ for best-effort filesystem ops; allow both. Shell::command() is
+		     not the alternative here: it buffers the child's output, which loses the live progress of a
+		     per-skin build or a slow composer run, and its default restrictions hide LocalSettings.php
+		     from a nested maintenance script. proc_open is the safest of these (an array argv never
+		     reaches a shell), so it is allowed alongside the passthru calls it has not replaced. -->
 		<exclude name="MediaWiki.Usage.ForbiddenFunctions.passthru" />
 		<exclude name="MediaWiki.Usage.ForbiddenFunctions.escapeshellarg" />
+		<exclude name="MediaWiki.Usage.ForbiddenFunctions.proc_open" />
 		<exclude name="Generic.PHP.NoSilencedErrors.Discouraged" />
 	</rule>
 	<file>.</file>
