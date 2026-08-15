@@ -279,6 +279,30 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		$this->assertSame([1, 2, 3], array_keys(StalenessComputer::sourceUnits($text)));
 	}
 
+	public function testASourceUnitEndsWhereItsBlockDoes() {
+		// Translate segments each block's contents on their own, so the last unit of one stops at
+		// </translate> instead of running on to the next marker and taking the page furniture with it.
+		$text =
+			"<translate>\n<!--T:1-->\nOne.\n</translate>\n"
+			. "{{DISPLAYTITLE:Wikven}}\n"
+			. "<translate>\n<!--T:2-->\nTwo.\n</translate>\n[[Category:Docs]]";
+		$units = StalenessComputer::sourceUnits($text);
+		$this->assertSame("\nOne.\n", $units[1]['text']);
+		$this->assertSame("\nTwo.\n", $units[2]['text']);
+	}
+
+	public function testEditingOutsideEveryBlockStalesNothing() {
+		// What the unit bound is for: a category or a template call is not part of any unit, so
+		// changing one must not send every translation of the page back to the translator.
+		$before = "<translate>\n<!--T:1-->\nHello.\n</translate>\n[[Category:Docs]]";
+		$after = "<translate>\n<!--T:1-->\nHello.\n</translate>\n[[Category:Guides]]";
+		$translation = StalenessComputer::restamp($before, "<!--T:1-->\n안녕.\n");
+		$this->assertSame(
+			[StalenessComputer::OK],
+			array_column(StalenessComputer::analyze($after, $translation), 'status')
+		);
+	}
+
 	public function testAnalyzeIgnoresAnExampleMarkerInACodeBlock() {
 		// A translation covering only the real unit is fully up to date; the example marker shown in
 		// the code block is neither a missing source unit nor an orphan.

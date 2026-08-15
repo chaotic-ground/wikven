@@ -7,7 +7,7 @@
 <!--T:2 @2f0b756f-->
 == GitHub Pages ==
 
-<!--T:3 @16d842b9-->
+<!--T:3 @8dd3954d-->
 이 워크플로는 푸시할 때마다 사이트를 다시 빌드하고 게시합니다. {{SITENAME}} [https://github.com/chaotic-ground/wikven/tree/main/action 복합 액션]으로 소스를 빌드한 뒤 <code>dist/</code>를 Pages에 업로드합니다.
 
 <!--T:4 @cec23135-->
@@ -28,11 +28,11 @@
 <!--T:9 @3bb18363-->
 <code>dist/index.html</code>을 직접 열거나, 링크와 자산이 프로덕션에서와 똑같이 해석되도록 디렉터리를 제공하세요. {{SITENAME}}에는 이를 위한 <code>serve</code> 명령이 내장되어 있습니다.
 
-<!--T:10 @d2799661-->
+<!--T:10 @ee704a0e-->
 [[$1|단독 실행 바이너리]]를 쓰면 <code>dist/</code>를 <code>http://localhost:8080</code>에서 제공합니다 (<code>--listen</code>으로 변경):
 
-<!--T:11 @8145bacc-->
+<!--T:11 @77a3cf99-->
 Docker 이미지를 쓸 때는 <code>serve</code> 명령을 실행하고 포트를 공개하세요 (빌드 출력이 마운트된 <code>dist/</code>에 이미 있어야 합니다):
 
-<!--T:12 @22a8fb3c-->
+<!--T:12 @fdf6c82a-->
 임의의 정적 서버도 됩니다. 예를 들어 <code>cd dist && python3 -m http.server</code>처럼요.

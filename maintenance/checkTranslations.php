@@ -117,14 +117,20 @@ class CheckTranslations extends Maintenance {
 			return 1;
 		}
 
-		$ids = [];
+		// Same ids and same hashes means the two readings agree on every byte staleness turns on.
+		// No page title is passed, so the title unit Translate has no counterpart for is never added.
+		$translate = [];
 		$unmarked = 0;
 		foreach ($output->units() as $unit) {
 			if ((string)$unit->id === '-1') {
 				$unmarked++;
 			} else {
-				$ids[] = (string)$unit->id;
+				$translate[(string)$unit->id] = StalenessComputer::hashUnit($unit->text);
 			}
+		}
+		$wikven = [];
+		foreach (StalenessComputer::sourceUnits($sourceText) as $id => $unit) {
+			$wikven[(string)$id] = StalenessComputer::hashUnit($unit['text']);
 		}
 
 		$problems = 0;
@@ -135,21 +141,31 @@ class CheckTranslations extends Maintenance {
 				. " run translate mark\n"
 			);
 		}
-		// The two readings agreeing is what makes every check below it mean anything: a unit only
-		// wikven sees is never translated on the wiki, and one only Translate sees is never gated.
-		// No page title is passed, so the title unit Translate has no counterpart for is never added.
-		$wikven = array_map('strval', array_keys(StalenessComputer::sourceUnits($sourceText)));
-		if ($wikven !== $ids) {
+		if (array_keys($wikven) !== array_keys($translate)) {
 			$problems++;
 			$this->output(
 				"::error file=$reportFile::Translate reads units "
-				. ( $ids ? implode(', ', $ids) : '(none)' )
+				. $this->unitList(array_keys($translate))
 				. ' where wikven reads '
-				. ( $wikven ? implode(', ', $wikven) : '(none)' )
+				. $this->unitList(array_keys($wikven))
+				. "\n"
+			);
+		} elseif ($wikven !== $translate) {
+			$problems++;
+			$this->output(
+				"::error file=$reportFile::Translate and wikven read different text for unit(s) "
+				. $this->unitList(array_keys(array_diff_assoc($wikven, $translate)))
 				. "\n"
 			);
 		}
 		return $problems;
+	}
+
+	/**
+	 * @param list<string> $ids
+	 */
+	private function unitList(array $ids): string {
+		return $ids === [] ? '(none)' : 'T:' . implode(', T:', $ids);
 	}
 }
 

@@ -120,8 +120,9 @@ class StalenessComputer {
 	 */
 	public static function translationUnits(string $text): array {
 		$verbatim = self::verbatimRanges($text);
-		return self::unitsAt($text, static function (int $offset) use ($verbatim): bool {
-			return !self::insideVerbatim($offset, $verbatim);
+		$length = strlen($text);
+		return self::unitsAt($text, static function (int $offset) use ($verbatim, $length): ?int {
+			return self::insideVerbatim($offset, $verbatim) ? null : $length;
 		});
 	}
 
@@ -132,29 +133,35 @@ class StalenessComputer {
 	 */
 	private static function sourcePageUnits(string $text): array {
 		$blocks = self::blockRanges($text);
-		return self::unitsAt($text, static function (int $offset) use ($blocks): bool {
-			return self::containingRange($offset, $blocks) !== null;
+		// Translate segments each block's contents on their own, so no unit outlives its block.
+		return self::unitsAt($text, static function (int $offset) use ($blocks): ?int {
+			$block = self::containingRange($offset, $blocks);
+			return $block === null ? null : $block[1];
 		});
 	}
 
 	/**
-	 * Units keyed by marker id, counting only the markers whose offset $keep accepts. A unit's body
-	 * runs to the next counted marker, so a skipped one leaves the surrounding unit whole.
+	 * Units keyed by marker id. $bound says both which markers count and how far each one's body may
+	 * run: null skips the marker, leaving the surrounding unit whole. A body otherwise runs to the
+	 * next counted marker.
 	 *
 	 * @param string $text
-	 * @param callable(int):bool $keep
+	 * @param callable(int):(?int) $bound
 	 * @return array<string,array{hash:?string,text:string}>
 	 */
-	private static function unitsAt(string $text, callable $keep): array {
+	private static function unitsAt(string $text, callable $bound): array {
 		$pattern = '/<!--T:(?<id>[A-Za-z0-9]+)(?:\s+@(?<hash>[0-9a-f]{' . self::HASH_LENGTH . '}))?\s*-->/';
 		if (!preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
 			return [];
 		}
 
 		$markers = [];
+		$limits = [];
 		foreach ($matches as $marker) {
-			if ($keep($marker[0][1])) {
+			$limit = $bound($marker[0][1]);
+			if ($limit !== null) {
 				$markers[] = $marker;
+				$limits[] = $limit;
 			}
 		}
 
@@ -163,7 +170,7 @@ class StalenessComputer {
 		for ($i = 0; $i < $count; $i++) {
 			$marker = $markers[$i];
 			$bodyStart = $marker[0][1] + strlen($marker[0][0]);
-			$bodyEnd = ( $i + 1 ) < $count ? $markers[$i + 1][0][1] : strlen($text);
+			$bodyEnd = min($limits[$i], ( $i + 1 ) < $count ? $markers[$i + 1][0][1] : strlen($text));
 			// An unstamped marker (source page, or a not-yet-stamped translation) has no hash group.
 			$stamped = isset($marker['hash']) && $marker['hash'][1] !== -1;
 			$units[$marker['id'][0]] = [
