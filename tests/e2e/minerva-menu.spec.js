@@ -10,8 +10,10 @@ test("minerva's main menu offers no link the export cannot serve", async ({
 }) => {
 	await page.goto("minerva/Installation.html");
 
-	// The drawer is off-canvas rather than display:none, so its links are visible to Playwright
-	// while the ones this export hides are not. An empty menu would assert nothing.
+	// The drawer is visibility:hidden until it is opened, and its toggle is a label with a
+	// transparent checkbox over it, so the checkbox is what a click lands on.
+	await page.locator("#main-menu-input").click();
+
 	const links = page.locator("#mw-mf-page-left a:visible");
 	await expect(links).not.toHaveCount(0);
 
