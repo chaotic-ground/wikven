@@ -2,6 +2,21 @@
 // never reaches it and these four are inserted unconditionally. Every one is a Special: page an
 // export cannot serve. Community portal is not here: it has a lever, and build.php pulls it.
 // By item rather than by group, so a site's own entries in the same group survive.
+// Minerva collapses the table of contents whenever .client-js is set, and initMobile.js draws the
+// chevron that says so on the wikipage.content hook, which a static export never fires: the
+// collapse arrives, the affordance does not. Undo the half that did, and drop the toggle with it,
+// since without the icon it is an invisible control over the heading.
+.client-js .toc {
+  .toctogglecheckbox ~ ul {
+    visibility: visible;
+    height: auto;
+  }
+
+  .toctogglespan {
+    display: none;
+  }
+}
+
 // The site's navigation, written into the menu by fillMinervaMenu.php. Minerva indents a label by
 // the icon beside it, and these have no icon, so the indent is theirs to keep the column straight.
 .wikven-nav-item .toggle-list-item__label {
