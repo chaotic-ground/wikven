@@ -15,6 +15,7 @@ RUN apt-get update \
 # SifterSearch (client-side Pagefind search) ships built in. Its release tarball carries the
 # per-arch Pagefind binary a git clone omits, so fetch the one matching this build's architecture.
 ARG TARGETARCH
+# renovate: datasource=github-releases depName=chaotic-ground/SifterSearch
 ARG SIFTERSEARCH_VERSION=v0.6.1
 RUN arch="$TARGETARCH" \
  && if [ "$arch" = amd64 ]; then arch=x64; fi \

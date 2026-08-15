@@ -1,0 +1,23 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"enabledManagers": ["custom.regex"],
+	"customManagers": [
+		{
+			"customType": "regex",
+			"description": "Dependabot cannot track a GitHub-release tarball pinned in a Dockerfile ARG; the other five ecosystems here (composer, npm, github-actions, docker, gomod) already have Dependabot covering them in .github/dependabot.yml, so this manager is the only one enabled.",
+			"managerFilePatterns": ["/^Dockerfile$/"],
+			"matchStrings": [
+				"# renovate: datasource=(?<datasource>[a-zA-Z0-9-._]+?) depName=(?<depName>[^\\s]+?)\\s+ARG SIFTERSEARCH_VERSION=(?<currentValue>.+?)\\s"
+			]
+		}
+	],
+	"packageRules": [
+		{
+			"matchDepNames": ["chaotic-ground/SifterSearch"],
+			"commitMessageTopic": "SifterSearch",
+			"semanticCommits": "enabled",
+			"semanticCommitType": "build",
+			"semanticCommitScope": "deps"
+		}
+	]
+}
