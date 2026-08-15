@@ -32,8 +32,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: ${{ inputs.tag != '' && fromJSON('["x86_64", "aarch64"]') || fromJSON('["x86_64"]') }}
-    runs-on: ${{ matrix.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+        arch: ${{ case(inputs.tag != '', fromJSON('["x86_64", "aarch64"]'), fromJSON('["x86_64"]')) }}
+    runs-on: ${{ case(matrix.arch == 'aarch64', 'ubuntu-24.04-arm', 'ubuntu-latest') }}
     permissions:
       contents: write  # gh release upload
       id-token: write  # sign the build provenance attestation
@@ -52,8 +52,8 @@ jobs:
           load: true
           tags: wikven
           # A pull request reads the layer cache the image build shares, and writes nothing back.
-          cache-from: type=gha,scope=wikven-image${{ inputs.tag != '' && format('-{0}', matrix.arch) || '' }}
-          cache-to: ${{ inputs.tag != '' && format('type=gha,mode=max,scope=wikven-image-{0}', matrix.arch) || '' }}
+          cache-from: type=gha,scope=wikven-image${{ case(inputs.tag != '', format('-{0}', matrix.arch), '') }}
+          cache-to: ${{ case(inputs.tag != '', format('type=gha,mode=max,scope=wikven-image-{0}', matrix.arch), '') }}
 
       # binary.Dockerfile's export target FROMs the loaded image and writes out the compiled binary.
       - name: Build the standalone binary
