@@ -3,6 +3,12 @@ name: Bump SifterSearch
 
 # Dependabot cannot track a GitHub-release tarball pinned in a Dockerfile ARG, so check weekly
 # and open a bump PR when SifterSearch publishes a new release.
+#
+# renovate.json already declares a custom manager for this same ARG line, ready for whenever the
+# Renovate GitHub App is installed on the org -- that also requires no code change here, just an
+# org admin's action -- at which point this workflow is redundant and can be removed. Renovate's
+# own PRs trigger CI normally (unlike the GITHUB_TOKEN-opened ones below) and supersede an older
+# bump PR instead of leaving it open, neither of which this workflow can do on its own.
 on:
   schedule:
     - cron: "0 5 * * 1"
