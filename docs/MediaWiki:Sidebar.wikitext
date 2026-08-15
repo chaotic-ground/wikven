@@ -1,23 +1,23 @@
+<!-- Targets go through Special:MyLanguage so a reader on a translated page stays in their language.
+     The prefix also stops "Licenses" being read as the message that would drop the entry. -->
 * navigation
-** mainpage|mainpage-description
+** Special:MyLanguage/index|mainpage-description
 * sidebar-docs
-** Why wikitext|sidebar-why-wikitext
-** Installation|sidebar-installation
-** Getting Started|sidebar-getting-started
-** Pages|sidebar-pages
-** Editing sidebar|sidebar-editing-sidebar
-** Images|sidebar-images
-** Skins|sidebar-skins
-** JavaScript|sidebar-javascript
-** Searching|sidebar-searching
-** Translating|sidebar-translating
-** Deploying|sidebar-deploying
-** Troubleshooting|sidebar-troubleshooting
+** Special:MyLanguage/Why wikitext|sidebar-why-wikitext
+** Special:MyLanguage/Installation|sidebar-installation
+** Special:MyLanguage/Getting Started|sidebar-getting-started
+** Special:MyLanguage/Pages|sidebar-pages
+** Special:MyLanguage/Editing sidebar|sidebar-editing-sidebar
+** Special:MyLanguage/Images|sidebar-images
+** Special:MyLanguage/Skins|sidebar-skins
+** Special:MyLanguage/JavaScript|sidebar-javascript
+** Special:MyLanguage/Searching|sidebar-searching
+** Special:MyLanguage/Translating|sidebar-translating
+** Special:MyLanguage/Deploying|sidebar-deploying
+** Special:MyLanguage/Troubleshooting|sidebar-troubleshooting
 * sidebar-references
-** Configuration|sidebar-configuration
-** Standalone binary|sidebar-standalone-binary
-** Development|sidebar-development
-** Version|sidebar-version
-<!-- ":Licenses", not "Licenses": a target is read as a message name first, and MediaWiki defines
-     "licenses" (the upload form's license list) as "-", which drops the entry from the sidebar. -->
-** :Licenses|sidebar-licenses
+** Special:MyLanguage/Configuration|sidebar-configuration
+** Special:MyLanguage/Standalone binary|sidebar-standalone-binary
+** Special:MyLanguage/Development|sidebar-development
+** Special:MyLanguage/Version|sidebar-version
+** Special:MyLanguage/Licenses|sidebar-licenses

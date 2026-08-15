@@ -21,6 +21,24 @@ Each top-level <code>*</code> line is a heading, and each <code>**</code> line b
 <!--T:7-->
 A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
 
+<!--T:8-->
+== Linking on a translated site ==
+
+<!--T:9-->
+A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The main page is a target like any other (<code>index</code>, unless <code>WikvenMainPage</code> says otherwise), and the prefix keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+</translate>
+
+<syntaxhighlight lang="wikitext" copy>
+* navigation
+** Special:MyLanguage/index|mainpage-description
+* sidebar-docs
+** Special:MyLanguage/Getting Started|sidebar-getting-started
+** Special:MyLanguage/Images|sidebar-images
+* sidebar-references
+** Special:MyLanguage/Licenses|sidebar-licenses
+</syntaxhighlight>
+
+<translate>
 <!--T:3-->
 == What is removed ==
 
