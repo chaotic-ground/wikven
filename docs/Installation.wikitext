@@ -12,7 +12,7 @@ __TOC__
 A single self-contained executable that embeds MediaWiki, for Linux on x86_64 and arm64. Download it and make it executable:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 curl -L -o wikven https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 chmod +x wikven
 </syntaxhighlight>
@@ -28,7 +28,7 @@ On arm64, use <code>wikven-linux-aarch64</code>. See [[<tvar name="1">Special:My
 Works on any platform with [https://www.docker.com/ Docker], so it is the option to use on macOS and Windows. The image is published to the GitHub Container Registry:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 docker pull ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
 
@@ -43,7 +43,7 @@ The untagged image tracks the latest build; append a release tag such as <code>:
 To modify {{SITENAME}} or run an unreleased commit, clone the repository and build the image yourself:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 git clone https://github.com/chaotic-ground/wikven.git
 cd wikven
 docker build -t wikven .

@@ -12,7 +12,7 @@ The file name is flexible. Wikven accepts <code>.wikven.yaml</code>, <code>.wikv
 Wikven ships its own defaults (a sensible MediaWiki configuration for a static wiki) and loads your file on top of them, so anything you set here overrides the default. The defaults live in a <code>default.yml</code> that uses this same format; see [[#Defaults]] below.
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 extensions:
   - SyntaxHighlight_GeSHi
   - ParserFunctions
@@ -45,7 +45,7 @@ A map of configuration variables, each named without the <code>wg</code> prefix,
 The site's header logos. It mirrors MediaWiki's {{ml|Manual:$wgLogos|$wgLogos}}, with the same keys (<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code>, and so on), except each value is the name of an image file in your source directory rather than a URL:
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 config:
   WikvenLogos:
     icon: logo.svg
@@ -94,7 +94,7 @@ Each entry chooses one of three methods by the key it carries:
 
 <translate nowrap>
 <!--T:34-->
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 <tvar name="1">config:
   WikvenRepositories:</tvar>
     # 1. A tarball, e.g. from Special:ExtensionDistributor, whose archive already
@@ -147,7 +147,7 @@ Titles are kept as written (rather than first-letter-capitalized, MediaWiki's de
 To see the current defaults, read the bundled <code>default.yml</code>. From the Docker image:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 docker run --rm --entrypoint cat ghcr.io/chaotic-ground/wikven extensions/Wikven/default.yml
 </syntaxhighlight>
 

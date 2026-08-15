@@ -16,7 +16,7 @@ You can embed images from [[commons:Main Page|Wikimedia Commons]]. Referenced fi
 You can also use your own image files. Put them in your source directory, next to the <code>.wikitext</code> files, and embed them with the {{ml|Help:Images|usual file syntax}}:
 </translate>
 
-<syntaxhighlight lang="wikitext">
+<syntaxhighlight lang="wikitext" copy>
 [[File:My photo.png|thumb|A caption]]
 </syntaxhighlight>
 
