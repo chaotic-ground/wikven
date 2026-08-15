@@ -5,8 +5,8 @@ name: Updatecli
 # Dockerfile, the mago binary in composer.json, and the biome binary in biome.json. The five real
 # ecosystems are Dependabot's, in .github/dependabot.yml.
 #
-# The app is what makes the bump testable: a pull request opened with GITHUB_TOKEN starts no
-# workflows, so the bump would reach main unbuilt. Its own identity gets the full suite.
+# A pull request opened with GITHUB_TOKEN starts no workflows, so close and reopen a bump PR to
+# run the suite against it.
 
 on:
   schedule:
@@ -18,6 +18,9 @@ permissions: {}
 jobs:
   updatecli:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # push the bump branch
+      pull-requests: write  # open the bump PR
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -29,6 +32,4 @@ jobs:
 
       - run: updatecli apply --config updatecli/updatecli.d
         env:
-          UPDATECLI_GITHUB_APP_CLIENT_ID: ${{ secrets.UPDATECLI_APP_CLIENT_ID }}
-          UPDATECLI_GITHUB_APP_PRIVATE_KEY: ${{ secrets.UPDATECLI_APP_PRIVATE_KEY }}
-          UPDATECLI_GITHUB_APP_INSTALLATION_ID: ${{ secrets.UPDATECLI_APP_INSTALLATION_ID }}
+          UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
