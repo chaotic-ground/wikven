@@ -25,12 +25,12 @@ A link target is looked up as a message too, and an entry whose target resolves 
 == Linking on a translated site ==
 
 <!--T:9-->
-A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The main page is a target like any other (<code>index</code>, unless <code>WikvenMainPage</code> says otherwise), and the prefix keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </translate>
 
 <syntaxhighlight lang="wikitext" copy>
 * navigation
-** Special:MyLanguage/index|mainpage-description
+** mainpage|mainpage-description
 * sidebar-docs
 ** Special:MyLanguage/Getting Started|sidebar-getting-started
 ** Special:MyLanguage/Images|sidebar-images
@@ -39,6 +39,9 @@ A target names one page, so an entry leads to that page and no other: a reader o
 </syntaxhighlight>
 
 <translate>
+<!--T:10-->
+The main page keeps its plain <code>mainpage</code> entry, because that target is a message: the prefix goes in the message instead. Write <code>Special:MyLanguage/index</code> in <code>MediaWiki:Mainpage.wikitext</code> (<code>index</code> being whatever <code>WikvenMainPage</code> names), as Meta-Wiki does. Every skin points its logo at that same message, so the logo follows the reader's language too. The cost is that the wiki stops recognising the page as its main page: the page title shows in the browser tab, and MinervaNeue leaves out its main-page styling.
+
 <!--T:3-->
 == What is removed ==
 

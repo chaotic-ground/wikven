@@ -1,7 +1,8 @@
-<!-- Targets go through Special:MyLanguage so a reader on a translated page stays in their language.
-     The prefix also stops "Licenses" being read as the message that would drop the entry. -->
+<!-- Targets go through Special:MyLanguage so a reader on a translated page stays in their language;
+     "mainpage" carries its own, in MediaWiki:Mainpage. The prefix also stops "Licenses" being read
+     as the message that would drop the entry. -->
 * navigation
-** Special:MyLanguage/index|mainpage-description
+** mainpage|mainpage-description
 * sidebar-docs
 ** Special:MyLanguage/Why wikitext|sidebar-why-wikitext
 ** Special:MyLanguage/Installation|sidebar-installation
