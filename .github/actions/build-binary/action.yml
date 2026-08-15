@@ -1,13 +1,10 @@
 ---
 name: Build the standalone binary
-description: >-
-  Build the wikven image, compile the standalone binary from binary.Dockerfile, and report what came
-  out. Shared by build-binary.yml (release and nightly) and binary-pr.yml (pull requests), which
-  differ only in what they do with the binary afterwards.
+description: Build the wikven image and compile the standalone binary from binary.Dockerfile.
 
 inputs:
   arch:
-    description: Target architecture, used to name the binary. The runner must be native to it.
+    description: Names the binary; the runner must be native to it.
     required: true
   cache-from:
     description: buildx cache-from for the wikven image build.
@@ -48,9 +45,6 @@ runs:
         ARCH: ${{ inputs.arch }}
       run: sha256sum "wikven-linux-$ARCH" > "wikven-linux-$ARCH.sha256"
 
-    # Size and checksum give a reviewer something to compare against; the two version lines double as
-    # a smoke test, since a binary that answers them at all linked and booted PHP. They are reported,
-    # not asserted: the subcommands come from FrankenPHP, so a rename upstream should not fail a build.
     - name: Report what was built
       shell: bash
       env:

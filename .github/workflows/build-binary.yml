@@ -3,7 +3,6 @@ name: Build binary
 
 # Reusable: build the standalone binary for each architecture and attach it to
 # the given release tag. Called by release-please.yml and nightly.yml.
-# The build itself lives in .github/actions/build-binary, shared with binary-pr.yml.
 on:
   workflow_call:
     inputs:
