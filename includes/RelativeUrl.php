@@ -51,7 +51,8 @@ class RelativeUrl {
 					return $m[0][0];
 				}
 				return (
-					$m[1][0] . 'srcset="'
+					$m[1][0]
+					. 'srcset="'
 					. preg_replace_callback(
 						'#(^|,\s*)(\.\.?)/#',
 						static function (array $u) use ($rebase): string {
