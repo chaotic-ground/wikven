@@ -77,6 +77,19 @@ jobs:
             exit 1
           fi
 
+          # Bundled webfonts. The Khmer translation is the fixture: without a page in a script ULS
+          # has a font for, every assertion below passes vacuously on an empty stylesheet.
+          test -s dist/webfonts.css
+          grep -q ':lang(km)' dist/webfonts.css
+          ls dist/fonts/uls/KhmerOSbattambang/*.woff2 >/dev/null
+
+          # Every url() must resolve from the stylesheet's own directory, which is what lets the
+          # fonts load from a page at any depth.
+          grep -o "url('[^']*')" dist/webfonts.css | sed "s/^url('//;s/')$//" | sort -u \
+            | while read -r ref; do
+                test -f "dist/$ref" || { echo "::error::webfonts.css references missing $ref"; exit 1; }
+              done
+
           echo "Smoke checks passed."
 
       # Node.js is preinstalled on the runner; no setup-node (its caching trips
