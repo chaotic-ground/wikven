@@ -23,41 +23,42 @@ concurrency:
 # requests exhausts -- the jobs then fail on a 403 with nothing wrong in the code. Fetching the
 # release asset directly touches the CDN, not the REST API, and a cache hit skips even that. Caches
 # written by main runs are readable from every pull request branch, so a miss is rare.
+#
+# Neither version is written down here: biome's comes from biome.json's $schema, which is what an
+# editor reads too, and mago's from composer.json, beside the rest of the PHP tooling.
 
 jobs:
   biome:
     runs-on: ubuntu-latest
-    env:
-      # Must match biome.json's $schema URL; the guard step below fails if the two drift apart.
-      BIOME_VERSION: "2.4.16"
-      BIOME_SHA256: "f6904c208ce8884cf859460178f32f885250b375da1810c551912a029f4abf79"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
 
-      # biome.json is where the version is chosen; this job only mirrors it, so say so out loud
-      # rather than silently linting with a different biome than the editor uses.
-      - name: Check the pinned version still matches biome.json
+      # biome.json's $schema already names the version, and it is the one an editor honours, so it
+      # stays the only place the version is written down.
+      - id: version
         run: |
-          schema=$(sed -n 's#.*biomejs\.dev/schemas/\([^/]*\)/.*#\1#p' biome.json)
-          if [ "$schema" != "$BIOME_VERSION" ]; then
-            echo "::error file=biome.json::biome.json asks for $schema, lint.yml pins $BIOME_VERSION"
+          v=$(sed -n 's#.*biomejs\.dev/schemas/\([^/]*\)/.*#\1#p' biome.json)
+          if [ -z "$v" ]; then
+            echo "::error file=biome.json::could not read a version from the \$schema URL"
             exit 1
           fi
+          echo "v=$v" >> "$GITHUB_OUTPUT"
 
       - id: cache
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
         with:
           path: ~/.local/bin/biome
-          key: biome-${{ runner.os }}-${{ env.BIOME_VERSION }}
+          key: biome-${{ runner.os }}-${{ steps.version.outputs.v }}
 
       - if: steps.cache.outputs.cache-hit != 'true'
+        env:
+          BIOME_VERSION: ${{ steps.version.outputs.v }}
         run: |
           base=https://github.com/biomejs/biome/releases/download
           tmp=$(mktemp -d)
           curl -fsSL -o "$tmp/biome" "$base/@biomejs/biome@${BIOME_VERSION}/biome-linux-x64"
-          echo "${BIOME_SHA256}  $tmp/biome" | sha256sum -c -
           mkdir -p ~/.local/bin
           mv "$tmp/biome" ~/.local/bin/biome
 
@@ -98,9 +99,6 @@ jobs:
 
   mago:
     runs-on: ubuntu-latest
-    env:
-      MAGO_VERSION: "1.29.0"
-      MAGO_SHA256: "5e99d1232fa93e6adc6feaaddaf2b46c148b2990173cdcf18400b474646bf046"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -112,13 +110,23 @@ jobs:
       # mago.toml extends the shared style config installed under vendor/, so install it first.
       - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
 
+      # mago has no config file of its own that carries a version, so the pin lives beside the
+      # other PHP tooling in composer.json rather than here.
+      - id: version
+        run: |
+          php -r '$e = json_decode(file_get_contents("composer.json"), true)["extra"];
+                  echo "v=", $e["mago-version"], "\nsha=", $e["mago-sha256"], "\n";' >> "$GITHUB_OUTPUT"
+
       - id: cache
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
         with:
           path: ~/.local/bin/mago
-          key: mago-${{ runner.os }}-${{ env.MAGO_VERSION }}
+          key: mago-${{ runner.os }}-${{ steps.version.outputs.v }}
 
       - if: steps.cache.outputs.cache-hit != 'true'
+        env:
+          MAGO_VERSION: ${{ steps.version.outputs.v }}
+          MAGO_SHA256: ${{ steps.version.outputs.sha }}
         run: |
           base=https://github.com/carthage-software/mago/releases/download
           dir="mago-${MAGO_VERSION}-x86_64-unknown-linux-musl"

@@ -22,6 +22,10 @@
 			"no-api": true
 		}
 	],
+	"extra": {
+		"mago-version": "1.29.0",
+		"mago-sha256": "5e99d1232fa93e6adc6feaaddaf2b46c148b2990173cdcf18400b474646bf046"
+	},
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
