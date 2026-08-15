@@ -1,58 +1,71 @@
-// The toolbox is Special: pages a static host cannot serve, so the bake empties it
-// (Hooks\Hider). Core hides the emptied portlet, but a skin that wraps it in a box
-// of its own draws that box regardless, and it is the box a reader sees as an empty
-// "Tools" panel. The markup is identical either way, so only a laid-out page tells
-// the two apart: the workflow's static assertions cannot.
+// The toolbox is the only skin switcher the export has, so in every skin it must be
+// somewhere a reader can actually get to -- not merely present in the DOM. Each skin
+// puts it somewhere different, and behind a different control: Vector in the "Tools"
+// dropdown, Citizen in the "More actions" card, Minerva in the page-actions overflow
+// menu. Only a rendered page shows whether opening that control reveals the links.
 //
-// Minerva needs no case here: it drops its overflow menu when the menu has no
-// entries, so it never draws the empty box in the first place.
+// A single-skin export has nothing to put in the toolbox and hides the empty box
+// instead (ext.Wikven.emptyToolbox); docs/ enables several, so that path is not
+// exercised here.
 
 const { test, expect } = require("@playwright/test");
 
-// Per skin: the page it renders, and the element it wraps the toolbox in.
-const SKINS = [
-	["vector-2022", "Installation.html", ".vector-page-tools-landmark"],
-	["citizen", "citizen/Installation.html", "#citizen-page-more-dropdown"],
-];
+// What each skin puts the toolbox behind, where it takes a control to reveal.
+const OPENERS = {
+	"vector-2022": "#vector-page-tools-dropdown-label",
+	citizen: "#citizen-page-more-dropdown summary",
+	timeless: null,
+	minerva: "#page-actions-overflow-toggle",
+};
 
-for (const [skin, path, box] of SKINS) {
-	test(`${skin} draws no empty tools box`, async ({ page }) => {
+const entry = (page, skin) =>
+	page
+		.locator(
+			`#t-wikven-skin-${skin}, .menu__item--page-actions-overflow-wikven-skin-${skin}`,
+		)
+		.first();
+
+let skins;
+let main;
+
+test.beforeAll(async ({ browser }) => {
+	const page = await browser.newPage();
+	await page.goto("index.html");
+	skins = await page.evaluate(() =>
+		Array.from(document.querySelectorAll('[id^="t-wikven-skin-"]')).map(
+			(element) => ({
+				skin: element.id.replace("t-wikven-skin-", ""),
+				current: element.classList.contains("active"),
+			}),
+		),
+	);
+	main = skins.find((s) => s.current).skin;
+	await page.close();
+});
+
+test("the toolbox is reachable in every skin the export renders", async ({
+	page,
+}) => {
+	for (const { skin } of skins) {
+		const path =
+			skin === main ? "Installation.html" : `${skin}/Installation.html`;
 		await page.goto(path);
 		await expect(page.locator("#firstHeading")).toBeVisible();
 
-		// Still emitted, so the assertions below are about what is shown, not what is built.
-		await expect(page.locator("#p-tb")).toBeAttached();
-		await expect(page.locator("#p-tb")).toBeHidden();
-
-		// The box is what this rule hides, and toBeHidden() passes for an element that
-		// is not there, so a renamed box has to fail here rather than assert nothing.
-		await expect(page.locator(box)).not.toHaveCount(0);
-		for (const element of await page.locator(box).all()) {
-			await expect(element).toBeHidden();
+		const opener = OPENERS[skin];
+		expect(
+			opener,
+			`no opener recorded for ${skin}; check where its toolbox renders`,
+		).not.toBeUndefined();
+		if (opener) {
+			await page.locator(opener).first().click();
 		}
-	});
-}
 
-// Below the width at which Vector hides the tab row it moves the tabs into that box,
-// which is then the only way to reach them, so there it has to stay. Both sides of
-// that edge are pinned: the two rules keying off the same breakpoint is what keeps a
-// width with neither the tabs nor the box from opening up between them.
-test("vector-2022 keeps its tools box where Vector hides the tab row", async ({
-	page,
-}) => {
-	await page.setViewportSize({ width: 639, height: 800 });
-	await page.goto("Installation.html");
-
-	await expect(page.locator(".mw-portlet-views")).toBeHidden();
-	await expect(page.locator("#vector-page-tools-dropdown")).toBeVisible();
-});
-
-test("vector-2022 drops its tools box where the tab row is back", async ({
-	page,
-}) => {
-	await page.setViewportSize({ width: 640, height: 800 });
-	await page.goto("Installation.html");
-
-	await expect(page.locator(".mw-portlet-views")).toBeVisible();
-	await expect(page.locator("#vector-page-tools-dropdown")).toBeHidden();
+		// Some other skin's copy of this page, visible and ready to be followed.
+		const other = skins.find((s) => s.skin !== skin).skin;
+		await expect(
+			entry(page, other),
+			`${skin} hides its switcher`,
+		).toBeVisible();
+	}
 });

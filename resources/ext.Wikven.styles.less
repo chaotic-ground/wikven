@@ -1,4 +1,4 @@
-// Codex design tokens, so the skin switcher matches the active skin's theme.
+// Codex design tokens, so these rules follow the active skin's theme.
 @import 'mediawiki.skin.variables.less';
 
 // Footer: the project (about/disclaimer/privacy) pages do not exist in the
@@ -26,39 +26,11 @@
   display: none;
 }
 
-// Core hides the emptied toolbox portlet itself; these are the boxes Timeless
-// and Citizen keep drawing around it, headings and all.
-#site-tools,
-#citizen-page-more-dropdown {
-  display: none;
-}
-
-// Vector's box also carries the page tabs, but only below the width at which it
-// hides the tab row.
-@media ( min-width: @min-width-breakpoint-tablet ) {
-  .vector-page-tools-landmark {
-    display: none;
-  }
+// The skin the page is already rendered in: listed, marked, and not a link.
+.mw-portlet-tb .mw-list-item.active {
+  font-weight: @font-weight-bold;
 }
 
 a.new {
   pointer-events: none;
-}
-
-// Skin switcher: a native select styled with design tokens so it reads as a
-// regular MediaWiki form control across skins.
-.wikven-skin-switcher {
-  display: inline-flex;
-  align-items: center;
-
-  select {
-    margin-left: @spacing-50;
-    padding: @spacing-25 @spacing-75;
-    border: @border-width-base @border-style-base @border-color-base;
-    border-radius: @border-radius-base;
-    background-color: @background-color-base;
-    color: @color-base;
-    font: inherit;
-    cursor: pointer;
-  }
 }

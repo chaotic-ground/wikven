@@ -16,12 +16,12 @@
 		"ext.Wikven.styles": {
 			"styles": ["ext.Wikven.styles.less"]
 		},
+		"ext.Wikven.emptyToolbox": {
+			"styles": ["empty-toolbox.less"]
+		},
 		"ext.Wikven.pinnableState": {
 			"scripts": ["pinnable-state.js"],
 			"dependencies": ["mediawiki.storage"]
-		},
-		"ext.Wikven.skinSwitcher": {
-			"scripts": ["skin-switcher.js"]
 		}
 	},
 	"ResourceModuleSkinStyles": {
@@ -36,7 +36,7 @@
 	"Hooks": {
 		"ParserOutputPostCacheTransform": "hider",
 		"SkinTemplateNavigation::Universal": ["hider", "main"],
-		"SidebarBeforeOutput": "hider",
+		"SidebarBeforeOutput": ["hider", "adder"],
 		"SkinAddFooterLinks": "adder",
 		"BeforePageDisplay": "adder",
 		"GetLocalURL": "main",
