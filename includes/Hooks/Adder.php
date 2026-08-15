@@ -10,15 +10,8 @@ use MediaWiki\Title\Title;
 
 class Adder implements
 	\MediaWiki\Hook\BeforePageDisplayHook,
-	\MediaWiki\Language\Hook\MessageCacheFetchOverridesHook,
 	\MediaWiki\Hook\SidebarBeforeOutputHook,
 	\MediaWiki\Hook\SkinAddFooterLinksHook {
-	/**
-	 * Message keys for the toolbox heading. Core's is 'toolbox'; Vector 2022 ignores it and labels
-	 * the menu itself (VectorComponentPageTools::getMenus), so its own key is listed too.
-	 */
-	private const TOOLBOX_HEADING_KEYS = ['toolbox', 'vector-page-tools-general-label'];
-
 	/**
 	 * Skins whose toolbox is a page-actions menu: Minerva's builder keeps only entries carrying an
 	 * icon, and hands every one of those to SingleMenuEntry, whose $url is typed string -- so an
@@ -61,22 +54,6 @@ class Adder implements
 				$entry['active'] = true;
 			}
 			$sidebar['TOOLBOX']["wikven-skin-$target"] = $entry;
-		}
-	}
-
-	/**
-	 * Name the toolbox for what it holds. Hider empties it and the loop above refills it with
-	 * nothing but the skin list, so "Tools" (or Vector's "General") names a menu that no longer
-	 * exists; a reader would see two product names under a heading that explains neither.
-	 *
-	 * @inheritDoc
-	 */
-	public function onMessageCacheFetchOverrides(array &$keys): void {
-		if (count($GLOBALS['wgWikvenSkins'] ?? []) < 2) {
-			return;
-		}
-		foreach (self::TOOLBOX_HEADING_KEYS as $key) {
-			$keys[$key] = 'wikven-skins-label';
 		}
 	}
 

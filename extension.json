@@ -36,7 +36,6 @@
 	"Hooks": {
 		"ParserOutputPostCacheTransform": "hider",
 		"SkinTemplateNavigation::Universal": ["hider", "main"],
-		"MessageCacheFetchOverrides": "adder",
 		"SidebarBeforeOutput": ["hider", "adder"],
 		"SkinAddFooterLinks": "adder",
 		"BeforePageDisplay": "adder",
