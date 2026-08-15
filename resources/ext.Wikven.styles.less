@@ -18,6 +18,8 @@
 // the personal/preferences menu, the language switcher, and the watch action.
 .vector-user-links,
 #p-vector-user-menu-preferences,
+// Citizen's, which also carries the language trigger the .mw-portlet-lang rule hides elsewhere.
+.citizen-userMenu,
 #p-lang-btn,
 .mw-portlet-lang,
 .mw-watchlink,
@@ -30,6 +32,21 @@
 .mw-portlet-tb .mw-list-item.active,
 .mw-portlet-wikven-skins .mw-list-item.active {
   font-weight: @font-weight-bold;
+}
+
+// Citizen hangs a menu item's box off the <a>, so the entry above needs one of its own or its
+// name sits flush against the card edge beside the padded links. Mirrors the skin's
+// `.citizen-menu .mw-list-item a`, in its custom properties: those follow its light/dark theme,
+// where its Less tokens stay at their static Codex values. It cannot live in the skin's own
+// module, which claims the whole ResourceModuleSkinStyles["citizen"] map -- a second
+// declaration of that key replaces it rather than merging. This sheet is linked after the
+// skin's, so equal specificity is enough.
+.skin-citizen .mw-portlet-tb .mw-list-item.active > span {
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding-inline: var( --space-md );
+  color: var( --color-base );
 }
 
 a.new {

@@ -99,6 +99,16 @@ class Adder implements
 			$out->addModuleStyles('ext.Wikven.emptyToolbox');
 		}
 
+		// Citizen registers a service worker at "$wgScriptPath/load.php" whenever the client-side
+		// script path is the wiki root (""), which is what the build installs with, and the request
+		// 404s on every page. There is no script path in a static export -- no index.php, load.php
+		// or api.php -- so say so, and the registration returns early on its own guard. Citizen is
+		// the only thing that reads the value for a decision; what else reads it builds api.php and
+		// rest.php URLs, which are dead here whichever way it is set.
+		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'citizen') {
+			$out->addJsConfigVars('wgScriptPath', null);
+		}
+
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
 		// and its "Page tools" sidebar (page actions, Special:Log) are dead; hide them on cli export.
 		// !important: the skin stylesheet loads after this inline rule and would otherwise win.

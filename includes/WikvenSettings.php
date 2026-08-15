@@ -244,6 +244,13 @@ if (in_array('UniversalLanguageSelector', $config['extensions'], true)) {
 	$GLOBALS['wgULSWebfontsEnabled'] = false;
 }
 
+// Citizen points its web app manifest at api.php, which the export has no server for: the tag
+// would carry the build host's own URL ("http://localhost:4000/api.php?action=appmanifest") into
+// every page. Nothing else in the skin depends on the manifest.
+if (in_array('citizen', $wgWikvenSkins, true)) {
+	$GLOBALS['wgCitizenEnableManifest'] = false;
+}
+
 // SifterSearch ships built in; default its Pagefind index into the build's dist dir, unless the
 // site set the output path itself (an empty value there turns search off).
 $wikvenSiteConfig = is_array($wikvenSiteData['config'] ?? null) ? $wikvenSiteData['config'] : [];

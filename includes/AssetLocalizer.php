@@ -7,17 +7,17 @@ use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
 use Wikimedia\Minify\CSSMin;
 
-/** Rewrites image url()s in dumped CSS/JS to local copies, avoiding load.php references. */
+/** Rewrites asset url()s in dumped CSS/JS to local copies, avoiding load.php references. */
 class AssetLocalizer {
 	/**
-	 * Rewrite image url()s in the given dumped CSS/JS files to point at copies in $dir.
+	 * Rewrite asset url()s in the given dumped CSS/JS files to point at copies in $dir.
 	 *
 	 * A CSS file resolves its url()s relative to itself, so a "./img-*.svg" next to it works from
 	 * any page depth. A JS bundle instead injects its CSS into the document, where url()s resolve
 	 * against the page, breaking on subpages ("index/ko.html" would fetch "index/img-*.svg"). Pass
 	 * $inline for JS bundles to embed the images as data: URIs, which are depth- and base-path-safe.
 	 */
-	public static function localizeImages(
+	public static function localizeAssets(
 		ResourceLoader $rl,
 		string $dir,
 		array $files,
@@ -50,11 +50,16 @@ class AssetLocalizer {
 				$text
 			);
 
-			// (2) Direct skin/resource/extension asset paths.
+			// (2) Direct skin/resource/extension asset paths. Fonts (Citizen ships its own) only in a
+			// plain stylesheet, which is where an @font-face can do any good: inlining one into a JS
+			// bundle would carry the whole typeface, in base64, in every page's JavaScript.
 			if ($mwRoot !== '') {
+				$types = $inline ? 'svg|png|gif|jpe?g' : 'svg|png|gif|jpe?g|woff2?|ttf|otf';
 				$text = preg_replace_callback(
 					'~url\(\s*[\'"]?(\\\\?/(?:skins|resources|extensions)/[^)\'"?]+'
-					. '\.(?:svg|png|gif|jpe?g))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
+					. '\.(?:'
+					. $types
+					. '))(?:\?[^)\'"]*)?[\'"]?\s*\)~',
 					static function ($m) use (&$map, $mwRoot, $dir, $inline) {
 						$path = self::decodeJsonString($m[1]);
 						if (!array_key_exists($path, $map)) {
@@ -159,7 +164,7 @@ class AssetLocalizer {
 		if ($bytes === false || $bytes === '') {
 			return null;
 		}
-		$ext = pathinfo($path, PATHINFO_EXTENSION) ?: 'svg';
+		$ext = strtolower(pathinfo($path, PATHINFO_EXTENSION) ?: 'svg');
 
 		if ($inline) {
 			$mimes = [
@@ -169,10 +174,11 @@ class AssetLocalizer {
 				'jpg' => 'image/jpeg',
 				'jpeg' => 'image/jpeg'
 			];
-			return self::dataUri($bytes, $mimes[strtolower($ext)] ?? 'application/octet-stream');
+			return self::dataUri($bytes, $mimes[$ext] ?? 'application/octet-stream');
 		}
 
-		$name = 'img-' . substr(md5($path), 0, 12) . ".$ext";
+		$prefix = in_array($ext, ['woff', 'woff2', 'ttf', 'otf'], true) ? 'font-' : 'img-';
+		$name = $prefix . substr(md5($path), 0, 12) . ".$ext";
 		file_put_contents("$dir/$name", $bytes, LOCK_EX);
 		return "./$name";
 	}

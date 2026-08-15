@@ -17,7 +17,7 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	 * that look-alike paths which must NOT match are left untouched, and that the
 	 * referenced bytes are actually copied out.
 	 */
-	public function testLocalizeImagesRewritesDirectAssetPaths() {
+	public function testLocalizeAssetsRewritesDirectAssetPaths() {
 		$mwRoot = $this->getNewTempDirectory();
 		mkdir("$mwRoot/skins/Vector/images", 0777, true);
 		file_put_contents("$mwRoot/skins/Vector/images/arrow.svg", '<svg>arrow</svg>');
@@ -39,7 +39,7 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 			. "\n");
 
 		$rl = $this->getServiceContainer()->getResourceLoader();
-		AssetLocalizer::localizeImages($rl, $dir, [$css], 'en', 'vector');
+		AssetLocalizer::localizeAssets($rl, $dir, [$css], 'en', 'vector');
 
 		$out = file_get_contents($css);
 		$this->assertStringNotContainsString('/skins/Vector/images/arrow.svg', $out, 'all three forms rewritten');
@@ -63,7 +63,7 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	 * must instead be embedded as a data: URI (depth- and base-path-safe) with no
 	 * file written out.
 	 */
-	public function testLocalizeImagesInlinesAssetsAsDataUris() {
+	public function testLocalizeAssetsInlinesAssetsAsDataUris() {
 		$mwRoot = $this->getNewTempDirectory();
 		mkdir("$mwRoot/skins/Vector/images", 0777, true);
 		file_put_contents("$mwRoot/skins/Vector/images/arrow.svg", '<svg>arrow</svg>');
@@ -74,7 +74,7 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		file_put_contents($js, '.a{background:url(/skins/Vector/images/arrow.svg)}' . "\n");
 
 		$rl = $this->getServiceContainer()->getResourceLoader();
-		AssetLocalizer::localizeImages($rl, $dir, [$js], 'en', 'vector', true);
+		AssetLocalizer::localizeAssets($rl, $dir, [$js], 'en', 'vector', true);
 
 		$out = file_get_contents($js);
 		// CSSMin percent-encodes printable content like this SVG rather than base64-encoding it.
@@ -82,5 +82,41 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		$this->assertStringContainsString($expected, $out, 'asset inlined as a data: URI');
 		$this->assertStringNotContainsString('url(./img-', $out, 'no relative file reference emitted');
 		$this->assertCount(0, glob("$dir/img-*.svg"), 'no image file written in inline mode');
+	}
+
+	/**
+	 * A skin that ships its own typeface (Citizen does) points @font-face at a path only a live
+	 * MediaWiki serves, so the export renders in a fallback font and 404s once per face. The font
+	 * is copied out beside the stylesheet -- but never inlined, which would put the whole typeface
+	 * in base64 into every page's JavaScript.
+	 */
+	public function testLocalizeAssetsCopiesFontsForStylesheetsOnly() {
+		$mwRoot = $this->getNewTempDirectory();
+		mkdir("$mwRoot/skins/Citizen/resources/fonts", 0777, true);
+		file_put_contents("$mwRoot/skins/Citizen/resources/fonts/Roboto.woff2", 'wOF2fake');
+		$this->setMwGlobals('IP', $mwRoot);
+
+		$rule = '@font-face{src:url(/skins/Citizen/resources/fonts/Roboto.woff2) format("woff2")}';
+		$rl = $this->getServiceContainer()->getResourceLoader();
+
+		$cssDir = $this->getNewTempDirectory();
+		file_put_contents("$cssDir/styles.css", $rule . "\n");
+		AssetLocalizer::localizeAssets($rl, $cssDir, ["$cssDir/styles.css"], 'en', 'citizen');
+
+		$css = file_get_contents("$cssDir/styles.css");
+		$this->assertMatchesRegularExpression('~url\(\./font-[0-9a-f]{12}\.woff2\)~', $css, 'rewritten');
+		$copies = glob("$cssDir/font-*.woff2");
+		$this->assertCount(1, $copies, 'the font is copied beside the stylesheet');
+		$this->assertSame('wOF2fake', file_get_contents($copies[0]), 'font bytes copied verbatim');
+
+		$jsDir = $this->getNewTempDirectory();
+		file_put_contents("$jsDir/modules-static.js", $rule . "\n");
+		AssetLocalizer::localizeAssets($rl, $jsDir, ["$jsDir/modules-static.js"], 'en', 'citizen', true);
+
+		$this->assertStringContainsString(
+			'url(/skins/Citizen/resources/fonts/Roboto.woff2)',
+			file_get_contents("$jsDir/modules-static.js"),
+			'left alone rather than inlined into the bundle'
+		);
 	}
 }

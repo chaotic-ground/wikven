@@ -71,6 +71,40 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * Citizen registers a service worker from load.php whenever the client-side script path is
+	 * the wiki root, and an export has no load.php to answer it. The value is overridden for
+	 * Citizen alone, so a skin that does not read it keeps whatever core reports.
+	 *
+	 * @dataProvider provideScriptPathSkins
+	 */
+	public function testScriptPathClearedForCitizen(string $skin, bool $overridden) {
+		$this->overrideConfigValue('WikvenSkins', [$skin]);
+		$out = $this->createMock(OutputPage::class);
+		$vars = [];
+		$out->method('addJsConfigVars')->willReturnCallback(
+			static function ($keys, $value = null) use (&$vars) {
+				$vars[$keys] = $value;
+			}
+		);
+		$skinMock = $this->createMock(Skin::class);
+		$skinMock->method('getSkinName')->willReturn($skin);
+
+		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+
+		$this->assertSame($overridden, array_key_exists('wgScriptPath', $vars));
+		if ($overridden) {
+			$this->assertNull($vars['wgScriptPath']);
+		}
+	}
+
+	public static function provideScriptPathSkins() {
+		return [
+			'citizen' => ['citizen', true],
+			'vector' => ['vector-2022', false]
+		];
+	}
+
+	/**
 	 * Vector moves every section from the toolbox onward into its page-tools menu, so the skin list
 	 * gets a section of its own there and the toolbox stays as Hider left it.
 	 */
