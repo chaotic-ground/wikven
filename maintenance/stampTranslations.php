@@ -30,7 +30,7 @@ class StampTranslations extends Maintenance {
 				$this->fatalError("Wikven: source directory '$source' does not exist.");
 			}
 			$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
-			foreach (TranslationSource::baseFiles($source) as $baseFile) {
+			foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
 				$sourceText = (string)file_get_contents($baseFile);
 				$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
 				foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {

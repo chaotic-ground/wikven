@@ -65,6 +65,28 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 		];
 	}
 
+	public function testBaseFilesLeaveOutATranslationThatQuotesATranslateTag() {
+		// A <translate> a translation quotes is as real to Translate as to wikven, so nothing
+		// downstream would object to "Intro/ko" being marked as a translatable page of its own.
+		$dir = sys_get_temp_dir() . '/wikven-base-files-' . uniqid();
+		$page = "<languages/>\n<translate>\n<!--T:1-->\nHi.\n</translate>";
+		mkdir("$dir/Intro", 0777, true);
+		file_put_contents("$dir/Intro.wikitext", $page);
+		file_put_contents("$dir/Intro/ko.wikitext", "<!--T:1-->\n안녕. 이렇게 씁니다: $page");
+		// A subpage whose name is not a language code is a page in its own right, not a translation.
+		file_put_contents("$dir/Intro/Details.wikitext", $page);
+
+		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
+		$found = TranslationSource::baseFiles($dir, $isKnownLanguage);
+
+		array_map('unlink', glob("$dir/Intro/*") ?: []);
+		array_map('unlink', glob("$dir/*.wikitext") ?: []);
+		rmdir("$dir/Intro");
+		rmdir($dir);
+
+		$this->assertSame(["$dir/Intro.wikitext", "$dir/Intro/Details.wikitext"], $found);
+	}
+
 	/** @dataProvider provideTranslatableTitle */
 	public function testTranslatableTitle(string $baseFile, string $text, ?string $expected) {
 		$this->assertSame($expected, TranslationSource::translatableTitle($baseFile, '/src', $text));

@@ -161,9 +161,15 @@ class TranslationSource {
 	/**
 	 * Every translatable base page under a source directory.
 	 *
+	 * A translation is never one, whatever it holds. A <translate> it quotes is real to Translate as
+	 * much as to wikven, so nothing downstream would object to "<Page>/<lang>" being marked as a page
+	 * in its own right; the naming convention is what says it is not.
+	 *
+	 * @param string $sourceDir
+	 * @param callable(string):bool $isKnownLanguage
 	 * @return string[] Absolute paths, sorted for a stable order.
 	 */
-	public static function baseFiles(string $sourceDir): array {
+	public static function baseFiles(string $sourceDir, callable $isKnownLanguage): array {
 		$iterator = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS)
 		);
@@ -173,6 +179,7 @@ class TranslationSource {
 			if (
 				$file->isFile()
 				&& str_ends_with($path, '.wikitext')
+				&& !self::isTranslationFile($path, $isKnownLanguage)
 				&& self::isTranslatable((string)file_get_contents($path))
 			) {
 				$files[] = $path;

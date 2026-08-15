@@ -54,7 +54,7 @@ class CheckTranslations extends Maintenance {
 		// before it bakes wrong, while a translation falling behind is the translation system working.
 		$errors = 0;
 		$stale = 0;
-		foreach (TranslationSource::baseFiles($source) as $baseFile) {
+		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
 			$sourceText = (string)file_get_contents($baseFile);
 			// A source page that marks a unit <!--T:title--> collides with the page-title unit, which
 			// sourceUnits() refuses outright. Report the source file here rather than let every

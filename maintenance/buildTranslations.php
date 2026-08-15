@@ -66,7 +66,7 @@ class BuildTranslations extends Maintenance {
 		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
 		$prepared = [];
-		foreach (TranslationSource::baseFiles($source) as $baseFile) {
+		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
 			$relative = substr($baseFile, strlen($source) + 1);
 			$title = Title::newFromText(SourceFile::filenameToTitle($relative));
 			if (!$title) {
