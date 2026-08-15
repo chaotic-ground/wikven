@@ -23,18 +23,18 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-/** Report (and optionally gate on) out-of-date or missing translations in the source tree. */
+/** Report broken source pages, and out-of-date or missing translations, in the source tree. */
 class CheckTranslations extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->addDescription('Report translations that are out of date or missing.');
+		$this->addDescription('Report broken source pages, and translations that are out of date or missing.');
 		$this->addOption('source', 'Source directory to check (default: $wgWikvenSourceDirectory).', false, true);
 		$this->addOption('path-prefix', 'Prefix for reported file names, making them repo-relative.', false, true);
-		$this->addOption('gate', 'Exit non-zero when any translation is stale or missing.');
+		$this->addOption('gate', 'Exit non-zero when a source page has an error. Staleness never gates.');
 	}
 
 	/**
-	 * @return bool Whether the run itself succeeded (staleness is reported, and gated, separately).
+	 * @return bool Whether the run itself succeeded (what it found is reported, and gated, separately).
 	 */
 	public function execute() {
 		if (!ExtensionRegistry::getInstance()->isLoaded('Translate')) {
@@ -50,14 +50,17 @@ class CheckTranslations extends Maintenance {
 		$prefix = $prefix === '' ? '' : rtrim($prefix, '/') . '/';
 		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
-		$problems = 0;
+		// Counted apart because only one of them gates: a broken source page is the author's to fix
+		// before it bakes wrong, while a translation falling behind is the translation system working.
+		$errors = 0;
+		$stale = 0;
 		foreach (TranslationSource::baseFiles($source) as $baseFile) {
 			$sourceText = (string)file_get_contents($baseFile);
 			// A source page that marks a unit <!--T:title--> collides with the page-title unit, which
 			// sourceUnits() refuses outright. Report the source file here rather than let every
 			// translation of it fail, since the page is what has to be fixed.
 			if (StalenessComputer::usesReservedId($sourceText)) {
-				$problems++;
+				$errors++;
 				$reportSource = $prefix . substr($baseFile, strlen($source) + 1);
 				$reserved = StalenessComputer::TITLE_UNIT_ID;
 				$this->output(
@@ -66,7 +69,7 @@ class CheckTranslations extends Maintenance {
 				);
 				continue;
 			}
-			$problems += $this->checkSourcePage($prefix . substr($baseFile, strlen($source) + 1), $sourceText);
+			$errors += $this->checkSourcePage($prefix . substr($baseFile, strlen($source) + 1), $sourceText);
 			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
 			foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
 				$translationFile = TranslationSource::translationPath($baseFile, $lang);
@@ -77,7 +80,7 @@ class CheckTranslations extends Maintenance {
 					if ($unit['status'] === StalenessComputer::OK) {
 						continue;
 					}
-					$problems++;
+					$stale++;
 					// GitHub Actions annotation; a harmless plain line in any other console.
 					$this->output(
 						"::warning file=$reportFile::"
@@ -88,14 +91,21 @@ class CheckTranslations extends Maintenance {
 			}
 		}
 
-		if ($problems === 0) {
+		if ($errors === 0 && $stale === 0) {
 			$this->output("All translations are up to date.\n");
 			return true;
 		}
 
-		$this->output("\n$problems translation issue(s) found.\n");
-		if ($this->hasOption('gate')) {
-			$this->fatalError('Wikven: translations are out of date or missing (see annotations above).');
+		$summary = [];
+		if ($errors > 0) {
+			$summary[] = "$errors source page error(s)";
+		}
+		if ($stale > 0) {
+			$summary[] = "$stale translation(s) out of date or missing";
+		}
+		$this->output("\n" . implode(', ', $summary) . ".\n");
+		if ($errors > 0 && $this->hasOption('gate')) {
+			$this->fatalError('Wikven: source pages have errors (see annotations above).');
 		}
 		return true;
 	}
@@ -104,7 +114,7 @@ class CheckTranslations extends Maintenance {
 	 * Read a source page with Translate's own parser and report where wikven would read it
 	 * differently, so the author hears it here rather than from a page that bakes wrong.
 	 *
-	 * @return int Problems found.
+	 * @return int Errors found.
 	 */
 	private function checkSourcePage(string $reportFile, string $sourceText): int {
 		try {
@@ -133,16 +143,16 @@ class CheckTranslations extends Maintenance {
 			$wikven[(string)$id] = StalenessComputer::hashUnit($unit['text']);
 		}
 
-		$problems = 0;
+		$errors = 0;
 		if ($unmarked > 0) {
-			$problems++;
+			$errors++;
 			$this->output(
 				"::error file=$reportFile::$unmarked translation unit(s) have no <!--T:n--> marker;"
 				. " run translate mark\n"
 			);
 		}
 		if (array_keys($wikven) !== array_keys($translate)) {
-			$problems++;
+			$errors++;
 			$this->output(
 				"::error file=$reportFile::Translate reads units "
 				. $this->unitList(array_keys($translate))
@@ -151,14 +161,14 @@ class CheckTranslations extends Maintenance {
 				. "\n"
 			);
 		} elseif ($wikven !== $translate) {
-			$problems++;
+			$errors++;
 			$this->output(
 				"::error file=$reportFile::Translate and wikven read different text for unit(s) "
 				. $this->unitList(array_keys(array_diff_assoc($wikven, $translate)))
 				. "\n"
 			);
 		}
-		return $problems;
+		return $errors;
 	}
 
 	/**
