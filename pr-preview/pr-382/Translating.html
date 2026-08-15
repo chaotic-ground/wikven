@@ -102,20 +102,6 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 </div>
 
-<div id="p-" class="vector-menu mw-portlet mw-portlet-"  >
-	<div class="vector-menu-heading">
-		
-	</div>
-	<div class="vector-menu-content">
-		
-		<ul class="vector-menu-content-list">
-			
-			<li id="n-help-mediawiki" class="mw-list-item"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents"><span>Help about MediaWiki</span></a></li>
-		</ul>
-		
-	</div>
-</div>
-
 </div>
 
 				</div>
@@ -569,7 +555,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					
 					<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><meta property="mw:PageProp/toc" />
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Translating/ko.html" class="mw-pt-progress mw-pt-progress--high" title="번역 (96% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Translating/ko.html" class="mw-pt-progress mw-pt-progress--high" title="번역 (93% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven can build a site in more than one language using MediaWiki's <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:Translate" class="extiw" title="mw:Special:MyLanguage/Help:Extension:Translate">Translate extension</a>. Translate normally expects translators to work in an in-wiki editor, which a static build has no room for, so Wikven drives it from your source tree instead: you translate by adding files and committing them, the same way you write any other page.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Enabling_translation">Enabling translation</h2></div>
@@ -655,19 +641,23 @@ It runs a real MediaWiki at build time.
 <p>When you change a source unit, its translations no longer match their stamp and are <b>out of date</b>. Wikven does not hide this:
 </p>
 <ul><li>In the built site, an out-of-date unit is marked as an outdated translation, exactly as it would be on a wiki running Translate.</li>
-<li><code>translate check</code> reports every out-of-date or missing translation, and with <code>--gate</code> exits non-zero so continuous integration can fail the build:</li></ul>
+<li><code>translate check</code> reports every out-of-date or missing translation as a warning, and every broken source page as an error. With <code>--gate</code> it exits non-zero on the errors alone, so continuous integration fails on a page nobody can translate but not on a translation that is merely behind:</li></ul>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_4-label" href="#tabber-Binary_4" aria-controls="tabber-Binary_4">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_4-label" href="#tabber-Docker_4" aria-controls="tabber-Docker_4">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_4" aria-labelledby="tabber-Binary_4-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>wikven<span class="w"> </span>translate<span class="w"> </span>check<span class="w"> </span>--gate
 <span class="go">::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)</span>
+
+<span class="go">1 translation(s) out of date or missing.</span>
 </pre></div>
 <p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_4" aria-labelledby="tabber-Docker_4-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>check<span class="w"> </span>--gate
 <span class="go">::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)</span>
+
+<span class="go">1 translation(s) out of date or missing.</span>
 </pre></div>
 <p class="mw-empty-elt"></p></article></section></div>
-<p>The <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations">check-translations action</a> runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. It only reports; pass <code>gate: true</code> to fail the build instead. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
+<p>The <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations">check-translations action</a> runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r74">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Searching.html" title="Special:MyLanguage/Searching">Searching</a></div><div class="wikven-prevnext-next"><a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Searching.html" title="Special:MyLanguage/Searching">Searching</a></div><div class="wikven-prevnext-next"><a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Translating.html">Translating.html</a>"</div></div>
@@ -680,7 +670,7 @@ It runs a real MediaWiki at build time.
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 19:44.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 20:05.</li>
 </ul>
 
 	<ul id="footer-places">
