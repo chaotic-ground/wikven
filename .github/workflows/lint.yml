@@ -13,10 +13,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name != 'push' }}
 
-# biome and mago are installed by hand, not via their setup-* actions: those spend two GitHub REST
-# calls per run to resolve a fixed download URL and cache nothing, exhausting the 1,000/hour
-# GITHUB_TOKEN budget the whole repository shares. Versions come from biome.json's $schema and,
-# since mago has none of its own, composer.json.
+# biome and mago are installed by hand: their setup-* actions spend two GitHub REST calls per run
+# on a fixed download URL and cache nothing, exhausting the repository's shared 1,000/hour budget.
 
 jobs:
   biome:
