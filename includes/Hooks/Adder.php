@@ -94,6 +94,15 @@ class Adder implements
 			$out->addModules('ext.Wikven.citizenSkins');
 		}
 
+		// Minerva writes the night-mode class only when SkinOptions::NIGHT_MODE is on, which nothing
+		// but MobileFrontend can turn on, or when the request carries minervanightmode. The bake
+		// makes its own requests, so it asks for the day theme: the class is what mw.user.clientPrefs
+		// switches from, and without it the appearance panel would have nothing to set.
+		if ($skin->getSkinName() === 'minerva') {
+			$out->getRequest()->setVal('minervanightmode', 'day');
+			$out->addModules('ext.Wikven.minervaAppearance');
+		}
+
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
 		// and its "Page tools" sidebar (page actions, Special:Log) are dead; hide them on cli export.
 		// !important: the skin stylesheet loads after this inline rule and would otherwise win.

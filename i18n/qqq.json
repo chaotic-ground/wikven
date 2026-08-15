@@ -7,5 +7,9 @@
 	"wikven-version-intro": "Introductory sentence on the generated version page, which mirrors [[Special:Version]].",
 	"wikven-skins": "Heading of the sidebar section holding the export's other skins, used by skins that render their own sections in the page-tools menu. The section key is the message key.",
 	"wikven-skin": "Label of the skin chooser wikven adds to Citizen's preferences panel, beside the theme and text size. Singular: it names one setting, not the list.",
-	"wikven-skin-description": "Description under {{msg-mw|wikven-skin}}, in the style of Citizen's own preference descriptions (no full stop)."
+	"wikven-skin-description": "Description under {{msg-mw|wikven-skin}}, in the style of Citizen's own preference descriptions (no full stop).",
+	"wikven-appearance": "Heading of the colour theme control on the generated settings page, which a static export renders itself because Minerva's own settings page is MobileFrontend's.",
+	"wikven-appearance-day": "Label for the light colour theme. Sets the skin-theme client preference to \"day\".",
+	"wikven-appearance-night": "Label for the dark colour theme. Sets the skin-theme client preference to \"night\".",
+	"wikven-appearance-os": "Label for following the reader's operating system setting. Sets the skin-theme client preference to \"os\"."
 }

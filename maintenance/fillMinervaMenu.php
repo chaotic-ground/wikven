@@ -49,7 +49,7 @@ class FillMinervaMenu extends Maintenance {
 		// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
 		$groups =
 			$this->list('p-wikven-navigation', $this->navigationMarkup())
-			. $this->list('p-wikven-skins', $this->skinMarkup());
+			. $this->list('p-wikven-appearance', $this->themeMarkup() . $this->skinMarkup());
 		if ($groups === '') {
 			$this->output("Nothing to add to Minerva's main menu\n");
 			return;
@@ -68,6 +68,44 @@ class FillMinervaMenu extends Maintenance {
 			}
 		}
 		$this->output("Filled Minerva's main menu on $changed page(s)\n");
+	}
+
+	/**
+	 * The colour theme, as the radios Minerva's own settings page would have offered. The classes
+	 * are Codex's, which the skin already styles; ext.Wikven.minervaAppearance wires them to
+	 * mw.user.clientPrefs, the one place a static export can keep a reader's choice.
+	 */
+	private function themeMarkup(): string {
+		$options = '';
+		foreach (['day', 'night', 'os'] as $value) {
+			$id = "wikven-theme-$value";
+			$options .= Html::rawElement(
+				'span',
+				['class' => 'cdx-radio wikven-appearance-option'],
+				Html::element('input', [
+					'class' => 'cdx-radio__input',
+					'type' => 'radio',
+					'name' => 'wikven-skin-theme',
+					'id' => $id,
+					'value' => $value
+				]) . Html::element('span', ['class' => 'cdx-radio__icon'])
+					. Html::element(
+						'label',
+						['class' => 'cdx-radio__label', 'for' => $id],
+						wfMessage("wikven-appearance-$value")->text()
+					)
+			);
+		}
+		return Html::rawElement(
+			'li',
+			['class' => 'toggle-list-item wikven-appearance-item'],
+			Html::element(
+				'span',
+				['class' => 'wikven-appearance-heading'],
+				wfMessage('wikven-appearance')->text()
+			)
+				. $options
+		);
 	}
 
 	/** One menu group, or "" when it would hold nothing. */

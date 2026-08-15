@@ -26,6 +26,10 @@
 		"ext.Wikven.citizenSkins": {
 			"scripts": ["citizen-skins.js"],
 			"messages": ["wikven-skin", "wikven-skin-description"]
+		},
+		"ext.Wikven.minervaAppearance": {
+			"scripts": ["minerva-appearance.js"],
+			"dependencies": ["mediawiki.user"]
 		}
 	},
 	"ResourceModuleSkinStyles": {
