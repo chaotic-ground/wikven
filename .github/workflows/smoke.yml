@@ -90,10 +90,9 @@ jobs:
                 test -f "dist/$ref" || { echo "::error::webfonts.css references missing $ref"; exit 1; }
               done
 
-          # Every <languages/> bar must list every language the source has, on every copy of the
-          # page. A page with N languages is emitted N+1 times (X.html plus X/<lang>.html) and each
-          # carries N entries, so the target comes from the source tree rather than a fixed number.
-          # This is the shape #333 broke: bars came out short, silently, and differently per bake.
+          # Every <languages/> bar lists every language the source has (#333 baked them short).
+          # A page with N languages is emitted N+1 times and each copy carries N entries, so the
+          # target is derived from the source tree rather than pinned to a number.
           expected=0
           for f in src/*.wikitext; do
             grep -q '<languages */>' "$f" || continue
