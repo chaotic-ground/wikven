@@ -1,10 +1,11 @@
-# Base images are digest-pinned for reproducible builds; Dependabot keeps them current.
-FROM composer:2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040 AS composer
+# Base images are digest-pinned for reproducible builds and version-tagged so Dependabot's bumps
+# read as version numbers rather than digests. Dependabot keeps them current.
+FROM composer:2.10.2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040 AS composer
 
 # The alpine variant, because nothing here serves over HTTP: `build` runs a maintenance script and
 # `serve` runs PHP's own server, so the Apache the default variant carries is never started. Same
 # PHP extensions, 873MB against 1.5GB.
-FROM mediawiki:1.46-fpm-alpine@sha256:b0e9413c015268322cfb67908e5f92121372c7407f09f97a4ce8938a4351e4ad
+FROM mediawiki:1.46.0-fpm-alpine@sha256:b0e9413c015268322cfb67908e5f92121372c7407f09f97a4ce8938a4351e4ad
 
 # composer to install third-party extensions/skins at bake time (git/tar/gzip/unzip present).
 # rsvg-convert renders SVG thumbnails, and alpine splits ImageMagick's delegates out, so its

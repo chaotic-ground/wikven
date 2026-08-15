@@ -42,9 +42,19 @@ updates:
     cooldown:
       default-days: 7
     groups:
+      # A dependency joins the first group it matches, so MediaWiki always gets its own pull
+      # request: a release-branch move needs REL* CI and extension bumps alongside it, and must
+      # not hold the routine patches hostage.
+      mediawiki:
+        patterns:
+          - mediawiki
       docker:
         patterns:
           - "*"
+        # Majors land as their own pull requests instead of riding along in the group.
+        update-types:
+          - minor
+          - patch
   - package-ecosystem: uv
     directory: /
     schedule:
