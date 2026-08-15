@@ -77,7 +77,8 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 		AssetLocalizer::localizeImages($rl, $dir, [$js], 'en', 'vector', true);
 
 		$out = file_get_contents($js);
-		$expected = 'url(data:image/svg+xml;base64,' . base64_encode('<svg>arrow</svg>') . ')';
+		// CSSMin percent-encodes printable content like this SVG rather than base64-encoding it.
+		$expected = 'url(data:image/svg+xml,%3Csvg%3Earrow%3C/svg%3E)';
 		$this->assertStringContainsString($expected, $out, 'asset inlined as a data: URI');
 		$this->assertStringNotContainsString('url(./img-', $out, 'no relative file reference emitted');
 		$this->assertCount(0, glob("$dir/img-*.svg"), 'no image file written in inline mode');
