@@ -15,8 +15,11 @@ use MediaWiki\Title\Title;
 class Main implements
 	\MediaWiki\Hook\GetLocalURLHook,
 	\MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook,
+	\MediaWiki\Hook\SetupAfterCacheHook,
 	\MediaWiki\Hook\SkinTemplateNavigation__UniversalHook {
 	private ?Context $rlClientContext = null;
+
+	private Config $config;
 
 	/** The directory the HTML files are written to. */
 	private string $htmlDirectory;
@@ -25,6 +28,7 @@ class Main implements
 	private string $styleDirectory;
 
 	public function __construct(Config $config) {
+		$this->config = $config;
 		$this->htmlDirectory = $config->get('WikvenHtmlDirectory');
 		$this->styleDirectory = $config->get('WikvenStyleDirectory');
 	}
@@ -78,6 +82,61 @@ class Main implements
 		} else {
 			$url = "./$name.html";
 		}
+	}
+
+	/**
+	 * Resolve $wgWikvenLogos -- $wgLogos, but each src is a source-dir file name -- to $wgLogos
+	 * proper, once each file's actual upload URL can be asked for.
+	 *
+	 * This has to run here rather than in WikvenSettings.php (LocalSettings.php time), because the
+	 * service container -- Title, RepoGroup -- does not exist yet that early.
+	 *
+	 * @inheritDoc
+	 */
+	public function onSetupAfterCache(): void {
+		$wikvenLogos = $this->config->get('WikvenLogos');
+		if (!is_array($wikvenLogos) || $wikvenLogos === []) {
+			return;
+		}
+		$sourceDirectory = $this->config->get('WikvenSourceDirectory');
+
+		$logos = is_array($GLOBALS['wgLogos'] ?? null) ? $GLOBALS['wgLogos'] : [];
+		foreach ($wikvenLogos as $key => $value) {
+			if (is_array($value)) {
+				if (!isset($value['src'])) {
+					$logos[$key] = $value;
+					continue;
+				}
+				$src = $this->resolveLogoUrl($sourceDirectory, (string)$value['src']);
+				if ($src === null) {
+					continue;
+				}
+				$value['src'] = $src;
+				$logos[$key] = $value;
+			} else {
+				$url = $this->resolveLogoUrl($sourceDirectory, (string)$value);
+				if ($url !== null) {
+					$logos[$key] = $url;
+				}
+			}
+		}
+		$GLOBALS['wgLogos'] = $logos;
+	}
+
+	/**
+	 * The upload URL a source-dir file name $name will have, or null if it does not exist there.
+	 */
+	private function resolveLogoUrl(string $sourceDirectory, string $name): ?string {
+		if ($sourceDirectory === '' || !is_file("$sourceDirectory/$name")) {
+			error_log("Wikven: logo file '$name' not found in the source directory");
+			return null;
+		}
+		$title = Title::makeTitleSafe(NS_FILE, $name);
+		if ($title === null) {
+			error_log("Wikven: logo file '$name' is not a valid file title");
+			return null;
+		}
+		return MediaWikiServices::getInstance()->getRepoGroup()->getLocalRepo()->newFile($title)->getUrl();
 	}
 
 	/**

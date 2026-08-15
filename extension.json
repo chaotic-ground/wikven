@@ -41,7 +41,7 @@
 		"BeforePageDisplay": "adder",
 		"GetLocalURL": "main",
 		"OutputPageAfterGetHeadLinksArray": "main",
-		"SetupAfterCache": "retrier"
+		"SetupAfterCache": ["retrier", "main"]
 	},
 	"HookHandlers": {
 		"main": {

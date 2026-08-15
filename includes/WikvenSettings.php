@@ -249,44 +249,5 @@ if (
 	$GLOBALS['wgSifterSearchOutputDir'] = "$wikvenDist/pagefind";
 }
 
-// WikvenLogos mirrors $wgLogos but each src is a source-dir file name; resolve to its upload URL.
-if (!empty($wgWikvenLogos) && is_array($wgWikvenLogos)) {
-	// Map a source file name to the flat-storage URL its upload will have.
-	$wikvenLogoUrl = static function ($name) use ($wikvenSrc) {
-		global $wgUploadPath, $wgScriptPath, $wgCapitalLinks;
-		if (!is_file("$wikvenSrc/" . $name)) {
-			error_log("Wikven: logo file '$name' not found in the source directory");
-			return null;
-		}
-		// $wgUploadPath is false this early; resolve to $wgScriptPath/images as Setup.php does.
-		$uploadPath =
-			$wgUploadPath !== false && (string)$wgUploadPath !== ''
-				? $wgUploadPath
-				: ( $wgScriptPath ?? '' ) . '/images';
-		$title = str_replace(' ', '_', trim($name));
-		if ($wgCapitalLinks ?? true) {
-			$title = ucfirst($title);
-		}
-		return rtrim((string)$uploadPath, '/') . '/' . $title;
-	};
-
-	$logos = isset($wgLogos) && is_array($wgLogos) ? $wgLogos : [];
-	foreach ($wgWikvenLogos as $key => $value) {
-		if (is_array($value)) {
-			if (isset($value['src'])) {
-				$src = $wikvenLogoUrl($value['src']);
-				if ($src === null) {
-					continue;
-				}
-				$value['src'] = $src;
-			}
-			$logos[$key] = $value;
-		} else {
-			$url = $wikvenLogoUrl($value);
-			if ($url !== null) {
-				$logos[$key] = $url;
-			}
-		}
-	}
-	$wgLogos = $logos;
-}
+// WikvenLogos ($wgWikvenLogos) mirrors $wgLogos but each src is a source-dir file name, resolved
+// to its upload URL once the service container exists; see Hooks\Main::onSetupAfterCache().
