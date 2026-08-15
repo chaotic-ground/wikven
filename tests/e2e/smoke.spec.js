@@ -32,8 +32,9 @@ test("a content page fetches nothing from a live backend", async ({ page }) => {
 		}
 	});
 
-	await page.goto("Installation.html", { waitUntil: "load" });
-	await page.waitForTimeout(1000);
+	// This asserts the absence of a request, so the wait is defined by the traffic itself -- exactly
+	// the property under test here.
+	await page.goto("Installation.html", { waitUntil: "networkidle" });
 
 	expect(backend, backend.join("; ")).toEqual([]);
 });
