@@ -5,14 +5,18 @@
 // never reaches these and they are inserted unconditionally. Every one is a Special: page an
 // export cannot serve. Community portal is not here: it has a lever, and build.php pulls it.
 // By item rather than by group, so a site's own entries in the same groups survive.
-// Nearby and settings (Special:MobileOptions) only appear with MobileFrontend installed, which a
-// wikven site may well have; they are as unservable as the rest.
+// Minerva's language button, which opens MobileFrontend's interwiki-language overlay and carries
+// an empty href without it. An export has no interwiki languages; the translations a site does
+// have reach the reader through Translate's own bar in the content. Wikven hides Vector's
+// #p-lang-btn for the same reason.
+#language-selector {
+  display: none;
+}
+
 .toggle-list-item:has( > .menu__item--random ),
 .toggle-list-item:has( > .menu__item--recentchanges ),
 .toggle-list-item:has( > .menu__item--specialPages ),
-.toggle-list-item:has( > .menu__item--preferences ),
-.toggle-list-item:has( > .menu__item--nearby ),
-.toggle-list-item:has( > .menu__item--settings ) {
+.toggle-list-item:has( > .menu__item--preferences ) {
   display: none;
 }
 
