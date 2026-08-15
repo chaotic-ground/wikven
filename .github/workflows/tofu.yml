@@ -1,7 +1,6 @@
 ---
 name: Tofu
 
-# Manual runs get a descriptive title; other events keep GitHub's default (commit message, PR title).
 run-name: >-
   ${{ github.event_name == 'workflow_dispatch'
   && format('Tofu: manual run on {0} by @{1}', github.ref_name, github.actor)
