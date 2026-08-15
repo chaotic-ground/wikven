@@ -30,20 +30,24 @@ a.new {
   pointer-events: none;
 }
 
-// Skin switcher: a native select styled with design tokens so it reads as a
-// regular MediaWiki form control across skins.
+// Skin switcher: a native select. The shared rules place it and give it the Codex
+// control every skin inherits; skinStyles/ shapes it per skin.
 .wikven-skin-switcher {
   display: inline-flex;
   align-items: center;
+  gap: @spacing-50;
+  max-width: 100%;
 
   select {
-    margin-left: @spacing-50;
-    padding: @spacing-25 @spacing-75;
-    border: @border-width-base @border-style-base @border-color-base;
+    max-width: 100%;
+    padding: @spacing-25 @spacing-50;
+    border: @border-width-base @border-style-base @border-color-interactive;
     border-radius: @border-radius-base;
-    background-color: @background-color-base;
+    background-color: @background-color-interactive-subtle;
     color: @color-base;
-    font: inherit;
-    cursor: pointer;
+    // Longhands: `font: inherit` would take the footer's link-row line height too.
+    font-family: inherit;
+    font-size: inherit;
+    cursor: @cursor-base--hover;
   }
 }

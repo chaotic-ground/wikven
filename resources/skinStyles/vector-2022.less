@@ -1,0 +1,24 @@
+@import 'mediawiki.skin.variables.less';
+
+// Vector 2022 is the Codex skin, so the shared control already has its shape; what is
+// missing are the states Codex gives a select, which also carry it into night mode.
+.wikven-skin-switcher select {
+  transition-property: @transition-property-base;
+  transition-duration: @transition-duration-base;
+
+  &:hover {
+    border-color: @border-color-interactive--hover;
+    background-color: @background-color-interactive-subtle--hover;
+  }
+
+  &:active {
+    border-color: @border-color-interactive--active;
+    background-color: @background-color-interactive-subtle--active;
+  }
+
+  &:focus {
+    outline: @outline-base--focus;
+    border-color: @border-color-progressive--focus;
+    box-shadow: @box-shadow-inset-small @box-shadow-color-progressive--focus;
+  }
+}

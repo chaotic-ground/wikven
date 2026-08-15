@@ -1,0 +1,13 @@
+@import 'mediawiki.skin.variables.less';
+
+// Timeless runs its footer over the dark page background, sizes in em rather than px, and
+// edges every box with a heavier bottom border; the control repeats all three.
+.wikven-skin-switcher select {
+  padding: 0.15em 0.4em;
+  border-width: @border-width-base @border-width-base 0.2em;
+  // var() first: Timeless resolves the Less token to a fixed colour, so it cannot see a
+  // site theme's accent (MediaWiki:Common.css).
+  border-color: @border-color-base @border-color-base var( --color-progressive, @color-progressive );
+  border-radius: 0.2em;
+  background-color: @background-color-base;
+}

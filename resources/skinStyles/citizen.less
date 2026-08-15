@@ -1,0 +1,24 @@
+// Citizen's footer links are quiet buttons in a grid; the control lines up with them and
+// takes Citizen's own tokens, which are custom properties and so follow its dark mode.
+// Its Less tokens do not: those stay at the static Codex values.
+.wikven-skin-switcher {
+  padding-inline-start: var( --space-md );
+
+  select {
+    padding: var( --space-xxs ) var( --space-xs );
+    border-color: var( --border-color-base );
+    border-radius: var( --border-radius-base );
+    background-color: var( --background-color-interactive );
+    color: var( --color-emphasized );
+    font-weight: var( --font-weight-medium );
+    transition: background-color var( --transition-duration-base ) var( --transition-timing-function-ease );
+
+    &:hover {
+      background-color: var( --background-color-interactive--hover );
+    }
+
+    &:active {
+      background-color: var( --background-color-interactive--active );
+    }
+  }
+}

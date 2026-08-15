@@ -27,6 +27,15 @@
 	"ResourceModuleSkinStyles": {
 		"vector": {
 			"+skins.vector.styles": "skins.vector.styles.less"
+		},
+		"vector-2022": {
+			"+ext.Wikven.styles": "skinStyles/vector-2022.less"
+		},
+		"timeless": {
+			"+ext.Wikven.styles": "skinStyles/timeless.less"
+		},
+		"citizen": {
+			"+ext.Wikven.styles": "skinStyles/citizen.less"
 		}
 	},
 	"ResourceFileModulePaths": {
