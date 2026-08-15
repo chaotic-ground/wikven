@@ -45,4 +45,6 @@ jobs:
           source: docs
           image: wikven
           cache: false  # the image was just built locally; nothing to cache or pull
-          gate: false  # translating is not the job of whoever edits the English source
+          # A broken source page fails here; staleness only annotates, since translating is not the
+          # job of whoever edits the English source.
+          gate: true

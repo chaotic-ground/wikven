@@ -1,6 +1,6 @@
 ---
 name: Check wikven translations
-description: Report (and optionally gate on) out-of-date or missing translations in a wikven source tree.
+description: Report broken source pages, and out-of-date or missing translations, in a wikven source tree.
 branding:
   icon: globe
   color: blue
@@ -16,8 +16,10 @@ inputs:
     default: ghcr.io/chaotic-ground/wikven:0.1.0  # x-release-please-version
   gate:
     description: >-
-      Fail the step (non-zero exit) when any translation is stale or missing.
-      Set to "false" to only report, never fail.
+      Fail the step (non-zero exit) when a source page is broken: one Translate
+      cannot parse, or one the two readings disagree on. A translation that is
+      stale or missing is always reported and never fails the step. Set to
+      "false" to report even a broken page without failing.
     default: "true"
   cache:
     description: >-

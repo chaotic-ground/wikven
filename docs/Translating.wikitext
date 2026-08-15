@@ -150,7 +150,7 @@ When you change a source unit, its translations no longer match their stamp and 
 
 <!--T:20-->
 * In the built site, an out-of-date unit is marked as an outdated translation, exactly as it would be on a wiki running Translate.
-* <code>translate check</code> reports every out-of-date or missing translation, and with <code>--gate</code> exits non-zero so continuous integration can fail the build:
+* <code>translate check</code> reports every out-of-date or missing translation as a warning, and every broken source page as an error. With <code>--gate</code> it exits non-zero on the errors alone, so continuous integration fails on a page nobody can translate but not on a translation that is merely behind:
 </translate>
 
 <tabber>
@@ -158,17 +158,21 @@ When you change a source unit, its translations no longer match their stamp and 
 <syntaxhighlight lang="console">
 $ wikven translate check --gate
 ::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)
+
+1 translation(s) out of date or missing.
 </syntaxhighlight>
 |-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate check --gate
 ::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)
+
+1 translation(s) out of date or missing.
 </syntaxhighlight>
 </tabber>
 
 <translate>
 <!--T:21-->
-The [https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations check-translations action] runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. It only reports; pass <code>gate: true</code> to fail the build instead. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
+The [https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations check-translations action] runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
 </translate>
 
 {{prevnext|Searching|Deploying}}
