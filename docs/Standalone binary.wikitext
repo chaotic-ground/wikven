@@ -18,7 +18,7 @@ There is no prebuilt Windows binary either: the toolchain that produces a single
 Download the binary for your architecture from the [https://github.com/chaotic-ground/wikven/releases latest release] and make it executable:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 curl -L -o wikven https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 chmod +x wikven
 </syntaxhighlight>
@@ -31,7 +31,7 @@ On arm64, use <code>wikven-linux-aarch64</code>.
 To track the latest commit on the main branch instead of a tagged release, use a nightly build. These are published daily as dated pre-releases tagged <code>nightly-YYYY-MM-DD</code>; pick the most recent from the [https://github.com/chaotic-ground/wikven/releases releases page], or resolve it automatically:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 tag=$(curl -s https://api.github.com/repos/chaotic-ground/wikven/releases | sed -n 's/.*"tag_name": *"\(nightly-[^"]*\)".*/\1/p' | head -n1)
 curl -L -o wikven "https://github.com/chaotic-ground/wikven/releases/download/$tag/wikven-linux-x86_64"
 </syntaxhighlight>
@@ -44,7 +44,7 @@ curl -L -o wikven "https://github.com/chaotic-ground/wikven/releases/download/$t
 Each release binary is published with a <code>.sha256</code> checksum and a signed build-provenance attestation. To check it before trusting a binary you install onto your <code>PATH</code>, download it under its release name and verify the checksum:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 curl -LO https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 curl -LO https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64.sha256
 sha256sum -c wikven-linux-x86_64.sha256
@@ -55,7 +55,7 @@ sha256sum -c wikven-linux-x86_64.sha256
 Or verify the provenance, that GitHub Actions built it from this repository, with the [https://cli.github.com/ GitHub CLI]:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 gh attestation verify wikven-linux-x86_64 --repo chaotic-ground/wikven
 </syntaxhighlight>
 
@@ -67,7 +67,7 @@ gh attestation verify wikven-linux-x86_64 --repo chaotic-ground/wikven
 The downloaded file already runs as-is — <code>./wikven</code> from the directory you saved it in. To run it as plain <code>wikven</code> from anywhere, install it onto your <code>PATH</code>:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 sudo install wikven /usr/local/bin/
 </syntaxhighlight>
 
@@ -76,7 +76,7 @@ sudo install wikven /usr/local/bin/
 Without root, install it into a personal directory that is on your <code>PATH</code> instead, such as <code>~/.local/bin</code> (<code>-D</code> creates the directory if it is missing):
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 install -D wikven ~/.local/bin/wikven
 </syntaxhighlight>
 
@@ -91,7 +91,7 @@ The commands below assume it is on your <code>PATH</code>. If you skipped this s
 Put your wikitext and a [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]] in a <code>src/</code> directory, then build:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 mkdir -p src
 echo 'Hello, World!' > src/index.wikitext
 wikven build
@@ -102,7 +102,7 @@ wikven build
 The rendered site is written to <code>dist/</code>. Preview it with <code>wikven serve</code> (see [[<tvar name="1">Special:MyLanguage/Deploying#Preview locally</tvar>|Deploying]]). The working directory defaults to the current directory; set <code>WIKVEN_WORKDIR</code> to build a project elsewhere:
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 WIKVEN_WORKDIR=/path/to/project wikven build
 </syntaxhighlight>
 

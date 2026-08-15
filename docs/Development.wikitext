@@ -21,7 +21,7 @@ A {{SITENAME}} build has four moving parts:
 == Building the image ==
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 docker build --tag wikven .
 </syntaxhighlight>
 
@@ -33,7 +33,7 @@ The <code>Dockerfile</code> is <code>FROM mediawiki:1.46</code>. It adds Compose
 == Running a build ==
 </translate>
 
-<syntaxhighlight lang="shell">
+<syntaxhighlight lang="shell" copy>
 docker run --rm \
   -v "$(pwd)/docs:/workspace/src" \
   -v "$(pwd)/dist:/workspace/dist" \

@@ -16,7 +16,7 @@ Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a r
 To use {{ml|Extension:Gadgets|gadgets}}, enable the bundled Gadgets extension in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]]:
 </translate>
 
-<syntaxhighlight lang="yaml">
+<syntaxhighlight lang="yaml" copy>
 extensions:
   - Gadgets
 </syntaxhighlight>
@@ -26,7 +26,7 @@ extensions:
 List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put each gadget's code in <code>MediaWiki:Gadget-<name>.js</code>:
 </translate>
 
-<syntaxhighlight lang="wikitext">
+<syntaxhighlight lang="wikitext" copy>
 * MyGadget[ResourceLoader|default]|MyGadget.js
 </syntaxhighlight>
 
