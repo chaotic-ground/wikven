@@ -47,7 +47,7 @@ class Build extends Maintenance {
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
 		$this->setVersionPage();
-		$this->dropDeadFooterPlaces();
+		$this->dropDeadPlaceLinks();
 		$this->dropDeadCategoryLink();
 		// Materialize content translations before RunJobs so rendered translation pages get exported.
 		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
@@ -287,13 +287,16 @@ class Build extends Maintenance {
 		}
 	}
 
-	/** Hide about/privacy/disclaimer footer links with no imported target (blank label to "-"). */
-	private function dropDeadFooterPlaces(): void {
+	/** Hide project links with no imported target (blank label to "-"), in the footer and menus. */
+	private function dropDeadPlaceLinks(): void {
 		// Label message (controls whether the link shows) => page-name message (the link's target).
+		// Community portal is here for Minerva, which builds its menu from its own definitions and
+		// reads this message directly; the other skins take it from MediaWiki:Sidebar.
 		$places = [
 			'Privacy' => 'privacypage',
 			'Aboutsite' => 'aboutpage',
-			'Disclaimers' => 'disclaimerpage'
+			'Disclaimers' => 'disclaimerpage',
+			'Portal' => 'portal-url'
 		];
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		foreach ($places as $label => $pageMessage) {

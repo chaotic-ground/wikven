@@ -1,0 +1,10 @@
+// Minerva builds its main menu from its own Menu\Definitions rather than the sidebar, so Hider
+// never reaches it and these four are inserted unconditionally. Every one is a Special: page an
+// export cannot serve. Community portal is not here: it has a lever, and build.php pulls it.
+// By item rather than by group, so a site's own entries in the same group survive.
+.toggle-list-item:has( > .menu__item--random ),
+.toggle-list-item:has( > .menu__item--recentchanges ),
+.toggle-list-item:has( > .menu__item--specialPages ),
+.toggle-list-item:has( > .menu__item--preferences ) {
+  display: none;
+}
