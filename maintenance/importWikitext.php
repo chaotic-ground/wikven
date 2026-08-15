@@ -64,7 +64,16 @@ class ImportWikitext extends Maintenance {
 				$updater = $page->newPageUpdater($user);
 				$updater->setContent(SlotRecord::MAIN, $content);
 				$updater->saveRevision(CommentStoreComment::newUnsavedComment('Import'));
-				$this->output(" done\n");
+				// These are exactly the pages an edit hook may veto -- AbuseFilter or SpamBlacklist on a
+				// File: description, CSS validation on MediaWiki:Common.css.
+				if ($updater->wasSuccessful()) {
+					$this->output(" done\n");
+				} else {
+					$status = $updater->getStatus();
+					$reason = $status ? $status->getWikiText(false, false, 'en') : 'no revision was saved';
+					$this->output(' failed: ' . $reason . "\n");
+					$failed[] = $relative;
+				}
 				continue;
 			}
 
