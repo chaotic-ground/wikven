@@ -82,19 +82,9 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
 
-      # Serve dist under the site's own /wikven/ path prefix (as GitHub Pages does) so the
-      # Pagefind bundle and results page resolve, then drive it with a headless browser.
+      # The static server and its readiness check live in playwright.config.js (webServer), so the
+      # same command works on a developer's machine too.
       - name: Assert the rendered site in a browser
         env:
           WIKVEN_BASE_URL: http://127.0.0.1:8080/wikven/
-        run: |
-          mkdir -p pw-root
-          ln -sfn "$PWD/dist" pw-root/wikven
-          python3 -m http.server 8080 --directory pw-root &
-          server=$!
-          trap 'kill $server' EXIT
-          for _ in $(seq 1 30); do
-            curl -sf -o /dev/null "${WIKVEN_BASE_URL}index.html" && break
-            sleep 0.5
-          done
-          npm run test:e2e
+        run: npm run test:e2e
