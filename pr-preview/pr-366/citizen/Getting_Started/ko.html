@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>시작하기 - Wikven</title>
-<script>document.documentElement.className="client-js skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left skin-theme-clientpref-thumb-standard";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Getting_Started/ko","wgTitle":"Getting Started/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages using Tabber parser tag"],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Getting_Started/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Getting Started/ko","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":true,"wgVector2022LanguageInHeader":false,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
+<script>document.documentElement.className="client-js skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left skin-theme-clientpref-thumb-standard";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Getting_Started/ko","wgTitle":"Getting Started/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages using Tabber parser tag"],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Getting_Started/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Getting Started/ko","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":true,"wgVector2022LanguageInHeader":false,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","ext.tabberNeue.init.styles":"ready","skins.citizen.styles":"ready","skins.citizen.codex.styles":"ready","skins.citizen.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","skins.citizen.tokens":"ready","ext.uls.pt":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -108,7 +108,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="편집">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>675</span>
+		<span>678</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -458,7 +458,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <hr/>
 <p>소스 디렉터리를 만들고 위키텍스트 파일을 추가합니다. <code>.wikitext</code>로 끝나는 파일은 모두 위키 문서가 됩니다. 진입 문서의 이름을 <code>index</code>로 지으면 <code>index.html</code>로 빌드되는데, 이는 브라우저가 사이트 루트에서 여는 파일입니다.
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>src
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>src
 <span class="nb">echo</span><span class="w"> </span><span class="s1">'Hello, World!'</span><span class="w"> </span>><span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>그런 다음 사이트를 빌드합니다. 렌더링된 문서는 <code>dist/</code>에 기록됩니다. Wikven을 실행하는 방식에 맞는 탭을 고르십시오:
@@ -466,12 +466,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
 </p><p><code>src/</code>가 있는 디렉터리에서 실행합니다 (설치하려면 <a href="../Installation/ko.html#Binary" title="Special:MyLanguage/Installation">설치</a> 참고):
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
 </pre></div>
 <p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
 </p><p>소스 디렉터리와 출력 디렉터리를 컨테이너에 마운트합니다:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven
@@ -482,10 +482,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>사이트를 로컬에서 미리 보고, <code><a rel="nofollow" class="external free" href="http://localhost:8080">http://localhost:8080</a></code>을 엽니다:
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
-</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
+</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
 </pre></div>
 <p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
-</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
+</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>serve
 </pre></div>
@@ -496,7 +496,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="사이트_제목_설정하기"><span id=".EC.82.AC.EC.9D.B4.ED.8A.B8_.EC.A0.9C.EB.AA.A9_.EC.84.A4.EC.A0.95.ED.95.98.EA.B8.B0"></span>사이트 제목 설정하기</h2></div><section id="citizen-section-1" class="citizen-section">
 <p>설정을 위해 <code>src</code> 디렉터리에 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code></a> 파일을 만듭니다.
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF > src/.wikven.yaml</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF > src/.wikven.yaml</span>
 <span class="s">config:</span>
 <span class="s">  Sitename: My Site</span>
 <span class="s">EOF</span>
@@ -507,7 +507,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="두_번째_문서_추가하기"><span id=".EB.91.90_.EB.B2.88.EC.A7.B8_.EB.AC.B8.EC.84.9C_.EC.B6.94.EA.B0.80.ED.95.98.EA.B8.B0"></span>두 번째 문서 추가하기</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>모든 <code>.wikitext</code> 파일은 문서가 됩니다. 하나를 더 추가하고 <code>[[...]]</code>로 첫 문서에서 그 문서로 링크합니다:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'This is the help page.'</span><span class="w"> </span>><span class="w"> </span>src/Help.wikitext
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'This is the help page.'</span><span class="w"> </span>><span class="w"> </span>src/Help.wikitext
 <span class="nb">echo</span><span class="w"> </span><span class="s1">'Read the [[Help]].'</span><span class="w"> </span>>><span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>다시 빌드하면 홈 문서가 이제 <code>Help.html</code>로 링크되며, 그 링크는 서버 없이도 동작합니다. 파일 이름이 문서 제목과 이름공간에 어떻게 대응되는지는 <a href="../Pages/ko.html" title="Special:MyLanguage/Pages">문서</a>를 참고하십시오.
@@ -516,7 +516,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="틀_추가하기"><span id=".ED.8B.80_.EC.B6.94.EA.B0.80.ED.95.98.EA.B8.B0"></span>틀 추가하기</h2></div><section id="citizen-section-3" class="citizen-section">
 <p>Markdown 대신 Wikven을 택하는 주된 이유인 틀은 콘텐츠를 재사용할 수 있게 해 줍니다. 소스에 <code>Template:</code> 문서를 두고 <code>{{...}}</code>로 끼워 넣습니다:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">"'''Note:''' {{{1}}}"</span><span class="w"> </span>><span class="w"> </span><span class="s2">"src/Template:Note.wikitext"</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">"'''Note:''' {{{1}}}"</span><span class="w"> </span>><span class="w"> </span><span class="s2">"src/Template:Note.wikitext"</span>
 <span class="nb">echo</span><span class="w"> </span><span class="s1">'{{Note|Back up your wiki first.}}'</span><span class="w"> </span>>><span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>다시 빌드하면 홈 문서에 이제 알림이 표시됩니다. 매개변수 등에 대해서는 <a href="../Pages/ko.html#Templates" title="Special:MyLanguage/Pages">문서의 틀 섹션</a>을 참고하십시오.
@@ -540,7 +540,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Getting_Started/ko.html" title="이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다." data-timestamp="1786820383"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Getting_Started/ko.html" title="이 문서는 2026년 8월 15일 (토) 19:07에 마지막으로 편집되었습니다." data-timestamp="1786820845"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
 			
 		</ul>
 		
@@ -621,7 +621,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 19:07에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -644,6 +644,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<ul>
 		<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 		<li id="footer-places-version"><a href="../Version.html">버전</a></li>
+		<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 	</ul>
 </nav>
 		</section>

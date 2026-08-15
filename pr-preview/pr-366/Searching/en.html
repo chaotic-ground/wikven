@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Searching - Wikven</title>
-<script>(function(){var className="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-0 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Searching/en","wgTitle":"Searching/en","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Searching/en","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Searching/en","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":false,"wgVector2022LanguageInHeader":true,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
+<script>(function(){var className="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-0 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Searching/en","wgTitle":"Searching/en","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Searching/en","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Searching/en","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":false,"wgVector2022LanguageInHeader":true,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.vector.search.codex.styles":"ready","skins.vector.styles":"ready","skins.vector.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","ext.uls.pt":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -540,17 +540,17 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>Search needs no configuration: the index is written to a <code>pagefind/</code> directory under the build output and served from <code>/pagefind/</code>. You only adjust it in a few cases, all in <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p><p>If your site lives in a subdirectory, set the bundle path to include it. This site deploys under <code>/wikven</code> on GitHub Pages:
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">SifterSearchBundlePath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/wikven/pagefind/</span>
 </pre></div>
 <p>To list all matches on a page rather than just the typeahead, name a content page (see below):
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">SifterSearchResultsPage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Search&quot;</span>
 </pre></div>
 <p>To turn search off, point the output directory at nothing:
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">SifterSearchOutputDir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 </pre></div>
 <div class="mw-heading mw-heading2"><h2 id="Full_results_page">Full results page</h2></div>
@@ -574,12 +574,13 @@ titled <code>Search</code>.
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 18:59.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 19:07.</li>
 </ul>
 
 	<ul id="footer-places">
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 	<li id="footer-places-version"><a href="../Version.html">Version</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 </ul>
 
 	<ul id="" class="noprint">

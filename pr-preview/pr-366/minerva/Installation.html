@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Installation - Wikven</title>
-<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Installation","wgTitle":"Installation","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Installation","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"source","wgTranslatePageTranslationGroup":"page-Installation","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
+<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Installation","wgTitle":"Installation","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Installation","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"source","wgTranslatePageTranslationGroup":"page-Installation","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.minerva.styles":"ready","skins.minerva.content.styles.images":"ready","mediawiki.hlist":"ready","skins.minerva.codex.styles":"ready","skins.minerva.icons":"ready","skins.minerva.amc.styles":"ready","skins.minerva.personalMenu.icons":"ready","skins.minerva.mainMenu.advanced.icons":"ready","skins.minerva.overflow.icons":"ready","ext.translate.edit.documentation.styles":"ready","ext.translate":"ready","ext.Wikven.styles":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -218,7 +218,7 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="Binary">Binary</h2></div>
 <p>A single self-contained executable that embeds MediaWiki, for Linux on x86_64 and arm64. Download it and make it executable:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
 chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </pre></div>
 <p>On arm64, use <code>wikven-linux-aarch64</code>. See <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a> for installing it onto your <code>PATH</code>, nightly builds, and the optional host tools it uses.
@@ -226,14 +226,14 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 <div class="mw-heading mw-heading2"><h2 id="Docker">Docker</h2></div>
 <p>Works on any platform with <a rel="nofollow" class="external text" href="https://www.docker.com/">Docker</a>, so it is the option to use on macOS and Windows. The image is published to the GitHub Container Registry:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
 <p>The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Build_from_source">Build from source</h2></div>
 <p>To modify Wikven or run an unreleased commit, clone the repository and build the image yourself:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/chaotic-ground/wikven.git
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/chaotic-ground/wikven.git
 <span class="nb">cd</span><span class="w"> </span>wikven
 docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>wikven<span class="w"> </span>.
 </pre></div>
@@ -259,8 +259,8 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786820383">
-  				<span>Last edited on 15 August 2026, at 18:59</span>
+  				data-timestamp="1786820845">
+  				<span>Last edited on 15 August 2026, at 19:07</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -283,12 +283,13 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 18:59.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 19:07.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 	<li id="footer-places-version"><a href="./Version.html">Version</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 </ul>
 
 			</div>

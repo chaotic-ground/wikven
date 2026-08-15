@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>개발 - Wikven</title>
-<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Development/ko","wgTitle":"Development/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Development/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Development/ko","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
+<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Development/ko","wgTitle":"Development/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Development/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Development/ko","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.minerva.styles":"ready","skins.minerva.content.styles.images":"ready","mediawiki.hlist":"ready","skins.minerva.codex.styles":"ready","skins.minerva.icons":"ready","skins.minerva.amc.styles":"ready","skins.minerva.personalMenu.icons":"ready","skins.minerva.mainMenu.advanced.icons":"ready","skins.minerva.overflow.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -231,13 +231,13 @@ Wikven
 <p><span id="Building&#95;the&#95;image"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="이미지_빌드하기"><span id=".EC.9D.B4.EB.AF.B8.EC.A7.80_.EB.B9.8C.EB.93.9C.ED.95.98.EA.B8.B0"></span>이미지 빌드하기</h2></div>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span>wikven<span class="w"> </span>.
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span>wikven<span class="w"> </span>.
 </pre></div>
 <p><code>Dockerfile</code>은 <code>FROM mediawiki:1.46</code>입니다. Composer와 unzip(서드파티 확장 기능을 가져올 때 필요)을 추가하고, 확장 기능을 <code>/var/www/html/extensions/Wikven</code>으로 복사하며, <code>WikvenSettings.php</code>를 MediaWiki 루트로 복사하고, <code>bin/entrypoint</code> 스크립트를 이미지의 기본 명령(<code>CMD</code>)으로 설정합니다.
 </p><p><span id="Running&#95;a&#95;build"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="빌드_실행하기"><span id=".EB.B9.8C.EB.93.9C_.EC.8B.A4.ED.96.89.ED.95.98.EA.B8.B0"></span>빌드 실행하기</h2></div>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/docs:/workspace/src&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>wikven
@@ -315,8 +315,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786820383">
-  				<span>2026년 8월 15일 (토) 18:59에 마지막으로 편집됨</span>
+  				data-timestamp="1786820845">
+  				<span>2026년 8월 15일 (토) 19:07에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -339,12 +339,13 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 19:07에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 	<li id="footer-places-version"><a href="../Version.html">버전</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 </ul>
 
 			</div>

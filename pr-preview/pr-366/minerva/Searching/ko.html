@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>검색 - Wikven</title>
-<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Searching/ko","wgTitle":"Searching/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Searching/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Searching/ko","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
+<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Searching/ko","wgTitle":"Searching/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Searching/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Searching/ko","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.minerva.styles":"ready","skins.minerva.content.styles.images":"ready","mediawiki.hlist":"ready","skins.minerva.codex.styles":"ready","skins.minerva.icons":"ready","skins.minerva.amc.styles":"ready","skins.minerva.personalMenu.icons":"ready","skins.minerva.mainMenu.advanced.icons":"ready","skins.minerva.overflow.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -215,17 +215,17 @@ Wikven
 <p>검색에는 설정이 필요 없습니다. 색인은 빌드 출력 아래의 <code>pagefind/</code> 디렉터리에 쓰이고 <code>/pagefind/</code>에서 제공됩니다. 몇 가지 경우에만 이를 조정하며, 모두 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>에서 합니다.
 </p><p>사이트가 하위 디렉터리에 있다면 번들 경로에 그것을 포함하도록 설정합니다. 이 사이트는 GitHub Pages에서 <code>/wikven</code> 아래에 배포됩니다:
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">SifterSearchBundlePath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/wikven/pagefind/</span>
 </pre></div>
 <p>타입어헤드만이 아니라 한 문서에 모든 일치 항목을 나열하려면 콘텐츠 문서를 지정합니다(아래 참고):
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">SifterSearchResultsPage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Search&quot;</span>
 </pre></div>
 <p>검색을 끄려면 출력 디렉터리를 아무것도 없는 곳으로 지정합니다:
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">SifterSearchOutputDir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 </pre></div>
 <p><span id="Full&#95;results&#95;page"></span>
@@ -250,8 +250,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="FuzzyBot"
   				data-user-gender="unknown"
-  				data-timestamp="1786820383">
-  				<span>2026년 8월 15일 (토) 18:59에 마지막으로 편집됨</span>
+  				data-timestamp="1786820845">
+  				<span>2026년 8월 15일 (토) 19:07에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -274,12 +274,13 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 19:07에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 	<li id="footer-places-version"><a href="../Version.html">버전</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 </ul>
 
 			</div>

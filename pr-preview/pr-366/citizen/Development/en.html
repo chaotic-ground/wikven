@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Development - Wikven</title>
-<script>document.documentElement.className="client-js skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left skin-theme-clientpref-thumb-standard";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Development/en","wgTitle":"Development/en","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Development/en","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Development/en","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":true,"wgVector2022LanguageInHeader":false,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
+<script>document.documentElement.className="client-js skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left skin-theme-clientpref-thumb-standard";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Development/en","wgTitle":"Development/en","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Development/en","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Development/en","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":true,"wgVector2022LanguageInHeader":false,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.citizen.styles":"ready","skins.citizen.codex.styles":"ready","skins.citizen.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","skins.citizen.tokens":"ready","ext.uls.pt":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -107,7 +107,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="edits">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>675</span>
+		<span>678</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -456,12 +456,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><b><code>WikvenSettings.php</code></b>. The <code>LocalSettings.php</code> the build runs under: it loads the configuration, detects the image backend, and applies Wikven's defaults.</li>
 <li>The <b><code>bin/entrypoint</code></b> script and <b><code>Dockerfile</code></b>. They package MediaWiki 1.46 plus the extension into an image whose default command runs one build.</li></ul>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Building_the_image">Building the image</h2></div><section id="citizen-section-2" class="citizen-section">
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span>wikven<span class="w"> </span>.
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span>wikven<span class="w"> </span>.
 </pre></div>
 <p>The <code>Dockerfile</code> is <code>FROM mediawiki:1.46</code>. It adds Composer and unzip (needed when fetching third-party extensions), copies the extension into <code>/var/www/html/extensions/Wikven</code>, copies <code>WikvenSettings.php</code> into the MediaWiki root, and sets the <code>bin/entrypoint</code> script as the image's default command (<code>CMD</code>).
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Running_a_build">Running a build</h2></div><section id="citizen-section-3" class="citizen-section">
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/docs:/workspace/src"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>wikven
@@ -533,7 +533,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Development/en.html" title="This page was last edited on 15 August 2026, at 18:59." data-timestamp="1786820383"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Development/en.html" title="This page was last edited on 15 August 2026, at 19:07." data-timestamp="1786820845"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -704,7 +704,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 18:59.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 19:07.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -727,6 +727,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<ul>
 		<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 		<li id="footer-places-version"><a href="../Version.html">Version</a></li>
+		<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 	</ul>
 </nav>
 		</section>

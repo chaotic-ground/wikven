@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>문서 - Wikven</title>
-<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Pages/ko","wgTitle":"Pages/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Pages/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Pages/ko","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
+<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Pages/ko","wgTitle":"Pages/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Pages/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Pages/ko","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.minerva.styles":"ready","skins.minerva.content.styles.images":"ready","mediawiki.hlist":"ready","skins.minerva.codex.styles":"ready","skins.minerva.icons":"ready","skins.minerva.amc.styles":"ready","skins.minerva.personalMenu.icons":"ready","skins.minerva.mainMenu.advanced.icons":"ready","skins.minerva.overflow.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -244,7 +244,7 @@ Wikven
 <p>문서에 <code>[[Category:Name]]</code>을 추가하면 그 문서를 <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories" class="extiw" title="mw:Special:MyLanguage/Help:Categories">분류</a>할 수 있습니다. 분류는 다른 위키와 마찬가지로 문서 하단에 표시됩니다.
 </p><p>다만 분류 자체의 문서는 기본적으로 내보내지지 않습니다. Wikven은 정적 사이트에 <i>콘텐츠</i> 문서만 기록하며, 콘텐츠로 치는 것은 주(main) 이름공간과 File: 이름공간뿐입니다. (이름공간에는 숫자 ID가 있습니다: 주 이름공간은 <code>0</code>, File:은 <code>6</code>, Category는 <code>14</code>입니다.) 그래서 하단의 분류는 정적 호스트가 제공하지 않는 <code>Category:Name.html</code>로 연결되는 죽은 링크가 되며, 이는 분류 문서를 내보내기 전까지 그렇습니다. 그렇게 하려면 <a href="../Configuration/ko.html#ContentNamespaces" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code></a>에서 <code>ContentNamespaces</code>를 설정하고 소스에 <code>Category:Name.wikitext</code> 파일을 추가하세요:
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">ContentNamespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">14</span><span class="p p-Indicator">]</span>
 </pre></div>
 <p>이 키는 기본값을 확장하는 것이 아니라 대체하므로, 목록에 <code>0</code>과 <code>6</code>을 반드시 남겨 두세요. 그러지 않으면 주 이름공간과 File: 문서가 더 이상 내보내지지 않습니다.
@@ -254,11 +254,11 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="틀"><span id=".ED.8B.80"></span>틀</h2></div>
 <p>소스에 <code>Template:Name.wikitext</code> 파일을 두고 아무 문서에서나 <code>{{Name}}</code>으로 사용하세요. 예를 들어 다음 파일을:
 </p>
-<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr" dir="ltr"><pre><span></span><span class="gs">&#39;&#39;&#39;Note:&#39;&#39;&#39;</span> <span class="p">{{{</span><span class="nv">1</span><span class="p">}}}</span>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="gs">&#39;&#39;&#39;Note:&#39;&#39;&#39;</span> <span class="p">{{{</span><span class="nv">1</span><span class="p">}}}</span>
 </pre></div>
 <p><code>Template:Note.wikitext</code>로 저장하고 문서에서 다음과 같이 사용하면:
 </p>
-<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nt">Note</span><span class="p">|</span>Back up your wiki first.<span class="p">}}</span>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nt">Note</span><span class="p">|</span>Back up your wiki first.<span class="p">}}</span>
 </pre></div>
 <p>"<b>Note:</b> Back up your wiki first."로 렌더링됩니다. 틀은 위치 매개변수(<code>{{{1}}}</code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions" class="extiw" title="mw:Special:MyLanguage/Help:Parser functions">파서 함수</a>를 실행합니다. 문법 자체는 표준 MediaWiki입니다. <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates" class="extiw" title="mw:Special:MyLanguage/Help:Templates">Help:Templates</a> 참고.
 </p>
@@ -279,8 +279,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786820383">
-  				<span>2026년 8월 15일 (토) 18:59에 마지막으로 편집됨</span>
+  				data-timestamp="1786820845">
+  				<span>2026년 8월 15일 (토) 19:07에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -303,12 +303,13 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 18:59에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 19:07에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 	<li id="footer-places-version"><a href="../Version.html">버전</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 </ul>
 
 			</div>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Getting Started - Wikven</title>
-<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Getting_Started","wgTitle":"Getting Started","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages using Tabber parser tag"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Getting_Started","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"source","wgTranslatePageTranslationGroup":"page-Getting Started","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
+<script>(function(){var className="client-js skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Getting_Started","wgTitle":"Getting Started","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages using Tabber parser tag"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Getting_Started","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"source","wgTranslatePageTranslationGroup":"page-Getting Started","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","ext.tabberNeue.init.styles":"ready","skins.minerva.styles":"ready","skins.minerva.content.styles.images":"ready","mediawiki.hlist":"ready","skins.minerva.codex.styles":"ready","skins.minerva.icons":"ready","skins.minerva.amc.styles":"ready","skins.minerva.personalMenu.icons":"ready","skins.minerva.mainMenu.advanced.icons":"ready","skins.minerva.overflow.icons":"ready","ext.translate.edit.documentation.styles":"ready","ext.translate":"ready","ext.Wikven.styles":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -218,7 +218,7 @@ Wikven
 <hr />
 <p>Create a source directory and add a wikitext file. Any file ending in <code>.wikitext</code> becomes a wiki article. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a browser opens at the site root.
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>src
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>src
 <span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;Hello, World!&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>Then build the site. The rendered pages are written to <code>dist/</code>. Pick the tab for how you run Wikven:
@@ -226,12 +226,12 @@ Wikven
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
 </p><p>Run it in the directory that holds <code>src/</code> (see <a href="./Installation.html#Binary" title="Special:MyLanguage/Installation">Installation</a> to get it):
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
 </pre></div>
 <p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
 </p><p>Mount the source and output directories into the container:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven
@@ -242,10 +242,10 @@ Wikven
 <p>Preview the site locally, then open <code><a rel="nofollow" class="external free" href="http://localhost:8080">http://localhost:8080</a></code>:
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
-</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
+</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
 </pre></div>
 <p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
-</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
+</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>serve
 </pre></div>
@@ -255,7 +255,7 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="Setting_the_title_of_the_site">Setting the title of the site</h2></div>
 <p>For configuration, create a <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code></a> file in your <code>src</code> directory.
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt; src/.wikven.yaml</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt; src/.wikven.yaml</span>
 <span class="s">config:</span>
 <span class="s">  Sitename: My Site</span>
 <span class="s">EOF</span>
@@ -265,7 +265,7 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="Adding_a_second_page">Adding a second page</h2></div>
 <p>Every <code>.wikitext</code> file becomes a page. Add another one and link to it from the first with <code>[[...]]</code>:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;This is the help page.&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>src/Help.wikitext
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;This is the help page.&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>src/Help.wikitext
 <span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;Read the [[Help]].&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>Build again: the home page now links to <code>Help.html</code>, and the link works with no server. See <a href="./Pages.html" title="Special:MyLanguage/Pages">Pages</a> for how file names map to page titles and namespaces.
@@ -273,7 +273,7 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="Adding_a_template">Adding a template</h2></div>
 <p>Templates, the main reason to reach for Wikven over Markdown, let you reuse content. Put a <code>Template:</code> page in your source and transclude it with <code>{{...}}</code>:
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&#39;&#39;&#39;Note:&#39;&#39;&#39; {{{1}}}&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;src/Template:Note.wikitext&quot;</span>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&#39;&#39;&#39;Note:&#39;&#39;&#39; {{{1}}}&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;src/Template:Note.wikitext&quot;</span>
 <span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{{Note|Back up your wiki first.}}&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>src/index.wikitext
 </pre></div>
 <p>Build again: the home page now shows the note. See <a href="./Pages.html#Templates" title="Special:MyLanguage/Pages">Pages#Templates</a> for parameters and more.
@@ -295,8 +295,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786820383">
-  				<span>Last edited on 15 August 2026, at 18:59</span>
+  				data-timestamp="1786820845">
+  				<span>Last edited on 15 August 2026, at 19:07</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -319,12 +319,13 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 18:59.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 19:07.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 	<li id="footer-places-version"><a href="./Version.html">Version</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 </ul>
 
 			</div>

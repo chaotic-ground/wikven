@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Editing sidebar - Wikven</title>
-<script>document.documentElement.className="client-js skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left skin-theme-clientpref-thumb-standard";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Editing_sidebar/en","wgTitle":"Editing sidebar/en","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Editing_sidebar/en","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Editing sidebar/en","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":true,"wgVector2022LanguageInHeader":false,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
+<script>document.documentElement.className="client-js skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left skin-theme-clientpref-thumb-standard";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Editing_sidebar/en","wgTitle":"Editing sidebar/en","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Editing_sidebar/en","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Editing sidebar/en","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":true,"wgVector2022LanguageInHeader":false,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
 RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.citizen.styles":"ready","skins.citizen.codex.styles":"ready","skins.citizen.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","skins.citizen.tokens":"ready","ext.uls.pt":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
@@ -107,7 +107,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="edits">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>675</span>
+		<span>678</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -448,7 +448,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>The navigation sidebar is configured the same way as on MediaWiki, through the <code>MediaWiki:Sidebar</code> system message. Create a <code>MediaWiki:Sidebar.wikitext</code> file in your source directory, alongside your other pages.
 </p><p>Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the English wording goes in <code>MediaWiki:Sidebar-docs.wikitext</code> and the Korean in <code>MediaWiki:Sidebar-docs/ko.wikitext</code>, next to your other pages. This site's sidebar, for example:
 </p>
-<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr" dir="ltr"><pre><span></span><span class="k">*</span> navigation
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
 <span class="k">**</span> mainpage|mainpage-description
 <span class="k">*</span> sidebar-docs
 <span class="k">**</span> Getting Started|sidebar-getting-started
@@ -482,7 +482,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Editing_sidebar/en.html" title="This page was last edited on 15 August 2026, at 18:59." data-timestamp="1786820383"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Editing_sidebar/en.html" title="This page was last edited on 15 August 2026, at 19:07." data-timestamp="1786820845"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -548,7 +548,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 18:59.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 19:07.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -571,6 +571,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<ul>
 		<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 		<li id="footer-places-version"><a href="../Version.html">Version</a></li>
+		<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 	</ul>
 </nav>
 		</section>
