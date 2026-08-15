@@ -49,7 +49,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div id="mw-mf-page-left" class="menu view-border-box">
 	<ul id="p-navigation" class="toggle-list__list">
 			<li class="toggle-list-item ">
-				<a class="toggle-list-item__anchor menu__item--home" href="../index.html" data-mw-interface="1">
+				<a class="toggle-list-item__anchor menu__item--home" href="../index/ko.html" data-mw-interface="1">
 					<span class="minerva-icon minerva-icon--home"></span>
 
 					<span class="toggle-list-item__label">Home</span>
@@ -102,7 +102,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<label class="main-menu-mask" for="main-menu-input"></label>
 				</nav>
 				<div class="branding-box">
-					<a href="../index.html">
+					<a href="../index/ko.html">
 						<span>
 Wikven
 </span>
@@ -233,7 +233,7 @@ Wikven
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Editing_sidebar.html" title="Editing sidebar">Editing sidebar</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Editing%20sidebar/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Editing_sidebar.html" class="mw-pt-progress mw-pt-progress--complete" title="Editing sidebar (100% 번역함)" lang="en" dir="ltr">English</a></li>
 <li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>탐색 사이드바는 MediaWiki에서와 같은 방식으로, <code>MediaWiki:Sidebar</code> 시스템 메시지를 통해 설정합니다. 소스 디렉터리에 다른 문서들과 나란히 <code>MediaWiki:Sidebar.wikitext</code> 파일을 만드세요.
-</p><p>최상위 <code>*</code> 줄은 각각 제목이고, 그 아래 <code>**</code> 줄은 각각 <code>page|label</code> 형식으로 쓴 링크입니다. 제목과 라벨은 먼저 시스템 메시지로 조회되고, 그런 메시지가 없을 때만 적힌 글자를 그대로 씁니다(그래서 <code>mainpage</code>와 <code>mainpage-description</code>은 대문서와 그 라벨로 해석됩니다). 라벨을 번역할 수 있게 해 주는 것이 바로 메시지이므로, 여러분의 것도 메시지 이름으로 쓰세요. 영어 문구(<code>Docs</code>)는 <code>MediaWiki:Sidebar-docs.wikitext</code>에, 한국어 문구(<code>설명서</code>)는 <code>MediaWiki:Sidebar-docs/ko.wikitext</code>에 다른 문서들과 나란히 둡니다. 예를 들어 이 사이트의 사이드바는 다음과 같습니다:
+</p><p>최상위 <code>*</code> 줄은 각각 제목이고, 그 아래 <code>**</code> 줄은 각각 <code>page|label</code> 형식으로 쓴 링크입니다. 제목과 라벨은 먼저 시스템 메시지로 조회되고, 그런 메시지가 없을 때만 적힌 글자를 그대로 씁니다(그래서 <code>mainpage</code>와 <code>mainpage-description</code>은 대문서와 그 라벨로 해석됩니다). 라벨을 번역할 수 있게 해 주는 것이 바로 메시지이므로, 여러분의 것도 메시지 이름으로 쓰세요. 영어 문구(<code>Docs</code>)는 <code>MediaWiki:Sidebar-docs.wikitext</code>에, 한국어 문구(<code>설명서</code>)는 <code>MediaWiki:Sidebar-docs/ko.wikitext</code>에 다른 문서들과 나란히 둡니다. 그러면 사이드바는 다음과 같은 모양이 됩니다:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
 <span class="k">**</span> mainpage|mainpage-description
@@ -244,6 +244,20 @@ Wikven
 <span class="k">**</span> Configuration|sidebar-configuration
 </pre></div>
 <p>링크 대상도 메시지로 조회되며, 대상이 <code>-</code>인 메시지로 해석되는 항목은 아무 흔적 없이 사이드바에서 빠집니다. MediaWiki는 업로드 양식의 라이선스 선택 목록인 <code>licenses</code>를 <code>-</code>로 정의해 두었으므로, <code>Licenses</code>라는 이름의 문서를 대상에 그대로 쓰면 그 항목이 사라집니다. 그런 대상 앞에는 <code>:Licenses</code>처럼 콜론을 붙여 문서 자체로 연결하세요.
+</p><p><span id="Linking&#95;on&#95;a&#95;translated&#95;site"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="번역된_사이트에서_링크하기"><span id=".EB.B2.88.EC.97.AD.EB.90.9C_.EC.82.AC.EC.9D.B4.ED.8A.B8.EC.97.90.EC.84.9C_.EB.A7.81.ED.81.AC.ED.95.98.EA.B8.B0"></span>번역된 사이트에서 링크하기</h2></div>
+<p>대상은 문서 하나를 가리키므로, 항목은 언제나 그 문서로만 이어집니다. 번역된 문서를 읽던 독자도 사이드바를 누르면 원문 언어로 돌아가게 됩니다. MediaWiki의 위키들이 그러하듯 대상을 <code>Special:MyLanguage/문서</code>로 쓰면, 빌드가 문서마다 이를 알아서 풀어 줍니다. 어떤 언어의 문서에서는 그 언어의 번역으로 이어지고, 그 언어의 번역이 없으면 원문 문서로 이어집니다. 또 이 접두사는 대상이 위의 메시지 조회를 거치지 않게 하므로, 여기서는 <code>Licenses</code>에 콜론을 붙이지 않아도 됩니다:
+</p>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
+<span class="k">**</span> mainpage|mainpage-description
+<span class="k">*</span> sidebar-docs
+<span class="k">**</span> Special:MyLanguage/Getting Started|sidebar-getting-started
+<span class="k">**</span> Special:MyLanguage/Images|sidebar-images
+<span class="k">*</span> sidebar-references
+<span class="k">**</span> Special:MyLanguage/Licenses|sidebar-licenses
+</pre></div>
+<p>대문 항목은 <code>mainpage</code> 그대로 둡니다. 그 대상은 문서 이름이 아니라 메시지이므로, 접두사는 메시지 쪽에 넣습니다. 메타위키가 그러하듯 <code>MediaWiki:Mainpage.wikitext</code>에 <code>Special:MyLanguage/index</code>라고 쓰면 됩니다(<code>index</code>는 <code>WikvenMainPage</code>가 가리키는 이름입니다). 모든 스킨이 로고를 같은 메시지에 걸어 두므로, 로고도 독자의 언어를 따라갑니다. 대가는 위키가 그 문서를 더 이상 대문으로 인식하지 않는다는 점입니다. 브라우저 탭에 문서 제목이 나오고, MinervaNeue는 대문 전용 스타일을 넣지 않습니다.
 </p><p><span id="What&#95;is&#95;removed"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="제거되는_것"><span id=".EC.A0.9C.EA.B1.B0.EB.90.98.EB.8A.94_.EA.B2.83"></span>제거되는 것</h2></div>
@@ -252,7 +266,7 @@ Wikven
 </p>
 <div class="mw-heading mw-heading2"><h2 id="함께_보기"><span id=".ED.95.A8.EA.BB.98_.EB.B3.B4.EA.B8.B0"></span>함께 보기</h2></div>
 <ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar" class="extiw" title="mw:Special:MyLanguage/Manual:Interface/Sidebar">Manual:Interface/Sidebar</a></li></ul>
-<style data-mw-deduplicate="TemplateStyles:r74">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Pages/ko.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="../Images/ko.html" title="Special:MyLanguage/Images">Images</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Pages/ko.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="../Images/ko.html" title="Special:MyLanguage/Images">Images</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="Editing_sidebar/ko.html">Editing_sidebar/ko.html</a>"</div></div>
@@ -269,8 +283,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="FuzzyBot"
   				data-user-gender="unknown"
-  				data-timestamp="1786823937">
-  				<span>2026년 8월 15일 (토) 19:58에 마지막으로 편집됨</span>
+  				data-timestamp="1786826825">
+  				<span>2026년 8월 15일 (토) 20:47에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -293,7 +307,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 19:58에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 15일 (토) 20:47에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

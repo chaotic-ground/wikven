@@ -49,7 +49,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div id="mw-mf-page-left" class="menu view-border-box">
 	<ul id="p-navigation" class="toggle-list__list">
 			<li class="toggle-list-item ">
-				<a class="toggle-list-item__anchor menu__item--home" href="../index.html" data-mw-interface="1">
+				<a class="toggle-list-item__anchor menu__item--home" href="../index/en.html" data-mw-interface="1">
 					<span class="minerva-icon minerva-icon--home"></span>
 
 					<span class="toggle-list-item__label">Home</span>
@@ -102,7 +102,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<label class="main-menu-mask" for="main-menu-input"></label>
 				</nav>
 				<div class="branding-box">
-					<a href="../index.html">
+					<a href="../index/en.html">
 						<span>
 Wikven
 </span>
@@ -221,7 +221,7 @@ Wikven
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Editing%20sidebar/en.wikitext" title="Special:Translate">Translate this page</a></div><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><a href="../Editing_sidebar.html" class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" title="Editing sidebar (100% translated)" lang="en" dir="ltr">English</a></li>
 <li><a href="../Editing_sidebar/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="사이드바 편집 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>The navigation sidebar is configured the same way as on MediaWiki, through the <code>MediaWiki:Sidebar</code> system message. Create a <code>MediaWiki:Sidebar.wikitext</code> file in your source directory, alongside your other pages.
-</p><p>Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the English wording goes in <code>MediaWiki:Sidebar-docs.wikitext</code> and the Korean in <code>MediaWiki:Sidebar-docs/ko.wikitext</code>, next to your other pages. This site's sidebar, for example:
+</p><p>Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the English wording goes in <code>MediaWiki:Sidebar-docs.wikitext</code> and the Korean in <code>MediaWiki:Sidebar-docs/ko.wikitext</code>, next to your other pages. A sidebar then reads like this:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
 <span class="k">**</span> mainpage|mainpage-description
@@ -233,12 +233,25 @@ Wikven
 </pre></div>
 <p>A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
 </p>
+<div class="mw-heading mw-heading2"><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div>
+<p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+</p>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
+<span class="k">**</span> mainpage|mainpage-description
+<span class="k">*</span> sidebar-docs
+<span class="k">**</span> Special:MyLanguage/Getting Started|sidebar-getting-started
+<span class="k">**</span> Special:MyLanguage/Images|sidebar-images
+<span class="k">*</span> sidebar-references
+<span class="k">**</span> Special:MyLanguage/Licenses|sidebar-licenses
+</pre></div>
+<p>The main page keeps its plain <code>mainpage</code> entry, because that target is a message: the prefix goes in the message instead. Write <code>Special:MyLanguage/index</code> in <code>MediaWiki:Mainpage.wikitext</code> (<code>index</code> being whatever <code>WikvenMainPage</code> names), as Meta-Wiki does. Every skin points its logo at that same message, so the logo follows the reader's language too. The cost is that the wiki stops recognising the page as its main page: the page title shows in the browser tab, and MinervaNeue leaves out its main-page styling.
+</p>
 <div class="mw-heading mw-heading2"><h2 id="What_is_removed">What is removed</h2></div>
 <p>Some default sidebar blocks need a live wiki, so Wikven drops them from the static export: the <b>toolbox</b> (What links here, Special pages, Printable version, and so on) and the <b>search</b> box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="See_also">See also</h2></div>
 <ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar" class="extiw" title="mw:Special:MyLanguage/Manual:Interface/Sidebar">Manual:Interface/Sidebar</a></li></ul>
-<style data-mw-deduplicate="TemplateStyles:r74">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Pages/en.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="../Images/en.html" title="Special:MyLanguage/Images">Images</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Pages/en.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="../Images/en.html" title="Special:MyLanguage/Images">Images</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Editing_sidebar/en.html">Editing_sidebar/en.html</a>"</div></div>
@@ -255,8 +268,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="FuzzyBot"
   				data-user-gender="unknown"
-  				data-timestamp="1786823937">
-  				<span>Last edited on 15 August 2026, at 19:58</span>
+  				data-timestamp="1786826825">
+  				<span>Last edited on 15 August 2026, at 20:47</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -279,7 +292,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 19:58.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 20:47.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
