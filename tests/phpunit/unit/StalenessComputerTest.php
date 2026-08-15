@@ -299,6 +299,17 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		];
 	}
 
+	public function testACommentMerelyMentioningAVerbatimTagDoesNotSwallowLaterUnits() {
+		// An HTML comment is inert to MediaWiki's parser, so a tag name it merely mentions -- as a
+		// reviewer note might -- must not read as a real, unclosed opener; that would otherwise run
+		// to the end of the page and hide the second <translate> block entirely.
+		$text =
+			"<translate>\n<!--T:1-->\nOne.\n</translate>\n"
+			. "<!-- reviewer: do not wrap this in <nowiki> -->\n"
+			. "<translate>\n<!--T:2-->\nTwo.\n</translate>";
+		$this->assertSame([1, 2], array_keys(StalenessComputer::splitUnits($text)));
+	}
+
 	public function testMarkIgnoresATranslatePairAfterAnUnclosedVerbatimTag() {
 		// The same rule applies to marking: nothing after the unclosed tag is numbered.
 		$text = "<translate>\nReal.\n</translate>\n<pre>\n<translate>\nExample.\n</translate>";

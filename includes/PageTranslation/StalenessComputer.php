@@ -280,15 +280,43 @@ class StalenessComputer {
 	 *
 	 * An unclosed verbatim tag runs to the end of the page, matching how MediaWiki renders it. That
 	 * is the safer reading: the alternative -- treating the span as absent -- would hand the rest of
-	 * the page back to the marker scan, turning example text into counted units.
+	 * the page back to the marker scan, turning example text into counted units. But an HTML comment
+	 * is inert to MediaWiki's parser, so a tag name it merely mentions -- e.g. "<!-- don't wrap this
+	 * in <nowiki> -->" -- must not seed a span in the first place: read as a real opener, that "runs
+	 * to the end of the page" rule would swallow every marker after it. Scanning match by match,
+	 * instead of in one preg_match_all pass, lets a match like that be skipped in place, so a genuine
+	 * span later in the page is still found.
 	 *
 	 * @return list<array{int,int}>
 	 */
 	private static function verbatimRanges(string $text): array {
+		$comments = self::commentRanges($text);
 		// The attribute run is lazy so a self-closing tag closes on its own "/>" instead of the
 		// attributes swallowing the slash and leaving the tag to match as unclosed.
 		$pattern = '#<(' . self::VERBATIM_TAGS . ')(?:\s[^>]*?)?(?:/\s*>|>.*?</\1\s*>|>.*)#is';
-		if (!preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE)) {
+
+		$ranges = [];
+		$offset = 0;
+		$length = strlen($text);
+		while ($offset < $length && preg_match($pattern, $text, $match, PREG_OFFSET_CAPTURE, $offset)) {
+			$start = $match[0][1];
+			$comment = self::containingRange($start, $comments);
+			if ($comment !== null) {
+				// A false opener inside a comment; resume right after it instead of accepting a
+				// match that would otherwise run to the end of the page.
+				$offset = $comment[1];
+				continue;
+			}
+			$end = $start + strlen($match[0][0]);
+			$ranges[] = [$start, $end];
+			$offset = $end;
+		}
+		return $ranges;
+	}
+
+	/** Byte ranges of the HTML comments in a page, each as [start, endExclusive]. */
+	private static function commentRanges(string $text): array {
+		if (!preg_match_all('/<!--.*?-->/s', $text, $matches, PREG_OFFSET_CAPTURE)) {
 			return [];
 		}
 		$ranges = [];
@@ -303,12 +331,21 @@ class StalenessComputer {
 	 * @param list<array{int,int}> $ranges
 	 */
 	private static function insideVerbatim(int $offset, array $ranges): bool {
-		foreach ($ranges as [$start, $end]) {
-			if ($offset >= $start && $offset < $end) {
-				return true;
+		return self::containingRange($offset, $ranges) !== null;
+	}
+
+	/**
+	 * @param int $offset
+	 * @param list<array{int,int}> $ranges
+	 * @return ?array{int,int} The range in $ranges containing $offset, or null.
+	 */
+	private static function containingRange(int $offset, array $ranges): ?array {
+		foreach ($ranges as $range) {
+			if ($offset >= $range[0] && $offset < $range[1]) {
+				return $range;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/** Strip <translate> wrapper tags and surrounding whitespace so the hash tracks unit content only. */
