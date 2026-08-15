@@ -7,6 +7,7 @@ extensions:
   - TemplateStyles
   - Translate
   - UniversalLanguageSelector
+# With Vector from default.yml, this is the whole supported set.
 skins:
   - Citizen
   - MinervaNeue
