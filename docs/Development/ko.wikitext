@@ -93,11 +93,11 @@
 <!--T:22 @9c7c0fee-->
 == 지속적 통합 ==
 
-<!--T:23 @89a2af99-->
+<!--T:23 @46577bba-->
 * <code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행합니다.
-* <code>docker-build.yml</code>은 이미지를 빌드하고 <code>main</code>에서 <code>ghcr.io/chaotic-ground/wikven</code>에 게시합니다.
+* <code>docker-image.yml</code>은 이미지를 빌드하고 <code>main</code>에서 <code>ghcr.io/chaotic-ground/wikven</code>에 게시합니다.
 * <code>deploy-docs.yml</code>은 이미지로 <code>docs/</code> 디렉터리를 빌드하고 그 결과를 GitHub Pages에 배포하므로, 이 사이트 자체가 하나의 {{SITENAME}} 빌드입니다.
-* <code>build-binary.yml</code>은 각 플랫폼용 단독 실행 [[$1|바이너리]]를 빌드하는 재사용 가능한 워크플로입니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다.
+* <code>binary.yml</code>은 단독 실행 [[$1|바이너리]]를 빌드합니다. 해당 파일을 건드리는 풀 리퀘스트에서, 그리고 릴리스 때는 각 플랫폼용으로 실행됩니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다.
 
 <!--T:24 @b9edc4cf-->
 버전은 [https://www.conventionalcommits.org/ Conventional Commits]를 따르며, release-please가 이를 사용해 변경 로그를 생성하고 버전을 올립니다.

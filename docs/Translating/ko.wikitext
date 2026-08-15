@@ -10,8 +10,8 @@
 <!--T:3 @fb88aa9b-->
 [[$1|<code>.wikven.yaml</code>]]의 <code>extensions</code>에 <code>Translate</code>를 추가하고, Translate가 의존하는 <code>UniversalLanguageSelector</code>도 함께 추가합니다. 둘 다 {{SITENAME}} 이미지에 번들되어 있으므로 설치할 것은 없습니다.
 
-<!--T:4 @b79a448f-->
-정적 내보내기는 UniversalLanguageSelector의 런타임 웹폰트(라이브 엔드포인트에서 불러옴)를 제공할 수 없으므로 {{SITENAME}}은 이를 끕니다. 독자는 각 문자를 자신의 시스템 글꼴로 보게 됩니다.
+<!--T:4 @4641fec3-->
+정적 내보내기는 UniversalLanguageSelector의 런타임 웹폰트(라이브 엔드포인트에서 불러옴)를 제공할 수 없으므로, {{SITENAME}}은 기본적으로 이를 끄고 독자는 각 문자를 자신의 시스템 글꼴로 보게 됩니다. 대신 <code>WikvenBundleWebfonts</code>를 설정하면 글꼴을 사이트에 구워 넣으므로, 어떤 문자의 글꼴이 없는 시스템의 독자도 의도한 서체를 볼 수 있습니다.
 
 <!--T:5 @4bb4feb7-->
 번역할 언어를 나열하지 않습니다. Translate 자체와 마찬가지로, 어떤 언어의 번역이 존재하는 순간 그 언어가 존재하게 됩니다. 문서를 작성하는 언어는 원본 언어로 유지됩니다.
