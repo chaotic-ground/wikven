@@ -41,25 +41,31 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # On a release (tag input set) publish the immutable version tags plus latest, else just latest.
-      - name: Compute image tags
-        id: tags
-        env:
-          TAG: ${{ inputs.tag }}
-        run: |
-          img=ghcr.io/chaotic-ground/wikven
-          if [ -n "$TAG" ]; then
-            v=${TAG#v}
-            printf 'tags=%s\n' "$img:$v,$img:${v%.*},$img:${v%%.*},$img:latest" >> "$GITHUB_OUTPUT"
-          else
-            printf 'tags=%s\n' "$img:latest" >> "$GITHUB_OUTPUT"
-          fi
+      # metadata-action computes proper semver tags (a prerelease is not tagged :latest or a bare
+      # major/minor) and emits the org.opencontainers.image.* labels, without which GHCR does not link
+      # the published package back to this repository.
+      - name: Compute image tags and labels
+        id: meta
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051  # v5.10.0
+        with:
+          images: ghcr.io/chaotic-ground/wikven
+          # latest is handled explicitly below; the default "auto" keys off a tag push, and releases
+          # reach this workflow through workflow_call with the tag as an input instead.
+          flavor: latest=false
+          tags: |
+            type=semver,pattern={{version}},value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
+            type=semver,pattern={{major}},value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
+            type=raw,value=latest,enable=${{ inputs.tag == '' || !contains(inputs.tag, '-') }}
 
       - name: Build and push the image
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a  # v7.3.0
         with:
           context: .
           push: ${{ github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main' }}
-          tags: ${{ steps.tags.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
           # Layer cache shared with the other image builds, so a PR reuses main's cached layers.
           cache-from: type=gha,scope=wikven-image
           cache-to: type=gha,mode=max,scope=wikven-image
