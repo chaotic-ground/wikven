@@ -33,18 +33,21 @@ ARG ULS_VERSION=REL1_46
 # including a require-dev one that --no-dev then never installs. Translate's dev requirements pin
 # a phpcs release that has one, which broke every build reaching this layer without a warm cache.
 # The audit still reports on what is installed; only the hard stop is off.
-# The clones' .git go in the same layer that made them, or the image carries them anyway.
+# Fetched as tarballs: a clone carries a .git nothing here reads, and transfers several times the
+# bytes for it. Downloaded before extracting rather than piped, so a failed fetch fails the build
+# instead of feeding tar an empty stream.
 RUN composer config --global policy.advisories.block false \
- && git clone --depth 1 --branch "$ULS_VERSION" \
-      https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector.git \
-      /var/www/html/extensions/UniversalLanguageSelector \
- && git clone --depth 1 --branch "$TRANSLATE_VERSION" \
-      https://github.com/wikimedia/mediawiki-extensions-Translate.git \
-      /var/www/html/extensions/Translate \
+ && ext=/var/www/html/extensions \
+ && curl -fsSL -o /tmp/uls.tar.gz \
+      "https://codeload.github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector/tar.gz/refs/heads/$ULS_VERSION" \
+ && curl -fsSL -o /tmp/translate.tar.gz \
+      "https://codeload.github.com/wikimedia/mediawiki-extensions-Translate/tar.gz/refs/heads/$TRANSLATE_VERSION" \
+ && mkdir -p "$ext/UniversalLanguageSelector" "$ext/Translate" \
+ && tar -xzf /tmp/uls.tar.gz --strip-components=1 -C "$ext/UniversalLanguageSelector" \
+ && tar -xzf /tmp/translate.tar.gz --strip-components=1 -C "$ext/Translate" \
+ && rm /tmp/uls.tar.gz /tmp/translate.tar.gz \
  && composer install --no-dev --no-interaction \
-      --working-dir=/var/www/html/extensions/Translate \
- && rm -rf /var/www/html/extensions/UniversalLanguageSelector/.git \
-      /var/www/html/extensions/Translate/.git
+      --working-dir="$ext/Translate"
 
 COPY ./ /var/www/html/extensions/Wikven
 COPY includes/WikvenSettings.php /var/www/html/
