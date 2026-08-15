@@ -420,13 +420,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	
 >
 	<div class="citizen-menu__heading">
-		도구
+		Skins
 	</div>
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
 			
-			<li id="t-wikven-skin-vector-2022" class="mw-list-item"><a href="../../Development/ko.html"><span>벡터 (2022)</span></a></li><li id="t-wikven-skin-citizen" class="mw-list-item active"><span>시티즌</span></li>
+			<li id="t-wikven-skin-vector-2022" class="mw-list-item"><a href="../../Development/ko.html"><span>벡터 (2022)</span></a></li><li id="t-wikven-skin-citizen" class="mw-list-item active"><span>시티즌</span></li><li id="t-wikven-skin-minerva" class="mw-list-item"><a href="../../minerva/Development/ko.html"><span>미네르바 노이에</span></a></li>
 		</ul>
 		
 	</div></nav>
@@ -443,9 +443,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				<div id="contentSub" lang="ko" dir="ltr"><div id="mw-content-subtitle" lang="ko" dir="ltr"></div></div>
 				
 				
-				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><section id="citizen-section-0" class="citizen-section"><meta property="mw:PageProp/toc"/>
+				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 96% 완료했습니다.</div><div class="mw-pt-translate-header" dir="ltr" lang="ko"><span class="mw-translate-fuzzy">오래된 번역은 이렇게 표시됩니다.</span></div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><section id="citizen-section-0" class="citizen-section"><meta property="mw:PageProp/toc"/>
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Development.html" class="mw-pt-progress mw-pt-progress--complete" title="Development (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>이 문서는 Wikven에 작업하고자 하는 사람들을 위해 Wikven이 어떻게 만들어지는지 설명합니다. Wikven은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki" class="extiw" title="mw:Special:MyLanguage/MediaWiki">MediaWiki</a> 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다.
 </p><p><span id="Architecture"></span>
 </p>
@@ -522,10 +522,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="Continuous_integration"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="지속적_통합"><span id=".EC.A7.80.EC.86.8D.EC.A0.81_.ED.86.B5.ED.95.A9"></span>지속적 통합</h2></div><section id="citizen-section-9" class="citizen-section">
+<div class="mw-translate-fuzzy">
 <ul><li><code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행합니다.</li>
 <li><code>docker-build.yml</code>은 이미지를 빌드하고 <code>main</code>에서 <code>ghcr.io/chaotic-ground/wikven</code>에 게시합니다.</li>
 <li><code>deploy-docs.yml</code>은 이미지로 <code>docs/</code> 디렉터리를 빌드하고 그 결과를 GitHub Pages에 배포하므로, 이 사이트 자체가 하나의 Wikven 빌드입니다.</li>
 <li><code>build-binary.yml</code>은 각 플랫폼용 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>를 빌드하는 재사용 가능한 워크플로입니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다.</li></ul>
+</div>
 <p>버전은 <a rel="nofollow" class="external text" href="https://www.conventionalcommits.org/">Conventional Commits</a>를 따르며, release-please가 이를 사용해 변경 로그를 생성하고 버전을 올립니다.
 </p>
 </section></div>
@@ -545,7 +547,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Development/ko.html" title="이 문서는 2026년 8월 15일 (토) 15:25에 마지막으로 편집되었습니다." data-timestamp="1786807537"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Development/ko.html" title="이 문서는 2026년 8월 15일 (토) 15:42에 마지막으로 편집되었습니다." data-timestamp="1786808536"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
 			
 		</ul>
 		
@@ -716,7 +718,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 15:25에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 15:42에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
