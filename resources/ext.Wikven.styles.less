@@ -26,6 +26,21 @@
   display: none;
 }
 
+// Core hides the emptied toolbox portlet itself; these are the boxes Timeless
+// and Citizen keep drawing around it, headings and all.
+#site-tools,
+#citizen-page-more-dropdown {
+  display: none;
+}
+
+// Vector's box also carries the page tabs, but only below the width at which it
+// hides the tab row.
+@media ( min-width: @min-width-breakpoint-tablet ) {
+  .vector-page-tools-landmark {
+    display: none;
+  }
+}
+
 a.new {
   pointer-events: none;
 }
