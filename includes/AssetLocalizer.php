@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
+use Wikimedia\Minify\CSSMin;
 
 /** Rewrites image url()s in dumped CSS/JS to local copies, avoiding load.php references. */
 class AssetLocalizer {
@@ -82,9 +83,14 @@ class AssetLocalizer {
 		return is_string($decoded) ? $decoded : $text;
 	}
 
-	/** Encode raw image bytes as a data: URI usable unquoted inside url(). */
+	/**
+	 * Encode raw image bytes as a data: URI usable unquoted inside url().
+	 *
+	 * CSSMin percent-encodes printable text (an SVG, typically) instead of base64-encoding it, which
+	 * is what ResourceLoader itself does for the same images when it inlines them into a CSS bundle.
+	 */
 	private static function dataUri(string $bytes, string $mime): string {
-		return 'data:' . $mime . ';base64,' . base64_encode($bytes);
+		return CSSMin::encodeStringAsDataURI($bytes, $mime);
 	}
 
 	/**
