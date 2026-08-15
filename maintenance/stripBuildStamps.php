@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven;
 
+use FilesystemIterator;
 use Maintenance;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
@@ -25,8 +26,13 @@ class StripBuildStamps extends Maintenance {
 		}
 
 		$changed = 0;
-		foreach (glob("$dir/*.html") as $file) {
-			$html = (string)file_get_contents($file);
+		// A configured directory containing a glob metacharacter would make a glob pattern built from it
+		// match nothing, silently leaving a per-build request id in every page.
+		foreach (new FilesystemIterator($dir, FilesystemIterator::SKIP_DOTS) as $file) {
+			if (!$file->isFile() || $file->getExtension() !== 'html') {
+				continue;
+			}
+			$html = (string)file_get_contents($file->getPathname());
 			$stripped = BuildStamps::strip($html);
 			if ($stripped !== $html) {
 				file_put_contents($file, $stripped, LOCK_EX);
