@@ -1,0 +1,48 @@
+---
+name: Translations
+
+# Report out-of-date and missing translations in this repository's own docs, and dogfood the
+# composite action that does it: nothing else in continuous integration runs that action.
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'actions/check-translations/**'
+      - 'includes/PageTranslation/**'
+      - 'maintenance/checkTranslations.php'
+      - 'bin/entrypoint'
+      - '.github/workflows/translations.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  check-translations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+
+      # Reader only; docker-image.yml exports this cache. See the note in smoke.yml.
+      - name: Build and load this pull request's image
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a  # v7.3.0
+        with:
+          context: .
+          load: true
+          tags: wikven
+          cache-from: type=gha,scope=wikven-image
+
+      - name: Check the docs translations
+        uses: ./actions/check-translations
+        with:
+          source: docs
+          image: wikven
+          cache: false  # the image was just built locally; nothing to cache or pull
+          gate: false  # translating is not the job of whoever edits the English source
