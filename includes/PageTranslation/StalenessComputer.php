@@ -48,9 +48,9 @@ class StalenessComputer {
 	private const VERBATIM_TAGS = 'syntaxhighlight|source|nowiki|pre';
 
 	/**
-	 * A <translate> block, its contents captured. Exactly the two spellings parse() accepts: it takes
-	 * no other attribute, so anything else is a tag containsMarkup() offers for marking and parse()
-	 * then refuses, which checkTranslations reports rather than this quietly reading as a block.
+	 * A <translate> block, its contents captured. Exactly the two spellings parse() accepts: any other
+	 * attribute makes a tag it opens no block for, and reading one here would put markers where the
+	 * engine sees none. checkTranslations compares the two readings and reports where they differ.
 	 */
 	private const TRANSLATE_BLOCK = '#(<translate(?: nowrap)?>)(.*?)(</translate>)#s';
 
