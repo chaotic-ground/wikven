@@ -97,14 +97,8 @@ jobs:
       # mago.toml extends the shared style config installed under vendor/, so install it first.
       - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
 
-      - id: version
-        run: |
-          php -r '$e = json_decode(file_get_contents("composer.json"), true)["extra"];
-                  echo "v=", $e["mago-version"], "\n";' >> "$GITHUB_OUTPUT"
-
-      - uses: chaotic-ground/setup-mago@2b05b7dc0ef2b491d204a80173c5e573b208d032  # v1.0.0
-        with:
-          version: ${{ steps.version.outputs.v }}
+      # No version input: the action reads extra.mago-version out of composer.json itself.
+      - uses: chaotic-ground/setup-mago@d79272ad1380980e87ff0c7da01b7131ccb0083b  # v1.1.0
 
       - run: mago format --check
       - run: mago lint
