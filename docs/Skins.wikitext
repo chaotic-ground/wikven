@@ -23,7 +23,7 @@ You can change the skin by setting <code>skins</code>. The first skin in the lis
 
 <syntaxhighlight lang="yaml">
 skins:
-  - MonoBook
+  - MinervaNeue
 </syntaxhighlight>
 
 <translate>
