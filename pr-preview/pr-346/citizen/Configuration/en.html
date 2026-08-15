@@ -99,7 +99,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--images" title="files">
 		<span class="citizen-ui-icon mw-ui-icon-image mw-ui-icon-wikimedia-image"></span>
-		<span>3</span>
+		<span>4</span>
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--users" title="users">
 		<span class="citizen-ui-icon mw-ui-icon-userAvatar mw-ui-icon-wikimedia-userAvatar"></span>
@@ -107,7 +107,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="edits">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>670</span>
+		<span>672</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -516,7 +516,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A name in <code>WikvenRepositories</code> that is already bundled with wikven is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
 </p><p>Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and Composer when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">binary</a> they must be on your <code>PATH</code>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r70">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="https://commons.wikimedia.org/wiki/File:Xclamation_SVG.svg" class="mw-file-description"><img src="../img-32be870a65b9.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-395e50026be7.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r72">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
 </div>
 <p>This very site fetches <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue" class="extiw" title="mw:Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="../Getting_Started/en.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 </p>
@@ -532,7 +532,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>It is also in the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/default.yml">repository</a>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r72">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Troubleshooting/en.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a></div><div class="wikven-prevnext-next"><a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a> →</div></div>
+<style data-mw-deduplicate="TemplateStyles:r74">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Troubleshooting/en.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a></div><div class="wikven-prevnext-next"><a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a> →</div></div>
 
 </section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Configuration/en.html">Configuration/en.html</a>"</div></div>
@@ -551,7 +551,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Configuration/en.html" title="This page was last edited on 15 August 2026, at 13:52." data-timestamp="1786801931"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="../Configuration/en.html" title="This page was last edited on 15 August 2026, at 14:04." data-timestamp="1786802653"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -757,7 +757,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 13:52.</div>
+		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 14:04.</div>
 		    </section>
 		</div>
 </footer>		</div>
