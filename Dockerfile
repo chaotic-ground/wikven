@@ -33,6 +33,7 @@ ARG ULS_VERSION=REL1_46
 # including a require-dev one that --no-dev then never installs. Translate's dev requirements pin
 # a phpcs release that has one, which broke every build reaching this layer without a warm cache.
 # The audit still reports on what is installed; only the hard stop is off.
+# The clones' .git go in the same layer that made them, or the image carries them anyway.
 RUN composer config --global policy.advisories.block false \
  && git clone --depth 1 --branch "$ULS_VERSION" \
       https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector.git \
@@ -41,7 +42,9 @@ RUN composer config --global policy.advisories.block false \
       https://github.com/wikimedia/mediawiki-extensions-Translate.git \
       /var/www/html/extensions/Translate \
  && composer install --no-dev --no-interaction \
-      --working-dir=/var/www/html/extensions/Translate
+      --working-dir=/var/www/html/extensions/Translate \
+ && rm -rf /var/www/html/extensions/UniversalLanguageSelector/.git \
+      /var/www/html/extensions/Translate/.git
 
 COPY ./ /var/www/html/extensions/Wikven
 COPY includes/WikvenSettings.php /var/www/html/
