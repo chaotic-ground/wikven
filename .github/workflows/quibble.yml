@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@d799e5bb348756ea1588f2b5f2ca7fc09fdbdac9  # v2.0.1
+      - uses: femiwiki/quibble-action@3ce3d15fc42e28f2b4a01da22957f263286b4361  # v2.0.2
         with:
           stage: phan
           mediawiki-version: ${{ matrix.mediawiki-version }}
@@ -42,7 +42,7 @@ jobs:
         with:
           persist-credentials: false
       - id: quibble
-        uses: femiwiki/quibble-action@d799e5bb348756ea1588f2b5f2ca7fc09fdbdac9  # v2.0.1
+        uses: femiwiki/quibble-action@3ce3d15fc42e28f2b4a01da22957f263286b4361  # v2.0.2
         with:
           stage: coverage
           # Coverage tooling lives only on MediaWiki master.
