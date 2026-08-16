@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\Hooks\Adder;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Request\FauxRequest;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
@@ -13,6 +14,16 @@ use Wikimedia\TestingAccessWrapper;
  * @covers \MediaWiki\Extension\Wikven\Hooks\Adder
  */
 class AdderTest extends MediaWikiIntegrationTestCase {
+	/**
+	 * An OutputPage that answers getRequest(): the Minerva path asks the request which theme it is
+	 * rendering in, and a bare mock hands back null.
+	 */
+	private function outputPage() {
+		$out = $this->createMock(OutputPage::class);
+		$out->method('getRequest')->willReturn(new FauxRequest());
+		return $out;
+	}
+
 	/**
 	 * The footer project link shows a friendly host name for known forges and the
 	 * bare host otherwise, so it is not hardcoded to GitHub.
@@ -60,7 +71,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testHidesSearchBoxWithoutSifterSearch() {
 		$this->overrideConfigValue('WikvenSkins', ['vector']);
-		$out = $this->createMock(OutputPage::class);
+		$out = $this->outputPage();
 		$out->expects($this->once())
 			->method('addInlineStyle')
 			->with($this->stringContains('#p-search'));
@@ -79,7 +90,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testScriptPathClearedForCitizen(string $skin, bool $overridden) {
 		$this->overrideConfigValue('WikvenSkins', [$skin]);
-		$out = $this->createMock(OutputPage::class);
+		$out = $this->outputPage();
 		$vars = [];
 		$out->method('addJsConfigVars')->willReturnCallback(
 			static function ($keys, $value = null) use (&$vars) {
@@ -113,7 +124,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	public function testSearchShortcutsAreTakenOverForCitizenOnly(string $skin, bool $expected) {
 		$this->overrideConfigValue('WikvenSkins', [$skin]);
 		$modules = [];
-		$out = $this->createMock(OutputPage::class);
+		$out = $this->outputPage();
 		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
 			$modules[] = $name;
 		});
@@ -151,7 +162,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSkins', $skins);
 		$this->setMwGlobals('wgCitizenEnablePreferences', $preferences);
 		$modules = [];
-		$out = $this->createMock(OutputPage::class);
+		$out = $this->outputPage();
 		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
 			$modules[] = $name;
 		});

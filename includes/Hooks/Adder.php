@@ -6,6 +6,7 @@ use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SkinList;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Output\OutputPage;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
@@ -72,6 +73,11 @@ class Adder implements
 		// One skin means no skin list, so nothing refills the toolbox and its box stays empty.
 		if (count($GLOBALS['wgWikvenSkins'] ?? []) < 2) {
 			$out->addModuleStyles('ext.Wikven.emptyToolbox');
+		} else {
+			// Every skin renders the settings page, so every skin has its skin list to fill in. The
+			// module takes the list from the chrome, wherever the skin keeps it, and leaves where
+			// the build has already written one -- which is Minerva, and Minerva alone.
+			$out->addModules('ext.Wikven.appearance');
 		}
 
 		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'citizen') {
@@ -108,7 +114,6 @@ class Adder implements
 		// switches from, and without it the settings page would have nothing to offer.
 		if ($skin->getSkinName() === 'minerva') {
 			$out->getRequest()->setVal('minervanightmode', 'day');
-			$out->addModules('ext.Wikven.appearance');
 			// The text size a reader picks on the settings page has to hold on the pages they then
 			// read, so every page carries the class it is set from and the stylesheet it means
 			// something in. MobileFrontend loads that stylesheet when it is serving a mobile view,
@@ -139,10 +144,8 @@ class Adder implements
 	 * The one control not offered is "Expand all sections": clientPreferences.js draws a preference
 	 * only when the page carries its class, and no page here does, because nothing in a bake
 	 * collapses a section to begin with.
-	 *
-	 * @param OutputPage $out
 	 */
-	private function prepareSettingsPage($out): void {
+	private function prepareSettingsPage(OutputPage $out): void {
 		$page = (string)( $GLOBALS['wgWikvenSettingsPage'] ?? '' );
 		$title = $out->getTitle();
 		if ($page === '' || !$title || $title->getPrefixedText() !== $page) {

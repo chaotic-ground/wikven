@@ -228,3 +228,19 @@ test("switching the skin on a source page keeps the article", async ({
 	await expect(page.locator("#firstHeading")).toHaveText(ENGLISH_HEADING);
 	expect(missing, missing.join("; ")).toEqual([]);
 });
+
+// The generated settings page carries a skins section in every skin, and a section with a heading
+// and a description and nothing under it reads as a broken page. Minerva's list is written by the
+// build; the others are filled from the chrome by ext.Wikven.appearance.
+test("the settings page lists the skins, whichever skin renders it", async ({
+	page,
+}) => {
+	for (const skin of [main, ...others]) {
+		const path = skin === main ? "Settings.html" : `${skin}/Settings.html`;
+		await page.goto(path);
+		await expect(
+			page.locator(".wikven-skin-item"),
+			`${skin} leaves the skins section empty`,
+		).toHaveCount(order.length);
+	}
+});
