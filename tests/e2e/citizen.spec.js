@@ -77,10 +77,15 @@ test("Citizen's search shortcuts open the search the export has", async ({
 }) => {
 	// The skin binds "/" and Ctrl+K to its command palette in skin.js whether or not the trigger
 	// they open survived the bake, so left alone they fetch a module the export does not ship. What
-	// this asserts is both halves: the form opens, and nothing goes to a backend.
+	// this asserts is both halves: the form opens, and neither module is asked for.
+	//
+	// Narrowed to those two rather than to any backend request, because focusing a text field also
+	// has UniversalLanguageSelector fetch its input methods (#398), which is older than this and not
+	// Citizen's. "a Citizen page gets everything it asks for" below still holds the wider line.
+	const PALETTE = /skins\.citizen\.commandPalette|mediawiki\.notification/;
 	const backend = [];
 	page.on("request", (request) => {
-		if (BACKEND.test(request.url())) {
+		if (BACKEND.test(request.url()) && PALETTE.test(request.url())) {
 			backend.push(request.url());
 		}
 	});
