@@ -3,7 +3,7 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-Configuration lives in a <code>.wikven.yaml</code> file in your source directory. It follows the same shape as {{ml|Manual:YAML settings file format|MediaWiki's own YAML settings format}}: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
+Configuration lives in a <code>.wikven.yaml</code> file in your source directory. It follows the same shape as [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:YAML_settings_file_format</tvar> MediaWiki's own YAML settings format]: a top-level <code>extensions</code> list, a <code>skins</code> list, and a <code>config</code> map.
 
 <!--T:2-->
 The file name is flexible. Wikven accepts <code>.wikven.yaml</code>, <code>.wikven.yml</code> or <code>.wikven.json</code>, and the same three without the leading dot (<code>wikven.yaml</code>, <code>wikven.yml</code>, <code>wikven.json</code>); the <code>.json</code> forms use the same structure, since YAML is a superset of JSON. If more than one is present the first wins, in that order, and the rest are ignored with a warning, so a dotted name beats a plain one, YAML beats JSON, and <code>.yaml</code> beats <code>.yml</code>.
@@ -26,7 +26,7 @@ config:
 <translate>
 <!--T:4-->
 == <code>extensions</code> ==
-A list of extension names to load. {{ml|Bundled extensions|Bundled extensions}} work by name alone; a name that is not bundled is treated as third-party and fetched from a source you declare in [[#WikvenRepositories|<code>WikvenRepositories</code>]].
+A list of extension names to load. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions</tvar> Bundled extensions] work by name alone; a name that is not bundled is treated as third-party and fetched from a source you declare in [[#WikvenRepositories|<code>WikvenRepositories</code>]].
 
 <!--T:5-->
 == <code>skins</code> ==
@@ -36,13 +36,13 @@ A list of skin names to enable. The first one is used as the default skin. As wi
 == <code>config</code> ==
 
 <!--T:7-->
-A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any {{ml|Manual:Configuration settings|configuration setting}} can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
+A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
 
 <!--T:8-->
 === <code>WikvenLogos</code> ===
 
 <!--T:9-->
-The site's header logos. It mirrors MediaWiki's {{ml|Manual:$wgLogos|$wgLogos}}, with the same keys (<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code>, and so on), except each value is the name of an image file in your source directory rather than a URL:
+The site's header logos. It mirrors MediaWiki's [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgLogos</tvar> $wgLogos], with the same keys (<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code>, and so on), except each value is the name of an image file in your source directory rather than a URL:
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
@@ -120,19 +120,19 @@ Each entry chooses one of three methods by the key it carries:
 A name in <code>WikvenRepositories</code> that is already bundled with wikven is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
 
 <!--T:24-->
-Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and Composer when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] they must be on your <code>PATH</code>.
+Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and [<tvar name="2">https://getcomposer.org/</tvar> Composer] when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] they must be on your <code>PATH</code>.
 
 <!--T:25-->
 {{note|The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}
 
 <!--T:26-->
-This very site fetches {{ml|Extension:TabberNeue|TabberNeue}} this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
+This very site fetches [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue</tvar> TabberNeue] this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 
 <!--T:27-->
 === <code>ContentNamespaces</code> ===
 
 <!--T:28-->
-A standard MediaWiki setting ({{ml|Manual:$wgContentNamespaces|<code>$wgContentNamespaces</code>}}) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven defaults it to <code>[0, 6]</code>, the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see [[<tvar name="1">Special:MyLanguage/Pages#Categories</tvar>|Pages#Categories]]. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
+A standard MediaWiki setting ([<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces</tvar> <code>$wgContentNamespaces</code>]) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven defaults it to <code>[0, 6]</code>, the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see [[<tvar name="1">Special:MyLanguage/Pages#Categories</tvar>|Pages#Categories]]. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
 
 <!--T:29-->
 == Defaults ==

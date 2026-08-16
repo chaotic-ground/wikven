@@ -1,7 +1,7 @@
 <languages />
 <translate>
 <!--T:1-->
-You can choose {{ml|Bundled extensions and skins|bundled skins}} in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]].
+You can choose [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins</tvar> bundled skins] in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]].
 
 <!--T:2-->
 == Supported skins ==
@@ -10,9 +10,9 @@ You can choose {{ml|Bundled extensions and skins|bundled skins}} in [[<tvar name
 Wikven supports three skins. This documentation site is built with all three, so every change is exercised in each of them.
 
 <!--T:4-->
-* {{ml|Skin:Vector|Vector}} (default; <code>Vector</code> selects the skin's <code>vector-2022</code> variant, Vector 2022)
-* {{ml|Skin:MinervaNeue|MinervaNeue}} (mobile-oriented)
-* {{ml|Skin:Citizen|Citizen}} (third-party, fetched at build time)
+* [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector</tvar> Vector] (default; <code>Vector</code> selects the skin's <code>vector-2022</code> variant, Vector 2022)
+* [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MinervaNeue</tvar> MinervaNeue] (mobile-oriented)
+* [<tvar name="3">https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Citizen</tvar> Citizen] (third-party, fetched at build time)
 
 <!--T:11-->
 Any other skin is untested rather than refused: every skin bundled with MediaWiki is available by name, MonoBook among them, and a third-party skin can be fetched like Citizen is.
@@ -21,7 +21,7 @@ Any other skin is untested rather than refused: every skin bundled with MediaWik
 === Minerva and MobileFrontend ===
 
 <!--T:13-->
-MinervaNeue is bundled with MediaWiki; {{ml|Extension:MobileFrontend|MobileFrontend}}, which it grew up alongside, is not. Without it the skin skips its own <code>initMobile.js</code> and loses what that sets up, the table of contents toggle among it. Fetch the pair if you enable Minerva. This site does, so the recommended configuration is the one every build renders.
+MinervaNeue is bundled with MediaWiki; [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:MobileFrontend</tvar> MobileFrontend], which it grew up alongside, is not. Without it the skin skips its own <code>initMobile.js</code> and loses what that sets up, the table of contents toggle among it. Fetch the pair if you enable Minerva. This site does, so the recommended configuration is the one every build renders.
 </translate>
 
 <syntaxhighlight lang="yaml">

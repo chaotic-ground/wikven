@@ -13,7 +13,7 @@ Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a r
 == Gadgets ==
 
 <!--T:5-->
-To use {{ml|Extension:Gadgets|gadgets}}, enable the bundled Gadgets extension in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]]:
+To use [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Gadgets</tvar> gadgets], enable the bundled Gadgets extension in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]]:
 </translate>
 
 <syntaxhighlight lang="yaml" copy>

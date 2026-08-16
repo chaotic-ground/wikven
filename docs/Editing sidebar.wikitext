@@ -52,7 +52,7 @@ Some default sidebar blocks need a live wiki, so {{SITENAME}} drops them from th
 == See also ==
 
 <!--T:6-->
-* {{ml|Manual:Interface/Sidebar}}
+* [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar</tvar> Manual:Interface/Sidebar]
 </translate>
 
 {{prevnext|Pages|Images}}

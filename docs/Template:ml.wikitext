@@ -5,4 +5,12 @@ Usage:
 
 * {{ml|link target on MediaWikiWiki}}
 * {{ml|link target on MediaWikiWiki|label}}
+
+The English source pages no longer use this. They spell the link out as an external
+link with the URL inside a <tvar>, so the link carries the external-link marker its
+target deserves and a translator never retypes the URL:
+
+* [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> Templates]
+
+The template stays for the translations that still transclude it.
 -->

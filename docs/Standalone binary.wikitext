@@ -117,8 +117,8 @@ The output is the same as the Docker image's: the binary embeds MediaWiki, the b
 The binary renders on its own, but uses these host programs when they are present:
 
 <!--T:21-->
-* '''ImageMagick''' and '''librsvg''' produce higher-quality thumbnails. Without them the binary uses the built-in GD library for raster images and serves SVG inline. See [[<tvar name="1">Special:MyLanguage/Images</tvar>|Images]].
-* '''git''' is needed only to fetch [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|third-party extensions and skins]].
+* '''[<tvar name="3">https://imagemagick.org/</tvar> ImageMagick]''' and '''[<tvar name="4">https://gitlab.gnome.org/GNOME/librsvg</tvar> librsvg]''' produce higher-quality thumbnails. Without them the binary uses the built-in [<tvar name="5">https://libgd.github.io/</tvar> GD] library for raster images and serves SVG inline. See [[<tvar name="1">Special:MyLanguage/Images</tvar>|Images]].
+* '''[<tvar name="6">https://git-scm.com/</tvar> git]''' is needed only to fetch [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|third-party extensions and skins]].
 
 <!--T:22-->
 {{note|Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|third-party extensions or skins]], relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.}}
