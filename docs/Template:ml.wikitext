@@ -1,8 +1,0 @@
-<onlyinclude>[[mw:Special:MyLanguage/{{{1|}}}|{{{2|{{{1|}}}}}}]]</onlyinclude><!--
-Links to an article on mediawiki.org (https://www.mediawiki.org/).
-
-Usage:
-
-* {{ml|link target on MediaWikiWiki}}
-* {{ml|link target on MediaWikiWiki|label}}
--->

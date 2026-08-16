@@ -9,13 +9,13 @@ Common problems and what to check.
 == Thumbnails look low quality ==
 
 <!--T:3-->
-The [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] falls back to the built-in GD library, which produces lower-quality thumbnails and supports fewer formats. Install '''ImageMagick''' and '''librsvg''' on the build host for better output, or use the Docker image, which bundles them. See [[<tvar name="2">Special:MyLanguage/Images</tvar>|Images]].
+The [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] falls back to the built-in [<tvar name="3">https://libgd.github.io/</tvar> GD] library, which produces lower-quality thumbnails and supports fewer formats. Install '''[<tvar name="4">https://imagemagick.org/</tvar> ImageMagick]''' and '''[<tvar name="5">https://gitlab.gnome.org/GNOME/librsvg</tvar> librsvg]''' on the build host for better output, or use the Docker image, which bundles them. See [[<tvar name="2">Special:MyLanguage/Images</tvar>|Images]].
 
 <!--T:4-->
 == The search box does nothing ==
 
 <!--T:5-->
-Search is client-side, built into {{SITENAME}} via SifterSearch and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See [[<tvar name="1">Special:MyLanguage/Searching</tvar>|Searching]].
+Search is client-side, built into {{SITENAME}} via [<tvar name="2">https://github.com/chaotic-ground/SifterSearch</tvar> SifterSearch] and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See [[<tvar name="1">Special:MyLanguage/Searching</tvar>|Searching]].
 
 <!--T:6-->
 == A page is missing from the site ==

@@ -3,7 +3,7 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-{{SITENAME}} can build a site in more than one language using MediaWiki's {{ml|Help:Extension:Translate|Translate extension}}. Translate normally expects translators to work in an in-wiki editor, which a static build has no room for, so {{SITENAME}} drives it from your source tree instead: you translate by adding files and committing them, the same way you write any other page.
+{{SITENAME}} can build a site in more than one language using MediaWiki's [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:Translate</tvar> Translate extension]. Translate normally expects translators to work in an in-wiki editor, which a static build has no room for, so {{SITENAME}} drives it from your source tree instead: you translate by adding files and committing them, the same way you write any other page.
 
 <!--T:2-->
 == Enabling translation ==
@@ -29,7 +29,7 @@ You do not list the languages you translate into: as with Translate itself, a la
 == Marking a page for translation ==
 
 <!--T:7-->
-Wrap the parts of a page that should be translated in <code>&lt;translate&gt;</code> tags, add <code>&lt;languages/&gt;</code> where you want the language bar, and give each unit a <code>&lt;!--T:n--&gt;</code> marker. This is Translate's own {{ml|Help:Extension:Translate/Page translation administration|page-translation markup}}:
+Wrap the parts of a page that should be translated in <code>&lt;translate&gt;</code> tags, add <code>&lt;languages/&gt;</code> where you want the language bar, and give each unit a <code>&lt;!--T:n--&gt;</code> marker. This is Translate's own [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:Translate/Page_translation_administration</tvar> page-translation markup]:
 </translate>
 
  <nowiki><languages/>

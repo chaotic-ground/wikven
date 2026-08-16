@@ -52,7 +52,7 @@ Enable Pages for the repository under '''Settings → Pages → Build and deploy
 == Any static host ==
 
 <!--T:7-->
-Because <code>dist/</code> is just files, you can serve it from any static host (Netlify, Cloudflare Pages, an object store like S3, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
+Because <code>dist/</code> is just files, you can serve it from any static host ([<tvar name="1">https://www.netlify.com/</tvar> Netlify], [<tvar name="2">https://pages.cloudflare.com/</tvar> Cloudflare Pages], an object store like [<tvar name="3">https://aws.amazon.com/s3/</tvar> S3], or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
 
 <!--T:8-->
 == Preview locally ==

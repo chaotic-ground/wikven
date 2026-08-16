@@ -3,16 +3,16 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-{{SITENAME}} authors content in {{ml|Wikitext}}, MediaWiki's markup, rather than Markdown. If you are coming from a Markdown-based site generator, here is what changes, and why you might want it.
+{{SITENAME}} authors content in [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Wikitext</tvar> Wikitext], MediaWiki's markup, rather than Markdown. If you are coming from a Markdown-based site generator, here is what changes, and why you might want it.
 
 <!--T:2-->
 == What wikitext adds ==
 
 <!--T:3-->
-* '''{{ml|Help:Templates|Templates}}''' — reusable, parameterised snippets transcluded with <code><nowiki>{{...}}</nowiki></code>. Markdown has no equivalent; you copy and paste instead. See [[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Pages#Templates]].
-* '''{{ml|Help:Parser functions|Parser functions}} and magic words''' — light logic and computed values (<code><nowiki>{{#if:}}</nowiki></code>, dates, page info) written in the page itself.
-* '''Structured linking''' — <code><nowiki>[[Page]]</nowiki></code> internal links, {{ml|Help:Categories|categories}} and redirects, managed by the wiki rather than by hand.
-* '''Rich media and references''' — image {{ml|Help:Images|thumbnails and galleries}} and footnotes in one consistent syntax.
+* '''[<tvar name="3">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> Templates]''' — reusable, parameterised snippets transcluded with <code><nowiki>{{...}}</nowiki></code>. Markdown has no equivalent; you copy and paste instead. See [[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Pages#Templates]].
+* '''[<tvar name="4">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions</tvar> Parser functions] and magic words''' — light logic and computed values (<code><nowiki>{{#if:}}</nowiki></code>, dates, page info) written in the page itself.
+* '''Structured linking''' — <code><nowiki>[[Page]]</nowiki></code> internal links, [<tvar name="5">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories</tvar> categories] and redirects, managed by the wiki rather than by hand.
+* '''Rich media and references''' — image [<tvar name="6">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Images</tvar> thumbnails and galleries] and footnotes in one consistent syntax.
 * '''An extension ecosystem''' — syntax highlighting, math and more, added as [[<tvar name="2">Special:MyLanguage/Configuration</tvar>|extensions]].
 
 <!--T:4-->
