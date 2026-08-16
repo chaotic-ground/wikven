@@ -72,6 +72,58 @@ test("Citizen's search box suggests pages as you type", async ({ page }) => {
 	).not.toBe("rgb(255, 255, 255)");
 });
 
+test("Citizen's search shortcuts open the search the export has", async ({
+	page,
+}) => {
+	// The skin binds "/" and Ctrl+K to its command palette in skin.js whether or not the trigger
+	// they open survived the bake, so left alone they fetch a module the export does not ship. What
+	// this asserts is both halves: the form opens, and neither module is asked for.
+	//
+	// Narrowed to those two rather than to any backend request, because focusing a text field also
+	// has UniversalLanguageSelector fetch its input methods (#398), which is older than this and not
+	// Citizen's. "a Citizen page gets everything it asks for" below still holds the wider line.
+	const PALETTE = /skins\.citizen\.commandPalette|mediawiki\.notification/;
+	const backend = [];
+	page.on("request", (request) => {
+		if (BACKEND.test(request.url()) && PALETTE.test(request.url())) {
+			backend.push(request.url());
+		}
+	});
+
+	await page.goto(PAGE);
+
+	// Which listener the keystroke reaches first is up to mw.loader, so what keeps the request from
+	// being made is the palette being marked failed rather than merely registered.
+	expect(
+		await page.evaluate(() =>
+			mw.loader.getState("skins.citizen.commandPalette"),
+		),
+	).toBe("error");
+
+	await page.keyboard.press("/");
+	await expect(page.locator("#citizen-search-details")).toHaveJSProperty(
+		"open",
+		true,
+	);
+	await expect(page.locator("#searchInput")).toBeFocused();
+
+	// Escape is the skin's own dismissal (dropdown.js), which opening the <details> rather than
+	// unclipping the card by hand is what buys.
+	await page.keyboard.press("Escape");
+	await expect(page.locator("#citizen-search-details")).toHaveJSProperty(
+		"open",
+		false,
+	);
+
+	// The shortcuts are inert while focus is in a field, in the export as in the skin, so the
+	// second one is only reachable once focus has left the search box.
+	await page.locator("#firstHeading").click();
+	await page.keyboard.press("ControlOrMeta+k");
+	await expect(page.locator("#searchInput")).toBeFocused();
+
+	expect(backend, backend.join("; ")).toEqual([]);
+});
+
 test("Citizen's preferences panel loads and switches the theme", async ({
 	page,
 }) => {
