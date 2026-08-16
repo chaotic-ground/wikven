@@ -1,0 +1,61 @@
+---
+name: "build(deps): bump the bundled MediaWiki extensions"
+pipelineid: mediawiki-extensions
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+# The Dockerfile pins both extensions to commits, so the branch they follow lives here rather than
+# there. It is the release branch of the image's MediaWiki, and moves when that base image does.
+sources:
+  translate:
+    name: Head of Translate's REL1_46
+    kind: gitcommit
+    spec:
+      url: https://github.com/wikimedia/mediawiki-extensions-Translate
+      branch: REL1_46
+      depth: 1
+  uls:
+    name: Head of UniversalLanguageSelector's REL1_46
+    kind: gitcommit
+    spec:
+      url: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
+      branch: REL1_46
+      depth: 1
+
+targets:
+  translate:
+    name: 'build(deps): bump Translate to {{ source "translate" }}'
+    kind: dockerfile
+    scmid: default
+    sourceid: translate
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: ARG
+        matcher: TRANSLATE_VERSION
+  uls:
+    name: 'build(deps): bump UniversalLanguageSelector to {{ source "uls" }}'
+    kind: dockerfile
+    scmid: default
+    sourceid: uls
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: ARG
+        matcher: ULS_VERSION
