@@ -3,7 +3,7 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-This page explains how {{SITENAME}} is built, for people who want to work on it. {{SITENAME}} is a {{ml|MediaWiki}} extension plus a handful of maintenance scripts that turn a directory of wikitext into a static website; it does not add a new rendering engine, it drives MediaWiki itself and then captures the result.
+This page explains how {{SITENAME}} is built, for people who want to work on it. {{SITENAME}} is a [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki</tvar> MediaWiki] extension plus a handful of maintenance scripts that turn a directory of wikitext into a static website; it does not add a new rendering engine, it drives MediaWiki itself and then captures the result.
 
 <!--T:2-->
 == Architecture ==
@@ -98,7 +98,7 @@ A live wiki relies on <code>load.php</code>, an action API, and a database; a st
 == Third-party extensions and skins ==
 
 <!--T:19-->
-Names in <code>extensions</code>/<code>skins</code> that are not bundled with {{SITENAME}} are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] (a tarball, a Git repository, or a Composer package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
+Names in <code>extensions</code>/<code>skins</code> that are not bundled with {{SITENAME}} are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] (a tarball, a [<tvar name="2">https://git-scm.com/</tvar> Git] repository, or a [<tvar name="3">https://getcomposer.org/</tvar> Composer] package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
 
 <!--T:20-->
 == Standalone binary ==

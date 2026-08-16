@@ -1,8 +1,8 @@
 <!--T:title @55c45bc3-->
 스킨
 
-<!--T:1 @acd93a69-->
-{{ml|Bundled extensions and skins|번들된 스킨}}은 [[$1|.wikven.yaml]]에서 고를 수 있습니다.
+<!--T:1 @221588f7-->
+[$2 번들된 스킨]은 [[$1|.wikven.yaml]]에서 고를 수 있습니다.
 
 <!--T:2 @83da4e91-->
 == 지원하는 스킨 ==
@@ -10,10 +10,10 @@
 <!--T:3 @37596812-->
 Wikven은 세 가지 스킨을 지원합니다. 이 문서 사이트는 세 스킨 모두로 빌드되므로, 모든 변경이 각 스킨에서 검증됩니다.
 
-<!--T:4 @edf885f8-->
-* {{ml|Skin:Vector|Vector}} (기본값. <code>Vector</code>를 선택하면 해당 스킨의 <code>vector-2022</code> 변형인 Vector 2022가 적용됩니다)
-* {{ml|Skin:MinervaNeue|MinervaNeue}} (모바일 지향)
-* {{ml|Skin:Citizen|Citizen}} (서드파티, 빌드 시점에 가져옴)
+<!--T:4 @50475fff-->
+* [$1 Vector] (기본값. <code>Vector</code>를 선택하면 해당 스킨의 <code>vector-2022</code> 변형인 Vector 2022가 적용됩니다)
+* [$2 MinervaNeue] (모바일 지향)
+* [$3 Citizen] (서드파티, 빌드 시점에 가져옴)
 
 <!--T:11 @b34d3fdc-->
 그 밖의 스킨은 거부되는 것이 아니라 검증되지 않을 뿐입니다. MediaWiki에 번들된 스킨은 MonoBook을 비롯해 모두 이름만으로 사용할 수 있고, 서드파티 스킨은 Citizen처럼 가져올 수 있습니다.
@@ -40,7 +40,7 @@ Minerva는 나머지 둘보다 설명할 것이 많습니다. 빌드가 스킨�
 <code>config</code> 맵을 사용합니다.
 
 <!--T:19 @5077039f-->
-설정은 다른 것과 똑같은 경로로 스킨에 닿지만, 스킨이 빌드에서도 그것을 읽어야 무언가를 합니다. 대부분이 그렇지 않은 곳은 Minerva 하나뿐입니다. 설정에 손대기 전에 부록의 [[$1|Minerva 설정]]을 보십시오.
+설정은 다른 설정과 똑같은 방식으로 스킨에 전달되지만, 빌드에서 스킨이 여전히 그 설정을 읽을 때만 효과가 있습니다. Minerva는 대부분이 그렇지 않은 유일한 경우이니, 설정에 손대기 전에 부록의 [[$1|Minerva 설정]]을 참고하십시오.
 
 <!--T:25 @c0f7d361-->
 <span id="minerva-appendix"></span>
@@ -49,8 +49,8 @@ Minerva는 나머지 둘보다 설명할 것이 많습니다. 빌드가 스킨�
 <!--T:12 @5c4e7f23-->
 === Minerva와 MobileFrontend ===
 
-<!--T:13 @a156836b-->
-MinervaNeue는 MediaWiki에 번들되어 있지만, 함께 자라 온 {{ml|Extension:MobileFrontend|MobileFrontend}}는 그렇지 않습니다. 이것이 없으면 스킨은 자체 <code>initMobile.js</code>를 건너뛰고 그것이 마련해 주는 것들을 잃는데, 목차 토글도 그중 하나입니다. Minerva를 활성화한다면 이 둘을 함께 가져오십시오. 이 사이트가 그렇게 하고 있으므로, 권장 구성은 모든 빌드가 렌더링하는 바로 그 구성입니다.
+<!--T:13 @13547b33-->
+MinervaNeue는 MediaWiki에 번들되어 있지만, 함께 자라 온 [$1 MobileFrontend]는 그렇지 않습니다. 이것이 없으면 스킨은 자체 <code>initMobile.js</code>를 건너뛰고 그것이 마련해 주는 것들을 잃는데, 목차 토글도 그중 하나입니다. Minerva를 활성화한다면 이 둘을 함께 가져오십시오. 이 사이트가 그렇게 하고 있으므로, 권장 구성은 모든 빌드가 렌더링하는 바로 그 구성입니다.
 
 <!--T:14 @864f603c-->
 Wikven은 MobileFrontend 없이도 Minerva를 렌더링합니다. Minerva가 제공하는 항목 중 정적 호스트가 서비스할 수 없는 것들은 어느 쪽이든 빠집니다.
@@ -62,11 +62,11 @@ Wikven은 MobileFrontend 없이도 Minerva를 렌더링합니다. Minerva가 제
 Minerva도 나머지 둘과 똑같이 빌드되고 검증되지만, 그 지원의 상당 부분은 스킨을 설정하는 것이 아니라 {{SITENAME}}이 스킨을 우회하는 일입니다. Minerva는 주 메뉴를 <code>MediaWiki:Sidebar</code>가 아니라 자체 정의에서 만들고, 여러 컨트롤이 MobileFrontend나 살아 있는 위키를 전제하므로, 빌드가 그 둘을 대신합니다.
 
 <!--T:22 @95d6abd8-->
-* 사이트 자체의 둘러보기는 렌더링된 모든 문서의 주 메뉴에 직접 써 넣습니다. 스킨이 읽어 갈 사이드바 구획이 없기 때문입니다.
+* 사이트 자체의 둘러보기는 렌더링되는 모든 문서의 주 메뉴에 직접 기록합니다. 스킨이 읽어 갈 사이드바 구획이 없기 때문입니다.
 * 임의 문서, 최근 바뀜, 특수 문서 목록, 환경 설정은 제거가 아니라 스타일시트로 숨깁니다. 스킨이 이들을 무조건 넣으므로, 내보낸 HTML에는 앵커가 그대로 남습니다.
 * 커뮤니티 포털은 스킨이 이미 확인하는 메시지를 통해 제대로 빠집니다.
-* 색상 테마와 읽을 스킨은 구워 낸 <code>Settings</code> 문서에 있습니다. 스킨 자체의 것은 <code>Special:MobileOptions</code>이기 때문입니다.
-* 언어 단추는 숨깁니다. 그 오버레이가 MobileFrontend의 것이기 때문입니다.
+* 색 테마와 읽을 스킨은 빌드가 기록하는 <code>Settings</code> 문서에 있습니다. 스킨 자체의 것은 <code>Special:MobileOptions</code>이기 때문입니다.
+* 언어 버튼은 숨깁니다. 그 오버레이가 MobileFrontend의 것이기 때문입니다.
 * MobileFrontend가 없으면 목차는 접힌 채로 오고 그것을 펼 토글은 그려지지 않으므로, 스타일시트가 다시 펼칩니다.
 
 <!--T:23 @a76df708-->
@@ -77,10 +77,10 @@ Minerva도 나머지 둘과 똑같이 빌드되고 검증되지만, 그 지원�
 === Minerva 설정 ===
 
 <!--T:16 @09711049-->
-<code>$wgMinerva*</code> 설정은 MobileFrontend의 설치 여부와 상관없이 대부분 빌드에서 아무 일도 하지 않습니다. 스킨이 선언하는 열여섯 개 가운데 열 개는 MobileFrontend 기능으로 등록되어 <code>SkinOptions::setMinervaSkinOptions()</code>에서 다시 읽히는데, 이 메서드는 <code>RequestContextCreateSkinMobile</code> 훅에서 실행됩니다. 그리고 MobileFrontend는 모바일 보기를 제공하기로 정한 뒤에야 그 훅을 띄우며, 그러려면 모바일 도메인이나 모바일 기기, 또는 <code>useformat=mobile</code>이 필요합니다. 굽기는 그 어느 것도 아니므로 스킨 옵션은 안에 박힌 기본값을 그대로 두고, 다음 설정들은 죽은 값이 됩니다. <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code>, <code>MinervaNightMode</code>.
+MobileFrontend의 설치 여부와 관계없이, <code>$wgMinerva*</code> 설정은 대부분 빌드에서 아무 일도 하지 않습니다. 스킨이 선언하는 열여섯 개 중 열 개는 MobileFrontend 기능으로 등록되어 <code>SkinOptions::setMinervaSkinOptions()</code>에서 다시 읽히는데, 이 메서드는 <code>RequestContextCreateSkinMobile</code> 훅에서 실행됩니다. 그리고 MobileFrontend는 모바일 뷰를 제공하기로 결정한 뒤에야 그 훅을 발동시키며, 그러려면 모바일 도메인이나 모바일 기기, 또는 <code>useformat=mobile</code>이 필요합니다. 빌드는 그 어느 것도 아니므로 스킨 옵션은 자체에 컴파일된 기본값을 그대로 유지하고, 다음 설정들은 작동하지 않습니다: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code>, <code>MinervaNightMode</code>.
 
 <!--T:17 @442f5a60-->
-나머지 여섯 개는 스킨이 설정에서 직접 읽으므로 문서대로 동작합니다. <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code>, <code>MinervaABSamplingRate</code>입니다. 이 중 뒤의 둘은 여기서 할 일이 거의 없습니다. 타이프어헤드는 정적 호스트에 없는 검색 API를 호출하고, 표본을 뽑을 A/B 분류도 없습니다. 언어 단추는 어느 쪽이든 숨겨집니다. 그 오버레이가 MobileFrontend의 것이기 때문입니다.
+나머지 여섯 개는 스킨이 설정에서 직접 읽으므로 문서화된 대로 동작합니다: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code>, <code>MinervaABSamplingRate</code>. 이 중 마지막 두 개는 여기서 작용할 대상이 거의 없습니다. 타입어헤드는 정적 호스트에 없는 검색 API를 호출하고, 표본을 뽑을 A/B 버킷도 없기 때문입니다. 언어 버튼은 그 오버레이가 MobileFrontend의 것이라 어느 쪽이든 숨겨집니다.
 
 <!--T:18 @2ad8756b-->
-죽은 설정들이 맡았을 일은 {{SITENAME}}이 가능한 범위에서 제 방식으로 대신합니다. 색상 테마는 빌드가 <code>Special:MobileOptions</code> 자리에 써 넣는 <code>Settings</code> 문서에 있고, 사이트 자체의 둘러보기는 렌더링된 모든 문서의 주 메뉴에 써 넣습니다.
+작동하지 않는 설정들이 구성했을 법한 것은, 가능한 범위에서 {{SITENAME}}이 자체적인 방식으로 제공합니다. 색 테마는 빌드가 <code>Special:MobileOptions</code> 대신 기록하는 <code>Settings</code> 문서에 있고, 사이트 자체의 둘러보기는 렌더링되는 모든 문서의 주 메뉴에 기록됩니다.

@@ -1,8 +1,8 @@
 <!--T:title @21b6a798-->
 개발
 
-<!--T:1 @e7d4038c-->
-이 문서는 {{SITENAME}}에 작업하고자 하는 사람들을 위해 {{SITENAME}}이 어떻게 만들어지는지 설명합니다. {{SITENAME}}은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 {{ml|MediaWiki}} 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다.
+<!--T:1 @64177b72-->
+이 문서는 {{SITENAME}}에 작업하고자 하는 사람들을 위해 {{SITENAME}}이 어떻게 만들어지는지 설명합니다. {{SITENAME}}은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 [$1 MediaWiki] 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다.
 
 <!--T:2 @8583e922-->
 == 구조 ==
@@ -81,8 +81,8 @@
 <!--T:18 @a7473987-->
 == 서드파티 확장 기능과 스킨 ==
 
-<!--T:19 @6c9159a3-->
-<code>extensions</code>/<code>skins</code>에 있는 이름 중 {{SITENAME}}에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 [[$1|<code>WikvenRepositories</code>]]에 선언된 소스(tarball, Git 저장소, 또는 Composer 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
+<!--T:19 @89906bd2-->
+<code>extensions</code>/<code>skins</code>에 있는 이름 중 {{SITENAME}}에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 [[$1|<code>WikvenRepositories</code>]]에 선언된 소스(tarball, [$2 Git] 저장소, 또는 [$3 Composer] 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
 
 <!--T:20 @a974dfaf-->
 == 단독 실행 바이너리 ==

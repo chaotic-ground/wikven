@@ -4,19 +4,19 @@
 <!--T:1 @3a090f24-->
 {{SITENAME}} 자체는 [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]로 라이선스됩니다. Docker 이미지와 그것이 만들어 내는 단독 실행 바이너리는 서드파티 소프트웨어를 그 소프트웨어 자체의 라이선스에 따라 재배포하며, 이를 여기서 밝힙니다. (GPL-2.0-or-later와 GPL-3.0-or-later는 호환되므로, 이는 충돌이 아니라 출처 표시입니다.)
 
-<!--T:2 @4e242a51-->
+<!--T:2 @40a9db65-->
 {| class="wikitable"
 ! 구성 요소 !! 라이선스 !! 번들 위치
 |-
-| [https://www.mediawiki.org/ MediaWiki]와 그 번들 스킨 및 확장 기능 || GPL-2.0-or-later || 이미지, 바이너리
+| [$1 MediaWiki]와 그 번들 스킨 및 확장 기능 || GPL-2.0-or-later || 이미지, 바이너리
 |-
-| [https://www.php.net/ PHP] || PHP License 3.01 || 바이너리
+| [$2 PHP] || PHP License 3.01 || 바이너리
 |-
-| [https://frankenphp.dev/ FrankenPHP] || MIT || 바이너리
+| [$3 FrankenPHP] || MIT || 바이너리
 |-
-| [https://caddyserver.com/ Caddy] || Apache-2.0 || 바이너리
+| [$4 Caddy] || Apache-2.0 || 바이너리
 |-
-| [https://getcomposer.org/ Composer] || MIT || 이미지
+| [$5 Composer] || MIT || 이미지
 |}
 
 <!--T:3 @2bfb4b44-->
