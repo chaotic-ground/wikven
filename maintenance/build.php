@@ -346,8 +346,10 @@ class Build extends Maintenance {
 
 		// Special:MobileOptions is an empty form its own script fills, so this page is the same
 		// empty form: Adder queues the modules, and MediaWiki draws the controls it would have
-		// drawn there. The skin list is wikven's own, and follows in a section of its own.
-		$text = "<div id=\"mobile-options\" class=\"mw-mf-settings\"></div>\n";
+		// drawn there. Wikitext carries no <form>, and that stylesheet's layout rules all name
+		// one, so fillMinervaMenu.php puts a real form inside this. The skin list is wikven's own,
+		// and follows in a section of its own.
+		$text = "<div id=\"wikven-settings-form\"></div>\n";
 		if (count($GLOBALS['wgWikvenSkins'] ?? []) > 1) {
 			$text .= $this->settingsSection(
 				'wikven-skins',

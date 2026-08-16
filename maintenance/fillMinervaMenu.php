@@ -36,6 +36,9 @@ class FillMinervaMenu extends Maintenance {
 	/** The placeholder build.php leaves on the settings page for the skin list. */
 	private const SKIN_LIST = 'wikven-appearance-skins';
 
+	/** The placeholder build.php leaves for the form MobileFrontend's controls are laid out in. */
+	private const SETTINGS_FORM = 'wikven-settings-form';
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription("Add the site's navigation to Minerva's main menu.");
@@ -72,6 +75,13 @@ class FillMinervaMenu extends Maintenance {
 			);
 			// The switcher lives on the settings page, the only page with anywhere to put it.
 			$filled = HtmlListInserter::inside($filled, self::SKIN_LIST, $this->skinMarkup($page));
+			// mobile.special.mobileoptions.styles lays the controls out through form.mw-mf-settings,
+			// and wikitext carries no form, so the page gets one here.
+			$filled = HtmlListInserter::inside(
+				$filled,
+				self::SETTINGS_FORM,
+				Html::rawElement('form', ['id' => 'mobile-options', 'class' => 'mw-mf-settings'], '')
+			);
 			if ($filled !== $html) {
 				file_put_contents($file, $filled, LOCK_EX);
 				$changed++;

@@ -108,9 +108,13 @@ a.new {
   color: @color-subtle;
 }
 
-.wikven-skin-list {
+// A skin's content styles put a bullet on every list; these are controls, not prose. Named through
+// the parser output so the rule outweighs the skin's own, whichever skin renders the page.
+.mw-parser-output .wikven-skin-list,
+.mw-parser-output #mobile-options ul {
   list-style: none;
   margin: 0;
+  padding-left: 0;
 }
 
 .wikven-skin-item {

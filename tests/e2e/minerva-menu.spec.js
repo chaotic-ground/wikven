@@ -9,7 +9,11 @@ const { test, expect } = require("@playwright/test");
 // checkbox over it, so the checkbox is what a click lands on.
 const openDrawer = async (page) => {
 	await page.locator("#main-menu-input").click();
-	return page.locator("#mw-mf-page-left a:visible");
+	const links = page.locator("#mw-mf-page-left a:visible");
+	// Awaited here rather than in the caller: the drawer slides in, and a bare read of the links
+	// runs before it arrives and reports an empty menu as an empty menu.
+	await expect(links).not.toHaveCount(0);
+	return links;
 };
 
 test("minerva's main menu offers no link the export cannot serve", async ({
@@ -17,7 +21,6 @@ test("minerva's main menu offers no link the export cannot serve", async ({
 }) => {
 	await page.goto("minerva/Installation.html");
 	const links = await openDrawer(page);
-	await expect(links).not.toHaveCount(0);
 
 	const dead = [];
 	for (const link of await links.all()) {

@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SkinList;
 use MediaWiki\Html\Html;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
@@ -102,9 +103,16 @@ class Adder implements
 		if ($skin->getSkinName() === 'minerva') {
 			$out->getRequest()->setVal('minervanightmode', 'day');
 			$out->addModules('ext.Wikven.appearance');
+			// The text size a reader picks on the settings page has to hold on the pages they then
+			// read, so every page carries the class it is set from and the stylesheet it means
+			// something in. MobileFrontend loads that stylesheet when it is serving a mobile view,
+			// which a bake never is.
+			if (ExtensionRegistry::getInstance()->isLoaded('MobileFrontend')) {
+				$out->addHtmlClasses('mf-font-size-clientpref-regular');
+				$out->addModuleStyles('mobile.init.styles');
+			}
+			$this->prepareSettingsPage($out);
 		}
-
-		$this->prepareSettingsPage($out);
 
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
 		// and its "Page tools" sidebar (page actions, Special:Log) are dead; hide them on cli export.
@@ -122,9 +130,9 @@ class Adder implements
 	 * behind them. So the page carries the same empty form, and buildScripts.php bundles the
 	 * modules because this queued them.
 	 *
-	 * Text size and section expansion are declared here too: MobileFrontend writes those classes
-	 * only when it is serving a mobile view, and clientPreferences.js renders a preference only
-	 * when the page already carries its class.
+	 * The one control not offered is "Expand all sections": clientPreferences.js draws a preference
+	 * only when the page carries its class, and no page here does, because nothing in a bake
+	 * collapses a section to begin with.
 	 *
 	 * @param OutputPage $out
 	 */
@@ -138,7 +146,12 @@ class Adder implements
 			return;
 		}
 
-		$out->addHtmlClasses(['mf-font-size-clientpref-regular', 'mf-expand-sections-clientpref-0']);
+		// The special page sets this itself, and its script draws no text-size control without it.
+		$out->addJsConfigVars([
+			'wgMFEnableFontChanger' => MediaWikiServices::getInstance()
+				->getService('MobileFrontend.FeaturesManager')
+				->isFeatureAvailableForCurrentUser('MFEnableFontChanger')
+		]);
 		$out->addModuleStyles([
 			'mobile.special.styles',
 			'mobile.special.codex.styles',
