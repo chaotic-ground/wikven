@@ -136,15 +136,15 @@ class Build extends Maintenance {
 
 		foreach ($pages as $page) {
 			$title = $titleFactory->makeTitle((int)$page->page_namespace, $page->page_title);
-			$file = $this->sourceFileFor($title->getPrefixedText(), $history);
-			if ($file === null) {
+			$change = $this->sourceChangeFor($title->getPrefixedText(), $history);
+			if ($change === null) {
 				continue;
 			}
 
-			$set = ['rev_timestamp' => $dbw->timestamp($history->timestamp($file))];
+			$set = ['rev_timestamp' => $dbw->timestamp($change['timestamp'])];
 			// A name MediaWiki would not take gives the build's own account back, which is the one
 			// it already has; hideBuildAuthors() below then leaves that page unattributed.
-			$author = $authors->accountFor($history->author($file));
+			$author = $authors->accountFor($change['author']);
 			if (!$author->equals($build)) {
 				$set['rev_actor'] = $actorStore->acquireActorId($author, $dbw);
 			}
@@ -159,25 +159,27 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * The source file a page was written from, as the history knows it, or null for a page written
-	 * by the build itself.
+	 * What the history says about the file a page was written from, or null for a page the build
+	 * wrote itself.
 	 *
-	 * SourceFile's naming convention answers this for an imported page and for a translated one
-	 * alike: "Skins" came from "Skins.wikitext" and "Skins/ko" from "Skins/ko.wikitext". The one
-	 * page with no file of its own is the source-language page Translate creates ("Skins/en"),
-	 * which follows the page it repeats.
+	 * SourceFile's naming convention answers which file that is for an imported page and for a
+	 * translated one alike: "Skins" came from "Skins.wikitext" and "Skins/ko" from
+	 * "Skins/ko.wikitext". The one page with no file of its own is the source-language page
+	 * Translate adds ("Skins/en"), which follows the page it repeats.
+	 *
+	 * @return ?array{timestamp:int,author:?string}
 	 */
-	private function sourceFileFor(string $prefixedText, SourceHistory $history): ?string {
-		$file = SourceFile::titleToFilename($prefixedText);
-		if ($history->timestamp($file) !== null) {
-			return $file;
-		}
-
+	private function sourceChangeFor(string $prefixedText, SourceHistory $history): ?array {
+		$files = [SourceFile::titleToFilename($prefixedText)];
 		$slash = strrpos($prefixedText, '/');
 		if ($slash !== false) {
-			$base = SourceFile::titleToFilename(substr($prefixedText, 0, $slash));
-			if ($history->timestamp($base) !== null) {
-				return $base;
+			$files[] = SourceFile::titleToFilename(substr($prefixedText, 0, $slash));
+		}
+
+		foreach ($files as $file) {
+			$timestamp = $history->timestamp($file);
+			if ($timestamp !== null) {
+				return ['timestamp' => $timestamp, 'author' => $history->author($file)];
 			}
 		}
 		return null;
