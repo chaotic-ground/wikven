@@ -71,7 +71,11 @@ test("what is left of the Tools box goes with it", async ({ page }) => {
 test("following an entry from the menu switches the skin, keeping the article", async ({
 	page,
 }) => {
-	const link = page.locator(`${LIST} .mw-list-item:not(.active) a`).first();
+	// The entry names the skin it leads to, which is the directory that skin's copy of the page is
+	// exported into -- so the entry says where following it should land.
+	const item = page.locator(`${LIST} .mw-list-item:not(.active)`).first();
+	const skin = (await item.getAttribute("id")).replace("t-wikven-skin-", "");
+	const link = item.locator("a");
 	await expect(link).toBeVisible();
 
 	const navigation = page.waitForResponse((response) =>
@@ -85,7 +89,7 @@ test("following an entry from the menu switches the skin, keeping the article", 
 	expect(response.status()).toBe(200);
 	await page.waitForLoadState("domcontentloaded");
 	await expect(page.locator("#firstHeading")).toHaveText(HEADING);
-	expect(page.url()).not.toMatch(new RegExp(`/${PAGE}$`));
+	expect(page.url()).toMatch(new RegExp(`/${skin}/${PAGE}$`));
 });
 
 test("the list travels with the menu when it is hidden and put back", async ({
