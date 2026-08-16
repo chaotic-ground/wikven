@@ -36,6 +36,12 @@ test("a content page fetches nothing from a live backend", async ({ page }) => {
 	// the property under test here.
 	await page.goto("Installation.html", { waitUntil: "networkidle" });
 
+	// A page can be quiet on load and still reach for a backend on the first thing a reader does.
+	// ULS binds its input methods to text fields and fetches them on first focus, so the click is
+	// part of the claim rather than a separate one.
+	await page.locator("#searchInput").first().click();
+	await page.waitForLoadState("networkidle");
+
 	expect(backend, backend.join("; ")).toEqual([]);
 });
 

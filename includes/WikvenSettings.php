@@ -247,7 +247,9 @@ foreach ($config['extensions'] ?? [] as $extension) {
 // the same fonts into a static stylesheet (see includes/Webfonts/FontRepository.php).
 // Its input methods go the same way: focusing any text input -- the search box, most visibly --
 // has the browser fetch ext.uls.ime and jquery.ime from load.php. Nothing in an export takes
-// typed input anywhere, so there is nothing for a transliteration keyboard to type into.
+// typed input anywhere, so there is nothing for a transliteration keyboard to type into. The flag
+// below is not what stops that fetch: Main::onSetupAfterCache() empties the list of selectors the
+// handler binds to, and says there why that cannot be done from here.
 if (in_array('UniversalLanguageSelector', $config['extensions'], true)) {
 	$GLOBALS['wgULSWebfontsEnabled'] = false;
 	$GLOBALS['wgULSIMEEnabled'] = false;

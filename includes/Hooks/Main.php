@@ -102,6 +102,7 @@ class Main implements
 	 */
 	public function onSetupAfterCache(): void {
 		$this->restoreCitizenSearchWiring();
+		$this->unbindUlsInputMethods();
 
 		$wikvenLogos = $this->config->get('WikvenLogos');
 		if (!is_array($wikvenLogos) || $wikvenLogos === []) {
@@ -153,6 +154,27 @@ class Main implements
 		MediaWikiServices::getInstance()
 			->getHookContainer()
 			->register('SkinPageReadyConfig', [$this, 'enableCitizenSearch']);
+	}
+
+	/**
+	 * Leave ULS's input methods with no field to attach to.
+	 *
+	 * ULSIMEEnabled, which WikvenSettings turns off, does not stop the request: ext.uls.interface
+	 * binds a focus handler to every text field whatever that flag says, and the flag is read
+	 * inside ext.uls.ime, which the handler has fetched from load.php by then. So the empty
+	 * selector list is what actually keeps the export quiet on the first click into a field.
+	 *
+	 * It has to be set here rather than in WikvenSettings.php, because an empty array is the one
+	 * value ExtensionRegistry does not keep: it reads as "not set", and the extension's own
+	 * default replaces it wholesale when the registry applies extension.json config.
+	 *
+	 * The global is the test for ULS: it exists because ULS's extension.json declares it.
+	 */
+	private function unbindUlsInputMethods(): void {
+		if (!isset($GLOBALS['wgULSImeSelectors'])) {
+			return;
+		}
+		$GLOBALS['wgULSImeSelectors'] = [];
 	}
 
 	/**
