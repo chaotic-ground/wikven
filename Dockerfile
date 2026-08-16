@@ -1,11 +1,12 @@
 # Base images are digest-pinned and version-tagged so Dependabot's bumps read as version numbers
-# rather than digests. Dependabot keeps them current. The pin fixes the base images alone: apk,
-# codeload and Packagist below are all read at build time, so the image is not reproducible.
+# rather than digests. Dependabot keeps them current. The pin fixes the base images alone: apk below
+# still resolves against the current Alpine index at build time, so the image is not reproducible.
 FROM composer:2.10.2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040 AS composer
 
 # The alpine variant, because nothing here serves over HTTP: `build` runs a maintenance script and
 # `serve` runs PHP's own server, so the Apache the default variant carries is never started. Same
-# PHP extensions, 873MB against 1.5GB.
+# PHP extensions, 873MB against 1.5GB. A bump onto a new release branch has to take the bundled
+# extensions with it, and their branch is `branch` in updatecli/updatecli.d/mediawiki-extensions.yaml.
 FROM mediawiki:1.46.0-fpm-alpine@sha256:b0e9413c015268322cfb67908e5f92121372c7407f09f97a4ce8938a4351e4ad
 
 # composer to install third-party extensions/skins at bake time (git/tar/gzip/unzip present).
@@ -33,8 +34,11 @@ RUN arch="$TARGETARCH" \
 # image's MediaWiki branch. Translate pulls its runtime Composer deps (spyc) into its own vendor/,
 # which its load_composer_autoloader then loads.
 ENV COMPOSER_ALLOW_SUPERUSER=1
-ARG TRANSLATE_VERSION=REL1_46
-ARG ULS_VERSION=REL1_46
+# Commits, not the branch tip: REL1_46 takes translatewiki updates weekly, so a branch pin builds a
+# different Translate from the same wikven commit a week later. Bumped by updatecli, which reads the
+# branch these follow from its own manifest, so that branch moves there when this image's does.
+ARG TRANSLATE_VERSION=79db5ae621f57e043350b280ffceaaa7dec6d991
+ARG ULS_VERSION=ab91c5b52bc362c07c81a17dd7908a97ed27b9f1
 # Translate asks for its two runtime deps by range, so an unpinned install takes whatever Packagist
 # serves that day. Core's own answer to this is exact versions and no lock file, so: exact versions,
 # passed as temporary constraints rather than written into Translate's manifest. Bumped by updatecli.
@@ -52,9 +56,9 @@ ARG COMPOSER_INSTALLERS_VERSION=v2.3.0
 RUN composer config --global policy.advisories.block false \
  && ext=/var/www/html/extensions \
  && curl -fsSL -o /tmp/uls.tar.gz \
-      "https://codeload.github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector/tar.gz/refs/heads/$ULS_VERSION" \
+      "https://codeload.github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector/tar.gz/$ULS_VERSION" \
  && curl -fsSL -o /tmp/translate.tar.gz \
-      "https://codeload.github.com/wikimedia/mediawiki-extensions-Translate/tar.gz/refs/heads/$TRANSLATE_VERSION" \
+      "https://codeload.github.com/wikimedia/mediawiki-extensions-Translate/tar.gz/$TRANSLATE_VERSION" \
  && mkdir -p "$ext/UniversalLanguageSelector" "$ext/Translate" \
  && tar -xzf /tmp/uls.tar.gz --strip-components=1 -C "$ext/UniversalLanguageSelector" \
  && tar -xzf /tmp/translate.tar.gz --strip-components=1 -C "$ext/Translate" \
