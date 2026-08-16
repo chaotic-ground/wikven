@@ -75,7 +75,7 @@ class SourceHistoryTest extends MediaWikiUnitTestCase {
 
 	public function testPathsArriveVerbatim() {
 		// -z means no quoting, so a name with a tab, a quote or a non-ASCII letter arrives whole.
-		$names = ['설치.wikitext', "Say \"hi\".wikitext", "Tab\there.wikitext"];
+		$names = ['설치.wikitext', 'Say "hi".wikitext', "Tab\there.wikitext"];
 		$history = SourceHistory::fromLog(self::log([['1786893214', 'Leslie', $names]]));
 
 		foreach ($names as $name) {

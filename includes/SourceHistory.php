@@ -2,6 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven;
 
+use MediaWiki\Utils\ExecutableFinder;
+
 /**
  * When each source file last changed, and who changed it, as the repository's git history tells it.
  *
@@ -135,20 +137,28 @@ class SourceHistory {
 	/**
 	 * Run git in a directory and return its output, or null if it is missing or fails there.
 	 *
+	 * @param string $directory Directory to run in, passed as git's own -C.
 	 * @param string[] $arguments
 	 */
 	private static function git(string $directory, array $arguments): ?string {
+		// Located rather than spawned by name: proc_open() raises a PHP warning of its own when the
+		// command is not there, and a host without git is one of the answers this method gives.
+		$binary = ExecutableFinder::findInDefaultPaths(['git']) ?: null;
+		if ($binary === null) {
+			return null;
+		}
+
 		// An array argv never reaches a shell, so a directory name needs no quoting. git's own
-		// complaints (no repository here, no git at all) are the expected outcome rather than
-		// something to print, and the exit status already reports them.
+		// complaints (no repository here, nothing committed yet) are the expected outcome rather
+		// than something to print, and the exit status already reports them.
 		$descriptors = [
 			0 => ['file', '/dev/null', 'r'],
 			1 => ['pipe', 'w'],
 			2 => ['file', '/dev/null', 'w']
 		];
 		$pipes = [];
-		$process = @proc_open(array_merge(['git', '-C', $directory], $arguments), $descriptors, $pipes);
-		if (!is_resource($process)) {
+		$process = proc_open(array_merge([$binary, '-C', $directory], $arguments), $descriptors, $pipes);
+		if ($process === false) {
 			return null;
 		}
 		$output = stream_get_contents($pipes[1]);

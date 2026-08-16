@@ -68,14 +68,14 @@ class ImportWikitext extends Maintenance {
 			// which is true of the export as a whole (see SourceHistory and WikvenSettings.php).
 			$timestamp = $history->timestamp($relative) ?? ConvertibleTimestamp::time();
 			$author = $history->author($relative);
-			$editor = $author === null ? null : $this->accountFor($author);
+			$editor = $author === null ? $user : $this->accountFor($author, $user);
 
 			$this->output("Saving... $title");
 
 			// File:/MediaWiki: pages need a current-revision edit so upload desc and edit hooks apply.
 			if ($title->getNamespace() === NS_FILE || $title->getNamespace() === NS_MEDIAWIKI) {
 				$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
-				$updater = $page->newPageUpdater($editor ?? $user);
+				$updater = $page->newPageUpdater($editor);
 				$updater->setContent(SlotRecord::MAIN, $content);
 				// PageUpdater stamps the revision from the clock and offers no way to set it, so the
 				// frozen clock moves to the file's own date for the length of the save. setFakeTime()
@@ -103,7 +103,7 @@ class ImportWikitext extends Maintenance {
 			$revision = new WikiRevision();
 			$revision->setContent(SlotRecord::MAIN, $content);
 			$revision->setTitle($title);
-			$revision->setUserObj($editor ?? $user);
+			$revision->setUserObj($editor);
 			$revision->setComment('');
 			$revision->setTimestamp(wfTimestamp(TS_MW, $timestamp));
 
@@ -129,25 +129,31 @@ class ImportWikitext extends Maintenance {
 	}
 
 	/**
-	 * The wiki account standing in for a git author, created on first sight, or null if the name
-	 * is not one MediaWiki will take.
+	 * The wiki account standing in for a git author, created on first sight, or $unattributed when
+	 * the name is not one MediaWiki will take.
 	 *
 	 * A revision needs an account to belong to, and the point of reading the history is that the
 	 * name the reader is shown matches the commit list the "View history" link opens. The accounts
 	 * are as throwaway as the wiki holding them: the export carries no user pages and no
 	 * contributions, so nothing is claimed of the name beyond having written the page.
 	 */
-	private function accountFor(string $author): ?User {
-		if (array_key_exists($author, $this->authors)) {
-			return $this->authors[$author];
+	private function accountFor(string $author, User $unattributed): User {
+		if (!array_key_exists($author, $this->authors)) {
+			$this->authors[$author] = $this->createAccount($author);
 		}
-		$this->authors[$author] = null;
+		return $this->authors[$author] ?? $unattributed;
+	}
 
-		// A git author name is free text, so it can be one MediaWiki refuses: too long, or holding
-		// a character titles cannot carry. Such a page keeps the build's own account, which the
-		// build then hides rather than name (see build.php's hideBuildAuthors()).
-		$user = $this->getServiceContainer()->getUserFactory()
-			->newFromName($author, UserRigorOptions::RIGOR_CREATABLE);
+	/**
+	 * Find or create the account for a git author name, or null if MediaWiki will not have it.
+	 *
+	 * A git author name is free text, so it can be one MediaWiki refuses: too long, or holding a
+	 * character titles cannot carry. Such a page keeps the build's own account, which the build then
+	 * hides rather than name (see build.php's hideBuildAuthors()).
+	 */
+	private function createAccount(string $author): ?User {
+		$factory = $this->getServiceContainer()->getUserFactory();
+		$user = $factory->newFromName($author, UserRigorOptions::RIGOR_CREATABLE);
 		if (!$user) {
 			$this->output("Warning: '$author' is not a usable account name; importing unattributed.\n");
 			return null;
@@ -159,8 +165,6 @@ class ImportWikitext extends Maintenance {
 				return null;
 			}
 		}
-
-		$this->authors[$author] = $user;
 		return $user;
 	}
 
