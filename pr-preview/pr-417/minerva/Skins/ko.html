@@ -203,8 +203,8 @@ Wikven
 				<div id="mw-content-subtitle" lang="ko" dir="ltr"></div>
 			</div>
 			<div id="bodyContent" class="content">
-				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Skins.html" title="Skins">Skins</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Skins/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Skins.html" class="mw-pt-progress mw-pt-progress--complete" title="Skins (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Skins.html" title="Skins">Skins</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Skins/ko.wikitext">번역한 것</a></span>이며 번역은 75% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Skins.html" class="mw-pt-progress mw-pt-progress--complete" title="Skins (100% 번역함)" lang="en" dir="ltr">English</a></li>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins" class="extiw" title="mw:Special:MyLanguage/Bundled extensions and skins">번들된 스킨</a>은 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>에서 고를 수 있습니다.
 </p><p><span id="Supported&#95;skins"></span>
 </p>
@@ -213,11 +213,12 @@ Wikven
 <li class="toclevel-1 tocsection-1"><a href="#지원하는_스킨"><span class="tocnumber">1</span> <span class="toctext">지원하는 스킨</span></a>
 <ul>
 <li class="toclevel-2 tocsection-2"><a href="#Minerva와_MobileFrontend"><span class="tocnumber">1.1</span> <span class="toctext">Minerva와 MobileFrontend</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Minerva_settings"><span class="tocnumber">1.2</span> <span class="toctext">Minerva settings</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-3"><a href="#스킨_설정"><span class="tocnumber">2</span> <span class="toctext">스킨 설정</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#서드파티_스킨"><span class="tocnumber">3</span> <span class="toctext">서드파티 스킨</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#스킨별_설정"><span class="tocnumber">4</span> <span class="toctext">스킨별 설정</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#스킨_설정"><span class="tocnumber">2</span> <span class="toctext">스킨 설정</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#서드파티_스킨"><span class="tocnumber">3</span> <span class="toctext">서드파티 스킨</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#스킨별_설정"><span class="tocnumber">4</span> <span class="toctext">스킨별 설정</span></a></li>
 </ul>
 </div>
 
@@ -244,7 +245,23 @@ Wikven
 <span class="w">      </span><span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REL1_46</span>
 </pre></div>
 <p>Wikven은 MobileFrontend 없이도 Minerva를 렌더링합니다. Minerva가 제공하는 항목 중 정적 호스트가 서비스할 수 없는 것들은 어느 쪽이든 빠집니다.
-</p><p><span id="Configuring&#95;the&#95;skin"></span>
+</p>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<div class="mw-heading mw-heading3"><h3 id="Minerva_settings">Minerva settings</h3></div>
+</div>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
+</p>
+</div>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. The last two have little to act on here: the typeahead calls a search API a static host does not have, and there is no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
+</p>
+</div>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>What the inert ones would have configured, Wikven supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
+</p>
+</div>
+<p><span id="Configuring&#95;the&#95;skin"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="스킨_설정"><span id=".EC.8A.A4.ED.82.A8_.EC.84.A4.EC.A0.95"></span>스킨 설정</h2></div>
 <p><code>skins</code>를 설정하여 스킨을 바꿀 수 있습니다. 목록의 첫 번째 스킨이 기본값으로 사용됩니다.
@@ -273,6 +290,10 @@ Wikven
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">VectorResponsive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see <a href="../Skins/ko.html#Minerva_settings" title="Special:MyLanguage/Skins">Minerva settings</a> above before reaching for one.
+</p>
+</div>
 <style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Images/ko.html" title="Special:MyLanguage/Images">Images</a></div><div class="wikven-prevnext-next"><a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">JavaScript</a>&#160;&#8594;</div></div>
 
 </div>
@@ -290,8 +311,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786866337">
-  				<span>2026년 8월 16일 (일) 07:45에 마지막으로 편집됨</span>
+  				data-timestamp="1786866678">
+  				<span>2026년 8월 16일 (일) 07:51에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -314,7 +335,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 07:45에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 07:51에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
