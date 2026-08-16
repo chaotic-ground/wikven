@@ -106,7 +106,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="편집">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>694</span>
+		<span>701</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -425,14 +425,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				<div id="contentSub" lang="ko" dir="ltr"><div id="mw-content-subtitle" lang="ko" dir="ltr"></div></div>
 				
 				
-				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 92% 완료했습니다.</div><div class="mw-pt-translate-header" dir="ltr" lang="ko"><span class="mw-translate-fuzzy">오래된 번역은 이렇게 표시됩니다.</span></div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><section id="citizen-section-0" class="citizen-section"><meta property="mw:PageProp/toc"/>
+				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><section id="citizen-section-0" class="citizen-section"><meta property="mw:PageProp/toc"/>
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Development.html" class="mw-pt-progress mw-pt-progress--complete" title="Development (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
-<div class="mw-translate-fuzzy">
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>이 문서는 Wikven에 작업하고자 하는 사람들을 위해 Wikven이 어떻게 만들어지는지 설명합니다. Wikven은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki">MediaWiki</a> 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다.
-</p>
-</div>
-<p><span id="Architecture"></span>
+</p><p><span id="Architecture"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="구조"><span id=".EA.B5.AC.EC.A1.B0"></span>구조</h2></div><section id="citizen-section-1" class="citizen-section">
 <p>Wikven 빌드는 네 개의 구성 요소로 이루어집니다:
@@ -499,11 +496,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="Third-party_extensions_and_skins"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="서드파티_확장_기능과_스킨"><span id=".EC.84.9C.EB.93.9C.ED.8C.8C.ED.8B.B0_.ED.99.95.EC.9E.A5_.EA.B8.B0.EB.8A.A5.EA.B3.BC_.EC.8A.A4.ED.82.A8"></span>서드파티 확장 기능과 스킨</h2></div><section id="citizen-section-7" class="citizen-section">
-<div class="mw-translate-fuzzy">
-<p><code>extensions</code>/<code>skins</code>에 있는 이름 중 Wikven에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 <a href="../Configuration/ko.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>에 선언된 소스(tarball, Git 저장소, 또는 Composer 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
-</p>
-</div>
-<p><span id="Standalone_binary"></span>
+<p><code>extensions</code>/<code>skins</code>에 있는 이름 중 Wikven에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 <a href="../Configuration/ko.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>에 선언된 소스(tarball, <a rel="nofollow" class="external text" href="https://git-scm.com/">Git</a> 저장소, 또는 <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
+</p><p><span id="Standalone_binary"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="단독_실행_바이너리"><span id=".EB.8B.A8.EB.8F.85_.EC.8B.A4.ED.96.89_.EB.B0.94.EC.9D.B4.EB.84.88.EB.A6.AC"></span>단독 실행 바이너리</h2></div><section id="citizen-section-8" class="citizen-section">
 <p>동일한 MediaWiki + Wikven 트리가 단일 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">FrankenPHP 실행 파일</a>로 내장되어(<code>binary.Dockerfile</code> 참고), Docker 없이도 사이트를 빌드할 수 있습니다. 바이너리는 시작 시 자신의 앱을 쓰기 가능한 임시 디렉터리로 추출하고 동일한 파이프라인을 실행하는데, 이것이 모든 쓰기 가능한 경로를 <code>WIKVEN_WORKDIR</code> 아래에 두는 이유입니다.
@@ -533,7 +527,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/ko.wikitext" title="이 문서는 2026년 8월 16일 (일) 14:24에 마지막으로 편집되었습니다." data-timestamp="1786890297"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 16일 (일)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/ko.wikitext" title="이 문서는 2026년 8월 16일 (일) 14:59에 마지막으로 편집되었습니다." data-timestamp="1786892364"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 16일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -704,7 +698,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 16일 (일) 14:24에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 16일 (일) 14:59에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
