@@ -7,6 +7,7 @@ use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleValue;
@@ -53,6 +54,8 @@ class Build extends Maintenance {
 		// Materialize content translations before RunJobs so rendered translation pages get exported.
 		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
 		$this->runJobs("$ip/maintenance/runJobs.php");
+		// Every page exists by now, so every author the export will ever have is known.
+		$this->hideBuildAuthors();
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
 		if (!$skins) {
@@ -93,6 +96,50 @@ class Build extends Maintenance {
 		$child = $this->createChild(RunJobs::class, $file);
 		$child->setOption('type', $type);
 		$child->execute();
+	}
+
+	/**
+	 * Stop the "last edited" lines naming the accounts the build writes under.
+	 *
+	 * The wiki is filled by maintenance scripts, so unless importWikitext could name a page's
+	 * author from the source history, the account on its newest revision is the build's own:
+	 * "Maintenance script" for everything the import and the page setters above wrote, and
+	 * Translate's FuzzyBot for the translated pages its jobs render. Minerva's footer bar was
+	 * offering that name to every reader as the person who last edited the page (#406). It names
+	 * nobody, and the export has no user page, contributions or account for it to lead to.
+	 *
+	 * MediaWiki's own way of saying that a revision's author is not public is the DELETED_USER bit,
+	 * and skins answer it without a name: Minerva emits no editor at all for a revision whose
+	 * RevisionRecord::getUser() is null, leaving its bar to read "Last edited <when> by an
+	 * anonymous user" -- which is what the export knows -- and with no name there is no link to a
+	 * user page the export does not have. Vector's #footer-info-lastmod never carried an author.
+	 * The pages that would report the bit itself, history and diffs, are not rendered, and page
+	 * content hangs off a separate bit (DELETED_TEXT) this leaves alone.
+	 */
+	private function hideBuildAuthors(): void {
+		$names = [User::MAINTENANCE_SCRIPT_USER];
+		if (ExtensionRegistry::getInstance()->isLoaded('Translate')) {
+			$names[] = (string)( $GLOBALS['wgTranslateFuzzyBotName'] ?? 'FuzzyBot' );
+		}
+
+		$dbw = $this->getPrimaryDB();
+		$actors = $dbw->newSelectQueryBuilder()
+			->select('actor_id')
+			->from('actor')
+			->where(['actor_name' => $names])
+			->caller(__METHOD__)
+			->fetchFieldValues();
+		if (!$actors) {
+			return;
+		}
+
+		// Assigned rather than or-ed in: a build never deletes a revision, so the field is 0 here.
+		$dbw->newUpdateQueryBuilder()
+			->update('revision')
+			->set(['rev_deleted' => RevisionRecord::DELETED_USER])
+			->where(['rev_actor' => $actors])
+			->caller(__METHOD__)
+			->execute();
 	}
 
 	/** Freeze page_touched once content is final; wiki-page modules fold it into their version hash. */

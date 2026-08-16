@@ -18,6 +18,13 @@ $wgFileCacheDirectory = $wikvenDist;
 $wgWikvenSourceDirectory = $wikvenSrc;
 $wgWikvenHtmlDirectory = $wikvenDist;
 
+// Per-page "last edited" dates and authors come from the source tree's git history. A bake usually
+// cannot reach it -- actions/bake mounts the source directory alone, without the .git beside it --
+// so the action dumps the log on the runner and mounts it here instead. Absent, the build asks git
+// directly, which answers when the source directory is itself in a checkout (see SourceHistory).
+$wikvenHistoryFile = "$wikvenWork/source-history";
+$wgWikvenSourceHistoryFile = is_file($wikvenHistoryFile) ? $wikvenHistoryFile : '';
+
 // $wgCacheEpoch would otherwise follow LocalSettings.php's mtime, which the entrypoint rewrites
 // every bake, and it is a version input of any module carrying a versionCallback.
 $wgInvalidateCacheOnLocalSettingsChange = false;

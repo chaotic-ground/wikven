@@ -12,6 +12,8 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
+use MediaWiki\User\UserRigorOptions;
+use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -20,6 +22,9 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 require_once "$IP/maintenance/Maintenance.php";
 
 class ImportWikitext extends Maintenance {
+	/** @var array<string,?User> Wiki accounts standing in for git author names, cached by name. */
+	private array $authors = [];
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Import *.wikitext files from the given path');
@@ -29,8 +34,9 @@ class ImportWikitext extends Maintenance {
 	 * @return bool Whether every file was imported successfully.
 	 */
 	public function execute() {
-		global $wgWikvenSourceDirectory;
+		global $wgWikvenSourceDirectory, $wgWikvenSourceHistoryFile;
 		$sourceDirectory = rtrim($wgWikvenSourceDirectory, '/');
+		$history = SourceHistory::forSource($sourceDirectory, (string)$wgWikvenSourceHistoryFile);
 
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		RequestContext::getMain()->setUser($user);
@@ -56,14 +62,30 @@ class ImportWikitext extends Maintenance {
 			$text = file_get_contents($filename);
 			$content = ContentHandler::makeContent($text, $title);
 
+			// What the footer's "last edited" line ends up reporting. The commit that last touched
+			// the file is the answer git gives, and the one the "View history" link leads to; with
+			// no history to read, the frozen build clock dates the page at the commit being built,
+			// which is true of the export as a whole (see SourceHistory and WikvenSettings.php).
+			$timestamp = $history->timestamp($relative) ?? ConvertibleTimestamp::time();
+			$author = $history->author($relative);
+			$editor = $author === null ? null : $this->accountFor($author);
+
 			$this->output("Saving... $title");
 
 			// File:/MediaWiki: pages need a current-revision edit so upload desc and edit hooks apply.
 			if ($title->getNamespace() === NS_FILE || $title->getNamespace() === NS_MEDIAWIKI) {
 				$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
-				$updater = $page->newPageUpdater($user);
+				$updater = $page->newPageUpdater($editor ?? $user);
 				$updater->setContent(SlotRecord::MAIN, $content);
-				$updater->saveRevision(CommentStoreComment::newUnsavedComment('Import'));
+				// PageUpdater stamps the revision from the clock and offers no way to set it, so the
+				// frozen clock moves to the file's own date for the length of the save. setFakeTime()
+				// hands back what it replaced, so this puts the build's own instant back exactly.
+				$frozen = ConvertibleTimestamp::setFakeTime($timestamp);
+				try {
+					$updater->saveRevision(CommentStoreComment::newUnsavedComment('Import'));
+				} finally {
+					ConvertibleTimestamp::setFakeTime($frozen ?? false);
+				}
 				// These are exactly the pages an edit hook may veto -- AbuseFilter or SpamBlacklist on a
 				// File: description, CSS validation on MediaWiki:Common.css.
 				if ($updater->wasSuccessful()) {
@@ -77,13 +99,13 @@ class ImportWikitext extends Maintenance {
 				continue;
 			}
 
-			// Import as an old revision so the file mtime becomes the footer's last-modified timestamp.
+			// Import as an old revision, which is the only path that takes a timestamp of its own.
 			$revision = new WikiRevision();
 			$revision->setContent(SlotRecord::MAIN, $content);
 			$revision->setTitle($title);
-			$revision->setUserObj($user);
+			$revision->setUserObj($editor ?? $user);
 			$revision->setComment('');
-			$revision->setTimestamp(wfTimestamp(TS_UNIX, filemtime($filename)));
+			$revision->setTimestamp(wfTimestamp(TS_MW, $timestamp));
 
 			// WikiRevision::importOldRevision() has been a deprecated shim for this service since 1.31.
 			$importer = $this->getServiceContainer()->getWikiRevisionOldRevisionImporter();
@@ -104,6 +126,42 @@ class ImportWikitext extends Maintenance {
 		}
 
 		return true;
+	}
+
+	/**
+	 * The wiki account standing in for a git author, created on first sight, or null if the name
+	 * is not one MediaWiki will take.
+	 *
+	 * A revision needs an account to belong to, and the point of reading the history is that the
+	 * name the reader is shown matches the commit list the "View history" link opens. The accounts
+	 * are as throwaway as the wiki holding them: the export carries no user pages and no
+	 * contributions, so nothing is claimed of the name beyond having written the page.
+	 */
+	private function accountFor(string $author): ?User {
+		if (array_key_exists($author, $this->authors)) {
+			return $this->authors[$author];
+		}
+		$this->authors[$author] = null;
+
+		// A git author name is free text, so it can be one MediaWiki refuses: too long, or holding
+		// a character titles cannot carry. Such a page keeps the build's own account, which the
+		// build then hides rather than name (see build.php's hideBuildAuthors()).
+		$user = $this->getServiceContainer()->getUserFactory()
+			->newFromName($author, UserRigorOptions::RIGOR_CREATABLE);
+		if (!$user) {
+			$this->output("Warning: '$author' is not a usable account name; importing unattributed.\n");
+			return null;
+		}
+		if (!$user->isRegistered()) {
+			$status = $user->addToDatabase();
+			if (!$status->isOK()) {
+				$this->output("Warning: could not create an account for '$author'; importing unattributed.\n");
+				return null;
+			}
+		}
+
+		$this->authors[$author] = $user;
+		return $user;
 	}
 
 	/**

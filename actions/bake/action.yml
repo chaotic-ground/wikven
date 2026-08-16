@@ -69,8 +69,26 @@ runs:
           '' | *[!0-9]*) ;;
           *) epoch=(-e "SOURCE_DATE_EPOCH=$DATE_EPOCH") ;;
         esac
+        # Each page is dated at the commit that last touched its source file, and credited to that
+        # commit's author. Only this side can see the history -- the container is given the source
+        # directory alone, with no .git beside it -- so dump the log for it here. Paths come out
+        # relative to the source directory, NUL-separated so none of them needs quoting.
+        # A shallow checkout holds one commit, which would date every page at the last push to the
+        # branch and credit whoever made it, so it is refused rather than read. Both commands run
+        # inside the `if`, where a failing one is an answer rather than an aborted step.
+        history=()
+        log="${RUNNER_TEMP:-/tmp}/wikven-source-history"
+        if [ "$(git -C "$SOURCE" rev-parse --is-shallow-repository 2>/dev/null)" = false ] \
+          && git -C "$SOURCE" -c core.quotePath=false log -z --relative --no-renames \
+               --format="%x01%ct%x09%an" --name-only -- . > "$log"; then
+          history=(-v "$log:/workspace/source-history:ro")
+        else
+          echo "wikven: no per-file history for '$SOURCE'; every page will be dated at the commit" \
+               "being built. Check the repository out with fetch-depth: 0 for per-page dates."
+        fi
         docker run --rm \
           -v "$PWD/$SOURCE:/workspace/src" \
           -v "$PWD/$OUTPUT:/workspace/dist" \
           "${epoch[@]}" \
+          "${history[@]}" \
           "$IMAGE"
