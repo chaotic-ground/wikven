@@ -280,7 +280,7 @@ Wikven
 <dt><code>buildScripts</code></dt>
 <dd>Dumps the JavaScript the pages need into two files: <code>startup-static.js</code> (the loader manifest, with its network auto-load removed) and <code>modules-static.js</code> (the full dependency closure, so every module self-executes). It seeds the <code>site</code> module (<code>MediaWiki:Common.js</code> and the skin's JS) and any default <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">gadgets</a>, which a live wiki pulls in implicitly.</dd>
 <dt><code>rewriteScripts</code></dt>
-<dd>Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the appearance menu (and the search box, unless <a href="../Searching/en.html" title="Special:MyLanguage/Searching">SifterSearch</a> is providing a static index), which need a live API.</dd>
+<dd>Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the search box, which needs a live API, unless <a href="../Searching/en.html" title="Special:MyLanguage/Searching">SifterSearch</a> is providing a static index.</dd>
 <dt><code>storeImages</code></dt>
 <dd>Copies every referenced image (from Wikimedia Commons via InstantCommons, or from local uploads) to a content-hashed local file and rewrites the URLs, so nothing is fetched over the network at view time.</dd>
 <dt><code>rename</code></dt>
@@ -319,8 +319,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="FuzzyBot"
   				data-user-gender="unknown"
-  				data-timestamp="1786826814">
-  				<span>Last edited on 15 August 2026, at 20:46</span>
+  				data-timestamp="1786849694">
+  				<span>Last edited on 16 August 2026, at 03:08</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -343,7 +343,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 20:46.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 03:08.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

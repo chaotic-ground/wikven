@@ -474,7 +474,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dt><code>buildScripts</code></dt>
 <dd>Dumps the JavaScript the pages need into two files: <code>startup-static.js</code> (the loader manifest, with its network auto-load removed) and <code>modules-static.js</code> (the full dependency closure, so every module self-executes). It seeds the <code>site</code> module (<code>MediaWiki:Common.js</code> and the skin's JS) and any default <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">gadgets</a>, which a live wiki pulls in implicitly.</dd>
 <dt><code>rewriteScripts</code></dt>
-<dd>Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the appearance menu (and the search box, unless <a href="../Searching/en.html" title="Special:MyLanguage/Searching">SifterSearch</a> is providing a static index), which need a live API.</dd>
+<dd>Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the search box, which needs a live API, unless <a href="../Searching/en.html" title="Special:MyLanguage/Searching">SifterSearch</a> is providing a static index.</dd>
 <dt><code>storeImages</code></dt>
 <dd>Copies every referenced image (from Wikimedia Commons via InstantCommons, or from local uploads) to a content-hashed local file and rewrites the URLs, so nothing is fetched over the network at view time.</dd>
 <dt><code>rename</code></dt>
@@ -515,7 +515,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/en.wikitext" title="This page was last edited on 15 August 2026, at 20:46." data-timestamp="1786826814"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>15 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/en.wikitext" title="This page was last edited on 16 August 2026, at 03:08." data-timestamp="1786849694"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>16 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -686,7 +686,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 15 August 2026, at 20:46.</div>
+		        <div class="page-info__text"> This page was last edited on 16 August 2026, at 03:08.</div>
 		    </section>
 		</div>
 </footer>		</div>
