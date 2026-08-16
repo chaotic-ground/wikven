@@ -97,4 +97,33 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$this->main()->onGetLocalURL($title, $url, 'diff=');
 		$this->assertSame('./Getting_Started.html', $url);
 	}
+
+	/**
+	 * Vector renders the collapsed search box as a link to Special:Search, which the export does
+	 * not have, so it goes to the page SifterSearch lists a query's matches on instead.
+	 */
+	public function testSearchLinkGoesToTheResultsPage() {
+		$this->setMwGlobals('wgSifterSearchResultsPage', 'Search');
+		$url = '/index.php/Special:Search';
+		$this->main()->onGetLocalURL(Title::newFromText('Special:Search'), $url, '');
+		$this->assertSame('./Search.html', $url);
+	}
+
+	/** A link that asks for a term keeps it: the results widget reads "?search=" from the URL. */
+	public function testSearchLinkCarriesTheTerm() {
+		$this->setMwGlobals('wgSifterSearchResultsPage', 'Help:Search');
+		$url = '/x';
+		$this->main()->onGetLocalURL(Title::newFromText('Special:Search'), $url, 'search=oven');
+		$this->assertSame('./Help:Search.html?search=oven', $url);
+	}
+
+	/**
+	 * With no results page named there is nowhere for a search to land, so the toggle is left the
+	 * button its own script treats it as, rather than a link to a page that answers 404.
+	 */
+	public function testSearchLinkWithoutResultsPage() {
+		$url = '/x';
+		$this->main()->onGetLocalURL(Title::newFromText('Special:Search'), $url, '');
+		$this->assertSame('#', $url);
+	}
 }

@@ -77,6 +77,15 @@ jobs:
             exit 1
           fi
 
+          # The export has no Special:Search, so a link to it answers 404 (#393). Vector writes one
+          # for the collapsed search box, on every page it renders, and the results page is where
+          # that belongs; the hidden "title" input naming the special page is left to SifterSearch,
+          # which repoints it, so this matches the link alone.
+          if grep -rIl --include='*.html' 'Special:Search\.html' dist; then
+            echo "::error::exported HTML links to Special:Search, which the export does not have"
+            exit 1
+          fi
+
           # Bundled webfonts. The Khmer translation is the fixture: without a page in a script ULS
           # has a font for, every assertion below passes vacuously on an empty stylesheet.
           test -s dist/webfonts.css
