@@ -12,7 +12,6 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
-use MediaWiki\User\UserRigorOptions;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
@@ -22,9 +21,6 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 require_once "$IP/maintenance/Maintenance.php";
 
 class ImportWikitext extends Maintenance {
-	/** @var array<string,?User> Wiki accounts standing in for git author names, cached by name. */
-	private array $authors = [];
-
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Import *.wikitext files from the given path');
@@ -40,6 +36,7 @@ class ImportWikitext extends Maintenance {
 
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		RequestContext::getMain()->setUser($user);
+		$authors = new SourceAuthors($this->getServiceContainer()->getUserFactory(), $user);
 
 		$failed = [];
 		foreach ($this->wikitextFiles($sourceDirectory) as $filename) {
@@ -67,8 +64,7 @@ class ImportWikitext extends Maintenance {
 			// no history to read, the frozen build clock dates the page at the commit being built,
 			// which is true of the export as a whole (see SourceHistory and WikvenSettings.php).
 			$timestamp = $history->timestamp($relative) ?? ConvertibleTimestamp::time();
-			$author = $history->author($relative);
-			$editor = $author === null ? $user : $this->accountFor($author, $user);
+			$editor = $authors->accountFor($history->author($relative));
 
 			$this->output("Saving... $title");
 
@@ -126,46 +122,6 @@ class ImportWikitext extends Maintenance {
 		}
 
 		return true;
-	}
-
-	/**
-	 * The wiki account standing in for a git author, created on first sight, or $unattributed when
-	 * the name is not one MediaWiki will take.
-	 *
-	 * A revision needs an account to belong to, and the point of reading the history is that the
-	 * name the reader is shown matches the commit list the "View history" link opens. The accounts
-	 * are as throwaway as the wiki holding them: the export carries no user pages and no
-	 * contributions, so nothing is claimed of the name beyond having written the page.
-	 */
-	private function accountFor(string $author, User $unattributed): User {
-		if (!array_key_exists($author, $this->authors)) {
-			$this->authors[$author] = $this->createAccount($author);
-		}
-		return $this->authors[$author] ?? $unattributed;
-	}
-
-	/**
-	 * Find or create the account for a git author name, or null if MediaWiki will not have it.
-	 *
-	 * A git author name is free text, so it can be one MediaWiki refuses: too long, or holding a
-	 * character titles cannot carry. Such a page keeps the build's own account, which the build then
-	 * hides rather than name (see build.php's hideBuildAuthors()).
-	 */
-	private function createAccount(string $author): ?User {
-		$factory = $this->getServiceContainer()->getUserFactory();
-		$user = $factory->newFromName($author, UserRigorOptions::RIGOR_CREATABLE);
-		if (!$user) {
-			$this->output("Warning: '$author' is not a usable account name; importing unattributed.\n");
-			return null;
-		}
-		if (!$user->isRegistered()) {
-			$status = $user->addToDatabase();
-			if (!$status->isOK()) {
-				$this->output("Warning: could not create an account for '$author'; importing unattributed.\n");
-				return null;
-			}
-		}
-		return $user;
 	}
 
 	/**
