@@ -29,4 +29,4 @@
 == 함께 보기 ==
 
 <!--T:6 @bf5b7624-->
-* {{ml|Manual:Interface/Sidebar}}
+* [$1 Manual:Interface/Sidebar]

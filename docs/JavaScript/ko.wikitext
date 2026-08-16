@@ -14,7 +14,7 @@
 == 소도구 ==
 
 <!--T:5 @be9e9765-->
-{{ml|Extension:Gadgets|소도구}}를 사용하려면 [[$1|.wikven.yaml]]에서 번들된 Gadgets 확장 기능을 활성화합니다:
+[$2 소도구]를 사용하려면 [[$1|.wikven.yaml]]에서 번들된 Gadgets 확장 기능을 활성화합니다:
 
 <!--T:6 @a22fc720-->
 소도구는 <code>MediaWiki:Gadgets-definition.wikitext</code>에 나열하고, 각 소도구의 코드는 <code>MediaWiki:Gadget-<name>.js</code>에 둡니다:
