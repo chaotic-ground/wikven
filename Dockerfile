@@ -35,6 +35,11 @@ RUN arch="$TARGETARCH" \
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ARG TRANSLATE_VERSION=REL1_46
 ARG ULS_VERSION=REL1_46
+# Translate asks for its two runtime deps by range, so an unpinned install takes whatever Packagist
+# serves that day. Core's own answer to this is exact versions and no lock file, so: exact versions,
+# passed as temporary constraints rather than written into Translate's manifest. Bumped by updatecli.
+ARG SPYC_VERSION=0.6.3
+ARG COMPOSER_INSTALLERS_VERSION=v2.3.0
 # Composer refuses to resolve at all when any package in the tree carries a security advisory,
 # including a require-dev one that --no-dev then never installs. Translate's dev requirements pin
 # a phpcs release that has one, which broke every build reaching this layer without a warm cache.
@@ -42,6 +47,8 @@ ARG ULS_VERSION=REL1_46
 # Fetched as tarballs: a clone carries a .git nothing here reads, and transfers several times the
 # bytes for it. Downloaded before extracting rather than piped, so a failed fetch fails the build
 # instead of feeding tar an empty stream.
+# The php check ahead of the update fails the build if Translate's runtime requirements ever stop
+# matching what the ARGs pin, so a new upstream dependency cannot slip in unpinned.
 RUN composer config --global policy.advisories.block false \
  && ext=/var/www/html/extensions \
  && curl -fsSL -o /tmp/uls.tar.gz \
@@ -52,8 +59,12 @@ RUN composer config --global policy.advisories.block false \
  && tar -xzf /tmp/uls.tar.gz --strip-components=1 -C "$ext/UniversalLanguageSelector" \
  && tar -xzf /tmp/translate.tar.gz --strip-components=1 -C "$ext/Translate" \
  && rm /tmp/uls.tar.gz /tmp/translate.tar.gz \
- && composer install --no-dev --no-interaction \
-      --working-dir="$ext/Translate"
+ && php -r '$have = array_keys(json_decode(file_get_contents($argv[1]), true)["require"]); $want = explode(" ", $argv[2]); sort($have); sort($want); if ($have !== $want) { fwrite(STDERR, "Translate requires " . implode(" ", $have) . ", pinned " . implode(" ", $want) . "\n"); exit(1); }' \
+      -- "$ext/Translate/composer.json" "composer/installers mustangostang/spyc" \
+ && composer update --no-dev --no-interaction \
+      --working-dir="$ext/Translate" \
+      --with "mustangostang/spyc:$SPYC_VERSION" \
+      --with "composer/installers:$COMPOSER_INSTALLERS_VERSION"
 
 COPY ./ /var/www/html/extensions/Wikven
 COPY includes/WikvenSettings.php /var/www/html/
