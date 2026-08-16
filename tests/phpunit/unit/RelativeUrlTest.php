@@ -96,6 +96,63 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 		$this->assertSame($html, RelativeUrl::reparent($html, 1));
 	}
 
+	/**
+	 * The printfooter's "Retrieved from" link reaches here as a bare path from the output root:
+	 * core expands the page's own URL, and dot-segment removal takes the "./" off it.
+	 */
+	public function testThePrintFooterLinkIsRebased() {
+		$this->assertSame(
+			'<div class="printfooter" data-nosnippet="">Retrieved from '
+			. '"<a dir="ltr" href="../Manual/Config.html">Manual/Config.html</a>"</div>',
+			RelativeUrl::reparent(
+				'<div class="printfooter" data-nosnippet="">Retrieved from '
+				. '"<a dir="ltr" href="Manual/Config.html">Manual/Config.html</a>"</div>',
+				1
+			)
+		);
+	}
+
+	public function testThePrintFooterLinkGainsOneLevelPerDepth() {
+		$this->assertSame(
+			'<div class="printfooter"><a href="../../A/B/C.html">A/B/C.html</a></div>',
+			RelativeUrl::reparent('<div class="printfooter"><a href="A/B/C.html">A/B/C.html</a></div>', 2)
+		);
+	}
+
+	/** A namespaced title reads like a URL scheme; only "://" marks one that really is. */
+	public function testThePrintFooterLinkToANamespacedPageIsRebased() {
+		$this->assertSame(
+			'<div class="printfooter"><a href="../File:Oven.jpg.html">File:Oven.jpg.html</a></div>',
+			RelativeUrl::reparent(
+				'<div class="printfooter"><a href="File:Oven.jpg.html">File:Oven.jpg.html</a></div>',
+				1
+			)
+		);
+	}
+
+	public function testAPrintFooterLinkThatKeptItsMarkerIsRebasedOnce() {
+		$this->assertSame(
+			'<div class="printfooter"><a href="../Intro.html">Intro.html</a></div>',
+			RelativeUrl::reparent('<div class="printfooter"><a href="./Intro.html">Intro.html</a></div>', 1)
+		);
+	}
+
+	public function testAnAbsolutePrintFooterLinkIsLeftAlone() {
+		$html = '<div class="printfooter"><a href="https://example.org/Intro">https://example.org/Intro</a></div>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
+	/** Outside the printfooter a bare relative href is indistinguishable from a path in prose. */
+	public function testABareRelativeHrefOutsideThePrintFooterIsLeftAlone() {
+		$html = '<a href="Manual/Config.html">Config</a>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
+	public function testAPrintFooterShownAsACodeExampleIsNotRewritten() {
+		$html = '<pre>&lt;div class="printfooter"&gt;&lt;a href="Intro.html"&gt;&lt;/a&gt;&lt;/div&gt;</pre>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
 	public function testMyLanguageResolvesToTheTranslationWhenItExists() {
 		$this->assertSame(
 			'href="./B/ko.html"',

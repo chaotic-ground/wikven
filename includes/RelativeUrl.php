@@ -18,6 +18,9 @@ class RelativeUrl {
 	 * which turns a documentation example's own "<a href=\"./intro\">" into "&lt;a href=\"./intro\"&gt;"
 	 * -- the quotes survive, but neither escaped angle bracket is a real "<" or ">", so nothing there
 	 * reads as a tag span and the example's href is correctly left alone.
+	 *
+	 * The printfooter's link arrives without the "./" it was written with, so it is rebased on its
+	 * own; see rebasePrintFooter() below.
 	 */
 	public static function reparent(string $html, int $depth): string {
 		if ($depth < 1) {
@@ -70,7 +73,7 @@ class RelativeUrl {
 		);
 
 		$styleContexts = array_merge(self::tagRanges($html), self::ranges($html, '#<style\b[^>]*>.*?</style>#is'));
-		return preg_replace_callback(
+		$html = preg_replace_callback(
 			'#url\((["\']?)(\.\.?)/#',
 			static function (array $m) use ($rebase, $styleContexts): string {
 				if (!self::insideAny($m[0][1], $styleContexts)) {
@@ -83,6 +86,63 @@ class RelativeUrl {
 			$count,
 			PREG_OFFSET_CAPTURE
 		);
+
+		return self::rebasePrintFooter($html, $up);
+	}
+
+	/**
+	 * Rebase the printfooter's "Retrieved from" link, the one reference that reaches a page having
+	 * lost the "./" the rest of this class goes by.
+	 *
+	 * Skin::printSource() builds it from Title::getCanonicalURL() and expands the result a second
+	 * time; each expansion runs UrlUtils' dot-segment removal over the URL, which drops the leading
+	 * "./" that Hooks\Main::onGetLocalURL wrote. What survives is still a path from the output root
+	 * -- it just no longer says so, so the passes above walk past it, and from a page exported into
+	 * a subdirectory it resolves inside that subdirectory and answers 404. A top-level page is
+	 * unaffected, its link being right from the root by accident.
+	 *
+	 * A bare relative href is exactly the shape that carries no marker telling a link of ours from
+	 * a path a page merely shows, which is why only core's printfooter div is rebased: everything
+	 * in there is the line core has just built out of this page's own URL.
+	 */
+	private static function rebasePrintFooter(string $html, string $up): string {
+		return preg_replace_callback(
+			'~<div[^>]*\bclass="printfooter"[^>]*>.*?</div>~s',
+			static function (array $footer) use ($up): string {
+				return preg_replace_callback(
+					'~(\shref=")([^"]*)"~',
+					static function (array $href) use ($up): string {
+						if (!self::isRootRelative($href[2])) {
+							return $href[0];
+						}
+						return $href[1] . $up . $href[2] . '"';
+					},
+					$footer[0]
+				);
+			},
+			$html
+		);
+	}
+
+	/**
+	 * Whether $href is a bare path from the output root -- what the printfooter's link is left as.
+	 *
+	 * Everything else names something the depth of the page cannot move: an absolute URL, a path
+	 * from the host root, a fragment or query on the page itself, or -- for a link that kept its
+	 * marker, and so was rebased by reparent() already -- a path the "./" prefix has spoken for.
+	 * A namespaced title such as "File:Oven.jpg.html" reads like a scheme and is not one, hence
+	 * the test for "://" rather than for a colon.
+	 */
+	private static function isRootRelative(string $href): bool {
+		if ($href === '') {
+			return false;
+		}
+		foreach (['/', '#', '?', './', '../'] as $prefix) {
+			if (str_starts_with($href, $prefix)) {
+				return false;
+			}
+		}
+		return !str_contains($href, '://');
 	}
 
 	/** Byte ranges of the raw "<tag ...>" spans in $html, each as [start, endExclusive]. */

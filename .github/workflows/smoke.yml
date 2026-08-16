@@ -86,6 +86,20 @@ jobs:
             exit 1
           fi
 
+          # Every printfooter "Retrieved from" link must resolve from the page that carries it
+          # (#394). Core builds it from the page's own URL and expands away the "./" wikven writes,
+          # so a page exported into a subdirectory needs the "../" per level rename.php adds; the
+          # link is print-only on screen, which is exactly why nothing else would catch it.
+          find dist -name '*.html' -print0 | while IFS= read -r -d '' page; do
+            href=$(sed -n 's/.*class="printfooter"[^<]*<a[^>]*href="\([^"]*\)".*/\1/p' "$page")
+            [ -n "$href" ] || continue
+            case "$href" in *'://'* | /* | '#'*) continue ;; esac
+            if [ ! -f "$(dirname "$page")/$href" ]; then
+              echo "::error::$page: printfooter link '$href' does not resolve"
+              exit 1
+            fi
+          done
+
           # Bundled webfonts. The Khmer translation is the fixture: without a page in a script ULS
           # has a font for, every assertion below passes vacuously on an empty stylesheet.
           test -s dist/webfonts.css
