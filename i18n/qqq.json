@@ -13,5 +13,7 @@
 	"wikven-appearance-night": "Label for the dark colour theme. Sets the skin-theme client preference to \"night\".",
 	"wikven-appearance-os": "Label for following the reader's operating system setting. Sets the skin-theme client preference to \"os\".",
 	"wikven-settings": "Label of the link to the generated settings page, in Minerva's main menu, where the skin would otherwise link to Special:MobileOptions.",
-	"wikven-settings-intro": "Opening sentence of the generated settings page, explaining that a static export keeps display choices in the reader's browser."
+	"wikven-settings-intro": "Opening sentence of the generated settings page, explaining that a static export keeps display choices in the reader's browser.",
+	"wikven-appearance-description": "Description under {{msg-mw|wikven-appearance}} on the generated settings page, in the style of Special:MobileOptions.",
+	"wikven-skins-description": "Description under {{msg-mw|wikven-skins}} on the generated settings page."
 }

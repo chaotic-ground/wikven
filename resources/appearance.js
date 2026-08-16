@@ -48,22 +48,38 @@ const drawTheme = (container) => {
 };
 
 // The switcher is a list of links rather than a preference: each skin's copy of a page is its own
-// file, so choosing one is a navigation. The list comes from the page itself, which the bake wrote
-// into the menu, so this page does not have to know the skins.
+// file, so choosing one is a navigation. Minerva's copy of this page is written by the build, which
+// knows each page's own links; the other skins carry theirs in the chrome, so the list is taken
+// from there rather than worked out again here.
 const drawSkins = (container) => {
-	const source = document.querySelector("#p-wikven-skins");
-	if (!source) {
+	if (container.children.length) {
+		return;
+	}
+	const entries = document.querySelectorAll('[id^="t-wikven-skin-"]');
+	if (!entries.length) {
 		return;
 	}
 	const list = document.createElement("ul");
-	for (const item of source.querySelectorAll('[id^="t-wikven-skin-"]')) {
-		list.append(item.cloneNode(true));
+	list.className = "wikven-skin-list";
+	for (const entry of entries) {
+		const item = document.createElement("li");
+		item.className = entry.className.includes("active")
+			? "wikven-skin-item active"
+			: "wikven-skin-item";
+		const link = entry.querySelector("a");
+		const label = document.createElement(link ? "a" : "span");
+		if (link) {
+			label.href = link.getAttribute("href");
+		}
+		label.textContent = entry.textContent.trim();
+		item.append(label);
+		list.append(item);
 	}
 	container.append(list);
 };
 
-const theme = document.querySelector(".wikven-appearance-theme");
-const skins = document.querySelector(".wikven-appearance-skins");
+const theme = document.querySelector("#wikven-appearance-theme");
+const skins = document.querySelector("#wikven-appearance-skins");
 
 if (theme && mw.user?.clientPrefs) {
 	drawTheme(theme);

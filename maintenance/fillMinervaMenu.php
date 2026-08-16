@@ -33,6 +33,9 @@ class FillMinervaMenu extends Maintenance {
 	/** Minerva's own class for a menu group, which is what draws the gap between two of them. */
 	private const LIST_CLASS = 'toggle-list__list';
 
+	/** The placeholder build.php leaves on the settings page for the skin list. */
+	private const SKIN_LIST = 'wikven-appearance-skins';
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription("Add the site's navigation to Minerva's main menu.");
@@ -58,12 +61,17 @@ class FillMinervaMenu extends Maintenance {
 				continue;
 			}
 			// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
-			// The file is still under its cache name here; the link has to name it as rename.php
-			// will leave it, since that pass runs after this one.
+			// The file is still under its cache name here; a link has to name its destination as
+			// rename.php will leave it, since that pass runs after this one.
 			$page = CacheName::toOutputPath($file->getFilename(), $language);
-			$groups = $navigation . $this->list('p-wikven-skins', $this->skinMarkup($page) . $settings);
 			$html = (string)file_get_contents($file->getPathname());
-			$filled = HtmlListInserter::after($html, self::AFTER_LIST, $groups);
+			$filled = HtmlListInserter::after(
+				$html,
+				self::AFTER_LIST,
+				$navigation . $this->list('p-wikven-settings', $settings)
+			);
+			// The switcher lives on the settings page, the only page with anywhere to put it.
+			$filled = HtmlListInserter::inside($filled, self::SKIN_LIST, $this->skinMarkup($page));
 			if ($filled !== $html) {
 				file_put_contents($file, $filled, LOCK_EX);
 				$changed++;
@@ -139,26 +147,23 @@ class FillMinervaMenu extends Maintenance {
 	private function skinMarkup(string $page): string {
 		global $wgDefaultSkin;
 
-		$markup = '';
+		$items = '';
 		$skin = RequestContext::getMain()->getSkin();
 		foreach (SkinList::forPage($skin, $page, $wgDefaultSkin) as $entry) {
-			$label = Html::element('span', ['class' => 'toggle-list-item__label'], $entry['text']);
-			$classes = ['toggle-list-item', 'wikven-nav-item', 'wikven-skin-item'];
+			$classes = ['wikven-skin-item'];
 			if ($entry['active']) {
 				$classes[] = 'active';
 			}
-			// The skin being read is not a link, but it is still a row: the anchor's class carries
-			// the box, so a span in its place lines the label up with the ones beside it.
-			$row = $entry['href'] === null
-				? Html::rawElement('span', ['class' => 'toggle-list-item__anchor'], $label)
-				: Html::rawElement(
-					'a',
-					['class' => 'toggle-list-item__anchor', 'href' => $entry['href']],
-					$label
-				);
-			$markup .= Html::rawElement('li', ['class' => $classes, 'id' => $entry['id']], $row);
+			$items .= Html::rawElement(
+				'li',
+				['class' => $classes, 'id' => $entry['id']],
+				// The skin being read names itself without linking to the page one is already on.
+				$entry['href'] === null
+					? Html::element('span', [], $entry['text'])
+					: Html::element('a', ['href' => $entry['href']], $entry['text'])
+			);
 		}
-		return $markup;
+		return $items === '' ? '' : Html::rawElement('ul', ['class' => 'wikven-skin-list'], $items);
 	}
 
 	/**

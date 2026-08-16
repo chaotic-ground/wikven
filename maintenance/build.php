@@ -344,12 +344,20 @@ class Build extends Maintenance {
 			return;
 		}
 
-		$text = $this->contentMsg('wikven-settings-intro') . "\n\n";
-		$text .= '== ' . $this->contentMsg('wikven-appearance') . " ==\n";
-		$text .= "<div class=\"wikven-appearance-theme\"></div>\n\n";
+		// A section each, titled and described as Special:MobileOptions does, around a placeholder
+		// the build or the script fills. Class and id both: the class styles, the id is what
+		// fillMinervaMenu.php finds.
+		$text = $this->settingsSection(
+			'wikven-appearance',
+			'wikven-appearance-description',
+			'wikven-appearance-theme'
+		);
 		if (count($GLOBALS['wgWikvenSkins'] ?? []) > 1) {
-			$text .= '== ' . $this->contentMsg('wikven-skins') . " ==\n";
-			$text .= "<div class=\"wikven-appearance-skins\"></div>\n";
+			$text .= $this->settingsSection(
+				'wikven-skins',
+				'wikven-skins-description',
+				'wikven-appearance-skins'
+			);
 		}
 
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
@@ -357,6 +365,21 @@ class Build extends Maintenance {
 		$updater = $page->newPageUpdater($user);
 		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($text, $title));
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Generate the settings page'));
+	}
+
+	/** One titled and described section of the settings page, around an empty placeholder. */
+	private function settingsSection(string $title, string $description, string $id): string {
+		return (
+			'<div class="wikven-setting">'
+			. '<div class="wikven-setting-title">'
+			. $this->contentMsg($title)
+			. '</div>'
+			. '<div class="wikven-setting-description">'
+			. $this->contentMsg($description)
+			. '</div>'
+			. "<div class=\"wikven-setting-control\" id=\"$id\"></div>"
+			. "</div>\n"
+		);
 	}
 
 	/** Generate a Version page (static Special:Version) listing software, extensions and skins. */

@@ -24,4 +24,28 @@ class HtmlListInserter {
 		$after = $close + strlen('</ul>');
 		return substr($html, 0, $after) . $markup . substr($html, $after);
 	}
+
+	/**
+	 * @param string $html A rendered page.
+	 * @param string $id The id of an empty element to fill.
+	 * @param string $markup What to put inside it.
+	 * @param string $tag The element's tag, whose first close after the id is taken as its own.
+	 * @return string The page, unchanged when the element is not there or never closes.
+	 */
+	public static function inside(
+		string $html,
+		string $id,
+		string $markup,
+		string $tag = 'div'
+	): string {
+		$at = strpos($html, 'id="' . $id . '"');
+		if ($at === false) {
+			return $html;
+		}
+		$close = strpos($html, "</$tag>", $at);
+		if ($close === false) {
+			return $html;
+		}
+		return substr($html, 0, $close) . $markup . substr($html, $close);
+	}
 }

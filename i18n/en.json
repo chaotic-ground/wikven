@@ -13,5 +13,7 @@
 	"wikven-appearance-night": "Dark",
 	"wikven-appearance-os": "Automatic",
 	"wikven-settings": "Settings",
-	"wikven-settings-intro": "These choices are kept in this browser. They apply to this site only, and no account is involved."
+	"wikven-settings-intro": "These choices are kept in this browser. They apply to this site only, and no account is involved.",
+	"wikven-appearance-description": "Choose how the site looks, for this browser.",
+	"wikven-skins-description": "Read this site in another skin. Each one renders the same pages."
 }
