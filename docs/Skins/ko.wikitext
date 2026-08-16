@@ -18,6 +18,15 @@ Wikven은 세 가지 스킨을 지원합니다. 이 문서 사이트는 세 스�
 <!--T:11 @b34d3fdc-->
 그 밖의 스킨은 거부되는 것이 아니라 검증되지 않을 뿐입니다. MediaWiki에 번들된 스킨은 MonoBook을 비롯해 모두 이름만으로 사용할 수 있고, 서드파티 스킨은 Citizen처럼 가져올 수 있습니다.
 
+<!--T:12 @5c4e7f23-->
+=== Minerva와 MobileFrontend ===
+
+<!--T:13 @a156836b-->
+MinervaNeue는 MediaWiki에 번들되어 있지만, 함께 자라 온 {{ml|Extension:MobileFrontend|MobileFrontend}}는 그렇지 않습니다. 이것이 없으면 스킨은 자체 <code>initMobile.js</code>를 건너뛰고 그것이 마련해 주는 것들을 잃는데, 목차 토글도 그중 하나입니다. Minerva를 활성화한다면 이 둘을 함께 가져오십시오. 이 사이트가 그렇게 하고 있으므로, 권장 구성은 모든 빌드가 렌더링하는 바로 그 구성입니다.
+
+<!--T:14 @864f603c-->
+Wikven은 MobileFrontend 없이도 Minerva를 렌더링합니다. Minerva가 제공하는 항목 중 정적 호스트가 서비스할 수 없는 것들은 어느 쪽이든 빠집니다.
+
 <!--T:5 @1c58d369-->
 == 스킨 설정 ==
 
