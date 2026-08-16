@@ -5,6 +5,8 @@ grumphp:
         # none are staged, and offer to re-run with fixes applied when they fail.
         mago_format: ~
         mago_lint: ~
+        phpcs:
+            standard: .phpcs.xml
         # No native task exists for these, so they run as they do in CI.
         shell:
             scripts:
@@ -13,4 +15,5 @@ grumphp:
                 - ["-c", "taplo fmt --check"]
                 - ["-c", "taplo check"]
                 - ["-c", "vendor/bin/minus-x check ."]
+                - ["-c", "composer validate --no-check-publish"]
             triggered_by: [php, json, css, less, js, ts, md, toml]
