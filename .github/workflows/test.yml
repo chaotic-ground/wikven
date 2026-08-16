@@ -58,6 +58,7 @@ jobs:
       - name: Install MediaWiki dependencies
         working-directory: mediawiki
         run: composer install --no-interaction --no-progress
+      # --with-developmentsettings loads what Quibble loads; it turns on $wgEnableJavaScriptTest, which #392 needed.
       - name: Install MediaWiki (SQLite)
         working-directory: mediawiki
         run: |
@@ -66,6 +67,7 @@ jobs:
             --dbtype=sqlite --dbpath="$RUNNER_TEMP/wikidb" \
             --scriptpath='' \
             --pass=adminpassword \
+            --with-developmentsettings \
             TestWiki Admin
       - name: Enable Wikven
         working-directory: mediawiki
