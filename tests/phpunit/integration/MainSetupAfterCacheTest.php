@@ -113,4 +113,25 @@ class MainSetupAfterCacheTest extends MediaWikiIntegrationTestCase {
 			'another skin keeps its own answer' => ['vector-2022', false]
 		];
 	}
+
+	/**
+	 * ULS fetches its input methods from load.php the first time a reader focuses a text field, and
+	 * an export has no load.php. Emptying the selector list is what leaves the handler nothing to
+	 * bind to, and it belongs here: set at LocalSettings time, an empty array reads to
+	 * ExtensionRegistry as "not set" and ULS's own default replaces it.
+	 */
+	public function testUlsInputMethodsAreLeftWithNoFieldToBindTo() {
+		$this->setMwGlobals('wgULSImeSelectors', ['input[type=text]', 'textarea']);
+		$this->main()->onSetupAfterCache();
+		$this->assertSame([], $GLOBALS['wgULSImeSelectors']);
+	}
+
+	/** Without ULS there is no such config, and inventing one would be a global that means nothing. */
+	public function testTheUlsSelectorListIsNotInventedWithoutUls() {
+		if (array_key_exists('wgULSImeSelectors', $GLOBALS)) {
+			$this->markTestSkipped('ULS is loaded here, so there is no "without ULS" to assert');
+		}
+		$this->main()->onSetupAfterCache();
+		$this->assertArrayNotHasKey('wgULSImeSelectors', $GLOBALS);
+	}
 }
