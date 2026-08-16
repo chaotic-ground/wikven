@@ -205,10 +205,10 @@ Wikven
 <p>Common problems and what to check.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Thumbnails_look_low_quality">Thumbnails look low quality</h2></div>
-<p>The <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> falls back to the built-in GD library, which produces lower-quality thumbnails and supports fewer formats. Install <b>ImageMagick</b> and <b>librsvg</b> on the build host for better output, or use the Docker image, which bundles them. See <a href="../Images/en.html" title="Special:MyLanguage/Images">Images</a>.
+<p>The <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> falls back to the built-in <a rel="nofollow" class="external text" href="https://libgd.github.io/">GD</a> library, which produces lower-quality thumbnails and supports fewer formats. Install <b><a rel="nofollow" class="external text" href="https://imagemagick.org/">ImageMagick</a></b> and <b><a rel="nofollow" class="external text" href="https://gitlab.gnome.org/GNOME/librsvg">librsvg</a></b> on the build host for better output, or use the Docker image, which bundles them. See <a href="../Images/en.html" title="Special:MyLanguage/Images">Images</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="The_search_box_does_nothing">The search box does nothing</h2></div>
-<p>Search is client-side, built into Wikven via SifterSearch and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See <a href="../Searching/en.html" title="Special:MyLanguage/Searching">Searching</a>.
+<p>Search is client-side, built into Wikven via <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/SifterSearch">SifterSearch</a> and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See <a href="../Searching/en.html" title="Special:MyLanguage/Searching">Searching</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="A_page_is_missing_from_the_site">A page is missing from the site</h2></div>
 <p>The build aborts if any page fails to import, printing <code>Failed to import N page(s)</code> with the file names. A common cause is a file whose name does not map to a valid title; rename it (the build warns when a name does not round-trip). Re-run the build and read the log for the failing file.
@@ -219,7 +219,7 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="The_binary_will_not_run_on_macOS_or_Windows">The binary will not run on macOS or Windows</h2></div>
 <p>The standalone binary is Linux-only (x86_64 and arm64). On macOS or Windows, use the Docker image instead. See <a href="../Installation/en.html" title="Special:MyLanguage/Installation">Installation</a>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Deploying/en.html" title="Special:MyLanguage/Deploying">Deploying</a></div><div class="wikven-prevnext-next"><a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">Configuration</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r77">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Deploying/en.html" title="Special:MyLanguage/Deploying">Deploying</a></div><div class="wikven-prevnext-next"><a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">Configuration</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Troubleshooting/en.html">Troubleshooting/en.html</a>"</div></div>
@@ -236,8 +236,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="FuzzyBot"
   				data-user-gender="unknown"
-  				data-timestamp="1786869252">
-  				<span>Last edited on 16 August 2026, at 08:34</span>
+  				data-timestamp="1786892880">
+  				<span>Last edited on 16 August 2026, at 15:08</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -260,7 +260,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 08:34.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 15:08.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

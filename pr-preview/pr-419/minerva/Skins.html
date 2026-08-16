@@ -206,61 +206,32 @@ Wikven
 			<div id="bodyContent" class="content">
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
 <li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="스킨 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
-<p>You can choose <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins" class="extiw" title="mw:Special:MyLanguage/Bundled extensions and skins">bundled skins</a> in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
+<p>You can choose <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins">bundled skins</a> in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p>
 <div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="en" dir="ltr"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Supported_skins"><span class="tocnumber">1</span> <span class="toctext">Supported skins</span></a>
+<li class="toclevel-1 tocsection-1"><a href="#Supported_skins"><span class="tocnumber">1</span> <span class="toctext">Supported skins</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Configuring_the_skin"><span class="tocnumber">2</span> <span class="toctext">Configuring the skin</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Third-party_skins"><span class="tocnumber">3</span> <span class="toctext">Third-party skins</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Skin-specific_configuration"><span class="tocnumber">4</span> <span class="toctext">Skin-specific configuration</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Appendix:_Minerva"><span class="tocnumber">5</span> <span class="toctext">Appendix: Minerva</span></a>
 <ul>
-<li class="toclevel-2 tocsection-2"><a href="#Minerva_and_MobileFrontend"><span class="tocnumber">1.1</span> <span class="toctext">Minerva and MobileFrontend</span></a></li>
-<li class="toclevel-2 tocsection-3"><a href="#How_Minerva_is_supported"><span class="tocnumber">1.2</span> <span class="toctext">How Minerva is supported</span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#Minerva_settings"><span class="tocnumber">1.3</span> <span class="toctext">Minerva settings</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Minerva_and_MobileFrontend"><span class="tocnumber">5.1</span> <span class="toctext">Minerva and MobileFrontend</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#How_Minerva_is_supported"><span class="tocnumber">5.2</span> <span class="toctext">How Minerva is supported</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Minerva_settings"><span class="tocnumber">5.3</span> <span class="toctext">Minerva settings</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#Configuring_the_skin"><span class="tocnumber">2</span> <span class="toctext">Configuring the skin</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#Third-party_skins"><span class="tocnumber">3</span> <span class="toctext">Third-party skins</span></a></li>
-<li class="toclevel-1 tocsection-7"><a href="#Skin-specific_configuration"><span class="tocnumber">4</span> <span class="toctext">Skin-specific configuration</span></a></li>
 </ul>
 </div>
 
 <div class="mw-heading mw-heading2"><h2 id="Supported_skins">Supported skins</h2></div>
 <p>Wikven supports three skins. This documentation site is built with all three, so every change is exercised in each of them.
 </p>
-<ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector" class="extiw" title="mw:Special:MyLanguage/Skin:Vector">Vector</a> (default; <code>Vector</code> selects the skin's <code>vector-2022</code> variant, Vector 2022)</li>
-<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MinervaNeue" class="extiw" title="mw:Special:MyLanguage/Skin:MinervaNeue">MinervaNeue</a> (mobile-oriented)</li>
-<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Citizen" class="extiw" title="mw:Special:MyLanguage/Skin:Citizen">Citizen</a> (third-party, fetched at build time)</li></ul>
+<ul><li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector">Vector</a> (default; <code>Vector</code> selects the skin's <code>vector-2022</code> variant, Vector 2022)</li>
+<li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:MinervaNeue">MinervaNeue</a> (mobile-oriented)</li>
+<li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Citizen">Citizen</a> (third-party, fetched at build time)</li></ul>
 <p>Any other skin is untested rather than refused: every skin bundled with MediaWiki is available by name, MonoBook among them, and a third-party skin can be fetched like Citizen is.
-</p>
-<div class="mw-heading mw-heading3"><h3 id="Minerva_and_MobileFrontend">Minerva and MobileFrontend</h3></div>
-<p>MinervaNeue is bundled with MediaWiki; <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:MobileFrontend" class="extiw" title="mw:Special:MyLanguage/Extension:MobileFrontend">MobileFrontend</a>, which it grew up alongside, is not. Without it the skin skips its own <code>initMobile.js</code> and loses what that sets up, the table of contents toggle among it. Fetch the pair if you enable Minerva. This site does, so the recommended configuration is the one every build renders.
-</p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
-<span class="nt">extensions</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MobileFrontend</span>
-<span class="nt">config</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">WikvenRepositories</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">MobileFrontend</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git</span>
-<span class="w">      </span><span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REL1_46</span>
-</pre></div>
-<p>Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
-</p>
-<div class="mw-heading mw-heading3"><h3 id="How_Minerva_is_supported">How Minerva is supported</h3></div>
-<p>Minerva is built and exercised like the other two, but more of that support is Wikven working around the skin than configuring it. Minerva builds its main menu from its own definitions rather than from <code>MediaWiki:Sidebar</code>, and several of its controls expect MobileFrontend or a live wiki behind them, so the build stands in for both:
-</p>
-<ul><li>The site's own navigation is written into the main menu of every rendered page, there being no sidebar section the skin would read it from.</li>
-<li>Random, Recent changes, Special pages and Preferences are hidden with a stylesheet rather than dropped: the skin inserts them unconditionally, so the anchors are still in the exported HTML.</li>
-<li>Community portal is dropped properly, through the message the skin already checks.</li>
-<li>The colour theme and the skin to read in are on the baked <code>Settings</code> page, the skin's own being <code>Special:MobileOptions</code>.</li>
-<li>The language button is hidden, its overlay being MobileFrontend's.</li>
-<li>Without MobileFrontend the table of contents arrives collapsed and the toggle that would open it is never drawn, so a stylesheet opens it again.</li></ul>
-<p>A reader meets none of this. It is worth knowing before changing Minerva's chrome, though: a change there usually lands in <code>maintenance/fillMinervaMenu.php</code> or <code>resources/skins.minerva.styles.less</code> rather than in configuration.
-</p>
-<div class="mw-heading mw-heading3"><h3 id="Minerva_settings">Minerva settings</h3></div>
-<p>Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
-</p><p>The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. The last two have little to act on here: the typeahead calls a search API a static host does not have, and there is no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
-</p><p>What the inert ones would have configured, Wikven supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
+</p><p>Minerva needs more said about it than the other two, a build working around parts of the skin rather than configuring them. That is collected in the <a href="./Skins.html#minerva-appendix" title="Special:MyLanguage/Skins">appendix</a> rather than here.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Configuring_the_skin">Configuring the skin</h2></div>
 <p>You can change the skin by setting <code>skins</code>. The first skin in the list is used as the default.
@@ -285,9 +256,43 @@ Wikven
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">VectorResponsive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
-<p>A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see <a href="./Skins.html#Minerva_settings" title="Special:MyLanguage/Skins">Minerva settings</a> above before reaching for one.
+<p>A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see <a href="./Skins.html#minerva-settings" title="Special:MyLanguage/Skins">Minerva settings</a> in the appendix before reaching for one.
+</p><p><span id="minerva-appendix"></span>
 </p>
-<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Images.html" title="Special:MyLanguage/Images">Images</a></div><div class="wikven-prevnext-next"><a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a>&#160;&#8594;</div></div>
+<div class="mw-heading mw-heading2"><h2 id="Appendix:_Minerva">Appendix: Minerva</h2></div>
+<div class="mw-heading mw-heading3"><h3 id="Minerva_and_MobileFrontend">Minerva and MobileFrontend</h3></div>
+<p>MinervaNeue is bundled with MediaWiki; <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:MobileFrontend">MobileFrontend</a>, which it grew up alongside, is not. Without it the skin skips its own <code>initMobile.js</code> and loses what that sets up, the table of contents toggle among it. Fetch the pair if you enable Minerva. This site does, so the recommended configuration is the one every build renders.
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
+<span class="nt">extensions</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MobileFrontend</span>
+<span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">WikvenRepositories</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">MobileFrontend</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git</span>
+<span class="w">      </span><span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REL1_46</span>
+</pre></div>
+<p>Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
+</p>
+<div class="mw-heading mw-heading3"><h3 id="How_Minerva_is_supported">How Minerva is supported</h3></div>
+<p>Minerva is built and exercised like the other two, but more of that support is Wikven working around the skin than configuring it. Minerva builds its main menu from its own definitions rather than from <code>MediaWiki:Sidebar</code>, and several of its controls expect MobileFrontend or a live wiki behind them, so the build stands in for both:
+</p>
+<ul><li>The site's own navigation is written into the main menu of every rendered page, there being no sidebar section the skin would read it from.</li>
+<li>Random, Recent changes, Special pages and Preferences are hidden with a stylesheet rather than dropped: the skin inserts them unconditionally, so the anchors are still in the exported HTML.</li>
+<li>Community portal is dropped properly, through the message the skin already checks.</li>
+<li>The colour theme and the skin to read in are on the baked <code>Settings</code> page, the skin's own being <code>Special:MobileOptions</code>.</li>
+<li>The language button is hidden, its overlay being MobileFrontend's.</li>
+<li>Without MobileFrontend the table of contents arrives collapsed and the toggle that would open it is never drawn, so a stylesheet opens it again.</li></ul>
+<p>A reader meets none of this. It is worth knowing before changing Minerva's chrome, though: a change there usually lands in <code>maintenance/fillMinervaMenu.php</code> or <code>resources/skins.minerva.styles.less</code> rather than in configuration.
+</p><p><span id="minerva-settings"></span>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="Minerva_settings">Minerva settings</h3></div>
+<p>Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
+</p><p>The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. The last two have little to act on here: the typeahead calls a search API a static host does not have, and there is no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
+</p><p>What the inert ones would have configured, Wikven supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r77">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Images.html" title="Special:MyLanguage/Images">Images</a></div><div class="wikven-prevnext-next"><a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Skins.html">Skins.html</a>"</div></div>
@@ -304,8 +309,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786869252">
-  				<span>Last edited on 16 August 2026, at 08:34</span>
+  				data-timestamp="1786892880">
+  				<span>Last edited on 16 August 2026, at 15:08</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -328,7 +333,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 08:34.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 15:08.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

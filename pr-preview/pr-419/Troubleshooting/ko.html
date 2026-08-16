@@ -559,11 +559,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="Thumbnails&#95;look&#95;low&#95;quality"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="섬네일_품질이_낮아_보여요"><span id=".EC.84.AC.EB.84.A4.EC.9D.BC_.ED.92.88.EC.A7.88.EC.9D.B4_.EB.82.AE.EC.95.84_.EB.B3.B4.EC.97.AC.EC.9A.94"></span>섬네일 품질이 낮아 보여요</h2></div>
-<p><a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>는 내장 GD 라이브러리로 대체 동작하는데, 이는 품질이 낮은 섬네일을 만들고 지원하는 형식도 적습니다. 더 나은 출력을 얻으려면 빌드 호스트에 <b>ImageMagick</b>과 <b>librsvg</b>를 설치하거나, 이들을 번들로 포함한 Docker 이미지를 사용하세요. <a href="../Images/ko.html" title="Special:MyLanguage/Images">이미지</a> 참고.
+<p><a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>는 내장 <a rel="nofollow" class="external text" href="https://libgd.github.io/">GD</a> 라이브러리로 대체 동작하는데, 이는 품질이 낮은 섬네일을 만들고 지원하는 형식도 적습니다. 더 나은 출력을 얻으려면 빌드 호스트에 <b><a rel="nofollow" class="external text" href="https://imagemagick.org/">ImageMagick</a></b>과 <b><a rel="nofollow" class="external text" href="https://gitlab.gnome.org/GNOME/librsvg">librsvg</a></b>를 설치하거나, 이들을 번들로 포함한 Docker 이미지를 사용하세요. <a href="../Images/ko.html" title="Special:MyLanguage/Images">이미지</a> 참고.
 </p><p><span id="The&#95;search&#95;box&#95;does&#95;nothing"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="검색_상자가_아무_반응이_없어요"><span id=".EA.B2.80.EC.83.89_.EC.83.81.EC.9E.90.EA.B0.80_.EC.95.84.EB.AC.B4_.EB.B0.98.EC.9D.91.EC.9D.B4_.EC.97.86.EC.96.B4.EC.9A.94"></span>검색 상자가 아무 반응이 없어요</h2></div>
-<p>검색은 클라이언트 사이드로, SifterSearch를 통해 Wikven에 내장되어 있으며 기본적으로 켜져 있습니다. 상자가 반응하지 않는다면, 검색이 꺼져 있거나(<code>SifterSearchOutputDir</code>가 비어 있음), 번들 경로가 사이트가 제공되는 위치와 맞지 않는 것입니다(하위 디렉터리 배포에서는 <code>SifterSearchBundlePath</code>를 설정하세요). <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색</a> 참고.
+<p>검색은 클라이언트 사이드로, <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/SifterSearch">SifterSearch</a>를 통해 Wikven에 내장되어 있으며 기본적으로 켜져 있습니다. 상자가 반응하지 않는다면, 검색이 꺼져 있거나(<code>SifterSearchOutputDir</code>가 비어 있음), 번들 경로가 사이트가 제공되는 위치와 맞지 않는 것입니다(하위 디렉터리 배포에서는 <code>SifterSearchBundlePath</code>를 설정하세요). <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색</a> 참고.
 </p><p><span id="A&#95;page&#95;is&#95;missing&#95;from&#95;the&#95;site"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="사이트에서_문서가_하나_빠져_있어요"><span id=".EC.82.AC.EC.9D.B4.ED.8A.B8.EC.97.90.EC.84.9C_.EB.AC.B8.EC.84.9C.EA.B0.80_.ED.95.98.EB.82.98_.EB.B9.A0.EC.A0.B8_.EC.9E.88.EC.96.B4.EC.9A.94"></span>사이트에서 문서가 하나 빠져 있어요</h2></div>
@@ -577,7 +577,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading2"><h2 id="바이너리가_macOS나_Windows에서_실행되지_않아요"><span id=".EB.B0.94.EC.9D.B4.EB.84.88.EB.A6.AC.EA.B0.80_macOS.EB.82.98_Windows.EC.97.90.EC.84.9C_.EC.8B.A4.ED.96.89.EB.90.98.EC.A7.80_.EC.95.8A.EC.95.84.EC.9A.94"></span>바이너리가 macOS나 Windows에서 실행되지 않아요</h2></div>
 <p>단독 실행 바이너리는 Linux 전용입니다(x86_64와 arm64). macOS나 Windows에서는 대신 Docker 이미지를 사용하세요. <a href="../Installation/ko.html" title="Special:MyLanguage/Installation">설치</a> 참고.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">Deploying</a></div><div class="wikven-prevnext-next"><a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">Configuration</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r77">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">Deploying</a></div><div class="wikven-prevnext-next"><a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">Configuration</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="Troubleshooting/ko.html">Troubleshooting/ko.html</a>"</div></div>
@@ -590,7 +590,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 08:34에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 15:08에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">

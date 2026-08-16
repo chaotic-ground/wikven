@@ -224,7 +224,7 @@ Wikven
 
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Configuration.html" class="mw-pt-progress mw-pt-progress--complete" title="Configuration (100% 번역함)" lang="en" dir="ltr">English</a></li>
 <li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
-<p>설정은 소스 디렉터리의 <code>.wikven.yaml</code> 파일에 담깁니다. 이 파일은 <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:YAML_settings_file_format" class="extiw" title="mw:Special:MyLanguage/Manual:YAML settings file format">MediaWiki 자체의 YAML 설정 형식</a>과 같은 구조를 따릅니다. 최상위 <code>extensions</code> 목록, <code>skins</code> 목록, 그리고 <code>config</code> 맵으로 이루어집니다.
+<p>설정은 소스 디렉터리의 <code>.wikven.yaml</code> 파일에 담깁니다. 이 파일은 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:YAML_settings_file_format">MediaWiki 자체의 YAML 설정 형식</a>과 같은 구조를 따릅니다. 최상위 <code>extensions</code> 목록, <code>skins</code> 목록, 그리고 <code>config</code> 맵으로 이루어집니다.
 </p><p>파일 이름은 유연합니다. Wikven은 <code>.wikven.yaml</code>, <code>.wikven.yml</code>, <code>.wikven.json</code>과 앞에 점이 없는 같은 세 가지(<code>wikven.yaml</code>, <code>wikven.yml</code>, <code>wikven.json</code>)를 받아들이며, <code>.json</code> 형식은 YAML이 JSON의 상위 집합이므로 같은 구조를 씁니다. 여러 개가 있으면 그 순서대로 첫 번째가 우선하고 나머지는 경고와 함께 무시되므로, 점이 붙은 이름이 평범한 이름보다 우선하고, YAML이 JSON보다, <code>.yaml</code>이 <code>.yml</code>보다 우선합니다.
 </p><p>Wikven은 자체 기본값(정적 위키를 위한 합리적인 MediaWiki 설정)을 제공하며 그 위에 여러분의 파일을 얹어 읽으므로, 여기서 설정한 것은 무엇이든 기본값을 덮어씁니다. 기본값은 이와 같은 형식을 쓰는 <code>default.yml</code>에 들어 있습니다. 아래 <a href="#기본값">기본값</a>을 참고하십시오.
 </p>
@@ -239,16 +239,16 @@ Wikven
 <span class="w">  </span><span class="nt">WikvenHistoryUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/yourname/some-repository/commits/branch-name/path/to/$1</span>
 </pre></div>
 <div class="mw-heading mw-heading2"><h2 id="extensions"><code>extensions</code></h2></div>
-<p>불러올 확장 기능 이름의 목록입니다. <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions" class="extiw" title="mw:Special:MyLanguage/Bundled extensions">번들된 확장 기능</a>은 이름만으로 작동하며, 번들되지 않은 이름은 서드파티로 취급되어 <a href="#WikvenRepositories"><code>WikvenRepositories</code></a>에 선언한 소스에서 가져옵니다.
+<p>불러올 확장 기능 이름의 목록입니다. <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions">번들된 확장 기능</a>은 이름만으로 작동하며, 번들되지 않은 이름은 서드파티로 취급되어 <a href="#WikvenRepositories"><code>WikvenRepositories</code></a>에 선언한 소스에서 가져옵니다.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="skins"><code>skins</code></h2></div>
 <p>활성화할 스킨 이름의 목록입니다. 첫 번째가 기본 스킨으로 쓰입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 <a href="#WikvenRepositories"><code>WikvenRepositories</code></a>에서 가져옵니다. <a href="../Skins/ko.html" title="Special:MyLanguage/Skins">스킨</a>을 참고하십시오.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="config"><code>config</code></h2></div>
-<p>각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings" class="extiw" title="mw:Special:MyLanguage/Manual:Configuration settings">설정 값</a>이든 여기에 정의할 수 있으며, <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, <code>WikvenRepositories</code> 같은 Wikven 자체 변수도 포함합니다.
+<p>각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">설정 값</a>이든 여기에 정의할 수 있으며, <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, <code>WikvenRepositories</code> 같은 Wikven 자체 변수도 포함합니다.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenLogos"><code>WikvenLogos</code></h3></div>
-<p>사이트의 헤더 로고입니다. MediaWiki의 <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgLogos" class="extiw" title="mw:Special:MyLanguage/Manual:$wgLogos">$wgLogos</a>를 본떠 같은 키(<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code> 등)를 쓰지만, 각 값이 URL이 아니라 소스 디렉터리에 있는 이미지 파일의 이름이라는 점만 다릅니다:
+<p>사이트의 헤더 로고입니다. MediaWiki의 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgLogos">$wgLogos</a>를 본떠 같은 키(<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code> 등)를 쓰지만, 각 값이 URL이 아니라 소스 디렉터리에 있는 이미지 파일의 이름이라는 점만 다릅니다:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">WikvenLogos</span><span class="p">:</span>
@@ -293,14 +293,14 @@ Wikven
 <span class="w">      </span><span class="nt">package</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mediawiki/semantic-media-wiki:~4.1</span>
 </pre></div>
 <p>이미 wikven에 번들된 <code>WikvenRepositories</code> 속 이름은 건드리지 않습니다. <code>extensions</code>나 <code>skins</code>에도 나열되지 않은 이름은 오류입니다.
-</p><p>각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>curl</code>과 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 Composer를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>에서는 이들이 <code>PATH</code>에 있어야 합니다.
+</p><p>각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>curl</code>과 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a>를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>에서는 이들이 <code>PATH</code>에 있어야 합니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r74">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>여기서 이름을 대는 코드를 빌드가 네트워크 접근과 함께 내려받아 <b>실행</b>합니다. 복제된 확장 기능의 PHP와 모든 Composer 스크립트가 빌드 중에 실행됩니다. 신뢰하는 소스만 선언하십시오. 변조를 알아챌 수 있고 재현 가능한 빌드를 위해서는 타르볼을 <code>sha256</code>으로, 리포지터리를 <code>commit</code>(정확한 SHA)으로 고정하십시오. 가변적인 <code>reference</code> 태그/브랜치나 유동적인 <code>package</code> 제약은 여러분 모르게 바뀔 수 있습니다.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>여기서 이름을 대는 코드를 빌드가 네트워크 접근과 함께 내려받아 <b>실행</b>합니다. 복제된 확장 기능의 PHP와 모든 Composer 스크립트가 빌드 중에 실행됩니다. 신뢰하는 소스만 선언하십시오. 변조를 알아챌 수 있고 재현 가능한 빌드를 위해서는 타르볼을 <code>sha256</code>으로, 리포지터리를 <code>commit</code>(정확한 SHA)으로 고정하십시오. 가변적인 <code>reference</code> 태그/브랜치나 유동적인 <code>package</code> 제약은 여러분 모르게 바뀔 수 있습니다.</p></div>
 </div>
-<p>바로 이 사이트도 이 방식으로 <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue" class="extiw" title="mw:Special:MyLanguage/Extension:TabberNeue">TabberNeue</a>를 가져옵니다(그 <code>.wikven.yaml</code> 참고). <a href="../Getting_Started/ko.html" title="Special:MyLanguage/Getting Started">시작하기</a>에 있는 탭 형식의 Docker/바이너리 명령 예시는 가져온 이 확장 기능이 렌더링한 것입니다. (이 사이트의 틀이 쓰는 TemplateStyles는 MediaWiki에 번들되어 있어 여기에 소스가 필요 없습니다.)
+<p>바로 이 사이트도 이 방식으로 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a>를 가져옵니다(그 <code>.wikven.yaml</code> 참고). <a href="../Getting_Started/ko.html" title="Special:MyLanguage/Getting Started">시작하기</a>에 있는 탭 형식의 Docker/바이너리 명령 예시는 가져온 이 확장 기능이 렌더링한 것입니다. (이 사이트의 틀이 쓰는 TemplateStyles는 MediaWiki에 번들되어 있어 여기에 소스가 필요 없습니다.)
 </p>
 <div class="mw-heading mw-heading3"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
-<p>어떤 문서를 wikven이 내보낼지 정하는 표준 MediaWiki 설정(<a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces" class="extiw" title="mw:Special:MyLanguage/Manual:$wgContentNamespaces"><code>$wgContentNamespaces</code></a>)입니다. 콘텐츠 이름공간에 있는 문서만 정적 사이트로 작성됩니다. Wikven은 이를 <code>[0, 6]</code>, 즉 주 이름공간과 File: 이름공간으로 기본 설정하므로, 모든 <code>Template:</code>이나 <code>MediaWiki:</code> 문서를 쏟아내지 않고도 파일 설명 문서가 내보내집니다. 분류 문서도 내보내려면 분류 이름공간(<code>14</code>)을 추가하십시오. <a href="../Pages/ko.html#Categories" title="Special:MyLanguage/Pages">문서의 분류 섹션</a>을 참고하십시오. <code>config</code> 값은 기본값을 확장하는 것이 아니라 대체하므로, 유지하려는 기본값을 포함해 원하는 전체 집합을 나열하십시오.
+<p>어떤 문서를 wikven이 내보낼지 정하는 표준 MediaWiki 설정(<a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces"><code>$wgContentNamespaces</code></a>)입니다. 콘텐츠 이름공간에 있는 문서만 정적 사이트로 작성됩니다. Wikven은 이를 <code>[0, 6]</code>, 즉 주 이름공간과 File: 이름공간으로 기본 설정하므로, 모든 <code>Template:</code>이나 <code>MediaWiki:</code> 문서를 쏟아내지 않고도 파일 설명 문서가 내보내집니다. 분류 문서도 내보내려면 분류 이름공간(<code>14</code>)을 추가하십시오. <a href="../Pages/ko.html#Categories" title="Special:MyLanguage/Pages">문서의 분류 섹션</a>을 참고하십시오. <code>config</code> 값은 기본값을 확장하는 것이 아니라 대체하므로, 유지하려는 기본값을 포함해 원하는 전체 집합을 나열하십시오.
 </p><p><span id="Defaults"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="기본값"><span id=".EA.B8.B0.EB.B3.B8.EA.B0.92"></span>기본값</h2></div>
@@ -312,7 +312,7 @@ Wikven
 </pre></div>
 <p>이는 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/default.yml">리포지터리</a>에도 있습니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Troubleshooting/ko.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a></div><div class="wikven-prevnext-next"><a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r77">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Troubleshooting/ko.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a></div><div class="wikven-prevnext-next"><a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="Configuration/ko.html">Configuration/ko.html</a>"</div></div>
@@ -329,8 +329,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786869252">
-  				<span>2026년 8월 16일 (일) 08:34에 마지막으로 편집됨</span>
+  				data-timestamp="1786892880">
+  				<span>2026년 8월 16일 (일) 15:08에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -353,7 +353,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 08:34에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 15:08에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
