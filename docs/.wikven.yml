@@ -22,8 +22,16 @@ config:
   # Translated pages may be in a script the reader's system has no font for.
   WikvenBundleWebfonts: true
   # Search results have no thumbnails, so drop the empty thumbnail column from
-  # the typeahead.
+  # the typeahead. Both skins that mount core's Codex typeahead need telling
+  # separately: each reads its own config var, and each is replaced wholesale
+  # rather than merged, so the API keys are restated at their own defaults.
   VectorTypeahead:
+    apiUrl: null
+    recommendationApiUrl: null
+    options:
+      showThumbnail: false
+      showDescription: true
+  MinervaTypeahead:
     apiUrl: null
     recommendationApiUrl: null
     options:
