@@ -72,6 +72,16 @@ class Main implements
 			}
 		}
 
+		// Vector renders the collapsed search box as a link to Special:Search -- the page the "f"
+		// accesskey opens, and at a narrow viewport the whole of the search affordance -- and the
+		// export has no such page. Where search lands here is SifterSearch's results page, so send
+		// it there instead of at a 404. SifterSearch retargets the link itself once its script
+		// runs; writing the link out right is what makes the exported page correct on its own.
+		if ($title->isSpecial('Search')) {
+			$url = $this->searchUrl($query);
+			return;
+		}
+
 		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
 		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
 		$params = wfCgiToArray($query);
@@ -89,6 +99,25 @@ class Main implements
 		} else {
 			$url = "./$name.html";
 		}
+	}
+
+	/**
+	 * Where a search goes in the export: the results page, carrying the term the link asks for
+	 * (SifterSearch's widget reads it from "?search="), or nowhere.
+	 *
+	 * With no results page named there is nowhere to land, so the link is left the button its own
+	 * script already treats it as: Vector's toggle prevents the navigation and opens the box, which
+	 * is the whole of what it is for, and a reader without scripts has no search here either way --
+	 * Pagefind answers in the browser. That beats a link to a page that answers 404.
+	 */
+	private function searchUrl(string $query): string {
+		$results = Search::resultsPage();
+		if (!$results) {
+			return '#';
+		}
+		$url = './' . Title::makeName($results->getNamespace(), $results->getDBkey()) . '.html';
+		$term = wfCgiToArray($query)['search'] ?? '';
+		return $term === '' ? $url : $url . '?' . wfArrayToCgi(['search' => $term]);
 	}
 
 	/**
