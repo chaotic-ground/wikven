@@ -17,40 +17,8 @@ Wikven supports three skins. This documentation site is built with all three, so
 <!--T:11-->
 Any other skin is untested rather than refused: every skin bundled with MediaWiki is available by name, MonoBook among them, and a third-party skin can be fetched like Citizen is.
 
-<!--T:12-->
-=== Minerva and MobileFrontend ===
-
-<!--T:13-->
-MinervaNeue is bundled with MediaWiki; [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:MobileFrontend</tvar> MobileFrontend], which it grew up alongside, is not. Without it the skin skips its own <code>initMobile.js</code> and loses what that sets up, the table of contents toggle among it. Fetch the pair if you enable Minerva. This site does, so the recommended configuration is the one every build renders.
-</translate>
-
-<syntaxhighlight lang="yaml">
-skins:
-  - MinervaNeue
-extensions:
-  - MobileFrontend
-config:
-  WikvenRepositories:
-    MobileFrontend:
-      repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      reference: REL1_46
-</syntaxhighlight>
-
-<translate>
-<!--T:14-->
-Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
-
-<!--T:15-->
-=== Minerva settings ===
-
-<!--T:16-->
-Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
-
-<!--T:17-->
-The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. The last two have little to act on here: the typeahead calls a search API a static host does not have, and there is no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
-
-<!--T:18-->
-What the inert ones would have configured, {{SITENAME}} supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
+<!--T:24-->
+Minerva needs more said about it than the other two, a build working around parts of the skin rather than configuring them. That is collected in the [[<tvar name="1">Special:MyLanguage/Skins#minerva-appendix</tvar>|appendix]] rather than here.
 
 <!--T:5-->
 == Configuring the skin ==
@@ -97,7 +65,64 @@ config:
 
 <translate>
 <!--T:19-->
-A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see [[<tvar name="1">Special:MyLanguage/Skins#Minerva settings</tvar>|Minerva settings]] above before reaching for one.
+A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see [[<tvar name="1">Special:MyLanguage/Skins#minerva-settings</tvar>|Minerva settings]] in the appendix before reaching for one.
+
+<!--T:25-->
+<span id="minerva-appendix"></span>
+== Appendix: Minerva ==
+
+<!--T:12-->
+=== Minerva and MobileFrontend ===
+
+<!--T:13-->
+MinervaNeue is bundled with MediaWiki; [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:MobileFrontend</tvar> MobileFrontend], which it grew up alongside, is not. Without it the skin skips its own <code>initMobile.js</code> and loses what that sets up, the table of contents toggle among it. Fetch the pair if you enable Minerva. This site does, so the recommended configuration is the one every build renders.
+</translate>
+
+<syntaxhighlight lang="yaml">
+skins:
+  - MinervaNeue
+extensions:
+  - MobileFrontend
+config:
+  WikvenRepositories:
+    MobileFrontend:
+      repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
+      reference: REL1_46
+</syntaxhighlight>
+
+<translate>
+<!--T:14-->
+Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
+
+<!--T:20-->
+=== How Minerva is supported ===
+
+<!--T:21-->
+Minerva is built and exercised like the other two, but more of that support is {{SITENAME}} working around the skin than configuring it. Minerva builds its main menu from its own definitions rather than from <code>MediaWiki:Sidebar</code>, and several of its controls expect MobileFrontend or a live wiki behind them, so the build stands in for both:
+
+<!--T:22-->
+* The site's own navigation is written into the main menu of every rendered page, there being no sidebar section the skin would read it from.
+* Random, Recent changes, Special pages and Preferences are hidden with a stylesheet rather than dropped: the skin inserts them unconditionally, so the anchors are still in the exported HTML.
+* Community portal is dropped properly, through the message the skin already checks.
+* The colour theme and the skin to read in are on the baked <code>Settings</code> page, the skin's own being <code>Special:MobileOptions</code>.
+* The language button is hidden, its overlay being MobileFrontend's.
+* Without MobileFrontend the table of contents arrives collapsed and the toggle that would open it is never drawn, so a stylesheet opens it again.
+
+<!--T:23-->
+A reader meets none of this. It is worth knowing before changing Minerva's chrome, though: a change there usually lands in <code>maintenance/fillMinervaMenu.php</code> or <code>resources/skins.minerva.styles.less</code> rather than in configuration.
+
+<!--T:15-->
+<span id="minerva-settings"></span>
+=== Minerva settings ===
+
+<!--T:16-->
+Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
+
+<!--T:17-->
+The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. The last two have little to act on here: the typeahead calls a search API a static host does not have, and there is no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
+
+<!--T:18-->
+What the inert ones would have configured, {{SITENAME}} supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
 </translate>
 
 {{prevnext|Images|JavaScript}}
