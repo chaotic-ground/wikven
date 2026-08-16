@@ -106,7 +106,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="편집">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>690</span>
+		<span>695</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -425,8 +425,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				<div id="contentSub" lang="ko" dir="ltr"><div id="mw-content-subtitle" lang="ko" dir="ltr"></div></div>
 				
 				
-				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Skins.html" title="Skins">Skins</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Skins/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><section id="citizen-section-0" class="citizen-section"><div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Skins.html" class="mw-pt-progress mw-pt-progress--complete" title="Skins (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Skins.html" title="Skins">Skins</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Skins/ko.wikitext">번역한 것</a></span>이며 번역은 75% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><section id="citizen-section-0" class="citizen-section"><div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Skins.html" class="mw-pt-progress mw-pt-progress--complete" title="Skins (100% 번역함)" lang="en" dir="ltr">English</a></li>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins" class="extiw" title="mw:Special:MyLanguage/Bundled extensions and skins">번들된 스킨</a>은 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>에서 고를 수 있습니다.
 </p><p><span id="Supported_skins"></span>
 </p>
@@ -454,7 +454,23 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">      </span><span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REL1_46</span>
 </pre></div>
 <p>Wikven은 MobileFrontend 없이도 Minerva를 렌더링합니다. Minerva가 제공하는 항목 중 정적 호스트가 서비스할 수 없는 것들은 어느 쪽이든 빠집니다.
-</p><p><span id="Configuring_the_skin"></span>
+</p>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<div class="mw-heading mw-heading3"><h3 id="Minerva_settings">Minerva settings</h3></div>
+</div>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
+</p>
+</div>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. The last two have little to act on here: the typeahead calls a search API a static host does not have, and there is no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
+</p>
+</div>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>What the inert ones would have configured, Wikven supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
+</p>
+</div>
+<p><span id="Configuring_the_skin"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="스킨_설정"><span id=".EC.8A.A4.ED.82.A8_.EC.84.A4.EC.A0.95"></span>스킨 설정</h2></div><section id="citizen-section-2" class="citizen-section">
 <p><code>skins</code>를 설정하여 스킨을 바꿀 수 있습니다. 목록의 첫 번째 스킨이 기본값으로 사용됩니다.
@@ -483,6 +499,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">VectorResponsive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see <a href="../Skins/ko.html#Minerva_settings" title="Special:MyLanguage/Skins">Minerva settings</a> above before reaching for one.
+</p>
+</div>
 <style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Images/ko.html" title="Special:MyLanguage/Images">Images</a></div><div class="wikven-prevnext-next"><a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">JavaScript</a> →</div></div>
 
 </section></div>
@@ -502,7 +522,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Skins/ko.wikitext" title="이 문서는 2026년 8월 16일 (일) 07:29에 마지막으로 편집되었습니다." data-timestamp="1786865364"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 16일 (일)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Skins/ko.wikitext" title="이 문서는 2026년 8월 16일 (일) 07:45에 마지막으로 편집되었습니다." data-timestamp="1786866344"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 16일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -559,6 +579,21 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			</a>
 			
 			<ul id="toc-Minerva와_MobileFrontend-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Minerva_settings"
+			class="citizen-toc-list-item citizen-toc-level-2">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Minerva_settings" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">1.2</span>
+						<span class="citizen-toc-heading">Minerva settings</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Minerva_settings-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
 	</ul>
@@ -618,7 +653,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 16일 (일) 07:29에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 16일 (일) 07:45에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

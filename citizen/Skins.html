@@ -107,7 +107,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="edits">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>690</span>
+		<span>695</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -427,7 +427,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				
 				
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><section id="citizen-section-0" class="citizen-section"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="스킨 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--high" title="스킨 (75% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>You can choose <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins" class="extiw" title="mw:Special:MyLanguage/Bundled extensions and skins">bundled skins</a> in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p>
 <meta property="mw:PageProp/toc"/>
@@ -454,6 +454,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
 </p>
+<div class="mw-heading mw-heading3"><h3 id="Minerva_settings">Minerva settings</h3></div>
+<p>Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
+</p><p>The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. The last two have little to act on here: the typeahead calls a search API a static host does not have, and there is no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
+</p><p>What the inert ones would have configured, Wikven supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
+</p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Configuring_the_skin">Configuring the skin</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>You can change the skin by setting <code>skins</code>. The first skin in the list is used as the default.
 </p>
@@ -477,6 +482,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">VectorResponsive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
+<p>A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see <a href="./Skins.html#Minerva_settings" title="Special:MyLanguage/Skins">Minerva settings</a> above before reaching for one.
+</p>
 <style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Images.html" title="Special:MyLanguage/Images">Images</a></div><div class="wikven-prevnext-next"><a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a> →</div></div>
 
 </section></div>
@@ -496,7 +503,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Skins.wikitext" title="This page was last edited on 16 August 2026, at 07:29." data-timestamp="1786865364"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>16 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Skins.wikitext" title="This page was last edited on 16 August 2026, at 07:45." data-timestamp="1786866344"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>16 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -553,6 +560,21 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			</a>
 			
 			<ul id="toc-Minerva_and_MobileFrontend-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Minerva_settings"
+			class="citizen-toc-list-item citizen-toc-level-2">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Minerva_settings" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">1.2</span>
+						<span class="citizen-toc-heading">Minerva settings</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Minerva_settings-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
 	</ul>
@@ -612,7 +634,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 16 August 2026, at 07:29.</div>
+		        <div class="page-info__text"> This page was last edited on 16 August 2026, at 07:45.</div>
 		    </section>
 		</div>
 </footer>		</div>
