@@ -8,6 +8,7 @@ use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleValue;
@@ -58,6 +59,7 @@ class Build extends Maintenance {
 		// this, so this is where each page can be told when it was last edited, and by whom.
 		$this->stampSourceHistory();
 		$this->hideBuildAuthors();
+		$this->forgetCachedRevisionRows();
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
 		if (!$skins) {
@@ -227,6 +229,38 @@ class Build extends Maintenance {
 			->where(['rev_actor' => $actors])
 			->caller(__METHOD__)
 			->execute();
+	}
+
+	/**
+	 * Drop the cached copies of the revision rows the two steps above rewrote in place.
+	 *
+	 * RevisionStore keeps the row of a page's newest revision in the object cache for a week, keyed
+	 * on the page and revision ids alone (RevisionStore::ROW_CACHE_KEY), and an edit in place
+	 * changes neither id. The build reads most pages long before those two steps run -- the job
+	 * queue parses every one of them -- so without this the skin passes, fresh processes over the
+	 * same database-backed cache, would render each page with the date it had before it was
+	 * stamped. Nothing else in the cache is touched: the Commons thumbnail lookups it also holds
+	 * are why the build has one at all (see WikvenSettings.php).
+	 */
+	private function forgetCachedRevisionRows(): void {
+		$cache = $this->getServiceContainer()->getMainWANObjectCache();
+		$dbw = $this->getPrimaryDB();
+		$pages = $dbw->newSelectQueryBuilder()
+			->select(['page_id', 'page_latest'])
+			->from('page')
+			->caller(__METHOD__)
+			->fetchResultSet();
+
+		foreach ($pages as $page) {
+			$cache->delete(
+				$cache->makeGlobalKey(
+					RevisionStore::ROW_CACHE_KEY,
+					$dbw->getDomainID(),
+					(int)$page->page_id,
+					(int)$page->page_latest
+				)
+			);
+		}
 	}
 
 	/** Freeze page_touched once content is final; wiki-page modules fold it into their version hash. */
