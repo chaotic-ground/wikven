@@ -139,11 +139,6 @@ class RewriteScripts extends Maintenance {
 				$html = $this->citizenSearch($html, $citizenSearchWorks);
 			}
 
-			// Remove the appearance menu: its widgets pull codex+vue from load.php, which 404s statically.
-			$html = HtmlElementRemover::remove($html, static function ($unusedName, array $attrs) {
-				return ( $attrs['id'] ?? null ) === 'vector-appearance';
-			});
-
 			file_put_contents($file, $html, LOCK_EX);
 		}
 	}

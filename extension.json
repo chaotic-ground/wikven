@@ -28,11 +28,6 @@
 			"messages": ["wikven-skin", "wikven-skin-description"]
 		}
 	},
-	"ResourceModuleSkinStyles": {
-		"vector": {
-			"+skins.vector.styles": "skins.vector.styles.less"
-		}
-	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "resources",
 		"remoteExtPath": "Wikven/resources"
