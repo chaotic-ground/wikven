@@ -40,6 +40,18 @@ config:
 <!--T:14-->
 Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
 
+<!--T:15-->
+=== Minerva settings ===
+
+<!--T:16-->
+Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
+
+<!--T:17-->
+The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. The last two have little to act on here: the typeahead calls a search API a static host does not have, and there is no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
+
+<!--T:18-->
+What the inert ones would have configured, {{SITENAME}} supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
+
 <!--T:5-->
 == Configuring the skin ==
 
@@ -82,5 +94,10 @@ Use the <code>config</code> map.
 config:
   VectorResponsive: false
 </syntaxhighlight>
+
+<translate>
+<!--T:19-->
+A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see [[<tvar name="1">Special:MyLanguage/Skins#Minerva settings</tvar>|Minerva settings]] above before reaching for one.
+</translate>
 
 {{prevnext|Images|JavaScript}}
