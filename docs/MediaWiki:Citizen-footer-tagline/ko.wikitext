@@ -1,0 +1,1 @@
+{{SITENAME}}과 이 문서는 [https://www.gnu.org/licenses/gpl-3.0.html GNU 일반 공중 사용 허가서 v3.0 이상]에 따라 이용할 수 있습니다.
