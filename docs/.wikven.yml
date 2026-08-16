@@ -48,6 +48,8 @@ config:
     # the skin skips initMobile.js entirely (see its setup.js). This site builds the pair so the
     # configuration wikven recommends for Minerva is the one CI renders. Mirrored from Gerrit,
     # which throttles Actions runners.
+    # Pinned to a commit rather than to REL1_46's tip, so a build of a given revision of this
+    # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      reference: REL1_46
+      commit: e00881d4d6f2e91f57026e8fa81a7dd8ad71cda4

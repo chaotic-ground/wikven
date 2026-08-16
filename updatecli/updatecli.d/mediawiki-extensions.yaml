@@ -20,8 +20,10 @@ actions:
       labels:
         - dependencies
 
-# The Dockerfile pins both extensions to commits, so the branch they follow lives here rather than
-# there. It is the release branch of the image's MediaWiki, and moves when that base image does.
+# Every pin here is a commit, so the branch it follows lives here rather than beside it. It is the
+# release branch of the image's MediaWiki, and moves when that base image does. Two of the three are
+# bundled by the Dockerfile; MobileFrontend is fetched at build time by the docs site, which is the
+# only site that installs it.
 sources:
   translate:
     name: Head of Translate's REL1_46
@@ -35,6 +37,13 @@ sources:
     kind: gitcommit
     spec:
       url: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
+      branch: REL1_46
+      depth: 1
+  mobilefrontend:
+    name: Head of MobileFrontend's REL1_46
+    kind: gitcommit
+    spec:
+      url: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend
       branch: REL1_46
       depth: 1
 
@@ -59,3 +68,11 @@ targets:
       instruction:
         keyword: ARG
         matcher: ULS_VERSION
+  mobilefrontend:
+    name: 'build(deps): bump MobileFrontend to {{ source "mobilefrontend" }}'
+    kind: yaml
+    scmid: default
+    sourceid: mobilefrontend
+    spec:
+      file: docs/.wikven.yml
+      key: $.config.WikvenRepositories.MobileFrontend.commit
