@@ -1,24 +1,23 @@
 // The switcher is the only one the export has, so in every skin it must be somewhere a reader can
 // actually get to -- not merely present in the DOM. Each skin puts it somewhere different, and
-// behind a different control: Vector in the "Tools" dropdown, for one.
-// Only a rendered page shows whether opening that control reveals it.
+// behind a different control. Only a rendered page shows whether opening that control reveals it.
 //
 // A single-skin export has nothing to switch to and hides the empty box instead
 // (ext.Wikven.emptyToolbox); docs/ enables several, so that path is not exercised here.
 //
-// Two skins are exceptions, and have specs of their own. Citizen: with JavaScript its skin list
+// Three skins are exceptions, and have specs of their own. Citizen: with JavaScript its skin list
 // moves into the preferences panel and takes the toolbox with it (citizen.spec.js covers both that
-// and the plain list a reader without JavaScript is left). Minerva: it has no page-tools menu that
-// is not its page actions, so its list is on the settings page instead of on every page
+// and the plain list a reader without JavaScript is left). Vector: the same move, into its
+// appearance menu (vector-skins.spec.js). Minerva: it has no page-tools menu that is not its page
+// actions, so its list is on the settings page instead of on every page
 // (minerva-settings.spec.js).
 
 const { test, expect } = require("@playwright/test");
 
-// What each skin puts the switcher behind, where it takes a control to reveal. Vector discloses
-// with a transparent checkbox laid over its own label, so a click aimed at the label lands on the
-// checkbox. A skin absent from here carries no switcher on an article page.
+// What each skin puts the switcher behind, where it takes a control to reveal. A skin absent from
+// here either carries no switcher on an article page or keeps it somewhere a spec of its own
+// follows.
 const OPENERS = {
-	"vector-2022": "#vector-page-tools-dropdown-checkbox",
 	timeless: null,
 };
 

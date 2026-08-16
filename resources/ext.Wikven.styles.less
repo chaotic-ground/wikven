@@ -42,6 +42,24 @@
   font-weight: @font-weight-bold;
 }
 
+// The skin list once ext.Wikven.vectorSkins has moved it into Vector's appearance menu. The menu
+// sets the type for the sections it draws itself, and the portlet arrives with the heading that
+// names this one, so what it needs here is room from the preferences above it rather than chrome.
+.wikven-vector-skins-moved #vector-appearance .mw-portlet-wikven-skins {
+  margin-top: @spacing-75;
+}
+
+// What is left in the page-tools menu once the list leaves is the toolbox Hider emptied. Core
+// hides the emptied portlet itself; this is the box Vector draws around it, as in
+// empty-toolbox.less -- and, as there, only above the width at which that box also carries the
+// page tabs. Gated on the class the module sets, because without JavaScript the list is still in
+// the box and hiding it would take the export's only switcher with it.
+@media ( min-width: @min-width-breakpoint-tablet ) {
+  .wikven-vector-skins-moved .vector-page-tools-landmark {
+    display: none;
+  }
+}
+
 // Citizen counts the wiki in its drawer. Pages and files are facts about the exported site; the
 // user count is the build's own admin account, and the edit count is how many revisions building
 // it happened to take. Neither says anything about the site a reader is looking at.

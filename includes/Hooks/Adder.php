@@ -22,6 +22,10 @@ class Adder implements
 	 * skin list goes in the toolbox: Citizen splices the toolbox alone and Minerva reads no other
 	 * section, so a section of our own would leave their page-tools menus for the sidebar drawer,
 	 * or vanish.
+	 *
+	 * The page-tools menu is where the section is rendered, not where a reader is meant to find it:
+	 * ext.Wikven.vectorSkins moves it into the appearance menu, beside the other choices about how
+	 * a page looks. This stays as the fallback a reader without JavaScript is left with.
 	 */
 	private const OWN_SECTION_SKINS = ['vector-2022'];
 
@@ -106,6 +110,17 @@ class Adder implements
 			&& ( $GLOBALS['wgCitizenEnablePreferences'] ?? false )
 		) {
 			$out->addModules('ext.Wikven.citizenSkins');
+		}
+
+		// Vector's appearance menu is where its readers change how a page looks, so the skin list
+		// moves there from the page-tools menu its own section lands in. As in Citizen, the module
+		// moves the section the bake already rendered rather than building a second copy, so a
+		// reader without JavaScript keeps the plain list of links where it is.
+		if (
+			$skin->getSkinName() === 'vector-2022'
+			&& count($GLOBALS['wgWikvenSkins'] ?? []) > 1
+		) {
+			$out->addModules('ext.Wikven.vectorSkins');
 		}
 
 		// Minerva writes the night-mode class only when SkinOptions::NIGHT_MODE is on, which nothing

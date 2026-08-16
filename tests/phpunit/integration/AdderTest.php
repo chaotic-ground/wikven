@@ -205,6 +205,41 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame($expected, in_array('ext.Wikven.citizenSkins', $modules, true));
 	}
 
+	/**
+	 * The module that carries the skin list out of Vector's page-tools menu and into its appearance
+	 * menu is only worth loading in Vector, and only where there is a list to move.
+	 *
+	 * @dataProvider provideVectorAppearanceCases
+	 */
+	public function testTheAppearanceMoveIsLoadedForVectorOnly(
+		string $skin,
+		array $skins,
+		bool $expected
+	) {
+		$this->overrideConfigValue('WikvenSkins', $skins);
+		$modules = [];
+		$out = $this->outputPage();
+		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
+			$modules[] = $name;
+		});
+		$skinMock = $this->createMock(Skin::class);
+		$skinMock->method('getSkinName')->willReturn($skin);
+
+		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+
+		$this->assertSame($expected, in_array('ext.Wikven.vectorSkins', $modules, true));
+	}
+
+	public static function provideVectorAppearanceCases() {
+		$two = ['vector-2022', 'citizen'];
+		return [
+			'vector with a choice' => ['vector-2022', $two, true],
+			'vector with nothing to choose between' => ['vector-2022', ['vector-2022'], false],
+			'citizen' => ['citizen', $two, false],
+			'minerva' => ['minerva', $two, false]
+		];
+	}
+
 	public static function provideSkinChooserCases() {
 		$two = ['vector-2022', 'citizen'];
 		return [
