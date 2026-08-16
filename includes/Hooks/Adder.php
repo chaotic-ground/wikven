@@ -144,7 +144,10 @@ class Adder implements
 			'mobile.special.codex.styles',
 			'mobile.special.mobileoptions.styles'
 		]);
-		$out->addModules('mobile.special.mobileoptions.scripts');
+		// oojs-ui-widgets is asked for at runtime rather than declared, so buildScripts.php has no
+		// way to see it coming: without it the module's own mw.loader.using() never resolves and
+		// nothing it would have drawn is drawn.
+		$out->addModules(['mobile.special.mobileoptions.scripts', 'oojs-ui-widgets']);
 	}
 
 	/** @inheritDoc */
