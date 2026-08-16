@@ -105,6 +105,38 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * Citizen binds its search shortcuts whether or not the command palette they open survived the
+	 * bake, so the export takes them over. Only Citizen has them, so only Citizen gets the module.
+	 *
+	 * @dataProvider provideSearchShortcutSkins
+	 */
+	public function testSearchShortcutsAreTakenOverForCitizenOnly(string $skin, bool $expected) {
+		$this->overrideConfigValue('WikvenSkins', [$skin]);
+		$modules = [];
+		$out = $this->createMock(OutputPage::class);
+		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
+			$modules[] = $name;
+		});
+		$skinMock = $this->createMock(Skin::class);
+		$skinMock->method('getSkinName')->willReturn($skin);
+
+		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+
+		$this->assertSame(
+			$expected,
+			in_array('ext.Wikven.citizenSearchShortcuts', $modules, true)
+		);
+	}
+
+	public static function provideSearchShortcutSkins() {
+		return [
+			'citizen' => ['citizen', true],
+			'vector' => ['vector-2022', false],
+			'minerva' => ['minerva', false]
+		];
+	}
+
+	/**
 	 * The chooser that carries the skin list into Citizen's preferences panel is only worth
 	 * loading where there is a panel to put it in and more than one skin to choose between.
 	 *
