@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SkinList;
 use MediaWiki\Html\Html;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
 
@@ -97,11 +98,13 @@ class Adder implements
 		// Minerva writes the night-mode class only when SkinOptions::NIGHT_MODE is on, which nothing
 		// but MobileFrontend can turn on, or when the request carries minervanightmode. The bake
 		// makes its own requests, so it asks for the day theme: the class is what mw.user.clientPrefs
-		// switches from, and without it the appearance panel would have nothing to set.
+		// switches from, and without it the settings page would have nothing to offer.
 		if ($skin->getSkinName() === 'minerva') {
 			$out->getRequest()->setVal('minervanightmode', 'day');
 			$out->addModules('ext.Wikven.appearance');
 		}
+
+		$this->prepareSettingsPage($out, $skin);
 
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
 		// and its "Page tools" sidebar (page actions, Special:Log) are dead; hide them on cli export.
@@ -109,6 +112,37 @@ class Adder implements
 		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'timeless') {
 			$out->addInlineStyle('#user-tools, #page-tools { display: none !important; }');
 		}
+	}
+
+	/**
+	 * Ask for what Special:MobileOptions asks for, on the page the export offers in its place.
+	 *
+	 * The controls there are not the special page's markup: its script renders them from the
+	 * client preferences the page declares, which is why they can be had at all without a wiki
+	 * behind them. So the page carries the same empty form, and buildScripts.php bundles the
+	 * modules because this queued them.
+	 *
+	 * Text size and section expansion are declared here too: MobileFrontend writes those classes
+	 * only when it is serving a mobile view, and clientPreferences.js renders a preference only
+	 * when the page already carries its class.
+	 */
+	private function prepareSettingsPage($out, Skin $skin): void {
+		$page = (string)( $GLOBALS['wgWikvenSettingsPage'] ?? '' );
+		$title = $out->getTitle();
+		if ($page === '' || !$title || $title->getPrefixedText() !== $page) {
+			return;
+		}
+		if (!ExtensionRegistry::getInstance()->isLoaded('MobileFrontend')) {
+			return;
+		}
+
+		$out->addHtmlClasses(['mf-font-size-clientpref-regular', 'mf-expand-sections-clientpref-0']);
+		$out->addModuleStyles([
+			'mobile.special.styles',
+			'mobile.special.codex.styles',
+			'mobile.special.mobileoptions.styles'
+		]);
+		$out->addModules('mobile.special.mobileoptions.scripts');
 	}
 
 	/** @inheritDoc */

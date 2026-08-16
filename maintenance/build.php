@@ -344,14 +344,10 @@ class Build extends Maintenance {
 			return;
 		}
 
-		// A section each, titled and described as Special:MobileOptions does, around a placeholder
-		// the build or the script fills. Class and id both: the class styles, the id is what
-		// fillMinervaMenu.php finds.
-		$text = $this->settingsSection(
-			'wikven-appearance',
-			'wikven-appearance-description',
-			'wikven-appearance-theme'
-		);
+		// Special:MobileOptions is an empty form its own script fills, so this page is the same
+		// empty form: Adder queues the modules, and MediaWiki draws the controls it would have
+		// drawn there. The skin list is wikven's own, and follows in a section of its own.
+		$text = "<div id=\"mobile-options\" class=\"mw-mf-settings\"></div>\n";
 		if (count($GLOBALS['wgWikvenSkins'] ?? []) > 1) {
 			$text .= $this->settingsSection(
 				'wikven-skins',

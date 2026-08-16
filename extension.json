@@ -28,13 +28,7 @@
 			"messages": ["wikven-skin", "wikven-skin-description"]
 		},
 		"ext.Wikven.appearance": {
-			"scripts": ["appearance.js"],
-			"messages": [
-				"wikven-appearance-day",
-				"wikven-appearance-night",
-				"wikven-appearance-os"
-			],
-			"dependencies": ["mediawiki.user"]
+			"scripts": ["appearance.js"]
 		}
 	},
 	"ResourceModuleSkinStyles": {
