@@ -91,3 +91,36 @@
 a.new {
   pointer-events: none;
 }
+
+// The generated settings page: choices the reader keeps in this browser, laid out as
+// Special:MobileOptions lays out the same ones, a titled and described section each.
+.wikven-setting {
+  padding: @spacing-75 0;
+  border-bottom: @border-width-base @border-style-base @border-color-muted;
+}
+
+.wikven-setting-title {
+  font-weight: @font-weight-bold;
+}
+
+.wikven-setting-description {
+  padding-bottom: @spacing-50;
+  color: @color-subtle;
+}
+
+// A skin's content styles put a bullet on every list; these are controls, not prose. Named through
+// the parser output so the rule outweighs the skin's own, whichever skin renders the page.
+.mw-parser-output .wikven-skin-list,
+.mw-parser-output #mobile-options ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.wikven-skin-item {
+  padding: @spacing-25 0;
+}
+
+.wikven-skin-item.active {
+  font-weight: @font-weight-bold;
+}

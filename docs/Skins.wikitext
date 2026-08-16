@@ -17,6 +17,29 @@ Wikven supports three skins. This documentation site is built with all three, so
 <!--T:11-->
 Any other skin is untested rather than refused: every skin bundled with MediaWiki is available by name, MonoBook among them, and a third-party skin can be fetched like Citizen is.
 
+<!--T:12-->
+=== Minerva and MobileFrontend ===
+
+<!--T:13-->
+MinervaNeue is bundled with MediaWiki; {{ml|Extension:MobileFrontend|MobileFrontend}}, which it grew up alongside, is not. Without it the skin skips its own <code>initMobile.js</code> and loses what that sets up, the table of contents toggle among it. Fetch the pair if you enable Minerva. This site does, so the recommended configuration is the one every build renders.
+</translate>
+
+<syntaxhighlight lang="yaml">
+skins:
+  - MinervaNeue
+extensions:
+  - MobileFrontend
+config:
+  WikvenRepositories:
+    MobileFrontend:
+      repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
+      reference: REL1_46
+</syntaxhighlight>
+
+<translate>
+<!--T:14-->
+Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
+
 <!--T:5-->
 == Configuring the skin ==
 

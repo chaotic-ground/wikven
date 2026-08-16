@@ -1,6 +1,7 @@
 ---
 extensions:
   - Gadgets
+  - MobileFrontend
   - ParserFunctions
   - SyntaxHighlight_GeSHi
   - TabberNeue
@@ -43,3 +44,10 @@ config:
     Citizen:
       repository: https://github.com/StarCitizenTools/mediawiki-skins-Citizen.git
       reference: v3.17.0
+    # Minerva is bundled with MediaWiki but MobileFrontend, which it leans on, is not: without it
+    # the skin skips initMobile.js entirely (see its setup.js). This site builds the pair so the
+    # configuration wikven recommends for Minerva is the one CI renders. Mirrored from Gerrit,
+    # which throttles Actions runners.
+    MobileFrontend:
+      repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
+      reference: REL1_46

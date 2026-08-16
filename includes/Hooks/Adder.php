@@ -3,8 +3,11 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Extension\Wikven\Search;
+use MediaWiki\Extension\Wikven\SkinList;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
 
@@ -12,13 +15,6 @@ class Adder implements
 	\MediaWiki\Hook\BeforePageDisplayHook,
 	\MediaWiki\Hook\SidebarBeforeOutputHook,
 	\MediaWiki\Hook\SkinAddFooterLinksHook {
-	/**
-	 * Skins whose toolbox is a page-actions menu: Minerva's builder keeps only entries carrying an
-	 * icon, and hands every one of those to SingleMenuEntry, whose $url is typed string -- so an
-	 * entry with an icon and no href fatals the bake. There the current skin is a self-link.
-	 */
-	private const PAGE_ACTIONS_TOOLBOX = ['minerva' => 'listBullet'];
-
 	/**
 	 * Skins that move every sidebar section from the toolbox onward into their page-tools menu
 	 * (SkinVector22::extractPageToolsFromSidebar splices from the toolbox to the end), so a section
@@ -36,52 +32,32 @@ class Adder implements
 	 * Offer each enabled skin's copy of this page, in the toolbox Hider has just emptied or in a
 	 * section of our own.
 	 *
-	 * The href is the same root-relative form every other link is written in ("./x" from the main
-	 * skin's output, "../x" from a skin subdirectory), so rename.php reparents these by the page's
-	 * own depth along with the rest and a subpage's links stay correct.
+	 * Minerva is not served here. It reads no sidebar section but `navigation` and the toolbox, and
+	 * its toolbox is the page-actions menu, which is not where a site-wide setting belongs;
+	 * fillMinervaMenu.php writes the same entries into its main menu instead.
 	 *
 	 * @inheritDoc
 	 */
 	public function onSidebarBeforeOutput($skin, &$sidebar): void {
-		global $wgWikvenSkins, $wgWikvenMainSkin;
-
-		$skins = $wgWikvenSkins ?? [];
-		$title = $skin->getTitle();
-		if (count($skins) < 2 || !isset($sidebar['TOOLBOX']) || !$title || !$title->canExist()) {
+		$current = $skin->getSkinName();
+		if ($current === 'minerva' || !isset($sidebar['TOOLBOX'])) {
 			return;
 		}
 
-		$current = $skin->getSkinName();
-		$page = Title::makeName($title->getNamespace(), $title->getDBkey()) . '.html';
-		$root = $current === $wgWikvenMainSkin ? './' : '../';
-		$icon = self::PAGE_ACTIONS_TOOLBOX[$current] ?? null;
 		// Appended, so it follows the toolbox: core drops SEARCH and LANGUAGES from the section
 		// list, leaving the toolbox last and this section right after it.
 		$section = in_array($current, self::OWN_SECTION_SKINS, true) ? self::SECTION : 'TOOLBOX';
 
-		foreach ($skins as $target) {
-			$entry = ['id' => "t-wikven-skin-$target", 'text' => $this->skinLabel($skin, $target)];
-			if ($icon !== null) {
-				$entry['icon'] = $icon;
+		foreach (SkinList::entries($skin) as $entry) {
+			$item = ['id' => $entry['id'], 'text' => $entry['text']];
+			if ($entry['href'] !== null) {
+				$item['href'] = $entry['href'];
 			}
-			if ($target !== $current || $icon !== null) {
-				$entry['href'] = $root . ( $target === $wgWikvenMainSkin ? '' : "$target/" ) . $page;
+			if ($entry['active']) {
+				$item['active'] = true;
 			}
-			if ($target === $current) {
-				$entry['active'] = true;
-			}
-			$sidebar[$section]["wikven-skin-$target"] = $entry;
+			$sidebar[$section][$entry['id']] = $item;
 		}
-	}
-
-	/** A skin's human-readable name; getInstalledSkins() only resolves an explicit displayname. */
-	private function skinLabel(Skin $skin, string $name): string {
-		$message = $skin->msg("skinname-$name");
-		if (!$message->isDisabled() && $message->exists()) {
-			return $message->text();
-		}
-		$installed = MediaWikiServices::getInstance()->getSkinFactory()->getInstalledSkins();
-		return $installed[$name] ?? ucwords(str_replace('-', ' ', $name));
 	}
 
 	/** @inheritDoc */
@@ -97,6 +73,11 @@ class Adder implements
 		// One skin means no skin list, so nothing refills the toolbox and its box stays empty.
 		if (count($GLOBALS['wgWikvenSkins'] ?? []) < 2) {
 			$out->addModuleStyles('ext.Wikven.emptyToolbox');
+		} else {
+			// Every skin renders the settings page, so every skin has its skin list to fill in. The
+			// module takes the list from the chrome, wherever the skin keeps it, and leaves where
+			// the build has already written one -- which is Minerva, and Minerva alone.
+			$out->addModules('ext.Wikven.appearance');
 		}
 
 		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'citizen') {
@@ -127,12 +108,68 @@ class Adder implements
 			$out->addModules('ext.Wikven.citizenSkins');
 		}
 
+		// Minerva writes the night-mode class only when SkinOptions::NIGHT_MODE is on, which nothing
+		// but MobileFrontend can turn on, or when the request carries minervanightmode. The bake
+		// makes its own requests, so it asks for the day theme: the class is what mw.user.clientPrefs
+		// switches from, and without it the settings page would have nothing to offer.
+		if ($skin->getSkinName() === 'minerva') {
+			$out->getRequest()->setVal('minervanightmode', 'day');
+			// The text size a reader picks on the settings page has to hold on the pages they then
+			// read, so every page carries the class it is set from and the stylesheet it means
+			// something in. MobileFrontend loads that stylesheet when it is serving a mobile view,
+			// which a bake never is.
+			if (ExtensionRegistry::getInstance()->isLoaded('MobileFrontend')) {
+				$out->addHtmlClasses('mf-font-size-clientpref-regular');
+				$out->addModuleStyles('mobile.init.styles');
+			}
+			$this->prepareSettingsPage($out);
+		}
+
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
 		// and its "Page tools" sidebar (page actions, Special:Log) are dead; hide them on cli export.
 		// !important: the skin stylesheet loads after this inline rule and would otherwise win.
 		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'timeless') {
 			$out->addInlineStyle('#user-tools, #page-tools { display: none !important; }');
 		}
+	}
+
+	/**
+	 * Ask for what Special:MobileOptions asks for, on the page the export offers in its place.
+	 *
+	 * The controls there are not the special page's markup: its script renders them from the
+	 * client preferences the page declares, which is why they can be had at all without a wiki
+	 * behind them. So the page carries the same empty form, and buildScripts.php bundles the
+	 * modules because this queued them.
+	 *
+	 * The one control not offered is "Expand all sections": clientPreferences.js draws a preference
+	 * only when the page carries its class, and no page here does, because nothing in a bake
+	 * collapses a section to begin with.
+	 */
+	private function prepareSettingsPage(OutputPage $out): void {
+		$page = (string)( $GLOBALS['wgWikvenSettingsPage'] ?? '' );
+		$title = $out->getTitle();
+		if ($page === '' || !$title || $title->getPrefixedText() !== $page) {
+			return;
+		}
+		if (!ExtensionRegistry::getInstance()->isLoaded('MobileFrontend')) {
+			return;
+		}
+
+		// The special page sets this itself, and its script draws no text-size control without it.
+		$out->addJsConfigVars([
+			'wgMFEnableFontChanger' => MediaWikiServices::getInstance()
+				->getService('MobileFrontend.FeaturesManager')
+				->isFeatureAvailableForCurrentUser('MFEnableFontChanger')
+		]);
+		$out->addModuleStyles([
+			'mobile.special.styles',
+			'mobile.special.codex.styles',
+			'mobile.special.mobileoptions.styles'
+		]);
+		// oojs-ui-widgets is asked for at runtime rather than declared, so buildScripts.php has no
+		// way to see it coming: without it the module's own mw.loader.using() never resolves and
+		// nothing it would have drawn is drawn.
+		$out->addModules(['mobile.special.mobileoptions.scripts', 'oojs-ui-widgets']);
 	}
 
 	/** @inheritDoc */

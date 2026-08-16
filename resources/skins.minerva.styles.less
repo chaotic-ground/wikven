@@ -1,0 +1,69 @@
+// Codex design tokens, so these rules follow the skin's theme.
+@import 'mediawiki.skin.variables.less';
+
+// Minerva builds its main menu from its own Menu\Definitions rather than the sidebar, so Hider
+// never reaches these and they are inserted unconditionally. Every one is a Special: page an
+// export cannot serve. Community portal is not here: it has a lever, and build.php pulls it.
+// By item rather than by group, so a site's own entries in the same groups survive.
+// Minerva's language button, which opens MobileFrontend's interwiki-language overlay and carries
+// an empty href without it. An export has no interwiki languages; the translations a site does
+// have reach the reader through Translate's own bar in the content. Wikven hides Vector's
+// #p-lang-btn for the same reason.
+#language-selector {
+  display: none;
+}
+
+.toggle-list-item:has( > .menu__item--random ),
+.toggle-list-item:has( > .menu__item--recentchanges ),
+.toggle-list-item:has( > .menu__item--specialPages ),
+.toggle-list-item:has( > .menu__item--preferences ) {
+  display: none;
+}
+
+// Minerva collapses the table of contents whenever .client-js is set, and initMobile.js draws the
+// chevron that says so on the wikipage.content hook. setup.js runs that file only when
+// MobileFrontend is installed, so without it the collapse arrives and the affordance never does.
+// Undo the half that did, and drop the toggle with it: without the icon it is an invisible control
+// sitting over the heading. Keyed on the icon, so a site that does have MobileFrontend keeps the
+// collapse it can see -- the selector stops matching the moment the script adds the span.
+.client-js .toc:not(:has( > .toctitle > .toc-title-state-icon )) {
+  .toctogglecheckbox ~ ul {
+    visibility: visible;
+    height: auto;
+  }
+
+  .toctogglespan {
+    display: none;
+  }
+}
+
+// The site's navigation and the skin switcher, written into the menu by fillMinervaMenu.php.
+// Minerva indents a label by the icon beside it, and these have no icon, so the indent is theirs
+// to keep the column straight.
+.wikven-nav-item .toggle-list-item__label {
+  padding-left: 26px; // Minerva's icon, 20px, plus the 6px between it and the label.
+}
+
+// Nothing is left in these once their dead entries are hidden, and an empty group is a grey band
+// of its own: page actions unless the site has a community portal, preferences always, and the
+// sitelinks footer whenever build.php found no About or Disclaimers page to point it at.
+#pt-preferences,
+#p-interaction:not(:has( > .toggle-list-item > .menu__item--speechBubbles )),
+#mw-mf-page-left .hlist:not(:has( > li )) {
+  display: none;
+}
+
+// The skin being read is listed, marked, and not a link, as in every other skin.
+.wikven-skin-item.active .toggle-list-item__label {
+  font-weight: @font-weight-bold;
+}
+
+
+// MobileFrontend insets the block of controls it draws on the settings page
+// (form.mw-mf-settings #mf-client-preferences { margin: 0 16px }), so wikven's own section beneath
+// it takes the same inset and the two read as one column. Only Minerva loads that stylesheet, so
+// only Minerva has anything to line up with.
+.wikven-setting {
+  margin-left: 16px;
+  margin-right: 16px;
+}

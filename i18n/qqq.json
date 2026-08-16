@@ -7,5 +7,8 @@
 	"wikven-version-intro": "Introductory sentence on the generated version page, which mirrors [[Special:Version]].",
 	"wikven-skins": "Heading of the sidebar section holding the export's other skins, used by skins that render their own sections in the page-tools menu. The section key is the message key.",
 	"wikven-skin": "Label of the skin chooser wikven adds to Citizen's preferences panel, beside the theme and text size. Singular: it names one setting, not the list.",
-	"wikven-skin-description": "Description under {{msg-mw|wikven-skin}}, in the style of Citizen's own preference descriptions (no full stop)."
+	"wikven-skin-description": "Description under {{msg-mw|wikven-skin}}, in the style of Citizen's own preference descriptions (no full stop).",
+	"wikven-settings": "Label of the link to the generated settings page, in Minerva's main menu, where the skin would otherwise link to Special:MobileOptions.",
+	"wikven-settings-intro": "Opening sentence of the generated settings page, explaining that a static export keeps display choices in the reader's browser.",
+	"wikven-skins-description": "Description under {{msg-mw|wikven-skins}} on the generated settings page."
 }

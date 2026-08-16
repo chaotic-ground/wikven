@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\Hooks\Adder;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Request\FauxRequest;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
@@ -13,6 +14,16 @@ use Wikimedia\TestingAccessWrapper;
  * @covers \MediaWiki\Extension\Wikven\Hooks\Adder
  */
 class AdderTest extends MediaWikiIntegrationTestCase {
+	/**
+	 * An OutputPage that answers getRequest(): the Minerva path asks the request which theme it is
+	 * rendering in, and a bare mock hands back null.
+	 */
+	private function outputPage(): OutputPage {
+		$out = $this->createMock(OutputPage::class);
+		$out->method('getRequest')->willReturn(new FauxRequest());
+		return $out;
+	}
+
 	/**
 	 * The footer project link shows a friendly host name for known forges and the
 	 * bare host otherwise, so it is not hardcoded to GitHub.
@@ -60,7 +71,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testHidesSearchBoxWithoutSifterSearch() {
 		$this->overrideConfigValue('WikvenSkins', ['vector']);
-		$out = $this->createMock(OutputPage::class);
+		$out = $this->outputPage();
 		$out->expects($this->once())
 			->method('addInlineStyle')
 			->with($this->stringContains('#p-search'));
@@ -68,6 +79,37 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skin->method('getSkinName')->willReturn('vector');
 
 		( new Adder() )->onBeforePageDisplay($out, $skin);
+	}
+
+	/**
+	 * Every skin renders the generated settings page, and its skin list is filled from the chrome by
+	 * ext.Wikven.appearance. One skin means there is no list, so the module has nothing to do and the
+	 * empty toolbox is hidden instead.
+	 *
+	 * @dataProvider provideAppearanceCases
+	 */
+	public function testAppearanceModuleFollowsTheSkinCount(string $skin, array $skins, bool $expected) {
+		$this->overrideConfigValue('WikvenSkins', $skins);
+		$modules = [];
+		$out = $this->outputPage();
+		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
+			$modules[] = $name;
+		});
+		$skinMock = $this->createMock(Skin::class);
+		$skinMock->method('getSkinName')->willReturn($skin);
+
+		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+
+		$this->assertSame($expected, in_array('ext.Wikven.appearance', $modules, true));
+	}
+
+	public static function provideAppearanceCases() {
+		$two = ['vector-2022', 'minerva'];
+		return [
+			'the main skin with a choice' => ['vector-2022', $two, true],
+			'minerva with a choice' => ['minerva', $two, true],
+			'nothing to choose between' => ['vector-2022', ['vector-2022'], false]
+		];
 	}
 
 	/**
@@ -79,7 +121,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testScriptPathClearedForCitizen(string $skin, bool $overridden) {
 		$this->overrideConfigValue('WikvenSkins', [$skin]);
-		$out = $this->createMock(OutputPage::class);
+		$out = $this->outputPage();
 		$vars = [];
 		$out->method('addJsConfigVars')->willReturnCallback(
 			static function ($keys, $value = null) use (&$vars) {
@@ -113,7 +155,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	public function testSearchShortcutsAreTakenOverForCitizenOnly(string $skin, bool $expected) {
 		$this->overrideConfigValue('WikvenSkins', [$skin]);
 		$modules = [];
-		$out = $this->createMock(OutputPage::class);
+		$out = $this->outputPage();
 		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
 			$modules[] = $name;
 		});
@@ -151,7 +193,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSkins', $skins);
 		$this->setMwGlobals('wgCitizenEnablePreferences', $preferences);
 		$modules = [];
-		$out = $this->createMock(OutputPage::class);
+		$out = $this->outputPage();
 		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
 			$modules[] = $name;
 		});
@@ -182,32 +224,42 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 
 		$this->assertSame([], $sidebar['TOOLBOX'], 'the toolbox is left empty');
 		$this->assertSame(
-			['wikven-skin-vector-2022', 'wikven-skin-citizen'],
+			['t-wikven-skin-vector-2022', 't-wikven-skin-citizen'],
 			array_keys($sidebar['wikven-skins'])
 		);
 		$this->assertSame(
 			'./citizen/Installation.html',
-			$sidebar['wikven-skins']['wikven-skin-citizen']['href']
+			$sidebar['wikven-skins']['t-wikven-skin-citizen']['href']
 		);
-		$this->assertArrayNotHasKey('href', $sidebar['wikven-skins']['wikven-skin-vector-2022']);
+		$this->assertArrayNotHasKey('href', $sidebar['wikven-skins']['t-wikven-skin-vector-2022']);
 	}
 
 	/**
-	 * Every other skin keeps it in the toolbox: Citizen takes only the toolbox into its page-tools
-	 * menu and Minerva reads no other section, so a section of our own would not reach either.
+	 * Citizen keeps it in the toolbox: it takes only the toolbox into its page-tools menu, so a
+	 * section of our own would land in the sidebar drawer instead.
 	 */
-	public function testOtherSkinsKeepTheSkinListInTheToolbox() {
+	public function testCitizenKeepsTheSkinListInTheToolbox() {
 		$sidebar = $this->sidebarFor('citizen');
 
 		$this->assertArrayNotHasKey('wikven-skins', $sidebar);
 		$this->assertSame(
-			['wikven-skin-vector-2022', 'wikven-skin-citizen'],
+			['t-wikven-skin-vector-2022', 't-wikven-skin-citizen'],
 			array_keys($sidebar['TOOLBOX'])
 		);
 		$this->assertSame(
 			'../Installation.html',
-			$sidebar['TOOLBOX']['wikven-skin-vector-2022']['href']
+			$sidebar['TOOLBOX']['t-wikven-skin-vector-2022']['href']
 		);
+	}
+
+	/**
+	 * Minerva gets nothing here. Its toolbox is the page-actions menu, which is not where a
+	 * site-wide setting belongs, so fillMinervaMenu.php writes these into its main menu instead.
+	 */
+	public function testMinervaIsLeftToItsMainMenu() {
+		$sidebar = $this->sidebarFor('minerva');
+
+		$this->assertSame(['TOOLBOX' => []], $sidebar);
 	}
 
 	/** The sidebar a two-skin export builds for one of them, on a page at the export root. */

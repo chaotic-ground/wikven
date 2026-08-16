@@ -1,34 +1,28 @@
-// The toolbox is the only skin switcher the export has, so in every skin it must be
-// somewhere a reader can actually get to -- not merely present in the DOM. Each skin
-// puts it somewhere different, and behind a different control: Vector in the "Tools"
-// dropdown, Citizen in the "More actions" card, Minerva in the page-actions overflow
-// menu. Only a rendered page shows whether opening that control reveals the links.
+// The switcher is the only one the export has, so in every skin it must be somewhere a reader can
+// actually get to -- not merely present in the DOM. Each skin puts it somewhere different, and
+// behind a different control: Vector in the "Tools" dropdown, for one.
+// Only a rendered page shows whether opening that control reveals it.
 //
-// A single-skin export has nothing to put in the toolbox and hides the empty box
-// instead (ext.Wikven.emptyToolbox); docs/ enables several, so that path is not
-// exercised here.
+// A single-skin export has nothing to switch to and hides the empty box instead
+// (ext.Wikven.emptyToolbox); docs/ enables several, so that path is not exercised here.
 //
-// Citizen is the exception, and has its own spec: with JavaScript its skin list moves
-// into the preferences panel and takes the toolbox with it (citizen.spec.js covers
-// both that and the plain list a reader without JavaScript is left).
+// Two skins are exceptions, and have specs of their own. Citizen: with JavaScript its skin list
+// moves into the preferences panel and takes the toolbox with it (citizen.spec.js covers both that
+// and the plain list a reader without JavaScript is left). Minerva: it has no page-tools menu that
+// is not its page actions, so its list is on the settings page instead of on every page
+// (minerva-settings.spec.js).
 
 const { test, expect } = require("@playwright/test");
 
-// What each skin puts the toolbox behind, where it takes a control to reveal.
-// Vector and Minerva both disclose with a transparent checkbox laid over its own
-// label, so a click aimed at the label lands on the checkbox.
+// What each skin puts the switcher behind, where it takes a control to reveal. Vector discloses
+// with a transparent checkbox laid over its own label, so a click aimed at the label lands on the
+// checkbox. A skin absent from here carries no switcher on an article page.
 const OPENERS = {
 	"vector-2022": "#vector-page-tools-dropdown-checkbox",
 	timeless: null,
-	minerva: "#page-actions-overflow-checkbox",
 };
 
-const entry = (page, skin) =>
-	page
-		.locator(
-			`#t-wikven-skin-${skin}, .menu__item--page-actions-overflow-wikven-skin-${skin}`,
-		)
-		.first();
+const entry = (page, skin) => page.locator(`#t-wikven-skin-${skin}`).first();
 
 let skins;
 let main;

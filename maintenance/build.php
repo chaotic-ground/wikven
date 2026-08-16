@@ -47,7 +47,8 @@ class Build extends Maintenance {
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
 		$this->setVersionPage();
-		$this->dropDeadFooterPlaces();
+		$this->setSettingsPage();
+		$this->dropDeadPlaceLinks();
 		$this->dropDeadCategoryLink();
 		// Materialize content translations before RunJobs so rendered translation pages get exported.
 		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
@@ -178,6 +179,8 @@ class Build extends Maintenance {
 		$this->step(BakeWebfonts::class, "$own/bakeWebfonts.php");
 		$this->step(BuildScripts::class, "$own/buildScripts.php");
 		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
+		// Minerva takes no navigation from the sidebar, so its menu is filled in the rendered pages.
+		$this->step(FillMinervaMenu::class, "$own/fillMinervaMenu.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");
 		$this->step(Rename::class, "$own/rename.php");
 		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
@@ -287,13 +290,16 @@ class Build extends Maintenance {
 		}
 	}
 
-	/** Hide about/privacy/disclaimer footer links with no imported target (blank label to "-"). */
-	private function dropDeadFooterPlaces(): void {
+	/** Hide project links with no imported target (blank label to "-"), in the footer and menus. */
+	private function dropDeadPlaceLinks(): void {
 		// Label message (controls whether the link shows) => page-name message (the link's target).
+		// Community portal is here for Minerva, which builds its menu from its own definitions and
+		// reads this message directly; the other skins take it from MediaWiki:Sidebar.
 		$places = [
 			'Privacy' => 'privacypage',
 			'Aboutsite' => 'aboutpage',
-			'Disclaimers' => 'disclaimerpage'
+			'Disclaimers' => 'disclaimerpage',
+			'Portal' => 'portal-url'
 		];
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		foreach ($places as $label => $pageMessage) {
@@ -317,6 +323,61 @@ class Build extends Maintenance {
 		$updater = $page->newPageUpdater($user);
 		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent('', $title));
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Drop the dead category link'));
+	}
+
+	/**
+	 * Generate a Settings page: the reader's own display choices, which a static export keeps in
+	 * the browser rather than in a user account. It stands in for Special:MobileOptions, which is
+	 * MobileFrontend's and which no bake writes, and it is a page rather than a panel so every
+	 * skin can link to it.
+	 *
+	 * The controls themselves are drawn by ext.Wikven.appearance into the placeholders below;
+	 * wikitext cannot carry a radio, and the choices mean nothing without the script anyway.
+	 */
+	private function setSettingsPage(): void {
+		$name = $GLOBALS['wgWikvenSettingsPage'] ?? '';
+		if ($name === '') {
+			return;
+		}
+		$title = Title::newFromText($name);
+		if (!$title || $title->exists()) {
+			return;
+		}
+
+		// Special:MobileOptions is an empty form its own script fills, so this page is the same
+		// empty form: Adder queues the modules, and MediaWiki draws the controls it would have
+		// drawn there. Wikitext carries no <form>, and that stylesheet's layout rules all name
+		// one, so fillMinervaMenu.php puts a real form inside this. The skin list is wikven's own,
+		// and follows in a section of its own.
+		$text = "<div id=\"wikven-settings-form\"></div>\n";
+		if (count($GLOBALS['wgWikvenSkins'] ?? []) > 1) {
+			$text .= $this->settingsSection(
+				'wikven-skins',
+				'wikven-skins-description',
+				'wikven-appearance-skins'
+			);
+		}
+
+		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
+		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
+		$updater = $page->newPageUpdater($user);
+		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($text, $title));
+		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Generate the settings page'));
+	}
+
+	/** One titled and described section of the settings page, around an empty placeholder. */
+	private function settingsSection(string $title, string $description, string $id): string {
+		return (
+			'<div class="wikven-setting">'
+			. '<div class="wikven-setting-title">'
+			. $this->contentMsg($title)
+			. '</div>'
+			. '<div class="wikven-setting-description">'
+			. $this->contentMsg($description)
+			. '</div>'
+			. "<div class=\"wikven-setting-control\" id=\"$id\"></div>"
+			. "</div>\n"
+		);
 	}
 
 	/** Generate a Version page (static Special:Version) listing software, extensions and skins. */

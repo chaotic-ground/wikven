@@ -107,3 +107,12 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 .mw-highlight .gi {
 	color: #15803d;
 }
+
+/* MobileFrontend's footer toggle between the mobile and desktop views. It is a supported MediaWiki
+ * feature, so wikven leaves it alone; this site hides it because it offers every skin it builds
+ * from the toolbox already, and a second, differently-worded way to change the rendering is one
+ * thing too many to explain. */
+#footer-places-mobileview,
+#footer-places-desktop-toggle {
+	display: none;
+}

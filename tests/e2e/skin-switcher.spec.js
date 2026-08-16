@@ -13,22 +13,21 @@ const { test, expect } = require("@playwright/test");
 const ENGLISH_HEADING = "Getting Started";
 const KOREAN_HEADING = "시작하기";
 
-// What each skin puts the toolbox behind, where it takes a control to reveal.
-// Vector and Minerva both disclose with a transparent checkbox laid over its own
-// label, so a click aimed at the label lands on the checkbox. Citizen is not here:
-// its list moves into the preferences panel, and is followed by choosePreference().
+// What each skin puts the switcher behind, where it takes a control to reveal. Vector discloses
+// with a transparent checkbox laid over its own label, so a click aimed at the label lands on the
+// checkbox. Citizen is not here: its list moves into the preferences panel, and is followed by
+// choosePreference().
 const OPENERS = {
 	"vector-2022": "#vector-page-tools-dropdown-checkbox",
 	timeless: null,
-	minerva: "#page-actions-overflow-checkbox",
 };
 
-const entry = (page, skin) =>
-	page
-		.locator(
-			`#t-wikven-skin-${skin}, .menu__item--page-actions-overflow-wikven-skin-${skin}`,
-		)
-		.first();
+// Skins that offer no switcher on an article page, so a journey can end on them but not start
+// there. Minerva takes no sidebar section that reaches a menu of its own -- its toolbox is the page
+// actions -- so its list is on the settings page, which minerva-settings.spec.js follows.
+const NO_PAGE_SWITCHER = ["minerva"];
+
+const entry = (page, skin) => page.locator(`#t-wikven-skin-${skin}`).first();
 
 // Record every page the browser is sent to that the export does not have, so a
 // switch to a nonexistent path fails as the 404 it is.
@@ -46,25 +45,15 @@ const watchForMissingPages = (page) => {
 };
 
 // The skin the current page was rendered in, and the skins it offers.
-const skinsOn = async (page) => {
-	const ids = await page.evaluate(() =>
-		Array.from(
-			document.querySelectorAll(
-				'[id^="t-wikven-skin-"], [class*="page-actions-overflow-wikven-skin-"]',
-			),
-		).map((element) => {
-			const id = element.id.replace("t-wikven-skin-", "");
-			if (id) {
-				return { skin: id, current: element.classList.contains("active") };
-			}
-			const match = element.className.match(
-				/page-actions-overflow-wikven-skin-([a-z0-9-]+)/,
-			);
-			return { skin: match[1], current: false };
-		}),
+const skinsOn = (page) =>
+	page.evaluate(() =>
+		Array.from(document.querySelectorAll('[id^="t-wikven-skin-"]')).map(
+			(element) => ({
+				skin: element.id.replace("t-wikven-skin-", ""),
+				current: element.classList.contains("active"),
+			}),
+		),
 	);
-	return ids;
-};
 
 const revealTools = async (page, skin) => {
 	const opener = OPENERS[skin];
@@ -127,6 +116,8 @@ const expectKoreanArticle = async (page) => {
 // follow docs/.wikven.yml rather than restating it.
 let main;
 let others;
+// The non-main skins a journey can start from, which is what the tests below switch away from.
+let departures;
 // The order the skins are listed in, which every skin's copy of the list shares.
 let order;
 
@@ -136,6 +127,7 @@ test.beforeAll(async ({ browser }) => {
 	const listed = await skinsOn(page);
 	main = listed.find((s) => s.current)?.skin;
 	others = listed.filter((s) => !s.current).map((s) => s.skin);
+	departures = others.filter((skin) => !NO_PAGE_SWITCHER.includes(skin));
 	order = listed.map((s) => s.skin);
 	await page.close();
 });
@@ -189,9 +181,9 @@ test("switching back to the main skin from a Korean page returns to the root cop
 }) => {
 	const missing = watchForMissingPages(page);
 
-	await page.goto(`${others[0]}/Getting_Started/ko.html`);
+	await page.goto(`${departures[0]}/Getting_Started/ko.html`);
 
-	const response = await chooseSkin(page, others[0], main);
+	const response = await chooseSkin(page, departures[0], main);
 
 	expect(response.status()).toBe(200);
 	await expect(page).toHaveURL("Getting_Started/ko.html");
@@ -200,21 +192,20 @@ test("switching back to the main skin from a Korean page returns to the root cop
 });
 
 // And between two skins that both have a directory, where the old and the new
-// skin directory are at the same depth, then back out to the root copy.
+// skin directory are at the same depth. The way back out to the root copy is the
+// test above; what is new here is the hop that changes no depth at all.
 test("switching between two non-main skins on a Korean page keeps the article", async ({
 	page,
 }) => {
 	test.skip(others.length < 2, "needs two non-main skins");
 	const missing = watchForMissingPages(page);
 
-	await page.goto(`${others[0]}/Getting_Started/ko.html`);
+	const from = departures[0];
+	const to = others.find((skin) => skin !== from);
+	await page.goto(`${from}/Getting_Started/ko.html`);
 
-	expect((await chooseSkin(page, others[0], others[1])).status()).toBe(200);
-	await expect(page).toHaveURL(`${others[1]}/Getting_Started/ko.html`);
-	await expectKoreanArticle(page);
-
-	expect((await chooseSkin(page, others[1], main)).status()).toBe(200);
-	await expect(page).toHaveURL("Getting_Started/ko.html");
+	expect((await chooseSkin(page, from, to)).status()).toBe(200);
+	await expect(page).toHaveURL(`${to}/Getting_Started/ko.html`);
 	await expectKoreanArticle(page);
 	expect(missing, missing.join("; ")).toEqual([]);
 });
@@ -228,12 +219,28 @@ test("switching the skin on a source page keeps the article", async ({
 
 	await page.goto("Getting_Started.html");
 
-	expect((await chooseSkin(page, main, others[0])).status()).toBe(200);
-	await expect(page).toHaveURL(`${others[0]}/Getting_Started.html`);
+	expect((await chooseSkin(page, main, departures[0])).status()).toBe(200);
+	await expect(page).toHaveURL(`${departures[0]}/Getting_Started.html`);
 	await expect(page.locator("#firstHeading")).toHaveText(ENGLISH_HEADING);
 
-	expect((await chooseSkin(page, others[0], main)).status()).toBe(200);
+	expect((await chooseSkin(page, departures[0], main)).status()).toBe(200);
 	await expect(page).toHaveURL("Getting_Started.html");
 	await expect(page.locator("#firstHeading")).toHaveText(ENGLISH_HEADING);
 	expect(missing, missing.join("; ")).toEqual([]);
+});
+
+// The generated settings page carries a skins section in every skin, and a section with a heading
+// and a description and nothing under it reads as a broken page. Minerva's list is written by the
+// build; the others are filled from the chrome by ext.Wikven.appearance.
+test("the settings page lists the skins, whichever skin renders it", async ({
+	page,
+}) => {
+	for (const skin of [main, ...others]) {
+		const path = skin === main ? "Settings.html" : `${skin}/Settings.html`;
+		await page.goto(path);
+		await expect(
+			page.locator(".wikven-skin-item"),
+			`${skin} leaves the skins section empty`,
+		).toHaveCount(order.length);
+	}
 });
