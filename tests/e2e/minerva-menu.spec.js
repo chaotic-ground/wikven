@@ -69,3 +69,30 @@ test("minerva's main menu carries the same navigation as the main skin", async (
 		expect(shown, `${label} is missing from Minerva's menu`).toContain(label);
 	}
 });
+
+// Minerva puts an icon beside every entry of its main menu, and the settings entry is one the skin
+// itself would have drawn, so it gets the skin's own cog rather than the blank column the site's
+// navigation links are left with.
+test("the settings entry carries Minerva's own cog", async ({ page }) => {
+	await page.goto("minerva/Installation.html");
+	await openDrawer(page);
+
+	const icon = page.locator("#t-wikven-settings .minerva-icon--settings");
+	await expect(icon).toBeVisible();
+	// The icon is a mask, so a missing file leaves a visible element with nothing in it.
+	await expect
+		.poll(() => icon.evaluate((element) => getComputedStyle(element).maskImage))
+		.toContain("svg");
+
+	// And the label starts where an icon-bearing label starts, not 26px to its left. Both read in
+	// the one frame: the drawer slides in, so two reads of its own would be two positions.
+	const offset = await page.evaluate(() => {
+		const left = (selector) =>
+			document.querySelector(selector).getBoundingClientRect().left;
+		return (
+			left("#t-wikven-settings .toggle-list-item__label") -
+			left(".menu__item--home .toggle-list-item__label")
+		);
+	});
+	expect(offset).toBe(0);
+});

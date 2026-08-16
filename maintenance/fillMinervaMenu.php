@@ -100,17 +100,21 @@ class FillMinervaMenu extends Maintenance {
 		if (!$title) {
 			return '';
 		}
+		// The cog Minerva draws beside its own settings entry, which the skin already ships: the
+		// sidebar links have no icon of their own, but this one is the skin's own entry, restored.
+		$icon = Html::element('span', ['class' => 'minerva-icon minerva-icon--settings'], '');
 		return Html::rawElement(
 			'li',
-			['class' => 'toggle-list-item wikven-nav-item', 'id' => 't-wikven-settings'],
+			['class' => 'toggle-list-item', 'id' => 't-wikven-settings'],
 			Html::rawElement(
 				'a',
 				['class' => 'toggle-list-item__anchor', 'href' => $title->getLocalURL()],
-				Html::element(
-					'span',
-					['class' => 'toggle-list-item__label'],
-					wfMessage('wikven-settings')->text()
-				)
+				$icon
+					. Html::element(
+						'span',
+						['class' => 'toggle-list-item__label'],
+						wfMessage('wikven-settings')->text()
+					)
 			)
 		);
 	}

@@ -74,18 +74,20 @@ test("wikven's own section lines up with MobileFrontend's", async ({
 }) => {
 	await page.goto("minerva/Settings.html");
 
-	const left = (selector) =>
-		page
-			.locator(selector)
-			.first()
-			.evaluate((element) => element.getBoundingClientRect().left);
+	// The borrowed block is drawn by its script, so it has to arrive before anything is measured.
+	await expect(page.locator("#skin-client-prefs-skin-theme")).toBeVisible();
 
-	expect(await left(".wikven-setting")).toBe(
-		await left("#mf-client-preferences"),
-	);
-	expect(await left(".wikven-skin-list")).toBe(
-		await left("#skin-client-prefs-skin-theme"),
-	);
+	// Read in the one frame, so nothing the page is still settling into can come between them.
+	const offsets = await page.evaluate(() => {
+		const left = (selector) =>
+			document.querySelector(selector).getBoundingClientRect().left;
+		return {
+			section: left(".wikven-setting") - left("#mf-client-preferences"),
+			list: left(".wikven-skin-list") - left("#skin-client-prefs-skin-theme"),
+		};
+	});
+
+	expect(offsets).toEqual({ section: 0, list: 0 });
 });
 
 // A setting that only holds on the page it was set on is no setting, and the pages a reader goes on
