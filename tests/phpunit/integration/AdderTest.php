@@ -82,6 +82,37 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * Every skin renders the generated settings page, and its skin list is filled from the chrome by
+	 * ext.Wikven.appearance. One skin means there is no list, so the module has nothing to do and the
+	 * empty toolbox is hidden instead.
+	 *
+	 * @dataProvider provideAppearanceCases
+	 */
+	public function testAppearanceModuleFollowsTheSkinCount(string $skin, array $skins, bool $expected) {
+		$this->overrideConfigValue('WikvenSkins', $skins);
+		$modules = [];
+		$out = $this->outputPage();
+		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
+			$modules[] = $name;
+		});
+		$skinMock = $this->createMock(Skin::class);
+		$skinMock->method('getSkinName')->willReturn($skin);
+
+		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+
+		$this->assertSame($expected, in_array('ext.Wikven.appearance', $modules, true));
+	}
+
+	public static function provideAppearanceCases() {
+		$two = ['vector-2022', 'minerva'];
+		return [
+			'the main skin with a choice' => ['vector-2022', $two, true],
+			'minerva with a choice' => ['minerva', $two, true],
+			'nothing to choose between' => ['vector-2022', ['vector-2022'], false]
+		];
+	}
+
+	/**
 	 * Citizen registers a service worker from load.php whenever the client-side script path is
 	 * the wiki root, and an export has no load.php to answer it. The value is overridden for
 	 * Citizen alone, so a skin that does not read it keeps whatever core reports.
