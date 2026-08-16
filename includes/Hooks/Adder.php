@@ -104,7 +104,7 @@ class Adder implements
 			$out->addModules('ext.Wikven.appearance');
 		}
 
-		$this->prepareSettingsPage($out, $skin);
+		$this->prepareSettingsPage($out);
 
 		// A static export has no user session or server logs, so Timeless's personal-tools dropdown
 		// and its "Page tools" sidebar (page actions, Special:Log) are dead; hide them on cli export.
@@ -125,8 +125,10 @@ class Adder implements
 	 * Text size and section expansion are declared here too: MobileFrontend writes those classes
 	 * only when it is serving a mobile view, and clientPreferences.js renders a preference only
 	 * when the page already carries its class.
+	 *
+	 * @param OutputPage $out
 	 */
-	private function prepareSettingsPage($out, Skin $skin): void {
+	private function prepareSettingsPage($out): void {
 		$page = (string)( $GLOBALS['wgWikvenSettingsPage'] ?? '' );
 		$title = $out->getTitle();
 		if ($page === '' || !$title || $title->getPrefixedText() !== $page) {
