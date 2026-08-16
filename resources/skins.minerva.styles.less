@@ -58,3 +58,12 @@
   font-weight: @font-weight-bold;
 }
 
+
+// MobileFrontend insets the block of controls it draws on the settings page
+// (form.mw-mf-settings #mf-client-preferences { margin: 0 16px }), so wikven's own section beneath
+// it takes the same inset and the two read as one column. Only Minerva loads that stylesheet, so
+// only Minerva has anything to line up with.
+.wikven-setting {
+  margin-left: 16px;
+  margin-right: 16px;
+}

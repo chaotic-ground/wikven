@@ -67,6 +67,27 @@ test("the controls are laid out in a form, not stacked inline", async ({
 	expect(marker).toBe("none");
 });
 
+// The borrowed controls are inset from the page's own text, so wikven's section beneath them has
+// to be inset the same or the page reads as two columns.
+test("wikven's own section lines up with MobileFrontend's", async ({
+	page,
+}) => {
+	await page.goto("minerva/Settings.html");
+
+	const left = (selector) =>
+		page
+			.locator(selector)
+			.first()
+			.evaluate((element) => element.getBoundingClientRect().left);
+
+	expect(await left(".wikven-setting")).toBe(
+		await left("#mf-client-preferences"),
+	);
+	expect(await left(".wikven-skin-list")).toBe(
+		await left("#skin-client-prefs-skin-theme"),
+	);
+});
+
 // A setting that only holds on the page it was set on is no setting, and the pages a reader goes on
 // to read are baked with the same class the choice moves, so this reads one of them.
 test("a bigger text size holds on the pages read next", async ({ page }) => {
