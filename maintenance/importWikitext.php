@@ -12,7 +12,6 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
-use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -30,13 +29,11 @@ class ImportWikitext extends Maintenance {
 	 * @return bool Whether every file was imported successfully.
 	 */
 	public function execute() {
-		global $wgWikvenSourceDirectory, $wgWikvenSourceHistoryFile;
+		global $wgWikvenSourceDirectory;
 		$sourceDirectory = rtrim($wgWikvenSourceDirectory, '/');
-		$history = SourceHistory::forSource($sourceDirectory, (string)$wgWikvenSourceHistoryFile);
 
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		RequestContext::getMain()->setUser($user);
-		$authors = new SourceAuthors($this->getServiceContainer()->getUserFactory(), $user);
 
 		$failed = [];
 		foreach ($this->wikitextFiles($sourceDirectory) as $filename) {
@@ -59,29 +56,14 @@ class ImportWikitext extends Maintenance {
 			$text = file_get_contents($filename);
 			$content = ContentHandler::makeContent($text, $title);
 
-			// What the footer's "last edited" line ends up reporting. The commit that last touched
-			// the file is the answer git gives, and the one the "View history" link leads to; with
-			// no history to read, the frozen build clock dates the page at the commit being built,
-			// which is true of the export as a whole (see SourceHistory and WikvenSettings.php).
-			$timestamp = $history->timestamp($relative) ?? ConvertibleTimestamp::time();
-			$editor = $authors->accountFor($history->author($relative));
-
 			$this->output("Saving... $title");
 
 			// File:/MediaWiki: pages need a current-revision edit so upload desc and edit hooks apply.
 			if ($title->getNamespace() === NS_FILE || $title->getNamespace() === NS_MEDIAWIKI) {
 				$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
-				$updater = $page->newPageUpdater($editor);
+				$updater = $page->newPageUpdater($user);
 				$updater->setContent(SlotRecord::MAIN, $content);
-				// PageUpdater stamps the revision from the clock and offers no way to set it, so the
-				// frozen clock moves to the file's own date for the length of the save. setFakeTime()
-				// hands back what it replaced, so this puts the build's own instant back exactly.
-				$frozen = ConvertibleTimestamp::setFakeTime($timestamp);
-				try {
-					$updater->saveRevision(CommentStoreComment::newUnsavedComment('Import'));
-				} finally {
-					ConvertibleTimestamp::setFakeTime($frozen ?? false);
-				}
+				$updater->saveRevision(CommentStoreComment::newUnsavedComment('Import'));
 				// These are exactly the pages an edit hook may veto -- AbuseFilter or SpamBlacklist on a
 				// File: description, CSS validation on MediaWiki:Common.css.
 				if ($updater->wasSuccessful()) {
@@ -95,13 +77,15 @@ class ImportWikitext extends Maintenance {
 				continue;
 			}
 
-			// Import as an old revision, which is the only path that takes a timestamp of its own.
+			// Import as an old revision; the current-revision path above takes no timestamp of its
+			// own. What it is stamped with hardly matters: the build's frozen clock stands in until
+			// the source history restamps every page (see build.php's stampSourceHistory()).
 			$revision = new WikiRevision();
 			$revision->setContent(SlotRecord::MAIN, $content);
 			$revision->setTitle($title);
-			$revision->setUserObj($editor);
+			$revision->setUserObj($user);
 			$revision->setComment('');
-			$revision->setTimestamp(wfTimestamp(TS_MW, $timestamp));
+			$revision->setTimestamp(wfTimestampNow());
 
 			// WikiRevision::importOldRevision() has been a deprecated shim for this service since 1.31.
 			$importer = $this->getServiceContainer()->getWikiRevisionOldRevisionImporter();

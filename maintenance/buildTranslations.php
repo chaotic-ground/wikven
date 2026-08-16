@@ -29,7 +29,6 @@ use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 use Wikimedia\Rdbms\IDBAccessObject;
-use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -47,11 +46,6 @@ require_once "$IP/maintenance/Maintenance.php";
  * translation page's display title.
  */
 class BuildTranslations extends Maintenance {
-	/** When each source file was last changed, and by whom; see SourceHistory. */
-	private SourceHistory $history;
-
-	private SourceAuthors $authors;
-
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Mark translatable pages and load their translations from source files.');
@@ -71,13 +65,6 @@ class BuildTranslations extends Maintenance {
 		RequestContext::getMain()->setUser($user);
 		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
-		// A translatable page is written twice more after the import -- once to restore the tag
-		// Translate wants, and once per language when its translation is rendered -- and it is the
-		// last of those writes the footer reports. Each is dated and attributed from the source
-		// file it carries, so a translatable page reads no differently from any other (#406).
-		$this->history = SourceHistory::forSource($source, (string)( $GLOBALS['wgWikvenSourceHistoryFile'] ?? '' ));
-		$this->authors = new SourceAuthors($this->getServiceContainer()->getUserFactory(), $user);
-
 		$prepared = [];
 		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
 			$relative = substr($baseFile, strlen($source) + 1);
@@ -89,8 +76,8 @@ class BuildTranslations extends Maintenance {
 			$sourceText = (string)file_get_contents($baseFile);
 			$languages = TranslationSource::translationLanguages($baseFile, $isKnownLanguage);
 			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
-			if ($this->prepare($title, $sourceText, $languages, $pageTitle, $user, $relative)) {
-				$prepared[$relative] = $title;
+			if ($this->prepare($title, $sourceText, $languages, $pageTitle, $user)) {
+				$prepared[] = $title;
 			}
 		}
 
@@ -98,30 +85,11 @@ class BuildTranslations extends Maintenance {
 		// inline per page let the page marked just before another (the main page sorts last) render before
 		// the shared message index caught up, silently producing no <Page>/<lang> page for it.
 		$this->drainJobs();
-		foreach ($prepared as $relative => $title) {
-			$this->render($title, (string)$relative);
+		foreach ($prepared as $title) {
+			$this->render($title);
 		}
 
 		return true;
-	}
-
-	/** When a source file was last changed, or the frozen build clock where the history is silent. */
-	private function changedAt(string $relative): int {
-		return $this->history->timestamp($relative) ?? ConvertibleTimestamp::time();
-	}
-
-	/**
-	 * Run something with the build's frozen clock moved to one instant, and then put back exactly:
-	 * setFakeTime() hands back what it replaced. A page save takes its revision timestamp from the
-	 * clock and offers no way to set it (PageUpdater has no setter, and neither has a render job).
-	 */
-	private function asOf(int $timestamp, callable $work): void {
-		$frozen = ConvertibleTimestamp::setFakeTime($timestamp);
-		try {
-			$work();
-		} finally {
-			ConvertibleTimestamp::setFakeTime($frozen ?? false);
-		}
 	}
 
 	/** Report a page Translate would not take, and answer prepare()'s "was it marked" with no. */
@@ -138,7 +106,6 @@ class BuildTranslations extends Maintenance {
 	 * @param string[] $languages
 	 * @param ?string $pageTitle Source text of the page's title unit, or null if its title is fixed.
 	 * @param User $user
-	 * @param string $relative The page's source file, relative to the source directory.
 	 * @return bool Whether the page was marked (false if it could not be loaded, parsed or validated).
 	 */
 	private function prepare(
@@ -146,22 +113,16 @@ class BuildTranslations extends Maintenance {
 		string $sourceText,
 		array $languages,
 		?string $pageTitle,
-		User $user,
-		string $relative
+		User $user
 	): bool {
 		$services = $this->getServiceContainer();
 
 		// importWikitext saved the base as an old revision, which bypasses the PageSaveComplete hook
-		// that writes the "ready for translation" tag. A normal edit restores it -- and being the
-		// newest revision of the untranslated page, it is also the one that page's footer reports,
-		// so it carries the source file's own date and author. What follows stays with the build's
-		// account, which is what Translate's marker and its render jobs run under.
+		// that writes the "ready for translation" tag. A normal edit restores it.
 		$page = $services->getWikiPageFactory()->newFromTitle($title);
-		$updater = $page->newPageUpdater($this->authors->accountFor($this->history->author($relative)));
+		$updater = $page->newPageUpdater($user);
 		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($sourceText, $title));
-		$this->asOf($this->changedAt($relative), static function () use ($updater): void {
-			$updater->saveRevision(CommentStoreComment::newUnsavedComment('Prepare for translation'), EDIT_FORCE_BOT);
-		});
+		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Prepare for translation'), EDIT_FORCE_BOT);
 
 		$marker = TranslateServices::getInstance()->getTranslatablePageMarker();
 		$record = $services->getPageStore()->getPageByReference($title, IDBAccessObject::READ_LATEST);
@@ -197,26 +158,11 @@ class BuildTranslations extends Maintenance {
 		return true;
 	}
 
-	/**
-	 * Render one marked page's translated pages and refresh its stats.
-	 *
-	 * @param Title $title
-	 * @param string $relative The base page's source file, relative to the source directory.
-	 */
-	private function render(Title $title, string $relative): void {
+	/** Render one marked page's translated pages and refresh its stats. */
+	private function render(Title $title): void {
 		$translatable = TranslatablePage::newFromTitle($title);
-		// One job per translated page. Each is dated at the commit that last changed the file it
-		// renders -- "<Page>/<lang>.wikitext" -- so a translation left alone for months does not
-		// claim it was edited when the page it follows was. The source-language page has no such
-		// file and takes the base page's date. The account is Translate's own either way, and
-		// build.php hides it rather than offer it as an author.
 		foreach (UpdateTranslatablePageJob::getRenderJobs($translatable, true) as $job) {
-			$language = substr($job->getTitle()->getPrefixedText(), strlen($title->getPrefixedText()) + 1);
-			$translation = TranslationSource::translationPath($relative, $language);
-			$stamp = $this->history->timestamp($translation) ?? $this->changedAt($relative);
-			$this->asOf($stamp, static function () use ($job): void {
-				$job->run();
-			});
+			$job->run();
 		}
 		MessageGroupStats::forGroup(
 			$translatable->getMessageGroupId(),
