@@ -44,10 +44,13 @@ test("Minerva's search suggests pages without asking a REST backend", async ({
 	await page.keyboard.type("binary", { delay: 40 });
 
 	// A title suggestion leading to the page it names, not to the results page carrying the title
-	// as a query. Matched as a suffix, since the URL carries the path prefix the site is served
-	// under.
+	// as a query. Matched on the file name alone, at both ends: the URL carries the path prefix the
+	// site is served under, and core's typeahead appends a wprov= tracking parameter to every
+	// result URL it renders (instrumentation.addWprovToSearchResultUrls), so neither end is the
+	// page's own. What distinguishes it from the row #381 reported is Standalone_binary.html rather
+	// than Search.html.
 	await expect(
-		page.locator('.cdx-menu-item a[href$="Standalone_binary.html"]').first(),
+		page.locator('.cdx-menu-item a[href*="Standalone_binary.html"]').first(),
 	).toBeVisible({ timeout: 15000 });
 
 	expect(rest, rest.join("; ")).toEqual([]);
