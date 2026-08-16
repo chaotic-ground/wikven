@@ -500,7 +500,21 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		</nav>
 						<nav class="vector-appearance-landmark" aria-label="Appearance">
 							<div id="vector-appearance-pinned-container" class="vector-pinned-container">
-				
+				<div id="vector-appearance" class="vector-appearance vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-appearance-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="appearance-pinned"
+	data-pinnable-element-id="vector-appearance"
+	data-pinned-container-id="vector-appearance-pinned-container"
+	data-unpinned-container-id="vector-appearance-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Appearance</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-appearance.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-appearance.unpin">hide</button>
+</div>
+
+
+</div>
 
 							</div>
 		</nav>
@@ -532,22 +546,24 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div>
-<p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The main page is a target like any other (<code>index</code>, unless <code>WikvenMainPage</code> says otherwise), and the prefix keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+<p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
-<span class="k">**</span> Special:MyLanguage/index|mainpage-description
+<span class="k">**</span> mainpage|mainpage-description
 <span class="k">*</span> sidebar-docs
 <span class="k">**</span> Special:MyLanguage/Getting Started|sidebar-getting-started
 <span class="k">**</span> Special:MyLanguage/Images|sidebar-images
 <span class="k">*</span> sidebar-references
 <span class="k">**</span> Special:MyLanguage/Licenses|sidebar-licenses
 </pre></div>
+<p>The main page keeps its plain <code>mainpage</code> entry, because that target is a message: the prefix goes in the message instead. Write <code>Special:MyLanguage/index</code> in <code>MediaWiki:Mainpage.wikitext</code> (<code>index</code> being whatever <code>WikvenMainPage</code> names), as Meta-Wiki does. Every skin points its logo at that same message, so the logo follows the reader's language too. The cost is that the wiki stops recognising the page as its main page: the page title shows in the browser tab, and MinervaNeue leaves out its main-page styling.
+</p>
 <div class="mw-heading mw-heading2"><h2 id="What_is_removed">What is removed</h2></div>
 <p>Some default sidebar blocks need a live wiki, so Wikven drops them from the static export: the <b>toolbox</b> (What links here, Special pages, Printable version, and so on) and the <b>search</b> box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="See_also">See also</h2></div>
 <ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar" class="extiw" title="mw:Special:MyLanguage/Manual:Interface/Sidebar">Manual:Interface/Sidebar</a></li></ul>
-<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Pages.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="./Images.html" title="Special:MyLanguage/Images">Images</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Pages.html" title="Special:MyLanguage/Pages">Pages</a></div><div class="wikven-prevnext-next"><a href="./Images.html" title="Special:MyLanguage/Images">Images</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Editing_sidebar.html">Editing_sidebar.html</a>"</div></div>
@@ -560,7 +576,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 20:31.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 03:22.</li>
 </ul>
 
 	<ul id="footer-places">

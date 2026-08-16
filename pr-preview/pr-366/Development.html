@@ -572,7 +572,21 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		</nav>
 						<nav class="vector-appearance-landmark" aria-label="Appearance">
 							<div id="vector-appearance-pinned-container" class="vector-pinned-container">
-				
+				<div id="vector-appearance" class="vector-appearance vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-appearance-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="appearance-pinned"
+	data-pinnable-element-id="vector-appearance"
+	data-pinned-container-id="vector-appearance-pinned-container"
+	data-unpinned-container-id="vector-appearance-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Appearance</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-appearance.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-appearance.unpin">hide</button>
+</div>
+
+
+</div>
 
 							</div>
 		</nav>
@@ -637,7 +651,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dt><code>buildScripts</code></dt>
 <dd>Dumps the JavaScript the pages need into two files: <code>startup-static.js</code> (the loader manifest, with its network auto-load removed) and <code>modules-static.js</code> (the full dependency closure, so every module self-executes). It seeds the <code>site</code> module (<code>MediaWiki:Common.js</code> and the skin's JS) and any default <a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">gadgets</a>, which a live wiki pulls in implicitly.</dd>
 <dt><code>rewriteScripts</code></dt>
-<dd>Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the appearance menu (and the search box, unless <a href="./Searching.html" title="Special:MyLanguage/Searching">SifterSearch</a> is providing a static index), which need a live API.</dd>
+<dd>Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the search box, which needs a live API, unless <a href="./Searching.html" title="Special:MyLanguage/Searching">SifterSearch</a> is providing a static index.</dd>
 <dt><code>storeImages</code></dt>
 <dd>Copies every referenced image (from Wikimedia Commons via InstantCommons, or from local uploads) to a content-hashed local file and rewrites the URLs, so nothing is fetched over the network at view time.</dd>
 <dt><code>rename</code></dt>
@@ -672,7 +686,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 15 August 2026, at 20:31.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 03:22.</li>
 </ul>
 
 	<ul id="footer-places">
