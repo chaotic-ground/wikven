@@ -26,6 +26,9 @@
 		"ext.Wikven.citizenSkins": {
 			"scripts": ["citizen-skins.js"],
 			"messages": ["wikven-skin", "wikven-skin-description"]
+		},
+		"ext.Wikven.citizenSearchShortcuts": {
+			"scripts": ["citizen-search-shortcuts.js"]
 		}
 	},
 	"ResourceFileModulePaths": {
