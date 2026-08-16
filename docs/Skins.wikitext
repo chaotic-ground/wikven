@@ -40,6 +40,23 @@ config:
 <!--T:14-->
 Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
 
+<!--T:20-->
+=== How Minerva is supported ===
+
+<!--T:21-->
+Minerva is built and exercised like the other two, but more of that support is {{SITENAME}} working around the skin than configuring it. Minerva builds its main menu from its own definitions rather than from <code>MediaWiki:Sidebar</code>, and several of its controls expect MobileFrontend or a live wiki behind them, so the build stands in for both:
+
+<!--T:22-->
+* The site's own navigation is written into the main menu of every rendered page, there being no sidebar section the skin would read it from.
+* Random, Recent changes, Special pages and Preferences are hidden with a stylesheet rather than dropped: the skin inserts them unconditionally, so the anchors are still in the exported HTML.
+* Community portal is dropped properly, through the message the skin already checks.
+* The colour theme and the skin to read in are on the baked <code>Settings</code> page, the skin's own being <code>Special:MobileOptions</code>.
+* The language button is hidden, its overlay being MobileFrontend's.
+* Without MobileFrontend the table of contents arrives collapsed and the toggle that would open it is never drawn, so a stylesheet opens it again.
+
+<!--T:23-->
+A reader meets none of this. It is worth knowing before changing Minerva's chrome, though: a change there usually lands in <code>maintenance/fillMinervaMenu.php</code> or <code>resources/skins.minerva.styles.less</code> rather than in configuration.
+
 <!--T:15-->
 === Minerva settings ===
 
