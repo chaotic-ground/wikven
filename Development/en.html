@@ -603,8 +603,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					
 					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/en.wikitext" title="Special:Translate">Translate this page</a></div><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><meta property="mw:PageProp/toc" />
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><a href="../Development.html" class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" title="Development (100% translated)" lang="en" dir="ltr">English</a></li>
-<li><a href="../Development/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="개발 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
-<p>This page explains how Wikven is built, for people who want to work on it. Wikven is a <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki" class="extiw" title="mw:Special:MyLanguage/MediaWiki">MediaWiki</a> extension plus a handful of maintenance scripts that turn a directory of wikitext into a static website; it does not add a new rendering engine, it drives MediaWiki itself and then captures the result.
+<li><a href="../Development/ko.html" class="mw-pt-progress mw-pt-progress--high" title="개발 (92% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<p>This page explains how Wikven is built, for people who want to work on it. Wikven is a <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki">MediaWiki</a> extension plus a handful of maintenance scripts that turn a directory of wikitext into a static website; it does not add a new rendering engine, it drives MediaWiki itself and then captures the result.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Architecture">Architecture</h2></div>
 <p>A Wikven build has four moving parts:
@@ -662,7 +662,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A live wiki relies on <code>load.php</code>, an action API, and a database; a static host has none of these. Each pipeline step removes one such dependency: the file cache replaces the renderer, <code>buildStyles</code>/<code>buildScripts</code>/<code>rewriteScripts</code> replace <code>load.php</code>, <code>storeImages</code> replaces the thumbnail/Commons endpoints, and the extension's hooks remove the UI that would call the API. What is left is plain HTML, CSS, JS, and images.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Third-party_extensions_and_skins">Third-party extensions and skins</h2></div>
-<p>Names in <code>extensions</code>/<code>skins</code> that are not bundled with Wikven are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in <a href="../Configuration/en.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a> (a tarball, a Git repository, or a Composer package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
+<p>Names in <code>extensions</code>/<code>skins</code> that are not bundled with Wikven are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in <a href="../Configuration/en.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a> (a tarball, a <a rel="nofollow" class="external text" href="https://git-scm.com/">Git</a> repository, or a <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Standalone_binary">Standalone binary</h2></div>
 <p>The same MediaWiki + Wikven tree is embedded into a single <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">FrankenPHP executable</a> (see <code>binary.Dockerfile</code>), so a site can be built with no Docker. The binary extracts its app to a writable temporary directory at startup and runs the same pipeline, which is why all writable paths are kept under <code>WIKVEN_WORKDIR</code>.
@@ -685,7 +685,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 07:45.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 14:18.</li>
 </ul>
 
 	<ul id="footer-places">

@@ -553,9 +553,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div id="contentSub" lang="ko" dir="ltr"><div id="mw-content-subtitle" lang="ko" dir="ltr"></div></div>
 					
 					
-					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Standalone_binary.html" title="Standalone binary">Standalone binary</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Standalone%20binary/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><meta property="mw:PageProp/toc" />
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Standalone_binary.html" title="Standalone binary">Standalone binary</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Standalone%20binary/ko.wikitext">번역한 것</a></span>이며 번역은 96% 완료했습니다.</div><div class="mw-pt-translate-header" dir="ltr" lang="ko"><span class="mw-translate-fuzzy">오래된 번역은 이렇게 표시됩니다.</span></div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><meta property="mw:PageProp/toc" />
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Standalone_binary.html" class="mw-pt-progress mw-pt-progress--complete" title="Standalone binary (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p><a href="../Installation/ko.html#Docker" title="Special:MyLanguage/Installation">Docker 이미지</a> 외에도, Wikven은 MediaWiki를 내장한 단일 자체 완결형 실행 파일로 배포되므로 Docker 없이도 사이트를 빌드할 수 있습니다. x86_64와 arm64 Linux용으로 제공됩니다.
 </p><p>macOS와 Windows에서는 대신 <a href="../Installation/ko.html#Docker" title="Special:MyLanguage/Installation">Docker 이미지</a>를 사용하십시오. Wikven은 비용 문제로 미리 빌드된 macOS 바이너리를 제공하지 않습니다. 다운로드한 바이너리가 Gatekeeper에 차단되지 않고 실행되려면 Apple이 유료 Apple Developer Program 계정(연 US$99)을 통한 서명과 공증(notarization)을 요구하는데, 이 비용은 아직 이 프로젝트에 정당화되지 않습니다 (<a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/issues/322">이슈 #322</a> 참고). 유일한 대안인 사용자에게 격리(quarantine)를 손수 해제하라고 안내하는 방법은 보안 검사를 우회하도록 길들이므로 제공하지 않습니다. 그래도 바이너리를 원하는 macOS 사용자는 <a rel="nofollow" class="external text" href="https://frankenphp.dev/docs/static/">FrankenPHP의 정적 빌드</a>로 소스에서 직접 컴파일할 수 있습니다. 로컬에서 빌드한 바이너리는 격리되지 않습니다.
 </p><p>미리 빌드된 Windows 바이너리도 없습니다. 단일 자체 완결형 실행 파일을 만들어 내는 툴체인이 아직 Windows를 지원하지 않기 때문입니다 (<a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/issues/192">이슈 #192</a> 참고).
@@ -617,11 +617,13 @@ wikven<span class="w"> </span>build
 <div class="mw-heading mw-heading2"><h2 id="선택적_호스트_도구"><span id=".EC.84.A0.ED.83.9D.EC.A0.81_.ED.98.B8.EC.8A.A4.ED.8A.B8_.EB.8F.84.EA.B5.AC"></span>선택적 호스트 도구</h2></div>
 <p>바이너리는 자체적으로 렌더링하지만, 다음 호스트 프로그램이 있으면 활용합니다:
 </p>
+<div class="mw-translate-fuzzy">
 <ul><li><b>ImageMagick</b>과 <b>librsvg</b>는 더 높은 품질의 섬네일을 만들어 냅니다. 이들이 없으면 바이너리는 래스터 이미지에 내장 GD 라이브러리를 사용하고 SVG를 인라인으로 제공합니다. <a href="../Images/ko.html" title="Special:MyLanguage/Images">이미지</a> 참고.</li>
 <li><b>git</b>은 <a href="../Configuration/ko.html#WikvenRepositories" title="Special:MyLanguage/Configuration">서드파티 확장 기능과 스킨</a>을 가져올 때만 필요합니다.</li></ul>
-<style data-mw-deduplicate="TemplateStyles:r74">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>HTTPS를 통한 가져오기, InstantCommons를 통한 위키미디어 공용 이미지, 그리고 <a href="../Configuration/ko.html#WikvenRepositories" title="Special:MyLanguage/Configuration">서드파티 확장 기능이나 스킨</a>은 시스템의 CA 인증서에 의존합니다. 이것이 없는 최소 구성 시스템에서는 배포판의 CA 번들(예: <code>ca-certificates</code> 패키지)을 설치하십시오. 로컬 콘텐츠와 이미지만 있는 사이트는 네트워크 접근이 필요 없습니다.</p></div>
 </div>
-<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">Configuration</a></div><div class="wikven-prevnext-next"><a href="../Development/ko.html" title="Special:MyLanguage/Development">Development</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r73">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>HTTPS를 통한 가져오기, InstantCommons를 통한 위키미디어 공용 이미지, 그리고 <a href="../Configuration/ko.html#WikvenRepositories" title="Special:MyLanguage/Configuration">서드파티 확장 기능이나 스킨</a>은 시스템의 CA 인증서에 의존합니다. 이것이 없는 최소 구성 시스템에서는 배포판의 CA 번들(예: <code>ca-certificates</code> 패키지)을 설치하십시오. 로컬 콘텐츠와 이미지만 있는 사이트는 네트워크 접근이 필요 없습니다.</p></div>
+</div>
+<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">Configuration</a></div><div class="wikven-prevnext-next"><a href="../Development/ko.html" title="Special:MyLanguage/Development">Development</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="Standalone_binary/ko.html">Standalone_binary/ko.html</a>"</div></div>
@@ -634,7 +636,7 @@ wikven<span class="w"> </span>build
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 07:45에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 14:18에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">

@@ -214,14 +214,14 @@ Wikven
 </div>
 
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Troubleshooting/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="문제 해결 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Troubleshooting/ko.html" class="mw-pt-progress mw-pt-progress--high" title="문제 해결 (83% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Common problems and what to check.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Thumbnails_look_low_quality">Thumbnails look low quality</h2></div>
-<p>The <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> falls back to the built-in GD library, which produces lower-quality thumbnails and supports fewer formats. Install <b>ImageMagick</b> and <b>librsvg</b> on the build host for better output, or use the Docker image, which bundles them. See <a href="./Images.html" title="Special:MyLanguage/Images">Images</a>.
+<p>The <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> falls back to the built-in <a rel="nofollow" class="external text" href="https://libgd.github.io/">GD</a> library, which produces lower-quality thumbnails and supports fewer formats. Install <b><a rel="nofollow" class="external text" href="https://imagemagick.org/">ImageMagick</a></b> and <b><a rel="nofollow" class="external text" href="https://gitlab.gnome.org/GNOME/librsvg">librsvg</a></b> on the build host for better output, or use the Docker image, which bundles them. See <a href="./Images.html" title="Special:MyLanguage/Images">Images</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="The_search_box_does_nothing">The search box does nothing</h2></div>
-<p>Search is client-side, built into Wikven via SifterSearch and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See <a href="./Searching.html" title="Special:MyLanguage/Searching">Searching</a>.
+<p>Search is client-side, built into Wikven via <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/SifterSearch">SifterSearch</a> and on by default. If the box does not respond, search was turned off (an empty <code>SifterSearchOutputDir</code>), or its bundle path does not match where the site is served (set <code>SifterSearchBundlePath</code> for a subdirectory deploy). See <a href="./Searching.html" title="Special:MyLanguage/Searching">Searching</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="A_page_is_missing_from_the_site">A page is missing from the site</h2></div>
 <p>The build aborts if any page fails to import, printing <code>Failed to import N page(s)</code> with the file names. A common cause is a file whose name does not map to a valid title; rename it (the build warns when a name does not round-trip). Re-run the build and read the log for the failing file.
@@ -232,7 +232,7 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="The_binary_will_not_run_on_macOS_or_Windows">The binary will not run on macOS or Windows</h2></div>
 <p>The standalone binary is Linux-only (x86_64 and arm64). On macOS or Windows, use the Docker image instead. See <a href="./Installation.html" title="Special:MyLanguage/Installation">Installation</a>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a></div><div class="wikven-prevnext-next"><a href="./Configuration.html" title="Special:MyLanguage/Configuration">Configuration</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a></div><div class="wikven-prevnext-next"><a href="./Configuration.html" title="Special:MyLanguage/Configuration">Configuration</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Troubleshooting.html">Troubleshooting.html</a>"</div></div>
@@ -249,8 +249,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786866344">
-  				<span>Last edited on 16 August 2026, at 07:45</span>
+  				data-timestamp="1786889931">
+  				<span>Last edited on 16 August 2026, at 14:18</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -273,7 +273,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 07:45.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 14:18.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

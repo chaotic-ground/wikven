@@ -204,7 +204,7 @@ Wikven
 			</div>
 			<div id="bodyContent" class="content">
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./index/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="index/ko (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./index/ko.html" class="mw-pt-progress mw-pt-progress--med" title="index/ko (56% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven is a static site generator built on <a class="external text" href="https://www.mediawiki.org/">MediaWiki</a>, the software
 behind <a rel="nofollow" class="external text" href="https://www.wikipedia.org/">Wikipedia</a>. It turns a directory of wikitext
 into a plain HTML site you can host anywhere, with no server or database to run.
@@ -213,7 +213,7 @@ This documentation site is itself built with Wikven.
 want MediaWiki's templates, parser functions, gadgets and extensions but a static
 result with nothing to run: a project's documentation site, an archived wiki
 you can browse as plain HTML, or a personal wiki. Unlike a general static-site generator
-such as Hugo or MkDocs, it renders real wikitext through MediaWiki itself, so it
+such as <a rel="nofollow" class="external text" href="https://gohugo.io/">Hugo</a> or <a rel="nofollow" class="external text" href="https://www.mkdocs.org/">MkDocs</a>, it renders real wikitext through MediaWiki itself, so it
 assumes you are comfortable with wikitext (see <a href="./Why_wikitext.html" title="Special:MyLanguage/Why wikitext">Why wikitext</a> for the trade-offs).
 </p><p>See <a href="./Installation.html" title="Special:MyLanguage/Installation">Installation</a> for the three ways to install Wikven, the standalone
 <a href="./Installation.html#Binary" title="Special:MyLanguage/Installation">binary</a>, the <a href="./Installation.html#Docker" title="Special:MyLanguage/Installation">Docker image</a>, or
@@ -223,11 +223,11 @@ your first site.
 <div class="mw-heading mw-heading2"><h2 id="Supported_features">Supported features</h2></div>
 <p>With Wikven, you can use the following features of MediaWiki.
 </p>
-<ul><li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Wikitext" class="extiw" title="mw:Special:MyLanguage/Wikitext">Wikitext</a> pages (see <a href="./Pages.html" title="Special:MyLanguage/Pages">Pages</a>)</li>
+<ul><li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Wikitext">Wikitext</a> pages (see <a href="./Pages.html" title="Special:MyLanguage/Pages">Pages</a>)</li>
 <li><a href="./Pages.html#Templates" title="Special:MyLanguage/Pages">Templates</a></li>
 <li><a href="./Images.html" title="Special:MyLanguage/Images">Images</a> from Wikimedia Commons or local files</li>
 <li><a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a> (MediaWiki:Common.js and gadgets)</li>
-<li><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins" class="extiw" title="mw:Special:MyLanguage/Bundled extensions and skins">Bundled extensions and skins</a></li>
+<li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins">Bundled extensions and skins</a></li>
 <li>Third-party extensions and skins (see <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>)</li>
 <li><a href="./Searching.html" title="Special:MyLanguage/Searching">Search</a> (client-side, built in via SifterSearch)</li>
 <li><a href="./Translating.html" title="Special:MyLanguage/Translating">Translation</a> into multiple languages (via the Translate extension)</li></ul>
@@ -235,8 +235,8 @@ your first site.
 <p>These need a live wiki, so they are not part of the static export:
 </p>
 <ul><li>All special pages</li>
-<li>All editors (<a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiEditor" class="extiw" title="mw:Special:MyLanguage/Extension:WikiEditor">WikiEditor</a>, <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:VisualEditor" class="extiw" title="mw:Special:MyLanguage/Extension:VisualEditor">VisualEditor</a> and <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CodeEditor" class="extiw" title="mw:Special:MyLanguage/Extension:CodeEditor">CodeEditor</a>)</li></ul>
-<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-next"><a href="./Why_wikitext.html" title="Special:MyLanguage/Why wikitext">Why wikitext</a>&#160;&#8594;</div></div>
+<li>All editors (<a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiEditor">WikiEditor</a>, <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:VisualEditor">VisualEditor</a> and <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CodeEditor">CodeEditor</a>)</li></ul>
+<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-next"><a href="./Why_wikitext.html" title="Special:MyLanguage/Why wikitext">Why wikitext</a>&#160;&#8594;</div></div>
 <p><br />
 </p>
 </div>
@@ -254,8 +254,8 @@ your first site.
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786866344">
-  				<span>Last edited on 16 August 2026, at 07:45</span>
+  				data-timestamp="1786889931">
+  				<span>Last edited on 16 August 2026, at 14:18</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -278,7 +278,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 07:45.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 14:18.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

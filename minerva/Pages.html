@@ -216,7 +216,7 @@ Wikven
 </div>
 
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Pages/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="문서 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Pages/ko.html" class="mw-pt-progress mw-pt-progress--high" title="문서 (77% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Each file in your source directory becomes a page. Wikven derives the page's title, and namespace, from the file's path, so the file name is how you choose them.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="From_file_name_to_page">From file name to page</h2></div>
@@ -225,10 +225,10 @@ Wikven
 </p><p>If a file name does not map cleanly to a title (MediaWiki would normalise it differently), the build warns, because the page's edit and history links are derived from the file name and would otherwise not resolve. Rename the file to a title that is already normalised.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Linking_between_pages">Linking between pages</h2></div>
-<p>Link with <code>[[Title]]</code>, or <code>[[Title|label]]</code>, the standard <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Links" class="extiw" title="mw:Special:MyLanguage/Help:Links">wikitext link</a>. Wikven rewrites these to the matching <code>.html</code> paths in the static output, so internal links work with no server.
+<p>Link with <code>[[Title]]</code>, or <code>[[Title|label]]</code>, the standard <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Links">wikitext link</a>. Wikven rewrites these to the matching <code>.html</code> paths in the static output, so internal links work with no server.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Subpages">Subpages</h2></div>
-<p>Put a file in a subdirectory to create a <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages" class="extiw" title="mw:Special:MyLanguage/Help:Subpages">subpage</a>: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup".
+<p>Put a file in a subdirectory to create a <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages">subpage</a>: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup".
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Namespaces">Namespaces</h2></div>
 <p>Prefix the file name with a namespace to place the page there:
@@ -237,14 +237,14 @@ Wikven
 <li><code>File:Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see <a href="./Images.html" title="Special:MyLanguage/Images">Images</a>).</li>
 <li><code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see <a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a>). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.</li></ul>
 <div class="mw-heading mw-heading2"><h2 id="Categories">Categories</h2></div>
-<p>Add <code>[[Category:Name]]</code> to a page to <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories" class="extiw" title="mw:Special:MyLanguage/Help:Categories">categorise</a> it; the categories show in the page footer, as on any wiki.
+<p>Add <code>[[Category:Name]]</code> to a page to <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories">categorise</a> it; the categories show in the page footer, as on any wiki.
 </p><p>A category's own page is not exported by default, though. Wikven writes only <i>content</i> pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your <a href="./Configuration.html#ContentNamespaces" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code></a> and add a <code>Category:Name.wikitext</code> file to your source:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">ContentNamespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">14</span><span class="p p-Indicator">]</span>
 </pre></div>
 <p>This key replaces the default rather than extending it, so keep <code>0</code> and <code>6</code> in the list, or the main and File: pages stop being exported.
-</p><p>To keep a maintenance or tracking category out of the footer instead, add the <code>__HIDDENCAT__</code> <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words" class="extiw" title="mw:Special:MyLanguage/Help:Magic words">magic word</a> to its category page; a static export has no logged-in readers, so a hidden category is off the footer for everyone.
+</p><p>To keep a maintenance or tracking category out of the footer instead, add the <code>__HIDDENCAT__</code> <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words">magic word</a> to its category page; a static export has no logged-in readers, so a hidden category is off the footer for everyone.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Templates">Templates</h2></div>
 <p>Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code>{{Name}}</code>. For example, this file:
@@ -255,9 +255,9 @@ Wikven
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nt">Note</span><span class="p">|</span>Back up your wiki first.<span class="p">}}</span>
 </pre></div>
-<p>renders as "<b>Note:</b> Back up your wiki first." Templates take positional (<code>{{{1}}}</code>) and named parameters and run <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions" class="extiw" title="mw:Special:MyLanguage/Help:Parser functions">parser functions</a> exactly as in MediaWiki. The syntax itself is standard MediaWiki; see <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates" class="extiw" title="mw:Special:MyLanguage/Help:Templates">Help:Templates</a>.
+<p>renders as "<b>Note:</b> Back up your wiki first." Templates take positional (<code>{{{1}}}</code>) and named parameters and run <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions">parser functions</a> exactly as in MediaWiki. The syntax itself is standard MediaWiki; see <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates">Help:Templates</a>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a></div><div class="wikven-prevnext-next"><a href="./Editing_sidebar.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a></div><div class="wikven-prevnext-next"><a href="./Editing_sidebar.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Pages.html">Pages.html</a>"</div></div>
@@ -274,8 +274,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Maintenance script"
   				data-user-gender="unknown"
-  				data-timestamp="1786866344">
-  				<span>Last edited on 16 August 2026, at 07:45</span>
+  				data-timestamp="1786889931">
+  				<span>Last edited on 16 August 2026, at 14:18</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -298,7 +298,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 07:45.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 14:18.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
