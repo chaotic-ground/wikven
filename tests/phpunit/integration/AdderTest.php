@@ -18,7 +18,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 * An OutputPage that answers getRequest(): the Minerva path asks the request which theme it is
 	 * rendering in, and a bare mock hands back null.
 	 */
-	private function outputPage() {
+	private function outputPage(): OutputPage {
 		$out = $this->createMock(OutputPage::class);
 		$out->method('getRequest')->willReturn(new FauxRequest());
 		return $out;
