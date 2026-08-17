@@ -43,7 +43,10 @@ for (const skin of COPIES) {
 		const target = page
 			.locator(".pagefind-ui__result-link", { hasText: "Standalone binary" })
 			.first();
-		await expect(target).toHaveAttribute("href", new RegExp(`/${skin}/${RESULT}$`));
+		await expect(target).toHaveAttribute(
+			"href",
+			new RegExp(`/${skin}/${RESULT}$`),
+		);
 		await target.click();
 		await expect(page).toHaveURL(new RegExp(`/${skin}/${RESULT}$`));
 		await expect(page.locator("#firstHeading")).toBeVisible();
