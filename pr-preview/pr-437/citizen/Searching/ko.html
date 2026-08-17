@@ -106,7 +106,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="편집">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>723</span>
+		<span>725</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -431,7 +431,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="How_it_works"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="동작_방식"><span id=".EB.8F.99.EC.9E.91_.EB.B0.A9.EC.8B.9D"></span>동작 방식</h2></div><section id="citizen-section-1" class="citizen-section">
-<p>SifterSearch는 <a rel="nofollow" class="external text" href="https://pagefind.app/">Pagefind</a>로 렌더링된 문서를 색인하고 정적 색인 번들을 빌드 출력에 씁니다. 각 문서에서 그 결과를 스킨 자체의 검색 상자(Vector 2022의 타입어헤드, 또는 다른 스킨의 고전적인 제안 상자)에 넣어 주므로, 검색은 뒤에 API나 데이터베이스, <code>load.php</code> 없이 실행됩니다.
+<p>SifterSearch는 <a rel="nofollow" class="external text" href="https://pagefind.app/">Pagefind</a>로 렌더링된 문서를 색인하고 정적 색인 번들을 빌드 출력에 씁니다. 각 문서에서 그 결과를 스킨 자체의 검색 상자에 넣어 줍니다. 스킨이 Codex 타입어헤드를 마운트한다면(Vector 2022와 MinervaNeue) 그쪽으로, 그렇지 않다면 코어의 고전적인 제안 상자로 갑니다. 어느 쪽이든 입력하는 동안 상자가 문서를 제안하고, 제안은 그것이 가리키는 문서로 이어지며, 뒤에 있는 무엇에도 요청을 보내지 않습니다. API도, 데이터베이스도, <code>load.php</code>도 없습니다.
 </p><p><span id="Configuring_it"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="설정하기"><span id=".EC.84.A4.EC.A0.95.ED.95.98.EA.B8.B0"></span>설정하기</h2></div><section id="citizen-section-2" class="citizen-section">
@@ -450,6 +450,22 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">SifterSearchOutputDir</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
+</pre></div>
+<p>Codex 타입어헤드는 결과마다 섬네일 자리를 열로 남겨 두는데 Pagefind 결과에는 섬네일이 없으므로, 이를 마운트하는 스킨은 그러지 말라고 일러 주기 전까지 빈 열을 보여줍니다. 그런 스킨은 저마다 자기 설정을 읽고, 그 값을 기본값에 병합하지 않고 통째로 가져가므로, 블록을 스킨마다 온전히 다시 적어야 합니다. 그 안의 API 키도 스킨이 원래 쓰던 값 그대로 함께 적습니다. 이 사이트는 둘 다 설정합니다:
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">VectorTypeahead</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">apiUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">recommendationApiUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">showThumbnail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">showDescription</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">MinervaTypeahead</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">apiUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">recommendationApiUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">showThumbnail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">showDescription</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 <p><span id="Full_results_page"></span>
 </p>
@@ -475,7 +491,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Searching/ko.wikitext" title="이 문서는 2026년 8월 15일 (토) 19:46에 마지막으로 편집되었습니다." data-timestamp="1786823215"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 15일 (토)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Searching/ko.wikitext" title="이 문서는 2026년 8월 17일 (월) 03:20에 마지막으로 편집되었습니다." data-timestamp="1786936859"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 17일 (월)</span></a></li>
 			
 		</ul>
 		
@@ -556,7 +572,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 15일 (토) 19:46에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 17일 (월) 03:20에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
