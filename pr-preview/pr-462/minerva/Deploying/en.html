@@ -332,7 +332,7 @@ Wikven
 <span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$.config.WikvenRepositories.Citizen.reference</span>
 </pre></div>
 <p>A <code>commit</code> that follows a branch is the same manifest with the source swapped: <code>kind: gitcommit</code>, given the repository's URL and the branch to track, writing to a key that ends in <code>commit</code> instead of <code>reference</code>. A <code>tarball</code> and its <code>sha256</code> are <b>not</b> covered here: the two keys have to move together, and the archive names Special:ExtensionDistributor hands out carry a build hash that no version feed publishes, so a source has nothing to read. Declare anything you want watched as a <code>repository</code>. And there is no shortcut past writing one: updatecli's autodiscovery crawls the ecosystems it knows (npm, cargo, dockerfile, maven, ...), which a bespoke configuration file will never be, so a hand-written manifest is the whole story for this file.
-</p><p>This site is the working example. Its manifests are in <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/updatecli/updatecli.d"><code>updatecli/updatecli.d/</code></a> (one release tag per <code>reference</code> pin, one branch head per <code>commit</code> pin), and <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/.github/workflows/updatecli.yml">a weekly workflow</a> applies them, opening one pull request per pipeline. One wrinkle from running it: a pull request opened with the default <code>GITHUB_TOKEN</code> starts no workflows, so close and reopen it to have your build judge the bump. <a rel="nofollow" class="external text" href="https://www.updatecli.io/docs/">Upstream's own documentation</a> covers everything a manifest can do beyond the two shapes above.
+</p><p>This site is the working example. Its manifests are in <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/updatecli/updatecli.d"><code>updatecli/updatecli.d/</code></a> (one release tag per <code>reference</code> pin, one branch head per <code>commit</code> pin), and <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/.github/workflows/updatecli.yml">a weekly workflow</a> applies them, opening one pull request per pipeline. <a rel="nofollow" class="external text" href="https://www.updatecli.io/docs/">Upstream's own documentation</a> covers everything a manifest can do beyond the two shapes above.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r86">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Translating/en.html" title="Special:MyLanguage/Translating">Translating</a></div><div class="wikven-prevnext-next"><a href="../Troubleshooting/en.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a>&#160;&#8594;</div></div>
 
@@ -351,8 +351,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1786970654">
-  				<span>Last edited on 17 August 2026, at 12:44</span>
+  				data-timestamp="1786971726">
+  				<span>Last edited on 17 August 2026, at 13:02</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -375,7 +375,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 12:44.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 13:02.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
