@@ -106,7 +106,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--edits" title="edits">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span>
-		<span>725</span>
+		<span>727</span>
 	</div>
 </div>
 						<div class="mw-logo-wordmark">Wikven</div>
@@ -431,6 +431,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="How_it_works">How it works</h2></div><section id="citizen-section-1" class="citizen-section">
 <p>SifterSearch indexes the rendered pages with <a rel="nofollow" class="external text" href="https://pagefind.app/">Pagefind</a> and writes a static index bundle into the build output. On each page it feeds those results into the skin's own search box: the Codex typeahead where the skin mounts one (Vector 2022 and MinervaNeue), and core's classic suggestions box elsewhere. Either way the box suggests as you type, a suggestion leads to the page it names, and nothing behind it is asked — no API, no database, no <code>load.php</code>.
+</p><p>A site built with more than one skin is written once per skin, and each of those copies carries the index as well as the pages, under its own <code>pagefind/</code>. A result is a page in the copy the reader is already reading, so choosing a skin survives a search.
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Configuring_it">Configuring it</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>Search needs no configuration: the index is written to a <code>pagefind/</code> directory under the build output and served from <code>/pagefind/</code>. You only adjust it in a few cases, all in <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
@@ -492,7 +493,7 @@ titled <code>Search</code>.
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Searching/en.wikitext" title="This page was last edited on 17 August 2026, at 03:20." data-timestamp="1786936859"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>17 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Searching/en.wikitext" title="This page was last edited on 17 August 2026, at 03:28." data-timestamp="1786937320"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>17 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -573,7 +574,7 @@ titled <code>Search</code>.
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 17 August 2026, at 03:20.</div>
+		        <div class="page-info__text"> This page was last edited on 17 August 2026, at 03:28.</div>
 		    </section>
 		</div>
 </footer>		</div>

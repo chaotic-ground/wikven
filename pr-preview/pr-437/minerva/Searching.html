@@ -216,6 +216,7 @@ Wikven
 </p>
 <div class="mw-heading mw-heading2"><h2 id="How_it_works">How it works</h2></div>
 <p>SifterSearch indexes the rendered pages with <a rel="nofollow" class="external text" href="https://pagefind.app/">Pagefind</a> and writes a static index bundle into the build output. On each page it feeds those results into the skin's own search box: the Codex typeahead where the skin mounts one (Vector 2022 and MinervaNeue), and core's classic suggestions box elsewhere. Either way the box suggests as you type, a suggestion leads to the page it names, and nothing behind it is asked — no API, no database, no <code>load.php</code>.
+</p><p>A site built with more than one skin is written once per skin, and each of those copies carries the index as well as the pages, under its own <code>pagefind/</code>. A result is a page in the copy the reader is already reading, so choosing a skin survives a search.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Configuring_it">Configuring it</h2></div>
 <p>Search needs no configuration: the index is written to a <code>pagefind/</code> directory under the build output and served from <code>/pagefind/</code>. You only adjust it in a few cases, all in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
@@ -275,8 +276,8 @@ titled <code>Search</code>.
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1786936859">
-  				<span>Last edited on 17 August 2026, at 03:20</span>
+  				data-timestamp="1786937320">
+  				<span>Last edited on 17 August 2026, at 03:28</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -299,7 +300,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 03:20.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 03:28.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
