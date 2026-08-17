@@ -43,12 +43,14 @@ config:
   WikvenRepositories:
     # TabberNeue is not bundled in the image; clone it from Git to show off
     # third-party fetching. (TemplateStyles, which the templates use, is bundled
-    # in MediaWiki 1.46, so it needs no source here.)
+    # in MediaWiki 1.46, so it needs no source here.) Pinned to a release tag,
+    # which updatecli moves.
     TabberNeue:
       repository: https://github.com/StarCitizenTools/mediawiki-extensions-TabberNeue.git
       reference: v4.0.0
     # Citizen is a third-party skin, fetched rather than bundled. Wikven handles
     # what it does that a static export cannot serve, so nothing is needed here.
+    # Pinned to a release tag, which updatecli moves.
     Citizen:
       repository: https://github.com/StarCitizenTools/mediawiki-skins-Citizen.git
       reference: v3.17.0
