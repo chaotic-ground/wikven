@@ -54,31 +54,28 @@
 .wikven-vector-skins-moved #vector-appearance .mw-portlet-wikven-skins {
   margin-top: @spacing-75;
 
+  // Blocks rather than a flex column. A column would do the stacking just as well, but the header
+  // dropdown the menu moves into when a reader hides it sets `align-items: center` on its lists:
+  // the entries would then be shrunk to their names and centred, which is not something aligning
+  // the text inside them can undo. Blocks have no such handle to be taken by.
   ul {
-    display: flex;
-    flex-direction: column;
+    display: block;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  // The header dropdown the menu moves into when a reader hides it centres its entries, which left
-  // the skin names strung down the middle of a section whose every choice is ranged left. Stated on
-  // the entry rather than on the list around it: the dropdown declares its centring on the entry,
-  // and a declaration beats a value inherited from an ancestor however specific that ancestor's
-  // selector is. `start` rather than `left`, so a right-to-left reading keeps its own edge.
   .mw-list-item {
     display: block;
     margin: 0;
-    text-align: start;
   }
 
   // The label is the anchor, except on the skin being read, where it is a span; both carry the row.
+  // Without a box of its own the label is only as tall as its text, and the rows crowd each other.
   .mw-list-item > a,
   .mw-list-item > span {
     display: block;
     padding: @spacing-25 0;
-    text-align: start;
   }
 }
 
