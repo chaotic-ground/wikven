@@ -1,8 +1,9 @@
-<!-- Targets go through Special:MyLanguage so a reader on a translated page stays in their language;
-     "mainpage" carries its own, in MediaWiki:Mainpage. The prefix also stops "Licenses" being read
-     as the message that would drop the entry. -->
-* navigation
-** mainpage|mainpage-description
+<!-- Targets go through Special:MyLanguage so a reader on a translated page stays in their language.
+     The prefix also stops "Licenses" being read as the message that would drop the entry.
+
+     No main-page entry: every skin already points its logo at MediaWiki:Mainpage, and Minerva
+     offers its own Home besides -- fillMinervaMenu.php drops an entry leading there for that
+     reason, so this section only ever reached the two skins that show the logo anyway. -->
 * sidebar-docs
 ** Special:MyLanguage/Why wikitext|sidebar-why-wikitext
 ** Special:MyLanguage/Installation|sidebar-installation
