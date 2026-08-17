@@ -23,7 +23,7 @@ RUN apk add --no-cache rsvg-convert imagemagick-jpeg imagemagick-webp
 # SifterSearch (client-side Pagefind search) ships built in. Its release tarball carries the
 # per-arch Pagefind binary a git clone omits, so fetch the one matching this build's architecture.
 ARG TARGETARCH
-ARG SIFTERSEARCH_VERSION=v0.7.0
+ARG SIFTERSEARCH_VERSION=v0.7.1
 RUN arch="$TARGETARCH" \
  && if [ "$arch" = amd64 ]; then arch=x64; fi \
  && curl -fsSL "https://github.com/chaotic-ground/SifterSearch/releases/download/${SIFTERSEARCH_VERSION}/SifterSearch-linux-${arch}.tar.gz" \
