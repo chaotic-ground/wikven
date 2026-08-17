@@ -55,6 +55,17 @@ all matches, create an (otherwise empty) content page and name it in
 there and runs the query from the URL, and the search box's "search for pages
 containing…" action and its Enter key go to that page. This site uses a page
 titled <code>Search</code>.
+
+<!--T:11-->
+== Search and the extra skins ==
+
+<!--T:12-->
+A site that enables more than one skin publishes its pages once per skin (see
+[[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]]), and each of those copies gets its own
+copy of the search index inside it. A result then leads to the copy the reader searched from,
+rather than taking them back to the default skin. The index is built once and copied, so the extra
+cost is disk in the output, not build time; the bundle path you configure is the default skin's,
+and the others are derived from it.
 </translate>
 
 {{prevnext|JavaScript|Translating}}

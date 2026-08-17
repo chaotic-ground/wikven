@@ -16,6 +16,35 @@ class Search {
 	 */
 	public const INDEX_JOB = 'sifterSearchBuildIndex';
 
+	/**
+	 * Whether the bundle path is a path from this site's own root.
+	 *
+	 * That is the only shape a per-copy bundle can be derived from, and the same test
+	 * SifterSearch's ClientConfig::anchored() makes for the same reason: a bundle served from
+	 * another host says nothing about where this site's root is. Wikven cannot copy such a bundle
+	 * into a skin's directory either, since it is not wikven that publishes it.
+	 */
+	public static function isBundlePathRootAnchored(string $bundlePath): bool {
+		return str_starts_with($bundlePath, '/') && !str_starts_with($bundlePath, '//');
+	}
+
+	/**
+	 * The same bundle path with a skin's directory in front of the bundle, which is where that
+	 * skin's copy of the index is published.
+	 *
+	 * The path names the bundle directory itself ("/wikven/pagefind/"), and its parent is the root
+	 * the client resolves every result against, so putting the skin's directory between the two
+	 * ("/wikven/citizen/pagefind/") makes the skin's own copy that root -- which is the whole of
+	 * the fix, the bundle bytes being identical either way.
+	 */
+	public static function bundlePathUnder(string $bundlePath, string $skin): string {
+		$path = rtrim($bundlePath, '/');
+		$cut = strrpos($path, '/');
+		$root = $cut === false ? '' : substr($path, 0, $cut + 1);
+		$bundle = $cut === false ? $path : substr($path, $cut + 1);
+		return "$root$skin/$bundle/";
+	}
+
 	public static function isActive(): bool {
 		return (
 			ExtensionRegistry::getInstance()->isLoaded('SifterSearch')

@@ -353,6 +353,8 @@ class Build extends Maintenance {
 		// Minerva takes no navigation from the sidebar, so its menu is filled in the rendered pages.
 		$this->step(FillMinervaMenu::class, "$own/fillMinervaMenu.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");
+		// A skin copy searches within itself, which means loading the index from inside itself.
+		$this->copySearchBundle();
 		$this->step(Rename::class, "$own/rename.php");
 		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
 		$this->step(ResolveTranslationLinks::class, "$own/resolveTranslationLinks.php");
@@ -361,6 +363,52 @@ class Build extends Maintenance {
 		$history = "$dir/history";
 		if (is_dir($history)) {
 			$this->removeDirectory($history);
+		}
+	}
+
+	/**
+	 * Give this skin pass its own copy of the search index, so a result keeps the reader in the
+	 * copy they searched from.
+	 *
+	 * Pagefind reports each result's URL relative to the crawl root ("/Pages.html") and the client
+	 * resolves it against the directory the bundle sits in, so a copy loading the root's bundle
+	 * sends every result back to the root's pages (#399). The index describes one site and the
+	 * copies hold the same pages, so the fix is where the bundle is read from rather than what is
+	 * in it: the index is built once, by the job runJobs() holds back to the end, and each pass
+	 * that is not the main skin publishes that same bundle inside its own output.
+	 * WikvenSettings.php is what points the pass's client at the copy, and names both paths here.
+	 *
+	 * The cost is a copy of the index per skin. Rebuilding it per skin instead would cost a
+	 * Pagefind pass over the whole site per skin, for bytes that would come out identical.
+	 */
+	private function copySearchBundle(): void {
+		$source = rtrim((string)( $GLOBALS['wgWikvenSearchIndexSource'] ?? '' ), '/');
+		$destination = rtrim((string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' ), '/');
+		// Equal on the main skin's pass, which is the one the index was built into.
+		if ($source === '' || $destination === '' || $source === $destination || !is_dir($source)) {
+			return;
+		}
+		$this->copyDirectory($source, $destination);
+	}
+
+	/** Recursively copy the contents of $source into $destination, creating what is missing. */
+	private function copyDirectory(string $source, string $destination): void {
+		if (!wfMkdirParents($destination)) {
+			$this->fatalError("Wikven: could not create directory $destination");
+		}
+		$entries = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::SELF_FIRST
+		);
+		foreach ($entries as $entry) {
+			$target = $destination . '/' . substr($entry->getPathname(), strlen($source) + 1);
+			if ($entry->isDir()) {
+				if (!wfMkdirParents($target)) {
+					$this->fatalError("Wikven: could not create directory $target");
+				}
+			} elseif (!copy($entry->getPathname(), $target)) {
+				$this->fatalError("Wikven: could not copy {$entry->getPathname()} to $target");
+			}
 		}
 	}
 

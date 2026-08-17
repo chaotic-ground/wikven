@@ -288,5 +288,35 @@ if (
 	$GLOBALS['wgSifterSearchOutputDir'] = "$wikvenDist/pagefind";
 }
 
+// Where the built index is, whichever pass is asking. It is built once, by the job the
+// orchestrator drains before any skin pass runs, and so always lands in the main skin's output.
+$wgWikvenSearchIndexSource = (string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' );
+
+// Each skin copy searches within itself. Pagefind reports a result's URL relative to the crawl
+// root, and the client resolves it against the directory the bundle sits in -- so a copy loading
+// the root's bundle sends every result out of the copy and back to the root's pages (#399). The
+// index describes one site and the copies hold the same pages, so what a copy needs is that same
+// bundle inside its own directory: Build::renderSkin() puts it there, and pointing the client at
+// it makes the copy's own directory the root each result resolves against.
+//
+// SifterSearch's own default is used where the site named no path, since its extension.json has
+// not been read at this point -- LocalSettings.php runs before the registry materializes it. For
+// the same reason Search is loaded by hand here, as SiteConfig is above.
+require_once "$IP/extensions/Wikven/includes/Search.php";
+$wikvenBundlePath = (string)( $GLOBALS['wgSifterSearchBundlePath'] ?? '/pagefind/' );
+if (
+	$wikvenBuildSkin !== false
+	&& in_array($wikvenBuildSkin, $wgWikvenSkins, true)
+	&& $wikvenBuildSkin !== $wgWikvenMainSkin
+	&& $wgWikvenSearchIndexSource !== ''
+	&& MediaWiki\Extension\Wikven\Search::isBundlePathRootAnchored($wikvenBundlePath)
+) {
+	$GLOBALS['wgSifterSearchBundlePath'] = MediaWiki\Extension\Wikven\Search::bundlePathUnder(
+		$wikvenBundlePath,
+		$wikvenBuildSkin
+	);
+	$GLOBALS['wgSifterSearchOutputDir'] = $wgWikvenHtmlDirectory . '/' . basename($wgWikvenSearchIndexSource);
+}
+
 // WikvenLogos ($wgWikvenLogos) mirrors $wgLogos but each src is a source-dir file name, resolved
 // to its upload URL once the service container exists; see Hooks\Main::onSetupAfterCache().
