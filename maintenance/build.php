@@ -63,6 +63,9 @@ class Build extends Maintenance {
 		$this->stampSourceHistory();
 		$this->hideBuildAuthors();
 		$this->forgetCachedRevisionRows();
+		// The content is final here, which is what the freeze is waiting for, and the passes below
+		// are then readers of one settled database rather than each writing this same row set again.
+		$this->freezePageTouched();
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
 		if (!$skins) {
@@ -266,7 +269,30 @@ class Build extends Maintenance {
 		}
 	}
 
-	/** Freeze page_touched once content is final; wiki-page modules fold it into their version hash. */
+	/**
+	 * Pin page_touched to a fixed value, once the content is final.
+	 *
+	 * A wiki-page module (site JS and CSS, gadgets) folds the page_touched of the pages it is made
+	 * of into its version hash, and that hash is written into every rendered page and into the
+	 * module bundle's own file name. Left alone, page_touched is whatever the import and the job
+	 * queue wrote, which is the frozen clock -- SOURCE_DATE_EPOCH, a different instant for every
+	 * commit. Pinning it to a value that is not the clock is what keeps those hashes the same
+	 * between bakes of two different commits.
+	 *
+	 * This is content state: it is the same answer in every skin pass, and derived from nothing a
+	 * pass does. Run per pass, as it was, a three-skin bake ran the same full-table update three
+	 * times and only the first one changed anything -- and, more than the waste, it made every pass
+	 * a writer of a database they otherwise only read from, which is what would have them contend
+	 * on the SQLite file if they ever run at once (#407). rebuildFileCache.php makes the same
+	 * judgement about its own pass, putting the wiki in read-only mode for its duration.
+	 *
+	 * Moved ahead of the passes, the value also reaches the pages themselves, which are rendered
+	 * with it rather than with what the import left. That is the point of the freeze rather than a
+	 * side effect of the move: the hash embedded in the HTML was the one still moving per commit.
+	 * It cannot cost a page its render either -- RebuildFileCache consults HTMLFileCache::
+	 * isCacheGood() (the cache file's mtime against page_touched) only to decide whether to skip a
+	 * page, and under --overwrite, which is how the build runs it, it renders regardless.
+	 */
 	private function freezePageTouched(): void {
 		$dbw = $this->getPrimaryDB();
 		$dbw->newUpdateQueryBuilder()
@@ -276,8 +302,9 @@ class Build extends Maintenance {
 			->caller(__METHOD__)
 			->execute();
 
-		// The modules read page_touched through LinkCache, not the row just written: it is warmed in
-		// process while the pages render, and MediaWiki: pages are cached in the object cache too.
+		// The modules read page_touched through LinkCache, not the row just written, and the import
+		// and the job queue have warmed it -- in this process, and, for MediaWiki: pages, in the
+		// object cache the skin passes go on to share.
 		$linkCache = $this->getServiceContainer()->getLinkCache();
 		$pages = $dbw->newSelectQueryBuilder()
 			->select(['page_namespace', 'page_title'])
@@ -343,8 +370,6 @@ class Build extends Maintenance {
 		$this->step(RetranslateChrome::class, "$own/retranslateChrome.php");
 		// Every page is rendered by now: drop what each one recorded about the request that made it.
 		$this->step(StripBuildStamps::class, "$own/stripBuildStamps.php");
-		// Nothing is rendered after this, so freezing costs no staleness; the asset dumps below read it.
-		$this->freezePageTouched();
 		$this->step(BuildStyles::class, "$own/buildStyles.php");
 		// Opt-in: bake ULS webfonts into a static stylesheet rewriteScripts links below.
 		$this->step(BakeWebfonts::class, "$own/bakeWebfonts.php");
