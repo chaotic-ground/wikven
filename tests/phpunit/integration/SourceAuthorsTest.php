@@ -19,7 +19,7 @@ class SourceAuthorsTest extends MediaWikiIntegrationTestCase {
 	public function testAnAuthorNameGetsAnAccountOfItsOwn() {
 		[$authors] = $this->authors();
 
-		$account = $authors->accountFor('Leslie');
+		$account = $authors->accountFor(['Leslie']);
 
 		$this->assertSame('Leslie', $account->getName());
 		$this->assertTrue($account->isRegistered(), 'the account is saved, so a revision can belong to it');
@@ -28,20 +28,29 @@ class SourceAuthorsTest extends MediaWikiIntegrationTestCase {
 	public function testTheSameNameIsAskedOfMediaWikiOnce() {
 		[$authors] = $this->authors();
 
-		$this->assertSame($authors->accountFor('Leslie'), $authors->accountFor('Leslie'));
+		$this->assertSame($authors->accountFor(['Leslie']), $authors->accountFor(['Leslie']));
 	}
 
-	public function testANameMediaWikiWillNotTakeLeavesThePageUnattributed() {
+	public function testANameMediaWikiWillNotTakeFallsBackToTheAuthorsOtherName() {
+		[$authors] = $this->authors();
+
+		// A slash cannot appear in a username, which is what the name on this repository's own
+		// commits ("Lens0021 / Leslie") runs into; the same author's other spelling is taken.
+		$account = $authors->accountFor(['Ada / Lovelace', 'Ada Lovelace']);
+
+		$this->assertSame('Ada Lovelace', $account->getName());
+	}
+
+	public function testAnAuthorWithNoUsableNameAtAllLeavesThePageUnattributed() {
 		[$authors, $build] = $this->authors();
 
-		// A pipe cannot appear in a title, so no account can carry this name.
-		$this->assertSame($build, $authors->accountFor('Ada|Lovelace'));
+		// A pipe cannot appear in a title, so no account can carry either of these.
+		$this->assertSame($build, $authors->accountFor(['Ada|Lovelace', 'Ada|L']));
 	}
 
 	public function testAPageTheHistorySaysNothingAboutIsUnattributed() {
 		[$authors, $build] = $this->authors();
 
-		$this->assertSame($build, $authors->accountFor(null));
-		$this->assertSame($build, $authors->accountFor(''));
+		$this->assertSame($build, $authors->accountFor([]));
 	}
 }

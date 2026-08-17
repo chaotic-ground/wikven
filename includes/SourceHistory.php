@@ -52,18 +52,28 @@ class SourceHistory {
 		// A rename is a change to the file under its current name, which is the name being asked
 		// about; following one back would date the file at a commit that does not mention it.
 		'--no-renames',
-		'--format=' . self::HEADER . '%ct%x09%an',
+		// The author's email is read but never written out: it is what ties one person's several
+		// spellings of their own name together, so that a name MediaWiki refuses can fall back to
+		// another the same person committed under.
+		'--format=' . self::HEADER . '%ct%x09%an%x09%ae',
 		'--name-only',
 		'--',
 		'.'
 	];
 
-	/** @var array<string,array{timestamp:int,author:string}> Keyed by source-relative path. */
+	/** @var array<string,array{timestamp:int,author:string,email:string}> Keyed by source-relative path. */
 	private array $entries;
 
-	/** @param array<string,array{timestamp:int,author:string}> $entries */
-	private function __construct(array $entries) {
+	/** @var array<string,list<string>> Every name an email committed under, newest first. */
+	private array $names;
+
+	/**
+	 * @param array<string,array{timestamp:int,author:string,email:string}> $entries
+	 * @param array<string,list<string>> $names
+	 */
+	private function __construct(array $entries, array $names = []) {
 		$this->entries = $entries;
+		$this->names = $names;
 	}
 
 	/**
@@ -86,8 +96,10 @@ class SourceHistory {
 	/** Parse a log written with LOG_ARGUMENTS. */
 	public static function fromLog(string $log): self {
 		$entries = [];
+		$names = [];
 		$timestamp = null;
 		$author = '';
+		$email = '';
 		foreach (explode("\0", $log) as $record) {
 			// git ends a commit's header with the newline its format asked for, and -z leaves that
 			// newline at the front of the first file name rather than dropping it.
@@ -97,19 +109,23 @@ class SourceHistory {
 			}
 
 			if (str_starts_with($record, self::HEADER)) {
-				[$time, $author] = array_pad(explode("\t", substr($record, strlen(self::HEADER)), 2), 2, '');
+				[$time, $author, $email] = array_pad(explode("\t", substr($record, strlen(self::HEADER)), 3), 3, '');
 				// A commit whose date git could not print is one to skip, not one to date at zero.
 				$timestamp = ctype_digit($time) ? (int)$time : null;
+				// Newest first here too, so the name someone last used comes before the ones before it.
+				if ($email !== '' && $author !== '' && !in_array($author, $names[$email] ?? [], true)) {
+					$names[$email][] = $author;
+				}
 				continue;
 			}
 
 			// Newest first, so the first commit naming a file is the one that last changed it; a
 			// header with no files after it is a merge, which git lists without a diff.
 			if ($timestamp !== null && !isset($entries[$record])) {
-				$entries[$record] = ['timestamp' => $timestamp, 'author' => $author];
+				$entries[$record] = ['timestamp' => $timestamp, 'author' => $author, 'email' => $email];
 			}
 		}
-		return new self($entries);
+		return new self($entries, $names);
 	}
 
 	/** When the file was last changed, in Unix time, or null if the history does not cover it. */
@@ -117,10 +133,25 @@ class SourceHistory {
 		return $this->entries[$relativePath]['timestamp'] ?? null;
 	}
 
-	/** Who last changed the file, as git records the author's name, or null if unknown. */
-	public function author(string $relativePath): ?string {
-		$author = $this->entries[$relativePath]['author'] ?? '';
-		return $author === '' ? null : $author;
+	/**
+	 * Who last changed the file, as git records their name, and then every other name that same
+	 * author has committed under, newest first.
+	 *
+	 * A git author name is free text and MediaWiki's is not, so the name on the commit is not
+	 * always one an account can carry ("A / B" holds a slash, which usernames cannot). The rest of
+	 * the list is the way out that invents nothing: it is the same person, spelled as they have
+	 * spelled themselves elsewhere in this repository, matched on the email git records beside the
+	 * name. Empty when the history does not cover the file, or records no author for it.
+	 *
+	 * @return list<string>
+	 */
+	public function authors(string $relativePath): array {
+		$entry = $this->entries[$relativePath] ?? null;
+		if ($entry === null || $entry['author'] === '') {
+			return [];
+		}
+		$alternatives = $this->names[$entry['email']] ?? [];
+		return array_values(array_unique(array_merge([$entry['author']], $alternatives)));
 	}
 
 	/** Run `git log` in the source directory, or null if git has nothing usable to say. */

@@ -18,12 +18,12 @@ class SourceHistoryTest extends MediaWikiIntegrationTestCase {
 	public function testTheDumpedLogIsReadInPlaceOfGit() {
 		$directory = $this->getNewTempDirectory();
 		$log = "$directory/source-history";
-		file_put_contents($log, "\x011786893214\tLeslie\0\nindex.wikitext\0");
+		file_put_contents($log, "\x011786893214\tLeslie\tleslie@example.org\0\nindex.wikitext\0");
 
 		$history = SourceHistory::forSource($directory, $log);
 
 		$this->assertSame(1_786_893_214, $history->timestamp('index.wikitext'));
-		$this->assertSame('Leslie', $history->author('index.wikitext'));
+		$this->assertSame('Leslie', $history->authors('index.wikitext')[0]);
 	}
 
 	public function testADirectoryOutsideACheckoutHasNoHistory() {
@@ -32,7 +32,7 @@ class SourceHistoryTest extends MediaWikiIntegrationTestCase {
 		$history = SourceHistory::forSource($this->getNewTempDirectory());
 
 		$this->assertNull($history->timestamp(self::ABSENT));
-		$this->assertNull($history->author(self::ABSENT));
+		$this->assertSame([], $history->authors(self::ABSENT));
 	}
 
 	public function testALogFileThatIsNotThereIsNotFatal() {

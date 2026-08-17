@@ -72,7 +72,8 @@ runs:
         # Each page is dated at the commit that last touched its source file, and credited to that
         # commit's author. Only this side can see the history -- the container is given the source
         # directory alone, with no .git beside it -- so dump the log for it here. Paths come out
-        # relative to the source directory, NUL-separated so none of them needs quoting.
+        # relative to the source directory, NUL-separated so none of them needs quoting; the
+        # author's email rides along to tie their several spellings of their own name together.
         # A shallow checkout holds one commit, which would date every page at the last push to the
         # branch and credit whoever made it, so it is refused rather than read. Both commands run
         # inside the `if`, where a failing one is an answer rather than an aborted step.
@@ -80,7 +81,7 @@ runs:
         log="${RUNNER_TEMP:-/tmp}/wikven-source-history"
         if [ "$(git -C "$SOURCE" rev-parse --is-shallow-repository 2>/dev/null)" = false ] \
           && git -C "$SOURCE" -c core.quotePath=false log -z --relative --no-renames \
-               --format="%x01%ct%x09%an" --name-only -- . > "$log"; then
+               --format="%x01%ct%x09%an%x09%ae" --name-only -- . > "$log"; then
           history=(-v "$log:/workspace/source-history:ro")
         else
           echo "wikven: no per-file history for '$SOURCE'; every page will be dated at the commit" \

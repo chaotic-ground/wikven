@@ -144,9 +144,9 @@ class Build extends Maintenance {
 			}
 
 			$set = ['rev_timestamp' => $dbw->timestamp($change['timestamp'])];
-			// A name MediaWiki would not take gives the build's own account back, which is the one
-			// it already has; hideBuildAuthors() below then leaves that page unattributed.
-			$author = $authors->accountFor($change['author']);
+			// No usable name among the author's gives the build's own account back, which is the
+			// one it already has; hideBuildAuthors() below then leaves that page unattributed.
+			$author = $authors->accountFor($change['authors']);
 			if (!$author->equals($build)) {
 				$set['rev_actor'] = $actorStore->acquireActorId($author, $dbw);
 			}
@@ -169,7 +169,7 @@ class Build extends Maintenance {
 	 * "Skins/ko.wikitext". The one page with no file of its own is the source-language page
 	 * Translate adds ("Skins/en"), which follows the page it repeats.
 	 *
-	 * @return ?array{timestamp:int,author:?string}
+	 * @return ?array{timestamp:int,authors:string[]}
 	 */
 	private function sourceChangeFor(string $prefixedText, SourceHistory $history): ?array {
 		$files = [SourceFile::titleToFilename($prefixedText)];
@@ -181,7 +181,7 @@ class Build extends Maintenance {
 		foreach ($files as $file) {
 			$timestamp = $history->timestamp($file);
 			if ($timestamp !== null) {
-				return ['timestamp' => $timestamp, 'author' => $history->author($file)];
+				return ['timestamp' => $timestamp, 'authors' => $history->authors($file)];
 			}
 		}
 		return null;
