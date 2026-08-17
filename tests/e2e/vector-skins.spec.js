@@ -160,14 +160,34 @@ test("the list travels with the menu when it is hidden and put back", async ({
 
 	// The dropdown is a second piece of chrome with styling of its own, and it is the one that had
 	// the names strung down the middle of the menu. So the rows are asserted here too, rather than
-	// only in the pinned menu beside the article.
-	const lefts = await labelLefts(page, `${unpinned} .mw-list-item > *`);
-	expect(lefts.length).toBeGreaterThan(1);
-	for (const [index, left] of lefts.entries()) {
-		expect(
-			left,
-			`entry ${index}'s name does not line up in the dropdown`,
-		).toBeCloseTo(lefts[0], 0);
+	// only in the pinned menu beside the article. What the browser worked out for each entry rides
+	// along in the failure, because "does not line up" alone does not say which of the ways a row
+	// can be pushed off its edge did it.
+	const rows = await page
+		.locator(`${unpinned} .mw-list-item`)
+		.evaluateAll((items) =>
+			items.map((item) => {
+				const label = item.firstElementChild;
+				const range = document.createRange();
+				range.selectNodeContents(label);
+				const round = (n) => Math.round(n * 10) / 10;
+				return {
+					name: label.textContent.trim(),
+					textLeft: round(range.getBoundingClientRect().left),
+					item: `${round(item.getBoundingClientRect().left)}+${round(item.getBoundingClientRect().width)}`,
+					label: `${round(label.getBoundingClientRect().left)}+${round(label.getBoundingClientRect().width)}`,
+					align: `${getComputedStyle(item).textAlign}/${getComputedStyle(label).textAlign}`,
+					display: `${getComputedStyle(item).display}/${getComputedStyle(label).display}`,
+					list: `${getComputedStyle(item.parentElement).display} ${getComputedStyle(item.parentElement).alignItems}`,
+				};
+			}),
+		);
+	expect(rows.length).toBeGreaterThan(1);
+	for (const row of rows) {
+		expect(row.textLeft, JSON.stringify(rows, null, 1)).toBeCloseTo(
+			rows[0].textLeft,
+			0,
+		);
 	}
 
 	await page.locator(`${MENU} .vector-pinnable-header-pin-button`).click();
