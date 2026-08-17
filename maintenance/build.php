@@ -69,6 +69,9 @@ class Build extends Maintenance {
 		// The content is final here, so this is the last write the database needs and the passes
 		// below can be readers of it.
 		$this->freezePageTouched();
+		// The search index is built by now, by the job runJobs() holds back to the end, and every
+		// skin pass below copies it. Settle it here so the one copy they all take is already stable.
+		$this->stabilizeSearchIndex();
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
 		if (!$skins) {
@@ -624,6 +627,35 @@ class Build extends Maintenance {
 		// Last, so nothing above walks the bundle looking for pages to rewrite.
 		if ($searchBundle !== null) {
 			$this->copySearchBundle($searchBundle);
+		}
+	}
+
+	/**
+	 * Put the search bundle's entry file in an order it will come out in again next bake.
+	 *
+	 * Pagefind names each language's index in one JSON map and writes that map in whatever order it
+	 * happened to iterate, so two bakes of one source produce two spellings of the same fact: the
+	 * index hashes and page counts match, the order of the languages does not. One language has no
+	 * order to get wrong, which is why this surfaced only once translations were indexed in their
+	 * own language rather than all as the wiki's.
+	 *
+	 * Reproducibility is the build's promise (#411), not the indexer's, so the build keeps it --
+	 * exactly as StripBuildStamps drops the per-request ids MediaWiki leaves in a page. Search
+	 * explains what is safe to rewrite and why nothing reading the bundle can tell.
+	 */
+	private function stabilizeSearchIndex(): void {
+		$bundle = rtrim((string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' ), '/');
+		if ($bundle === '') {
+			return;
+		}
+		$path = "$bundle/" . Search::INDEX_ENTRY_FILE;
+		if (!is_file($path)) {
+			// Search is off, or on with nothing indexed. Either way there is no bundle to settle.
+			return;
+		}
+		$stable = Search::stableIndexEntry((string)file_get_contents($path));
+		if ($stable !== null) {
+			file_put_contents($path, $stable);
 		}
 	}
 

@@ -2,5 +2,10 @@
 extend-exclude = ["package-lock.json"]
 
 [default]
-# Translate staleness stamps (<!--T:n @<hex>-->) are md5 fragments, not words.
-extend-ignore-re = ['<!--T:\d+ @[0-9a-f]{8}-->']
+extend-ignore-re = [
+  # Translate staleness stamps (<!--T:n @<hex>-->) are md5 fragments, not words.
+  '<!--T:\d+ @[0-9a-f]{8}-->',
+  # Pagefind names each language's index after a hex digest of it ("ko_72ba3bbda7"), and a test
+  # that pins the bundle's entry file quotes them verbatim. Hex, not words.
+  '\b[a-z]{2,3}_[0-9a-f]{10}\b',
+]

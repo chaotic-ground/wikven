@@ -91,4 +91,45 @@ class Search {
 		}
 		return substr($path, 0, $cut + 1) . $directory . '/' . $segment . '/';
 	}
+
+	/** The file in the bundle that names each language's index, and the key holding that map. */
+	public const INDEX_ENTRY_FILE = 'pagefind-entry.json';
+	private const INDEX_ENTRY_LANGUAGES = 'languages';
+
+	/**
+	 * The bundle's entry file with its language map in a fixed order, or null to leave it alone.
+	 *
+	 * Pagefind writes the map in whatever order it iterated the languages, which is not the same
+	 * order twice, so two bakes of one source disagree on this file while agreeing on every index
+	 * it points at -- the hashes and page counts come out identical. A site with one language never
+	 * showed it, having nothing to order; a translated site does, and it broke the promise that two
+	 * bakes are byte-identical (#411). This is the same work as StripBuildStamps: the build owns
+	 * that promise, so the build settles what a tool upstream of it left unsettled.
+	 *
+	 * Only the order changes, and only of that one map. Key order carries no meaning in JSON, so
+	 * nothing that reads the bundle can tell -- the client looks languages up by name.
+	 *
+	 * Re-encoding need not reproduce Pagefind's own bytes, only the same bytes every time, which is
+	 * all the promise asks; the flags keep it close anyway, so a diff against an older bake stays
+	 * readable. Anything this cannot parse, or that does not hold the map, is returned as null and
+	 * left as it is: a bundle this does not understand is not one to rewrite.
+	 *
+	 * @param string $json The contents of pagefind-entry.json.
+	 * @return ?string The re-encoded file, or null when there is nothing safe to do.
+	 */
+	public static function stableIndexEntry(string $json): ?string {
+		$entry = json_decode($json, true);
+		if (!is_array($entry) || !isset($entry[self::INDEX_ENTRY_LANGUAGES])) {
+			return null;
+		}
+		$languages = $entry[self::INDEX_ENTRY_LANGUAGES];
+		if (!is_array($languages) || $languages === []) {
+			return null;
+		}
+		ksort($languages);
+		$entry[self::INDEX_ENTRY_LANGUAGES] = $languages;
+
+		$encoded = json_encode($entry, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+		return $encoded === false ? null : $encoded;
+	}
 }
