@@ -31,7 +31,10 @@ class Indexer {
 	 * test suite does not install, and asking it is a static call there is otherwise no way past.
 	 * The rule is the part worth testing; the lookup is one question put to somebody else.
 	 *
-	 * @var callable(Title):?string
+	 * Phan wants the nullable return parenthesised; without that it reads the annotation as far as
+	 * "callable(Title)", gives up on the rest, and then calls the assignment below void.
+	 *
+	 * @var callable(Title):(?string)
 	 */
 	private $sourceLanguageOf;
 
