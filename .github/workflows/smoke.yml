@@ -154,21 +154,21 @@ jobs:
           # Searching/ko is the fixture, and the expectation is read from the source rather than
           # written here: any Korean at all would pass a string pinned in this file.
           want=$(awk '/^<!--T:title[ -]/ { found = 1; next } found && NF { print; exit }' \
-            docs/Deploying/ko.wikitext)
+            docs/Translating/ko.wikitext)
           if [ -z "$want" ]; then
-            echo "::error::docs/Deploying/ko.wikitext has no translated title to expect"
+            echo "::error::docs/Translating/ko.wikitext has no translated title to expect"
             exit 1
           fi
           # Newlines are flattened before the block is read: the template writes its markup over
           # several lines, and what is being matched is one span of it. An empty match fails the
           # case below rather than passing it, so a prevnext that stopped rendering is caught here
           # too.
-          shown=$(tr '\n' ' ' < dist/Searching/ko.html | grep -o 'wikven-prevnext-next.\{0,300\}' \
+          shown=$(tr '\n' ' ' < dist/Searching/ko.html | grep -o 'wikven-prevnext".\{0,700\}' \
             | head -n 1) || true
           case "$shown" in
             *"$want"*) ;;
             *)
-              echo "::error::Searching/ko's prevnext does not show Deploying's Korean title ($want)"
+              echo "::error::Searching/ko's prevnext does not show Translating's Korean title ($want)"
               echo "$shown"
               exit 1
               ;;
