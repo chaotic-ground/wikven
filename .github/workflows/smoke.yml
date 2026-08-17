@@ -98,6 +98,22 @@ jobs:
             fi
           done
 
+          # Each page is indexed in the language it is written in, so Pagefind builds one index per
+          # language and a reader searching from a translated page is answered out of that
+          # language's index (#400). A single index means every translation was stamped with the
+          # wiki's content language and stemmed by English rules, which is what this site looked
+          # like until SifterSearch indexed per page rather than per wiki.
+          echo "Search indexes built:"
+          ls dist/pagefind/*.pf_meta | xargs -n1 basename
+          echo "Indexed pages per language:"
+          ls dist/pagefind/fragment | sed 's/_.*//' | sort | uniq -c
+          for lang in en ko; do
+            if ! ls dist/pagefind/pagefind."${lang}"_*.pf_meta >/dev/null 2>&1; then
+              echo "::error::dist/pagefind has no $lang index; pages are not indexed in their own language"
+              exit 1
+            fi
+          done
+
           # Every printfooter "Retrieved from" link must resolve from the page that carries it
           # (#394). Core builds it from the page's own URL and expands away the "./" wikven writes,
           # so a page exported into a subdirectory needs the "../" per level rename.php adds; the
