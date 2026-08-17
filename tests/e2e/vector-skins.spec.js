@@ -56,6 +56,40 @@ test("the skin list is in the appearance menu, and every skin is on it", async (
 	await expect(list.locator(".mw-list-item.active a")).toHaveCount(0);
 });
 
+test("the skins are laid out one to a row, like the choices above them", async ({
+	page,
+}) => {
+	// The list is styled for the page-tools menu, which lays its entries out along a line. Moved
+	// into a sidebar-width menu unchanged, the skin names ran together into one word
+	// ("CitizenMinervaNeue") beside the current one. Presence is not enough to catch that, so this
+	// measures where the entries actually land.
+	const rows = await page
+		.locator(`${LIST} .mw-list-item`)
+		.evaluateAll((items) =>
+			items.map((item) => {
+				const { top, bottom, left } = item.getBoundingClientRect();
+				return { top, bottom, left };
+			}),
+		);
+	expect(rows.length).toBeGreaterThan(1);
+
+	for (const [index, row] of rows.entries()) {
+		if (index === 0) {
+			continue;
+		}
+		// Below the entry before it, not beside it. Sub-pixel rounding is the tolerance.
+		expect(
+			row.top,
+			`entry ${index} shares a line with the one before it`,
+		).toBeGreaterThanOrEqual(rows[index - 1].bottom - 0.5);
+		// And down a common edge, so the section reads as a list rather than as prose.
+		expect(row.left, `entry ${index} does not line up`).toBeCloseTo(
+			rows[0].left,
+			0,
+		);
+	}
+});
+
 test("what is left of the Tools box goes with it", async ({ page }) => {
 	// The list left the page-tools menu, rather than merely being copied into the appearance menu:
 	// two switchers disagreeing about which skin is current is its own bug.

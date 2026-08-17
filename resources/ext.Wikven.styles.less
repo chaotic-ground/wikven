@@ -43,10 +43,36 @@
 }
 
 // The skin list once ext.Wikven.vectorSkins has moved it into Vector's appearance menu. The menu
-// sets the type for the sections it draws itself, and the portlet arrives with the heading that
-// names this one, so what it needs here is room from the preferences above it rather than chrome.
+// reads as one choice to a row under a named heading, and the portlet arrives with the heading that
+// names this section, so what is left is the rows.
+//
+// The list cannot be left as it came: it is styled for the page-tools menu, which lays its entries
+// out along a line, and in a sidebar-width menu that runs the skin names together into one word.
+// So the column is stated here rather than inherited, and each entry is given the box its label
+// sits in -- without one the label is only as tall as the text, and the rows crowd each other.
+// Addressed through the id the menu carries, which is what outranks the skin's own list rules.
 .wikven-vector-skins-moved #vector-appearance .mw-portlet-wikven-skins {
   margin-top: @spacing-75;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mw-list-item {
+    display: block;
+    margin: 0;
+  }
+
+  // The label is the anchor, except on the skin being read, where it is a span; both carry the row.
+  .mw-list-item > a,
+  .mw-list-item > span {
+    display: block;
+    padding: @spacing-25 0;
+  }
 }
 
 // What is left in the page-tools menu once the list leaves is the toolbox Hider emptied. Core
