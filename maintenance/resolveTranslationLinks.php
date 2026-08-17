@@ -2,12 +2,9 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-use FilesystemIterator;
 use Maintenance;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Registration\ExtensionRegistry;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -23,6 +20,10 @@ require_once "$IP/maintenance/Maintenance.php";
  * Rename, over the final tree: it reads each file's language from its path, then rewrites every
  * "Special:MyLanguage/Target" link to the target's translation in that language when it exists, or
  * the source target otherwise, keeping the link's existing relative prefix.
+ *
+ * "The final tree" is this pass's own pages and no one else's: the walk goes through SkinOutput,
+ * which keeps the main skin's out of the other skins' output below it. Deciding a link in
+ * dist/citizen/Foo/ko.html by whether dist/Foo/ko.html exists is how that goes wrong.
  */
 class ResolveTranslationLinks extends Maintenance {
 	public function __construct() {
@@ -40,14 +41,13 @@ class ResolveTranslationLinks extends Maintenance {
 		}
 		$languageNameUtils = $this->getServiceContainer()->getLanguageNameUtils();
 
-		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($htmlDir, FilesystemIterator::SKIP_DOTS)
+		$pages = SkinOutput::pages(
+			$htmlDir,
+			$GLOBALS['wgWikvenSkins'] ?? [],
+			(string)( $GLOBALS['wgWikvenMainSkin'] ?? $GLOBALS['wgDefaultSkin'] ),
+			(string)$GLOBALS['wgDefaultSkin']
 		);
-		foreach ($iterator as $file) {
-			$path = $file->getPathname();
-			if (!$file->isFile() || !str_ends_with($path, '.html')) {
-				continue;
-			}
+		foreach ($pages as $path) {
 			$lang = $this->fileLanguage($path, $htmlDir, $languageNameUtils);
 			$html = (string)file_get_contents($path);
 			$resolved = RelativeUrl::resolveMyLanguage(
