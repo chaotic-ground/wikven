@@ -146,6 +146,25 @@ jobs:
             exit 1
           fi
 
+          # A prevnext link is labelled with the target page's own title, so on a translated page it
+          # must carry the translated one. The label is not in the calling page's source: the call
+          # sits outside the translate tags and passes a page name, and the template reads the
+          # title from the target's own title unit, which is the whole point -- a label restated in
+          # the caller would be a second copy of a string that is already translated once.
+          # Searching/ko is the fixture, and the expectation is read from the source rather than
+          # written here: any Korean at all would pass a string pinned in this file.
+          want=$(awk '/^<!--T:title[ -]/ { found = 1; next } found && NF { print; exit }' \
+            docs/Deploying/ko.wikitext)
+          if [ -z "$want" ]; then
+            echo "::error::docs/Deploying/ko.wikitext has no translated title to expect"
+            exit 1
+          fi
+          if ! grep -q "wikven-prevnext-next\"><a [^>]*>$want</a>" dist/Searching/ko.html; then
+            echo "::error::Searching/ko's prevnext does not show Deploying's Korean title ($want)"
+            sed -n 's/.*\(wikven-prevnext-next">[^<]*<a[^>]*>[^<]*<\/a>\).*/\1/p' dist/Searching/ko.html
+            exit 1
+          fi
+
           echo "Smoke checks passed."
 
       # Two bakes of the same source have to produce the same bytes, and until now nothing said so.
