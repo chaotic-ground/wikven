@@ -77,13 +77,15 @@ class ImportWikitext extends Maintenance {
 				continue;
 			}
 
-			// Import as an old revision so the file mtime becomes the footer's last-modified timestamp.
+			// Import as an old revision; the current-revision path above takes no timestamp of its
+			// own. What it is stamped with hardly matters: the build's frozen clock stands in until
+			// the source history restamps every page (see build.php's stampSourceHistory()).
 			$revision = new WikiRevision();
 			$revision->setContent(SlotRecord::MAIN, $content);
 			$revision->setTitle($title);
 			$revision->setUserObj($user);
 			$revision->setComment('');
-			$revision->setTimestamp(wfTimestamp(TS_UNIX, filemtime($filename)));
+			$revision->setTimestamp(wfTimestampNow());
 
 			// WikiRevision::importOldRevision() has been a deprecated shim for this service since 1.31.
 			$importer = $this->getServiceContainer()->getWikiRevisionOldRevisionImporter();

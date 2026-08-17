@@ -85,6 +85,10 @@
 			"value": "",
 			"description": "Absolute path to the directory the build reads pages and images from. Set by WikvenSettings.php from WIKVEN_WORKDIR; empty means no source directory, which is what a wiki running the extension outside a build has."
 		},
+		"WikvenSourceHistoryFile": {
+			"value": "",
+			"description": "Absolute path to a dump of the source tree's `git log`, used to date each page at the commit that last changed it and to name that commit's author. Set by WikvenSettings.php from WIKVEN_WORKDIR when actions/bake has mounted one; empty means the build reads git itself, if the source directory sits in a checkout it can reach, and dates every page at the commit being built if it cannot."
+		},
 		"WikvenHtmlDirectory": {
 			"value": "",
 			"description": "Absolute path to the directory the build writes the static site to. Set by WikvenSettings.php from WIKVEN_WORKDIR (per-skin passes point it at a subdirectory); empty means nothing is written, which is what a wiki running the extension outside a build has."
