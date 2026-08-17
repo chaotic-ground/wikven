@@ -54,7 +54,8 @@
 		"BeforePageDisplay": "adder",
 		"GetLocalURL": "main",
 		"OutputPageAfterGetHeadLinksArray": "main",
-		"SetupAfterCache": ["retrier", "main"]
+		"SetupAfterCache": ["retrier", "main"],
+		"SifterSearchIndexPage": "indexer"
 	},
 	"HookHandlers": {
 		"main": {
@@ -66,6 +67,9 @@
 		},
 		"hider": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Hider"
+		},
+		"indexer": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Indexer"
 		},
 		"retrier": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Retrier"

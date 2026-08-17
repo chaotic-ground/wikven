@@ -114,6 +114,12 @@ jobs:
             fi
           done
 
+          # The counts above also carry #454: marking a page for translation gives it a translation
+          # page in the source language too, so "Installation" and "Installation/en" hold the same
+          # English text under two titles and English was counted twice for every translated page.
+          # Only the source page is indexed now. What that leaves is not asserted yet -- the number
+          # is read off this run first, since a figure guessed here would gate every future bake.
+
           # Every printfooter "Retrieved from" link must resolve from the page that carries it
           # (#394). Core builds it from the page's own URL and expands away the "./" wikven writes,
           # so a page exported into a subdirectory needs the "../" per level rename.php adds; the
