@@ -18,6 +18,13 @@ $wgFileCacheDirectory = $wikvenDist;
 $wgWikvenSourceDirectory = $wikvenSrc;
 $wgWikvenHtmlDirectory = $wikvenDist;
 
+// That file cache holds two actions per page, and the export is one of them. rebuildFileCache.php
+// renders ?action=history for every page as well, in every skin pass, into a tree the pass then
+// deletes -- and no exported page ever links to a local history page. Swap the action for one that
+// renders nothing rather than pay for it (see SkippedHistoryAction for why not $wgActions off).
+// Through $GLOBALS because the setting defaults to an empty array that is never written here.
+$GLOBALS['wgActions']['history'] = MediaWiki\Extension\Wikven\SkippedHistoryAction::class;
+
 // Per-page "last edited" dates and authors come from the source tree's git history. A bake usually
 // cannot reach it -- actions/bake mounts the source directory alone, without the .git beside it --
 // so the action dumps the log on the runner and mounts it here instead. Absent, the build asks git
