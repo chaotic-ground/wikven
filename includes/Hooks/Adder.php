@@ -9,7 +9,6 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
-use MediaWiki\Title\Title;
 
 class Adder implements
 	\MediaWiki\Hook\BeforePageDisplayHook,
@@ -174,7 +173,7 @@ class Adder implements
 
 	/** @inheritDoc */
 	public function onSkinAddFooterLinks(Skin $skin, string $key, array &$footerItems) {
-		global $wgWikvenFooterUrl, $wgWikvenVersionPage;
+		global $wgWikvenFooterUrl;
 
 		if ($key !== 'places') {
 			return;
@@ -188,17 +187,6 @@ class Adder implements
 					? $skin->msg('wikven-footer-source', $host)->text()
 					: $skin->msg('wikven-footer-source-plain')->text()
 			);
-		}
-		$versionPage = $wgWikvenVersionPage ?? '';
-		if ($versionPage !== '') {
-			$versionTitle = Title::newFromText($versionPage);
-			if ($versionTitle && $versionTitle->exists()) {
-				$footerItems['version'] = Html::element(
-					'a',
-					['href' => $versionTitle->getLocalURL()],
-					$skin->msg('version')->text()
-				);
-			}
 		}
 	}
 

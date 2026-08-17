@@ -77,9 +77,9 @@
 			"value": "Settings",
 			"description": "Title of an auto-generated page holding the reader's display choices (colour theme, and the skin to read the site in), which a static export keeps in the browser. Stands in for Special:MobileOptions, which no bake writes. Empty disables it; a same-named source page takes precedence."
 		},
-		"WikvenVersionPage": {
-			"value": "Version",
-			"description": "Title of an auto-generated page (mirroring Special:Version) listing the installed software, extensions and skins, linked from the footer. Empty disables it; a same-named source page takes precedence."
+		"WikvenAboutPage": {
+			"value": "About",
+			"description": "Title of the page introducing the site, which MediaWiki's own \"About\" footer link is pointed at. A source page of that name is used as written and can transclude {{Wikven software}} -- a generated template listing the installed software, extensions and skins -- wherever it wants it; with no source page, the build writes an introduction with that list under it. Empty writes no page, and the footer link goes with it."
 		},
 		"WikvenSourceDirectory": {
 			"value": "",

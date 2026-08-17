@@ -1,0 +1,15 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+{{SITENAME}} turns a directory of wikitext files into a static website. It runs MediaWiki itself, so pages are written with the markup, templates and parser functions a wiki gives you, and then captures the result: what it writes out is plain HTML, CSS, JavaScript and images, served by anything that serves files. There is no server and no database behind the published site.
+
+<!--T:2-->
+This site is one of its builds. Every page here comes from a <code>.wikitext</code> file under [<tvar name="1">https://github.com/chaotic-ground/wikven/tree/main/docs</tvar> <code>docs/</code>], baked by the same [<tvar name="2">https://github.com/chaotic-ground/wikven/tree/main/actions/bake</tvar> action] the documentation recommends, and the "Edit" and "View history" links on each page lead to that file in the repository.
+
+<!--T:3-->
+{{SITENAME}} is free software, licensed [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]. The software it redistributes is acknowledged on [[<tvar name="3">Special:MyLanguage/Licenses</tvar>|Licenses]]; issues and pull requests are welcome on [https://github.com/chaotic-ground/wikven GitHub].
+</translate>
+
+{{Wikven software}}

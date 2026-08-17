@@ -21,8 +21,8 @@ Wikven은 자체 기본값(정적 위키를 위한 합리적인 MediaWiki 설정
 <!--T:6 @df99ac49-->
 == <code>config</code> ==
 
-<!--T:7 @a7c6cbf7-->
-각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 [$1 설정 값]이든 여기에 정의할 수 있으며, <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, <code>WikvenRepositories</code> 같은 Wikven 자체 변수도 포함합니다.
+<!--T:7 @6431c507-->
+각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 [$1 설정 값]이든 여기에 정의할 수 있으며, <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenAboutPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, <code>WikvenRepositories</code> 같은 Wikven 자체 변수도 포함합니다.
 
 <!--T:8 @6495a3e5-->
 === <code>WikvenLogos</code> ===
@@ -39,8 +39,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:12 @6883c88e-->
 === <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> 및 <code>WikvenViewSourceUrl</code> ===
 
-<!--T:13 @8226c668-->
-"편집", "역사 보기", "원본 보기" 링크가 가리키는 대상으로, 독자가 렌더링된 문서에서 리포지터리의 소스로 건너뛸 수 있게 합니다. 각 URL에서 <code>$1</code>은 확장자를 포함해 소스 디렉터리를 기준으로 한 문서 소스 파일 이름으로 치환됩니다. 제목이 자체 콘텐츠 모델을 지니는 문서는 그 이름을 그대로 유지하고(<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, <code>.json</code> 설정 문서, <code>Module:</code> 문서 등), 그 밖의 모든 문서는 <code>.wikitext</code> 파일이므로 평범한 문서는 <code>Getting Started.wikitext</code>가 됩니다. 이들 중 어느 것이든 설정하지 않으면 해당 링크가 빠집니다. 생성된 문서([[#WikvenVersionPage|버전]] 문서 같은)에는 소스 파일이 없으므로 이 링크들은 생략됩니다.
+<!--T:13 @4d8db29e-->
+"편집", "역사 보기", "원본 보기" 링크가 가리키는 대상으로, 독자가 렌더링된 문서에서 리포지터리의 소스로 건너뛸 수 있게 합니다. 각 URL에서 <code>$1</code>은 확장자를 포함해 소스 디렉터리를 기준으로 한 문서 소스 파일 이름으로 치환됩니다. 제목이 자체 콘텐츠 모델을 지니는 문서는 그 이름을 그대로 유지하고(<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, <code>.json</code> 설정 문서, <code>Module:</code> 문서 등), 그 밖의 모든 문서는 <code>.wikitext</code> 파일이므로 평범한 문서는 <code>Getting Started.wikitext</code>가 됩니다. 이들 중 어느 것이든 설정하지 않으면 해당 링크가 빠집니다. 생성된 문서(빌드가 직접 쓴 [[#WikvenAboutPage|소개]] 문서 같은)에는 소스 파일이 없으므로 이 링크들은 생략됩니다.
 
 <!--T:14 @c9fc389d-->
 === <code>WikvenMainPage</code> ===
@@ -48,11 +48,11 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:15 @433a30f7-->
 사이트 루트로 쓰이는 문서의 제목으로, <code>index.html</code>로 작성되어 사이트 최상단에서 제공됩니다. 기본값은 <code>index</code>이므로 진입 파일 이름을 <code>index.wikitext</code>로 지으면 별도 설정 없이 작동합니다. 이 문서는 여러분이 가져온 문서여야 하며, 없으면 빌드가 실패합니다.
 
-<!--T:16 @78a62af5-->
-=== <code>WikvenVersionPage</code> ===
+<!--T:16 @af5c0b04-->
+=== <code>WikvenAboutPage</code> ===
 
-<!--T:17 @6354ebae-->
-설치된 소프트웨어, 확장 기능, 스킨을 나열하고 바닥글에서 링크되는 자동 생성 문서(<code>Special:Version</code>을 본뜬)의 제목입니다. 기본값은 <code>Version</code>입니다. 비워 두면 문서를 비활성화하며, 같은 이름의 소스 문서가 생성된 문서보다 우선합니다.
+<!--T:17 @6c4ada6b-->
+사이트를 소개하는 문서의 제목으로, MediaWiki 자체의 "소개" 바닥글 링크가 이 문서를 가리킵니다. 기본값은 <code>About</code>입니다. 같은 이름의 소스 문서를 쓰면 그 내용이 그대로 쓰이며, 빌드는 설치된 소프트웨어·확장 기능·스킨을 나열하는 <code>Wikven software</code> 틀(<code>Special:Version</code>이 보여 줄 내용으로, export에는 그런 특수문서가 없습니다)도 함께 생성하므로, 그 목록을 원하는 자리에 <code><nowiki>{{Wikven software}}</nowiki></code>로 넣거나 아예 빼면 됩니다. 같은 이름의 소스 문서가 없으면 빌드가 소개 문장과 그 아래 목록을 담은 문서를 씁니다. 비워 두면 문서를 아예 쓰지 않으며, 바닥글 링크도 함께 사라집니다.
 
 <!--T:18 @c5bc8e2e-->
 === <code>WikvenFooterUrl</code> ===
