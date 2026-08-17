@@ -1,16 +1,13 @@
 <?php
 /**
- * SifterSearch and Translate are optional, image-bundled dependencies that phan does not analyse,
- * so their symbols are undeclared to static analysis here. The hook below is only reached when
- * SifterSearch runs it, and only asks Translate anything once it has said it is loaded.
+ * Translate is an optional, image-bundled dependency that phan does not analyse, so its symbols
+ * are undeclared to static analysis here. It is only asked anything once it has said it is loaded.
  *
- * @phan-file-suppress PhanUndeclaredInterface
  * @phan-file-suppress PhanUndeclaredClassMethod
  */
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
-use MediaWiki\Extension\SifterSearch\Hook\SifterSearchIndexPageHook;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;
@@ -18,9 +15,15 @@ use MediaWiki\Title\Title;
 /**
  * What the search index is asked to leave out.
  *
- * @see \MediaWiki\Extension\SifterSearch\Hook\SifterSearchIndexPageHook
+ * SifterSearch declares SifterSearchIndexPageHook for this, and this does not implement it: the
+ * interface is only on disk where SifterSearch is installed, and a class that implements a missing
+ * one cannot be loaded at all -- not by the test suite, which installs neither. MediaWiki dispatches
+ * a hook by method name regardless, so what the interface buys is a signature check, and what it
+ * costs here is the class being unloadable wherever the optional dependency is absent.
+ *
+ * @see \MediaWiki\Extension\SifterSearch\Hook\SifterSearchIndexPageHook for the signature.
  */
-class Indexer implements SifterSearchIndexPageHook {
+class Indexer {
 	/**
 	 * How the source language of a translation page is looked up.
 	 *
@@ -32,7 +35,10 @@ class Indexer implements SifterSearchIndexPageHook {
 	 */
 	private $sourceLanguageOf;
 
-	/** @param ?callable(Title):?string $sourceLanguageOf Defaults to asking Translate. */
+	/**
+	 * @param callable|null $sourceLanguageOf Takes a Title, answers its source language or null.
+	 *   Defaults to asking Translate.
+	 */
 	public function __construct(?callable $sourceLanguageOf = null) {
 		$this->sourceLanguageOf = $sourceLanguageOf ?? [self::class, 'translateSourceLanguage'];
 	}

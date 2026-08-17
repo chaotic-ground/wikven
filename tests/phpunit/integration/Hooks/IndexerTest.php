@@ -21,7 +21,9 @@ class IndexerTest extends MediaWikiIntegrationTestCase {
 		?string $sourceLanguage,
 		bool $expected
 	) {
-		$indexer = new Indexer(static fn(): ?string => $sourceLanguage);
+		$indexer = new Indexer(static function () use ($sourceLanguage): ?string {
+			return $sourceLanguage;
+		});
 
 		$index = true;
 		$indexer->onSifterSearchIndexPage(Title::makeTitle(NS_MAIN, $title), $index);
