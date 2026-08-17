@@ -127,6 +127,59 @@ That history has to be reachable. The [[<tvar name="1">Special:MyLanguage/Comman
 
 <!--T:19-->
 The rest follows from the same idea. A build runs with its clock frozen at <code>SOURCE_DATE_EPOCH</code> — the commit's own date, when the action sets it — so two builds of one commit produce '''byte-identical''' output, down to the timestamps in the pages. It means a redeploy of unchanged content changes nothing on the host, and a diff between two builds only ever shows what you actually edited. {{SITENAME}}'s own continuous integration asserts it by baking this site twice and comparing the results.
+
+<!--T:20-->
+== Keeping pinned sources current ==
+
+<!--T:21-->
+The pins that make those builds reproducible are the ones nothing moves for you. An exact [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] pin stays exact until you change it, and no bot will change it: <code>.wikven.yaml</code> is {{SITENAME}}'s own file, and Dependabot and Renovate only watch the ecosystems they recognise. A site can therefore sit years behind on a skin with every check green.
+
+<!--T:22-->
+[<tvar name="1">https://www.updatecli.io/</tvar> updatecli] fills that hole, and it fills it by never having to recognise your file: you tell it where the pin is. A manifest names a '''source''' (where the current version is published) and a '''target''' (which key of which file holds the pin); applying it writes the source's value into the target and opens a pull request if that changed anything. Run it on a schedule in continuous integration and a pin that has fallen behind becomes a pull request you can review. Here is a whole manifest for one pin, a repository following a release tag:
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+---
+name: "build(deps): bump Citizen"
+pipelineid: citizen
+scms:
+  default:
+    kind: github
+    spec:
+      owner: yourname
+      repository: some-repository
+      branch: main
+      user: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+sources:
+  citizen:
+    kind: githubrelease
+    spec:
+      owner: StarCitizenTools
+      repository: mediawiki-skins-Citizen
+      versionfilter:
+        kind: semver
+targets:
+  citizen:
+    name: 'build(deps): bump Citizen to {{ source "citizen" }}'
+    kind: yaml
+    scmid: default
+    sourceid: citizen
+    spec:
+      file: .wikven.yaml
+      key: $.config.WikvenRepositories.Citizen.reference
+</syntaxhighlight>
+
+<translate>
+<!--T:23-->
+A <code>commit</code> that follows a branch is the same manifest with the source swapped: <code>kind: gitcommit</code>, given the repository's URL and the branch to track, writing to a key that ends in <code>commit</code> instead of <code>reference</code>. A <code>tarball</code> and its <code>sha256</code> are '''not''' covered here: the two keys have to move together, and the archive names Special:ExtensionDistributor hands out carry a build hash that no version feed publishes, so a source has nothing to read. Declare anything you want watched as a <code>repository</code>. And there is no shortcut past writing one: updatecli's autodiscovery crawls the ecosystems it knows (npm, cargo, dockerfile, maven, ...), which a bespoke configuration file will never be, so a hand-written manifest is the whole story for this file.
+
+<!--T:24-->
+This site is the working example. Its manifests are in [<tvar name="1">https://github.com/chaotic-ground/wikven/tree/main/updatecli/updatecli.d</tvar> <code>updatecli/updatecli.d/</code>] (one release tag per <code>reference</code> pin, one branch head per <code>commit</code> pin), and [<tvar name="2">https://github.com/chaotic-ground/wikven/blob/main/.github/workflows/updatecli.yml</tvar> a weekly workflow] applies them, opening one pull request per pipeline. [<tvar name="3">https://www.updatecli.io/docs/</tvar> Upstream's own documentation] covers everything a manifest can do beyond the two shapes above.
 </translate>
 
 {{prevnext|Translating|Troubleshooting}}
