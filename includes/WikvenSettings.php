@@ -235,6 +235,13 @@ if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, tru
 	// chrome would point at a Special: page the export does not have. Citizen's is the visible
 	// one: it moves the entry out of the toolbox (which Hider empties) into the sidebar.
 	$wgEnableUploads = false;
+	// The passes run beside each other, and SQLite takes one writer at a time -- a pass still
+	// writes to the object cache, which is a table. build.php hands each one a copy of the
+	// database to work on and names its directory here; nothing reads the copies afterwards.
+	$wikvenPassDatabase = getenv('WIKVEN_BUILD_DB_DIR');
+	if (is_string($wikvenPassDatabase) && is_dir($wikvenPassDatabase)) {
+		$wgSQLiteDataDir = $wikvenPassDatabase;
+	}
 	if ($wikvenBuildSkin !== $wgWikvenMainSkin) {
 		$wgWikvenHtmlDirectory = "$wikvenDist/$wikvenBuildSkin";
 		$wgFileCacheDirectory = $wgWikvenHtmlDirectory;

@@ -31,6 +31,9 @@ class Build extends Maintenance {
 	/** Template the generated software list is written to, so an About page can place it itself. */
 	private const SOFTWARE_TEMPLATE = 'Wikven software';
 
+	/** Names the directory a skin pass's own copy of the database goes in, beside the original. */
+	private const PASS_DATABASE_PREFIX = 'wikven-pass-';
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Run the full wikven static-site build in a single process.');
@@ -71,9 +74,7 @@ class Build extends Maintenance {
 		if (!$skins) {
 			$skins = [$GLOBALS['wgDefaultSkin']];
 		}
-		foreach ($skins as $skin) {
-			$this->renderSkinPass($skin);
-		}
+		$this->renderSkinPasses(array_values($skins));
 	}
 
 	/**
@@ -309,8 +310,69 @@ class Build extends Maintenance {
 		$linkCache->clear();
 	}
 
-	/** Render one skin in a fresh boot by re-invoking this script with WIKVEN_BUILD_SKIN set. */
-	private function renderSkinPass(string $skin): void {
+	/**
+	 * Render every enabled skin, several passes at a time.
+	 *
+	 * The passes are independent by construction: everything they read is in the database before
+	 * the first one starts, each writes into an output directory of its own, and each is a
+	 * separate process with its own boot. So the skin phase is the half of the bake that
+	 * parallelizes, and the half that grows -- the populate phase above is O(pages) and stays
+	 * serial, while this is O(pages x skins) and gains a pass every time a skin is added (#407).
+	 *
+	 * What the passes still share is the database, and a pass is not quite a reader of it: the
+	 * object cache is a table ($wgMainCacheType = CACHE_DB), and SQLite takes one writer at a
+	 * time. Each therefore gets a copy of the database file to work on, which also keeps a pass
+	 * from reading what another one cached -- so a pass renders from the same state whether it
+	 * runs first, last or beside the others, which is what keeps the output reproducible (#411).
+	 *
+	 * @param string[] $skins
+	 */
+	private function renderSkinPasses(array $skins): void {
+		$command = $this->skinPassCommand();
+		$limit = $this->passLimit(count($skins));
+		$databases = $this->copyDatabasePerPass($skins);
+
+		$this->output('Rendering ' . count($skins) . ' skin(s), up to ' . $limit . " at a time\n");
+
+		$queued = $skins;
+		$running = [];
+		$failed = [];
+		while ($queued || $running) {
+			while ($queued && count($running) < $limit) {
+				$skin = array_shift($queued);
+				$running[$skin] = $this->startSkinPass($command, $skin, $databases[$skin] ?? '');
+			}
+
+			$this->waitForPassOutput($running);
+			foreach (array_keys($running) as $skin) {
+				$this->readPass($running[$skin]);
+				$exit = $this->reapPass($running[$skin]);
+				if ($exit === null) {
+					continue;
+				}
+				// Whole and in one piece, now that the pass is done: three renders writing to this
+				// process's own stdout as they go would interleave into something no one could
+				// attribute a failure from, and the log is how a bake is debugged.
+				$this->reportPass($skin, $running[$skin], $exit);
+				if ($exit !== 0) {
+					$failed[] = "$skin (exit $exit)";
+				}
+				unset($running[$skin]);
+			}
+		}
+
+		$this->removeDatabaseCopies($databases);
+		if ($failed) {
+			$this->fatalError('Wikven: build failed for skin ' . implode(', ', $failed));
+		}
+	}
+
+	/**
+	 * The argv that re-invokes this script for one skin, resolved once for every pass.
+	 *
+	 * @return string[]
+	 */
+	private function skinPassCommand(): array {
 		$self = PHP_BINARY;
 		$prefix = [$self];
 		// Embedded FrankenPHP leaves PHP_BINARY empty; re-run the binary itself as "<self> php-cli".
@@ -321,30 +383,199 @@ class Build extends Maintenance {
 		if ($self === '' || !is_executable($self)) {
 			$this->fatalError('Wikven: cannot locate the PHP executable to render skins');
 		}
+		return array_merge($prefix, ['maintenance/run.php', __FILE__]);
+	}
 
-		$command = array_merge($prefix, ['maintenance/run.php', __FILE__]);
-
-		// The skin and the working directory are passed as arguments, scoped to the child alone, so
-		// this process's own environment and cwd stay untouched while a skin renders. run.php resolves
-		// relative to the install root, which the binary's php-cli requires, hence $GLOBALS['IP'] as
-		// the child's cwd. An array argv also means the arguments never pass through a shell to be
-		// quoted for.
-		$descriptors = [0 => STDIN, 1 => STDOUT, 2 => STDERR];
+	/**
+	 * Start one skin's pass in a fresh boot, with its output on pipes this process reads.
+	 *
+	 * @param string[] $command
+	 * @return array{process:resource,pipes:array<int,?resource>,output:array<int,string>}
+	 */
+	private function startSkinPass(array $command, string $skin, string $databaseDirectory): array {
+		// The skin, the database and the working directory are passed to the child alone, so this
+		// process's own environment and cwd stay untouched while a skin renders. run.php resolves
+		// relative to the install root, which the binary's php-cli requires, hence $GLOBALS['IP']
+		// as the child's cwd. An array argv also means the arguments never pass through a shell to
+		// be quoted for. Both variables are set even when empty, so that a pass never inherits a
+		// value another run left in this process's environment.
+		$environment = ['WIKVEN_BUILD_SKIN' => $skin, 'WIKVEN_BUILD_DB_DIR' => $databaseDirectory] + getenv();
+		$descriptors = [0 => STDIN, 1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
 		$pipes = [];
-		$process = proc_open(
-			$command,
-			$descriptors,
-			$pipes,
-			$GLOBALS['IP'],
-			['WIKVEN_BUILD_SKIN' => $skin] + getenv()
-		);
+		$process = proc_open($command, $descriptors, $pipes, $GLOBALS['IP'], $environment);
 		if ($process === false) {
 			$this->fatalError("Wikven: could not start the build for skin '$skin'");
 		}
-		$exit = proc_close($process);
+		// Non-blocking, so reading a quiet pass never holds up a talkative one.
+		stream_set_blocking($pipes[1], false);
+		stream_set_blocking($pipes[2], false);
+		return ['process' => $process, 'pipes' => $pipes, 'output' => [1 => '', 2 => '']];
+	}
 
-		if ($exit !== 0) {
-			$this->fatalError("Wikven: build failed for skin '$skin' (exit $exit)");
+	/**
+	 * Block until one of the running passes has something to say, or briefly if none of them has.
+	 *
+	 * @param array[] $running
+	 */
+	private function waitForPassOutput(array $running): void {
+		$read = [];
+		foreach ($running as $pass) {
+			foreach ($pass['pipes'] as $pipe) {
+				// A pipe this process has closed is left as null, and there is nothing to wait for.
+				if ($pipe !== null) {
+					$read[] = $pipe;
+				}
+			}
+		}
+		if (!$read) {
+			// Every pass has closed its pipes and none has been reaped yet; that gap is short.
+			usleep(50_000);
+			return;
+		}
+		$write = [];
+		$except = [];
+		// The timeout is what bounds the wait, since a pass that exits without a last word leaves
+		// nothing to wake this up. A closed pipe reads as ready, so an ending pass is seen at once.
+		stream_select($read, $write, $except, 0, 200_000);
+	}
+
+	/**
+	 * Take whatever a pass has written so far, so its pipe buffer never fills and blocks it.
+	 *
+	 * @param array &$pass
+	 */
+	private function readPass(array &$pass): void {
+		foreach ($pass['pipes'] as $descriptor => $pipe) {
+			if ($pipe === null) {
+				continue;
+			}
+			$chunk = fread($pipe, 65_536);
+			while ($chunk !== false && $chunk !== '') {
+				$pass['output'][$descriptor] .= $chunk;
+				$chunk = fread($pipe, 65_536);
+			}
+			// Dropped once the pass has closed its end, so it stops waking the select above.
+			if (feof($pipe)) {
+				fclose($pipe);
+				$pass['pipes'][$descriptor] = null;
+			}
+		}
+	}
+
+	/**
+	 * Close a finished pass and answer how it exited, or null while it is still running.
+	 *
+	 * @param array &$pass
+	 */
+	private function reapPass(array &$pass): ?int {
+		$status = proc_get_status($pass['process']);
+		if ($status['running']) {
+			return null;
+		}
+		// Anything the pass wrote before exiting is still in the pipes; a pipe outlives its writer.
+		$this->readPass($pass);
+		foreach ($pass['pipes'] as $descriptor => $pipe) {
+			if ($pipe !== null) {
+				fclose($pipe);
+				$pass['pipes'][$descriptor] = null;
+			}
+		}
+		// The status above already reaped the child, so proc_close's own answer is not the exit
+		// code any more; it is called to release the handle.
+		proc_close($pass['process']);
+		return (int)$status['exitcode'];
+	}
+
+	/**
+	 * Print one pass's output under a heading naming it, once the pass is over.
+	 *
+	 * @param string $skin
+	 * @param array $pass
+	 * @param int $exit
+	 */
+	private function reportPass(string $skin, array $pass, int $exit): void {
+		$this->output("--- $skin pass" . ( $exit === 0 ? '' : " failed (exit $exit)" ) . " ---\n");
+		$this->output($pass['output'][1]);
+		if ($pass['output'][2] !== '') {
+			$this->error(rtrim($pass['output'][2], "\n"));
+		}
+	}
+
+	/** How many passes to run at once; BuildConcurrency reads what the answer is made of. */
+	private function passLimit(int $passes): int {
+		return BuildConcurrency::limit(
+			$passes,
+			(string)getenv('WIKVEN_BUILD_JOBS'),
+			$this->readFile('/proc/cpuinfo'),
+			$this->readFile('/sys/fs/cgroup/cpu.max')
+		);
+	}
+
+	/** A file that describes the machine, or "" where this one does not have it. */
+	private function readFile(string $path): string {
+		return is_readable($path) ? (string)file_get_contents($path) : '';
+	}
+
+	/**
+	 * Give each pass a copy of the database to render from.
+	 *
+	 * A pass reads the content, but it still writes: the object cache is a table of this database
+	 * ($wgMainCacheType = CACHE_DB, which is there so the Commons thumbnail lookups a bake makes
+	 * are made once). SQLite takes one writer at a time, so passes sharing the file would be
+	 * serialized by it at best and fail with SQLITE_BUSY at worst. The file is small and the
+	 * content is final by now, so a copy each is the cheap way out -- and the copies are taken
+	 * after the populate phase, so each pass inherits its lookups rather than repeating them.
+	 *
+	 * A server database has no such limit and is left alone, as is a single-pass bake.
+	 *
+	 * @param string[] $skins
+	 * @return array<string,string> Skin to the data directory holding its copy; empty when the
+	 *   passes share the database.
+	 */
+	private function copyDatabasePerPass(array $skins): array {
+		$directory = rtrim((string)( $GLOBALS['wgSQLiteDataDir'] ?? '' ), '/');
+		if (count($skins) < 2 || ( $GLOBALS['wgDBtype'] ?? '' ) !== 'sqlite' || !is_dir($directory)) {
+			return [];
+		}
+
+		// Everything this process wrote has to be in the file before it is copied.
+		$this->getServiceContainer()->getDBLoadBalancerFactory()->commitPrimaryChanges(__METHOD__);
+		$databases = glob("$directory/*.sqlite");
+		if (!$databases) {
+			// Nothing to copy is nothing to isolate; leave the passes on the database as it is.
+			return [];
+		}
+		// The write-ahead log alongside a database holds commits the database file does not have
+		// yet; the shared-memory index beside it is rebuilt from that log and is not copied.
+		$logs = glob("$directory/*.sqlite-wal");
+		$files = array_merge($databases, $logs === false ? [] : $logs);
+
+		$copies = [];
+		foreach ($skins as $skin) {
+			$destination = "$directory/" . self::PASS_DATABASE_PREFIX . $skin;
+			if (!wfMkdirParents($destination)) {
+				$this->fatalError("Wikven: could not create the database directory $destination");
+			}
+			foreach ($files as $file) {
+				if (!copy($file, $destination . '/' . basename($file))) {
+					$this->fatalError("Wikven: could not copy $file for the '$skin' pass");
+				}
+			}
+			$copies[$skin] = $destination;
+		}
+		return $copies;
+	}
+
+	/**
+	 * Drop the per-pass databases, which say nothing about the site once its pages are rendered.
+	 *
+	 * @param array<string,string> $copies
+	 */
+	private function removeDatabaseCopies(array $copies): void {
+		foreach ($copies as $directory) {
+			if (is_dir($directory)) {
+				$this->removeDirectory($directory);
+			}
 		}
 	}
 
