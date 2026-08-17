@@ -234,6 +234,10 @@ Wikven
 <span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.deploy.outputs.page_url }}</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10</span><span class="w">  </span><span class="c1"># v6.0.3</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="c1"># Whole history, so each page is dated at the commit that last changed</span>
+<span class="w">          </span><span class="c1"># its source file. A shallow checkout knows only the latest commit.</span>
+<span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d</span><span class="w">  </span><span class="c1"># v6.0.0</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@19392b75d379de9e349ef2963c11ec5545c3e6ab</span><span class="w">  </span><span class="c1"># v1.0.0</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
@@ -284,10 +288,10 @@ Wikven
   		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
  
   		<span class="last-modified-bar__text modified-enhancement"
-  				data-user-name="FuzzyBot"
+  				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1786926063">
-  				<span>2026년 8월 17일 (월) 00:21에 마지막으로 편집됨</span>
+  				data-timestamp="1786892364">
+  				<span>2026년 8월 16일 (일) 14:59에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -310,7 +314,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 17일 (월) 00:21에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 16일 (일) 14:59에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
