@@ -1,0 +1,151 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+This page is for people writing a MediaWiki extension or skin that has to work inside a {{SITENAME}} build. It assumes you know how to write one for a live wiki; what follows is only what a static export changes. [[<tvar name="1">Special:MyLanguage/Development</tvar>|Development]] describes how {{SITENAME}} itself is built, which is a different question.
+
+<!--T:2-->
+== What a build is ==
+
+<!--T:3-->
+A {{SITENAME}} build boots MediaWiki once, on the command line, renders every page to a file, and exits. The reader is then served plain files by a host that runs no PHP.
+
+<!--T:4-->
+Two consequences run through everything below:
+
+<!--T:5-->
+* '''Your code runs at build time, not at view time.''' There is no <code>load.php</code>, no action API and no database once the site is deployed. Anything your extension would normally do in response to a request has to happen during the build, or ship as static JavaScript that needs no server.
+* '''The build is not a request.''' <code>MW_ENTRY_POINT</code> is <code>cli</code>, there is no <code>WebRequest</code> worth reading, and a hook of yours that assumes a user, a session or a title from the URL will not find one. {{SITENAME}}'s own hooks guard on <code>MW_ENTRY_POINT === 'cli'</code> for this reason.
+
+<!--T:6-->
+== Getting your extension into a build ==
+
+<!--T:7-->
+A site lists what it wants in its [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yml</code>]]. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - MyExtension
+config:
+  MyExtensionGreeting: Hello
+WikvenRepositories:
+  MyExtension:
+    repository: https://github.com/example/mediawiki-extensions-MyExtension.git
+    reference: v1.2.3
+</syntaxhighlight>
+
+<translate>
+<!--T:8-->
+Your settings need no support from {{SITENAME}}. The site's <code>config</code> map is applied through MediaWiki's own settings loader, so any key your <code>extension.json</code> declares under <code>config</code> can be set there, and reaches you as the global you already read.
+
+<!--T:9-->
+Pin a reference rather than tracking a branch. A build of a given revision of a site should fetch the code that revision was tested against, and the docs site pins every fetched component for that reason.
+
+<!--T:10-->
+== Local URLs: the one contract to read ==
+
+<!--T:11-->
+This is the part that catches extension authors, because the code is correct on a live wiki and wrong only here.
+
+<!--T:12-->
+{{SITENAME}} makes page URLs '''document-relative'''. <code>Title::getLocalURL()</code> answers <code>./Page.html</code>, and because a page whose title has a slash is exported into a real directory, a page one level down needs <code>../Page.html</code> to mean the same thing. <code>maintenance/rename.php</code> applies that correction per page, by the page's own depth.
+
+<!--T:13-->
+It corrects two places:
+
+<!--T:14-->
+* the page's markup — <code>href</code>, <code>src</code>, <code>srcset</code> and CSS <code>url()</code>;
+* the page's own JavaScript config, the <code>RLCONF</code> object, so a local URL you export as a config var is corrected the way an <code>href</code> is.
+
+<!--T:15-->
+It cannot correct a third: '''a local URL you bake into a ResourceLoader module's bundle.''' One bundle file serves every page at every depth, so there is no depth to correct it by, and nothing will fix it for you. If your module ships a URL, anchor it yourself against a value that is site-root-anchored by construction rather than against the document.
+
+<!--T:16-->
+The instance this was found through: SifterSearch baked the search results page's URL into its module config, which meant a reader who searched from a page one directory down was sent to a page that does not exist. It was fixed on the extension's side, by resolving that URL against the bundle path the site already declares.
+
+<!--T:17-->
+== Your code runs once per skin, in parallel ==
+
+<!--T:18-->
+A site with three skins renders three times. Each pass is a '''separate process''' with its own MediaWiki boot, its own copy of the database, and its own output directory, and passes run beside each other. Three rules follow:
+
+<!--T:19-->
+* '''Be a reader of the database, not a writer.''' The content is final before the passes start. A pass that writes contends with the others for the same file, and writes something the next pass would have written identically anyway.
+* '''Write only inside your pass's own output directory''' (<code>$wgWikvenHtmlDirectory</code>). Note the trap: the main skin renders into the export root, which is the '''parent''' of every other skin's directory, so "everything below my output directory" is not the same set as "my pages" for that pass.
+* '''Do not assume you are alone.''' Anything you create outside your own directory can be raced by another pass.
+
+<!--T:20-->
+== Reproducibility ==
+
+<!--T:21-->
+Two builds of the same source must produce '''byte-identical''' output, and CI asserts it by baking the docs site twice and diffing the results. The build already freezes the clock, pins <code>page_touched</code>, strips the request and render ids MediaWiki stamps into each page, and runs the job queue in a fixed order to get there.
+
+<!--T:22-->
+So do not put into rendered output:
+
+<!--T:23-->
+* a timestamp, a duration, or anything else read from the clock;
+* a random value, a request id, a hostname, a process id, or an absolute path from the build machine;
+* anything ordered by the filesystem — sort a directory listing before you write from it.
+
+<!--T:24-->
+If your extension has a cache keyed on any of the above, key it on content instead.
+
+<!--T:25-->
+== Jobs ==
+
+<!--T:26-->
+Enqueue jobs as you normally would. The build drains the queue before any skin renders, one job type at a time in name order, so a job of yours has run by the time pages are rendered.
+
+<!--T:27-->
+One thing to know if your job is expensive and gets enqueued per revision: the build holds the search index job back to the very end of the queue, because it was otherwise re-running on every pass of the queue and throwing away all but the last result. A job of the same shape wants the same treatment.
+
+<!--T:28-->
+== What {{SITENAME}} already removes ==
+
+<!--T:29-->
+Do not re-add UI that needs a live wiki — {{SITENAME}} has taken it out on purpose:
+
+<!--T:30-->
+* the edit and history UI, and the sidebar's wiki-only links;
+* the search box, unless a [[<tvar name="1">Special:MyLanguage/Searching</tvar>|static search index]] is providing results;
+* the history action, which renders nothing.
+
+<!--T:31-->
+Footer links to edit, history and source are pointed at the URLs the site configures (<code>WikvenEditUrl</code> and friends), so if your extension adds a link of that kind, take the same route rather than linking a <code>Special:</code> page the export does not contain.
+
+<!--T:32-->
+== Checking your work ==
+
+<!--T:33-->
+Build a site that uses your extension and look at the output, rather than trusting a live wiki to agree:
+</translate>
+
+<syntaxhighlight lang="shell" copy>
+docker run --rm \
+  -v "$(pwd)/docs:/workspace/src" \
+  -v "$(pwd)/dist:/workspace/dist" \
+  wikven
+</syntaxhighlight>
+
+<translate>
+<!--T:34-->
+Worth checking specifically:
+
+<!--T:35-->
+* open a page '''at depth''' — one whose title contains a slash — and follow the links your extension renders, since a URL bug shows up nowhere else;
+* build twice into different directories and <code>diff -r</code> them, which catches an unstable value before CI does;
+* build with more than one skin configured, so a pass that reaches outside its own output is caught.
+</translate>
+
+<translate>
+<!--T:36-->
+== See also ==
+
+<!--T:37-->
+* [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|Configuration]] — every setting a site can name, including <code>WikvenRepositories</code>.
+* [[<tvar name="2">Special:MyLanguage/Development</tvar>|Development]] — the build pipeline, step by step.
+* [[<tvar name="3">Special:MyLanguage/JavaScript</tvar>|JavaScript]] — how scripts and gadgets are bundled for a static host.
+</translate>

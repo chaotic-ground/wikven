@@ -20,4 +20,5 @@
 ** Special:MyLanguage/Configuration|sidebar-configuration
 ** Special:MyLanguage/Standalone binary|sidebar-standalone-binary
 ** Special:MyLanguage/Development|sidebar-development
+** Special:MyLanguage/Writing an extension|sidebar-writing-an-extension
 ** Special:MyLanguage/Licenses|sidebar-licenses
