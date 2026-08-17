@@ -23,3 +23,5 @@ __TOC__
 <!--T:3-->
 The standalone binary is compiled with [https://frankenphp.dev/ FrankenPHP], which also links several Caddy modules; see the FrankenPHP project for their licenses. The Docker image keeps MediaWiki's own <code>COPYING</code>, and each component's full license text is available from its project.
 </translate>
+
+{{prevnext|Writing an extension|}}

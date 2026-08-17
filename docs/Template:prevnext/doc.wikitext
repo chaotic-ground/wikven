@@ -2,11 +2,14 @@ Bottom-of-page navigation between the steps of the documentation, as a row of on
 
 == Usage ==
 
- <nowiki>{{prevnext|next step}}
-{{prevnext|previous step|next step}}</nowiki>
+ <nowiki>{{prevnext|previous step|next step}}
+{{prevnext||next step}}
+{{prevnext|previous step|}}</nowiki>
 
-Each argument is a page name, not a link label: it is the link target, and the link text is the
-target's own title.
+The first argument is always the step before this page and the second always the step after it, so
+an end of the chain leaves its own side empty: the first page has nothing before it, the last has
+nothing after it. Both are page names rather than link labels — the name is the link target, and
+the link text is the target's own title.
 
 == Translated pages ==
 

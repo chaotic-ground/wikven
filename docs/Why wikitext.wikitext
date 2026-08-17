@@ -30,4 +30,4 @@ __TOC__
 That last cost, running MediaWiki, is the one {{SITENAME}} removes: it renders your wikitext through MediaWiki once, at build time, and ships plain static HTML. You get templates, parser functions and the rest with nothing to run in production. Reach for {{SITENAME}} when that trade is worth it, typically when your content is already wikitext, or when templates and transclusion would save real work.
 </translate>
 
-{{prevnext|Installation}}
+{{prevnext||Installation}}
