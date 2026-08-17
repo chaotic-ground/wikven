@@ -174,7 +174,8 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$sktemplate = $this->createMock(SkinTemplate::class);
 		$sktemplate->method('getTitle')->willReturn(Title::newFromText($titleText));
 		$sktemplate->method('getSkinName')->willReturn($skin);
-		$sktemplate->method('msg')->willReturnCallback(static fn($key) => wfMessage($key));
+		// The hook asks for one message, the label; a mock has none of its own to answer with.
+		$sktemplate->method('msg')->willReturn(wfMessage('viewsource'));
 
 		$links = ['views' => []];
 		$this->main()->onSkinTemplateNavigation__Universal($sktemplate, $links);
