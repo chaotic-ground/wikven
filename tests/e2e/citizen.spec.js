@@ -165,6 +165,36 @@ test("Citizen's last-modified button leads to what changed", async ({
 	);
 });
 
+test("Citizen's view-source tab is a button a reader can hit", async ({
+	page,
+}) => {
+	// Below the skin's desktop breakpoint the page actions are icon-only -- Citizen sets the
+	// labels to font-size: 0 -- so a tab it has no icon for is a box the width of its padding
+	// with nothing in it. The tab is wikven's own, which is why it carries an icon of its own:
+	// the skin's icon map is keyed by the names core uses.
+	await page.setViewportSize({ width: 800, height: 600 });
+	await page.goto(PAGE);
+
+	const tab = page.locator("#ca-wikven-viewsource");
+	await expect(tab.locator("a")).toHaveAttribute(
+		"href",
+		/Installation\.wikitext$/,
+	);
+
+	// The glyph is a mask on the icon's ::before, so an icon whose stylesheet never reached the
+	// export leaves a span that is sized and blank rather than one that is missing.
+	const mask = await tab.locator(".citizen-ui-icon").evaluate((span) => {
+		const style = getComputedStyle(span, "::before");
+		return style.maskImage || style.webkitMaskImage;
+	});
+	expect(mask, "the icon's mask image").toMatch(/^url\(/);
+
+	// And the button around it is the size of the ones beside it, rather than an empty sliver.
+	const box = await tab.locator("a").boundingBox();
+	const history = await page.locator("#ca-history a").boundingBox();
+	expect(box.width).toBeGreaterThanOrEqual(history.width * 0.9);
+});
+
 test("a Citizen page gets everything it asks for, and asks no backend", async ({
 	page,
 }) => {
