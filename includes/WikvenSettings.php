@@ -219,6 +219,15 @@ $wgWikvenSkins = array_values(array_unique($wgWikvenSkins));
 $wgWikvenMainSkin = $wgWikvenSkins[0] ?? $wgDefaultSkin;
 $wgDefaultSkin = $wgWikvenMainSkin;
 
+// Where each skin pass writes, which is the one place that knows the export's layout: the main
+// skin renders to the dist root, and every other skin to a subdirectory of it. A pass walking its
+// own output reads this to prune the other skins' pages out of the walk -- the main skin's
+// directory holds all of them (see OutputTree).
+$wgWikvenSkinDirectories = [];
+foreach ($wgWikvenSkins as $wikvenSkin) {
+	$wgWikvenSkinDirectories[$wikvenSkin] = $wikvenSkin === $wgWikvenMainSkin ? $wikvenDist : "$wikvenDist/$wikvenSkin";
+}
+
 // Per-skin build pass: WIKVEN_BUILD_SKIN renders main skin to dist root, others to dist/<skin>/.
 $wikvenBuildSkin = getenv('WIKVEN_BUILD_SKIN');
 if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, true)) {
