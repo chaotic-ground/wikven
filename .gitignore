@@ -5,6 +5,7 @@
 /out/
 /test-results/
 /playwright-report/
+/pw-root/
 
 # uv
 /.venv/
