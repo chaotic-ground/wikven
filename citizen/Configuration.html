@@ -568,7 +568,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <style data-mw-deduplicate="TemplateStyles:r82">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
 </div>
-<p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
+<p>Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See <a href="./Deploying.html#Keeping_pinned_sources_current" title="Special:MyLanguage/Deploying">Deploying</a> for keeping one current.
+</p><p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 </p>
 <div class="mw-heading mw-heading3"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
 <p>A standard MediaWiki setting (<a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces"><code>$wgContentNamespaces</code></a>) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven defaults it to <code>[0, 6]</code>, the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see <a href="./Pages.html#Categories" title="Special:MyLanguage/Pages">Pages#Categories</a>. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
@@ -601,7 +602,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration.wikitext" title="This page was last edited on 17 August 2026, at 11:33." data-timestamp="1786966404"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>17 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration.wikitext" title="This page was last edited on 17 August 2026, at 13:08." data-timestamp="1786972111"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>17 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -852,7 +853,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 17 August 2026, at 11:33.</div>
+		        <div class="page-info__text"> This page was last edited on 17 August 2026, at 13:08.</div>
 		    </section>
 		</div>
 </footer>		</div>
