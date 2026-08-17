@@ -357,6 +357,10 @@ class Build extends Maintenance {
 			$this->fatalError("Wikven: could not create output directory $dir");
 		}
 
+		// Before anything renders or is dumped: the bundle path reaches the client inside the script
+		// bundle buildScripts writes below, so this pass has to be pointed at its own copy first.
+		$searchBundle = $this->pointSearchAtThisCopy();
+
 		$this->step(RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", ['overwrite' => true]);
 		// RebuildFileCache renders in the content language; re-render translations in their own.
 		$this->step(RetranslateChrome::class, "$own/retranslateChrome.php");
@@ -378,6 +382,76 @@ class Build extends Maintenance {
 		$history = "$dir/history";
 		if (is_dir($history)) {
 			$this->removeDirectory($history);
+		}
+
+		// Last, so nothing above walks the bundle looking for pages to rewrite.
+		if ($searchBundle !== null) {
+			$this->copySearchBundle($searchBundle);
+		}
+	}
+
+	/**
+	 * Point this pass's search at a bundle of its own, and say where that bundle has to be written.
+	 *
+	 * A skin copy already holds its own pages, styles and scripts; the search index was the one
+	 * thing it went on reading out of the export root, and reading it there is what sent a reader
+	 * who searched back to the root copy (#399, and Search::copyBundlePath for why the bundle's
+	 * location decides that). So the copy gets its own, and every URL SifterSearch derives from it
+	 * -- a result, the results page, the form's target, the "containing" row -- lands in the copy
+	 * without anything on the client having to correct it.
+	 *
+	 * The main skin renders into the export root, where the index already is, so it needs none of
+	 * this; nor does a site whose bundle sits somewhere this cannot put a copy beside.
+	 *
+	 * @return ?string The directory the bundle must be copied to, or null where nothing is to change.
+	 */
+	private function pointSearchAtThisCopy(): ?string {
+		$skin = (string)( $GLOBALS['wgDefaultSkin'] ?? '' );
+		$main = (string)( $GLOBALS['wgWikvenMainSkin'] ?? '' );
+		if ($skin === '' || $skin === $main || !Search::isActive()) {
+			return null;
+		}
+		$path = Search::copyBundlePath((string)( $GLOBALS['wgSifterSearchBundlePath'] ?? '' ), $skin);
+		if ($path === null) {
+			return null;
+		}
+		$GLOBALS['wgSifterSearchBundlePath'] = $path;
+		// The copy is served at the copy's own output directory, and copyBundlePath left the
+		// bundle's last segment alone, so that segment is the directory to write under it.
+		return rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/') . '/' . basename(rtrim($path, '/'));
+	}
+
+	/**
+	 * Duplicate the built Pagefind bundle into this pass's copy of the site.
+	 *
+	 * The index job is held back to the end of the populate phase (see runJobs), which is before
+	 * any skin renders, so the bundle is complete and nothing writes to it again while this reads.
+	 */
+	private function copySearchBundle(string $destination): void {
+		$source = rtrim((string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' ), '/');
+		if ($source === '' || !is_dir($source)) {
+			// Search is on but nothing was indexed -- an empty wiki, or a Pagefind run that failed
+			// and reported itself. There is no bundle to serve from the root copy either.
+			return;
+		}
+		if (!wfMkdirParents($destination, null, __METHOD__)) {
+			$this->fatalError("Wikven: could not create search bundle directory $destination");
+		}
+		$entries = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::SELF_FIRST
+		);
+		foreach ($entries as $entry) {
+			// Cut the source off each path rather than ask the iterator for the relative one:
+			// getSubPathname() is the inner directory iterator's, reached through __call.
+			$target = $destination . '/' . substr($entry->getPathname(), strlen($source) + 1);
+			if ($entry->isDir()) {
+				if (!wfMkdirParents($target, null, __METHOD__)) {
+					$this->fatalError("Wikven: could not create $target");
+				}
+			} elseif (!copy($entry->getPathname(), $target)) {
+				$this->fatalError("Wikven: could not copy {$entry->getPathname()} to $target");
+			}
 		}
 	}
 

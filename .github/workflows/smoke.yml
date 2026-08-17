@@ -86,6 +86,18 @@ jobs:
             exit 1
           fi
 
+          # A skin copy reads the search index out of its own directory, which is what keeps a
+          # search from the skin a reader chose inside that skin's copy (#399). The bundle is put
+          # there by the skin pass; without it the copy's search answers nothing at all, and only
+          # the browser tests would notice.
+          test -s dist/pagefind/pagefind.js
+          for copy in citizen minerva; do
+            if [ ! -s "dist/$copy/pagefind/pagefind.js" ]; then
+              echo "::error::dist/$copy has no Pagefind bundle of its own"
+              exit 1
+            fi
+          done
+
           # Every printfooter "Retrieved from" link must resolve from the page that carries it
           # (#394). Core builds it from the page's own URL and expands away the "./" wikven writes,
           # so a page exported into a subdirectory needs the "../" per level rename.php adds; the

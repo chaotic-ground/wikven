@@ -52,4 +52,43 @@ class Search {
 	public static function hasResultsPage(): bool {
 		return self::isActive() && self::resultsPage() !== null;
 	}
+
+	/**
+	 * Where a skin copy loads the Pagefind bundle from, given the path the site serves its own at.
+	 *
+	 * A result carries the URL the page had under the crawl root, and the client resolves that
+	 * against the bundle's own parent directory, so the bundle's location is what decides which
+	 * copy of the site a search answers with. One bundle at the export root answers every copy
+	 * with the root copy's pages, which is a reader who chose a skin being taken out of it the
+	 * moment they search (#399). SifterSearch anchors the results page's own URL at the same
+	 * parent, so that leaves the copy too.
+	 *
+	 * The copy's bundle therefore sits beside the copy's pages: the site's path with the copy's
+	 * directory inserted ahead of its last segment, so "/wikven/pagefind/" becomes
+	 * "/wikven/citizen/pagefind/". Everything downstream is SifterSearch's own arithmetic on that
+	 * one value, which is why nothing here has to know about results, forms or suggestions.
+	 *
+	 * @param string $bundlePath The site's own bundle path, e.g. "/wikven/pagefind/".
+	 * @param string $directory The copy's directory name, which is the skin's, e.g. "citizen".
+	 * @return ?string null where the site's path says nothing about where this site's root is: a
+	 *   bundle served from another host, or a protocol-relative one, has no copy to put beside it.
+	 */
+	public static function copyBundlePath(string $bundlePath, string $directory): ?string {
+		if ($directory === '' || !str_starts_with($bundlePath, '/') || str_starts_with($bundlePath, '//')) {
+			return null;
+		}
+		// Cut as the string it is: dirname() answers with a filesystem path, whose root is a
+		// backslash on Windows, and this is a URL path either way.
+		$path = rtrim($bundlePath, '/');
+		$cut = strrpos($path, '/');
+		if ($cut === false) {
+			return null;
+		}
+		$segment = substr($path, $cut + 1);
+		if ($segment === '') {
+			// "/" alone: a bundle at the site root has no directory of its own to reproduce.
+			return null;
+		}
+		return substr($path, 0, $cut + 1) . $directory . '/' . $segment . '/';
+	}
 }
