@@ -554,6 +554,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.deploy.outputs.page_url }}</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10</span><span class="w">  </span><span class="c1"># v6.0.3</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="c1"># Whole history, so each page is dated at the commit that last changed</span>
+<span class="w">          </span><span class="c1"># its source file. A shallow checkout knows only the latest commit.</span>
+<span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d</span><span class="w">  </span><span class="c1"># v6.0.0</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@19392b75d379de9e349ef2963c11ec5545c3e6ab</span><span class="w">  </span><span class="c1"># v1.0.0</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
@@ -599,7 +603,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 00:31.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 00:32.</li>
 </ul>
 
 	<ul id="footer-places">

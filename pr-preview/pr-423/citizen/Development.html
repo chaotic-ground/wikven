@@ -465,7 +465,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dt><code>importImages</code></dt>
 <dd>Uploads the image files in the source directory into the <code>File:</code> namespace. It runs <b>before</b> the wikitext import, so pages that embed a local image render a real thumbnail instead of a broken-media placeholder.</dd>
 <dt><code>importWikitext</code></dt>
-<dd>Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions stamped with the file's modification time, so the footer shows a real "last modified" date.</dd>
+<dd>Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. Each page is dated at the commit that last changed its source file and credited to that commit's author, so the footer's "last edited" line agrees with the top of the history it links to. Where the repository's history is out of reach — a shallow checkout, or a source directory that is not one — every page is dated at the commit being built and named to nobody.</dd>
 <dt><code>RunJobs</code></dt>
 <dd>Runs MediaWiki's job queue, mainly thumbnail generation and link-table updates.</dd>
 <dt><code>RebuildFileCache</code></dt>
@@ -516,7 +516,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development.wikitext" title="This page was last edited on 17 August 2026, at 00:31." data-timestamp="1786926698"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>17 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development.wikitext" title="This page was last edited on 17 August 2026, at 00:32." data-timestamp="1786926734"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>17 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -687,7 +687,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 17 August 2026, at 00:31.</div>
+		        <div class="page-info__text"> This page was last edited on 17 August 2026, at 00:32.</div>
 		    </section>
 		</div>
 </footer>		</div>

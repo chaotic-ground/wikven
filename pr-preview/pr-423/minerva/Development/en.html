@@ -243,7 +243,7 @@ Wikven
 <dt><code>importImages</code></dt>
 <dd>Uploads the image files in the source directory into the <code>File:</code> namespace. It runs <b>before</b> the wikitext import, so pages that embed a local image render a real thumbnail instead of a broken-media placeholder.</dd>
 <dt><code>importWikitext</code></dt>
-<dd>Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions stamped with the file's modification time, so the footer shows a real "last modified" date.</dd>
+<dd>Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. Each page is dated at the commit that last changed its source file and credited to that commit's author, so the footer's "last edited" line agrees with the top of the history it links to. Where the repository's history is out of reach — a shallow checkout, or a source directory that is not one — every page is dated at the commit being built and named to nobody.</dd>
 <dt><code>RunJobs</code></dt>
 <dd>Runs MediaWiki's job queue, mainly thumbnail generation and link-table updates.</dd>
 <dt><code>RebuildFileCache</code></dt>
@@ -290,10 +290,10 @@ Wikven
   		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
  
   		<span class="last-modified-bar__text modified-enhancement"
-  				data-user-name="FuzzyBot"
+  				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1786926698">
-  				<span>Last edited on 17 August 2026, at 00:31</span>
+  				data-timestamp="1786926734">
+  				<span>Last edited on 17 August 2026, at 00:32</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -316,7 +316,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 00:31.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 00:32.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
