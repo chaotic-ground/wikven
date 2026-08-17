@@ -94,7 +94,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 		<ul class="vector-menu-content-list">
 			
-			<li id="n-sidebar-configuration" class="mw-list-item"><a href="../Configuration/en.html"><span>Configuration</span></a></li><li id="n-sidebar-standalone-binary" class="mw-list-item"><a href="../Standalone_binary/en.html"><span>Standalone binary</span></a></li><li id="n-sidebar-development" class="mw-list-item"><a href="../Development/en.html"><span>Development</span></a></li><li id="n-sidebar-version" class="mw-list-item"><a href="../Version.html"><span>Version</span></a></li><li id="n-sidebar-licenses" class="mw-list-item"><a href="../Licenses/en.html"><span>Licenses</span></a></li>
+			<li id="n-sidebar-configuration" class="mw-list-item"><a href="../Configuration/en.html"><span>Configuration</span></a></li><li id="n-sidebar-standalone-binary" class="mw-list-item"><a href="../Standalone_binary/en.html"><span>Standalone binary</span></a></li><li id="n-sidebar-development" class="mw-list-item"><a href="../Development/en.html"><span>Development</span></a></li><li id="n-sidebar-licenses" class="mw-list-item"><a href="../Licenses/en.html"><span>Licenses</span></a></li>
 		</ul>
 		
 	</div>
@@ -362,16 +362,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-WikvenMainPage-sublist" class="vector-toc-list">
 			</ul>
 		</li>
-		<li id="toc-WikvenVersionPage"
+		<li id="toc-WikvenAboutPage"
 			class="vector-toc-list-item vector-toc-level-2">
-			<a class="vector-toc-link" href="#WikvenVersionPage">
+			<a class="vector-toc-link" href="#WikvenAboutPage">
 				<div class="vector-toc-text">
 					<span class="vector-toc-numb">3.4</span>
-					<span>WikvenVersionPage</span>
+					<span>WikvenAboutPage</span>
 				</div>
 			</a>
 			
-			<ul id="toc-WikvenVersionPage-sublist" class="vector-toc-list">
+			<ul id="toc-WikvenAboutPage-sublist" class="vector-toc-list">
 			</ul>
 		</li>
 		<li id="toc-WikvenFooterUrl"
@@ -654,7 +654,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from <a href="#WikvenRepositories"><code>WikvenRepositories</code></a>. See <a href="../Skins/en.html" title="Special:MyLanguage/Skins">Skins</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="config"><code>config</code></h2></div>
-<p>A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">configuration setting</a> can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
+<p>A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">configuration setting</a> can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenAboutPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenLogos"><code>WikvenLogos</code></h3></div>
 <p>The site's header logos. It mirrors MediaWiki's <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgLogos">$wgLogos</a>, with the same keys (<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code>, and so on), except each value is the name of an image file in your source directory rather than a URL:
@@ -667,13 +667,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenEditUrl,_WikvenHistoryUrl_and_WikvenViewSourceUrl"><span id="WikvenEditUrl.2C_WikvenHistoryUrl_and_WikvenViewSourceUrl"></span><code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> and <code>WikvenViewSourceUrl</code></h3></div>
-<p>The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the <a href="#WikvenVersionPage">Version</a> page) has no source file, so these links are omitted for it.
+<p>The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the <a href="#WikvenAboutPage">About</a> page, when the build writes it) has no source file, so these links are omitted for it.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenMainPage"><code>WikvenMainPage</code></h3></div>
 <p>The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Defaults to <code>index</code>, so naming your entry file <code>index.wikitext</code> works with no configuration. The page must be one you imported; the build fails if it is missing.
 </p>
-<div class="mw-heading mw-heading3"><h3 id="WikvenVersionPage"><code>WikvenVersionPage</code></h3></div>
-<p>The title of an auto-generated page (mirroring <code>Special:Version</code>) that lists the installed software, extensions and skins, linked from the footer. Defaults to <code>Version</code>. Set it empty to disable the page; a source page of the same name takes precedence over the generated one.
+<div class="mw-heading mw-heading3"><h3 id="WikvenAboutPage"><code>WikvenAboutPage</code></h3></div>
+<p>The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Defaults to <code>About</code>. Write a source page of that name and it is used exactly as written; the build also generates a <code>Wikven software</code> template listing the installed software, extensions and skins (what <code>Special:Version</code> would show, which an export has no room for), so put <code>{{Wikven software}}</code> wherever you want that list, or leave it out. With no source page of that name, the build writes one holding an introduction with the list under it. Set it empty to write no page at all, and the footer link goes with it.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenFooterUrl"><code>WikvenFooterUrl</code></h3></div>
 <p>A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...).
@@ -703,7 +703,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A name in <code>WikvenRepositories</code> that is already bundled with wikven is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
 </p><p>Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">binary</a> they must be on your <code>PATH</code>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r75">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r74">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
 </div>
 <p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="../Getting_Started/en.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 </p>
@@ -719,7 +719,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>It is also in the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/default.yml">repository</a>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r77">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Troubleshooting/en.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a></div><div class="wikven-prevnext-next"><a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r76">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Troubleshooting/en.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a></div><div class="wikven-prevnext-next"><a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="../Configuration/en.html">Configuration/en.html</a>"</div></div>
@@ -732,12 +732,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 16 August 2026, at 14:18.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 01:02.</li>
 </ul>
 
 	<ul id="footer-places">
+	<li id="footer-places-about"><a href="../About.html">About Wikven</a></li>
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
-	<li id="footer-places-version"><a href="../Version.html">Version</a></li>
 	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
 </ul>
 
