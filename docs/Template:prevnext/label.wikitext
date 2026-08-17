@@ -4,8 +4,11 @@ on, read from the one place that title is translated -- the target's reserved ti
 build writes to Translate's "Page display title" unit. Nothing here is translated, so a renamed or
 retranslated page carries its links with it.
 
-Outside <translate>, TRANSLATIONLANGUAGE is the language of the page it sits on, which is what a
-static export needs: a page is exported once, so the language is the page's, not the reader's.
+Outside a translate tag -- where a prevnext always is, being copied whole into each translation --
+TRANSLATIONLANGUAGE is the language of the page it sits on, which is what a static export needs: a
+page is exported once, so the language is the page's, not the reader's. (The tag is not named here
+in its own syntax on purpose: Translate reads one anywhere in the wikitext, comment or not, and an
+opening tag with no closing one is a page it refuses.)
 
 A target whose title unit is missing falls back to the page name, which is its title in the source
 language anyway. That covers a source-language page, a page with no translation, one that fixes its
