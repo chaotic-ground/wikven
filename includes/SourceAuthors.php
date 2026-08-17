@@ -50,8 +50,9 @@ class SourceAuthors {
 			if (!array_key_exists($name, $this->accounts)) {
 				$this->accounts[$name] = $this->create($name);
 			}
-			if ($this->accounts[$name] !== null) {
-				return $this->accounts[$name];
+			$account = $this->accounts[$name];
+			if ($account !== null) {
+				return $account;
 			}
 		}
 
