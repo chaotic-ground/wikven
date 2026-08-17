@@ -142,8 +142,8 @@ e2e 실행은 GitHub Pages가 그러하듯 <code>dist/</code>를 <code>/wikven/<
 <!--T:22 @9c7c0fee-->
 == 지속적 통합 ==
 
-<!--T:23 @2079509e-->
-* <code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행하고, {{SITENAME}}의 모든 설정 변수가 문서화되어 있는지 검사합니다.
+<!--T:23 @0b9d15f8-->
+* <code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행하고, 이 사이트가 {{SITENAME}}의 모든 설정 변수와 빌드의 모든 단계를 문서화하고 있는지 검사합니다.
 * <code>test.yml</code>과 <code>quibble.yml</code>은 PHPUnit 스위트와 MediaWiki 자체의 구조 테스트를 실행합니다.
 * <code>smoke.yml</code>은 이 사이트를 굽고 그 출력을 브라우저에서, 그리고 바이트 단위로 검증합니다.
 * <code>translations.yml</code>은 [[$2|check-translations 액션]]을 통해 <code>docs/</code>의 오래된 번역을 보고합니다.
