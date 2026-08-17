@@ -22,6 +22,18 @@ const LIST = `${MENU} .mw-portlet-wikven-skins`;
 const TOOLS = ".vector-page-tools-landmark";
 const TOOLS_OPENER = "#vector-page-tools-dropdown-checkbox";
 
+// Where each label's text actually starts, which is what a reader sees lining up (or not). A
+// range over the contents rather than the element's own box: the element is laid out to the
+// menu's width, so its box is the same wherever the text inside it is put.
+const labelLefts = (page, selector) =>
+	page.locator(selector).evaluateAll((labels) =>
+		labels.map((label) => {
+			const range = document.createRange();
+			range.selectNodeContents(label);
+			return range.getBoundingClientRect().left;
+		}),
+	);
+
 // Vector renders the export's main skin at the root; a page there that no export renders in Vector
 // would leave every assertion below vacuous.
 test.beforeEach(async ({ page }) => {
@@ -82,9 +94,16 @@ test("the skins are laid out one to a row, like the choices above them", async (
 			row.top,
 			`entry ${index} shares a line with the one before it`,
 		).toBeGreaterThanOrEqual(rows[index - 1].bottom - 0.5);
-		// And down a common edge, so the section reads as a list rather than as prose.
-		expect(row.left, `entry ${index} does not line up`).toBeCloseTo(
-			rows[0].left,
+	}
+
+	// And down a common edge. Measured on the text rather than on the entry, because the entry
+	// fills the menu's width whatever the label inside it does: centred names sit on a row each
+	// and still line their boxes up, so the boxes say nothing about what a reader sees.
+	const lefts = await labelLefts(page, `${LIST} .mw-list-item > *`);
+	expect(lefts).toHaveLength(rows.length);
+	for (const [index, left] of lefts.entries()) {
+		expect(left, `entry ${index}'s name does not line up`).toBeCloseTo(
+			lefts[0],
 			0,
 		);
 	}

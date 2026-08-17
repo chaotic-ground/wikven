@@ -60,6 +60,10 @@
     margin: 0;
     padding: 0;
     list-style: none;
+    // The chrome this menu is drawn in centres its text, which leaves the skin names strung down
+    // the middle while every choice above them is ranged left. `start` rather than `left`, so a
+    // right-to-left reading keeps its own edge.
+    text-align: start;
   }
 
   .mw-list-item {
