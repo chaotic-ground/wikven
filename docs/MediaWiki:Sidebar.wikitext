@@ -20,5 +20,5 @@
 ** Special:MyLanguage/Configuration|sidebar-configuration
 ** Special:MyLanguage/Standalone binary|sidebar-standalone-binary
 ** Special:MyLanguage/Development|sidebar-development
-** Special:MyLanguage/Version|sidebar-version
+** Special:MyLanguage/About|sidebar-about
 ** Special:MyLanguage/Licenses|sidebar-licenses

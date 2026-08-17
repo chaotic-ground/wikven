@@ -36,7 +36,7 @@ A list of skin names to enable. The first one is used as the default skin. As wi
 == <code>config</code> ==
 
 <!--T:7-->
-A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenVersionPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
+A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenAboutPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
 
 <!--T:8-->
 === <code>WikvenLogos</code> ===
@@ -62,7 +62,7 @@ Wikven also ships a small default favicon so browsers do not 404 on <code>/favic
 === <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> and <code>WikvenViewSourceUrl</code> ===
 
 <!--T:13-->
-The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the [[#WikvenVersionPage|Version]] page) has no source file, so these links are omitted for it.
+The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the [[#WikvenAboutPage|About]] page, when the build writes it) has no source file, so these links are omitted for it.
 
 <!--T:14-->
 === <code>WikvenMainPage</code> ===
@@ -71,10 +71,10 @@ The targets the "Edit", "View history" and "View source" links point at, so a re
 The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Defaults to <code>index</code>, so naming your entry file <code>index.wikitext</code> works with no configuration. The page must be one you imported; the build fails if it is missing.
 
 <!--T:16-->
-=== <code>WikvenVersionPage</code> ===
+=== <code>WikvenAboutPage</code> ===
 
 <!--T:17-->
-The title of an auto-generated page (mirroring <code>Special:Version</code>) that lists the installed software, extensions and skins, linked from the footer. Defaults to <code>Version</code>. Set it empty to disable the page; a source page of the same name takes precedence over the generated one.
+The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Defaults to <code>About</code>. Write a source page of that name and it is used exactly as written; the build also generates a <code>Wikven software</code> template listing the installed software, extensions and skins (what <code>Special:Version</code> would show, which an export has no room for), so put <code><nowiki>{{Wikven software}}</nowiki></code> wherever you want that list, or leave it out. With no source page of that name, the build writes one holding an introduction with the list under it. Set it empty to write no page at all, and the footer link goes with it.
 
 <!--T:18-->
 === <code>WikvenFooterUrl</code> ===

@@ -1,0 +1,11 @@
+<!--T:title @4efca0d1-->
+소개
+
+<!--T:1 @dd694669-->
+{{SITENAME}}은 위키텍스트 파일 디렉터리를 정적 웹사이트로 바꿉니다. MediaWiki 자체를 구동하므로 문서는 위키가 주는 문법과 틀, 파서 함수로 쓰고, 그 결과를 갈무리합니다. 내보내는 것은 평범한 HTML, CSS, JavaScript, 이미지이며, 파일을 서빙할 수 있는 곳이면 어디서든 서빙됩니다. 게시된 사이트 뒤에는 서버도 데이터베이스도 없습니다.
+
+<!--T:2 @f96f20a3-->
+이 사이트도 그 빌드 중 하나입니다. 여기의 모든 문서는 [$1 <code>docs/</code>] 아래의 <code>.wikitext</code> 파일에서 나오며, 문서가 권장하는 바로 그 [$2 액션]으로 구워집니다. 각 문서의 "편집"과 "역사 보기" 링크는 리포지터리의 그 파일로 이어집니다.
+
+<!--T:3 @6508c726-->
+{{SITENAME}}은 자유 소프트웨어이며 [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]로 라이선스됩니다. 재배포하는 소프트웨어는 [[$3|라이선스]] 문서에서 밝히고 있습니다. 이슈와 풀 리퀘스트는 [https://github.com/chaotic-ground/wikven GitHub]에서 환영합니다.

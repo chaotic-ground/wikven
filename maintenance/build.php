@@ -28,6 +28,9 @@ class Build extends Maintenance {
 	/** Fallback for the frozen timestamps when the caller names none; chosen only for being fixed. */
 	private const FROZEN_TIMESTAMP = '20000101000000';
 
+	/** Template the generated software list is written to, so an About page can place it itself. */
+	private const SOFTWARE_TEMPLATE = 'Wikven software';
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Run the full wikven static-site build in a single process.');
@@ -48,7 +51,7 @@ class Build extends Maintenance {
 		$this->importImages("$ip/maintenance/importImages.php");
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
-		$this->setVersionPage();
+		$this->setAboutPage();
 		$this->setSettingsPage();
 		$this->dropDeadPlaceLinks();
 		$this->dropDeadCategoryLink();
@@ -548,17 +551,40 @@ class Build extends Maintenance {
 		);
 	}
 
-	/** Generate a Version page (static Special:Version) listing software, extensions and skins. */
-	private function setVersionPage(): void {
-		$name = $GLOBALS['wgWikvenVersionPage'] ?? 'Version';
-		if ($name === '') {
-			return;
-		}
-		$title = Title::newFromText($name);
-		if (!$title || $title->exists()) {
+	/**
+	 * Give the site an About page, and MediaWiki's own footer link something to point at.
+	 *
+	 * An export has no Special:Version to send a reader to, and what that page holds -- what built
+	 * this site -- is something a wiki's About page carries anyway. So this is one page rather than
+	 * two: the software list is generated into {{Wikven software}}, and an About page transcludes
+	 * it. A source page of the configured name is left exactly as written, so a site introduces
+	 * itself in its own words and puts the list where it wants it (or leaves it out); with no
+	 * source page, the build writes an introduction with the list under it.
+	 *
+	 * The footer entry is core's own "About {{SITENAME}}" place link, pointed here through
+	 * MediaWiki:Aboutpage, which is where a reader of any wiki looks for it. Configured empty, no
+	 * page is written and dropDeadPlaceLinks() blanks that entry as it does the other dead ones.
+	 */
+	private function setAboutPage(): void {
+		$name = (string)( $GLOBALS['wgWikvenAboutPage'] ?? '' );
+		$title = $name === '' ? null : Title::newFromText($name);
+		if (!$title) {
 			return;
 		}
 
+		$this->savePage('Template:' . self::SOFTWARE_TEMPLATE, $this->softwareList(), 'Generate the software list');
+		if (!$title->exists()) {
+			$this->savePage(
+				$title->getPrefixedText(),
+				$this->contentMsg('wikven-about-intro') . "\n\n{{" . self::SOFTWARE_TEMPLATE . "}}\n",
+				'Generate the about page'
+			);
+		}
+		$this->savePage('MediaWiki:Aboutpage', $title->getPrefixedText(), 'Point the About link at the about page');
+	}
+
+	/** The installed software, extensions and skins, as the wikitext {{Wikven software}} holds. */
+	private function softwareList(): string {
 		$db = $this->getServiceContainer()->getConnectionProvider()->getReplicaDatabase();
 		$software = [
 			['[https://www.mediawiki.org/ MediaWiki]', MW_VERSION],
@@ -566,7 +592,7 @@ class Build extends Maintenance {
 			[ucfirst($db->getType()), $db->getServerVersion()]
 		];
 
-		$text = $this->contentMsg('wikven-version-intro') . "\n\n";
+		$text = $this->contentMsg('wikven-about-software') . "\n\n";
 		$text .= '== ' . $this->contentMsg('version-software') . " ==\n";
 		$text .=
 			"{| class=\"wikitable\"\n! "
@@ -591,15 +617,23 @@ class Build extends Maintenance {
 		}
 		$text .= $this->componentTable('version-extensions', 'version-ext-colheader-name', $extensions);
 		$text .= $this->componentTable('version-skins', 'version-skin-colheader-name', $skins);
+		return $text;
+	}
 
+	/** Write one page the build generates, creating or replacing it. */
+	private function savePage(string $titleText, string $text, string $summary): void {
+		$title = Title::newFromText($titleText);
+		if (!$title) {
+			return;
+		}
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
 		$updater = $page->newPageUpdater($user);
 		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($text, $title));
-		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Generate the version page'));
+		$updater->saveRevision(CommentStoreComment::newUnsavedComment($summary));
 	}
 
-	/** A message in the wiki's content language (the version page is content, not UI chrome). */
+	/** A message in the wiki's content language (the pages here are content, not UI chrome). */
 	private function contentMsg(string $key): string {
 		return wfMessage($key)->inContentLanguage()->text();
 	}
