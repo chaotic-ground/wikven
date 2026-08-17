@@ -44,18 +44,14 @@ It runs a real MediaWiki at build time.
 <translate>
 <!--T:8-->
 You do not number the units by hand. Wrap the content in <code>&lt;translate&gt;</code> and add <code>&lt;languages/&gt;</code>, then run <code>translate mark</code> to insert the <code>&lt;!--T:n--&gt;</code> markers, mounting your source directory writable:
+
+<!--T:33-->
+{{note|The four <code>translate</code> helpers on this page come with the Docker image. The standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] builds and serves a site but has no <code>translate</code> command, so use the image for these steps even if you build with the binary. See [[<tvar name="2">Special:MyLanguage/Commands#translate</tvar>|Commands]].}}
 </translate>
 
-<tabber>
-|-|Binary=
-<syntaxhighlight lang="console">
-$ wikven translate mark --all
-</syntaxhighlight>
-|-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate mark --all
 </syntaxhighlight>
-</tabber>
 
 <translate>
 <!--T:9-->
@@ -68,16 +64,9 @@ Pass a single file instead of <code>--all</code> to mark just that page. Marking
 A translation lives next to the page, named <code><Page>/<lang>.wikitext</code>: the Korean translation of <code>Intro.wikitext</code> is <code>Intro/ko.wikitext</code>. Generate its skeleton with <code>translate scaffold</code>, which writes an empty <code>&lt;!--T:n--&gt;</code> marker for every source unit and lists each unit's source text as a guide:
 </translate>
 
-<tabber>
-|-|Binary=
-<syntaxhighlight lang="console">
-$ wikven translate scaffold ko Intro.wikitext
-</syntaxhighlight>
-|-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate scaffold ko Intro.wikitext
 </syntaxhighlight>
-</tabber>
 
 <translate>
 <!--T:12-->
@@ -127,16 +116,9 @@ A page that sets its own title with the <code>DISPLAYTITLE</code> magic word is 
 After translating, run <code>translate stamp</code> so every up-to-date unit records the source version it matches. Mount your source directory writable:
 </translate>
 
-<tabber>
-|-|Binary=
-<syntaxhighlight lang="console">
-$ wikven translate stamp --all
-</syntaxhighlight>
-|-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate stamp --all
 </syntaxhighlight>
-</tabber>
 
 <translate>
 <!--T:17-->
@@ -153,22 +135,12 @@ When you change a source unit, its translations no longer match their stamp and 
 * <code>translate check</code> reports every out-of-date or missing translation as a warning, and every broken source page as an error. With <code>--gate</code> it exits non-zero on the errors alone, so continuous integration fails on a page nobody can translate but not on a translation that is merely behind:
 </translate>
 
-<tabber>
-|-|Binary=
-<syntaxhighlight lang="console">
-$ wikven translate check --gate
-::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)
-
-1 translation(s) out of date or missing.
-</syntaxhighlight>
-|-|Docker=
 <syntaxhighlight lang="console">
 $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven translate check --gate
 ::warning file=src/Intro/ko.wikitext::Stale translation unit T:2 (ko)
 
 1 translation(s) out of date or missing.
 </syntaxhighlight>
-</tabber>
 
 <translate>
 <!--T:21-->

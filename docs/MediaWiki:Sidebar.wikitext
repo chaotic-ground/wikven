@@ -11,6 +11,7 @@
 ** Special:MyLanguage/Editing sidebar|sidebar-editing-sidebar
 ** Special:MyLanguage/Images|sidebar-images
 ** Special:MyLanguage/Skins|sidebar-skins
+** Special:MyLanguage/Extensions|sidebar-extensions
 ** Special:MyLanguage/JavaScript|sidebar-javascript
 ** Special:MyLanguage/Searching|sidebar-searching
 ** Special:MyLanguage/Translating|sidebar-translating
@@ -19,6 +20,7 @@
 * sidebar-references
 ** Special:MyLanguage/Configuration|sidebar-configuration
 ** Special:MyLanguage/Standalone binary|sidebar-standalone-binary
+** Special:MyLanguage/Commands|sidebar-commands
 ** Special:MyLanguage/Development|sidebar-development
 ** Special:MyLanguage/Writing an extension|sidebar-writing-an-extension
 ** Special:MyLanguage/Licenses|sidebar-licenses

@@ -51,7 +51,7 @@ docker run --rm \
 </syntaxhighlight>
 <translate>
 <!--T:8-->
-The untagged image tracks the latest build; append a release tag such as <code>:1.0.0</code> to pin a specific version.
+The untagged image tracks the latest build on the main branch. No version has been released yet, so there is no <code>:1.2.3</code> tag to pin instead; to hold a build still, pin its digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
 </translate>
 </tabber>
 

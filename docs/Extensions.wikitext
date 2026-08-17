@@ -1,0 +1,88 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+{{SITENAME}} runs a real MediaWiki at build time, so a MediaWiki extension works the way it always does — as long as what it does can be finished before the site is published. This page is about which extensions you can have, and how to get one that is not already there.
+
+<!--T:2-->
+== Enabling an extension ==
+
+<!--T:3-->
+List it in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]] by name. Extensions that ship inside {{SITENAME}} need nothing else:
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - ParserFunctions
+  - SyntaxHighlight_GeSHi
+</syntaxhighlight>
+
+<translate>
+<!--T:4-->
+A name {{SITENAME}} cannot find on disk is skipped with a warning in the build log rather than failing the build, so a typo shows up as an extension that quietly did nothing. Anything not shipped has to say where it comes from, under [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]].
+
+<!--T:5-->
+== What is already there ==
+
+<!--T:6-->
+The {{SITENAME}} image carries everything [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions</tvar> bundled with MediaWiki] — ParserFunctions, Cite, Gadgets, SyntaxHighlight_GeSHi, TemplateStyles and the rest — plus three {{SITENAME}} adds for what a static site needs:
+
+<!--T:7-->
+; [<tvar name="1">https://github.com/chaotic-ground/SifterSearch</tvar> SifterSearch]
+: Client-side search. Enabled by default on every site, so [[<tvar name="2">Special:MyLanguage/Searching</tvar>|search]] works with no configuration at all.
+; [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Translate</tvar> Translate]
+: Multilingual pages, driven from your source tree. See [[<tvar name="2">Special:MyLanguage/Translating</tvar>|Translating]].
+; [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:UniversalLanguageSelector</tvar> UniversalLanguageSelector]
+: Translate's own dependency, and where [[<tvar name="2">Special:MyLanguage/Configuration#WikvenBundleWebfonts</tvar>|bundled webfonts]] come from.
+
+<!--T:8-->
+The last two are loaded only if you list them; SifterSearch is loaded for you. To see exactly what a given image holds, ask it:
+</translate>
+
+<syntaxhighlight lang="shell" copy>
+docker run --rm --entrypoint ls ghcr.io/chaotic-ground/wikven extensions
+docker run --rm --entrypoint ls ghcr.io/chaotic-ground/wikven skins
+</syntaxhighlight>
+
+<translate>
+<!--T:9-->
+== Anything else ==
+
+<!--T:10-->
+An extension that is not in the image is fetched at build time from a source you declare — a tarball, a Git repository, or a Composer package. The name still goes in <code>extensions</code>; <code>WikvenRepositories</code> only says where to get it:
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - TabberNeue
+config:
+  WikvenRepositories:
+    TabberNeue:
+      repository: https://github.com/StarCitizenTools/mediawiki-extensions-TabberNeue.git
+      reference: v4.0.0
+</syntaxhighlight>
+
+<translate>
+<!--T:11-->
+This documentation site fetches TabberNeue exactly like that — the tabs on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are it — along with MobileFrontend, which [[<tvar name="2">Special:MyLanguage/Skins</tvar>|MinervaNeue]] leans on. See [[<tvar name="3">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] for the three ways to name a source, the host tools each one needs, and why to pin what you fetch.
+
+<!--T:12-->
+== What will not work ==
+
+<!--T:13-->
+An extension has to do its work during the build, because the published site is files on a host that runs no PHP. That rules out a whole class of them, however well they behave on a live wiki:
+
+<!--T:14-->
+* '''Anything that edits.''' VisualEditor, WikiEditor and CodeEditor have nothing to save to.
+* '''Anything that answers a request.''' An extension whose feature is a special page, an API module, or a query run when a reader clicks, has no server to run on. Whatever it renders into a page at build time is all that survives.
+* '''Anything keyed to a reader.''' There are no accounts, no preferences and no sessions in an export, so notifications, watchlists and per-user settings have nothing to work with.
+
+<!--T:15-->
+Extensions that only change how wikitext renders — parser tags, parser functions, styling, templating — are the ones that work best, because their whole job is over by the time the page is written out.
+
+<!--T:16-->
+An extension of your own can also be made to survive a build deliberately; [[<tvar name="1">Special:MyLanguage/Writing an extension</tvar>|Writing an extension]] is the contract for that.
+</translate>
+
+{{prevnext|Skins|JavaScript}}

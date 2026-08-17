@@ -149,3 +149,5 @@ Worth checking specifically:
 * [[<tvar name="2">Special:MyLanguage/Development</tvar>|Development]] — the build pipeline, step by step.
 * [[<tvar name="3">Special:MyLanguage/JavaScript</tvar>|JavaScript]] — how scripts and gadgets are bundled for a static host.
 </translate>
+
+{{prevnext|Development|Licenses}}

@@ -1,0 +1,130 @@
+<!--T:title @b269dc4e-->
+명령어
+
+<!--T:1 @153a55d2-->
+{{SITENAME}}을 실행하는 모든 방법 — [[$1|Docker 이미지]], [[$2|단독 실행 바이너리]], GitHub 액션 — 은 같은 빌드를 구동합니다. 이 문서는 그 셋 모두에 대한 참고서입니다. 무엇을 실행할 수 있고, 무엇을 전달할 수 있으며, 환경에서 무엇을 읽는지를 다룹니다.
+
+<!--T:2 @4a96112c-->
+== 작업 디렉터리 ==
+
+<!--T:3 @73568df0-->
+{{SITENAME}}은 디렉터리 하나를 기준으로 동작하고, 나머지는 모두 거기서 파생됩니다:
+
+<!--T:4 @00e73a34-->
+; <code>&lt;workdir&gt;/src</code>
+: 여러분의 위키텍스트, 이미지, <code>.wikven.yaml</code>. 읽기만 하며, 번역 도우미를 쓸 때를 빼고는 쓰지 않습니다.
+; <code>&lt;workdir&gt;/dist</code>
+: 빌드된 사이트. 빌드가 시작될 때마다 비워집니다.
+; <code>&lt;workdir&gt;/.cache</code>
+: 일회용 데이터베이스와 MediaWiki의 임시 공간. 여러분의 사이트에 속하는 것은 없으며, 빌드 사이에 지워도 됩니다.
+
+<!--T:5 @9fa0a4fb-->
+Docker 이미지는 작업 디렉터리가 <code>/workspace</code>이고, 그래서 빌드가 <code>src</code>와 <code>dist</code>를 그 아래에 마운트합니다. 바이너리는 현재 디렉터리를 씁니다. 어느 쪽이든 <code>WIKVEN_WORKDIR</code>이 이를 덮어씁니다.
+
+<!--T:6 @39afb933-->
+== <code>build</code> ==
+
+<!--T:7 @5b4b14d4-->
+<code>src/</code>를 <code>dist/</code>로 빌드합니다. 이미지의 기본 명령이므로 Docker 쪽은 인자가 필요 없습니다:
+
+<!--T:8 @702e3fd8-->
+옵션은 없습니다. 빌드에 알려 줄 수 있는 것은 모두 [[$1|<code>.wikven.yaml</code>]]에 있습니다. 실패한 빌드는 0이 아닌 값으로 끝나며 어느 문서나 단계에서 실패했는지 알려 줍니다.
+
+<!--T:9 @4839de7e-->
+== <code>serve</code> ==
+
+<!--T:10 @c2352ed4-->
+이미 빌드된 <code>dist/</code>를 로컬 미리보기용으로 8080 포트에서 제공합니다. 빌드는 하지 않으므로 <code>build</code>를 먼저 실행하십시오.
+
+<!--T:11 @8221d3a9-->
+<code>--listen</code>은 바이너리만 받습니다. 컨테이너는 안에서 항상 8080을 듣고, 바깥 포트는 Docker 자신의 <code>-p</code>로 정합니다.
+
+<!--T:12 @4cfaef70-->
+== <code>translate</code> ==
+
+<!--T:13 @29242b5c-->
+[[$1|번역하기]] 뒤에 있는 네 가지 도우미입니다. 소스 트리를 대상으로 동작하며 아무것도 빌드하지 않고 끝납니다.
+
+<!--T:14 @2cfe7d0e-->
+{{note|이들은 Docker 이미지에만 있습니다. 단독 실행 바이너리는 <code>build</code>와 <code>serve</code>만 등록하므로 <code>wikven translate</code>는 그 바이너리에 없는 명령입니다.}}
+
+<!--T:15 @430857d1-->
+; <code>translate mark</code>
+: 소스 문서에서 아직 표시되지 않은 단위에 <code>&lt;!--T:n--&gt;</code> 표시자를 넣습니다. 이미 있는 번호는 유지하므로 다시 실행해도 안전합니다.
+; <code>translate scaffold &lt;언어&gt;</code>
+: 번역해 넣을 골격으로, 모든 원본 단위에 대해 빈 표시자를 <code>&lt;Page&gt;/&lt;언어&gt;.wikitext</code>에 씁니다. 이미 번역한 것은 유지합니다.
+; <code>translate stamp</code>
+: 번역된 각 단위가 어느 원본 판에 맞춰졌는지 기록하여 최신임을 표시합니다.
+; <code>translate check</code>
+: 망가진 원본 문서와, 오래되었거나 빠진 번역을 보고합니다. 아무것도 쓰지 않습니다.
+
+<!--T:16 @490983b6-->
+각각 파일 하나를 받거나, 소스 디렉터리 아래 모든 문서를 대상으로 하는 <code>--all</code>을 받습니다. <code>mark</code>, <code>scaffold</code>, <code>stamp</code>는 소스에 쓰므로 쓰기 가능하게 마운트하고, <code>check</code>는 읽기만 합니다.
+
+<!--T:17 @0422d385-->
+<code>check</code>는 두 가지를 더 받습니다:
+
+<!--T:18 @95cc3314-->
+; <code>--gate</code>
+: '''원본 문서'''가 망가졌을 때 0이 아닌 값으로 끝냅니다. 오래되었거나 빠진 번역은 어느 쪽이든 보고되지만 실행을 실패시키지는 않습니다. 번역은 영어 문서를 고친 사람의 몫이 아니기 때문입니다.
+; <code>--path-prefix &lt;접두사&gt;</code>
+: 보고되는 파일 이름 앞에 접두사를 붙여, 컨테이너 안의 경로가 아니라 저장소의 경로로 읽히게 합니다.
+
+<!--T:19 @71dbe2f0-->
+== 환경 변수 ==
+
+<!--T:20 @0898dd5d-->
+; <code>WIKVEN_WORKDIR</code>
+: 위에서 설명한 작업 디렉터리. 이미지에서는 <code>/workspace</code>, 바이너리에서는 현재 디렉터리가 기본값입니다.
+; <code>SOURCE_DATE_EPOCH</code>
+: 빌드가 자기 내용이 쓰였다고 밝힐 유닉스 시각으로, [$1 reproducible-builds 관례]를 따릅니다. 빌드는 시계를 그 값에 얼린 채 실행되므로 출력의 모든 시각이 일정합니다. 설정하지 않으면 고정된 날짜를 씁니다. 매번 움직이는 날짜보다 틀렸더라도 움직이지 않는 쪽이 감당하기 쉽기 때문입니다. [[$2|bake 액션]]은 빌드 중인 커밋의 시각으로 설정합니다.
+; <code>WIKVEN_BUILD_JOBS</code>
+: 스킨 렌더링을 몇 개까지 나란히 돌릴지. 설정하지 않으면 쓸 수 있는 프로세서 하나당 하나씩 쓰는데, 호스트가 아니라 컨테이너에 허용된 몫을 따릅니다. 나란히 돌릴 렌더링이 있는 것은 [[$3|스킨을 둘 이상으로 빌드한]] 사이트뿐입니다. 메모리가 부족한 기계이거나 로그를 순서대로 보고 싶다면 <code>1</code>로 두어 빌드를 차례대로 진행시키십시오.
+
+<!--T:21 @2025d32a-->
+하나가 더 있습니다. <code>WIKVEN_BUILD_SKIN</code>은 빌드가 스킨 하나의 렌더링을 실행하려고 스스로에게 설정하는 것으로, 손으로 설정해서 쓸 일은 없습니다.
+
+<!--T:22 @10f26350-->
+<span id="bake"></span>
+== <code>bake</code> 액션 ==
+
+<!--T:23 @8c725e94-->
+GitHub Actions 러너에서 Docker 이미지로 소스 트리를 굽습니다. 완전한 워크플로는 [[$1|배포하기]]를 참고하십시오.
+
+<!--T:24 @07a27602-->
+{| class="wikitable"
+! 입력 !! 기본값 !! 하는 일
+|-
+| <code>source</code> || <code>src</code> || 구울 위키 소스가 담긴 디렉터리.
+|-
+| <code>output</code> || <code>dist</code> || 정적 사이트를 쓸 디렉터리.
+|-
+| <code>image</code> || 액션이 잘려 나온 릴리스 || 실행할 이미지. 다른 태그로 고정하려면 덮어쓰십시오.
+|-
+| <code>cache</code> || <code>true</code> || 이미지 참조를 키로 삼아 받아 온 이미지를 실행 사이에 캐시합니다. 항상 새로 받으려면 <code>false</code>로 두십시오.
+|-
+| <code>date-epoch</code> || <code>HEAD</code>의 커밋 시각 || 굽기에 쓸 <code>SOURCE_DATE_EPOCH</code>. 한 커밋을 몇 번 구워도 문서 날짜가 같아집니다.
+|}
+
+<!--T:25 @84f8a7eb-->
+액션은 소스 트리의 <code>git log</code>를 덤프해 빌드에 넘기기도 합니다. 각 문서가 그것을 마지막으로 바꾼 커밋의 날짜를 갖는 것이 그 덕분입니다. 그러려면 전체 역사가 필요하므로 <code>fetch-depth: 0</code>으로 체크아웃하십시오. 그러지 않으면 모든 문서가 빌드 중인 커밋의 날짜를 갖게 됩니다. 그런 일이 생기면 액션이 로그에 그렇게 적습니다.
+
+<!--T:26 @4c5b6eb9-->
+<span id="check-translations"></span>
+== <code>check-translations</code> 액션 ==
+
+<!--T:27 @8fe12f4a-->
+소스 트리에 <code>translate check</code>를 실행하고, 발견한 것마다 해당 파일에 주석으로 보고합니다.
+
+<!--T:28 @06029d03-->
+{| class="wikitable"
+! 입력 !! 기본값 !! 하는 일
+|-
+| <code>source</code> || <code>src</code> || 검사할 위키 소스가 담긴 디렉터리.
+|-
+| <code>image</code> || 액션이 잘려 나온 릴리스 || 실행할 이미지.
+|-
+| <code>cache</code> || <code>true</code> || 받아 온 이미지를 실행 사이에 캐시합니다.
+|-
+| <code>gate</code> || <code>true</code> || 원본 문서가 망가졌을 때 단계를 실패시킵니다. 오래되었거나 빠진 번역은 보고되기만 하고 단계를 실패시키지 않습니다.
+|}

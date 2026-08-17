@@ -26,7 +26,7 @@ config:
 <translate>
 <!--T:4-->
 == <code>extensions</code> ==
-A list of extension names to load. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions</tvar> Bundled extensions] work by name alone; a name that is not bundled is treated as third-party and fetched from a source you declare in [[#WikvenRepositories|<code>WikvenRepositories</code>]].
+A list of extension names to load. An extension that ships inside {{SITENAME}} works by name alone; any other name is treated as third-party and fetched from a source you declare in [[#WikvenRepositories|<code>WikvenRepositories</code>]]. See [[<tvar name="1">Special:MyLanguage/Extensions</tvar>|Extensions]] for what ships and what does not.
 
 <!--T:5-->
 == <code>skins</code> ==
@@ -36,7 +36,39 @@ A list of skin names to enable. The first one is used as the default skin. As wi
 == <code>config</code> ==
 
 <!--T:7-->
-A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, including Wikven's own variables such as <code>WikvenMainPage</code>, <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code>, <code>WikvenViewSourceUrl</code>, <code>WikvenAboutPage</code>, <code>WikvenFooterUrl</code>, <code>WikvenLogos</code>, and <code>WikvenRepositories</code>.
+A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, and so can Wikven's own variables, which are these:
+
+<!--T:35-->
+{| class="wikitable"
+! Variable !! Default !! What it sets
+|-
+| [[#WikvenMainPage|<code>WikvenMainPage</code>]] || <code>index</code> || The page written as <code>index.html</code>, the site root.
+|-
+| [[#WikvenAboutPage|<code>WikvenAboutPage</code>]] || <code>About</code> || The page the footer's "About" link leads to.
+|-
+| [[#WikvenSettingsPage|<code>WikvenSettingsPage</code>]] || <code>Settings</code> || The generated page holding the reader's colour theme and skin.
+|-
+| [[#WikvenEditUrl|<code>WikvenEditUrl</code>]] || empty || Target of the per-page "Edit" link.
+|-
+| [[#WikvenEditUrl|<code>WikvenHistoryUrl</code>]] || empty || Target of the per-page "View history" link.
+|-
+| [[#WikvenEditUrl|<code>WikvenViewSourceUrl</code>]] || empty || Target of the per-page "View source" tab.
+|-
+| [[#WikvenFooterUrl|<code>WikvenFooterUrl</code>]] || empty || A link added to the site footer.
+|-
+| [[#WikvenLogos|<code>WikvenLogos</code>]] || empty || Header logos, named as source-directory files.
+|-
+| [[#WikvenRepositories|<code>WikvenRepositories</code>]] || empty || Where to fetch non-bundled extensions and skins from.
+|-
+| [[#WikvenBundleWebfonts|<code>WikvenBundleWebfonts</code>]] || <code>false</code> || Bake webfonts into the export for scripts the reader may lack a font for.
+|-
+| [[#WikvenStyleDirectory|<code>WikvenStyleDirectory</code>]] || <code>.</code> || Subdirectory of the output the CSS files are written to.
+|-
+| [[#WikvenStyleDirectory|<code>WikvenScriptDirectory</code>]] || <code>.</code> || Subdirectory of the output the JavaScript files are written to.
+|}
+
+<!--T:36-->
+Three more exist and are not for you to set: <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code> and <code>WikvenSourceHistoryFile</code> are derived from <code>WIKVEN_WORKDIR</code> by the build itself (see [[<tvar name="1">Special:MyLanguage/Commands</tvar>|Commands]]). Setting them in your file does nothing useful, and the build overwrites them anyway.
 
 <!--T:8-->
 === <code>WikvenLogos</code> ===
@@ -59,6 +91,7 @@ The values are file names rather than URLs because the file's address is decided
 Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
 
 <!--T:12-->
+<span id="WikvenEditUrl"></span>
 === <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> and <code>WikvenViewSourceUrl</code> ===
 
 <!--T:13-->
@@ -82,6 +115,36 @@ The title of the page that introduces your site, which MediaWiki's own "About" f
 <!--T:19-->
 A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...).
 
+<!--T:37-->
+=== <code>WikvenSettingsPage</code> ===
+
+<!--T:38-->
+The title of a page the build writes for the reader's own display choices: the colour theme, and, on a site built with more than one skin, which skin to read it in. The choices are kept in the reader's browser and apply to that site alone; no account is involved. It stands in for the preferences a live wiki would offer, which a static export has no server for. Defaults to <code>Settings</code>.
+
+<!--T:39-->
+Write a source page of that name and it takes precedence, exactly as for the About page. Set it empty to write no page at all, and the entries pointing at it go with it. See [[<tvar name="1">Special:MyLanguage/Skins#Settings</tvar>|Skins]] for what the page offers a reader.
+
+<!--T:40-->
+=== <code>WikvenBundleWebfonts</code> ===
+
+<!--T:41-->
+When set, and UniversalLanguageSelector is enabled, the build bakes that extension's webfonts for the languages your pages use into a stylesheet the export serves itself, so a reader whose system has no font for a script sees the intended typeface instead of empty boxes. Off by default, because the fonts are extra payload for a site whose readers may not need them. It does nothing without UniversalLanguageSelector; see [[<tvar name="1">Special:MyLanguage/Translating</tvar>|Translating]].
+
+<!--T:42-->
+<span id="WikvenStyleDirectory"></span>
+=== <code>WikvenStyleDirectory</code> and <code>WikvenScriptDirectory</code> ===
+
+<!--T:43-->
+Where under the output directory the build writes the CSS and JavaScript it dumps out of MediaWiki. Both default to <code>.</code>, the output root. Set them to keep the generated assets out of the way of your pages; the paths are relative to the output directory and the build writes the links to match, so nothing else needs telling.
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+config:
+  WikvenStyleDirectory: assets
+  WikvenScriptDirectory: assets
+</syntaxhighlight>
+
+<translate>
 <!--T:20-->
 === <code>WikvenRepositories</code> ===
 
