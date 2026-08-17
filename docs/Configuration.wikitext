@@ -188,6 +188,9 @@ Each method needs a host tool present at build time: <code>tarball</code> uses <
 <!--T:25-->
 {{note|The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}
 
+<!--T:44-->
+Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See [[<tvar name="1">Special:MyLanguage/Deploying#Keeping pinned sources current</tvar>|Deploying]] for keeping one current.
+
 <!--T:26-->
 This very site fetches [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue</tvar> TabberNeue] this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 
