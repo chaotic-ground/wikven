@@ -273,10 +273,19 @@ jobs:
       # Node.js is preinstalled on the runner; no setup-node (its caching trips
       # the cache-poisoning audit, and this job shares a build cache with the
       # image-publishing workflow).
+      # The headless shell, not all of "chromium". Asking for chromium fetches Chrome for Testing
+      # (379 MiB unpacked) as well as the shell (262 MiB), and these specs never start the former:
+      # they run headless, which is what the shell is. ffmpeg (5 MiB) comes along either way, so what
+      # this saves is the 379 MiB, and --with-deps stays because the system libraries it installs are
+      # ones the shell needs as much as the full browser does.
+      #
+      # Ran the suite locally against a real bake with nothing but the shell on disk: 57 passed. If it
+      # were ever not enough -- a spec asking for a headed browser, or for video -- Playwright fails
+      # naming the executable it cannot find, so this cannot quietly test the wrong thing.
       - name: Install the browser test tooling
         run: |
           npm ci
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium-headless-shell
 
       # The static server and its readiness check live in playwright.config.js (webServer), so the
       # same command works on a developer's machine too.
