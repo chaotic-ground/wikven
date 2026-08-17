@@ -1,8 +1,11 @@
 <templatestyles src="prevnext/styles.css" /><div class="wikven-prevnext"><!--
-  -->{{#if:{{{2|}}}|
-    <div class="wikven-prevnext-prev">&larr;&nbsp;[[Special:MyLanguage/{{{1|}}}|{{prevnext/label|{{{1|}}}}}]]</div>
+  The next page is the last positional argument, so one argument is a next and two are a previous
+  and a next. The last page of the chain has a previous and no next, which no positional form can
+  spell -- an empty second argument reads the same as an absent one -- so that one names prev=.
+  -->{{#if:{{{2|}}}{{{prev|}}}|
+    <div class="wikven-prevnext-prev">&larr;&nbsp;[[Special:MyLanguage/{{{prev|{{{1|}}}}}}|{{prevnext/label|{{{prev|{{{1|}}}}}}}}]]</div>
   }}<!--
-  --><div class="wikven-prevnext-next">[[Special:MyLanguage/{{{2|{{{1|}}}}}}|{{prevnext/label|{{{2|{{{1|}}}}}}}}]]&nbsp;&rarr;</div><!--
+  -->{{#if:{{{2|{{{1|}}}}}}|<div class="wikven-prevnext-next">[[Special:MyLanguage/{{{2|{{{1|}}}}}}|{{prevnext/label|{{{2|{{{1|}}}}}}}}]]&nbsp;&rarr;</div>}}<!--
 --></div><noinclude>
 {{prevnext/doc}}
 </noinclude>

@@ -3,10 +3,16 @@ Bottom-of-page navigation between the steps of the documentation, as a row of on
 == Usage ==
 
  <nowiki>{{prevnext|next step}}
-{{prevnext|previous step|next step}}</nowiki>
+{{prevnext|previous step|next step}}
+{{prevnext|prev=previous step}}</nowiki>
 
 Each argument is a page name, not a link label: it is the link target, and the link text is the
 target's own title.
+
+The next page is the last positional argument, so one of them is a next and two are a previous and
+a next. The last page of the chain is the one form that leaves out: it has a previous and no next,
+and an empty second argument reads the same as an absent one, so there is no positional way to say
+it. That page names <code>prev=</code> instead, which is otherwise the same previous link.
 
 == Translated pages ==
 
