@@ -4,6 +4,9 @@ namespace MediaWiki\Extension\Wikven;
 
 /** Rewrites a page's output links: depth reparenting, and Special:MyLanguage resolution. */
 class RelativeUrl {
+	/** The assignment MediaWiki writes a page's JavaScript config into, opening brace included. */
+	private const CONFIG_ASSIGNMENT = 'RLCONF={';
+
 	/**
 	 * Add a "../" per level to every root-relative reference in a page moved $depth subdirectories down.
 	 *
@@ -11,7 +14,8 @@ class RelativeUrl {
 	 * non-main-skin canonical does). A subpage title such as "Manual/Config" caches to a flat file but
 	 * is exported into a real "Manual/" directory; its references then need a "../" per level so links
 	 * and files agree on a static host. Absolute, protocol-relative and data: URLs carry no leading
-	 * "./" and are left alone. Covers href/src/srcset attributes and CSS url().
+	 * "./" and are left alone. Covers href/src/srcset attributes, CSS url(), and the page's own
+	 * JavaScript config (see reparentConfigVars()).
 	 *
 	 * Each candidate is required to sit inside a real "<tag ...>" span (or, for url(), inside a
 	 * <style> block too): MediaWiki escapes preformatted text with htmlspecialchars(..., ENT_NOQUOTES),
@@ -87,7 +91,93 @@ class RelativeUrl {
 			PREG_OFFSET_CAPTURE
 		);
 
+		$html = self::reparentConfigVars($html, $rebase);
+
 		return self::rebasePrintFooter($html, $up);
+	}
+
+	/**
+	 * Rebase the root-relative URLs a page carries in its JavaScript config.
+	 *
+	 * Title::getLocalURL() answers "./Page.html" here (Hooks\Main::onGetLocalURL), and a URL that
+	 * shape means "from the output root" -- a claim only true of a page sitting at the root. In an
+	 * attribute the passes above correct it; the same string handed to the client through
+	 * mw.config rides in the page's RLCONF object, where nothing was correcting it. Core writes one
+	 * itself for a redirect (wgInternalRedirectTargetUrl), and any extension that asks a Title for
+	 * its URL and exports it as a config var writes another.
+	 *
+	 * Only that object is rewritten, and in it only strings that begin with "./" or "../". The rest
+	 * of the page cannot be treated this way, since a bare string carries no marker telling a URL
+	 * of ours from a path a page merely shows -- these very docs write "./Page.html" as text.
+	 * RLCONF is a span MediaWiki wrote, not the wikitext, and everything in it is data for scripts.
+	 *
+	 * What this cannot reach is a local URL baked into a ResourceLoader module's bundle: one file
+	 * serves every page at every depth, so there is no depth to correct it by, and an extension
+	 * shipping one has to anchor it itself (#425).
+	 *
+	 * @param string $html A rendered page.
+	 * @param callable(string):string $rebase Takes the matched "." or "..", returns its replacement.
+	 */
+	private static function reparentConfigVars(string $html, callable $rebase): string {
+		$offset = 0;
+		while (true) {
+			$start = strpos($html, self::CONFIG_ASSIGNMENT, $offset);
+			if ($start === false) {
+				break;
+			}
+			$open = $start + strlen(self::CONFIG_ASSIGNMENT) - 1;
+			$end = self::objectEnd($html, $open);
+			if ($end === null) {
+				break;
+			}
+			$rebased = preg_replace_callback(
+				'#"(\.\.?)/#',
+				static function (array $m) use ($rebase): string {
+					return '"' . $rebase($m[1]);
+				},
+				substr($html, $open, $end - $open)
+			);
+			$html = substr_replace($html, $rebased, $open, $end - $open);
+			$offset = $open + strlen($rebased);
+		}
+		return $html;
+	}
+
+	/**
+	 * The offset just past the "}" closing the object literal that opens at $open, or null if the
+	 * text runs out first.
+	 *
+	 * Braces inside a string are not counted, so a config value holding one -- a message with a
+	 * "{{PLURAL:}}" left in it, a regular expression -- does not end the object early, and the
+	 * object's own end is found however many nested objects it holds. The alternative, a non-greedy
+	 * match up to the next "};", stops at the first config value that contains that pair.
+	 */
+	private static function objectEnd(string $text, int $open): ?int {
+		$depth = 0;
+		$inString = false;
+		$length = strlen($text);
+		for ($i = $open; $i < $length; $i++) {
+			$char = $text[$i];
+			if ($inString) {
+				if ($char === '\\') {
+					$i++;
+				} elseif ($char === '"') {
+					$inString = false;
+				}
+				continue;
+			}
+			if ($char === '"') {
+				$inString = true;
+			} elseif ($char === '{') {
+				$depth++;
+			} elseif ($char === '}') {
+				$depth--;
+				if ($depth === 0) {
+					return $i + 1;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**

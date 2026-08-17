@@ -153,6 +153,67 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 		$this->assertSame($html, RelativeUrl::reparent($html, 1));
 	}
 
+	public function testAConfigVarHoldingALocalUrlIsRebased() {
+		$this->assertSame(
+			'<script>RLCONF={"wgPageName":"Deploying","wgInternalRedirectTargetUrl":"../Intro.html"};</script>',
+			RelativeUrl::reparent(
+				'<script>RLCONF={"wgPageName":"Deploying","wgInternalRedirectTargetUrl":"./Intro.html"};</script>',
+				1
+			)
+		);
+	}
+
+	public function testAConfigVarGainsOneLevelPerDepth() {
+		$this->assertSame(
+			'RLCONF={"u":"../../../Search.html"};',
+			RelativeUrl::reparent('RLCONF={"u":"../Search.html"};', 2)
+		);
+	}
+
+	/** Only a value that claims the output root moves; everything else names a fixed place. */
+	public function testConfigVarsThatAreNotRootRelativeAreLeftAlone() {
+		$html = 'RLCONF={"a":"https://example.org/x","b":"/w/index.php","c":"Intro.html","d":"see ./x"};';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
+	public function testTheWholeConfigObjectIsWalkedPastANestedOneAndABracedValue() {
+		$this->assertSame(
+			'RLCONF={"m":"a {{PLURAL:$1|b}} c","n":{"deep":"../x.html"},"u":"../y.html"};RLSTATE={"s":"ready"};',
+			RelativeUrl::reparent(
+				'RLCONF={"m":"a {{PLURAL:$1|b}} c","n":{"deep":"./x.html"},"u":"./y.html"};RLSTATE={"s":"ready"};',
+				1
+			)
+		);
+	}
+
+	/** A brace or a quote inside a string value must not be read as the object's own. */
+	public function testAValueHoldingABraceOrAnEscapedQuoteDoesNotEndTheObjectEarly() {
+		$this->assertSame(
+			'RLCONF={"re":"^\\{a\\}$","q":"say \\"}\\"","u":"../x.html"};',
+			RelativeUrl::reparent('RLCONF={"re":"^\\{a\\}$","q":"say \\"}\\"","u":"./x.html"};', 1)
+		);
+	}
+
+	/** The rewrite stops at the object's closing brace; what follows it is not config. */
+	public function testTextAfterTheConfigObjectIsLeftAlone() {
+		$this->assertSame(
+			'RLCONF={"u":"../x.html"};<pre>"./x.html"</pre>',
+			RelativeUrl::reparent('RLCONF={"u":"./x.html"};<pre>"./x.html"</pre>', 1)
+		);
+	}
+
+	/** A page documenting the export's link shape writes the same string as prose. */
+	public function testAQuotedRootRelativePathInTheBodyIsLeftAlone() {
+		$html = '<pre>Title::getLocalURL() answers "./Page.html"</pre>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 2));
+	}
+
+	/** An unterminated object is left as it is rather than rewritten to the end of the page. */
+	public function testAnUnclosedConfigObjectIsLeftAlone() {
+		$html = 'RLCONF={"u":"./x.html"';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
 	public function testMyLanguageResolvesToTheTranslationWhenItExists() {
 		$this->assertSame(
 			'href="./B/ko.html"',
