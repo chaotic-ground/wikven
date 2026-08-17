@@ -1,0 +1,61 @@
+---
+name: "build(deps): bump the docs site's tagged repositories"
+pipelineid: wikven-repositories
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+# The WikvenRepositories pins that follow a release tag. A new one belongs here if its upstream
+# cuts releases; one that has to track a branch by commit belongs beside the cohort whose branch it
+# follows, the way MobileFrontend sits in mediawiki-extensions.yaml. The tag is copied in verbatim,
+# "v" and all, because it is what the site clones.
+sources:
+  tabberneue:
+    name: Latest TabberNeue release
+    kind: githubrelease
+    spec:
+      owner: StarCitizenTools
+      repository: mediawiki-extensions-TabberNeue
+      versionfilter:
+        kind: semver
+  citizen:
+    name: Latest Citizen release
+    kind: githubrelease
+    spec:
+      owner: StarCitizenTools
+      repository: mediawiki-skins-Citizen
+      versionfilter:
+        kind: semver
+
+targets:
+  tabberneue:
+    name: 'build(deps): bump TabberNeue to {{ source "tabberneue" }}'
+    kind: yaml
+    scmid: default
+    sourceid: tabberneue
+    spec:
+      file: docs/.wikven.yml
+      key: $.config.WikvenRepositories.TabberNeue.reference
+  citizen:
+    name: 'build(deps): bump Citizen to {{ source "citizen" }}'
+    kind: yaml
+    scmid: default
+    sourceid: citizen
+    spec:
+      file: docs/.wikven.yml
+      key: $.config.WikvenRepositories.Citizen.reference
