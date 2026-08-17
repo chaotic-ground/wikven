@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-0 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard" lang="ko" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>개발 - Wikven</title>
+<script>(function(){var className="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-0 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Development/ko","wgTitle":"Development/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Development/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Development/ko","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":false,"wgVector2022LanguageInHeader":true,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
+RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.vector.search.codex.styles":"ready","skins.vector.styles":"ready","skins.vector.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","ext.uls.pt":"ready"};RLPAGEMODULES=[];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+
+<script src=".././startup-static.js"></script><script src=".././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.uls.interface"]);</script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+
+<meta name="generator" content="MediaWiki 1.46.0">
+<meta name="robots" content="max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href=".././ext.translate.tag.languages.css">
+<link rel="stylesheet" href=".././ext.pygments.css">
+<link rel="stylesheet" href=".././skins.vector.search.codex.styles.css">
+<link rel="stylesheet" href=".././skins.vector.styles.css">
+<link rel="stylesheet" href=".././skins.vector.icons.css">
+<link rel="stylesheet" href=".././ext.translate.css">
+<link rel="stylesheet" href=".././ext.Wikven.styles.css">
+<link rel="stylesheet" href=".././ext.uls.pt.css">
+<link rel="stylesheet" href=".././webfonts.css"><link rel="stylesheet" href=".././site.styles.css"></head>
+<body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Development_ko rootpage-Development_ko skin-vector-2022 action-view">
+<div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">본문으로 이동</a>
+<div class="vector-header-container">
+	<header class="vector-header mw-header no-font-mode-scale">
+		<div class="vector-header-start">
+			<nav class="vector-main-menu-landmark" aria-label="사이트">
+				
+<div id="vector-main-menu-dropdown" class="vector-dropdown vector-main-menu-dropdown vector-button-flush-left vector-button-flush-right"  title="주 메뉴"  lang="ko" dir="ltr">
+	<input type="checkbox" id="vector-main-menu-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-main-menu-dropdown" class="vector-dropdown-checkbox "  aria-label="주 메뉴"  >
+	<label id="vector-main-menu-dropdown-label" for="vector-main-menu-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-menu mw-ui-icon-wikimedia-menu"></span>
+
+<span class="vector-dropdown-label-text">주 메뉴</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+				<div id="vector-main-menu-unpinned-container" class="vector-unpinned-container">
+		
+<div id="vector-main-menu" class="vector-main-menu vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-main-menu-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="main-menu-pinned"
+	data-pinnable-element-id="vector-main-menu"
+	data-pinned-container-id="vector-main-menu-pinned-container"
+	data-unpinned-container-id="vector-main-menu-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">주 메뉴</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-main-menu.pin">사이드바로 이동</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-main-menu.unpin">숨기기</button>
+</div>
+
+	
+<div id="p-sidebar-docs" class="vector-menu mw-portlet mw-portlet-sidebar-docs"   lang="ko" dir="ltr">
+	<div class="vector-menu-heading">
+		설명서
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="../Why_wikitext/ko.html"><span>위키텍스트를 쓰는 이유</span></a></li><li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/ko.html"><span>설치</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/ko.html"><span>시작하기</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/ko.html"><span>문서</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/ko.html"><span>사이드바 편집</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/ko.html"><span>이미지</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/ko.html"><span>스킨</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/ko.html"><span>확장 기능</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/ko.html"><span>자바스크립트</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/ko.html"><span>검색</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/ko.html"><span>번역</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying/ko.html"><span>배포하기</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/ko.html"><span>문제 해결</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-sidebar-references" class="vector-menu mw-portlet mw-portlet-sidebar-references"   lang="ko" dir="ltr">
+	<div class="vector-menu-heading">
+		참고 자료
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-sidebar-configuration" class="mw-list-item"><a href="../Configuration/ko.html"><span>설정</span></a></li><li id="n-sidebar-standalone-binary" class="mw-list-item"><a href="../Standalone_binary/ko.html"><span>단독 실행 바이너리</span></a></li><li id="n-sidebar-commands" class="mw-list-item"><a href="../Commands/ko.html"><span>명령어</span></a></li><li id="n-sidebar-development" class="mw-list-item"><a href="../Development/ko.html"><span>개발</span></a></li><li id="n-sidebar-writing-an-extension" class="mw-list-item"><a href="../Writing_an_extension/ko.html"><span>확장 기능 만들기</span></a></li><li id="n-sidebar-licenses" class="mw-list-item"><a href="../Licenses/ko.html"><span>라이선스</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+				</div>
+
+	</div>
+</div>
+
+		</nav>
+			
+<a href="../index/ko.html" class="mw-logo">
+	<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
+	<span class="mw-logo-container skin-invert">
+		<strong class="mw-logo-wordmark">Wikven</strong>
+	</span>
+</a>
+
+		</div>
+		<div class="vector-header-end">
+			
+<div id="p-search" role="search" class="vector-search-box-vue  vector-search-box-collapses vector-search-box">
+	<a href="../Search.html" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only search-toggle" title="Search Wikven [f]" accesskey="f"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>검색</span>
+	</a>
+	<div class="vector-typeahead-search-container">
+		<div class="cdx-typeahead-search">
+			<form action="/index.php" id="searchform" class="cdx-search-input cdx-search-input--has-end-button">
+				<div id="simpleSearch" class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+					<div class="cdx-text-input cdx-text-input--has-start-icon">
+						<input
+							class="cdx-text-input__input mw-searchInput" autocomplete="off"
+							 type="search" name="search" placeholder="Wikven 검색" aria-label="Wikven 검색" autocapitalize="none" spellcheck="false" title="Wikven 검색 [f]" accesskey="f" id="searchInput"
+							>
+						<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+					</div>
+					<input type="hidden" name="title" value="Special:Search">
+				</div>
+				<button class="cdx-button cdx-search-input__end-button">검색</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+			<nav class="vector-user-links vector-user-links-wide" aria-label="개인 도구">
+	<div class="vector-user-links-main">
+	
+<div id="p-vector-user-menu-preferences" class="vector-menu mw-portlet"   lang="ko" dir="ltr">
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="ca-uls" class="mw-list-item active user-links-collapsible-item"><a data-mw-interface  href="#" class="uls-trigger cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet"><span class="vector-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span>
+
+<span>한국어</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-userpage" class="vector-menu mw-portlet emptyPortlet"   lang="ko" dir="ltr">
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	<nav class="vector-appearance-landmark" aria-label="외관">
+		
+<div id="vector-appearance-dropdown" class="vector-dropdown "  title="문서의 글꼴 크기, 폭, 색의 모습을 변경합니다"  lang="ko" dir="ltr">
+	<input type="checkbox" id="vector-appearance-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-appearance-dropdown" class="vector-dropdown-checkbox "  aria-label="외관"  >
+	<label id="vector-appearance-dropdown-label" for="vector-appearance-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-appearance mw-ui-icon-wikimedia-appearance"></span>
+
+<span class="vector-dropdown-label-text">외관</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+			<div id="vector-appearance-unpinned-container" class="vector-unpinned-container">
+				
+			</div>
+		
+	</div>
+</div>
+
+	</nav>
+	
+<div id="p-vector-user-menu-notifications" class="vector-menu mw-portlet emptyPortlet"   lang="ko" dir="ltr">
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-overflow" class="vector-menu mw-portlet emptyPortlet"   lang="ko" dir="ltr">
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	</div>
+	
+<div id="vector-user-links-dropdown" class="vector-dropdown vector-user-menu vector-button-flush-right vector-user-menu-logged-out user-links-collapsible-item--none"  title="개인 설정"  lang="ko" dir="ltr">
+	<input type="checkbox" id="vector-user-links-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-user-links-dropdown" class="vector-dropdown-checkbox "  aria-label="개인 도구"  >
+	<label id="vector-user-links-dropdown-label" for="vector-user-links-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-icon mw-ui-icon- mw-ui-icon-wikimedia-"></span>
+
+<span class="vector-dropdown-label-text">개인 도구</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+		
+<div id="p-personal" class="vector-menu mw-portlet mw-portlet-personal emptyPortlet user-links-collapsible-item"  title="User menu"  lang="ko" dir="ltr">
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+</nav>
+
+		</div>
+	</header>
+</div>
+<div class="mw-page-container">
+	<div class="mw-page-container-inner">
+		<div class="vector-sitenotice-container">
+			<div id="siteNotice"></div>
+		</div>
+		<div class="vector-column-start">
+			<div class="vector-main-menu-container">
+		<div id="mw-navigation">
+			<nav id="mw-panel" class="vector-main-menu-landmark" aria-label="사이트">
+				<div id="vector-main-menu-pinned-container" class="vector-pinned-container">
+				
+				</div>
+		</nav>
+		</div>
+	</div>
+	<div class="vector-sticky-pinned-container">
+				<nav id="mw-panel-toc" aria-label="목차" data-event-name="ui.sidebar-toc" class="mw-table-of-contents-container vector-toc-landmark">
+					<div id="vector-toc-pinned-container" class="vector-pinned-container">
+					<div id="vector-toc" class="vector-toc vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-toc-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="toc-pinned"
+	data-pinnable-element-id="vector-toc"
+	data-pinned-container-id="vector-toc-pinned-container"
+	data-unpinned-container-id="vector-toc-unpinned-container"
+>
+	<h2 class="vector-pinnable-header-label">목차</h2>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-toc.pin">사이드바로 이동</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-toc.unpin">숨기기</button>
+</div>
+
+
+	<ul class="vector-toc-contents" id="mw-panel-toc-list">
+		<li id="toc-mw-content-text"
+			class="vector-toc-list-item vector-toc-level-1">
+			<a href="#" class="vector-toc-link">
+				<div class="vector-toc-text">처음 위치</div>
+			</a>
+		</li>
+		<li id="toc-구조"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#구조">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">1</span>
+				<span>구조</span>
+			</div>
+		</a>
+		
+		<ul id="toc-구조-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-이미지_빌드하기"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#이미지_빌드하기">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">2</span>
+				<span>이미지 빌드하기</span>
+			</div>
+		</a>
+		
+		<ul id="toc-이미지_빌드하기-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-빌드_실행하기"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#빌드_실행하기">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">3</span>
+				<span>빌드 실행하기</span>
+			</div>
+		</a>
+		
+		<ul id="toc-빌드_실행하기-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-빌드_파이프라인"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#빌드_파이프라인">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">4</span>
+				<span>빌드 파이프라인</span>
+			</div>
+		</a>
+		
+			<button aria-controls="toc-빌드_파이프라인-sublist" class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle">
+				<span class="vector-icon mw-ui-icon-wikimedia-expand"></span>
+				<span>빌드 파이프라인 하위 문단 토글하기</span>
+			</button>
+		
+		<ul id="toc-빌드_파이프라인-sublist" class="vector-toc-list">
+			<li id="toc-1단계:_위키_채우기"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#1단계:_위키_채우기">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">4.1</span>
+					<span>1단계: 위키 채우기</span>
+				</div>
+			</a>
+			
+			<ul id="toc-1단계:_위키_채우기-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-2단계:_스킨마다_한_번씩"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#2단계:_스킨마다_한_번씩">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">4.2</span>
+					<span>2단계: 스킨마다 한 번씩</span>
+				</div>
+			</a>
+			
+			<ul id="toc-2단계:_스킨마다_한_번씩-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li id="toc-설정"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#설정">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">5</span>
+				<span>설정</span>
+			</div>
+		</a>
+		
+		<ul id="toc-설정-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-이_단계들이_존재하는_이유"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#이_단계들이_존재하는_이유">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">6</span>
+				<span>이 단계들이 존재하는 이유</span>
+			</div>
+		</a>
+		
+		<ul id="toc-이_단계들이_존재하는_이유-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-서드파티_확장_기능과_스킨"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#서드파티_확장_기능과_스킨">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">7</span>
+				<span>서드파티 확장 기능과 스킨</span>
+			</div>
+		</a>
+		
+		<ul id="toc-서드파티_확장_기능과_스킨-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-단독_실행_바이너리"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#단독_실행_바이너리">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">8</span>
+				<span>단독 실행 바이너리</span>
+			</div>
+		</a>
+		
+		<ul id="toc-단독_실행_바이너리-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-테스트"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#테스트">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">9</span>
+				<span>테스트</span>
+			</div>
+		</a>
+		
+		<ul id="toc-테스트-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-지속적_통합"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#지속적_통합">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">10</span>
+				<span>지속적 통합</span>
+			</div>
+		</a>
+		
+		<ul id="toc-지속적_통합-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+</ul>
+</div>
+
+					</div>
+		</nav>
+			</div>
+		</div>
+		<div class="mw-content-container">
+			<main id="content" class="mw-body">
+				<header class="mw-body-header vector-page-titlebar no-font-mode-scale">
+					<nav aria-label="목차" class="vector-toc-landmark">
+						
+<div id="vector-page-titlebar-toc" class="vector-dropdown vector-page-titlebar-toc vector-button-flush-left"  title="목차"  lang="ko" dir="ltr">
+	<input type="checkbox" id="vector-page-titlebar-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-titlebar-toc" class="vector-dropdown-checkbox "  aria-label="목차 토글"  >
+	<label id="vector-page-titlebar-toc-label" for="vector-page-titlebar-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">목차 토글</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+							<div id="vector-page-titlebar-toc-unpinned-container" class="vector-unpinned-container">
+			</div>
+		
+	</div>
+</div>
+
+					</nav>
+					<h1 id="firstHeading" class="firstHeading mw-first-heading" lang="ko" dir="ltr">개발</h1>
+				</header>
+				<div class="vector-page-toolbar vector-feature-custom-font-size-clientpref--excluded">
+					<div class="vector-page-toolbar-container">
+						<div id="left-navigation">
+							<nav aria-label="이름공간">
+								
+<div id="p-associated-pages" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-associated-pages"   lang="ko" dir="ltr">
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-nstab-main" class="selected vector-tab-noicon mw-list-item"><a href="../Development/ko.html" title="본문 보기 [c]" accesskey="c"><span>문서</span></a></li><li id="ca-talk" class="new vector-tab-noicon mw-list-item"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Talk:Development/ko.wikitext" rel="discussion" class="new" title="문서의 내용에 대한 토론 문서 (없는 문서) [t]" accesskey="t"><span>토론</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+								
+<div id="vector-variants-dropdown" class="vector-dropdown emptyPortlet"   lang="ko" dir="ltr">
+	<input type="checkbox" id="vector-variants-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-variants-dropdown" class="vector-dropdown-checkbox " aria-label="언어 변종 바꾸기"   >
+	<label id="vector-variants-dropdown-label" for="vector-variants-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">한국어</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+					
+<div id="p-variants" class="vector-menu mw-portlet mw-portlet-variants emptyPortlet"   lang="ko" dir="ltr">
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+						<div id="right-navigation" class="vector-collapsible">
+							<nav aria-label="보기">
+								
+<div id="p-views" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-views"   lang="ko" dir="ltr">
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-view" class="selected vector-tab-noicon mw-list-item"><a href="../Development/ko.html"><span>읽기</span></a></li><li id="ca-edit" class="vector-tab-noicon mw-list-item"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext" title="이 문서 편집하기 [e]" accesskey="e"><span>번역하기</span></a></li><li id="ca-history" class="vector-tab-noicon mw-list-item"><a href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/ko.wikitext" title="문서의 과거 판 [h]" accesskey="h"><span>역사 보기</span></a></li><li id="ca-wikven-viewsource" class="vector-tab-noicon mw-list-item"><a href="https://github.com/chaotic-ground/wikven/blob/main/docs/Development/ko.wikitext"><span>원본 보기</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+							</nav>
+				
+							<nav class="vector-page-tools-landmark" aria-label="페이지 도구">
+								
+<div id="vector-page-tools-dropdown" class="vector-dropdown vector-page-tools-dropdown"   lang="ko" dir="ltr">
+	<input type="checkbox" id="vector-page-tools-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-tools-dropdown" class="vector-dropdown-checkbox "  aria-label="도구"  >
+	<label id="vector-page-tools-dropdown-label" for="vector-page-tools-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">도구</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+									<div id="vector-page-tools-unpinned-container" class="vector-unpinned-container">
+						
+<div id="vector-page-tools" class="vector-page-tools vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-page-tools-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="page-tools-pinned"
+	data-pinnable-element-id="vector-page-tools"
+	data-pinned-container-id="vector-page-tools-pinned-container"
+	data-unpinned-container-id="vector-page-tools-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">도구</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-page-tools.pin">사이드바로 이동</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-page-tools.unpin">숨기기</button>
+</div>
+
+	
+<div id="p-cactions" class="vector-menu mw-portlet mw-portlet-cactions emptyPortlet vector-has-collapsible-items"  title="More options"  lang="ko" dir="ltr">
+	<div class="vector-menu-heading">
+		작업
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-more-view" class="selected vector-more-collapsible-item mw-list-item"><a href="../Development/ko.html"><span>읽기</span></a></li><li id="ca-more-edit" class="vector-more-collapsible-item mw-list-item"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext" title="이 문서 편집하기 [e]" accesskey="e"><span>번역하기</span></a></li><li id="ca-more-history" class="vector-more-collapsible-item mw-list-item"><a href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/ko.wikitext"><span>역사 보기</span></a></li><li id="ca-more-wikven-viewsource" class="vector-more-collapsible-item mw-list-item"><a href="https://github.com/chaotic-ground/wikven/blob/main/docs/Development/ko.wikitext"><span>원본 보기</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-tb" class="vector-menu mw-portlet mw-portlet-tb emptyPortlet"   lang="ko" dir="ltr">
+	<div class="vector-menu-heading">
+		일반
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-wikven-skins" class="vector-menu mw-portlet mw-portlet-wikven-skins"   lang="ko" dir="ltr">
+	<div class="vector-menu-heading">
+		Skins
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-wikven-skin-vector-2022" class="mw-list-item active"><span>벡터 (2022)</span></li><li id="t-wikven-skin-citizen" class="mw-list-item"><a href="../citizen/Development/ko.html"><span>시티즌</span></a></li><li id="t-wikven-skin-minerva" class="mw-list-item"><a href="../minerva/Development/ko.html"><span>미네르바 노이에</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+									</div>
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="vector-column-end no-font-mode-scale">
+					<div class="vector-sticky-pinned-container">
+						<div class="wp25eastereggs-vector-sitenotice-landmark"></div>
+						<nav class="vector-page-tools-landmark" aria-label="페이지 도구">
+							<div id="vector-page-tools-pinned-container" class="vector-pinned-container">
+				
+							</div>
+		</nav>
+						<nav class="vector-appearance-landmark" aria-label="외관">
+							<div id="vector-appearance-pinned-container" class="vector-pinned-container">
+				<div id="vector-appearance" class="vector-appearance vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-appearance-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="appearance-pinned"
+	data-pinnable-element-id="vector-appearance"
+	data-pinned-container-id="vector-appearance-pinned-container"
+	data-unpinned-container-id="vector-appearance-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">외관</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-appearance.pin">사이드바로 이동</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-appearance.unpin">숨기기</button>
+</div>
+
+
+</div>
+
+							</div>
+		</nav>
+					</div>
+				</div>
+				<div id="bodyContent" class="vector-body" aria-labelledby="firstHeading" data-mw-ve-target-container>
+					<div class="vector-body-before-content">
+							<div class="mw-indicators">
+		</div>
+
+						<div id="siteSub" class="noprint">Wikven</div>
+					</div>
+					<div id="contentSub" lang="ko" dir="ltr"><div id="mw-content-subtitle" lang="ko" dir="ltr"></div></div>
+					
+					
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><meta property="mw:PageProp/toc" />
+<div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Development.html" class="mw-pt-progress mw-pt-progress--complete" title="Development (100% 번역함)" lang="en" dir="ltr">English</a></li>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+<p>이 문서는 Wikven에 작업하고자 하는 사람들을 위해 Wikven이 어떻게 만들어지는지 설명합니다. Wikven은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki">MediaWiki</a> 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다. Wikven 자체를 작업하는 것이 아니라 정적 내보내기에서 살아남아야 하는 확장 기능이나 스킨을 만드는 중이라면, <a href="../Writing_an_extension/ko.html" title="Special:MyLanguage/Writing an extension">확장 기능 만들기</a>가 그 문서입니다.
+</p><p><span id="Architecture"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="구조"><span id=".EA.B5.AC.EC.A1.B0"></span>구조</h2></div>
+<p>Wikven 빌드는 네 개의 구성 요소로 이루어집니다:
+</p>
+<ul><li><b>확장 기능</b>(<code>extension.json</code>, <code>includes/</code>). Wikven의 설정과, MediaWiki의 출력을 정적 호스트에 맞게 조정하는 몇 가지 훅을 등록합니다. 편집/역사 UI와 사이드바의 위키 전용 링크를 숨기고, 푸터 링크를 설정된 <code>WikvenFooterUrl</code>/<code>WikvenEditUrl</code>/<code>WikvenHistoryUrl</code>로 바꾸며, 내부 URL이 <code>index.php?title=</code> 대신 <code>.html</code> 파일을 가리키도록 다시 씁니다.</li>
+<li><b>관리 스크립트</b>(<code>maintenance/</code>). 아래에서 설명하는 빌드 파이프라인입니다.</li>
+<li><b><code>WikvenSettings.php</code></b>. 빌드가 그 아래에서 실행되는 <code>LocalSettings.php</code>입니다. 설정을 불러오고, 이미지 백엔드를 감지하며, Wikven의 기본값을 적용합니다.</li>
+<li><b><code>bin/entrypoint</code></b> 스크립트와 <b><code>Dockerfile</code></b>. MediaWiki와 확장 기능을, 기본 명령이 빌드 한 번을 실행하는 이미지로 패키징합니다.</li></ul>
+<p><span id="Building&#95;the&#95;image"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="이미지_빌드하기"><span id=".EC.9D.B4.EB.AF.B8.EC.A7.80_.EB.B9.8C.EB.93.9C.ED.95.98.EA.B8.B0"></span>이미지 빌드하기</h2></div>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span>wikven<span class="w"> </span>.
+</pre></div>
+<p><code>Dockerfile</code>은 <code>FROM mediawiki</code>입니다. Composer(빌드 시 서드파티 구성 요소를 가져오기 위해)와 이미지 도구인 <code>rsvg-convert</code>, ImageMagick의 JPEG·WebP 델리게이트를 추가하고, MediaWiki 자체의 것 외에 Wikven이 번들하는 확장 기능 셋(<a href="../Extensions/ko.html" title="Special:MyLanguage/Extensions">SifterSearch, Translate, UniversalLanguageSelector</a>)을 가져오며, 확장 기능을 <code>/var/www/html/extensions/Wikven</code>으로 복사하고, <code>WikvenSettings.php</code>를 MediaWiki 루트로 복사한 다음, <code>bin/entrypoint</code> 스크립트를 이미지의 엔트리포인트로 설정합니다.
+</p><p><span id="Running&#95;a&#95;build"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="빌드_실행하기"><span id=".EB.B9.8C.EB.93.9C_.EC.8B.A4.ED.96.89.ED.95.98.EA.B8.B0"></span>빌드 실행하기</h2></div>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/docs:/workspace/src&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>wikven
+</pre></div>
+<p>컨테이너는 소스를 <code>/workspace/src</code>에 마운트하고 렌더링된 사이트를 <code>/workspace/dist</code>에 기록합니다. 두 경로 모두 <code>WIKVEN_WORKDIR</code>(기본값 <code>/workspace</code>)에서 파생되며, 여기에는 일시적 상태를 위한 <code>.cache/</code>도 있습니다. 이 동일한 배치 덕분에 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>는 모든 것을 쓰기 가능한 호스트 디렉터리로 향하게 할 수 있습니다.
+</p><p><code>bin/entrypoint</code> 스크립트는:
+</p>
+<ol><li>일회용 MediaWiki를 SQLite 데이터베이스에 설치하고(웹 서버 없음. 만들어지는 관리자 계정은 결코 사용되지 않습니다),</li>
+<li>서드파티 확장 기능과 스킨을 가져오며(아래 참고),</li>
+<li>생성된 <code>LocalSettings.php</code>에 <code>require_once 'WikvenSettings.php';</code>를 덧붙이고,</li>
+<li>설치 관리자가 만들지 않는, 번들된 확장 기능이 요구하는 스키마 갱신을 적용한 다음,</li>
+<li>빌드 파이프라인을 실행하고,</li>
+<li>빌드가 root로 돌기 때문에 출력물을 마운트된 디렉터리의 소유자에게 돌려줍니다.</li></ol>
+<p><span id="The&#95;build&#95;pipeline"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="빌드_파이프라인"><span id=".EB.B9.8C.EB.93.9C_.ED.8C.8C.EC.9D.B4.ED.94.84.EB.9D.BC.EC.9D.B8"></span>빌드 파이프라인</h2></div>
+<p><code>maintenance/build.php</code>는 한 스크립트가 두 역할을 합니다. 환경 변수 없이 실행되면 <b>오케스트레이터</b>로서, MediaWiki를 한 번 부팅하여 일회용 위키를 여러분의 내용으로 채운 다음, <b>스킨마다 하나씩 렌더링 과정</b>을 별도 프로세스로 시작합니다. 각 프로세스에는 <code>WIKVEN_BUILD_SKIN</code>이 스킨 이름을 담고 있습니다. 그 변수가 설정된 채 실행되면 같은 스크립트가 바로 그 렌더링 과정이 됩니다. 어느 쪽이든 모든 단계는 자식 관리 스크립트이므로, 빌드 전체가 MediaWiki 부트스트랩 비용을 단계마다가 아니라 프로세스마다 한 번씩만 치릅니다.
+</p><p>이 구분이 렌더링 과정들을 나란히 돌려도 안전하게 만듭니다. 쓰기는 모두 오케스트레이터가 하고, 렌더링이 시작될 때 내용은 이미 확정되어 있어 각 과정은 읽기만 합니다. 렌더링은 쓸 수 있는 프로세서 수만큼 동시에 진행됩니다.
+</p><p><span id="Phase&#95;1:&#95;filling&#95;the&#95;wiki"></span>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="1단계:_위키_채우기"><span id="1.EB.8B.A8.EA.B3.84:_.EC.9C.84.ED.82.A4_.EC.B1.84.EC.9A.B0.EA.B8.B0"></span>1단계: 위키 채우기</h3></div>
+<dl><dt><code>clearOutputDirectory</code></dt>
+<dd>출력 디렉터리를 비워, 이전 빌드의 파일이 남지 않도록 합니다.</dd>
+<dt><code>setMainPage</code></dt>
+<dd><code>MediaWiki:Mainpage</code>를 가져온 <code>index</code> 문서로 지정하여, 사이트 루트가 <code>index.html</code>로 해석되도록 합니다.</dd>
+<dt><code>importImages</code></dt>
+<dd>소스 디렉터리의 이미지 파일을 <code>File:</code> 네임스페이스로 업로드합니다. 위키텍스트 가져오기 <b>전에</b> 실행되므로, 로컬 이미지를 삽입한 문서가 깨진 미디어 자리표시자 대신 실제 섬네일을 렌더링합니다.</dd>
+<dt><code>importWikitext</code></dt>
+<dd>모든 <code>*.wikitext</code> 파일을 가져옵니다(하위 디렉터리까지 재귀하므로 <code>Template:Foo/styles.css</code> 같은 문서는 중첩된 파일일 수 있습니다). <code>File:</code> 설명 문서와 <code>MediaWiki:</code> 시스템 문서는 편집 훅이 발동하도록 현재 판으로 저장되고, 일반 문서는 옛 판으로 가져옵니다. 주 문서가 없으면 빌드는 여기서 중단됩니다.</dd>
+<dt><code>setAboutPage</code>와 <code>setSettingsPage</code></dt>
+<dd>빌드가 생성하는 두 문서를 씁니다. 소프트웨어 목록이 담긴 <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">소개 문서</a>와, 독자의 색 테마와 스킨을 담은 <a href="../Skins/ko.html#Settings" title="Special:MyLanguage/Skins">설정 문서</a>입니다. 같은 이름의 소스 문서가 있으면 생성본 대신 그것이 쓰입니다.</dd>
+<dt><code>dropDeadPlaceLinks</code>와 <code>dropDeadCategoryLink</code></dt>
+<dd>내보내기에 없는 문서로 이어질 푸터와 메뉴 항목(개인정보 정책, 면책 조항, 커뮤니티 포털)의 시스템 메시지를 비웁니다.</dd>
+<dt><code>buildTranslations</code></dt>
+<dd><code>&lt;translate&gt;</code>로 표시된 각 문서의 번역을 실제 문서로 만들어, 작업 큐와 렌더링 과정이 다른 문서와 똑같이 다루도록 합니다. <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역하기</a>를 참고하십시오.</dd>
+<dt><code>RunJobs</code></dt>
+<dd>MediaWiki의 작업 큐를 실행합니다. 주로 섬네일 생성과 링크 테이블 갱신이며, 작업 종류별로 이름 순서대로 하나씩 처리합니다. 검색 색인 작업은 맨 끝으로 미룹니다. 판마다 큐에 들어가기 때문에, 그러지 않으면 큐를 돌 때마다 실행되고 마지막 것을 뺀 나머지 결과를 모두 버리게 됩니다.</dd>
+<dt><code>stampSourceHistory</code>와 <code>hideBuildAuthors</code></dt>
+<dd>각 문서에 그 소스 파일을 마지막으로 바꾼 커밋의 시각을 찍고 그 커밋의 작성자를 밝혀, 푸터의 "마지막 편집" 줄이 그 줄에서 이어지는 역사의 첫 항목과 맞아떨어지게 합니다. 저장소의 역사에 닿을 수 없다면 — 얕은 체크아웃이거나, 소스 디렉터리가 저장소가 아닌 경우 — 모든 문서가 빌드 중인 커밋의 시각을 갖고 작성자는 아무도 아니게 됩니다.</dd>
+<dt><code>freezePageTouched</code></dt>
+<dd>모든 문서의 <code>page_touched</code>를 고정합니다. 이 값은 버전 콜백을 지닌 모듈의 버전 입력이기 때문입니다. 데이터베이스에 대한 마지막 쓰기이며, 이후는 모두 읽기입니다.</dd></dl>
+<p><span id="Phase&#95;2:&#95;one&#95;pass&#95;per&#95;skin"></span>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="2단계:_스킨마다_한_번씩"><span id="2.EB.8B.A8.EA.B3.84:_.EC.8A.A4.ED.82.A8.EB.A7.88.EB.8B.A4_.ED.95.9C_.EB.B2.88.EC.94.A9"></span>2단계: 스킨마다 한 번씩</h3></div>
+<p>각 렌더링 과정은 사이트 전체를 자기 스킨으로, 자기 디렉터리에 렌더링합니다. <code>skins</code>의 첫 스킨은 출력 루트에, 나머지는 <code>dist/&lt;skin&gt;/</code>에 렌더링됩니다. 각 과정은 데이터베이스 사본을 하나씩 받는데, SQLite는 한 번에 하나만 쓸 수 있고 렌더링 과정도 객체 캐시에는 쓰기를 하기 때문입니다.
+</p>
+<dl><dt><code>RebuildFileCache</code></dt>
+<dd>모든 콘텐츠 문서를 HTML 파일로 렌더링합니다. MediaWiki 자체의 파일 캐시이며, Wikven은 <code>File:</code>도 콘텐츠 네임스페이스로 취급하므로 모든 틀을 쏟아내지 않으면서 파일 설명 문서까지 내보냅니다.</dd>
+<dt><code>retranslateChrome</code></dt>
+<dd>번역된 각 문서를 그 문서 자신의 언어를 인터페이스 언어로 삼아 다시 렌더링합니다. 파일 캐시는 표준 익명 열람만 캐시하므로, 그대로 두면 한국어 문서가 영어 인터페이스를 두르게 됩니다.</dd>
+<dt><code>stripBuildStamps</code></dt>
+<dd>MediaWiki가 렌더링된 문서마다 찍는 요청 id, 렌더 id, 시각을 제거합니다. 빌드마다 달라지는 값들입니다.</dd>
+<dt><code>buildStyles</code></dt>
+<dd>문서가 참조하는 각 CSS 모듈을 로컬 파일로 다시 렌더링하고, <code>site.styles</code> 모듈(<code>MediaWiki:Common.css</code>와 스킨의 사이트 CSS)을 자체 파일로 렌더링합니다.</dd>
+<dt><code>bakeWebfonts</code></dt>
+<dd><code>WikvenBundleWebfonts</code>가 설정되어 있으면, 내보내기의 언어들에 대한 UniversalLanguageSelector의 웹폰트를 글꼴 파일과 함께 평범한 스타일시트로 씁니다. 그렇지 않으면 아무 일도 하지 않습니다.</dd>
+<dt><code>buildScripts</code></dt>
+<dd>문서에 필요한 자바스크립트를 두 파일로 덤프합니다. <code>startup-static.js</code>(네트워크 자동 로드를 제거한 로더 매니페스트)와 <code>modules-static.js</code>(전체 의존성 클로저이므로 모든 모듈이 스스로 실행됩니다)입니다. 살아 있는 위키가 암묵적으로 끌어오는 <code>site</code> 모듈(<code>MediaWiki:Common.js</code>와 스킨의 JS)과 기본 <a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">소도구</a>도 함께 심습니다.</dd>
+<dt><code>rewriteScripts</code></dt>
+<dd>캐시된 HTML이 <code>load.php</code> 대신 로컬 번들을 불러오도록 다시 씁니다. 비동기 시작 태그를 정적 파일과 명시적인 <code>mw.loader.load()</code>로 바꾸고, 사이트 스타일이 캐스케이드에서 이기도록 마지막에 링크하며, 살아 있는 API가 필요한 검색 상자를 제거합니다. 단 <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">SifterSearch</a>가 정적 색인을 제공하는 경우는 예외입니다.</dd>
+<dt><code>fillMinervaMenu</code></dt>
+<dd>렌더링된 각 문서의 Minerva 주 메뉴에 사이트 자체의 내비게이션을 써넣습니다. Minerva는 그 메뉴를 자체 정의에서 만들고 <code>MediaWiki:Sidebar</code>를 결코 읽지 않으며, PHP 쪽에서 항목을 더할 방법도 없습니다.</dd>
+<dt><code>storeImages</code></dt>
+<dd>참조된 모든 이미지를(InstantCommons를 통한 위키미디어 공용의 것이든 로컬 업로드든) 내용 해시가 붙은 로컬 파일로 복사하고 URL을 다시 써서, 열람 시점에 네트워크로 가져오는 것이 없게 합니다.</dd>
+<dt><code>rename</code></dt>
+<dd>네임스페이스 접두사가 붙은 캐시 파일에 읽을 수 있는 이름을 줍니다(예: <code>ns6%3A...</code>가 <code>File:...</code>이 됩니다). 각 문서의 상대 링크도 그 문서 자신의 깊이에 맞게 고칩니다.</dd>
+<dt><code>resolveTranslationLinks</code></dt>
+<dd>각 번역이 어느 경로에 있는지 확정된 뒤, 완성된 트리 위에서 <code>Special:MyLanguage/</code> 링크를 다시 써서 독자 자신의 언어로 이어지게 합니다.</dd></dl>
+<p>주 스킨이 아닌 스킨을 렌더링하는 과정은 검색 색인을 자기 디렉터리로 복사하기도 합니다. 그 사본에서 검색하면 그 안에서 답이 나오도록 하기 위해서입니다.
+</p><p><span id="Configuration"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="설정"><span id=".EC.84.A4.EC.A0.95"></span>설정</h2></div>
+<p>설정은 계층으로 이루어집니다. <code>default.yml</code>은 Wikven의 기본 MediaWiki 설정을 제공하고, 사이트의 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>이 그 위에 병합됩니다. <code>WikvenSettings.php</code>는 둘 다를 MediaWiki 자체의 YAML 설정 파서로 읽어, 병합된 <code>config</code> 맵을 적용하고, 나열된 <code>extensions</code>와 <code>skins</code>를 불러오며, <code>$wgLogos</code>를 업로드된 <code>WikvenLogos</code> 파일로 향하게 합니다. 또한 실행 시점에 섬네일 백엔드를 감지하는데, 가능하면 ImageMagick과 rsvg를, 그렇지 않으면 내장 GD 라이브러리와 네이티브 인라인 SVG를 사용하므로, 동일한 빌드가 이미지에서도 GD만 있는 바이너리에서도 동작합니다.
+</p><p><span id="Why&#95;these&#95;steps&#95;exist"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="이_단계들이_존재하는_이유"><span id=".EC.9D.B4_.EB.8B.A8.EA.B3.84.EB.93.A4.EC.9D.B4_.EC.A1.B4.EC.9E.AC.ED.95.98.EB.8A.94_.EC.9D.B4.EC.9C.A0"></span>이 단계들이 존재하는 이유</h2></div>
+<p>실제로 구동 중인 위키는 <code>load.php</code>, 액션 API, 데이터베이스에 의존하지만, 정적 호스트에는 이 중 무엇도 없습니다. 각 파이프라인 단계는 그런 의존성을 하나씩 없앱니다. 파일 캐시가 렌더러를 대체하고, <code>buildStyles</code>/<code>buildScripts</code>/<code>rewriteScripts</code>가 <code>load.php</code>를 대체하며, <code>storeImages</code>가 섬네일/공용 엔드포인트를 대체하고, 확장 기능의 훅이 API를 호출할 UI를 제거합니다. 남는 것은 평범한 HTML, CSS, JS, 그리고 이미지입니다.
+</p><p><span id="Third-party&#95;extensions&#95;and&#95;skins"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="서드파티_확장_기능과_스킨"><span id=".EC.84.9C.EB.93.9C.ED.8C.8C.ED.8B.B0_.ED.99.95.EC.9E.A5_.EA.B8.B0.EB.8A.A5.EA.B3.BC_.EC.8A.A4.ED.82.A8"></span>서드파티 확장 기능과 스킨</h2></div>
+<p><code>extensions</code>/<code>skins</code>에 있는 이름 중 Wikven에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 <a href="../Configuration/ko.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>에 선언된 소스(tarball, <a rel="nofollow" class="external text" href="https://git-scm.com/">Git</a> 저장소, 또는 <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
+</p><p><span id="Standalone&#95;binary"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="단독_실행_바이너리"><span id=".EB.8B.A8.EB.8F.85_.EC.8B.A4.ED.96.89_.EB.B0.94.EC.9D.B4.EB.84.88.EB.A6.AC"></span>단독 실행 바이너리</h2></div>
+<p>동일한 MediaWiki + Wikven 트리가 단일 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">FrankenPHP 실행 파일</a>로 내장되어(<code>binary.Dockerfile</code> 참고), Docker 없이도 사이트를 빌드할 수 있습니다. 바이너리는 시작 시 자신의 앱을 쓰기 가능한 임시 디렉터리로 추출하고 동일한 파이프라인을 실행하는데, 이것이 모든 쓰기 가능한 경로를 <code>WIKVEN_WORKDIR</code> 아래에 두는 이유입니다. <code>build</code>와 <code>serve</code> 하위 명령은 <code>caddy/</code>의 작은 Caddy 모듈이 등록하며, 그 명령들이 실행하는 진입점이 <code>bin/build.php</code>입니다.
+</p><p><span id="Tests"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="테스트"><span id=".ED.85.8C.EC.8A.A4.ED.8A.B8"></span>테스트</h2></div>
+<p>네 가지 스위트가 있고, 각각 나머지가 다루지 못하는 것을 다룹니다:
+</p>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="c1"># PHPUnit, run against a MediaWiki install (CI does this with quibble).</span>
+php<span class="w"> </span>tests/phpunit/phpunit.php<span class="w"> </span>extensions/Wikven/tests/phpunit/unit
+php<span class="w"> </span>tests/phpunit/phpunit.php<span class="w"> </span>extensions/Wikven/tests/phpunit/integration
+
+<span class="c1"># Linters and coding standards.</span>
+composer<span class="w"> </span>phpcs
+composer<span class="w"> </span><span class="nb">test</span><span class="w">          </span><span class="c1"># minus-x: file modes and shebangs</span>
+
+<span class="c1"># Browser tests, against a site you have already baked into dist/.</span>
+npm<span class="w"> </span>ci
+npm<span class="w"> </span>run<span class="w"> </span>test:e2e
+</pre></div>
+<ul><li><b>단위 테스트</b>(<code>tests/phpunit/unit/</code>)는 순수한 문자열·경로 처리인 도우미 클래스를 다룹니다.</li>
+<li><b>통합 테스트</b>(<code>tests/phpunit/integration/</code>)는 훅과, 주변에 서비스가 있어야 하는 클래스를 다룹니다.</li>
+<li><b>스모크 테스트</b>(<code>.github/workflows/smoke.yml</code>)는 실제 이미지로 이 문서 사이트를 굽고 그 출력이 완결된 자립형 사이트인지 검증합니다. CSS에 <code>load.php</code>가 남아 있지 않은지, 스킨 사본마다 검색 번들이 있는지, 인쇄용 푸터 링크가 모두 해석되는지, 그리고 사이트 전체를 <b>두 번</b> 구워 비교합니다. 한 소스를 두 번 구우면 바이트까지 같아야 하기 때문입니다.</li>
+<li><b>브라우저 테스트</b>(<code>tests/e2e/</code>, Playwright)는 구워진 사이트를 Chromium에서 조작합니다. 스킨 전환기, 설정 문서, 스킨별 검색, Minerva의 메뉴를 다룹니다.</li></ul>
+<p>e2e 실행은 GitHub Pages가 그러하듯 <code>dist/</code>를 <code>/wikven/</code> 경로 접두사 아래에서 제공하므로, 같은 명령이 로컬에서도 CI에서도 작동합니다. 다른 곳을 가리키려면 <code>WIKVEN_BASE_URL</code>을 쓰십시오.
+</p><p><span id="Continuous&#95;integration"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="지속적_통합"><span id=".EC.A7.80.EC.86.8D.EC.A0.81_.ED.86.B5.ED.95.A9"></span>지속적 통합</h2></div>
+<ul><li><code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행하고, Wikven의 모든 설정 변수가 문서화되어 있는지 검사합니다.</li>
+<li><code>test.yml</code>과 <code>quibble.yml</code>은 PHPUnit 스위트와 MediaWiki 자체의 구조 테스트를 실행합니다.</li>
+<li><code>smoke.yml</code>은 이 사이트를 굽고 그 출력을 브라우저에서, 그리고 바이트 단위로 검증합니다.</li>
+<li><code>translations.yml</code>은 <a href="../Commands/ko.html#check-translations" title="Special:MyLanguage/Commands">check-translations 액션</a>을 통해 <code>docs/</code>의 오래된 번역을 보고합니다.</li>
+<li><code>docker-image.yml</code>은 이미지를 빌드하고 <code>main</code>에서 <code>ghcr.io/chaotic-ground/wikven</code>에 게시합니다.</li>
+<li><code>deploy-docs.yml</code>은 이미지로 <code>docs/</code> 디렉터리를 빌드하고 그 결과를 GitHub Pages에 배포하므로, 이 사이트 자체가 하나의 Wikven 빌드입니다. <code>pr-preview.yml</code>은 풀 리퀘스트마다 같은 일을 하되, 풀 리퀘스트가 닫히면 사라지는 하위 디렉터리에 배포합니다.</li>
+<li><code>binary.yml</code>은 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>를 빌드합니다. 해당 파일을 건드리는 풀 리퀘스트에서, 그리고 릴리스 때는 각 플랫폼용으로 실행됩니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다.</li>
+<li><code>updatecli.yml</code>은 이미지와 문서 사이트가 지닌 버전 핀을 옮기고, <code>tofu.yml</code>은 <code>.tf/</code>에 있는 저장소 자체의 설정을 적용합니다.</li></ul>
+<p>버전은 <a rel="nofollow" class="external text" href="https://www.conventionalcommits.org/">Conventional Commits</a>를 따르며, release-please가 이를 사용해 변경 로그를 생성하고 버전을 올립니다.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r86">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Commands/ko.html" title="Special:MyLanguage/Commands">명령어</a></div><div class="wikven-prevnext-next"><a href="../Writing_an_extension/ko.html" title="Special:MyLanguage/Writing an extension">확장 기능 만들기</a>&#160;&#8594;</div></div>
+
+</div>
+<div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="../Development/ko.html">Development/ko.html</a>"</div></div>
+					<div id="catlinks" class="catlinks catlinks-allhidden" data-mw-interface=""></div>
+				</div>
+			</main>
+			
+		</div>
+		<div class="mw-footer-container">
+			
+<footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
+	<ul id="footer-info">
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 17일 (월) 11:33에 마지막으로 편집되었습니다.</li>
+</ul>
+
+	<ul id="footer-places">
+	<li id="footer-places-about"><a href="../About.html">Wikven 소개</a></li>
+	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+</ul>
+
+	<ul id="" class="noprint">
+</ul>
+
+</footer>
+
+		</div>
+	</div> 
+</div> 
+<div class="vector-header-container vector-sticky-header-container no-font-mode-scale">
+	<div id="vector-sticky-header" class="vector-sticky-header">
+		<div class="vector-sticky-header-start">
+			<div class="vector-sticky-header-icon-start vector-button-flush-left" aria-hidden="true">
+				<button class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-sticky-header-search-toggle" tabindex="-1" data-event-name="ui.vector-sticky-search-form.icon"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>검색</span>
+			</button>
+		</div>
+			
+		<div role="search" class="vector-search-box-vue vector-search-box">
+			<div class="vector-typeahead-search-container">
+				<div class="cdx-typeahead-search">
+					<form action="/index.php" id="vector-sticky-search-form" class="cdx-search-input cdx-search-input--has-end-button">
+						<div  class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+							<div class="cdx-text-input cdx-text-input--has-start-icon">
+								<input
+									class="cdx-text-input__input mw-searchInput" autocomplete="off"
+									
+									type="search" name="search" placeholder="Wikven 검색">
+								<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+							</div>
+							<input type="hidden" name="title" value="Special:Search">
+						</div>
+						<button class="cdx-button cdx-search-input__end-button">검색</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-context-bar">
+				<nav aria-label="목차" class="vector-toc-landmark">
+						
+					<div id="vector-sticky-header-toc" class="vector-dropdown mw-portlet mw-portlet-sticky-header-toc vector-sticky-header-toc vector-button-flush-left"   lang="ko" dir="ltr">
+						<input type="checkbox" id="vector-sticky-header-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-sticky-header-toc" class="vector-dropdown-checkbox "  aria-label="목차 토글"  >
+						<label id="vector-sticky-header-toc-label" for="vector-sticky-header-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">목차 토글</span>
+						</label>
+						<div class="vector-dropdown-content">
+					
+						<div id="vector-sticky-header-toc-unpinned-container" class="vector-unpinned-container">
+						</div>
+					
+						</div>
+					</div>
+			</nav>
+				<div class="vector-sticky-header-context-bar-primary" aria-hidden="true"  lang="ko" dir="ltr">개발</div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-end" aria-hidden="true">
+			<div class="vector-sticky-header-icons">
+				<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-talk-sticky-header" tabindex="-1" data-event-name="talk-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbles mw-ui-icon-wikimedia-speechBubbles"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-subject-sticky-header" tabindex="-1" data-event-name="subject-sticky-header"><span class="vector-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-history-sticky-header" tabindex="-1" data-event-name="history-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-history mw-ui-icon-wikimedia-wikimedia-history"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only mw-watchlink" id="ca-watchstar-sticky-header" tabindex="-1" data-event-name="watch-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-star mw-ui-icon-wikimedia-wikimedia-star"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-edit-sticky-header" tabindex="-1" data-event-name="wikitext-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-wikiText mw-ui-icon-wikimedia-wikimedia-wikiText"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-ve-edit-sticky-header" tabindex="-1" data-event-name="ve-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-edit mw-ui-icon-wikimedia-wikimedia-edit"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-viewsource-sticky-header" tabindex="-1" data-event-name="ve-edit-protected-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-editLock mw-ui-icon-wikimedia-wikimedia-editLock"></span>
+
+<span></span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-buttons">
+				<button class="cdx-button cdx-button--weight-quiet mw-interlanguage-selector" id="p-lang-btn-sticky-header" tabindex="-1" data-event-name="ui.dropdown-p-lang-btn-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span>
+
+<span>언어 추가</span>
+			</button>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive" id="ca-addsection-sticky-header" tabindex="-1" data-event-name="addsection-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbleAdd-progressive mw-ui-icon-wikimedia-speechBubbleAdd-progressive"></span>
+
+<span>새 주제</span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-icon-end">
+				<div class="vector-user-links">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mw-portlet mw-portlet-dock-bottom emptyPortlet" id="p-dock-bottom">
+	<ul>
+		
+	</ul>
+</div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":0});});</script>
+</body>
+</html>
