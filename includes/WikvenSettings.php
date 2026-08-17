@@ -303,19 +303,19 @@ $wgWikvenSearchIndexSource = (string)( $GLOBALS['wgSifterSearchOutputDir'] ?? ''
 // not been read at this point -- LocalSettings.php runs before the registry materializes it. For
 // the same reason Search is loaded by hand here, as SiteConfig is above.
 require_once "$IP/extensions/Wikven/includes/Search.php";
-$wikvenBundlePath = (string)( $GLOBALS['wgSifterSearchBundlePath'] ?? '/pagefind/' );
-if (
-	$wikvenBuildSkin !== false
-	&& in_array($wikvenBuildSkin, $wgWikvenSkins, true)
-	&& $wikvenBuildSkin !== $wgWikvenMainSkin
-	&& $wgWikvenSearchIndexSource !== ''
-	&& MediaWiki\Extension\Wikven\Search::isBundlePathRootAnchored($wikvenBundlePath)
-) {
-	$GLOBALS['wgSifterSearchBundlePath'] = MediaWiki\Extension\Wikven\Search::bundlePathUnder(
-		$wikvenBundlePath,
-		$wikvenBuildSkin
-	);
-	$GLOBALS['wgSifterSearchOutputDir'] = $wgWikvenHtmlDirectory . '/' . basename($wgWikvenSearchIndexSource);
+$wikvenSkinPass = $wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, true)
+	? $wikvenBuildSkin
+	: '';
+$wikvenSearchCopy = MediaWiki\Extension\Wikven\Search::bundleCopyFor(
+	$wikvenSkinPass,
+	$wgWikvenMainSkin,
+	(string)( $GLOBALS['wgSifterSearchBundlePath'] ?? '/pagefind/' ),
+	$wgWikvenSearchIndexSource,
+	$wgWikvenHtmlDirectory
+);
+if ($wikvenSearchCopy !== null) {
+	$GLOBALS['wgSifterSearchBundlePath'] = $wikvenSearchCopy['path'];
+	$GLOBALS['wgSifterSearchOutputDir'] = $wikvenSearchCopy['directory'];
 }
 
 // WikvenLogos ($wgWikvenLogos) mirrors $wgLogos but each src is a source-dir file name, resolved

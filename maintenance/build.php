@@ -382,33 +382,13 @@ class Build extends Maintenance {
 	 * Pagefind pass over the whole site per skin, for bytes that would come out identical.
 	 */
 	private function copySearchBundle(): void {
-		$source = rtrim((string)( $GLOBALS['wgWikvenSearchIndexSource'] ?? '' ), '/');
-		$destination = rtrim((string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' ), '/');
-		// Equal on the main skin's pass, which is the one the index was built into.
-		if ($source === '' || $destination === '' || $source === $destination || !is_dir($source)) {
-			return;
-		}
-		$this->copyDirectory($source, $destination);
-	}
-
-	/** Recursively copy the contents of $source into $destination, creating what is missing. */
-	private function copyDirectory(string $source, string $destination): void {
-		if (!wfMkdirParents($destination)) {
-			$this->fatalError("Wikven: could not create directory $destination");
-		}
-		$entries = new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS),
-			\RecursiveIteratorIterator::SELF_FIRST
+		// Equal on the main skin's pass, the one the index was built into; Search returns early.
+		$error = Search::publishBundle(
+			(string)( $GLOBALS['wgWikvenSearchIndexSource'] ?? '' ),
+			(string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' )
 		);
-		foreach ($entries as $entry) {
-			$target = $destination . '/' . substr($entry->getPathname(), strlen($source) + 1);
-			if ($entry->isDir()) {
-				if (!wfMkdirParents($target)) {
-					$this->fatalError("Wikven: could not create directory $target");
-				}
-			} elseif (!copy($entry->getPathname(), $target)) {
-				$this->fatalError("Wikven: could not copy {$entry->getPathname()} to $target");
-			}
+		if ($error !== null) {
+			$this->fatalError($error);
 		}
 	}
 
