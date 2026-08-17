@@ -1,4 +1,12 @@
 <?php
+/**
+ * SifterSearch and Translate are optional, image-bundled dependencies that phan does not analyse,
+ * so their symbols are undeclared to static analysis here. The hook below is only reached when
+ * SifterSearch runs it, and only asks Translate anything once it has said it is loaded.
+ *
+ * @phan-file-suppress PhanUndeclaredInterface
+ * @phan-file-suppress PhanUndeclaredClassMethod
+ */
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
