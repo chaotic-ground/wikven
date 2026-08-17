@@ -2,6 +2,7 @@
 /vendor/
 /composer.lock
 /dist/
+/dist-again/
 /out/
 /test-results/
 /playwright-report/
