@@ -94,7 +94,9 @@ $run(["$ip/extensions/Wikven/maintenance/fetchExtensions.php"]);
 $run(['update', '--quick']);
 $run(["$ip/extensions/Wikven/maintenance/build.php"]);
 
-// Drop the per-page history the file cache emits, as the Docker run does. Done without a shell: this
+// Drop any per-page history left in the output, as the Docker run does. The file cache no longer
+// emits one (SkippedHistoryAction), so this is a guard over a workdir that was built before that or
+// by other means, and normally finds nothing. Done without a shell: this
 // is the entry point that has to work on a host with no distro toolchain -- it hunts for its own
 // executable and a CA bundle above for the same reason -- and each removal's result is checked so a
 // failure here is reported instead of leaving dist/history/ published under a misleading "done".

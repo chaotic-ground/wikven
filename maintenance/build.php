@@ -374,9 +374,15 @@ class Build extends Maintenance {
 		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
 		$this->step(ResolveTranslationLinks::class, "$own/resolveTranslationLinks.php");
 
-		// RebuildFileCache emits a per-page history/ tree the static host won't serve; drop it.
+		// SkippedHistoryAction leaves RebuildFileCache nothing to write here, so this finds nothing
+		// on a normal bake; it stays as the guard for a pass over an output directory that already
+		// holds a history/ tree, which the static host would not serve.
 		$history = "$dir/history";
 		if (is_dir($history)) {
+			// Say so rather than tidy up in silence: on a bake that starts from an empty output
+			// directory, a tree here means the skipped action is no longer being asked for, and
+			// every page has paid for a render nobody reads.
+			$this->output("Wikven: removing a history/ tree the export does not want ($history)\n");
 			$this->removeDirectory($history);
 		}
 	}
