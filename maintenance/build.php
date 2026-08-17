@@ -63,6 +63,9 @@ class Build extends Maintenance {
 		$this->stampSourceHistory();
 		$this->hideBuildAuthors();
 		$this->forgetCachedRevisionRows();
+		// The content is final here, so this is the last write the database needs and the passes
+		// below can be readers of it.
+		$this->freezePageTouched();
 
 		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
 		if (!$skins) {
@@ -266,7 +269,22 @@ class Build extends Maintenance {
 		}
 	}
 
-	/** Freeze page_touched once content is final; wiki-page modules fold it into their version hash. */
+	/**
+	 * Freeze page_touched once content is final; wiki-page modules fold it into their version hash.
+	 *
+	 * Once, in the orchestrator, rather than once per skin pass: what it writes is content state,
+	 * the same in every pass and derived from nothing a pass did, so a three-skin bake was running
+	 * the same full-table update three times for two no-ops. It is also one of the two writes that
+	 * kept a pass from being a reader of the database -- rebuildFileCache.php puts the wiki in
+	 * read-only mode for its own duration, so a pass has no business writing around it -- and a
+	 * reader is what a pass has to be to run beside another one (#407).
+	 *
+	 * Freezing here also means the pages are rendered with the frozen value rather than with
+	 * whatever the import and the job queue left, since the passes now boot after it. That is the
+	 * point of the freeze rather than a cost of moving it: SOURCE_DATE_EPOCH differs per commit,
+	 * so a page_touched written under the frozen clock differs per commit too, and pinning it is
+	 * what keeps the module version hashes embedded in the HTML stable between bakes.
+	 */
 	private function freezePageTouched(): void {
 		$dbw = $this->getPrimaryDB();
 		$dbw->newUpdateQueryBuilder()
@@ -276,8 +294,9 @@ class Build extends Maintenance {
 			->caller(__METHOD__)
 			->execute();
 
-		// The modules read page_touched through LinkCache, not the row just written: it is warmed in
-		// process while the pages render, and MediaWiki: pages are cached in the object cache too.
+		// The modules read page_touched through LinkCache, not the row just written: this process
+		// has warmed it filling the wiki, and its MediaWiki: entries are kept in the object cache
+		// as well, which the passes below boot onto rather than build for themselves.
 		$linkCache = $this->getServiceContainer()->getLinkCache();
 		$pages = $dbw->newSelectQueryBuilder()
 			->select(['page_namespace', 'page_title'])
@@ -343,8 +362,6 @@ class Build extends Maintenance {
 		$this->step(RetranslateChrome::class, "$own/retranslateChrome.php");
 		// Every page is rendered by now: drop what each one recorded about the request that made it.
 		$this->step(StripBuildStamps::class, "$own/stripBuildStamps.php");
-		// Nothing is rendered after this, so freezing costs no staleness; the asset dumps below read it.
-		$this->freezePageTouched();
 		$this->step(BuildStyles::class, "$own/buildStyles.php");
 		// Opt-in: bake ULS webfonts into a static stylesheet rewriteScripts links below.
 		$this->step(BakeWebfonts::class, "$own/bakeWebfonts.php");
