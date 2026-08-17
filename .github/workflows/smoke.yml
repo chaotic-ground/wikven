@@ -159,11 +159,20 @@ jobs:
             echo "::error::docs/Deploying/ko.wikitext has no translated title to expect"
             exit 1
           fi
-          if ! grep -q "wikven-prevnext-next\"><a [^>]*>$want</a>" dist/Searching/ko.html; then
-            echo "::error::Searching/ko's prevnext does not show Deploying's Korean title ($want)"
-            sed -n 's/.*\(wikven-prevnext-next">[^<]*<a[^>]*>[^<]*<\/a>\).*/\1/p' dist/Searching/ko.html
-            exit 1
-          fi
+          # Newlines are flattened before the block is read: the template writes its markup over
+          # several lines, and what is being matched is one span of it. An empty match fails the
+          # case below rather than passing it, so a prevnext that stopped rendering is caught here
+          # too.
+          shown=$(tr '\n' ' ' < dist/Searching/ko.html | grep -o 'wikven-prevnext-next.\{0,300\}' \
+            | head -n 1) || true
+          case "$shown" in
+            *"$want"*) ;;
+            *)
+              echo "::error::Searching/ko's prevnext does not show Deploying's Korean title ($want)"
+              echo "$shown"
+              exit 1
+              ;;
+          esac
 
           echo "Smoke checks passed."
 
