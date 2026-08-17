@@ -148,6 +148,35 @@ jobs:
 
           echo "Smoke checks passed."
 
+      # Two bakes of the same source have to produce the same bytes, and until now nothing said so.
+      # Everything in the bake that exists for it -- the frozen clock and SOURCE_DATE_EPOCH, the
+      # frozen page_touched, the fifo job queue, the disabled NewPP limit report, the PNG timestamp
+      # chunks stripped on import, the installer's main page deleted -- was written after someone
+      # noticed the output moving between bakes, so the next regression was going to be found the
+      # same way (#411).
+      #
+      # Same checkout, same image, same runner, so the bake itself is the only thing that can
+      # differ. Baking from two separate clones is the stronger check and is not this one: it fails
+      # today because importWikitext.php stamps revisions with filemtime(), which a second clone
+      # changes (#406).
+      - name: Bake the docs site again and assert the two bakes are identical
+        run: |
+          set -euo pipefail
+          mkdir -p dist-again
+          docker run --rm \
+            -v "$(pwd)/docs:/workspace/src" \
+            -v "$(pwd)/dist-again:/workspace/dist" \
+            wikven
+          if diff -rq dist dist-again; then
+            echo "Two bakes of the same source are byte-identical."
+          else
+            echo "::error::two bakes of the same source are not identical (#411)"
+            # The file list above says which pages moved; this says what moved in them, and is cut
+            # off because a single differing byte in a shared header differs in every page.
+            diff -r dist dist-again | head -n 200 || true
+            exit 1
+          fi
+
       # Node.js is preinstalled on the runner; no setup-node (its caching trips
       # the cache-poisoning audit, and this job shares a build cache with the
       # image-publishing workflow).
