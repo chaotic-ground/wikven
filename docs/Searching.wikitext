@@ -9,6 +9,9 @@ Static sites have no server to answer queries, so MediaWiki's built-in search do
 <!--T:3-->
 SifterSearch indexes the rendered pages with [https://pagefind.app/ Pagefind] and writes a static index bundle into the build output. On each page it feeds those results into the skin's own search box: the Codex typeahead where the skin mounts one (Vector 2022 and MinervaNeue), and core's classic suggestions box elsewhere. Either way the box suggests as you type, a suggestion leads to the page it names, and nothing behind it is asked — no API, no database, no <code>load.php</code>.
 
+<!--T:12-->
+A site built with more than one skin is written once per skin, and each of those copies carries the index as well as the pages, under its own <code>pagefind/</code>. A result is a page in the copy the reader is already reading, so choosing a skin survives a search.
+
 <!--T:4-->
 == Configuring it ==
 

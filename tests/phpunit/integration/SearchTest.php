@@ -46,4 +46,40 @@ class SearchTest extends MediaWikiIntegrationTestCase {
 			'no value, as on a wiki without SifterSearch' => [null, null]
 		];
 	}
+
+	/**
+	 * The bundle's location is what decides which copy of the site a search answers with, so this
+	 * is the whole of #399's fix: the copy's directory goes ahead of the bundle's own, and every
+	 * URL SifterSearch derives from the path follows it in.
+	 *
+	 * @dataProvider provideCopyBundlePaths
+	 */
+	public function testCopyBundlePathPutsTheBundleBesideTheCopy(
+		string $bundlePath,
+		string $directory,
+		?string $expected
+	) {
+		$this->assertSame($expected, Search::copyBundlePath($bundlePath, $directory));
+	}
+
+	public static function provideCopyBundlePaths() {
+		return [
+			'a site in a subdirectory' => ['/wikven/pagefind/', 'citizen', '/wikven/citizen/pagefind/'],
+			'a site at the host root' => ['/pagefind/', 'minerva', '/minerva/pagefind/'],
+			// SifterSearch's setting is a directory either way; a site may write it without the
+			// trailing slash, and the copy's own is the same path with one segment more.
+			'no trailing slash' => ['/wikven/pagefind', 'citizen', '/wikven/citizen/pagefind/'],
+			'several directories down' => ['/a/b/pagefind/', 'citizen', '/a/b/citizen/pagefind/'],
+			// Nothing here knows where such a bundle's site root is, so it is left where it is and
+			// the copy goes on reading the one bundle -- today's behaviour, not a broken path.
+			'another host' => ['https://cdn.example/pagefind/', 'citizen', null],
+			'protocol-relative' => ['//cdn.example/pagefind/', 'citizen', null],
+			'a relative path' => ['pagefind/', 'citizen', null],
+			'nothing configured' => ['', 'citizen', null],
+			// A bundle claiming the site root itself has no directory of its own to reproduce, and
+			// a copy of every page under it would collide with the copy's own pages.
+			'the site root' => ['/', 'citizen', null],
+			'no copy directory' => ['/wikven/pagefind/', '', null]
+		];
+	}
 }
