@@ -136,6 +136,62 @@ jobs:
       - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
       - run: composer phpcs
 
+  # Documentation the code has outgrown reads as documentation, which is worse than none: the two
+  # checks here are the drift that has actually happened, turned into a gate. Both carry an
+  # allowlist rather than a pattern, so a new entry is a decision someone makes rather than a
+  # silence someone inherits.
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Every configuration variable extension.json declares is one a site author can set, and
+      # docs/Configuration.wikitext is where they look it up. Six of them had never reached that
+      # page. The three skipped are derived from WIKVEN_WORKDIR by the build and are documented
+      # there as ones not to set.
+      - name: Check every configuration variable is documented
+        run: |
+          set -euo pipefail
+          internal="WikvenSourceDirectory WikvenHtmlDirectory WikvenSourceHistoryFile"
+          status=0
+          for key in $(jq -r '.config | keys[]' extension.json); do
+            case " $internal " in
+              *" $key "*) continue ;;
+            esac
+            if ! grep -qF "$key" docs/Configuration.wikitext; then
+              echo "::error file=docs/Configuration.wikitext::$key is declared in extension.json" \
+                   "but not documented here. Document it, or add it to the internal list in" \
+                   ".github/workflows/lint.yml if the build sets it itself."
+              status=1
+            fi
+          done
+          exit "$status"
+
+      # Every maintenance script is a build step, and the pipeline is described in
+      # docs/Development.wikitext. The four translation helpers are documented by the command that
+      # runs them (translate mark/scaffold/stamp/check) rather than by file name, so they are named
+      # here instead.
+      - name: Check every build step is documented
+        run: |
+          set -euo pipefail
+          helpers="markTranslations scaffoldTranslations stampTranslations checkTranslations"
+          status=0
+          for script in maintenance/*.php; do
+            step=$(basename "$script" .php)
+            case " $helpers " in
+              *" $step "*) continue ;;
+            esac
+            if ! grep -qrF "$step" docs/*.wikitext; then
+              echo "::error file=$script::$step is a build step no page under docs/ mentions." \
+                   "Describe it in docs/Development.wikitext, or add it to the helper list in" \
+                   ".github/workflows/lint.yml if it is documented by command name."
+              status=1
+            fi
+          done
+          exit "$status"
+
   # "composer test" is minus-x, which checks file modes and shebangs and needs no wiki around it.
   # It ran as a quibble stage, which spent 100 seconds booting MediaWiki to reach a check that
   # reads the working tree. Keeping the job name keeps the required check.

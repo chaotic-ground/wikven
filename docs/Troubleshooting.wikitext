@@ -34,6 +34,45 @@ Fetching Wikimedia Commons images and [[<tvar name="1">Special:MyLanguage/Config
 
 <!--T:11-->
 The standalone binary is Linux-only (x86_64 and arm64). On macOS or Windows, use the Docker image instead. See [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]].
+
+<!--T:12-->
+== A setting in <code>.wikven.yaml</code> does nothing ==
+
+<!--T:13-->
+Read the build log first: it warns about the mistakes it can see. <code>unknown config 'Wikven...'</code> means a variable that is not one of {{SITENAME}}'s — a typo, most often, since a name it does not recognise is otherwise applied and ignored. <code>unknown top-level key</code> means a setting outside <code>config</code>, <code>extensions</code> or <code>skins</code>. A URL template warning means <code>WikvenEditUrl</code> and friends are missing their <code>$1</code>.
+
+<!--T:14-->
+A silent one to check by eye: a <code>config</code> value '''replaces''' the default rather than merging with it, so a list or map you set has to carry every entry you want, including the ones you were happy with. See [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|Configuration]].
+
+<!--T:15-->
+== An extension or skin was not loaded ==
+
+<!--T:16-->
+<code>skipping extension 'X' (not bundled in this image)</code>, or the same for a skin, means the name in your <code>extensions</code> or <code>skins</code> list was not found on disk. Either it is misspelled, or it is not one of the components {{SITENAME}} ships and needs a source under [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]]. The build carries on without it rather than failing, so this shows up as a feature that quietly did nothing. See [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|Extensions]].
+
+<!--T:17-->
+== Two configuration files, one of them ignored ==
+
+<!--T:18-->
+<code>multiple site config files present</code> means your source directory holds more than one of the accepted names. The first in precedence order wins and the rest are ignored; delete the ones you do not want, rather than editing a file the build is not reading.
+
+<!--T:19-->
+== Every page says it was edited on the same day ==
+
+<!--T:20-->
+Page dates come from the commit that last changed each source file, and a '''shallow checkout''' holds only one commit. Check out with <code>fetch-depth: 0</code>, as the workflow in [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|Deploying]] does. Building from a directory that is not a repository at all has the same effect, and neither case fails the build: the log says it happened, and every page is dated at the commit being built.
+
+<!--T:21-->
+== The build fails on a Wikimedia Commons image ==
+
+<!--T:22-->
+Every parse of a page embedding a Commons image asks Commons for its thumbnail. {{SITENAME}} retries a failed lookup twice before giving up, and then names the image it could not resolve and stops, rather than publishing a page with a hole in it. Check the file name is right and still exists on Commons, and that the build host can reach the network — see also ''Fetching fails over HTTPS'' above.
+
+<!--T:23-->
+== A skin's pass failed ==
+
+<!--T:24-->
+On a site with several skins, each is rendered by its own process and the build reports each one that failed by name (<code>build failed for skin ...</code>). The output of each pass is printed under its own heading, so read the section for the named skin rather than the end of the log. If the machine is short of memory, <code>WIKVEN_BUILD_JOBS=1</code> runs the passes one at a time; see [[<tvar name="1">Special:MyLanguage/Commands</tvar>|Commands]].
 </translate>
 
 {{prevnext|Deploying|Configuration}}

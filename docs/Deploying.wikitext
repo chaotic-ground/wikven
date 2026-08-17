@@ -5,6 +5,33 @@ __TOC__
 <!--T:1-->
 {{SITENAME}} writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
 
+<!--T:13-->
+== What a build writes ==
+
+<!--T:14-->
+Everything the site needs is in <code>dist/</code>, and nothing in it is fetched from anywhere else at view time:
+</translate>
+
+<syntaxhighlight lang="text">
+dist/
+├── index.html               the main page, served at the site root
+├── Getting Started.html     one file per page
+├── Guide/
+│   └── Setup.html           a page whose title has a slash becomes a directory
+├── File:Logo.png.html       file description pages
+├── img-1a2b3c4d5e6f.png     every image the pages use, named by content
+├── site.styles.css          MediaWiki:Common.css and the skin's own CSS
+├── startup-static.js        the module loader, with its network fetch removed
+├── modules-static.js        every module the pages need, bundled
+├── webfonts.css + fonts/    only with WikvenBundleWebfonts set
+├── pagefind/                the search index
+└── citizen/                 a complete copy of the site, per extra skin
+</syntaxhighlight>
+
+<translate>
+<!--T:15-->
+Two things about that layout are worth knowing before you point a host at it. Links between pages are '''relative''', so the site works at a domain root and in a subdirectory alike, and even from the filesystem. But anything addressed from the site root rather than from the page — the search bundle most visibly — has to be told the base path; that is the note under GitHub Pages below. And each extra skin's directory is a '''complete copy''', so a three-skin site is roughly three times the files: see [[<tvar name="1">Special:MyLanguage/Skins#Building more than one skin</tvar>|Skins]].
+
 <!--T:2-->
 == GitHub Pages ==
 
@@ -34,7 +61,9 @@ jobs:
           # its source file. A shallow checkout knows only the latest commit.
           fetch-depth: 0
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
-      - uses: chaotic-ground/wikven/actions/bake@19392b75d379de9e349ef2963c11ec5545c3e6ab  # v1.0.0
+      # No version has been released yet, so there is no tag to pin: pin a commit
+      # of main, and move it to a release tag once one exists.
+      - uses: chaotic-ground/wikven/actions/bake@main
         with:
           source: src
           output: dist
@@ -86,6 +115,18 @@ docker run --rm -p 8080:8080 \
 <translate>
 <!--T:12-->
 Any static server works too, for example <code>cd dist && python3 -m http.server</code>.
+
+<!--T:16-->
+== Dates, authors and reproducible builds ==
+
+<!--T:17-->
+Each page's "last edited" line names the commit that last changed '''that page's source file''', and credits that commit's author. The wiki a build fills has no history of its own — every page is written in one import pass — so the repository's history is where those two facts come from.
+
+<!--T:18-->
+That history has to be reachable. The [[<tvar name="1">Special:MyLanguage/Commands#bake</tvar>|bake action]] reads it on the runner and hands it to the build, but a '''shallow checkout knows only the last commit''', which is why the workflow above checks out with <code>fetch-depth: 0</code>. Without the full history nothing fails: every page is simply dated at the commit being built and credited to nobody. The action says so in the log when it happens, and that line is the only warning you get.
+
+<!--T:19-->
+The rest follows from the same idea. A build runs with its clock frozen at <code>SOURCE_DATE_EPOCH</code> — the commit's own date, when the action sets it — so two builds of one commit produce '''byte-identical''' output, down to the timestamps in the pages. It means a redeploy of unchanged content changes nothing on the host, and a diff between two builds only ever shows what you actually edited. {{SITENAME}}'s own continuous integration asserts it by baking this site twice and comparing the results.
 </translate>
 
 {{prevnext|Translating|Troubleshooting}}
