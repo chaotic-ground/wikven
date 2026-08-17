@@ -1,21 +1,3 @@
-<!--
-The text of one step's link: the target page's own title, in the language of the page the link sits
-on, read from the one place that title is translated -- the target's reserved title unit, which the
-build writes to Translate's "Page display title" unit. Nothing here is translated, so a renamed or
-retranslated page carries its links with it.
-
-Outside a translate tag -- where a prevnext always is, being copied whole into each translation --
-TRANSLATIONLANGUAGE is the language of the page it sits on, which is what a static export needs: a
-page is exported once, so the language is the page's, not the reader's. (The tag is not named here
-in its own syntax on purpose: Translate reads one anywhere in the wikitext, comment or not, and an
-opening tag with no closing one is a page it refuses.)
-
-A target whose title unit is missing falls back to the page name, which is its title in the source
-language anyway. That covers a source-language page, a page with no translation, one that fixes its
-own DISPLAYTITLE, and one whose translated title is out of date -- the build leaves that unit out,
-so the link reads the same English the target's own heading does. Without Translate loaded at all,
-the lookup is for a page in no namespace, which does not exist either, and the fallback is the whole
-behaviour.
-
---><!--
--->{{#ifexist:Translations:{{{1|}}}/Page display title/{{TRANSLATIONLANGUAGE}}|{{Translations:{{{1|}}}/Page display title/{{TRANSLATIONLANGUAGE}}}}|{{{1|}}}}}
+{{#ifexist:Translations:{{{1|}}}/Page display title/{{TRANSLATIONLANGUAGE}}|{{Translations:{{{1|}}}/Page display title/{{TRANSLATIONLANGUAGE}}}}|{{{1|}}}}}<noinclude>
+{{prevnext/doc}}
+</noinclude>

@@ -1,0 +1,35 @@
+Bottom-of-page navigation between the steps of the documentation, as a row of one or two links.
+
+== Usage ==
+
+ <nowiki>{{prevnext|next step}}
+{{prevnext|previous step|next step}}</nowiki>
+
+Each argument is a page name, not a link label: it is the link target, and the link text is the
+target's own title.
+
+== Translated pages ==
+
+A prevnext sits outside the <code>&lt;translate&gt;</code> tags, so it is copied whole into every
+translation of the page it is on. That is why it takes page names alone: a label passed in would be
+a second copy of the target's title in every page that links to it, and one nothing checks, so
+renaming a page would leave the links to it quietly wrong in every language.
+
+<code>Template:prevnext/label</code> reads that title instead, from the one place it is translated:
+the target's <code>title</code> unit, which the build writes to Translate's "Page display title"
+unit. <code>TRANSLATIONLANGUAGE</code> outside the translate tags is the language of the page the
+link sits on, which is the one a static export needs, a page being exported once for its own
+language rather than served per reader. Meta-Wiki's
+[https://meta.wikimedia.org/wiki/Template:Page_display_title <code><nowiki>{{Page display title}}</nowiki></code>]
+does the same lookup for the labels of its localized links.
+
+A target with no translated title falls back to its page name: a page in the source language, one
+with no translation, one that fixes its own <code>DISPLAYTITLE</code>, and one whose translated
+title is out of date, which the build leaves out so the page keeps its untranslated title. All of
+them read the English the target's own heading shows. A site with no Translate loaded looks up a
+page in a namespace that does not exist, so the fallback is the whole behaviour there.
+
+Neither template writes <code>&lt;translate&gt;</code> in its own syntax, in a comment or anywhere
+else. Translate reads the raw wikitext before any tag is stripped and only <code>&lt;nowiki&gt;</code>
+hides one from it, so an opening tag written to explain the template is one it counts, and a page
+carrying it without a closing tag is one it refuses.

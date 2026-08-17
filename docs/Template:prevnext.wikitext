@@ -1,12 +1,8 @@
-<!--
-Usage:
-
-* {{prevnext|next step}}
-* {{prevnext|previous step|next step}}
-
---><templatestyles src="prevnext/styles.css" /><div class="wikven-prevnext"><!--
+<templatestyles src="prevnext/styles.css" /><div class="wikven-prevnext"><!--
   -->{{#if:{{{2|}}}|
     <div class="wikven-prevnext-prev">&larr;&nbsp;[[Special:MyLanguage/{{{1|}}}|{{prevnext/label|{{{1|}}}}}]]</div>
   }}<!--
   --><div class="wikven-prevnext-next">[[Special:MyLanguage/{{{2|{{{1|}}}}}}|{{prevnext/label|{{{2|{{{1|}}}}}}}}]]&nbsp;&rarr;</div><!--
---></div>
+--></div><noinclude>
+{{prevnext/doc}}
+</noinclude>
