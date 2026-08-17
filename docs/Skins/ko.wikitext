@@ -79,8 +79,8 @@ Minerva도 나머지 둘과 똑같이 빌드되고 검증되지만, 그 지원�
 <!--T:16 @09711049-->
 MobileFrontend의 설치 여부와 관계없이, <code>$wgMinerva*</code> 설정은 대부분 빌드에서 아무 일도 하지 않습니다. 스킨이 선언하는 열여섯 개 중 열 개는 MobileFrontend 기능으로 등록되어 <code>SkinOptions::setMinervaSkinOptions()</code>에서 다시 읽히는데, 이 메서드는 <code>RequestContextCreateSkinMobile</code> 훅에서 실행됩니다. 그리고 MobileFrontend는 모바일 뷰를 제공하기로 결정한 뒤에야 그 훅을 발동시키며, 그러려면 모바일 도메인이나 모바일 기기, 또는 <code>useformat=mobile</code>이 필요합니다. 빌드는 그 어느 것도 아니므로 스킨 옵션은 자체에 컴파일된 기본값을 그대로 유지하고, 다음 설정들은 작동하지 않습니다: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code>, <code>MinervaNightMode</code>.
 
-<!--T:17 @442f5a60-->
-나머지 여섯 개는 스킨이 설정에서 직접 읽으므로 문서화된 대로 동작합니다: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code>, <code>MinervaABSamplingRate</code>. 이 중 마지막 두 개는 여기서 작용할 대상이 거의 없습니다. 타입어헤드는 정적 호스트에 없는 검색 API를 호출하고, 표본을 뽑을 A/B 버킷도 없기 때문입니다. 언어 버튼은 그 오버레이가 MobileFrontend의 것이라 어느 쪽이든 숨겨집니다.
+<!--T:17 @9dfc0e8d-->
+나머지 여섯 개는 스킨이 설정에서 직접 읽으므로 문서화된 대로 동작합니다: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code>, <code>MinervaABSamplingRate</code>. 이 중 손댈 만한 것은 <code>MinervaTypeahead</code>입니다. 스킨의 타입어헤드는 이 설정이 가리키는 검색 API가 아니라 정적 색인 위에서 돌아가므로, <code>options</code>는 읽히고 API URL은 읽히지 않으며, 빈 섬네일 열도 여기서 끕니다. [[$1|검색]]을 참고하십시오. <code>MinervaABSamplingRate</code>는 표본을 뽑을 A/B 버킷이 없어 작용할 대상이 없습니다. 언어 버튼은 그 오버레이가 MobileFrontend의 것이라 어느 쪽이든 숨겨집니다.
 
 <!--T:18 @2ad8756b-->
 작동하지 않는 설정들이 구성했을 법한 것은, 가능한 범위에서 {{SITENAME}}이 자체적인 방식으로 제공합니다. 색 테마는 빌드가 <code>Special:MobileOptions</code> 대신 기록하는 <code>Settings</code> 문서에 있고, 사이트 자체의 둘러보기는 렌더링되는 모든 문서의 주 메뉴에 기록됩니다.
