@@ -3,6 +3,9 @@ extensions:
   - Gadgets
   - MobileFrontend
   - ParserFunctions
+  # This site has one Lua module, and Special:MyLanguage/Lua modules is about it. Listing Scribunto
+  # is all it takes: MediaWiki bundles the extension and the image compiles luasandbox into its PHP.
+  - Scribunto
   - SyntaxHighlight_GeSHi
   - TabberNeue
   - TemplateStyles

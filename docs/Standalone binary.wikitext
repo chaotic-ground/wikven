@@ -108,7 +108,16 @@ WIKVEN_WORKDIR=/path/to/project wikven build
 
 <translate>
 <!--T:18-->
-The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]] layered over {{SITENAME}}'s defaults.
+The output is the same as the Docker image's, with one exception below: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|.wikven.yaml]] layered over {{SITENAME}}'s defaults.
+
+<!--T:23-->
+== What it cannot do ==
+
+<!--T:24-->
+'''[[<tvar name="1">Special:MyLanguage/Lua modules</tvar>|Lua modules]].''' The PHP this binary is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship. A site that lists Scribunto is refused here, with a message saying so, rather than baked into pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them. Build that site with the image.
+
+<!--T:25-->
+{{note|This documentation site is one of those: it has a Lua module of its own, so the image builds it and this binary cannot.}}
 
 <!--T:19-->
 == Optional host tools ==

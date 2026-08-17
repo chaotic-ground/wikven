@@ -132,6 +132,30 @@ jobs:
             exit 1
           fi
 
+          # A Lua module runs at build time and its answer is baked into the page that invoked it
+          # (#465). Module:Example answers with the title of the page it ran on, so this says both
+          # that Scribunto rendered at all -- without it the invocation is left in the page as
+          # "{{#invoke:Example|thisPage}}", which is what used to happen quietly -- and that the
+          # module saw which page it was on, per language.
+          # Spelled out per language rather than looped, because the file name has underscores where
+          # the title the module answers with has spaces.
+          if ! grep -q '<code>Lua modules</code>' dist/Lua_modules.html; then
+            echo "::error::dist/Lua_modules.html does not carry Module:Example's answer"
+            exit 1
+          fi
+          if ! grep -q '<code>Lua modules/ko</code>' dist/Lua_modules/ko.html; then
+            echo "::error::dist/Lua_modules/ko.html does not carry Module:Example's answer for Korean"
+            exit 1
+          fi
+
+          # And the module itself is not a page of the site: Module: is not a content namespace, so
+          # nothing should export the Lua source. Without Scribunto it does, percent-encoded.
+          if ls dist/Module* >/dev/null 2>&1; then
+            echo "::error::the Lua module was exported as a page:"
+            ls dist/Module*
+            exit 1
+          fi
+
           # Every printfooter "Retrieved from" link must resolve from the page that carries it
           # (#394). Core builds it from the page's own URL and expands away the "./" wikven writes,
           # so a page exported into a subdirectory needs the "../" per level rename.php adds; the

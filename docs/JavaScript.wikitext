@@ -38,4 +38,4 @@ Only gadgets marked <code>default</code> are loaded: a static site has no logged
 These docs ship one such gadget, <code>PersistTabber</code>, which remembers whether you pick the Docker or the binary tab in the install steps. Every other tabber on the page switches to the tab you picked, and the choice is still there when you move to another page.
 </translate>
 
-{{prevnext|Extensions|Searching}}
+{{prevnext|Lua modules|Searching}}
