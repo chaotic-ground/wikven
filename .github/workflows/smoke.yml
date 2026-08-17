@@ -114,6 +114,24 @@ jobs:
             fi
           done
 
+          # Marking a page for translation gives it a translation page in the source language too,
+          # so "Installation" and "Installation/en" hold the same English text under two titles and
+          # English was counted twice for every translated page (#454). Only the source page is
+          # indexed now, and what says so is the absence of any "/en.html" from the English index --
+          # a count would not, since the pages indexed are not the source files: the build generates
+          # Settings, which has no file, and the search results page has a file but is not indexed.
+          # Those two cancelled out the day this was written, so a count read off the source tree
+          # would have passed by luck and broken on the next page added.
+          #
+          # This reads Pagefind's fragments, which are gzipped JSON carrying the page's url.
+          if for f in dist/pagefind/fragment/en_*; do
+               gzip -dc "$f" 2>/dev/null || cat "$f"
+             done | grep -q '"url":"[^"]*/en\.html"'; then
+            echo "::error::the en index holds a /en.html page, which restates its source page"
+            echo "::error::a source-language translation page is being indexed beside its source"
+            exit 1
+          fi
+
           # Every printfooter "Retrieved from" link must resolve from the page that carries it
           # (#394). Core builds it from the page's own URL and expands away the "./" wikven writes,
           # so a page exported into a subdirectory needs the "../" per level rename.php adds; the
