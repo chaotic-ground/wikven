@@ -30,6 +30,9 @@
 		"ext.Wikven.citizenSearchShortcuts": {
 			"scripts": ["citizen-search-shortcuts.js"]
 		},
+		"ext.Wikven.vectorSkins": {
+			"scripts": ["vector-skins.js"]
+		},
 		"ext.Wikven.appearance": {
 			"scripts": ["appearance.js"]
 		}

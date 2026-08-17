@@ -13,12 +13,12 @@ const { test, expect } = require("@playwright/test");
 const ENGLISH_HEADING = "Getting Started";
 const KOREAN_HEADING = "시작하기";
 
-// What each skin puts the switcher behind, where it takes a control to reveal. Vector discloses
-// with a transparent checkbox laid over its own label, so a click aimed at the label lands on the
-// checkbox. Citizen is not here: its list moves into the preferences panel, and is followed by
-// choosePreference().
+// What each skin puts the switcher behind, where it takes a control to reveal. Vector needs none:
+// its list moves into the appearance menu (ext.Wikven.vectorSkins), which is pinned open beside the
+// article. Citizen is not here either: its list moves into the preferences panel, and is followed
+// by choosePreference().
 const OPENERS = {
-	"vector-2022": "#vector-page-tools-dropdown-checkbox",
+	"vector-2022": null,
 	timeless: null,
 };
 

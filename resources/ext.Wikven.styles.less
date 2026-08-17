@@ -42,6 +42,54 @@
   font-weight: @font-weight-bold;
 }
 
+// The skin list once ext.Wikven.vectorSkins has moved it into Vector's appearance menu. The menu
+// reads as one choice to a row under a named heading, and the portlet arrives with the heading that
+// names this section, so what is left is the rows.
+//
+// The list cannot be left as it came: it is styled for the page-tools menu, which lays its entries
+// out along a line, and in a sidebar-width menu that runs the skin names together into one word.
+// So the column is stated here rather than inherited, and each entry is given the box its label
+// sits in -- without one the label is only as tall as the text, and the rows crowd each other.
+// Addressed through the id the menu carries, which is what outranks the skin's own list rules.
+.wikven-vector-skins-moved #vector-appearance .mw-portlet-wikven-skins {
+  margin-top: @spacing-75;
+
+  // Blocks rather than a flex column. A column would do the stacking just as well, but the header
+  // dropdown the menu moves into when a reader hides it sets `align-items: center` on its lists:
+  // the entries would then be shrunk to their names and centred, which is not something aligning
+  // the text inside them can undo. Blocks have no such handle to be taken by.
+  ul {
+    display: block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mw-list-item {
+    display: block;
+    margin: 0;
+  }
+
+  // The label is the anchor, except on the skin being read, where it is a span; both carry the row.
+  // Without a box of its own the label is only as tall as its text, and the rows crowd each other.
+  .mw-list-item > a,
+  .mw-list-item > span {
+    display: block;
+    padding: @spacing-25 0;
+  }
+}
+
+// What is left in the page-tools menu once the list leaves is the toolbox Hider emptied. Core
+// hides the emptied portlet itself; this is the box Vector draws around it, as in
+// empty-toolbox.less -- and, as there, only above the width at which that box also carries the
+// page tabs. Gated on the class the module sets, because without JavaScript the list is still in
+// the box and hiding it would take the export's only switcher with it.
+@media ( min-width: @min-width-breakpoint-tablet ) {
+  .wikven-vector-skins-moved .vector-page-tools-landmark {
+    display: none;
+  }
+}
+
 // Citizen counts the wiki in its drawer. Pages and files are facts about the exported site; the
 // user count is the build's own admin account, and the edit count is how many revisions building
 // it happened to take. Neither says anything about the site a reader is looking at.
