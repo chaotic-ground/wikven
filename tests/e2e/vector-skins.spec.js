@@ -155,9 +155,20 @@ test("the list travels with the menu when it is hidden and put back", async ({
 	await page.reload();
 
 	await page.locator("#vector-appearance-dropdown-checkbox").click();
-	await expect(
-		page.locator(`#vector-appearance-unpinned-container ${LIST}`),
-	).toBeVisible();
+	const unpinned = `#vector-appearance-unpinned-container ${LIST}`;
+	await expect(page.locator(unpinned)).toBeVisible();
+
+	// The dropdown is a second piece of chrome with styling of its own, and it is the one that had
+	// the names strung down the middle of the menu. So the rows are asserted here too, rather than
+	// only in the pinned menu beside the article.
+	const lefts = await labelLefts(page, `${unpinned} .mw-list-item > *`);
+	expect(lefts.length).toBeGreaterThan(1);
+	for (const [index, left] of lefts.entries()) {
+		expect(
+			left,
+			`entry ${index}'s name does not line up in the dropdown`,
+		).toBeCloseTo(lefts[0], 0);
+	}
 
 	await page.locator(`${MENU} .vector-pinnable-header-pin-button`).click();
 	await expect(
