@@ -60,15 +60,17 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    // The chrome this menu is drawn in centres its text, which leaves the skin names strung down
-    // the middle while every choice above them is ranged left. `start` rather than `left`, so a
-    // right-to-left reading keeps its own edge.
-    text-align: start;
   }
 
+  // The header dropdown the menu moves into when a reader hides it centres its entries, which left
+  // the skin names strung down the middle of a section whose every choice is ranged left. Stated on
+  // the entry rather than on the list around it: the dropdown declares its centring on the entry,
+  // and a declaration beats a value inherited from an ancestor however specific that ancestor's
+  // selector is. `start` rather than `left`, so a right-to-left reading keeps its own edge.
   .mw-list-item {
     display: block;
     margin: 0;
+    text-align: start;
   }
 
   // The label is the anchor, except on the skin being read, where it is a span; both carry the row.
@@ -76,6 +78,7 @@
   .mw-list-item > span {
     display: block;
     padding: @spacing-25 0;
+    text-align: start;
   }
 }
 
