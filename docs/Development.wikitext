@@ -181,7 +181,7 @@ The e2e run serves <code>dist/</code> under a <code>/wikven/</code> path prefix,
 == Continuous integration ==
 
 <!--T:23-->
-* <code>lint.yml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs), and checks that every {{SITENAME}} configuration variable is documented.
+* <code>lint.yml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs), and checks that the documentation has kept up: every {{SITENAME}} configuration variable documented, every build step described, and every page's bottom navigation in the order <code>MediaWiki:Sidebar</code> gives.
 * <code>test.yml</code> and <code>quibble.yml</code> run the PHPUnit suites and MediaWiki's own structure tests.
 * <code>smoke.yml</code> bakes this site and asserts the output, in a browser and byte for byte.
 * <code>translations.yml</code> reports out-of-date translations in <code>docs/</code>, through the [[<tvar name="2">Special:MyLanguage/Commands#check-translations</tvar>|check-translations action]].

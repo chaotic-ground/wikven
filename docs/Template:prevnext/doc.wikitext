@@ -14,6 +14,21 @@ a next. The last page of the chain is the one form that leaves out: it has a pre
 and an empty second argument reads the same as an absent one, so there is no positional way to say
 it. That page names <code>prev=</code> instead, which is otherwise the same previous link.
 
+== The order ==
+
+Which pages a call names is not the calling page's own decision. The sequence is the one
+<code>MediaWiki:Sidebar</code> lists, and each call restates the two entries on either side of its
+own. <code>index</code> heads the chain without being a sidebar entry, because every skin's logo
+already leads there, so the sidebar's first page has a next alone just as its last page has a
+previous alone.
+
+That leaves the order written down twice, so something has to hold the two copies together: the
+<code>docs</code> job of <code>.github/workflows/lint.yml</code> derives the call each page should
+carry from the sidebar and fails on any page carrying a different one. Adding a page means editing
+the sidebar, the new page and the page before it, and the check is there because forgetting the
+third is otherwise invisible: it once left three pages in the sidebar with no navigation at all, and
+a reader who followed the chain into the first of them had no way onward and no way back.
+
 == Translated pages ==
 
 A prevnext sits outside the <code>&lt;translate&gt;</code> tags, so it is copied whole into every

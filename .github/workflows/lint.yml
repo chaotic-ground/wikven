@@ -136,10 +136,10 @@ jobs:
       - run: composer install --no-interaction --no-progress --ignore-platform-req=ext-ast
       - run: composer phpcs
 
-  # Documentation the code has outgrown reads as documentation, which is worse than none: the two
-  # checks here are the drift that has actually happened, turned into a gate. Both carry an
-  # allowlist rather than a pattern, so a new entry is a decision someone makes rather than a
-  # silence someone inherits.
+  # Documentation the code has outgrown reads as documentation, which is worse than none: every
+  # check here is drift that has actually happened, turned into a gate. The two that carry an
+  # allowlist carry one rather than a pattern, so a new entry is a decision someone makes rather
+  # than a silence someone inherits.
   docs:
     runs-on: ubuntu-latest
     steps:
@@ -187,6 +187,76 @@ jobs:
               echo "::error file=$script::$step is a build step no page under docs/ mentions." \
                    "Describe it in docs/Development.wikitext, or add it to the helper list in" \
                    ".github/workflows/lint.yml if it is documented by command name."
+              status=1
+            fi
+          done
+          exit "$status"
+
+      # The documentation pages are a sequence, and the sequence was written down twice: as the
+      # order of docs/MediaWiki:Sidebar.wikitext, and as the arguments of the {{prevnext}} call at
+      # the bottom of each page. The two had already drifted (#455): three pages reached the sidebar
+      # without ever being wired into the chain, so a reader following it arrived at a page with no
+      # navigation on it at all. Adding a page means editing the sidebar, the new page and the page
+      # before it, and forgetting the third was invisible.
+      #
+      # The sidebar is the order of record because it is the one that cannot read the other: the
+      # skin parses it line by line, so it holds no template that would expand into entries. This
+      # derives the call each page should carry from it and compares, which leaves the order stated
+      # twice but no longer unwatched. Deriving the calls themselves would need string work no
+      # parser function does, and the two ways to get it -- a Lua module, or a build step writing a
+      # lookup page -- cost a Scribunto engine the standalone binary cannot carry, or a wikven
+      # feature that exists for this site alone. See the issue for both.
+      - name: Check every prevnext follows the sidebar order
+        run: |
+          set -euo pipefail
+          # The order of record, read as the skin reads it: one page per "**" entry, with the
+          # Special:MyLanguage/ prefix and the |message-key label cut off. index heads the chain
+          # without being an entry -- the sidebar names it through mainpage, and every skin's logo
+          # leads there -- so it is prepended.
+          chain=(index)
+          while IFS= read -r page; do
+            chain+=("$page")
+          done < <(sed -n 's#^\*\* Special:MyLanguage/\([^|]*\)|.*#\1#p' docs/MediaWiki:Sidebar.wikitext)
+          if [ "${#chain[@]}" -lt 3 ]; then
+            echo "::error file=docs/MediaWiki:Sidebar.wikitext::no page entries read from the sidebar."
+            exit 1
+          fi
+          last=$(( ${#chain[@]} - 1 ))
+          status=0
+          for i in "${!chain[@]}"; do
+            page=${chain[i]}
+            file="docs/$page.wikitext"
+            if [ ! -f "$file" ]; then
+              echo "::error file=docs/MediaWiki:Sidebar.wikitext::the sidebar lists $page, which has" \
+                   "no page under docs/. Add docs/$page.wikitext, or drop the entry."
+              status=1
+              continue
+            fi
+            # Which form the position takes: the last page names prev=, since no positional form
+            # spells a previous with no next; the others pass positional arguments, the next being
+            # the last of them. The first sidebar page has a next alone too, because what precedes
+            # it is index, which readers reach from the logo rather than from the chain.
+            if [ "$i" -eq "$last" ]; then
+              want="{{prevnext|prev=${chain[i - 1]}}}"
+            elif [ "$i" -le 1 ]; then
+              want="{{prevnext|${chain[i + 1]}}}"
+            else
+              want="{{prevnext|${chain[i - 1]}|${chain[i + 1]}}}"
+            fi
+            got=$(grep -F '{{prevnext' "$file" || true)
+            if [ "$got" != "$want" ]; then
+              echo "::error file=$file::MediaWiki:Sidebar puts this page where its navigation should" \
+                   "read $want, and it reads ${got:-nothing}. Fix whichever of the two is wrong."
+              status=1
+            fi
+          done
+          # Navigation on a page the sidebar leaves out points along a sequence it is not part of.
+          for file in docs/*.wikitext; do
+            page=$(basename "$file" .wikitext)
+            case "$page" in Template:*) continue ;; esac
+            if grep -qF '{{prevnext' "$file" && ! printf '%s\n' "${chain[@]}" | grep -qxF "$page"; then
+              echo "::error file=$file::this page has bottom navigation but is not in" \
+                   "MediaWiki:Sidebar. List it there, or drop the call."
               status=1
             fi
           done
