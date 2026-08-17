@@ -82,4 +82,79 @@ class SearchTest extends MediaWikiIntegrationTestCase {
 			'no copy directory' => ['/wikven/pagefind/', '', null]
 		];
 	}
+
+	/** The two spellings a bake of the docs site produced of one index, differing only in order. */
+	private const ENTRY_KO_FIRST =
+		'{"version":"1.5.2","languages":'
+			. '{"ko":{"hash":"ko_72ba3bbda7","wasm":null,"page_count":19},'
+			. '"en":{"hash":"en_e66da688eb","wasm":"en","page_count":39},'
+			. '"km":{"hash":"km_8ad2c8bfcb","wasm":null,"page_count":1}},'
+			. '"include_characters":["_","‿","⁀","⁔","︳","︴","﹍","﹎","﹏","＿"]}';
+	private const ENTRY_EN_FIRST =
+		'{"version":"1.5.2","languages":'
+			. '{"en":{"hash":"en_e66da688eb","wasm":"en","page_count":39},'
+			. '"ko":{"hash":"ko_72ba3bbda7","wasm":null,"page_count":19},'
+			. '"km":{"hash":"km_8ad2c8bfcb","wasm":null,"page_count":1}},'
+			. '"include_characters":["_","‿","⁀","⁔","︳","︴","﹍","﹎","﹏","＿"]}';
+
+	/**
+	 * The fixtures are the real thing: the two files a single source produced on one runner, which
+	 * agreed on every hash and page count and disagreed on the order alone. That is the whole
+	 * failure, and normalising is what makes the two bakes byte-identical again (#411).
+	 */
+	public function testStableIndexEntrySettlesTheLanguageOrder() {
+		$this->assertNotSame(
+			self::ENTRY_KO_FIRST,
+			self::ENTRY_EN_FIRST,
+			'fixtures must differ, or this asserts nothing'
+		);
+		$this->assertSame(
+			Search::stableIndexEntry(self::ENTRY_KO_FIRST),
+			Search::stableIndexEntry(self::ENTRY_EN_FIRST)
+		);
+	}
+
+	/**
+	 * Only the order of that one map may move. The version and the character list keep their place,
+	 * and the characters keep their bytes -- escaping them to ‿ would make this file differ
+	 * from an older bake for no reason, which is the very thing being fixed.
+	 */
+	public function testStableIndexEntryChangesNothingButTheOrder() {
+		$stable = Search::stableIndexEntry(self::ENTRY_KO_FIRST);
+
+		$this->assertSame(
+			[
+				'version' => '1.5.2',
+				'languages' => [
+					'en' => ['hash' => 'en_e66da688eb', 'wasm' => 'en', 'page_count' => 39],
+					'km' => ['hash' => 'km_8ad2c8bfcb', 'wasm' => null, 'page_count' => 1],
+					'ko' => ['hash' => 'ko_72ba3bbda7', 'wasm' => null, 'page_count' => 19]
+				],
+				'include_characters' => ['_', '‿', '⁀', '⁔', '︳', '︴', '﹍', '﹎', '﹏', '＿']
+			],
+			json_decode((string)$stable, true)
+		);
+		$this->assertStringContainsString('"include_characters":["_","‿"', (string)$stable);
+		$this->assertStringStartsWith('{"version":"1.5.2","languages":{"en"', (string)$stable);
+	}
+
+	/**
+	 * @dataProvider provideUnrewritableEntries
+	 */
+	public function testStableIndexEntryLeavesWhatItCannotReadAlone(string $json) {
+		$this->assertNull(Search::stableIndexEntry($json));
+	}
+
+	public static function provideUnrewritableEntries() {
+		return [
+			// A bundle whose entry file this does not recognise is not one to rewrite: answering
+			// null leaves the file exactly as Pagefind wrote it.
+			'not json' => ['<!DOCTYPE html>'],
+			'truncated' => ['{"version":"1.5.2","languages":{'],
+			'no language map' => ['{"version":"1.5.2"}'],
+			'languages is not a map' => ['{"languages":"en"}'],
+			// Nothing to order, so nothing to settle; rewriting would only risk the bytes.
+			'no languages yet' => ['{"version":"1.5.2","languages":{}}']
+		];
+	}
 }
