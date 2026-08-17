@@ -1,2 +1,2 @@
-{{#ifexist:Translations:{{{1|}}}/Page display title/{{TRANSLATIONLANGUAGE}}|{{Translations:{{{1|}}}/Page display title/{{TRANSLATIONLANGUAGE}}}}|{{{1|}}}}}<span class="wikven-label-probe">[tl={{TRANSLATIONLANGUAGE}}][pl={{PAGELANGUAGE}}][int={{int:lang}}][tr={{#translation:}}][unit-ko={{#ifexist:Translations:{{{1|}}}/Page display title/ko|yes|no}}]</span><noinclude>
-{{prevnext/doc}}</noinclude>
+<onlyinclude>{{#ifexist:Translations:{{{1|}}}/Page display title{{#translation:}}|{{Translations:{{{1|}}}/Page display title{{#translation:}}}}|{{{1|}}}}}</onlyinclude>
+{{prevnext/doc}}
