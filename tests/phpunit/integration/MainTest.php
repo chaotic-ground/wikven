@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\Hooks\Main;
+use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -125,5 +126,58 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$url = '/x';
 		$this->main()->onGetLocalURL(Title::newFromText('Special:Search'), $url, '');
 		$this->assertSame('#', $url);
+	}
+
+	/**
+	 * The "View source" tab points at the page's source file in the repository, and in Citizen it
+	 * brings an icon: the skin renders the page actions as icon buttons and stops rendering their
+	 * labels below desktop width, so a tab it has no icon for is a blank box there. It maps icons
+	 * onto the keys core uses, and this key is Wikven's own.
+	 */
+	public function testViewSourceTabCarriesCitizensIcon() {
+		$dir = $this->getNewTempDirectory();
+		file_put_contents("$dir/Real.wikitext", '');
+		$this->overrideConfigValue('WikvenSourceDirectory', $dir);
+		$this->overrideConfigValue('WikvenViewSourceUrl', 'https://repo/blob/$1');
+
+		$tab = $this->viewsFor('Real', 'citizen')['wikven-viewsource'];
+		$this->assertSame('https://repo/blob/Real.wikitext', $tab['href']);
+		$this->assertSame('wikiText', $tab['icon']);
+	}
+
+	/**
+	 * Every other skin gets the tab without one: core passes the key on to whichever skin is
+	 * rendering, and Vector 2022 draws it in the page-tools dropdown, where the edit and history
+	 * tabs beside it have no icon either.
+	 */
+	public function testViewSourceTabHasNoIconElsewhere() {
+		$dir = $this->getNewTempDirectory();
+		file_put_contents("$dir/Real.wikitext", '');
+		$this->overrideConfigValue('WikvenSourceDirectory', $dir);
+		$this->overrideConfigValue('WikvenViewSourceUrl', 'https://repo/blob/$1');
+
+		$tab = $this->viewsFor('Real', 'vector-2022')['wikven-viewsource'];
+		$this->assertSame('https://repo/blob/Real.wikitext', $tab['href']);
+		$this->assertArrayNotHasKey('icon', $tab);
+	}
+
+	/** A generated page has no source file behind it, so it gets no tab to a link that would 404. */
+	public function testViewSourceTabSkippedWithoutASourceFile() {
+		$this->overrideConfigValue('WikvenSourceDirectory', $this->getNewTempDirectory());
+		$this->overrideConfigValue('WikvenViewSourceUrl', 'https://repo/blob/$1');
+
+		$this->assertArrayNotHasKey('wikven-viewsource', $this->viewsFor('Version', 'citizen'));
+	}
+
+	/** @return array The 'views' menu the hook leaves behind, keyed as the skins read it. */
+	private function viewsFor(string $titleText, string $skin): array {
+		$sktemplate = $this->createMock(SkinTemplate::class);
+		$sktemplate->method('getTitle')->willReturn(Title::newFromText($titleText));
+		$sktemplate->method('getSkinName')->willReturn($skin);
+		$sktemplate->method('msg')->willReturnCallback(static fn($key) => wfMessage($key));
+
+		$links = ['views' => []];
+		$this->main()->onSkinTemplateNavigation__Universal($sktemplate, $links);
+		return $links['views'];
 	}
 }

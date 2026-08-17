@@ -256,6 +256,22 @@ class Main implements
 			'text' => $sktemplate->msg('viewsource')->text(),
 			'href' => str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenViewSourceUrl)
 		];
+
+		// Citizen draws the page actions as icon buttons and stops rendering their labels below
+		// desktop width (font-size: 0, Pagetools.less), so a tab it has no icon for is a blank box
+		// the width of its padding: nothing to read and little to hit. Its icons come from a map
+		// keyed by the names core uses, which this tab -- being ours -- is not in; what the skin
+		// does for every entry is turn an 'icon' the item carries into the markup, so the tab has
+		// to bring its own. wikiText rather than the editLock the skin gives core's "View source",
+		// because the Edit tab beside it works: a padlock would read as a permission this reader is
+		// missing rather than as a link to the file.
+		//
+		// Citizen alone, because core hands the key to whichever skin renders the page. Vector 2022
+		// suppresses icons on the tabs themselves, but not in the page-tools dropdown it copies
+		// them into, where Edit and View history next to it have none.
+		if ($sktemplate->getSkinName() === 'citizen') {
+			$links['views']['wikven-viewsource']['icon'] = 'wikiText';
+		}
 	}
 
 	/** @inheritDoc */
