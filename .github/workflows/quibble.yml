@@ -26,12 +26,6 @@ env:
   # which is why Translate's own phan config does not name it either.
   WIKI_DEPENDENCIES: Gadgets Translate UniversalLanguageSelector
 
-# quibble-action is pinned to an unreleased main commit, not a tag, for its `db` input. The newest
-# release, v2.0.2, does not have it, and a composite action answers an input it does not declare with
-# a warning rather than an error -- so moving back would leave `db: sqlite` below reading as a line
-# that does something while the wiki quietly returns to MySQL. Dependabot will offer exactly that
-# move; decline it until a release carries the input, then pin to the tag.
-
 # Cancel superseded runs; pushes to main are left to finish, keeping a result per merged commit.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -49,7 +43,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@19c1e829d09dbbd4b5a2267cd2b7637482acabca  # main, unreleased
+      - uses: femiwiki/quibble-action@cc701a03cc15d749b81267e2b657b10c508ab208  # v2.1.0
         with:
           stage: phan
           dependencies: ${{ env.PHAN_DEPENDENCIES }}
@@ -67,7 +61,7 @@ jobs:
         with:
           persist-credentials: false
       - id: quibble
-        uses: femiwiki/quibble-action@19c1e829d09dbbd4b5a2267cd2b7637482acabca  # main, unreleased
+        uses: femiwiki/quibble-action@cc701a03cc15d749b81267e2b657b10c508ab208  # v2.1.0
         with:
           stage: coverage
           dependencies: ${{ env.WIKI_DEPENDENCIES }}
