@@ -8,15 +8,23 @@ on:
 
 permissions: {}
 
-# What CI clones and installs beside wikven. Two lists are in play and they are not the same one:
-# phan wants the directories whose symbols this code reaches for (.phan/config.php), while the wiki
-# wants whatever will not load without it. UniversalLanguageSelector is the difference -- Translate
-# refuses to install without it, and phan has no use for it, which is why Translate's own phan config
-# does not name it either. Setting this also settles which source the action reads: it resolves from
-# the first that answers, and an extensions entry appearing in extension.json would otherwise take
-# the phan config's place without a word.
+# What CI clones beside wikven, which is two questions rather than one. phan wants the directories
+# whose symbols this code reaches for; the wiki wants whatever will not load without it. Wikimedia
+# keeps the answers in two files for this reason -- zuul/dependencies.yaml against
+# zuul/phan_dependencies.yaml, chosen by whether the job name carries `-phan` -- and their entries
+# for Translate share two of the ten names between them: the install side has UniversalLanguageSelector,
+# the phan side does not, and the phan side has AbuseFilter and Echo and Elastica, which the install
+# side does not. Same shape here, one name apart.
+#
+# Naming these also settles which source the action reads. It resolves from the first that answers --
+# this input, then extension.json's requires, then the phan config -- so an extensions entry
+# appearing in extension.json would otherwise take the phan config's place without a word.
 env:
-  QUIBBLE_DEPENDENCIES: Gadgets Translate UniversalLanguageSelector
+  # Mirrors .phan/config.php. Nothing is gained by cloning what phan will not parse.
+  PHAN_DEPENDENCIES: Gadgets Translate
+  # Translate refuses to install without UniversalLanguageSelector, and phan has no use for it --
+  # which is why Translate's own phan config does not name it either.
+  WIKI_DEPENDENCIES: Gadgets Translate UniversalLanguageSelector
 
 # quibble-action is pinned to an unreleased main commit, not a tag, for its `db` input. The newest
 # release, v2.0.2, does not have it, and a composite action answers an input it does not declare with
@@ -44,7 +52,7 @@ jobs:
       - uses: femiwiki/quibble-action@19c1e829d09dbbd4b5a2267cd2b7637482acabca  # main, unreleased
         with:
           stage: phan
-          dependencies: ${{ env.QUIBBLE_DEPENDENCIES }}
+          dependencies: ${{ env.PHAN_DEPENDENCIES }}
           mediawiki-version: ${{ matrix.mediawiki-version }}
           # PHP 8.3 image so the container resolves wikven's dev deps (>= 8.2); phan runs in the action's testrun image.
           quibble-docker-image: quibble-bookworm-php83
@@ -62,7 +70,7 @@ jobs:
         uses: femiwiki/quibble-action@19c1e829d09dbbd4b5a2267cd2b7637482acabca  # main, unreleased
         with:
           stage: coverage
-          dependencies: ${{ env.QUIBBLE_DEPENDENCIES }}
+          dependencies: ${{ env.WIKI_DEPENDENCIES }}
           # The backend wikven builds on: bin/build.php installs with --dbtype sqlite, and
           # maintenance/build.php has paths that exist only there -- one writer at a time, a database
           # file per pass, SQLITE_BUSY. Quibble defaults to MySQL, which wikven never runs on, so
