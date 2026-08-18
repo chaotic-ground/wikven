@@ -62,6 +62,56 @@ class AttemptsTest extends MediaWikiUnitTestCase {
 		$this->assertSame([2, 3], $waits, 'and no wait after the one that failed last');
 	}
 
+	/** Work answering with each of $answers in turn, recording the calls it received. */
+	private function answering(array $answers, array &$calls): callable {
+		return static function () use ($answers, &$calls) {
+			$calls[] = count($calls) + 1;
+			return $answers[count($calls) - 1];
+		};
+	}
+
+	public function testWhatTheAttemptAnsweredIsWhatComesBack() {
+		$calls = [];
+		$waits = [];
+		$body = Attempts::until(
+			$this->answering(['{"query":{}}'], $calls),
+			3,
+			static function (int $attempt) use (&$waits) {
+				$waits[] = $attempt;
+			}
+		);
+		$this->assertSame('{"query":{}}', $body, 'the caller that wants a body gets the body');
+		$this->assertCount(1, $calls);
+		$this->assertSame([], $waits, 'work that answered must not be waited on');
+	}
+
+	public function testAnEmptyAnswerIsNotMistakenForAFailure() {
+		$calls = [];
+		$body = Attempts::until(
+			$this->answering(['', 'unreached'], $calls),
+			3,
+			static function (int $attempt) {
+			}
+		);
+		$this->assertSame('', $body, 'false is the failure, and only false');
+		$this->assertCount(1, $calls);
+	}
+
+	public function testTheBodyOfTheFirstAttemptThatAnswersIsTheOneReturned() {
+		$calls = [];
+		$waits = [];
+		$body = Attempts::until(
+			$this->answering([false, '{"query":{}}'], $calls),
+			3,
+			static function (int $attempt) use (&$waits) {
+				$waits[] = $attempt;
+			}
+		);
+		$this->assertSame('{"query":{}}', $body);
+		$this->assertCount(2, $calls);
+		$this->assertSame([2], $waits);
+	}
+
 	/**
 	 * @dataProvider provideTooFewAttempts
 	 */
@@ -89,5 +139,11 @@ class AttemptsTest extends MediaWikiUnitTestCase {
 		$this->assertSame(2, Attempts::backoff(2));
 		$this->assertSame(4, Attempts::backoff(3));
 		$this->assertSame(8, Attempts::backoff(4));
+	}
+
+	public function testWaitingOutTheFirstAttemptCostsNothing() {
+		$before = microtime(true);
+		Attempts::sleep(1);
+		$this->assertLessThan(1.0, microtime(true) - $before, 'a zero backoff is not slept through');
 	}
 }

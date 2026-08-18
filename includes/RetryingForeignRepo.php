@@ -20,9 +20,6 @@ use RuntimeException;
  * really cannot be had, the build says which one and why instead of quoting that riddle.
  */
 class RetryingForeignRepo extends ForeignAPIRepo {
-	/** How many times one request is made before the repository reports it as failed. */
-	private const ATTEMPTS = 3;
-
 	/**
 	 * @inheritDoc
 	 *
@@ -43,7 +40,7 @@ class RetryingForeignRepo extends ForeignAPIRepo {
 		}
 
 		$size = $height > 0 ? "{$width}x{$height}" : "{$width}px";
-		$attempts = self::ATTEMPTS;
+		$attempts = Attempts::FETCH;
 		$what = "Wikven: the '{$this->getName()}' repository has no thumbnail URL for \"$name\" at $size";
 		$tries = "after $attempts attempt(s).";
 		$why = 'The build cannot make that image local, and would publish a page missing it.';
@@ -51,36 +48,19 @@ class RetryingForeignRepo extends ForeignAPIRepo {
 		throw new RuntimeException("$what $tries $why $fix");
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 *
+	 * Answering with a body or with false is what Attempts::until reads as worked or did not, so
+	 * the loop is the one the fetching side of the build uses, and the waits are the same waits.
+	 */
 	public function httpGet($url, $timeout = 'default', $options = [], &$mtime = false) {
-		return self::retry(
+		return Attempts::until(
 			function () use ($url, $timeout, $options, &$mtime) {
 				return parent::httpGet($url, $timeout, $options, $mtime);
 			},
-			self::ATTEMPTS,
-			'sleep'
+			Attempts::FETCH,
+			[Attempts::class, 'sleep']
 		);
-	}
-
-	/**
-	 * Run $request until it answers, at most $attempts times, waiting longer before each retry.
-	 *
-	 * @param callable():(string|false) $request Returns the response body, or false if it failed.
-	 * @param int $attempts How many times $request is run before its failure is passed on.
-	 * @param callable(int):mixed $pause Given the seconds to wait before the next attempt (1, then 2, ...).
-	 * @return string|false The first body $request returned, or false if every attempt failed.
-	 */
-	public static function retry(callable $request, int $attempts, callable $pause) {
-		$body = false;
-		for ($attempt = 1; $attempt <= $attempts; $attempt++) {
-			if ($attempt > 1) {
-				$pause($attempt - 1);
-			}
-			$body = $request();
-			if ($body !== false) {
-				break;
-			}
-		}
-		return $body;
 	}
 }
