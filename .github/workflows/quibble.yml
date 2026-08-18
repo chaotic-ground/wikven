@@ -18,6 +18,12 @@ permissions: {}
 env:
   QUIBBLE_DEPENDENCIES: Gadgets Translate UniversalLanguageSelector
 
+# quibble-action is pinned to an unreleased main commit, not a tag, for its `db` input. The newest
+# release, v2.0.2, does not have it, and a composite action answers an input it does not declare with
+# a warning rather than an error -- so moving back would leave `db: sqlite` below reading as a line
+# that does something while the wiki quietly returns to MySQL. Dependabot will offer exactly that
+# move; decline it until a release carries the input, then pin to the tag.
+
 # Cancel superseded runs; pushes to main are left to finish, keeping a result per merged commit.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -35,7 +41,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@3ce3d15fc42e28f2b4a01da22957f263286b4361  # v2.0.2
+      - uses: femiwiki/quibble-action@19c1e829d09dbbd4b5a2267cd2b7637482acabca  # main, unreleased
         with:
           stage: phan
           dependencies: ${{ env.QUIBBLE_DEPENDENCIES }}
@@ -53,10 +59,16 @@ jobs:
         with:
           persist-credentials: false
       - id: quibble
-        uses: femiwiki/quibble-action@3ce3d15fc42e28f2b4a01da22957f263286b4361  # v2.0.2
+        uses: femiwiki/quibble-action@19c1e829d09dbbd4b5a2267cd2b7637482acabca  # main, unreleased
         with:
           stage: coverage
           dependencies: ${{ env.QUIBBLE_DEPENDENCIES }}
+          # The backend wikven builds on: bin/build.php installs with --dbtype sqlite, and
+          # maintenance/build.php has paths that exist only there -- one writer at a time, a database
+          # file per pass, SQLITE_BUSY. Quibble defaults to MySQL, which wikven never runs on, so
+          # this is the one job standing where the product stands: its database and its extensions.
+          # The phpunit jobs cover SQLite without the extensions, on both MediaWiki versions.
+          db: sqlite
           # Coverage tooling lives only on MediaWiki master.
           mediawiki-version: master
           quibble-docker-image: quibble-bookworm-php83
