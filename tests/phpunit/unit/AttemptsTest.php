@@ -87,13 +87,17 @@ class AttemptsTest extends MediaWikiUnitTestCase {
 
 	public function testAnEmptyAnswerIsNotMistakenForAFailure() {
 		$calls = [];
+		$waits = [];
 		$body = Attempts::until(
 			$this->answering(['', 'unreached'], $calls),
 			3,
-			static function (int $attempt) {}
+			static function (int $attempt) use (&$waits) {
+				$waits[] = $attempt;
+			}
 		);
 		$this->assertSame('', $body, 'false is the failure, and only false');
 		$this->assertCount(1, $calls);
+		$this->assertSame([], $waits, 'so nothing was waited on and nothing tried again');
 	}
 
 	public function testTheBodyOfTheFirstAttemptThatAnswersIsTheOneReturned() {
