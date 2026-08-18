@@ -1,12 +1,4 @@
 <?php
-/**
- * Translate is an optional, image-bundled dependency that phan does not analyse, so its symbols
- * are undeclared to static analysis here. Reading a page with Translate's own parser only happens
- * when Translate is loaded.
- *
- * @phan-file-suppress PhanUndeclaredClassMethod
- * @phan-file-suppress PhanUndeclaredClassCatch
- */
 
 namespace MediaWiki\Extension\Wikven;
 
