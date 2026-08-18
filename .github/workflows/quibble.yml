@@ -71,6 +71,10 @@ jobs:
           # this is the one job standing where the product stands: its database and its extensions.
           # The phpunit jobs cover SQLite without the extensions, on both MediaWiki versions.
           db: sqlite
+          # The coverage command runs PHPUnit and nothing else, so the standalone npm install
+          # Quibble adds for it builds a Node tree no command here reads. Quibble's own help names
+          # this case; composer dependencies are installed either way.
+          skip-npm-install: true
           # Coverage tooling lives only on MediaWiki master.
           mediawiki-version: master
           quibble-docker-image: quibble-bookworm-php83
