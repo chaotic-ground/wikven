@@ -90,8 +90,7 @@ class AttemptsTest extends MediaWikiUnitTestCase {
 		$body = Attempts::until(
 			$this->answering(['', 'unreached'], $calls),
 			3,
-			static function (int $attempt) {
-			}
+			static function (int $attempt) {}
 		);
 		$this->assertSame('', $body, 'false is the failure, and only false');
 		$this->assertCount(1, $calls);
