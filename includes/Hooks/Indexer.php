@@ -1,10 +1,4 @@
 <?php
-/**
- * Translate is an optional, image-bundled dependency that phan does not analyse, so its symbols
- * are undeclared to static analysis here. It is only asked anything once it has said it is loaded.
- *
- * @phan-file-suppress PhanUndeclaredClassMethod
- */
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
