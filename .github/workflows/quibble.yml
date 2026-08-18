@@ -8,6 +8,16 @@ on:
 
 permissions: {}
 
+# What CI clones and installs beside wikven. Two lists are in play and they are not the same one:
+# phan wants the directories whose symbols this code reaches for (.phan/config.php), while the wiki
+# wants whatever will not load without it. UniversalLanguageSelector is the difference -- Translate
+# refuses to install without it, and phan has no use for it, which is why Translate's own phan config
+# does not name it either. Setting this also settles which source the action reads: it resolves from
+# the first that answers, and an extensions entry appearing in extension.json would otherwise take
+# the phan config's place without a word.
+env:
+  QUIBBLE_DEPENDENCIES: Gadgets Translate UniversalLanguageSelector
+
 # Cancel superseded runs; pushes to main are left to finish, keeping a result per merged commit.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -28,6 +38,7 @@ jobs:
       - uses: femiwiki/quibble-action@3ce3d15fc42e28f2b4a01da22957f263286b4361  # v2.0.2
         with:
           stage: phan
+          dependencies: ${{ env.QUIBBLE_DEPENDENCIES }}
           mediawiki-version: ${{ matrix.mediawiki-version }}
           # PHP 8.3 image so the container resolves wikven's dev deps (>= 8.2); phan runs in the action's testrun image.
           quibble-docker-image: quibble-bookworm-php83
@@ -45,6 +56,7 @@ jobs:
         uses: femiwiki/quibble-action@3ce3d15fc42e28f2b4a01da22957f263286b4361  # v2.0.2
         with:
           stage: coverage
+          dependencies: ${{ env.QUIBBLE_DEPENDENCIES }}
           # Coverage tooling lives only on MediaWiki master.
           mediawiki-version: master
           quibble-docker-image: quibble-bookworm-php83

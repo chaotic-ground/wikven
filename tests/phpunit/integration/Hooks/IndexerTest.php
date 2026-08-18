@@ -7,7 +7,13 @@ use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
 /**
+ * The database is for the one test below that lets the handler ask Translate for real: the answer
+ * comes from whether the page above the one asked about is marked for translation, which is a
+ * question for the database. MediaWiki reads this group from the class comment and nowhere else,
+ * so it is declared here rather than on that test.
+ *
  * @covers \MediaWiki\Extension\Wikven\Hooks\Indexer
+ * @group Database
  */
 class IndexerTest extends MediaWikiIntegrationTestCase {
 	/**
@@ -49,11 +55,15 @@ class IndexerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * Built the way MediaWiki builds it, the handler asks Translate, which this suite does not
-	 * install -- so it finds no translation pages and leaves the index alone. That is also what a
-	 * wiki without content translation gets, and it must not be a wiki that loses pages.
+	 * Built the way MediaWiki builds it, the handler asks Translate rather than a stand-in. Neither
+	 * answer may cost a page its place: where Translate is absent the lookup says so and stops, and
+	 * where it is installed, a page nobody marked for translation is not a translation page. A wiki
+	 * without content translation must not be a wiki that loses pages.
+	 *
+	 * Both answers are reached, because the jobs differ in what they install: the quibble jobs bring
+	 * Translate along (quibble.yml names it), the phpunit jobs install MediaWiki alone.
 	 */
-	public function testWithoutTranslateNothingIsLeftOut() {
+	public function testTheHandlerAsBuiltLeavesAnUnmarkedPageAlone() {
 		$index = true;
 		( new Indexer() )->onSifterSearchIndexPage(Title::makeTitle(NS_MAIN, 'Installation/en'), $index);
 
