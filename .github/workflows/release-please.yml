@@ -11,6 +11,7 @@ permissions: {}
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write
       pull-requests: write
@@ -51,6 +52,7 @@ jobs:
     needs: [release-please, binary, docker]
     if: needs.release-please.outputs.release_created == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write  # publish (un-draft) the release
     steps:

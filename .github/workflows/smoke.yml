@@ -39,6 +39,15 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
+    # Every job in this repository carries one of these, and this is the job that earned them. On
+    # 2026-08-18 the runner's Ubuntu mirror stopped answering during `playwright install
+    # --with-deps`; apt fell back to archive.ubuntu.com, fetched the release files and then sat
+    # there. With no timeout the job waited out GitHub's six-hour default before anyone was told
+    # anything. The mirror is not ours to fix; how long we wait to hear about it is.
+    #
+    # Three times what the job takes -- around ten minutes, two bakes and a browser install -- so a
+    # stall is reported in minutes while a slow but healthy run never trips it.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -57,13 +66,38 @@ jobs:
           tags: wikven
           cache-from: type=gha,scope=wikven-image
 
-      - name: Bake the docs site
+      # Both bakes of the reproducibility check below, at once. They are independent by construction
+      # -- separate containers, separate output directories, one shared source -- and most of a
+      # bake is a single process: only the skin passes run beside each other, so the second bake
+      # fills cores the first leaves idle rather than taking any from it. Measured on four cores, the
+      # runner's count: 257s one after the other against 150s together, output byte-identical either
+      # way, and a combined 1 GiB at peak where the runner has 16.
+      #
+      # Each writes to its own log because two live logs interleave into neither.
+      - name: Bake the docs site twice
         run: |
-          mkdir -p dist
-          docker run --rm \
-            -v "$(pwd)/docs:/workspace/src" \
-            -v "$(pwd)/dist:/workspace/dist" \
-            wikven
+          set -uo pipefail
+          mkdir -p dist dist-again
+          bake() {
+            docker run --rm \
+              -v "$(pwd)/docs:/workspace/src:ro" \
+              -v "$(pwd)/$1:/workspace/dist" \
+              wikven
+          }
+          bake dist > bake.log 2>&1 &
+          first=$!
+          bake dist-again > bake-again.log 2>&1 &
+          second=$!
+          status=0
+          wait "$first" || status=$?
+          wait "$second" || status=$?
+          echo '::group::First bake'
+          cat bake.log
+          echo '::endgroup::'
+          echo '::group::Second bake'
+          cat bake-again.log
+          echo '::endgroup::'
+          exit "$status"
 
       - name: Assert the bake produced a complete, self-contained site
         run: |
@@ -245,14 +279,11 @@ jobs:
       # differ. Baking from two separate clones is the stronger check and is not this one: it fails
       # today because importWikitext.php stamps revisions with filemtime(), which a second clone
       # changes (#406).
-      - name: Bake the docs site again and assert the two bakes are identical
+      #
+      # Both bakes ran in the step above, at once; this only reads what they wrote.
+      - name: Assert the two bakes are identical
         run: |
           set -euo pipefail
-          mkdir -p dist-again
-          docker run --rm \
-            -v "$(pwd)/docs:/workspace/src" \
-            -v "$(pwd)/dist-again:/workspace/dist" \
-            wikven
           if diff -rq dist dist-again; then
             echo "Two bakes of the same source are byte-identical."
           else
@@ -263,13 +294,32 @@ jobs:
             exit 1
           fi
 
-      # Node.js is preinstalled on the runner; no setup-node (its caching trips
-      # the cache-poisoning audit, and this job shares a build cache with the
-      # image-publishing workflow).
+      # Node.js is preinstalled on the runner; no setup-node, whose caching trips the
+      # cache-poisoning audit. Nothing this job does can reach a release on its own: it reads the
+      # wikven-image layer cache and writes nothing, and a released binary builds from its own
+      # per-architecture scope rather than that one. But the scope it reads is written by the job
+      # that publishes the image, so a cache added here is one more entry for that audit to weigh.
+      # At nine seconds for npm ci and the browser together, there is nothing worth buying with it.
+      # The headless shell, not all of "chromium". Asking for chromium fetches Chrome for Testing
+      # (379 MiB unpacked) as well as the shell (262 MiB), and these specs never start the former:
+      # they run headless, which is what the shell is. ffmpeg (5 MiB) comes along either way, so what
+      # this saves is the 379 MiB.
+      #
+      # And no --with-deps, which is the apt call. The runner image already carries Google Chrome,
+      # Chromium, Edge and Firefox as installed packages, so the shared libraries the shell wants are
+      # on the machine before we ask for anything; --with-deps was buying nothing and paying for it.
+      # Twice -- 2026-08-18 and 2026-08-19 -- azure.archive.ubuntu.com answered nothing at all, apt
+      # fell back to archive.ubuntu.com, took the four InRelease files and then went quiet on the
+      # package indexes until the job was killed. A mirror that is not ours, on a path we do not need.
+      #
+      # Ran the suite locally against a real bake with nothing but the shell on disk: 57 passed. If
+      # either half were ever not enough -- a spec asking for a headed browser, or a library the image
+      # stops shipping -- Playwright says which executable or which .so it cannot find, so this cannot
+      # quietly test the wrong thing.
       - name: Install the browser test tooling
         run: |
           npm ci
-          npx playwright install --with-deps chromium
+          npx playwright install chromium-headless-shell
 
       # The static server and its readiness check live in playwright.config.js (webServer), so the
       # same command works on a developer's machine too.

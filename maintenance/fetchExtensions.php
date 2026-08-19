@@ -2,16 +2,24 @@
 
 namespace MediaWiki\Extension\Wikven;
 
+use FilesystemIterator;
 use Maintenance;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Settings\Source\Format\JsonFormat;
 use MediaWiki\Settings\Source\Format\YamlFormat;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
 	: realpath(__DIR__ . '/../../../');
 
 require_once "$IP/maintenance/Maintenance.php";
+
+// Wikven's autoloader is not active this early: making the extensions MediaWiki will load present is
+// what this script is for, so it runs before that. Loaded directly for the same reason loadConfig()
+// loads SiteConfig directly below, and the class is dependency-free so that is all it takes.
+require_once __DIR__ . '/../includes/Attempts.php';
 
 /** Fetch third-party extensions/skins declared in .wikven.yaml before MediaWiki loads them. */
 class FetchExtensions extends Maintenance {
@@ -204,7 +212,8 @@ class FetchExtensions extends Maintenance {
 			$this->output("Wikven: cloning $kind '$name' from $repo @ $commit\n");
 			$this->run(['git', 'init', '--quiet', '--', $dest], "init $kind '$name'");
 			$this->run(['git', '-C', $dest, 'remote', 'add', 'origin', $repo], "configure $kind '$name'");
-			$this->run(
+			// No reset: a fetch that failed leaves a repository another fetch is happy to reuse.
+			$this->runOnNetwork(
 				['git', '-C', $dest, 'fetch', '--depth', '1', 'origin', $commit],
 				"fetch $kind '$name' @ $commit"
 			);
@@ -219,11 +228,15 @@ class FetchExtensions extends Maintenance {
 			array_push($cmd, '--', $repo, $dest);
 			$ref = !empty($spec['reference']) ? " @ {$spec['reference']}" : '';
 			$this->output("Wikven: cloning $kind '$name' from $repo$ref\n");
-			$this->run($cmd, "clone $kind '$name'");
+			// git clone refuses a destination that already has anything in it, and a clone that died
+			// partway leaves one, so the leftovers go before the next attempt.
+			$this->runOnNetwork($cmd, "clone $kind '$name'", static function () use ($dest) {
+				self::removeTree($dest);
+			});
 		}
 
 		if (!empty($spec['composer'])) {
-			$this->run(
+			$this->runOnNetwork(
 				['composer', 'update', '--no-dev', '--no-interaction', '--working-dir=' . $dest],
 				"composer install for $kind '$name'"
 			);
@@ -242,7 +255,7 @@ class FetchExtensions extends Maintenance {
 			json_encode($local, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n"
 		);
 
-		$this->run(
+		$this->runOnNetwork(
 			['composer', 'update', '--no-dev', '--no-interaction', '--working-dir=' . $IP],
 			'composer update'
 		);
@@ -251,20 +264,39 @@ class FetchExtensions extends Maintenance {
 	/** Download $url to $dest, streaming the body to disk instead of buffering it in memory. */
 	private function download(string $url, string $dest, string $what): void {
 		$http = MediaWikiServices::getInstance()->getHttpRequestFactory();
-		$req = $http->create($url, ['followRedirects' => true], __METHOD__);
-
-		$fh = fopen($dest, 'wb');
-		if ($fh === false) {
-			$this->fatalError("Wikven: could not open '$dest' for writing.");
-		}
-		$req->setCallback(static function ($resource, $buffer) use ($fh) {
-			return fwrite($fh, $buffer);
-		});
-		$status = $req->execute();
-		fclose($fh);
-
-		$httpStatus = $req->getStatus();
-		if (!$status->isOK() || $httpStatus < 200 || $httpStatus >= 300) {
+		// Read out here: __METHOD__ inside the closure would name the closure, not this.
+		$caller = __METHOD__;
+		$httpStatus = 0;
+		$ok = Attempts::until(
+			function () use ($http, $url, $dest, $caller, &$httpStatus) {
+				$req = $http->create($url, ['followRedirects' => true], $caller);
+				// Opened per attempt, and truncating, so a retry replaces a partial body rather
+				// than appending a second one to it.
+				$fh = fopen($dest, 'wb');
+				if ($fh === false) {
+					$this->fatalError("Wikven: could not open '$dest' for writing.");
+				}
+				$req->setCallback(static function ($resource, $buffer) use ($fh) {
+					return fwrite($fh, $buffer);
+				});
+				$status = $req->execute();
+				fclose($fh);
+				$httpStatus = $req->getStatus();
+				return $status->isOK() && $httpStatus >= 200 && $httpStatus < 300;
+			},
+			Attempts::FETCH,
+			function (int $attempt) use ($what, &$httpStatus) {
+				$wait = Attempts::backoff($attempt);
+				$this->output(
+					"Wikven: failed to $what (HTTP $httpStatus); trying again in {$wait}s"
+					. " (attempt $attempt of "
+					. Attempts::FETCH
+					. ")\n"
+				);
+				sleep($wait);
+			}
+		);
+		if (!$ok) {
 			unlink($dest);
 			$this->fatalError("Wikven: failed to $what (HTTP $httpStatus).");
 		}
@@ -282,6 +314,61 @@ class FetchExtensions extends Maintenance {
 		if ($ret !== 0) {
 			$this->fatalError("Wikven: failed to $what (exit $ret).");
 		}
+	}
+
+	/**
+	 * Run a command that reaches the network, giving it more than one go before the build fails.
+	 *
+	 * Used for the fetching alone. The commands around it -- git init, a checkout, an extraction --
+	 * work on what is already local, so one failure from those is a real one; see Attempts for why a
+	 * fetch is different.
+	 *
+	 * @param string[] $cmd
+	 * @param string $what What the command is doing, for the reports and the error.
+	 * @param callable():void|null $reset Clear a half-finished attempt away, for a command that will
+	 *   not run twice over its own leftovers.
+	 */
+	private function runOnNetwork(array $cmd, string $what, ?callable $reset = null): void {
+		$shell = implode(' ', array_map('escapeshellarg', $cmd));
+		$ret = 0;
+		$ok = Attempts::until(
+			static function () use ($shell, &$ret) {
+				passthru($shell, $ret);
+				return $ret === 0;
+			},
+			Attempts::FETCH,
+			function (int $attempt) use ($what, $reset, &$ret) {
+				$wait = Attempts::backoff($attempt);
+				$this->output(
+					"Wikven: failed to $what (exit $ret); trying again in {$wait}s"
+					. " (attempt $attempt of "
+					. Attempts::FETCH
+					. ")\n"
+				);
+				if ($reset !== null) {
+					$reset();
+				}
+				sleep($wait);
+			}
+		);
+		if (!$ok) {
+			$this->fatalError("Wikven: failed to $what (exit $ret).");
+		}
+	}
+
+	/** Remove a directory and everything under it, so a failed fetch can be tried again. */
+	private static function removeTree(string $dir): void {
+		if (!is_dir($dir)) {
+			return;
+		}
+		$entries = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS),
+			RecursiveIteratorIterator::CHILD_FIRST
+		);
+		foreach ($entries as $entry) {
+			$entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
+		}
+		rmdir($dir);
 	}
 }
 
