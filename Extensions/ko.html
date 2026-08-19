@@ -65,7 +65,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 		<ul class="vector-menu-content-list">
 			
-			<li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="../Why_wikitext/ko.html"><span>위키텍스트를 쓰는 이유</span></a></li><li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/ko.html"><span>설치</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/ko.html"><span>시작하기</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/ko.html"><span>문서</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/ko.html"><span>사이드바 편집</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/ko.html"><span>이미지</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/ko.html"><span>스킨</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/ko.html"><span>확장 기능</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/ko.html"><span>자바스크립트</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/ko.html"><span>검색</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/ko.html"><span>번역</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying/ko.html"><span>배포하기</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/ko.html"><span>문제 해결</span></a></li>
+			<li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="../Why_wikitext/ko.html"><span>위키텍스트를 쓰는 이유</span></a></li><li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/ko.html"><span>설치</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/ko.html"><span>시작하기</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/ko.html"><span>문서</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/ko.html"><span>사이드바 편집</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/ko.html"><span>이미지</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/ko.html"><span>스킨</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/ko.html"><span>확장 기능</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="../Lua_modules/ko.html"><span>Lua 모듈</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/ko.html"><span>자바스크립트</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/ko.html"><span>검색</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/ko.html"><span>번역</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying/ko.html"><span>배포하기</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/ko.html"><span>문제 해결</span></a></li>
 		</ul>
 		
 	</div>
@@ -580,9 +580,10 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <li><b>요청에 응답하는 것.</b> 기능이 특수 문서나 API 모듈이거나, 독자가 누를 때 실행되는 질의인 확장 기능에는 돌아갈 서버가 없습니다. 빌드 시점에 문서 안으로 렌더링해 넣은 것만 남습니다.</li>
 <li><b>독자에 매인 것.</b> 내보내기에는 계정도, 환경 설정도, 세션도 없으므로 알림·주시문서 목록·사용자별 설정은 기댈 것이 없습니다.</li></ul>
 <p>위키텍스트가 렌더링되는 방식만 바꾸는 확장 기능 — 파서 태그, 파서 함수, 스타일, 템플릿 — 이 가장 잘 맞습니다. 그 일은 문서가 파일로 쓰이는 시점에 이미 끝나 있기 때문입니다.
+</p><p>Scribunto가 그중 하나이며, 대부분의 위키가 손을 뻗는 것입니다. <a href="../Lua_modules/ko.html" title="Special:MyLanguage/Lua modules">Lua 모듈</a>에 별도 문서가 있는데, Lua 모듈은 설정이면서 콘텐츠이기도 하고 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>가 그것을 렌더링할 수 없기 때문입니다.
 </p><p>여러분의 확장 기능을 빌드에서 살아남도록 일부러 만들 수도 있습니다. <a href="../Writing_an_extension/ko.html" title="Special:MyLanguage/Writing an extension">확장 기능 만들기</a>가 그에 대한 계약입니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r86">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Skins/ko.html" title="Special:MyLanguage/Skins">스킨</a></div><div class="wikven-prevnext-next"><a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">자바스크립트</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r90">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Skins/ko.html" title="Special:MyLanguage/Skins">스킨</a></div><div class="wikven-prevnext-next"><a href="../Lua_modules/ko.html" title="Special:MyLanguage/Lua modules">Lua 모듈</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="../Extensions/ko.html">Extensions/ko.html</a>"</div></div>
@@ -595,7 +596,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 17일 (월) 11:33에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 19일 (수) 15:56에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">

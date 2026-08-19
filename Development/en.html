@@ -65,7 +65,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 		<ul class="vector-menu-content-list">
 			
-			<li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="../Why_wikitext/en.html"><span>Why wikitext</span></a></li><li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/en.html"><span>Installation</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/en.html"><span>Getting Started</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/en.html"><span>Pages</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/en.html"><span>Editing sidebar</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/en.html"><span>Images</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/en.html"><span>Skins</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/en.html"><span>Extensions</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/en.html"><span>JavaScript</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/en.html"><span>Searching</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/en.html"><span>Translating</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying/en.html"><span>Deploying</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/en.html"><span>Troubleshooting</span></a></li>
+			<li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="../Why_wikitext/en.html"><span>Why wikitext</span></a></li><li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/en.html"><span>Installation</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/en.html"><span>Getting Started</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/en.html"><span>Pages</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/en.html"><span>Editing sidebar</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/en.html"><span>Images</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/en.html"><span>Skins</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/en.html"><span>Extensions</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="../Lua_modules/en.html"><span>Lua modules</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/en.html"><span>JavaScript</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/en.html"><span>Searching</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/en.html"><span>Translating</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying/en.html"><span>Deploying</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/en.html"><span>Troubleshooting</span></a></li>
 		</ul>
 		
 	</div>
@@ -665,7 +665,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>The division is what makes the passes safe to run beside each other: the orchestrator does every write, and by the time a pass starts, the content is final and a pass only reads it. Passes run up to one per available processor.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="Phase_1:_filling_the_wiki">Phase 1: filling the wiki</h3></div>
-<dl><dt><code>clearOutputDirectory</code></dt>
+<dl><dt><code>checkLuaAgainstThisBuild</code></dt>
+<dd>Says what this site's <a href="../Translating/en.html" title="Special:MyLanguage/Translating">Lua</a> and this build's Lua make of each other, before anything else happens. A site that lists Scribunto where no engine can run it ends the build, because it asked for something this build cannot do; a site with <code>Module:</code> files that never listed Scribunto is only told what those files come to. Both used to pass quietly and publish pages with the invocation showing in them. It runs first so the last bake is still in place when a site is refused.</dd>
+<dt><code>clearOutputDirectory</code></dt>
 <dd>Empties the output directory, so a bake never inherits a file from the last one.</dd>
 <dt><code>setMainPage</code></dt>
 <dd>Points <code>MediaWiki:Mainpage</code> at the imported <code>index</code> article, so the site root resolves to <code>index.html</code>.</dd>
@@ -756,7 +758,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 <li><code>updatecli.yml</code> moves the version pins the image and the docs site carry, and <code>tofu.yml</code> applies the repository's own settings from <code>.tf/</code>.</li></ul>
 <p>Versions follow <a rel="nofollow" class="external text" href="https://www.conventionalcommits.org/">Conventional Commits</a>, which release-please uses to generate the changelog and bump the version.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r86">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Commands/en.html" title="Special:MyLanguage/Commands">Commands</a></div><div class="wikven-prevnext-next"><a href="../Writing_an_extension/en.html" title="Special:MyLanguage/Writing an extension">Writing an extension</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r90">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Commands/en.html" title="Special:MyLanguage/Commands">Commands</a></div><div class="wikven-prevnext-next"><a href="../Writing_an_extension/en.html" title="Special:MyLanguage/Writing an extension">Writing an extension</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="../Development/en.html">Development/en.html</a>"</div></div>
@@ -769,7 +771,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 14:20.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 19 August 2026, at 15:56.</li>
 </ul>
 
 	<ul id="footer-places">

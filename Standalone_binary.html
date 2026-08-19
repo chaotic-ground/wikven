@@ -66,7 +66,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 		<ul class="vector-menu-content-list">
 			
-			<li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="./Why_wikitext.html"><span>Why wikitext</span></a></li><li id="n-sidebar-installation" class="mw-list-item"><a href="./Installation.html"><span>Installation</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="./Getting_Started.html"><span>Getting Started</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="./Pages.html"><span>Pages</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="./Editing_sidebar.html"><span>Editing sidebar</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="./Images.html"><span>Images</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="./Skins.html"><span>Skins</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="./Extensions.html"><span>Extensions</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="./JavaScript.html"><span>JavaScript</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="./Searching.html"><span>Searching</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="./Translating.html"><span>Translating</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="./Deploying.html"><span>Deploying</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="./Troubleshooting.html"><span>Troubleshooting</span></a></li>
+			<li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="./Why_wikitext.html"><span>Why wikitext</span></a></li><li id="n-sidebar-installation" class="mw-list-item"><a href="./Installation.html"><span>Installation</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="./Getting_Started.html"><span>Getting Started</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="./Pages.html"><span>Pages</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="./Editing_sidebar.html"><span>Editing sidebar</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="./Images.html"><span>Images</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="./Skins.html"><span>Skins</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="./Extensions.html"><span>Extensions</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="./Lua_modules.html"><span>Lua modules</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="./JavaScript.html"><span>JavaScript</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="./Searching.html"><span>Searching</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="./Translating.html"><span>Translating</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="./Deploying.html"><span>Deploying</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="./Troubleshooting.html"><span>Troubleshooting</span></a></li>
 		</ul>
 		
 	</div>
@@ -322,11 +322,23 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<ul id="toc-Building_a_site-sublist" class="vector-toc-list">
 		</ul>
 	</li>
+	<li id="toc-What_it_cannot_do"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#What_it_cannot_do">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">5</span>
+				<span>What it cannot do</span>
+			</div>
+		</a>
+		
+		<ul id="toc-What_it_cannot_do-sublist" class="vector-toc-list">
+		</ul>
+	</li>
 	<li id="toc-Optional_host_tools"
 		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
 		<a class="vector-toc-link" href="#Optional_host_tools">
 			<div class="vector-toc-text">
-				<span class="vector-toc-numb">5</span>
+				<span class="vector-toc-numb">6</span>
 				<span>Optional host tools</span>
 			</div>
 		</a>
@@ -592,16 +604,21 @@ wikven<span class="w"> </span>build
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nv">WIKVEN_WORKDIR</span><span class="o">=</span>/path/to/project<span class="w"> </span>wikven<span class="w"> </span>build
 </pre></div>
-<p>The output is the same as the Docker image's: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a> layered over Wikven's defaults.
+<p>The output is the same as the Docker image's, with one exception below: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a> layered over Wikven's defaults.
 </p>
+<div class="mw-heading mw-heading2"><h2 id="What_it_cannot_do">What it cannot do</h2></div>
+<p><b><a href="./Lua_modules.html" title="Special:MyLanguage/Lua modules">Lua modules</a>.</b> The PHP this binary is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship. A site that lists Scribunto is refused here, with a message saying so, rather than baked into pages with <code>{{#invoke:}}</code> showing in them. Build that site with the image.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r86">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>This documentation site is one of those: it has a Lua module of its own, so the image builds it and this binary cannot.</p></div>
+</div>
 <div class="mw-heading mw-heading2"><h2 id="Optional_host_tools">Optional host tools</h2></div>
 <p>The binary renders on its own, but uses these host programs when they are present:
 </p>
 <ul><li><b><a rel="nofollow" class="external text" href="https://imagemagick.org/">ImageMagick</a></b> and <b><a rel="nofollow" class="external text" href="https://gitlab.gnome.org/GNOME/librsvg">librsvg</a></b> produce higher-quality thumbnails. Without them the binary uses the built-in <a rel="nofollow" class="external text" href="https://libgd.github.io/">GD</a> library for raster images and serves SVG inline. See <a href="./Images.html" title="Special:MyLanguage/Images">Images</a>.</li>
 <li><b><a rel="nofollow" class="external text" href="https://git-scm.com/">git</a></b> is needed only to fetch <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration">third-party extensions and skins</a>.</li></ul>
-<style data-mw-deduplicate="TemplateStyles:r82">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration">third-party extensions or skins</a>, relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r86" /><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration">third-party extensions or skins</a>, relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.</p></div>
 </div>
-<style data-mw-deduplicate="TemplateStyles:r86">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Configuration.html" title="Special:MyLanguage/Configuration">Configuration</a></div><div class="wikven-prevnext-next"><a href="./Commands.html" title="Special:MyLanguage/Commands">Commands</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r90">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Configuration.html" title="Special:MyLanguage/Configuration">Configuration</a></div><div class="wikven-prevnext-next"><a href="./Commands.html" title="Special:MyLanguage/Commands">Commands</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Standalone_binary.html">Standalone_binary.html</a>"</div></div>
@@ -614,7 +631,7 @@ wikven<span class="w"> </span>build
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 11:33.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 19 August 2026, at 15:56.</li>
 </ul>
 
 	<ul id="footer-places">
