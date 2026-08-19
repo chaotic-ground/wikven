@@ -1,0 +1,121 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+A great many wikis keep their templates' logic in Lua, and {{SITENAME}} runs a real MediaWiki at build time, so a module runs the way it always does. The page that invokes it is written out with the module's answer already in it; the module itself never becomes a page of the published site. Lua on a MediaWiki is [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Scribunto</tvar> Scribunto], which MediaWiki bundles.
+
+<!--T:2-->
+{{note|The [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] cannot render Lua, and only the Docker image can. A build that is asked to do the impossible now stops and says so, rather than publishing pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them.}}
+
+<!--T:3-->
+== Enabling it ==
+
+<!--T:4-->
+Name it in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]] and that is all. Scribunto ships inside the image, so it needs no [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] entry, and the engine needs no configuration: the image compiles <code>luasandbox</code> into its PHP and Scribunto finds it.
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - Scribunto
+</syntaxhighlight>
+
+<translate>
+<!--T:5-->
+== Writing a module ==
+
+<!--T:6-->
+A module is content, so it lives in your source tree beside your pages. Its file carries no <code>.wikitext</code> marker, because a <code>Module:</code> page's content model is Lua and not wikitext:
+</translate>
+
+<syntaxhighlight lang="text">
+src/
+  Module:Example
+  Home.wikitext
+</syntaxhighlight>
+
+<translate>
+<!--T:7-->
+A file named <code>Module:Example.wikitext</code> is imported too, but the bare name is the convention, and it is the one {{SITENAME}} maps a page back to when it needs the file that page came from.
+
+<!--T:8-->
+The module is ordinary Lua. This one is the module this site really has, in full:
+</translate>
+
+<syntaxhighlight lang="lua" copy>
+local p = {}
+
+function p.thisPage( frame )
+	return '<code>' .. mw.title.getCurrentTitle().text .. '</code>'
+end
+
+return p
+</syntaxhighlight>
+
+<translate>
+<!--T:9-->
+and the page invokes it the ordinary way:
+</translate>
+
+<syntaxhighlight lang="wikitext" copy>
+{{#invoke:Example|thisPage}}
+</syntaxhighlight>
+
+<translate>
+<!--T:10-->
+Which, run on this page as you read it, answered:
+</translate>
+
+{{#invoke:Example|thisPage}}
+
+<translate>
+<!--T:11-->
+The invocation sits outside the <code><nowiki><translate></nowiki></code> tags, because a module's return value is not a translation unit. It reaches a reader of any language exactly as the module wrote it, so the words belong in the sentence around it and not in the module.
+
+<!--T:12-->
+== What reaches the published site ==
+
+<!--T:13-->
+The module's output, and nothing else. <code>Module:</code> is not a content namespace, so the module is never exported as a page and its Lua source is not published; what a reader downloads is the page with that answer already in it. Nothing runs in the reader's browser, because nothing is left to run: the module ran once, at build time.
+
+<!--T:14-->
+That is worth knowing when you decide what to put in a module. Anything a module computes from the wiki's own content — a table assembled from other pages, a sorted list, a page's own order in a series — is computed once and frozen. Anything a module would need at read time, like the reader's clock or a query, has nowhere to run.
+
+<!--T:15-->
+== When the build and the site disagree ==
+
+<!--T:16-->
+Two mismatches used to pass quietly and produce a broken site. One of them ends the build; the other is only reported, and the bake goes on.
+
+<!--T:17-->
+'''Modules with no Scribunto.''' A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is built, and told what those files come to: a <code><nowiki>{{#invoke:}}</nowiki></code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read. The build says what it sees rather than deciding for you, because a <code>Module:</code> file is a guess read off a name and may be on its way in, on its way out, or kept for something else.
+</translate>
+
+<syntaxhighlight lang="console">
+Wikven: the source has 1 Lua module file(s) (Module:Example) and Scribunto is not in
+extensions, so a {{#invoke:}} is left in the page as its own source text, and a module
+named with the .wikitext marker is exported as a page. Add Scribunto to extensions if
+those modules are meant to run.
+</syntaxhighlight>
+
+<translate>
+<!--T:18-->
+'''Scribunto with no engine.''' A site that lists Scribunto is refused wherever no Lua engine can run it, which is the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]]. The PHP it is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship. This one is refused rather than reported: the site asked for Lua in so many words, and this build cannot give it.
+</translate>
+
+<syntaxhighlight lang="console">
+Wikven: this site lists Scribunto and no Lua engine is available here. The Docker image
+has one; the standalone binary has none, so it cannot bake a site that uses Lua modules.
+Bake this one with the image, or drop Scribunto from extensions and the Module: pages
+with it.
+</syntaxhighlight>
+
+<translate>
+<!--T:19-->
+So a site with Lua modules is a site built with the image. If you need the binary, keep the logic in [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> wikitext templates] and [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:ParserFunctions</tvar> ParserFunctions], both of which every product renders.
+
+<!--T:20-->
+This documentation site uses a module itself, which is what keeps the two answers above honest: it is built with the image, and it could not be built with the binary.
+</translate>
+
+{{prevnext|Extensions|JavaScript}}

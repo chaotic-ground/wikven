@@ -13,6 +13,7 @@
 ** Special:MyLanguage/Images|sidebar-images
 ** Special:MyLanguage/Skins|sidebar-skins
 ** Special:MyLanguage/Extensions|sidebar-extensions
+** Special:MyLanguage/Lua modules|sidebar-lua-modules
 ** Special:MyLanguage/JavaScript|sidebar-javascript
 ** Special:MyLanguage/Searching|sidebar-searching
 ** Special:MyLanguage/Translating|sidebar-translating

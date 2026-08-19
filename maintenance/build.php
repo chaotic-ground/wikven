@@ -49,6 +49,9 @@ class Build extends Maintenance {
 		$ip = $GLOBALS['IP'];
 		$own = __DIR__;
 
+		// Before the output directory is emptied, because a site this build cannot render is better
+		// told so with its last bake still in place.
+		$this->checkLuaAgainstThisBuild();
 		$this->clearOutputDirectory();
 		$this->setMainPage();
 		$this->importImages("$ip/maintenance/importImages.php");
@@ -78,6 +81,76 @@ class Build extends Maintenance {
 			$skins = [$GLOBALS['wgDefaultSkin']];
 		}
 		$this->renderSkinPasses(array_values($skins));
+	}
+
+	/**
+	 * Say what this site's Lua and this build's Lua make of each other; see Scribunto for the ways
+	 * they used to pass quietly and produce a site with braces in it.
+	 *
+	 * Only one of the two ends the build, and it is the one the site asked for: Scribunto listed where
+	 * nothing can run it. The other is a remark about Module: files the site never asked to run.
+	 */
+	private function checkLuaAgainstThisBuild(): void {
+		$source = rtrim((string)( $GLOBALS['wgWikvenSourceDirectory'] ?? '' ), '/');
+		$listed = ExtensionRegistry::getInstance()->isLoaded(Scribunto::EXTENSION);
+
+		$problem = Scribunto::problem($listed, self::luaEngineAvailable());
+		if ($problem !== null) {
+			$this->fatalError($problem);
+		}
+
+		$modules = $source !== '' && is_dir($source) ? Scribunto::modulePages(self::sourcePaths($source)) : [];
+		$warning = Scribunto::warning($listed, $modules);
+		if ($warning !== null) {
+			$this->output("$warning\n");
+		}
+	}
+
+	/**
+	 * Every file under the source directory, relative to it.
+	 *
+	 * Not ImportWikitext's list, which is filtered by SourceFile::isPageFile() -- and that asks
+	 * MediaWiki for the title's content model, so with Scribunto absent a module file is not a page
+	 * file and would be missing from exactly the case worth catching.
+	 *
+	 * @return string[]
+	 */
+	private static function sourcePaths(string $source): array {
+		$paths = [];
+		$entries = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS)
+		);
+		foreach ($entries as $entry) {
+			if ($entry->isFile()) {
+				$paths[] = substr($entry->getPathname(), strlen($source) + 1);
+			}
+		}
+		sort($paths);
+		return $paths;
+	}
+
+	/**
+	 * Whether anything here can run Lua.
+	 *
+	 * luasandbox is the engine the image carries. Scribunto's other engine runs an external lua, which
+	 * the standalone binary has no way to ship but a hand-rolled install may well have.
+	 */
+	private static function luaEngineAvailable(): bool {
+		if (extension_loaded('luasandbox')) {
+			return true;
+		}
+		$configured = (string)( $GLOBALS['wgScribuntoEngineConf']['luastandalone']['luaPath'] ?? '' );
+		if ($configured !== '' && is_executable($configured)) {
+			return true;
+		}
+		foreach (explode(PATH_SEPARATOR, (string)getenv('PATH')) as $dir) {
+			foreach (['lua5.1', 'lua'] as $name) {
+				if ($dir !== '' && is_executable("$dir/$name")) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

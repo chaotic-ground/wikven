@@ -1,0 +1,22 @@
+-- The one Lua module this documentation site has, and it is here to be read rather than to do work:
+-- Special:MyLanguage/Lua modules shows this source and invokes it on the same page, so the example a
+-- reader copies is the code that ran, and the smoke test asserts the answer it produced.
+--
+-- It answers with a page name and no prose, because a module's return value is not a translation unit
+-- and would reach a reader of any language in whatever language it was written in. The sentence around
+-- the invocation carries the words, and is translated like every other sentence on that page.
+--
+-- What it returns also has to be the same on every bake, since a module is run once at build time and
+-- its answer is baked into the page. A title satisfies that; a clock or a request would not, and the
+-- reproducibility check would catch it.
+
+local p = {}
+
+--- The title of the page being rendered.
+-- @param frame the invocation, unused: the question is about the page, not the arguments
+-- @return the page's title, as wikitext
+function p.thisPage( frame )
+	return '<code>' .. mw.title.getCurrentTitle().text .. '</code>'
+end
+
+return p

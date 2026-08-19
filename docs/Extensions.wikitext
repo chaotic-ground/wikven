@@ -81,8 +81,11 @@ An extension has to do its work during the build, because the published site is 
 <!--T:15-->
 Extensions that only change how wikitext renders — parser tags, parser functions, styling, templating — are the ones that work best, because their whole job is over by the time the page is written out.
 
+<!--T:17-->
+Scribunto is one of those, and the one most wikis reach for: it has a page of its own at [[<tvar name="1">Special:MyLanguage/Lua modules</tvar>|Lua modules]], because a Lua module is content as well as configuration and the [[<tvar name="2">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] cannot render it.
+
 <!--T:16-->
 An extension of your own can also be made to survive a build deliberately; [[<tvar name="1">Special:MyLanguage/Writing an extension</tvar>|Writing an extension]] is the contract for that.
 </translate>
 
-{{prevnext|Skins|JavaScript}}
+{{prevnext|Skins|Lua modules}}
