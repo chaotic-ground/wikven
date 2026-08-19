@@ -66,13 +66,38 @@ jobs:
           tags: wikven
           cache-from: type=gha,scope=wikven-image
 
-      - name: Bake the docs site
+      # Both bakes of the reproducibility check below, at once. They are independent by construction
+      # -- separate containers, separate output directories, one shared source -- and most of a
+      # bake is a single process: only the skin passes run beside each other, so the second bake
+      # fills cores the first leaves idle rather than taking any from it. Measured on four cores, the
+      # runner's count: 257s one after the other against 150s together, output byte-identical either
+      # way, and a combined 1 GiB at peak where the runner has 16.
+      #
+      # Each writes to its own log because two live logs interleave into neither.
+      - name: Bake the docs site twice
         run: |
-          mkdir -p dist
-          docker run --rm \
-            -v "$(pwd)/docs:/workspace/src" \
-            -v "$(pwd)/dist:/workspace/dist" \
-            wikven
+          set -uo pipefail
+          mkdir -p dist dist-again
+          bake() {
+            docker run --rm \
+              -v "$(pwd)/docs:/workspace/src:ro" \
+              -v "$(pwd)/$1:/workspace/dist" \
+              wikven
+          }
+          bake dist > bake.log 2>&1 &
+          first=$!
+          bake dist-again > bake-again.log 2>&1 &
+          second=$!
+          status=0
+          wait "$first" || status=$?
+          wait "$second" || status=$?
+          echo '::group::First bake'
+          cat bake.log
+          echo '::endgroup::'
+          echo '::group::Second bake'
+          cat bake-again.log
+          echo '::endgroup::'
+          exit "$status"
 
       - name: Assert the bake produced a complete, self-contained site
         run: |
@@ -230,14 +255,11 @@ jobs:
       # differ. Baking from two separate clones is the stronger check and is not this one: it fails
       # today because importWikitext.php stamps revisions with filemtime(), which a second clone
       # changes (#406).
-      - name: Bake the docs site again and assert the two bakes are identical
+      #
+      # Both bakes ran in the step above, at once; this only reads what they wrote.
+      - name: Assert the two bakes are identical
         run: |
           set -euo pipefail
-          mkdir -p dist-again
-          docker run --rm \
-            -v "$(pwd)/docs:/workspace/src" \
-            -v "$(pwd)/dist-again:/workspace/dist" \
-            wikven
           if diff -rq dist dist-again; then
             echo "Two bakes of the same source are byte-identical."
           else
