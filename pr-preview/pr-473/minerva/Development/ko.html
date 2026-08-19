@@ -272,8 +272,8 @@ Wikven
 </p><p><span id="Phase&#95;1:&#95;filling&#95;the&#95;wiki"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="1단계:_위키_채우기"><span id="1.EB.8B.A8.EA.B3.84:_.EC.9C.84.ED.82.A4_.EC.B1.84.EC.9A.B0.EA.B8.B0"></span>1단계: 위키 채우기</h3></div>
-<dl><dt><code>assertLuaMatchesThisBuild</code></dt>
-<dd>이 사이트의 <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">Lua</a>와 이 빌드의 Lua가 어긋나면 다른 어떤 일이 벌어지기 전에 빌드를 끝냅니다. <code>Module:</code> 파일이 있는데 Scribunto를 나열하지 않은 사이트, 또는 Scribunto를 나열했지만 그것을 실행할 엔진이 없는 곳이 그렇습니다. 둘 다 예전에는 조용히 통과해 호출문이 그대로 보이는 문서를 게시했습니다. 가장 먼저 실행되므로, 사이트가 거부될 때 지난 빌드 결과가 아직 그대로 남아 있습니다.</dd>
+<dl><dt><code>checkLuaAgainstThisBuild</code></dt>
+<dd>이 사이트의 <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">Lua</a>와 이 빌드의 Lua가 서로를 어떻게 보는지를, 다른 어떤 일이 벌어지기 전에 말합니다. Scribunto를 나열했지만 그것을 실행할 엔진이 없는 사이트는 빌드를 끝내는데, 이 빌드가 할 수 없는 일을 요구했기 때문입니다. 반면 Scribunto를 나열한 적 없이 <code>Module:</code> 파일만 있는 사이트에는 그 파일들이 무엇이 되는지를 알려주기만 합니다. 둘 다 예전에는 조용히 통과해 호출문이 그대로 보이는 문서를 게시했습니다. 가장 먼저 실행되므로, 사이트가 거부될 때 지난 빌드 결과가 아직 그대로 남아 있습니다.</dd>
 <dt><code>clearOutputDirectory</code></dt>
 <dd>출력 디렉터리를 비워, 이전 빌드의 파일이 남지 않도록 합니다.</dd>
 <dt><code>setMainPage</code></dt>
@@ -388,10 +388,10 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
   		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
  
   		<span class="last-modified-bar__text modified-enhancement"
-  				data-user-name="Lens0021"
+  				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1786988167">
-  				<span>2026년 8월 17일 (월) 17:36에 마지막으로 편집됨</span>
+  				data-timestamp="1787154688">
+  				<span>2026년 8월 19일 (수) 15:51에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -414,7 +414,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 17일 (월) 17:36에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 19일 (수) 15:51에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

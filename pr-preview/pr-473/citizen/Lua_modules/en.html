@@ -451,16 +451,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>The module's output, and nothing else. <code>Module:</code> is not a content namespace, so the module is never exported as a page and its Lua source is not published; what a reader downloads is the page with that answer already in it. Nothing runs in the reader's browser, because nothing is left to run: the module ran once, at build time.
 </p><p>That is worth knowing when you decide what to put in a module. Anything a module computes from the wiki's own content — a table assembled from other pages, a sorted list, a page's own order in a series — is computed once and frozen. Anything a module would need at read time, like the reader's clock or a query, has nowhere to run.
 </p>
-</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="What_the_build_refuses">What the build refuses</h2></div><section id="citizen-section-4" class="citizen-section">
-<p>Two mismatches used to pass quietly and produce a broken site. Both now end the build.
-</p><p><b>Modules with no Scribunto.</b> A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is refused, because without the extension a <code>{{#invoke:}}</code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read.
+</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="When_the_build_and_the_site_disagree">When the build and the site disagree</h2></div><section id="citizen-section-4" class="citizen-section">
+<p>Two mismatches used to pass quietly and produce a broken site. One of them ends the build; the other is only reported, and the bake goes on.
+</p><p><b>Modules with no Scribunto.</b> A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is built, and told what those files come to: a <code>{{#invoke:}}</code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read. The build says what it sees rather than deciding for you, because a <code>Module:</code> file is a guess read off a name and may be on its way in, on its way out, or kept for something else.
 </p>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: the source has 1 Lua module file(s) (Module:Example) and Scribunto is not in</span>
-<span class="go">extensions. Without it a {{#invoke:}} is left in the page as its own source text, and a</span>
-<span class="go">module named with the .wikitext marker is exported as a page. Add Scribunto to</span>
-<span class="go">extensions, or remove those files.</span>
+<span class="go">extensions, so a {{#invoke:}} is left in the page as its own source text, and a module</span>
+<span class="go">named with the .wikitext marker is exported as a page. Add Scribunto to extensions if</span>
+<span class="go">those modules are meant to run.</span>
 </pre></div>
-<p><b>Scribunto with no engine.</b> A site that lists Scribunto is refused wherever no Lua engine can run it, which is the <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">standalone binary</a>. The PHP it is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship.
+<p><b>Scribunto with no engine.</b> A site that lists Scribunto is refused wherever no Lua engine can run it, which is the <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">standalone binary</a>. The PHP it is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship. This one is refused rather than reported: the site asked for Lua in so many words, and this build cannot give it.
 </p>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: this site lists Scribunto and no Lua engine is available here. The Docker image</span>
 <span class="go">has one; the standalone binary has none, so it cannot bake a site that uses Lua modules.</span>
@@ -489,7 +489,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules/en.wikitext" title="This page was last edited on 17 August 2026, at 17:36." data-timestamp="1786988167"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>17 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules/en.wikitext" title="This page was last edited on 19 August 2026, at 15:51." data-timestamp="1787154688"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>19 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -560,19 +560,19 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-What_reaches_the_published_site-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
-		<li id="toc-What_the_build_refuses"
+		<li id="toc-When_the_build_and_the_site_disagree"
 			class="citizen-toc-list-item citizen-toc-level-1">
-			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#What_the_build_refuses" role="button">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#When_the_build_and_the_site_disagree" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
 						<span class="citizen-toc-numb">4</span>
-						<span class="citizen-toc-heading">What the build refuses</span>
+						<span class="citizen-toc-heading">When the build and the site disagree</span>
 					</div>
 					
 				</div>
 			</a>
 			
-			<ul id="toc-What_the_build_refuses-sublist" class="citizen-toc-list">
+			<ul id="toc-When_the_build_and_the_site_disagree-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
 	</ul>
@@ -585,7 +585,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 17 August 2026, at 17:36.</div>
+		        <div class="page-info__text"> This page was last edited on 19 August 2026, at 15:51.</div>
 		    </section>
 		</div>
 </footer>		</div>

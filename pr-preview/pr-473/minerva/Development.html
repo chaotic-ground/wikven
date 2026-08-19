@@ -266,8 +266,8 @@ Wikven
 </p><p>The division is what makes the passes safe to run beside each other: the orchestrator does every write, and by the time a pass starts, the content is final and a pass only reads it. Passes run up to one per available processor.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="Phase_1:_filling_the_wiki">Phase 1: filling the wiki</h3></div>
-<dl><dt><code>assertLuaMatchesThisBuild</code></dt>
-<dd>Ends the build before anything else happens if this site's <a href="./Translating.html" title="Special:MyLanguage/Translating">Lua</a> and this build's Lua disagree: a site with <code>Module:</code> files that does not list Scribunto, or a site that lists it where no engine can run it. Both used to pass quietly and publish pages with the invocation showing in them. It runs first so the last bake is still in place when a site is refused.</dd>
+<dl><dt><code>checkLuaAgainstThisBuild</code></dt>
+<dd>Says what this site's <a href="./Translating.html" title="Special:MyLanguage/Translating">Lua</a> and this build's Lua make of each other, before anything else happens. A site that lists Scribunto where no engine can run it ends the build, because it asked for something this build cannot do; a site with <code>Module:</code> files that never listed Scribunto is only told what those files come to. Both used to pass quietly and publish pages with the invocation showing in them. It runs first so the last bake is still in place when a site is refused.</dd>
 <dt><code>clearOutputDirectory</code></dt>
 <dd>Empties the output directory, so a bake never inherits a file from the last one.</dd>
 <dt><code>setMainPage</code></dt>
@@ -374,10 +374,10 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
   		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
  
   		<span class="last-modified-bar__text modified-enhancement"
-  				data-user-name="Lens0021"
+  				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1786988167">
-  				<span>Last edited on 17 August 2026, at 17:36</span>
+  				data-timestamp="1787154688">
+  				<span>Last edited on 19 August 2026, at 15:51</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -400,7 +400,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 17:36.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 19 August 2026, at 15:51.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

@@ -215,7 +215,7 @@ Wikven
 <li class="toclevel-1 tocsection-1"><a href="#Enabling_it"><span class="tocnumber">1</span> <span class="toctext">Enabling it</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Writing_a_module"><span class="tocnumber">2</span> <span class="toctext">Writing a module</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#What_reaches_the_published_site"><span class="tocnumber">3</span> <span class="toctext">What reaches the published site</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#What_the_build_refuses"><span class="tocnumber">4</span> <span class="toctext">What the build refuses</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#When_the_build_and_the_site_disagree"><span class="tocnumber">4</span> <span class="toctext">When the build and the site disagree</span></a></li>
 </ul>
 </div>
 
@@ -261,16 +261,16 @@ Wikven
 <p>The module's output, and nothing else. <code>Module:</code> is not a content namespace, so the module is never exported as a page and its Lua source is not published; what a reader downloads is the page with that answer already in it. Nothing runs in the reader's browser, because nothing is left to run: the module ran once, at build time.
 </p><p>That is worth knowing when you decide what to put in a module. Anything a module computes from the wiki's own content — a table assembled from other pages, a sorted list, a page's own order in a series — is computed once and frozen. Anything a module would need at read time, like the reader's clock or a query, has nowhere to run.
 </p>
-<div class="mw-heading mw-heading2"><h2 id="What_the_build_refuses">What the build refuses</h2></div>
-<p>Two mismatches used to pass quietly and produce a broken site. Both now end the build.
-</p><p><b>Modules with no Scribunto.</b> A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is refused, because without the extension a <code>{{#invoke:}}</code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read.
+<div class="mw-heading mw-heading2"><h2 id="When_the_build_and_the_site_disagree">When the build and the site disagree</h2></div>
+<p>Two mismatches used to pass quietly and produce a broken site. One of them ends the build; the other is only reported, and the bake goes on.
+</p><p><b>Modules with no Scribunto.</b> A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is built, and told what those files come to: a <code>{{#invoke:}}</code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read. The build says what it sees rather than deciding for you, because a <code>Module:</code> file is a guess read off a name and may be on its way in, on its way out, or kept for something else.
 </p>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: the source has 1 Lua module file(s) (Module:Example) and Scribunto is not in</span>
-<span class="go">extensions. Without it a {{#invoke:}} is left in the page as its own source text, and a</span>
-<span class="go">module named with the .wikitext marker is exported as a page. Add Scribunto to</span>
-<span class="go">extensions, or remove those files.</span>
+<span class="go">extensions, so a {{#invoke:}} is left in the page as its own source text, and a module</span>
+<span class="go">named with the .wikitext marker is exported as a page. Add Scribunto to extensions if</span>
+<span class="go">those modules are meant to run.</span>
 </pre></div>
-<p><b>Scribunto with no engine.</b> A site that lists Scribunto is refused wherever no Lua engine can run it, which is the <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a>. The PHP it is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship.
+<p><b>Scribunto with no engine.</b> A site that lists Scribunto is refused wherever no Lua engine can run it, which is the <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a>. The PHP it is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship. This one is refused rather than reported: the site asked for Lua in so many words, and this build cannot give it.
 </p>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: this site lists Scribunto and no Lua engine is available here. The Docker image</span>
 <span class="go">has one; the standalone binary has none, so it cannot bake a site that uses Lua modules.</span>
@@ -295,10 +295,10 @@ Wikven
   		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
  
   		<span class="last-modified-bar__text modified-enhancement"
-  				data-user-name="Lens0021"
+  				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1786988167">
-  				<span>Last edited on 17 August 2026, at 17:36</span>
+  				data-timestamp="1787154688">
+  				<span>Last edited on 19 August 2026, at 15:51</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -321,7 +321,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 17 August 2026, at 17:36.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 19 August 2026, at 15:51.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
