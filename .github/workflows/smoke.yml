@@ -39,6 +39,15 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
+    # Every job in this repository carries one of these, and this is the job that earned them. On
+    # 2026-08-18 the runner's Ubuntu mirror stopped answering during `playwright install
+    # --with-deps`; apt fell back to archive.ubuntu.com, fetched the release files and then sat
+    # there. With no timeout the job waited out GitHub's six-hour default before anyone was told
+    # anything. The mirror is not ours to fix; how long we wait to hear about it is.
+    #
+    # Three times what the job takes -- around ten minutes, two bakes and a browser install -- so a
+    # stall is reported in minutes while a slow but healthy run never trips it.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
