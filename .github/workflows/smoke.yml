@@ -270,9 +270,12 @@ jobs:
             exit 1
           fi
 
-      # Node.js is preinstalled on the runner; no setup-node (its caching trips
-      # the cache-poisoning audit, and this job shares a build cache with the
-      # image-publishing workflow).
+      # Node.js is preinstalled on the runner; no setup-node, whose caching trips the
+      # cache-poisoning audit. Nothing this job does can reach a release on its own: it reads the
+      # wikven-image layer cache and writes nothing, and a released binary builds from its own
+      # per-architecture scope rather than that one. But the scope it reads is written by the job
+      # that publishes the image, so a cache added here is one more entry for that audit to weigh.
+      # At nine seconds for npm ci and the browser together, there is nothing worth buying with it.
       # The headless shell, not all of "chromium". Asking for chromium fetches Chrome for Testing
       # (379 MiB unpacked) as well as the shell (262 MiB), and these specs never start the former:
       # they run headless, which is what the shell is. ffmpeg (5 MiB) comes along either way, so what
