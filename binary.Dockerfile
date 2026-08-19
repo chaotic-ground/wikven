@@ -28,15 +28,34 @@ RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
 # but not the build: build-static.sh fetches a nightly static-php-cli, which picks the library versions.
 FROM dunglas/frankenphp:static-builder-musl-1.12.6@sha256:e83b6dc244b8e170c5324cb8db32817b88703da495d40d14ce7751456e448a0d AS builder
 WORKDIR /go/src/app
+ENV PHP_VERSION=8.3
+ENV PHP_EXTENSIONS="gd,intl,pdo_sqlite,sqlite3,mbstring,dom,xml,simplexml,xmlreader,xmlwriter,fileinfo,iconv,ctype,filter,tokenizer,phar,session,calendar,opcache,openssl,sodium,zlib,bcmath,exif"
+ENV PHP_EXTENSION_LIBS="libpng,libjpeg,freetype,libwebp"
+
+# EXPERIMENT, not a change to keep as it stands. See #479.
+#
+# Measured on run 32203489763, the 449s build divides into 272s that cannot depend on this
+# repository -- fetching 21 sources and compiling libphp.a, decided by the three ENV lines above and
+# the pinned toolchain and by nothing else -- and the rest, which links the app in. The app first
+# appears 279.5s into the run, at "Creating app.tar".
+#
+# So the expensive part could live in a layer above the app COPY, keyed on those ENV lines alone and
+# cached across runs. Whether that is worth building depends on one fact nobody knows: does a second
+# build-static.sh reuse the libphp.a the first one left in buildroot, or does it "make clean" and
+# spend the 186s again? This run answers it. Compare "building embed" in the two RUNs below.
+#
+# CI is cleared because build-static.sh deletes downloads/ and source/ when it is set, which would
+# throw away the half of the answer this is asking about.
+RUN --mount=type=secret,id=github-token \
+    CI= GITHUB_TOKEN="$(cat /run/secrets/github-token 2>/dev/null || true)" \
+    ./build-static.sh
+
 COPY --from=app /var/www/html ./dist/app
 # A small Caddy module registers the `build` subcommand, so the binary can be run
 # as `./wikven build` instead of `./wikven php-cli build.php`. It is linked into
 # the FrankenPHP binary alongside FrankenPHP's own default Caddy modules.
 COPY caddy /go/wikven-caddy
 ENV SPC_CMD_VAR_FRANKENPHP_XCADDY_MODULES="--with github.com/dunglas/mercure/caddy --with github.com/dunglas/vulcain/caddy --with github.com/dunglas/caddy-cbrotli --with github.com/chaotic-ground/wikven/caddy=/go/wikven-caddy"
-ENV PHP_VERSION=8.3
-ENV PHP_EXTENSIONS="gd,intl,pdo_sqlite,sqlite3,mbstring,dom,xml,simplexml,xmlreader,xmlwriter,fileinfo,iconv,ctype,filter,tokenizer,phar,session,calendar,opcache,openssl,sodium,zlib,bcmath,exif"
-ENV PHP_EXTENSION_LIBS="libpng,libjpeg,freetype,libwebp"
 # static-php-cli resolves most sources through api.github.com, which is 60 requests/hour per IP when
 # anonymous and shared with every other runner on that IP. The token raises it to 1000/hour per repo.
 RUN --mount=type=secret,id=github-token \
