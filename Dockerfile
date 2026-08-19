@@ -20,14 +20,27 @@ RUN apk add --no-cache rsvg-convert imagemagick-jpeg imagemagick-webp
 # Bundled extensions come from stable external sources; fetch them before copying wikven's own
 # code so edits to that code do not bust the (slow) download/clone layers.
 
+# Every fetch below asks curl to try again, because "stable source" describes the bytes and not the
+# service in front of them: GitHub served 500s for archive and git traffic for hours on 2026-08-17,
+# and codeload has answered 429 under load. One attempt turns somebody else's bad minute into a
+# failed build with nothing wrong in it. --retry-all-errors is needed as well as --retry because
+# curl counts a connection reset as a non-transient error and would otherwise not repeat it.
+ARG CURL_RETRY="--retry 5 --retry-delay 2 --retry-all-errors"
+
 # SifterSearch (client-side Pagefind search) ships built in. Its release tarball carries the
 # per-arch Pagefind binary a git clone omits, so fetch the one matching this build's architecture.
+#
+# Downloaded before extracting rather than piped, for the reason the block below already gives: a
+# retried transfer restarts, and tar reading a restarted stream has already been fed the first
+# attempt's bytes.
 ARG TARGETARCH
 ARG SIFTERSEARCH_VERSION=v0.8.0
 RUN arch="$TARGETARCH" \
  && if [ "$arch" = amd64 ]; then arch=x64; fi \
- && curl -fsSL "https://github.com/chaotic-ground/SifterSearch/releases/download/${SIFTERSEARCH_VERSION}/SifterSearch-linux-${arch}.tar.gz" \
-  | tar -xz -C /var/www/html/extensions/
+ && curl -fsSL $CURL_RETRY -o /tmp/siftersearch.tar.gz \
+      "https://github.com/chaotic-ground/SifterSearch/releases/download/${SIFTERSEARCH_VERSION}/SifterSearch-linux-${arch}.tar.gz" \
+ && tar -xzf /tmp/siftersearch.tar.gz -C /var/www/html/extensions/ \
+ && rm /tmp/siftersearch.tar.gz
 
 # Content i18n (opt-in via WikvenI18nLanguages): Translate renders translated pages and the
 # <languages/> bar; UniversalLanguageSelector is its hard load-time dependency. Both track this
@@ -55,9 +68,9 @@ ARG COMPOSER_INSTALLERS_VERSION=v2.3.0
 # matching what the ARGs pin, so a new upstream dependency cannot slip in unpinned.
 RUN composer config --global policy.advisories.block false \
  && ext=/var/www/html/extensions \
- && curl -fsSL -o /tmp/uls.tar.gz \
+ && curl -fsSL $CURL_RETRY -o /tmp/uls.tar.gz \
       "https://codeload.github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector/tar.gz/$ULS_VERSION" \
- && curl -fsSL -o /tmp/translate.tar.gz \
+ && curl -fsSL $CURL_RETRY -o /tmp/translate.tar.gz \
       "https://codeload.github.com/wikimedia/mediawiki-extensions-Translate/tar.gz/$TRANSLATE_VERSION" \
  && mkdir -p "$ext/UniversalLanguageSelector" "$ext/Translate" \
  && tar -xzf /tmp/uls.tar.gz --strip-components=1 -C "$ext/UniversalLanguageSelector" \
