@@ -82,25 +82,25 @@ The module's output, and nothing else. <code>Module:</code> is not a content nam
 That is worth knowing when you decide what to put in a module. Anything a module computes from the wiki's own content — a table assembled from other pages, a sorted list, a page's own order in a series — is computed once and frozen. Anything a module would need at read time, like the reader's clock or a query, has nowhere to run.
 
 <!--T:15-->
-== What the build refuses ==
+== When the build and the site disagree ==
 
 <!--T:16-->
-Two mismatches used to pass quietly and produce a broken site. Both now end the build.
+Two mismatches used to pass quietly and produce a broken site. One of them ends the build; the other is only reported, and the bake goes on.
 
 <!--T:17-->
-'''Modules with no Scribunto.''' A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is refused, because without the extension a <code><nowiki>{{#invoke:}}</nowiki></code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read.
+'''Modules with no Scribunto.''' A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is built, and told what those files come to: a <code><nowiki>{{#invoke:}}</nowiki></code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read. The build says what it sees rather than deciding for you, because a <code>Module:</code> file is a guess read off a name and may be on its way in, on its way out, or kept for something else.
 </translate>
 
 <syntaxhighlight lang="console">
 Wikven: the source has 1 Lua module file(s) (Module:Example) and Scribunto is not in
-extensions. Without it a {{#invoke:}} is left in the page as its own source text, and a
-module named with the .wikitext marker is exported as a page. Add Scribunto to
-extensions, or remove those files.
+extensions, so a {{#invoke:}} is left in the page as its own source text, and a module
+named with the .wikitext marker is exported as a page. Add Scribunto to extensions if
+those modules are meant to run.
 </syntaxhighlight>
 
 <translate>
 <!--T:18-->
-'''Scribunto with no engine.''' A site that lists Scribunto is refused wherever no Lua engine can run it, which is the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]]. The PHP it is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship.
+'''Scribunto with no engine.''' A site that lists Scribunto is refused wherever no Lua engine can run it, which is the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]]. The PHP it is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship. This one is refused rather than reported: the site asked for Lua in so many words, and this build cannot give it.
 </translate>
 
 <syntaxhighlight lang="console">

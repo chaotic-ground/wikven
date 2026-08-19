@@ -68,8 +68,8 @@ The division is what makes the passes safe to run beside each other: the orchest
 === Phase 1: filling the wiki ===
 
 <!--T:29-->
-; <code>assertLuaMatchesThisBuild</code>
-: Ends the build before anything else happens if this site's [[<tvar name="1">Special:MyLanguage/Lua modules</tvar>|Lua]] and this build's Lua disagree: a site with <code>Module:</code> files that does not list Scribunto, or a site that lists it where no engine can run it. Both used to pass quietly and publish pages with the invocation showing in them. It runs first so the last bake is still in place when a site is refused.
+; <code>checkLuaAgainstThisBuild</code>
+: Says what this site's [[<tvar name="1">Special:MyLanguage/Lua modules</tvar>|Lua]] and this build's Lua make of each other, before anything else happens. A site that lists Scribunto where no engine can run it ends the build, because it asked for something this build cannot do; a site with <code>Module:</code> files that never listed Scribunto is only told what those files come to. Both used to pass quietly and publish pages with the invocation showing in them. It runs first so the last bake is still in place when a site is refused.
 ; <code>clearOutputDirectory</code>
 : Empties the output directory, so a bake never inherits a file from the last one.
 ; <code>setMainPage</code>

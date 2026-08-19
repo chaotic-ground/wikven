@@ -33,39 +33,52 @@ class ScribuntoTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testNothingIsWrongWhenTheEngineIsThere() {
-		$this->assertNull(Scribunto::problem(true, true, ['Module:Greet']));
+		$this->assertNull(Scribunto::problem(true, true));
 	}
 
 	public function testNothingIsWrongWithNoLuaAtAll() {
-		$this->assertNull(Scribunto::problem(false, false, []));
-		$this->assertNull(Scribunto::problem(false, true, []));
+		$this->assertNull(Scribunto::problem(false, false));
+		$this->assertNull(Scribunto::problem(false, true));
 	}
 
 	public function testListingScribuntoWithNoEngineIsRefused() {
-		$problem = Scribunto::problem(true, false, []);
+		$problem = Scribunto::problem(true, false);
 		$this->assertNotNull($problem);
 		$this->assertStringContainsString('no Lua engine', $problem);
 		$this->assertStringContainsString('standalone binary', $problem, 'the message names the product');
 	}
 
-	public function testTheEngineComplaintWinsOverTheOther() {
-		$problem = Scribunto::problem(true, false, ['Module:Greet']);
-		$this->assertStringContainsString('no Lua engine', $problem, 'the one the site cannot fix by listing');
+	/**
+	 * The site asked for Lua and cannot have it either way, so the modules make no difference to the
+	 * answer: this is the one case that ends the build.
+	 */
+	public function testTheEngineComplaintDoesNotDependOnTheModules() {
+		$this->assertNotNull(Scribunto::problem(true, false));
+		$this->assertNull(Scribunto::warning(true, ['Module:Greet']), 'and it is not also warned about');
 	}
 
-	public function testModulesWithoutScribuntoAreRefused() {
-		$problem = Scribunto::problem(false, true, ['Module:Greet']);
-		$this->assertNotNull($problem);
-		$this->assertStringContainsString('1 Lua module file(s)', $problem);
-		$this->assertStringContainsString('Module:Greet', $problem, 'and says which');
+	public function testModulesWithoutScribuntoAreWarnedAbout() {
+		$warning = Scribunto::warning(false, ['Module:Greet']);
+		$this->assertNotNull($warning);
+		$this->assertStringContainsString('1 Lua module file(s)', $warning);
+		$this->assertStringContainsString('Module:Greet', $warning, 'and says which');
+	}
+
+	/**
+	 * The whole point of the change: a source tree with modules and no Scribunto still bakes. The
+	 * warning says what those files come to; it does not decide for the site.
+	 */
+	public function testModulesWithoutScribuntoAreNotAProblem() {
+		$this->assertNull(Scribunto::problem(false, true));
+		$this->assertNull(Scribunto::problem(false, false));
 	}
 
 	public function testItNamesAtMostThreeModules() {
 		$many = ['Module:A', 'Module:B', 'Module:C', 'Module:D'];
-		$problem = Scribunto::problem(false, true, $many);
-		$this->assertStringContainsString('4 Lua module file(s)', $problem);
-		$this->assertStringContainsString('Module:A, Module:B, Module:C, ...', $problem);
-		$this->assertStringNotContainsString('Module:D', $problem, 'the count carries the rest');
+		$warning = Scribunto::warning(false, $many);
+		$this->assertStringContainsString('4 Lua module file(s)', $warning);
+		$this->assertStringContainsString('Module:A, Module:B, Module:C, ...', $warning);
+		$this->assertStringNotContainsString('Module:D', $warning, 'the count carries the rest');
 	}
 
 	/**
@@ -73,6 +86,7 @@ class ScribuntoTest extends MediaWikiUnitTestCase {
 	 * told anything: most sites have no Lua and the binary is the product they are told to use.
 	 */
 	public function testTheBinaryIsQuietForASiteWithoutLua() {
-		$this->assertNull(Scribunto::problem(false, false, []));
+		$this->assertNull(Scribunto::problem(false, false));
+		$this->assertNull(Scribunto::warning(false, []));
 	}
 }

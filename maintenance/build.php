@@ -51,7 +51,7 @@ class Build extends Maintenance {
 
 		// Before the output directory is emptied, because a site this build cannot render is better
 		// told so with its last bake still in place.
-		$this->assertLuaMatchesThisBuild();
+		$this->checkLuaAgainstThisBuild();
 		$this->clearOutputDirectory();
 		$this->setMainPage();
 		$this->importImages("$ip/maintenance/importImages.php");
@@ -84,18 +84,25 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * End the build now if this site's Lua and this build's Lua disagree; see Scribunto for the three
-	 * ways that used to pass quietly and produce a site with braces in it.
+	 * Say what this site's Lua and this build's Lua make of each other; see Scribunto for the ways
+	 * they used to pass quietly and produce a site with braces in it.
+	 *
+	 * Only one of the two ends the build, and it is the one the site asked for: Scribunto listed where
+	 * nothing can run it. The other is a remark about Module: files the site never asked to run.
 	 */
-	private function assertLuaMatchesThisBuild(): void {
+	private function checkLuaAgainstThisBuild(): void {
 		$source = rtrim((string)( $GLOBALS['wgWikvenSourceDirectory'] ?? '' ), '/');
-		$problem = Scribunto::problem(
-			ExtensionRegistry::getInstance()->isLoaded(Scribunto::EXTENSION),
-			self::luaEngineAvailable(),
-			$source !== '' && is_dir($source) ? Scribunto::modulePages(self::sourcePaths($source)) : []
-		);
+		$listed = ExtensionRegistry::getInstance()->isLoaded(Scribunto::EXTENSION);
+
+		$problem = Scribunto::problem($listed, self::luaEngineAvailable());
 		if ($problem !== null) {
 			$this->fatalError($problem);
+		}
+
+		$modules = $source !== '' && is_dir($source) ? Scribunto::modulePages(self::sourcePaths($source)) : [];
+		$warning = Scribunto::warning($listed, $modules);
+		if ($warning !== null) {
+			$this->output("$warning\n");
 		}
 	}
 

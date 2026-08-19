@@ -20,7 +20,9 @@ namespace MediaWiki\Extension\Wikven;
  *                                        Module%3AGreet.html, its Lua source now a page of the site
  *
  * So a reader got braces where the page meant to say something, and in one case the module's source
- * became a page. A build that stops is better than either, which is what this is for.
+ * became a page. Neither is worth being quiet about, and they are not worth the same answer either:
+ * a site that asked for Scribunto where it cannot run is told no, and a site that never asked for it
+ * is only told what its Module: files are doing. See problem() and warning().
  */
 class Scribunto {
 	/** The extension a site lists to ask for Lua. */
@@ -56,25 +58,21 @@ class Scribunto {
 	}
 
 	/**
-	 * What is wrong with this combination, or null if nothing is.
+	 * Why this build cannot do what the site asked for, or null if it can.
 	 *
-	 * Two rules, and both are about a mismatch rather than about Lua itself:
+	 * One rule, and it is about a request this build cannot honour: a site that lists Scribunto where
+	 * no engine can run it. That is the standalone binary, and the message names it. The alternative
+	 * is a published site with braces where the pages meant to say something, which is worse than
+	 * being told no.
 	 *
-	 * - a site that asks for Scribunto where no engine can run it gets a build that says so, instead
-	 *   of pages with braces in them. This is the standalone binary, and the message names it;
-	 * - a site with module files that does not ask for Scribunto gets the same treatment, since
-	 *   without it those files are either ignored or published, and the pages that invoke them are
-	 *   rendered as their own source.
-	 *
-	 * A site with no modules that lists Scribunto anyway is left alone under the image: nothing is
-	 * broken, the extension simply has nothing to do.
+	 * A site with no modules that lists Scribunto anyway is left alone: nothing is broken, the
+	 * extension simply has nothing to do.
 	 *
 	 * @param bool $listed Whether the site lists Scribunto in extensions.
 	 * @param bool $engineAvailable Whether a Lua engine can run here.
-	 * @param string[] $modulePages Module source files found, from modulePages().
 	 * @return ?string The message for a fatal error, or null to carry on.
 	 */
-	public static function problem(bool $listed, bool $engineAvailable, array $modulePages): ?string {
+	public static function problem(bool $listed, bool $engineAvailable): ?string {
 		if ($listed && !$engineAvailable) {
 			return (
 				'Wikven: this site lists '
@@ -86,22 +84,39 @@ class Scribunto {
 				. ' from extensions and the Module: pages with it.'
 			);
 		}
-		if (!$listed && $modulePages !== []) {
-			$count = count($modulePages);
-			$shown = implode(', ', array_slice($modulePages, 0, 3));
-			if ($count > 3) {
-				$shown .= ', ...';
-			}
-			return (
-				"Wikven: the source has $count Lua module file(s) ($shown) and "
-				. self::EXTENSION
-				. ' is not in extensions. Without it a {{#invoke:}} is left in the page as its own'
-				. ' source text, and a module named with the .wikitext marker is exported as a page.'
-				. ' Add '
-				. self::EXTENSION
-				. ' to extensions, or remove those files.'
-			);
-		}
 		return null;
+	}
+
+	/**
+	 * What the site should know about its Module: files, or null if there is nothing to say.
+	 *
+	 * A source tree with module files and no Scribunto in extensions is not an error. The site never
+	 * asked for Lua, and what those files are is a guess read off a name: they may be on their way in,
+	 * on their way out, or kept for something else entirely. Deciding that a file called Module:
+	 * means the bake must not happen is deciding for the site, so this only says what it sees --
+	 * the invocations stay in the pages as their own source text, and a module named with the
+	 * .wikitext marker is exported -- and lets the bake go on.
+	 *
+	 * @param bool $listed Whether the site lists Scribunto in extensions.
+	 * @param string[] $modulePages Module source files found, from modulePages().
+	 * @return ?string The message to print, or null to say nothing.
+	 */
+	public static function warning(bool $listed, array $modulePages): ?string {
+		if ($listed || $modulePages === []) {
+			return null;
+		}
+		$count = count($modulePages);
+		$shown = implode(', ', array_slice($modulePages, 0, 3));
+		if ($count > 3) {
+			$shown .= ', ...';
+		}
+		return (
+			"Wikven: the source has $count Lua module file(s) ($shown) and "
+			. self::EXTENSION
+			. ' is not in extensions, so a {{#invoke:}} is left in the page as its own source text,'
+			. ' and a module named with the .wikitext marker is exported as a page. Add '
+			. self::EXTENSION
+			. ' to extensions if those modules are meant to run.'
+		);
 	}
 }
