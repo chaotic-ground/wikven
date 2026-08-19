@@ -276,16 +276,23 @@ jobs:
       # The headless shell, not all of "chromium". Asking for chromium fetches Chrome for Testing
       # (379 MiB unpacked) as well as the shell (262 MiB), and these specs never start the former:
       # they run headless, which is what the shell is. ffmpeg (5 MiB) comes along either way, so what
-      # this saves is the 379 MiB, and --with-deps stays because the system libraries it installs are
-      # ones the shell needs as much as the full browser does.
+      # this saves is the 379 MiB.
       #
-      # Ran the suite locally against a real bake with nothing but the shell on disk: 57 passed. If it
-      # were ever not enough -- a spec asking for a headed browser, or for video -- Playwright fails
-      # naming the executable it cannot find, so this cannot quietly test the wrong thing.
+      # And no --with-deps, which is the apt call. The runner image already carries Google Chrome,
+      # Chromium, Edge and Firefox as installed packages, so the shared libraries the shell wants are
+      # on the machine before we ask for anything; --with-deps was buying nothing and paying for it.
+      # Twice -- 2026-08-18 and 2026-08-19 -- azure.archive.ubuntu.com answered nothing at all, apt
+      # fell back to archive.ubuntu.com, took the four InRelease files and then went quiet on the
+      # package indexes until the job was killed. A mirror that is not ours, on a path we do not need.
+      #
+      # Ran the suite locally against a real bake with nothing but the shell on disk: 57 passed. If
+      # either half were ever not enough -- a spec asking for a headed browser, or a library the image
+      # stops shipping -- Playwright says which executable or which .so it cannot find, so this cannot
+      # quietly test the wrong thing.
       - name: Install the browser test tooling
         run: |
           npm ci
-          npx playwright install --with-deps chromium-headless-shell
+          npx playwright install chromium-headless-shell
 
       # The static server and its readiness check live in playwright.config.js (webServer), so the
       # same command works on a developer's machine too.
