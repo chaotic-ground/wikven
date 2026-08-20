@@ -418,10 +418,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><b><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions">Parser functions</a> and magic words</b> — light logic and computed values (<code>{{#if:}}</code>, dates, page info) written in the page itself.</li>
 <li><b>Structured linking</b> — <code>[[Page]]</code> internal links, <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories">categories</a> and redirects, managed by the wiki rather than by hand.</li>
 <li><b>Rich media and references</b> — image <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Images">thumbnails and galleries</a> and footnotes in one consistent syntax.</li>
-<li><b>An extension ecosystem</b> — syntax highlighting, math and more, added as <a href="./Configuration.html" title="Special:MyLanguage/Configuration">extensions</a>.</li></ul>
+<li><b>An extension ecosystem</b> — syntax highlighting, math and more, added as <a href="./Configuration.html" title="Special:MyLanguage/Configuration">extensions</a>.</li>
+<li><b>One definition</b> — wikitext is whatever MediaWiki's parser makes of it, so a page renders the same wherever it is parsed. Markdown is less standardised than it looks: <a rel="nofollow" class="external text" href="https://commonmark.org/">CommonMark</a> pins down a core, but <a rel="nofollow" class="external text" href="https://github.github.com/gfm/">GitHub Flavored Markdown</a> and tool-specific variants (such as Phabricator's Remarkup) render the same text differently.</li></ul>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="What_Markdown_does_better">What Markdown does better</h2></div><section id="citizen-section-2" class="citizen-section">
-<ul><li><b>Simplicity</b> — a smaller, more readable syntax with a gentler learning curve, especially for tables and templates.</li>
-<li><b>Ubiquity</b> — Markdown is supported almost everywhere and familiar to most writers, though it is less standardised than it looks: <a rel="nofollow" class="external text" href="https://commonmark.org/">CommonMark</a> pins down a core, but <a rel="nofollow" class="external text" href="https://github.github.com/gfm/">GitHub Flavored Markdown</a> and tool-specific variants (such as Phabricator's Remarkup) render the same text differently, so portability is imperfect. Wikitext is defined by MediaWiki's implementation, with thinner editor and linting tooling.</li>
+<ul><li><b>Simplicity</b> — a smaller, more readable syntax with a gentler learning curve; wikitext's tables and template calls in particular take longer to pick up.</li>
+<li><b>Ubiquity</b> — Markdown is supported almost everywhere and familiar to most writers, so contributors usually arrive already knowing it.</li>
+<li><b>Tooling</b> — editors, formatters and linters for Markdown are plentiful and mature; the equivalents for wikitext are thinner outside a wiki.</li>
 <li><b>Lightweight rendering</b> — Markdown renders with a small library, whereas wikitext normally needs MediaWiki itself.</li></ul>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Where_Wikven_fits">Where Wikven fits</h2></div><section id="citizen-section-3" class="citizen-section">
 <p>That last cost, running MediaWiki, is the one Wikven removes: it renders your wikitext through MediaWiki once, at build time, and ships plain static HTML. You get templates, parser functions and the rest with nothing to run in production. Reach for Wikven when that trade is worth it, typically when your content is already wikitext, or when templates and transclusion would save real work.
@@ -445,7 +447,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Why%20wikitext.wikitext" title="This page was last edited on 20 August 2026, at 16:06." data-timestamp="1787241962"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Why%20wikitext.wikitext" title="This page was last edited on 20 August 2026, at 17:40." data-timestamp="1787247637"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -526,7 +528,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 16:06.</div>
+		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 17:40.</div>
 		    </section>
 		</div>
 </footer>		</div>

@@ -259,7 +259,7 @@ wikven<span class="w"> </span>build
 <p>The output is the same as the Docker image's, give or take the one host tool named below: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a> layered over Wikven's defaults.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="What_it_asks_of_the_host">What it asks of the host</h2></div>
-<p><b><a href="../Lua_modules/en.html" title="Special:MyLanguage/Lua modules">Lua modules</a>, on arm64.</b> The PHP this binary is built from carries no <code>luasandbox</code>, so Scribunto falls back to running an external <code>lua</code> program — and to the interpreter it carries in its own source tree when no other is named. That interpreter is built for 64-bit x86, and Scribunto picks it by operating system and integer size without looking at the processor, so on arm64 it selects a program that cannot start. Install Lua 5.1 and name it under <code>ScribuntoEngineConf.luastandalone.luaPath</code>; on x86-64 nothing is needed.
+<p><b><a href="../Lua_modules/en.html" title="Special:MyLanguage/Lua modules">Lua modules</a>, on arm64.</b> The PHP this binary is built from carries no <code>luasandbox</code>, so Scribunto falls back to running an external <code>lua</code> program — and to the interpreter it carries in its own source tree when no other is named. That interpreter is built for 64-bit x86, and Scribunto has no arm64 one to offer instead — the five it bundles are all Intel. It picks among them by operating system and integer size, so on arm64 it selects a program that cannot start. Install Lua 5.1 and name it under <code>ScribuntoEngineConf.luastandalone.luaPath</code>; on x86-64 nothing is needed.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r94">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>A site that lists Scribunto where nothing can run it is refused, with a message saying what to install, rather than baked into pages with <code>{{#invoke:}}</code> showing in them. The refusal is in the exit status too, so a script that bakes and then deploys stops instead of shipping nothing.</p></div>
 </div>
@@ -287,8 +287,8 @@ wikven<span class="w"> </span>build
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787241962">
-  				<span>Last edited on 20 August 2026, at 16:06</span>
+  				data-timestamp="1787246919">
+  				<span>Last edited on 20 August 2026, at 17:28</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -311,7 +311,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 17:28.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
