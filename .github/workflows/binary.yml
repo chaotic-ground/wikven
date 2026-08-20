@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: ${{ case(inputs.tag != '', fromJSON('["x86_64", "aarch64"]'), fromJSON('["x86_64"]')) }}
+        arch: ["aarch64"]  # PROBE BRANCH: arm only. Not for merge.
     runs-on: ${{ case(matrix.arch == 'aarch64', 'ubuntu-24.04-arm', 'ubuntu-latest') }}
     timeout-minutes: 60
     permissions:
@@ -143,7 +143,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: ${{ case(inputs.tag != '', fromJSON('["x86_64", "aarch64"]'), fromJSON('["x86_64"]')) }}
+        arch: ["aarch64"]  # PROBE BRANCH: arm only. Not for merge.
     runs-on: ${{ case(matrix.arch == 'aarch64', 'ubuntu-24.04-arm', 'ubuntu-latest') }}
     timeout-minutes: 20
     permissions:
@@ -213,19 +213,27 @@ jobs:
       # looks at the architecture, so on arm it picks lua5_1_5_linux_64_generic/lua, an x86-64 ELF,
       # passes its own is_executable() check on it, and fails only when the process will not start.
       # Asserting this on arm would be asserting somebody else's bug.
+      # PROBE BRANCH: the x86_64 guard is off and the assertion only reports, so arm can say what it
+      # does here. Now that reexec() exits rather than returning the status, this is also where the
+      # refusal's exit code is read on arm.
       - name: Bake with Scribunto's own bundled lua
-        if: matrix.arch == 'x86_64'
         env:
           ARCH: ${{ matrix.arch }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
           cat > work/src/.wikven.yaml <<'EOF'
           extensions:
             - Scribunto
           EOF
-          ( cd work && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" build )
-          test -s work/dist/index.html
-          grep -q 'lua ran on' work/dist/index.html
+          status=0
+          ( cd work && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" build ) \
+            > probe.log 2>&1 || status=$?
+          echo "PROBE exit: $status"
+          echo "PROBE index.html: $(test -s work/dist/index.html && echo present || echo absent)"
+          echo "PROBE module answer: $(grep -c 'lua ran on' work/dist/index.html 2>/dev/null || echo 0)"
+          echo '--- last 10 lines of the bake ---'
+          tail -10 probe.log
+          exit 0
 
       # A Lua interpreter the host provides, which is the arrangement that works on any
       # architecture -- and the only one arm has, per the step above.
