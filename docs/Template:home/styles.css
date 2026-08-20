@@ -12,9 +12,14 @@
  * besides, so the viewport says nothing useful about the space a band actually has.
  * repeat( auto-fit, minmax() ) measures the column instead of guessing at it.
  *
- * Two measures, and only two: 34rem for anything meant to be read in sentences, 48rem for
+ * Two measures, and only two: 34rem for anything meant to be read in sentences, 54rem for
  * the two objects that are looked at rather than read. Five different right edges down one
  * page reads as accumulated decisions rather than as a layout.
+ *
+ * Neither measure is put on a band that draws a rule. A rule stopping short of the column
+ * while the skin's own rules -- under the title, under the tabs, above the footer -- run the
+ * whole width of it does not read as a narrower measure; it reads as the page having slipped
+ * to the left. The bands run the full column and hold their contents in.
  *
  * Lengths come from 0.5 / 1 / 1.5 / 2 / 2.5 / 3.5 / 4 rem and nowhere else. There is no way
  * to tokenise a length here, so the discipline has to be kept by hand.
@@ -26,7 +31,6 @@
 .wikven-home-hero {
 	margin-block: 0 4rem;
 	padding-block-end: 3.5rem;
-	max-inline-size: 48rem;
 	border-block-end: 1px solid var(--border-color-subtle, #c8ccd1);
 }
 
@@ -107,7 +111,6 @@
 
 .wikven-home-section {
 	margin-block: 0 3.5rem;
-	max-inline-size: 48rem;
 }
 
 /* Sentence case, at a size that can carry the page's structure. It was a tracked-out caps
@@ -129,6 +132,11 @@
 	line-height: 1.25;
 	text-transform: none;
 	color: var(--color-emphasized, #101418);
+}
+
+/* The demo shares the cards' right edge, so the page has two edges and not three. */
+.wikven-home-demo {
+	max-inline-size: 54rem;
 }
 
 /* Only the margin. SyntaxHighlight draws the block's own box, and a border here landed on
@@ -154,9 +162,9 @@
  * is: two up on a column, one up on a phone, never three. */
 .wikven-home-cards {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
 	gap: 1.5rem;
-	max-inline-size: 48rem;
+	max-inline-size: 54rem;
 }
 
 /* The border is the card, and the fill is a bonus. The fill alone was the whole design and
@@ -220,7 +228,6 @@
 	align-items: center;
 	margin-block: 4rem 2rem;
 	padding-block-start: 3.5rem;
-	max-inline-size: 48rem;
 	border-block-start: 1px solid var(--border-color-subtle, #c8ccd1);
 }
 
