@@ -12,10 +12,10 @@
 	column-gap: 0.75em;
 	margin: 1em 0;
 	padding: 0.75em 1em;
-	border: 1px solid var( --border-color-subtle, #c8ccd1 );
+	border: 1px solid var(--border-color-subtle, #c8ccd1);
 	border-radius: 2px;
-	background-color: var( --background-color-neutral-subtle, #f8f9fa );
-	color: var( --color-base, #202122 );
+	background-color: var(--background-color-neutral-subtle, #f8f9fa);
+	color: var(--color-base, #202122);
 }
 
 .wikven-note-text p {
