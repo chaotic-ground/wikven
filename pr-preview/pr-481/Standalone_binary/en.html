@@ -321,16 +321,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<ul id="toc-Building_a_site-sublist" class="vector-toc-list">
 		</ul>
 	</li>
-	<li id="toc-What_it_cannot_do"
+	<li id="toc-What_it_asks_of_the_host"
 		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
-		<a class="vector-toc-link" href="#What_it_cannot_do">
+		<a class="vector-toc-link" href="#What_it_asks_of_the_host">
 			<div class="vector-toc-text">
 				<span class="vector-toc-numb">5</span>
-				<span>What it cannot do</span>
+				<span>What it asks of the host</span>
 			</div>
 		</a>
 		
-		<ul id="toc-What_it_cannot_do-sublist" class="vector-toc-list">
+		<ul id="toc-What_it_asks_of_the_host-sublist" class="vector-toc-list">
 		</ul>
 	</li>
 	<li id="toc-Optional_host_tools"
@@ -603,12 +603,12 @@ wikven<span class="w"> </span>build
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nv">WIKVEN_WORKDIR</span><span class="o">=</span>/path/to/project<span class="w"> </span>wikven<span class="w"> </span>build
 </pre></div>
-<p>The output is the same as the Docker image's, with one exception below: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a> layered over Wikven's defaults.
+<p>The output is the same as the Docker image's, give or take the one host tool named below: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a> layered over Wikven's defaults.
 </p>
-<div class="mw-heading mw-heading2"><h2 id="What_it_cannot_do">What it cannot do</h2></div>
-<p><b><a href="../Lua_modules/en.html" title="Special:MyLanguage/Lua modules">Lua modules</a>.</b> The PHP this binary is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship. A site that lists Scribunto is refused here, with a message saying so, rather than baked into pages with <code>{{#invoke:}}</code> showing in them. Build that site with the image.
+<div class="mw-heading mw-heading2"><h2 id="What_it_asks_of_the_host">What it asks of the host</h2></div>
+<p><b><a href="../Lua_modules/en.html" title="Special:MyLanguage/Lua modules">Lua modules</a>, on arm64.</b> The PHP this binary is built from carries no <code>luasandbox</code>, so Scribunto falls back to running an external <code>lua</code> program — and to the interpreter it carries in its own source tree when no other is named. That interpreter is built for 64-bit x86, and Scribunto picks it by operating system and integer size without looking at the processor, so on arm64 it selects a program that cannot start. Install Lua 5.1 and name it under <code>ScribuntoEngineConf.luastandalone.luaPath</code>; on x86-64 nothing is needed.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r86">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>This documentation site is one of those: it has a Lua module of its own, so the image builds it and this binary cannot.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r86">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid #c8ccd1;border-radius:2px;background-color:#f8f9fa}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>A site that lists Scribunto where nothing can run it is refused, with a message saying what to install, rather than baked into pages with <code>{{#invoke:}}</code> showing in them. The refusal is in the exit status too, so a script that bakes and then deploys stops instead of shipping nothing.</p></div>
 </div>
 <div class="mw-heading mw-heading2"><h2 id="Optional_host_tools">Optional host tools</h2></div>
 <p>The binary renders on its own, but uses these host programs when they are present:
@@ -630,7 +630,7 @@ wikven<span class="w"> </span>build
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 19 August 2026, at 15:56.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 12:41.</li>
 </ul>
 
 	<ul id="footer-places">
