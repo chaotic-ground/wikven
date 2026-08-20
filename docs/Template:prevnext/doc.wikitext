@@ -16,8 +16,9 @@ row, because a lone argument read as the *next* step and there was no way to spe
 this". Adding a page meant three edits, and forgetting the third was invisible. Now it is two: the
 sidebar, and a <code><nowiki>{{prevnext}}</nowiki></code> at the foot of the new page.
 
-<code>index</code> is the exception the module carries: it heads the sequence but is not a sidebar
-entry, because every skin already points its logo at the main page.
+The main page has no row. It is not a sidebar entry -- every skin already points its logo at it --
+and it is where a reader arrives rather than a step they walk, so it names its own way on in its
+opening lines instead.
 
 == Translated pages ==
 

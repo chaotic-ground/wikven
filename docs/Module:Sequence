@@ -16,17 +16,12 @@ local p = {}
 local SIDEBAR = 'MediaWiki:Sidebar'
 local ENTRY = '^%*%*%s*Special:MyLanguage/([^|\n]+)'
 
--- The sidebar has no entry for the main page: every skin points its logo there already. It heads
--- the sequence all the same, so it is prepended rather than added to the sidebar, where it would
--- show up as a duplicate of the logo.
-local FIRST = 'index'
-
 -- Both sidebar groups, in one sequence. The chain has always crossed from the docs group into the
 -- references group, and a reader at the end of the first group is better sent on than stopped.
 local function sequence()
 	local sidebar = mw.title.new(SIDEBAR)
 	local content = sidebar and sidebar:getContent()
-	local pages = { FIRST }
+	local pages = {}
 	if content then
 		for line in mw.text.gsplit(content, '\n') do
 			local target = line:match(ENTRY)
@@ -38,7 +33,10 @@ local function sequence()
 	return pages
 end
 
--- The page on either side of this one, or nil at an end of the sequence.
+-- The page on either side of this one, or nil at an end of the sequence -- and nil either way for a
+-- page the sidebar does not name, which is every page that is not a step of the documentation. The
+-- main page is one of those: it is where a reader arrives rather than a step they walk, and it
+-- names its own way on in its opening lines.
 --
 -- Matched on the root title, because on a translation this is "Searching/ko" and the sidebar names
 -- the page it was translated from.

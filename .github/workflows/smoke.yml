@@ -269,18 +269,18 @@ jobs:
             exit 1
           fi
 
-          # index heads the sequence without being a sidebar entry, so it is named here rather than
-          # read. The two ends are what the old shape could not spell: a lone argument was the next
-          # step, so the last page had no way to say it had none.
-          if ! grep -q 'wikven-prevnext' dist/index.html; then
-            echo "::error::dist/index.html has no navigation row"
+          # The two ends of the sequence get one link rather than two, which the old shape could not
+          # spell: a lone argument was the next step, so the last page had no way to say it had none.
+          #
+          # Matched on the div rather than the class name. TemplateStyles inlines prevnext/styles.css
+          # into every page that has a row, so both class names appear in the page's own stylesheet
+          # whether or not either link was rendered -- which is what the first draft of this check
+          # tripped over.
+          if grep -q 'class="wikven-prevnext-prev"' dist/Why_wikitext.html; then
+            echo "::error::Why wikitext heads the sequence and should have no previous link"
             exit 1
           fi
-          if grep -q 'wikven-prevnext-prev' dist/index.html; then
-            echo "::error::index heads the sequence and should have no previous link"
-            exit 1
-          fi
-          if grep -q 'wikven-prevnext-next' dist/Licenses.html; then
+          if grep -q 'class="wikven-prevnext-next"' dist/Licenses.html; then
             echo "::error::Licenses ends the sequence and should have no next link"
             exit 1
           fi
