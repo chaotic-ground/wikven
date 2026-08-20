@@ -1,12 +1,21 @@
+/* Colours read from the skin's Codex tokens rather than written here. The box used to
+ * pin background-color: #f8f9fa and set no colour at all, so night mode put the
+ * inherited --color-base (#eaecf0) on a near-white box: 1.12:1, which is text you
+ * cannot see. Seven pages use {{note}}.
+ *
+ * The literal in each var() is the light value, a fallback for a skin that defines no
+ * tokens. Defining a token here is not an option -- TemplateStyles drops a custom
+ * property declaration -- which is the whole reason these are read and not made. */
 .wikven-note {
 	display: flex;
 	align-items: center;
 	column-gap: 0.75em;
 	margin: 1em 0;
 	padding: 0.75em 1em;
-	border: 1px solid #c8ccd1;
+	border: 1px solid var( --border-color-subtle, #c8ccd1 );
 	border-radius: 2px;
-	background-color: #f8f9fa;
+	background-color: var( --background-color-neutral-subtle, #f8f9fa );
+	color: var( --color-base, #202122 );
 }
 
 .wikven-note-text p {
