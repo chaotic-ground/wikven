@@ -55,13 +55,17 @@ class BuildScripts extends Maintenance {
 		$seeds[] = 'site';
 		// Seed default-on gadgets; the Gadgets hook adds them per-request, not in static render.
 		$seeds = array_merge($seeds, $this->defaultGadgetModules());
+		$readyConfig = $this->readyConfig($rl, $wgLanguageCode, $wgDefaultSkin);
 		// Seed the lazy search module (loaded on focus, never in page queue) so its closure bundles.
 		if (Search::isActive()) {
-			$searchModule = $this->resolveSearchModule($rl, $wgLanguageCode, $wgDefaultSkin);
+			$searchModule = $this->resolveSearchModule($readyConfig);
 			if ($searchModule !== null && $rl->isModuleRegistered($searchModule)) {
 				$seeds[] = $searchModule;
 			}
 		}
+		// Same for the modules core decides on by looking at the rendered page rather than by
+		// queueing them, which is collapsibles and sortable tables. See LazyModules.
+		$seeds = array_merge($seeds, $this->collectLazyModules($htmlDir, $readyConfig));
 		// Same for Citizen's preferences panel (theme, font size, page width), lazy-loaded when the
 		// dropdown is first opened. Seeding it is what makes the panel work statically; unseeded it
 		// reports "Couldn't load preferences". Vue and its Codex components come along with it.
@@ -161,15 +165,52 @@ class BuildScripts extends Maintenance {
 	}
 
 	/** @return string|null Search module page.ready lazy-loads on focus, or null if search is off. */
-	private function resolveSearchModule(ResourceLoader $rl, string $lang, string $skin): ?string {
+	private function resolveSearchModule(array $readyConfig): ?string {
+		return $readyConfig['search'] ?? false ? $readyConfig['searchModule'] ?? null : null;
+	}
+
+	/**
+	 * mediawiki.page.ready's own configuration, which decides what it will go looking for.
+	 *
+	 * Core builds this in the module's config.json callback: these defaults, then the
+	 * SkinPageReadyConfig hook, which is where a skin turns a feature off. Read here rather than
+	 * assumed, so a site that switches one off gets the same answer from a bake as from a wiki.
+	 */
+	private function readyConfig(ResourceLoader $rl, string $lang, string $skin): array {
 		$query = ResourceLoader::makeLoaderQuery([], $lang, $skin, null, null, Context::DEBUG_OFF, null);
 		$context = new Context($rl, new FauxRequest($query));
-		$config = ['search' => true, 'searchModule' => 'mediawiki.searchSuggest'];
+		$config = [
+			'search' => true,
+			'searchModule' => 'mediawiki.searchSuggest',
+			'collapsible' => true,
+			'sortable' => true,
+			'selectorLogoutLink' => '#pt-logout a[data-mw-interface]'
+		];
 		( new HookRunner(MediaWikiServices::getInstance()->getHookContainer()) )->onSkinPageReadyConfig(
 			$context,
 			$config
 		);
-		return $config['search'] ?? false ? $config['searchModule'] ?? null : null;
+		return $config;
+	}
+
+	/**
+	 * The lazy modules any rendered page needs, from the same pass over the same HTML.
+	 *
+	 * Top-level pages only, as collectPageModules() reads them: a translation is rendered from the
+	 * source page's wikitext, so a collapsible on one is a collapsible on the other, and the source
+	 * page is not in a subdirectory. Scanning deeper would also reach the per-skin copies, which
+	 * this skin's bundle has no business reading.
+	 *
+	 * @return string[]
+	 */
+	private function collectLazyModules(string $htmlDir, array $readyConfig): array {
+		$modules = [];
+		foreach (glob("$htmlDir/*.html") as $file) {
+			foreach (LazyModules::forPage(file_get_contents($file), $readyConfig) as $module) {
+				$modules[$module] = true;
+			}
+		}
+		return array_keys($modules);
 	}
 
 	/** @return string[] The full dependency closure, including the base modules. */
