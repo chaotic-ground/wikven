@@ -121,7 +121,7 @@ A project's documentation
 --><div class="wikven-home-fit">
 <translate>
 <!--T:16-->
-An archived wiki, browsable as plain HTML
+An archived wiki
 </translate>
 </div><!--
 --><div class="wikven-home-fit">

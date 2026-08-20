@@ -131,15 +131,11 @@
 	color: var(--color-emphasized, #101418);
 }
 
-/* The demo is the evidence for the claim in the hero, so it gets more air inside it than
- * anything else on the page. */
+/* Only the margin. SyntaxHighlight draws the block's own box, and a border here landed on
+ * both .mw-highlight and the pre inside it, so the code came out in a frame inside a frame. */
 .wikven-home-demo .mw-highlight,
 .wikven-home-demo pre {
 	margin-block: 0;
-	padding: 1.5rem;
-	border: 1px solid var(--border-color-muted, #dadde3);
-	border-radius: 2px;
-	line-height: 1.7;
 }
 
 .wikven-home-caption {
@@ -200,8 +196,11 @@
 	color: var(--color-base, #202122);
 }
 
+/* inline-block, not inline: each phrase then wraps as a whole. Set inline they broke wherever
+ * the line ran out, so a phrase could start on one line and finish on the next with a middot
+ * between it and its own tail. */
 .wikven-home-fit {
-	display: inline;
+	display: inline-block;
 }
 
 .wikven-home-fit + .wikven-home-fit::before {
