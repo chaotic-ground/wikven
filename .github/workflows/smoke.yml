@@ -166,6 +166,21 @@ jobs:
             exit 1
           fi
 
+          # A sortable table needs jquery.tablesorter, and core does not queue it while rendering:
+          # mediawiki.page.ready looks for table.sortable in the browser and fetches the module from
+          # load.php, which an export does not have (#483). The build makes that decision instead, so
+          # what this checks is that it made it -- the module has to be in the bundle, and the page
+          # that asked for it has to still be there to ask.
+          if ! grep -q 'class="[^"]*\bsortable\b' dist/Licenses.html; then
+            echo "::error::dist/Licenses.html no longer has a sortable table for this to be about"
+            exit 1
+          fi
+          if ! grep -q 'jquery.tablesorter' dist/modules-static.js; then
+            echo "::error::a page has a sortable table and jquery.tablesorter is not in the bundle"
+            echo "::error::the table will publish with headers that do nothing"
+            exit 1
+          fi
+
           # A Lua module runs at build time and its answer is baked into the page that invoked it
           # (#465). Module:Example answers with the title of the page it ran on, so this says both
           # that Scribunto rendered at all -- without it the invocation is left in the page as

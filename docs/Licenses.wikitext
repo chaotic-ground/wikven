@@ -6,7 +6,7 @@ __TOC__
 {{SITENAME}} itself is licensed [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]. The Docker image and the standalone binary it produces redistribute third-party software under that software's own licenses, acknowledged here. (GPL-2.0-or-later and GPL-3.0-or-later are compatible, so this is attribution, not a conflict.)
 
 <!--T:2-->
-{| class="wikitable"
+{| class="wikitable sortable"
 ! Component !! License !! Bundled in
 |-
 | [<tvar name="1">https://www.mediawiki.org/</tvar> MediaWiki], with its bundled skins and extensions || GPL-2.0-or-later || image, binary
