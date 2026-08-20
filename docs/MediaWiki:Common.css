@@ -167,6 +167,15 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	color: #15803d;
 }
 
+/* MobileFrontend's footer toggle between the mobile and desktop views. It is a supported MediaWiki
+ * feature, so wikven leaves it alone; this site hides it because it offers every skin it builds
+ * from the toolbox already, and a second, differently-worded way to change the rendering is one
+ * thing too many to explain. */
+#footer-places-mobileview,
+#footer-places-desktop-toggle {
+	display: none;
+}
+
 /* The landing page's filled button, defined here because TemplateStyles drops a custom-property
  * declaration and so cannot make a token, only read one. It has to be a pair and it has to
  * invert: night mode moves --color-progressive to a pale teal that white text sits on at
@@ -197,15 +206,6 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 		--wikven-cta-bg--hover: #79d0e0;
 		--wikven-cta-fg: #101418;
 	}
-}
-
-/* MobileFrontend's footer toggle between the mobile and desktop views. It is a supported MediaWiki
- * feature, so wikven leaves it alone; this site hides it because it offers every skin it builds
- * from the toolbox already, and a second, differently-worded way to change the rendering is one
- * thing too many to explain. */
-#footer-places-mobileview,
-#footer-places-desktop-toggle {
-	display: none;
 }
 
 /* The landing page sets its own tagline where a page title would go, so the title is taken out
