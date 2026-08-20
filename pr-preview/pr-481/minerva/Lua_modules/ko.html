@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Lua 모듈 - Wikven</title>
-<script>(function(){var className="client-js skin-theme-clientpref-day mf-font-size-clientpref-regular skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Lua_modules/ko","wgTitle":"Lua modules/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_modules/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Lua modules/ko","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
-RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","skins.minerva.styles":"ready","skins.minerva.content.styles.images":"ready","mediawiki.hlist":"ready","skins.minerva.codex.styles":"ready","skins.minerva.icons":"ready","skins.minerva.amc.styles":"ready","skins.minerva.personalMenu.icons":"ready","skins.minerva.mainMenu.advanced.icons":"ready","skins.minerva.overflow.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","mobile.init.styles":"ready"};RLPAGEMODULES=[];</script>
+<script>(function(){var className="client-js skin-theme-clientpref-day mf-font-size-clientpref-regular skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"ko","wgMonthNames":["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Lua_modules/ko","wgTitle":"Lua modules/ko","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages using Tabber parser tag"],"wgPageViewLanguage":"ko","wgPageContentLanguage":"ko","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_modules/ko","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"translation","wgTranslatePageTranslationGroup":"page-Lua modules/ko","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
+RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","ext.tabberNeue.init.styles":"ready","skins.minerva.styles":"ready","skins.minerva.content.styles.images":"ready","mediawiki.hlist":"ready","skins.minerva.codex.styles":"ready","skins.minerva.icons":"ready","skins.minerva.amc.styles":"ready","skins.minerva.personalMenu.icons":"ready","skins.minerva.mainMenu.advanced.icons":"ready","skins.minerva.overflow.icons":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","mobile.init.styles":"ready"};RLPAGEMODULES=[];</script>
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src=".././startup-static.js"></script><script src=".././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","skins.minerva.scripts","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.sifter.retarget","ext.gadget.PersistTabber"]);</script>
+<script src=".././startup-static.js"></script><script src=".././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","ext.tabberNeue","site","mediawiki.page.ready","skins.minerva.scripts","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.sifter.retarget","ext.gadget.PersistTabber"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -18,6 +18,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
 <link rel="stylesheet" href=".././ext.translate.tag.languages.css">
 <link rel="stylesheet" href=".././ext.pygments.css">
+<link rel="stylesheet" href=".././ext.tabberNeue.init.styles.css">
 <link rel="stylesheet" href=".././skins.minerva.styles.css">
 <link rel="stylesheet" href=".././skins.minerva.content.styles.images.css">
 <link rel="stylesheet" href=".././mediawiki.hlist.css">
@@ -243,6 +244,31 @@ Wikven
   Home.wikitext
 </pre></div>
 <p><code>Module:Example.wikitext</code>라는 이름도 가져오기는 하지만, 표시 없는 이름이 관례이며 Wikven이 어떤 문서가 어느 파일에서 왔는지 되짚을 때 쓰는 이름도 그것입니다.
+</p><p>확장자가 없는 이름은 편집기에게 아무 단서도 주지 않아서, 파일에 색이 입혀지지도 Lua 관련 기능이 뜨지도 않습니다. 어느 편집기든 확장자 대신 이름으로 한 번 알려주면 됩니다:
+</p>
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-VS_Code-label" href="#tabber-VS_Code" aria-controls="tabber-VS_Code">VS Code</a><a class="tabber__tab" role="tab" id="tabber-Helix-label" href="#tabber-Helix" aria-controls="tabber-Helix">Helix</a><a class="tabber__tab" role="tab" id="tabber-Vim-label" href="#tabber-Vim" aria-controls="tabber-Vim">Vim</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-VS_Code" aria-labelledby="tabber-VS_Code-label"><p class="mw-empty-elt">
+</p><p><code>.vscode/settings.json</code>이나 사용자 설정에:
+</p>
+<div class="mw-highlight mw-highlight-lang-json mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;files.associations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Module:*&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Helix" aria-labelledby="tabber-Helix-label"><p class="mw-empty-elt">
+</p><p>소스 옆의 <code>.helix/languages.toml</code>이나 <code>~/.config/helix/languages.toml</code>에:
+</p>
+<div class="mw-highlight mw-highlight-lang-toml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">[[language]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
+<span class="n">file-types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">glob</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Module:*&quot;</span><span class="w"> </span><span class="p">}]</span>
+</pre></div>
+<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Vim" aria-labelledby="tabber-Vim-label"><p class="mw-empty-elt">
+</p><p><code>~/.vim/filetype.vim</code>이나 <code>vimrc</code>가 읽어들이는 아무 곳에:
+</p>
+<div class="mw-highlight mw-highlight-lang-vim mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>autocmd <span class="nb">BufRead</span><span class="p">,</span><span class="nb">BufNewFile</span> Module:* <span class="k">setfiletype</span> <span class="k">lua</span>
+</pre></div>
+<p class="mw-empty-elt"></p></article></section></div>
+<p>반대 방향도 됩니다. <code>Module:Example.lua</code>라는 파일도 가져와지는데, 표시자는 제목이 그러지 않으면 위키텍스트가 되는 곳에서만 필요하기 때문입니다. 다만 이름은 그대로 유지되므로 문서가 <code>Module:Example.lua</code>가 되고, 모든 <code>{{#invoke:}}</code>가 그렇게 적어줘야 합니다.
 </p><p>모듈은 평범한 Lua입니다. 아래는 이 사이트가 실제로 가진 모듈 전체입니다:
 </p>
 <div class="mw-highlight mw-highlight-lang-lua mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
@@ -341,8 +367,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1787229681">
-  				<span>2026년 8월 20일 (목) 12:41에 마지막으로 편집됨</span>
+  				data-timestamp="1787231203">
+  				<span>2026년 8월 20일 (목) 13:06에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -365,7 +391,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 20일 (목) 12:41에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 20일 (목) 13:06에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
