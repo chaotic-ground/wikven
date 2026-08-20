@@ -260,7 +260,10 @@ jobs:
           missing=
           while IFS= read -r page; do
             file="dist/$(printf '%s' "$page" | tr ' ' '_').html"
-            if [ ! -s "$file" ] || ! grep -q 'wikven-prevnext' "$file"; then
+            # The link div, not the wrapper: prevnext always emits the wrapper, so matching that
+            # passes an empty row -- which is exactly what a broken module produces, and what the
+            # first draft of this check waved through.
+            if [ ! -s "$file" ] || ! grep -q 'class="wikven-prevnext-' "$file"; then
               missing="$missing $page"
             fi
           done < <(sed -n 's@^\*\* *Special:MyLanguage/\([^|]*\).*@\1@p' 'docs/MediaWiki:Sidebar.wikitext')

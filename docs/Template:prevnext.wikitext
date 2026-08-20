@@ -1,7 +1,7 @@
 <templatestyles src="prevnext/styles.css" /><div class="wikven-prevnext"><!--
   Takes no arguments: the order comes from MediaWiki:Sidebar, which is where it is written down.
-  See Module:Sequence.
-  -->{{#invoke:Sequence|row}}<!--
+  See Module:Sequence.lua.
+  -->{{#invoke:Sequence.lua|row}}<!--
 --></div><noinclude>
 {{prevnext/doc}}
 </noinclude>

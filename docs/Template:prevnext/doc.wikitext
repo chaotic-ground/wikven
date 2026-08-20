@@ -5,7 +5,7 @@ Bottom-of-page navigation between the steps of the documentation, as a row of on
  <nowiki>{{prevnext}}</nowiki>
 
 No arguments. The order of the documentation is [[MediaWiki:Sidebar]], and
-<code>Module:Sequence</code> reads it: the page before this one in the sidebar becomes the previous
+<code>Module:Sequence.lua</code> reads it: the page before this one in the sidebar becomes the previous
 link, the page after it the next. The first and last pages of the sequence get one link rather than
 two, without having to say so, and a page the sidebar does not name gets no row at all.
 
