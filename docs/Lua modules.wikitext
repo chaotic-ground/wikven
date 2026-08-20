@@ -38,6 +38,47 @@ src/
 <!--T:7-->
 A file named <code>Module:Example.wikitext</code> is imported too, but the bare name is the convention, and it is the one {{SITENAME}} maps a page back to when it needs the file that page came from.
 
+<!--T:31-->
+A name with no extension leaves your editor with nothing to go on, so it will not colour the file or offer you Lua anything. Every editor can be told once, by the name rather than the extension:
+</translate>
+
+<tabber>
+|-|VS Code=
+<translate>
+<!--T:32-->
+In <code>.vscode/settings.json</code>, or your user settings:
+</translate>
+<syntaxhighlight lang="json" copy>
+{
+  "files.associations": {
+    "Module:*": "lua"
+  }
+}
+</syntaxhighlight>
+|-|Helix=
+<translate>
+<!--T:33-->
+In <code>.helix/languages.toml</code> beside the source, or <code>~/.config/helix/languages.toml</code>:
+</translate>
+<syntaxhighlight lang="toml" copy>
+[[language]]
+name = "lua"
+file-types = [{ glob = "Module:*" }]
+</syntaxhighlight>
+|-|Vim=
+<translate>
+<!--T:34-->
+In <code>~/.vim/filetype.vim</code>, or anywhere your <code>vimrc</code> is sourced from:
+</translate>
+<syntaxhighlight lang="vim" copy>
+autocmd BufRead,BufNewFile Module:* setfiletype lua
+</syntaxhighlight>
+</tabber>
+
+<translate>
+<!--T:35-->
+The other way round works as well: a file named <code>Module:Example.lua</code> is imported, because the marker is only needed where the title would otherwise be wikitext. But the name is kept as it is, so the page becomes <code>Module:Example.lua</code> and every <code><nowiki>{{#invoke:}}</nowiki></code> has to spell it that way.
+
 <!--T:8-->
 The module is ordinary Lua. This one is the module this site really has, in full:
 </translate>
