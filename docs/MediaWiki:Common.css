@@ -199,6 +199,34 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	}
 }
 
+/* The landing page sets its own tagline where a page title would go, so the title is taken out
+ * of the flow there and nowhere else.
+ *
+ * MediaWiki has a native way to do exactly this -- blanking MediaWiki:Mainpage-title and
+ * MediaWiki:Mainpage-title-loggedin -- and this site cannot use it. Those messages are only read
+ * for the page Title::isMainPage() is true of, and MediaWiki:Mainpage here holds
+ * "Special:MyLanguage/index" rather than "index", so that every skin's logo follows the reader's
+ * language; the cost of that, which Editing sidebar sets out, is that the wiki stops recognising
+ * the page as its main page. Keeping the logo is worth more than saving these seven lines.
+ *
+ * Clipped rather than display: none, so the heading stays in the accessibility tree: the page
+ * still has its h1 for a reader who is not looking at it, and only the sighted reader is spared
+ * the site name twice over.
+ *
+ * Here rather than in the page's own TemplateStyles because TemplateStyles prefixes every
+ * selector with .mw-parser-output and the heading is outside the parser output. rootpage- so
+ * that the translations (index/ko) are covered by the same rule as the source page; page- as
+ * well, so the source page is covered even where the root class is not written. */
+.page-index #firstHeading,
+.rootpage-index #firstHeading {
+	position: absolute;
+	overflow: hidden;
+	clip-path: inset(50%);
+	inline-size: 1px;
+	block-size: 1px;
+	white-space: nowrap;
+}
+
 /* MobileFrontend's footer toggle between the mobile and desktop views. It is a supported MediaWiki
  * feature, so wikven leaves it alone; this site hides it because it offers every skin it builds
  * from the toolbox already, and a second, differently-worded way to change the rendering is one

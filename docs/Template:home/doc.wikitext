@@ -40,6 +40,15 @@ It renders where it is put, so this is a move and not a hiding: a reader arrivin
 page is deciding whether to read at all, not which language to read in, and each skin carries a
 language control of its own for the reader who wants one sooner.
 
+The page title is taken out of the flow too, by a rule in <code>MediaWiki:Common.css</code>
+scoped to <code>rootpage-index</code>: the tagline is set where a title would be and does not
+need the site name repeated above it. MediaWiki's own way of doing this is to blank
+<code>MediaWiki:Mainpage-title</code>, which this site cannot use — that message is read only
+for the page <code>Title::isMainPage()</code> is true of, and pointing
+<code>MediaWiki:Mainpage</code> at <code>Special:MyLanguage/index</code> to keep the logo
+following the reader's language is what stops it being that page. The heading is clipped rather
+than removed, so it is still there for a reader who is not looking at it.
+
 What is still at the head is Translate's "this page is a translated version" notice, and this
 stylesheet cannot reach it. TemplateStyles prefixes every selector with
 <code>.mw-parser-output</code>, and that notice is written before the parser output rather than
