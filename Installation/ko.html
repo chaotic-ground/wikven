@@ -535,7 +535,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
 <p>같은 이미지는 Quay에도 <code>quay.io/chaotic-ground/wikven</code>으로 게시됩니다. 한 번의 빌드가 두 주소에 모두 푸시하므로, 응답하는 쪽에서 받으면 됩니다.
-</p><p>태그가 없는 이미지는 main 브랜치의 최신 빌드를 따라갑니다. 아직 릴리스된 버전이 없어 고정할 <code>:1.2.3</code> 태그가 없으므로, 빌드를 고정하려면 다이제스트(<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>)를 쓰십시오.
+</p><p>태그가 없는 이미지는 가장 최근의 나이틀리로, main 브랜치에 기능이나 수정이 들어온 날마다 그 브랜치에서 빌드됩니다. 버전이 릴리스되면 그때부터는 태그 없는 이미지가 그 릴리스를 가리킵니다. 아직 릴리스된 버전이 없어 고정할 <code>:1.2.3</code> 태그가 없으므로, 빌드를 고정하려면 날짜가 붙은 <code>:nightly-YYYY-MM-DD</code> 태그나 다이제스트(<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>)를 쓰십시오.
 </p><p><span id="Build&#95;from&#95;source"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="소스에서_빌드"><span id=".EC.86.8C.EC.8A.A4.EC.97.90.EC.84.9C_.EB.B9.8C.EB.93.9C"></span>소스에서 빌드</h2></div>
@@ -563,7 +563,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 20일 (목) 15:03에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 20일 (목) 15:30에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
