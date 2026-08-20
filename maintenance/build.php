@@ -10,6 +10,7 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Shell\Shell;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleValue;
 use MediaWiki\User\User;
@@ -132,8 +133,10 @@ class Build extends Maintenance {
 	/**
 	 * Whether anything here can run Lua.
 	 *
-	 * luasandbox is the engine the image carries. Scribunto's other engine runs an external lua, which
-	 * the standalone binary has no way to ship but a hand-rolled install may well have.
+	 * Four ways, in the order Scribunto would find them. luasandbox is the engine the image carries.
+	 * Failing that, Scribunto's standalone engine runs an external lua: the one this site configured,
+	 * one on PATH, or -- and this is the case that is easy to forget -- one Scribunto ships itself,
+	 * which is what it falls back to when luaPath is null.
 	 */
 	private static function luaEngineAvailable(): bool {
 		if (extension_loaded('luasandbox')) {
@@ -150,7 +153,29 @@ class Build extends Maintenance {
 				}
 			}
 		}
-		return false;
+		return self::bundledLuaRuns();
+	}
+
+	/**
+	 * Whether the lua binary Scribunto carries can run here.
+	 *
+	 * Existing is not enough, which is why this runs it. LuaStandaloneInterpreter picks among the
+	 * bundled binaries by PHP_OS and PHP_INT_SIZE and never looks at the architecture, so on arm it
+	 * selects the x86-64 one, passes its own is_executable() check on it, and only finds out when
+	 * the process will not start. The path below mirrors that choice for 64-bit Linux, which is the
+	 * only platform either wikven product runs on; executing it is what makes the mirror safe, since
+	 * a wrong guess answers no rather than promising Lua that never arrives.
+	 */
+	private static function bundledLuaRuns(): bool {
+		$lua =
+			$GLOBALS['IP']
+			. '/extensions/'
+			. Scribunto::EXTENSION
+			. '/includes/Engines/LuaStandalone/binaries/lua5_1_5_linux_64_generic/lua';
+		if (PHP_OS !== 'Linux' || PHP_INT_SIZE !== 8 || !is_executable($lua)) {
+			return false;
+		}
+		return Shell::command($lua, '-v')->includeStderr()->execute()->getExitCode() === 0;
 	}
 
 	/**

@@ -56,15 +56,29 @@ func reexec(args ...string) (int, error) {
 	cmd.Stderr = os.Stderr
 	cmd.Env = os.Environ()
 	if err := cmd.Run(); err != nil {
-		// Propagate the child's own exit code so a caller scripting on `wikven build` can tell one
-		// failure from another, and return a nil error so Caddy does not also print "exit status N"
-		// on top of the diagnostic the child already wrote. A signalled child reports -1; call that 1.
+		// Propagate the child's own exit code, so a caller scripting on `wikven build` -- a
+		// Makefile, a CI job, a deploy script -- can tell a refusal from a success.
+		//
+		// By exiting here rather than returning the code, because returning it does not work for
+		// the code that matters most. Caddy's cobra wrapper turns a CommandFunc's status into a
+		// process exit status only when it is greater than one:
+		//
+		//     status, err := f(Flags{cmd.Flags()})
+		//     if status > 1 { ... return &exitError{ExitCode: status, Err: err} }
+		//     return err
+		//
+		// so returning (1, nil) -- an ordinary failed build, which is every failed build -- exits
+		// 0. Returning (1, err) would exit 1 but print Caddy's own error line on top of the
+		// diagnostic the child already wrote to the stderr it shares with us. The child has
+		// finished and nothing else here has anything left to do, so exiting is the honest answer.
+		//
+		// A signalled child reports -1; call that 1.
 		var exit *exec.ExitError
 		if errors.As(err, &exit) {
 			if code := exit.ExitCode(); code > 0 {
-				return code, nil
+				os.Exit(code)
 			}
-			return 1, nil
+			os.Exit(1)
 		}
 		return 1, err
 	}

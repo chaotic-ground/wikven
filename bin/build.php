@@ -18,7 +18,15 @@ $work = getenv('WIKVEN_WORKDIR');
 if ($work === false || $work === '') {
 	$work = getcwd();
 }
-$work = rtrim($work, '/');
+// Resolved to an absolute path before anything else reads it. The skin passes are spawned with the
+// MediaWiki root as their working directory -- inside the binary that is the temporary directory the
+// embedded app is unpacked into -- and they inherit this variable. A relative value, which is what
+// the documented `WIKVEN_WORKDIR=. ./wikven build` gives, therefore means something different in a
+// pass than it did here: the pass opens an empty database beside the unpacked app rather than the
+// one the orchestrator just filled, and dies on "no such table: page". Under Docker the workdir is
+// /workspace and this never came up.
+$resolved = realpath($work);
+$work = $resolved !== false ? $resolved : rtrim($work, '/');
 putenv("WIKVEN_WORKDIR=$work");
 $_ENV['WIKVEN_WORKDIR'] = $work;
 

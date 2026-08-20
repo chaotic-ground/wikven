@@ -99,6 +99,16 @@ jobs:
             printf '| PHP | `%s` |\n' "$php"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      # Handed to the bake job below, which is a separate job because it needs a runner without a
+      # Docker build on it -- the point is to exercise the binary the way somebody who downloaded it
+      # would, on a machine that has nothing of wikven's installed.
+      - name: Hand the binary to the bake job
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+        with:
+          name: wikven-linux-${{ matrix.arch }}
+          path: wikven-linux-${{ matrix.arch }}
+          retention-days: 1
+
       # Sign the build provenance so users can `gh attestation verify` the binary.
       - name: Attest the binary
         if: inputs.tag != ''
@@ -117,3 +127,141 @@ jobs:
           "wikven-linux-$ARCH"
           "wikven-linux-$ARCH.sha256"
           --clobber
+
+  # Nothing else bakes anything with the binary. This workflow built it and ran `./wikven version`,
+  # which proves the static link but not that the product works, and smoke.yml only ever uses the
+  # Docker image. So a site the image can bake and the binary cannot has never been caught by
+  # anything -- which is how this repository's own documentation came to hold a Lua module the
+  # binary may not be able to render (#465, #473).
+  #
+  # Deliberately not folded into smoke.yml: that job belongs to the image, it is a required check,
+  # and Lua is a niche of a niche. This one hangs off `binary`, so it runs exactly when a binary was
+  # built and stays out of the way otherwise. It also runs on a plain runner with the binary
+  # downloaded as an artifact, which is how somebody who fetched a release would meet it.
+  bake:
+    needs: binary
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: ${{ case(inputs.tag != '', fromJSON('["x86_64", "aarch64"]'), fromJSON('["x86_64"]')) }}
+    runs-on: ${{ case(matrix.arch == 'aarch64', 'ubuntu-24.04-arm', 'ubuntu-latest') }}
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        with:
+          name: wikven-linux-${{ matrix.arch }}
+
+      - name: Make a source tree to bake
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          mkdir -p work/src
+          cat > work/src/index.wikitext <<'EOF'
+          Baked by the standalone binary.
+
+          {{#invoke:Greet|thisPage}}
+          EOF
+
+          cat > 'work/src/Module:Greet' <<'EOF'
+          local p = {}
+
+          function p.thisPage()
+            return 'lua ran on ' .. mw.title.getCurrentTitle().text
+          end
+
+          return p
+          EOF
+
+          chmod +x "wikven-linux-$ARCH"
+
+      # A bake that refuses has to say so in its exit code, or a caller scripting on `wikven build`
+      # -- a Makefile, a CI job, a deploy script -- reads the refusal as a success and ships nothing.
+      # caddy/wikven.go goes to some trouble to propagate the child's status and says so in a
+      # comment; this is the assertion that the whole chain, Caddy command to php-cli to the inner
+      # maintenance run, actually delivers it.
+      #
+      # Checked with the cheapest refusal there is, a workdir with no src, so what is asserted is the
+      # exit code and not any particular diagnosis.
+      - name: A refused bake exits non-zero
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -uo pipefail
+          mkdir -p empty
+          status=0
+          ( cd empty && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" build ) || status=$?
+          echo "a bake with no source directory exited $status"
+          if [ "$status" -eq 0 ]; then
+            echo "::error::the binary refused the bake and still exited 0"
+            exit 1
+          fi
+
+      # First, and before anything is installed, because that is the whole claim: somebody downloads
+      # the binary onto a machine with no Lua on it and bakes a site with a module in it. Scribunto
+      # carries its own lua binaries and falls back to them when luaPath is null, so where it ships
+      # one for the architecture, this should work with nothing configured and nothing installed.
+      #
+      # Ordering matters more than it looks. Run after the install step and this passes for the wrong
+      # reason: wikven's own luaEngineAvailable() would find the interpreter on PATH, and the bake
+      # would never be asked whether it can manage without one.
+      #
+      # Asserted on x86_64 only, and not because the arm tarball is missing the files -- it carries
+      # exactly the same ones. LuaStandaloneInterpreter chooses by PHP_OS and PHP_INT_SIZE and never
+      # looks at the architecture, so on arm it picks lua5_1_5_linux_64_generic/lua, an x86-64 ELF,
+      # passes its own is_executable() check on it, and fails only when the process will not start.
+      # Asserting this on arm would be asserting somebody else's bug.
+      - name: Bake with Scribunto's own bundled lua
+        if: matrix.arch == 'x86_64'
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          cat > work/src/.wikven.yaml <<'EOF'
+          extensions:
+            - Scribunto
+          EOF
+          ( cd work && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" build )
+          test -s work/dist/index.html
+          grep -q 'lua ran on' work/dist/index.html
+
+      # A Lua interpreter the host provides, which is the arrangement that works on any
+      # architecture -- and the only one arm has, per the step above.
+      #
+      # luajit is a real fallback and not a consolation: Scribunto's standalone engine reads
+      # `lua -v` and takes `LuaJIT ...` as readily as `Lua ...`, and LuaJIT is Lua 5.1, which is the
+      # version Scribunto wants. Which of the two the runner has is recorded either way, because the
+      # documentation this test exists to justify has to name something a reader can install.
+      - name: Install a Lua interpreter
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends lua5.1 \
+            || sudo apt-get install -y --no-install-recommends luajit
+          lua=$(command -v lua5.1 || command -v luajit)
+          echo "LUA_INTERPRETER=$lua" >> "$GITHUB_ENV"
+          echo "Using $lua: $("$lua" -v 2>&1 | head -1)"
+
+      - name: Bake with a Lua interpreter the host provides
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          rm -rf work/dist
+          cat > work/src/.wikven.yaml <<EOF
+          extensions:
+            - Scribunto
+          config:
+            ScribuntoEngineConf:
+              luastandalone:
+                luaPath: $LUA_INTERPRETER
+          EOF
+          ( cd work && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" build )
+          test -s work/dist/index.html
+          if ! grep -q 'lua ran on' work/dist/index.html; then
+            echo "::error::the binary baked a site, but the module's answer is not in it"
+            grep -o '{{#invoke[^}]*}}' work/dist/index.html || true
+            exit 1
+          fi

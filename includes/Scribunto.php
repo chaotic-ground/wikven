@@ -7,9 +7,11 @@ namespace MediaWiki\Extension\Wikven;
  *
  * Scribunto is ordinary equipment on a MediaWiki wiki, and wikven's two products disagree about it.
  * The image compiles luasandbox into its PHP and bundles the extension, so a site that lists
- * Scribunto bakes Lua there. The standalone binary has neither: static-php-cli, which builds its PHP,
- * offers no Lua extension among the hundred and thirty it supports, and Scribunto's other engine
- * shells out to a lua binary that a single executable does not carry.
+ * Scribunto bakes Lua there. The standalone binary has no such extension -- static-php-cli, which
+ * builds its PHP, offers no Lua extension among the hundred and thirty it supports -- and reaches
+ * Lua only through Scribunto's other engine, which shells out to a lua binary. It gets one on 64-bit
+ * x86 Linux, where the interpreter Scribunto itself ships will run; anywhere else the site has to
+ * name one of its own.
  *
  * Until now that disagreement was silent, and silence was the worst of it. Measured on a bake of one
  * page invoking one module, every one of these exited 0:
@@ -78,8 +80,13 @@ class Scribunto {
 				'Wikven: this site lists '
 				. self::EXTENSION
 				. ' and no Lua engine is available here.'
-				. ' The Docker image has one; the standalone binary has none, so it cannot bake a site'
-				. ' that uses Lua modules. Bake this one with the image, or drop '
+				. ' The Docker image compiles luasandbox into its PHP. The standalone binary carries no'
+				. ' engine of its own and falls back to the lua interpreter '
+				. self::EXTENSION
+				. ' ships, which is built for 64-bit x86 Linux and did not run here.'
+				. ' Install a Lua 5.1 interpreter and name it under'
+				. ' ScribuntoEngineConf.luastandalone.luaPath, bake this site with the Docker image, or'
+				. ' drop '
 				. self::EXTENSION
 				. ' from extensions and the Module: pages with it.'
 			);
