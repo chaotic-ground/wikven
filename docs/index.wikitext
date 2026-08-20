@@ -21,13 +21,19 @@ plain HTML. Nothing runs behind the published site.
 --></div>
 </div>
 
-<div class="wikven-home-section">
+<div class="wikven-home-section wikven-home-section-demo">
 <translate>
 <!--T:3-->
 == How it works ==
 </translate>
-<div class="wikven-home-demo"><!--
---><div class="wikven-home-pane">
+<div class="wikven-home-lede">
+<translate>
+<!--T:4-->
+Every <code>.wikitext</code> file becomes a page.
+</translate>
+</div>
+<div class="wikven-home-demo">
+<div class="wikven-home-pane-run">
 <div class="wikven-home-pane-label">
 <translate>
 <!--T:20-->
@@ -39,28 +45,24 @@ mkdir src
 echo 'Hello, World!' > src/index.wikitext
 wikven build
 </syntaxhighlight>
-</div><!--
---><div class="wikven-home-pane">
+</div>
+<div class="wikven-home-pane-get">
 <div class="wikven-home-pane-label">
 <translate>
 <!--T:21-->
 You get
 </translate>
 </div>
-<syntaxhighlight lang="text">
-dist/
-  index.html
-  site.styles.css
-  startup-static.js
-  pagefind/
-</syntaxhighlight>
-</div><!--
+<div class="wikven-home-tree">
+<div class="wikven-home-tree-root">dist/</div>
+<div class="wikven-home-tree-branch"><!--
+--><div class="wikven-home-tree-item">index.html</div><!--
+--><div class="wikven-home-tree-item">site.styles.css</div><!--
+--><div class="wikven-home-tree-item">startup-static.js</div><!--
+--><div class="wikven-home-tree-item">pagefind/</div><!--
 --></div>
-<div class="wikven-home-caption">
-<translate>
-<!--T:4-->
-Every <code>.wikitext</code> file becomes a page.
-</translate>
+</div>
+</div>
 </div>
 </div>
 
@@ -94,7 +96,7 @@ Templates, parser functions and Lua modules, all resolved at build time.
 <div class="wikven-home-card-body">
 <translate>
 <!--T:9-->
-Bundled, or fetched from Git as the site builds. Ship several skins and let the reader choose.
+Bundled or fetched from Git, with several skins for the reader to choose between.
 </translate>
 </div>
 </div><!--
@@ -122,7 +124,7 @@ The index is built with the site and runs in the reader's browser.
 <div class="wikven-home-card-body">
 <translate>
 <!--T:13-->
-Each one comes out as its own set of pages.
+Every language you write in comes out as its own set of pages.
 </translate>
 </div>
 </div><!--
@@ -154,6 +156,14 @@ A personal wiki
 </translate>
 </div><!--
 --></div>
+<div class="wikven-home-fits-note">
+<translate>
+<!--T:22-->
+Unlike a general static-site generator such as [<tvar name="1">https://gohugo.io/</tvar> Hugo] or [<tvar name="2">https://www.mkdocs.org/</tvar> MkDocs], {{SITENAME}} renders real wikitext, so it
+suits content that is already a wiki. See [[<tvar name="3">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for how the markup compares with
+Markdown, and [[<tvar name="4">Special:MyLanguage/Limitations</tvar>|Limitations]] for what a live wiki does that a published site cannot.
+</translate>
+</div>
 </div>
 
 <div class="wikven-home-closing">
@@ -169,10 +179,7 @@ Your first site is three commands away.
 <div class="wikven-home-fineprint">
 <translate>
 <!--T:19-->
-This site is a {{SITENAME}} build. Unlike a general static-site generator such as
-[<tvar name="1">https://gohugo.io/</tvar> Hugo] or [<tvar name="2">https://www.mkdocs.org/</tvar> MkDocs], it renders real wikitext — see
-[[<tvar name="3">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for how the markup compares with Markdown, and
-[[<tvar name="4">Special:MyLanguage/Limitations</tvar>|Limitations]] for what a live wiki does that a published site cannot.
+This site is a {{SITENAME}} build.
 </translate>
 </div>
 

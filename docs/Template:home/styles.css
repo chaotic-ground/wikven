@@ -23,15 +23,21 @@
  *
  * Lengths come from 0.5 / 1 / 1.5 / 2 / 2.5 / 3.5 / 4 rem and nowhere else. There is no way
  * to tokenise a length here, so the discipline has to be kept by hand.
+ *
+ * Every shape drawn on this page is drawn out of border-*-color or background-color, both of
+ * which are colour-typed and so may read a token. A var() inside linear-gradient() cannot be
+ * type-checked and the whole declaration goes, silently, which is the trap to know about here.
  */
 
 /* Hero. The page's h1 is the site name, so the line below it is a tagline rather than a
  * heading: it is set like one and is not one, which is also why it is not in the table of
  * contents this page suppresses. */
+/* No rule under the hero. The skin draws one under the title and another under the tab row,
+ * so a third within a couple of hundred pixels made the page's own rule indistinguishable from
+ * the furniture above it. The closing band keeps its rule and is now the only one the page
+ * draws itself, which is what lets it mean "the reading is over, here is the door". */
 .wikven-home-hero {
-	margin-block: 0 4rem;
-	padding-block-end: 3.5rem;
-	border-block-end: 1px solid var(--border-color-subtle, #c8ccd1);
+	margin-block: 2rem 4rem;
 }
 
 /* The cap is stated so the line breaks into two or three whatever language it is in. It is
@@ -40,10 +46,10 @@
 .wikven-home-tagline {
 	margin-block: 0 1.5rem;
 	max-inline-size: 26rem;
-	font-size: 2.5rem;
+	font-size: 3.25rem;
 	font-weight: bold;
-	letter-spacing: -0.015em;
-	line-height: 1.1;
+	letter-spacing: -0.02em;
+	line-height: 1.05;
 	color: var(--color-emphasized, #101418);
 }
 
@@ -67,7 +73,6 @@
 	display: block;
 	padding: 0.5rem 1.5rem;
 	min-inline-size: 9rem;
-	border-radius: 2px;
 	font-size: 1rem;
 	font-weight: bold;
 	line-height: 2;
@@ -106,11 +111,19 @@
 /* Its own rule, so that a pseudo-class the sanitiser does not know cannot take the hover
  * rules down with it -- one bad selector drops the whole list. */
 .wikven-home-route a:focus-visible {
+	outline: 2px solid var(--color-emphasized, #101418);
 	outline-offset: 2px;
 }
 
 .wikven-home-section {
 	margin-block: 0 3.5rem;
+}
+
+/* The page's proof gets more room than the list of features after it. Every interval on the
+ * page used to be 3.5 or 4rem, which is a constant, not a scale: nothing grouped with anything
+ * and the band that carries the argument got exactly the air of the band that lists points. */
+.wikven-home-section-demo {
+	margin-block: 0 4.5rem;
 }
 
 /* Sentence case, at a size that can carry the page's structure. It was a tracked-out caps
@@ -122,11 +135,11 @@
  * under a section heading off one or the other, so both are cleared. */
 .wikven-home-section .mw-heading,
 .wikven-home-section h2 {
-	margin-block: 0 1rem;
+	margin-block: 0 1.25rem;
 	padding-block: 0;
 	border: 0;
 	font-family: inherit;
-	font-size: 1.375rem;
+	font-size: 1.75rem;
 	font-weight: bold;
 	letter-spacing: normal;
 	line-height: 1.25;
@@ -134,19 +147,24 @@
 	color: var(--color-emphasized, #101418);
 }
 
-/* What goes in and what comes out, side by side. The section said "how it works" and then
- * showed only what you type, leaving a sentence to describe the result; a reader can see the
- * result in less time than that sentence takes to read. Two panes, so auto-fit never has an
- * odd one out, and no arrow between them -- an arrow has to turn around for a right-to-left
- * reader and says nothing to one who is not looking. The labels carry the direction. */
-/* 22rem, not the 18 the cards use: the longest line in the left pane is the echo, at 44
- * characters, and a monospace pane narrower than that breaks a single command across two lines
- * where it reads as two. Below the width for two panes they stack, and each gets the column. */
+/* What goes in and what comes out.
+ *
+ * This was two <syntaxhighlight> blocks side by side, and no amount of styling was ever going
+ * to make that read as a transform: lang="text" produces a .mw-highlight box with no tokens in
+ * it, so the markup was literally saying "here are two code blocks". The output is not code.
+ * It is a directory, so it is written as one and drawn with borders on zero-size boxes.
+ *
+ * Only the input is framed. What you type is a transcript you authored and can copy; what you
+ * get is the filesystem, and letting it sit on the page ground is the difference in material
+ * that does the work an arrow between two identical boxes could not.
+ *
+ * Stacked rather than side by side. The one line that matters, the echo, is 41 characters, and
+ * a pane half of 54rem does not hold that at every skin's code font size -- it broke a single
+ * command across two lines, where it reads as two commands. Stacked, the block has the whole
+ * measure and the direction is settled: down. */
 .wikven-home-demo {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
 	gap: 1.5rem;
-	align-items: start;
 	max-inline-size: 54rem;
 }
 
@@ -156,43 +174,134 @@
 	color: var(--color-subtle, #54595d);
 }
 
-/* Only the margin. SyntaxHighlight draws the block's own box, and a border here landed on
- * both .mw-highlight and the pre inside it, so the code came out in a frame inside a frame. */
+/* The label is welded to the block it names, so the two halves of the band are different
+ * shapes before they are different content. */
+.wikven-home-pane-run .wikven-home-pane-label {
+	margin-block-end: 0;
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--border-color-muted, #dadde3);
+	border-block-end: 0;
+	background-color: var(--background-color-neutral-subtle, #f8f9fa);
+	font-weight: bold;
+	color: var(--color-base, #202122);
+}
+
 .wikven-home-demo .mw-highlight,
 .wikven-home-demo pre {
 	margin-block: 0;
+	border-radius: 0;
 }
 
-.wikven-home-caption {
-	margin-block-start: 1rem;
-	max-inline-size: 34rem;
+/* The direction cue, and the correction of a claim this file used to make. An arrow was left
+ * out here because "it has to turn around for a right-to-left reader and says nothing to one
+ * who is not looking". Both halves were wrong: a triangle drawn from logical borders turns
+ * around by itself, and a content: "" pseudo-element is not in the accessibility tree at all,
+ * so being silent is what it is for. The labels stay the semantic carrier either way.
+ *
+ * Its own rule, on the same principle as the focus rule above. If any declaration in it is
+ * dropped the element collapses to nothing rather than leaving a filled square behind. */
+.wikven-home-pane-get .wikven-home-pane-label::before {
+	content: "";
+	display: inline-block;
+	inline-size: 0;
+	block-size: 0;
+	margin-inline-end: 0.5rem;
+	vertical-align: middle;
+	border-inline-start: 0.3rem solid transparent;
+	border-inline-end: 0.3rem solid transparent;
+	border-block-start-width: 0.5rem;
+	border-block-start-style: solid;
+	border-block-start-color: var(--color-subtle, #54595d);
+}
+
+/* Monospace because paths are monospace, and nothing else about it is code. */
+.wikven-home-tree {
+	font-family: monospace;
 	font-size: 0.875rem;
-	line-height: 1.5;
-	color: var(--color-subtle, #54595d);
+	line-height: 2;
+	color: var(--color-base, #202122);
 }
 
-/* Capped so that three tracks cannot fit: 16 + 16 + 16 with two 1.5rem gaps is 51rem, and
- * the cap is 48. Four items in an uncapped auto-fit grid orphan the fourth onto a row of
- * its own at every width that fits three, and which widths those are depends on the skin's
- * root font size -- so it is not something a minmax() alone can be tuned out of. In rem the
- * cap and the tracks scale together, which is why this holds whatever the skin's font size
- * is: two up on a column, one up on a phone, never three. */
+.wikven-home-tree-root {
+	font-weight: bold;
+	color: var(--color-emphasized, #101418);
+}
+
+.wikven-home-tree-branch {
+	margin-inline-start: 0.5rem;
+}
+
+/* The trunk. */
+.wikven-home-tree-item {
+	border-inline-start-width: 1px;
+	border-inline-start-style: solid;
+	border-inline-start-color: var(--border-color-muted, #dadde3);
+}
+
+/* The tick off it: an inline box that is nothing but a bottom border. */
+.wikven-home-tree-item::before {
+	content: "";
+	display: inline-block;
+	inline-size: 0.75rem;
+	block-size: 0;
+	margin-inline-end: 0.5rem;
+	vertical-align: middle;
+	border-block-end-width: 1px;
+	border-block-end-style: solid;
+	border-block-end-color: var(--border-color-muted, #dadde3);
+}
+
+/* The last item's trunk would otherwise run half a line past its own tick, so the stem moves
+ * into the pseudo-element and stops there. If :last-child is dropped, what is left is one
+ * hairline overhanging in a muted border colour. */
+.wikven-home-tree-item:last-child {
+	border-inline-start-color: transparent;
+}
+
+.wikven-home-tree-item:last-child::before {
+	block-size: 0.875rem;
+	vertical-align: top;
+	border-inline-start-width: 1px;
+	border-inline-start-style: solid;
+	border-inline-start-color: var(--border-color-muted, #dadde3);
+}
+
+/* The rule stated before it is shown, at reading size. It was underneath the demonstration in
+ * the page's quietest type, which is a footnote to a thing the reader has already worked out. */
+.wikven-home-lede {
+	margin-block: 0 1.5rem;
+	max-inline-size: 34rem;
+	font-size: 1.125rem;
+	line-height: 1.6;
+	color: var(--color-base, #202122);
+}
+
+/* Capped so that three tracks cannot fit: 18 + 18 + 18 with two 1.5rem gaps is 57rem, and the
+ * cap is 54. Four items in an uncapped auto-fit grid orphan the fourth onto a row of its own at
+ * every width that fits three, and which widths those are depends on the skin's root font size
+ * -- so it is not something a minmax() alone can be tuned out of. In rem the cap and the tracks
+ * scale together, which is why this holds whatever the skin's font size is: two up on a column,
+ * one up on a phone, never three.
+ *
+ * The gaps are bigger than they were because the boxes are gone: a 1.5rem gap between unboxed
+ * items reads as a list that lost its bullets. */
 .wikven-home-cards {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-	gap: 1.5rem;
+	gap: 2.5rem 3.5rem;
 	max-inline-size: 54rem;
 }
 
-/* The border is the card, and the fill is a bonus. The fill alone was the whole design and
- * it does not survive night mode: --background-color-neutral-subtle against the page ground
- * is about 1.1:1 there, so the cards simply were not present in one of the two themes this
- * site ships. A line is the same line in both. */
+/* A rule, not a box. Four boxes each holding a bold line and one sentence are boxes that are
+ * mostly padding, and they were made of the same light grey bordered material as the demo, so
+ * the page's proof and its list of points were the same object twice. Only the transcript is
+ * framed now, and being framed means something.
+ *
+ * No hover on the card: the title is a link and the card is not, and there is no JavaScript
+ * here to make one. A card-wide hover state would be a lie about what is clickable. */
 .wikven-home-card {
-	padding: 1.5rem;
-	border: 1px solid var(--border-color-muted, #dadde3);
-	border-radius: 2px;
-	background-color: var(--background-color-neutral-subtle, #f8f9fa);
+	padding-inline-start: 1rem;
+	border-inline-start: 2px solid var(--border-color-muted, #dadde3);
 }
 
 .wikven-home-card-title {
@@ -202,9 +311,9 @@
 	line-height: 1.35;
 }
 
-/* No font-size: the skin's own is the right one, and Minerva tunes it for reading on a
- * phone. Overriding it downward on the page a phone is likeliest to land on buys a look and
- * costs the reader. */
+/* No font-size: the skin's own is the right one, and Minerva tunes it for reading on a phone.
+ * Overriding it downward on the page a phone is likeliest to land on buys a look and costs the
+ * reader. */
 .wikven-home-card-body {
 	line-height: 1.6;
 	color: var(--color-base, #202122);
@@ -228,10 +337,21 @@
 	display: inline-block;
 }
 
+/* What wikven is instead of. This was the last paragraph of the fine print, under the last
+ * call to action, set as a disclaimer -- the one sentence on the page that distinguishes it,
+ * in the page's quietest type. It belongs in the band that is about where wikven fits, which
+ * otherwise was a whole section's worth of structure around eleven words. */
+.wikven-home-fits-note {
+	margin-block-start: 1.5rem;
+	max-inline-size: 34rem;
+	line-height: 1.6;
+	color: var(--color-base, #202122);
+}
+
 .wikven-home-fit + .wikven-home-fit::before {
 	content: "·";
 	margin-inline: 0.5rem;
-	color: var(--border-color-base, #a2a9b1);
+	color: var(--color-subtle, #54595d);
 }
 
 /* A rule and a size, not a box. Centred content in a rounded grey panel, on a page that is
@@ -285,7 +405,10 @@
  * paragraph margin cleared, so a new band has to be added here in the same edit. There is
  * no :is() or :where() to shorten this with -- the sanitiser drops any rule that uses one. */
 .wikven-home-sub p,
-.wikven-home-caption p,
+.wikven-home-lede p,
+.wikven-home-tree-root p,
+.wikven-home-tree-item p,
+.wikven-home-fits-note p,
 .wikven-home-pane-label p,
 .wikven-home-card-title p,
 .wikven-home-card-body p,

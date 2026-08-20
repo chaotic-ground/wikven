@@ -24,43 +24,33 @@ out.
 == What the bands are for ==
 
 The landing page carries what a reader who has just arrived needs, and sends the rest to the
-documentation. In order: a tagline and the two buttons, the three commands that show the whole
-tool, four things {{SITENAME}} can do at a line apiece, three places it fits, one more button, and
-the fine print. Everything else was moved or cut — the list of what a static export cannot do is
-an appendix now, on [[Special:MyLanguage/Limitations|Limitations]], because a landing page that
-answers "should I use this" with a list of what is missing has answered the wrong question first.
+documentation. In order: a tagline and the two buttons; the rule the tool follows, then the
+proof of it; four things {{SITENAME}} can do at a line apiece; where it fits and what it is
+instead of; one more button; the fine print. Everything else was moved or cut — the list of
+what a static export cannot do is an appendix now, on
+[[Special:MyLanguage/Limitations|Limitations]], because a landing page that answers "should I
+use this" with a list of what is missing has answered the wrong question first.
 
 The bands are short on purpose and the page is long on purpose: a reader scrolls, and would
 rather scroll past four lines than read four paragraphs.
 
-"How it works" shows what goes in beside what comes out. The <code>dist/</code> pane is the real
-root of a build, shortened to the four entries that say what kind of thing it is: a page, a
-stylesheet, a script and the search index. There is no arrow between the panes — an arrow has to
-turn around for a right-to-left reader and says nothing at all to one who is not looking — so the
-two labels carry the direction instead.
+== One framed object ==
 
-== The language bar ==
+The transcript under "How it works" is the only filled, bordered box on the page, and that is
+the design rather than an accident of it. What you type is a transcript you authored and can
+copy; what comes out is a directory. Writing the output as a second
+<code>&lt;syntaxhighlight&gt;</code> made the band read as two code blocks that happened to be
+adjacent, which is what it was: <code>lang="text"</code> produces a <code>.mw-highlight</code>
+box with no tokens in it, so no styling of the wrapper could have said anything else. The tree
+is ordinary markup drawn with borders on zero-size boxes, sitting on the page ground.
 
-<code><nowiki><languages /></nowiki></code> is at the foot of the page rather than the head.
-It renders where it is put, so this is a move and not a hiding: a reader arriving at a landing
-page is deciding whether to read at all, not which language to read in, and each skin carries a
-language control of its own for the reader who wants one sooner.
+The cards lost their boxes for the same reason. Four boxes each holding a bold line and one
+sentence are boxes that are mostly padding, and they were made of the same light grey bordered
+material as the demo, so the page's proof and its list of points were the same object twice.
 
-The page title is taken out of the flow too, by a rule in <code>MediaWiki:Common.css</code>
-scoped to <code>rootpage-index</code>: the tagline is set where a title would be and does not
-need the site name repeated above it. MediaWiki's own way of doing this is to blank
-<code>MediaWiki:Mainpage-title</code>, which this site cannot use — that message is read only
-for the page <code>Title::isMainPage()</code> is true of, and pointing
-<code>MediaWiki:Mainpage</code> at <code>Special:MyLanguage/index</code> to keep the logo
-following the reader's language is what stops it being that page. The heading is clipped rather
-than removed, so it is still there for a reader who is not looking at it.
-
-What is still at the head is Translate's "this page is a translated version" notice, and this
-stylesheet cannot reach it. TemplateStyles prefixes every selector with
-<code>.mw-parser-output</code>, and that notice is written before the parser output rather than
-inside it, so a rule for it here would match nothing. Hiding it would have to be a page-scoped
-rule in <code>MediaWiki:Common.css</code>, which is not sanitised — the body carries
-<code>page-index</code> and <code>rootpage-index</code> to scope one to.
+The panes are stacked rather than side by side. The one line that matters, the
+<code>echo</code>, is 41 characters, and half of 54rem does not hold that at every skin's code
+font size — it broke a single command across two lines, where it reads as two commands.
 
 == Colours ==
 
@@ -84,7 +74,7 @@ catches the translations too.
 == Sizes and lengths ==
 
 Two measures and no more: <code>34rem</code> for anything meant to be read in sentences, and
-<code>48rem</code> for the two objects that are looked at rather than read, the demo and the
+<code>54rem</code> for the two objects that are looked at rather than read, the demo and the
 cards. Five different right edges down one page reads as decisions that accumulated rather than
 as a layout.
 
@@ -92,10 +82,10 @@ Lengths come from 0.5 / 1 / 1.5 / 2 / 2.5 / 3.5 / 4 rem and nowhere else. A leng
 tokenised here — TemplateStyles drops the declaration — so the scale is kept by hand, and the
 next editor inherits the rule from the stylesheet's own header rather than inheriting the values.
 
-The card grid is capped at <code>48rem</code> for a reason worth keeping: four equal items in an
+The card grid is capped at <code>54rem</code> for a reason worth keeping: four equal items in an
 uncapped <code><nowiki>repeat( auto-fit, minmax() )</nowiki></code> orphan the fourth onto a row
 of its own at every width that fits three, and which widths those are depends on the skin's root
-font size. Three tracks of 16rem with two 1.5rem gaps is 51rem, so under a 48rem cap three cannot
+font size. Three tracks of 16rem with two 1.5rem gaps is 51rem, so under a 54rem cap three cannot
 happen — two up on a column, one up on a phone, and both numbers in rem so they scale together.
 
 Section headings are sentence case at 1.375rem. They were a tracked-out caps label, which is a
