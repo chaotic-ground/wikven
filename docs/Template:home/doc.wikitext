@@ -60,6 +60,11 @@ defined in <code>MediaWiki:Common.css</code>, which is not sanitised. All three 
 the Codex set for night mode, so reading the tokens is what makes the page follow the reader's
 theme without knowing which one it is.
 
+Every shape the page draws — the direction cue above "You get", the tree's trunk and its ticks
+— comes out of <code>border-*-color</code> or <code>background-color</code>, both of which are
+colour-typed and so may read a token. A <code>var()</code> inside <code>linear-gradient()</code>
+cannot be type-checked, so the whole declaration is dropped, silently. That is the trap here.
+
 The filled button is the exception, and it is why <code>MediaWiki:Common.css</code> carries a
 <code>--wikven-cta-*</code> pair scoped to <code>.rootpage-index</code>. A button brings its own
 background, so it cannot read <code>--color-progressive</code> and be legible: night mode moves
@@ -85,7 +90,7 @@ next editor inherits the rule from the stylesheet's own header rather than inher
 The card grid is capped at <code>54rem</code> for a reason worth keeping: four equal items in an
 uncapped <code><nowiki>repeat( auto-fit, minmax() )</nowiki></code> orphan the fourth onto a row
 of its own at every width that fits three, and which widths those are depends on the skin's root
-font size. Three tracks of 16rem with two 1.5rem gaps is 51rem, so under a 54rem cap three cannot
+font size. Three tracks of 18rem with two 1.5rem gaps is 57rem, so under a 54rem cap three cannot
 happen — two up on a column, one up on a phone, and both numbers in rem so they scale together.
 
 Section headings are sentence case at 1.375rem. They were a tracked-out caps label, which is a
