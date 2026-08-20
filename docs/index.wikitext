@@ -1,4 +1,3 @@
-<languages />
 __NOTOC__
 {{home}}
 
@@ -152,6 +151,10 @@ This site is a {{SITENAME}} build. Unlike a general static-site generator such a
 [[<tvar name="3">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for how the markup compares with Markdown, and
 [[<tvar name="4">Special:MyLanguage/Limitations</tvar>|Limitations]] for what a live wiki does that a published site cannot.
 </translate>
+</div>
+
+<div class="wikven-home-languages">
+<languages />
 </div>
 
 {{DISPLAYTITLE:Wikven}}

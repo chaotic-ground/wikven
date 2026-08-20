@@ -193,6 +193,16 @@
 	color: var(--color-subtle, #54595d);
 }
 
+/* Translate's language bar. It renders wherever <languages /> is put, and on this page that
+ * is the foot: a reader arriving at a landing page is choosing whether to read at all, not
+ * which language to read in, and every skin here carries a language control of its own for
+ * the reader who wants one sooner. Nothing is hidden, so it stays one tab stop from the end
+ * of the page rather than one from the start. */
+.wikven-home-languages {
+	margin-block-start: 2.5rem;
+	font-size: 0.875rem;
+}
+
 .wikven-home-sub p,
 .wikven-home-caption p,
 .wikven-home-card-title p,

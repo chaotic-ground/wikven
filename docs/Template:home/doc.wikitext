@@ -33,6 +33,20 @@ answers "should I use this" with a list of what is missing has answered the wron
 The bands are short on purpose and the page is long on purpose: a reader scrolls, and would
 rather scroll past four lines than read four paragraphs.
 
+== The language bar ==
+
+<code><nowiki><languages /></nowiki></code> is at the foot of the page rather than the head.
+It renders where it is put, so this is a move and not a hiding: a reader arriving at a landing
+page is deciding whether to read at all, not which language to read in, and each skin carries a
+language control of its own for the reader who wants one sooner.
+
+What is still at the head is Translate's "this page is a translated version" notice, and this
+stylesheet cannot reach it. TemplateStyles prefixes every selector with
+<code>.mw-parser-output</code>, and that notice is written before the parser output rather than
+inside it, so a rule for it here would match nothing. Hiding it would have to be a page-scoped
+rule in <code>MediaWiki:Common.css</code>, which is not sanitised — the body carries
+<code>page-index</code> and <code>rootpage-index</code> to scope one to.
+
 == Colours ==
 
 The stylesheet reads the skin's Codex custom properties and defines none. TemplateStyles drops a
