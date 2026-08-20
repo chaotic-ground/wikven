@@ -177,6 +177,28 @@ jobs:
 
           chmod +x "wikven-linux-$ARCH"
 
+      # A bake that refuses has to say so in its exit code, or a caller scripting on `wikven build`
+      # -- a Makefile, a CI job, a deploy script -- reads the refusal as a success and ships nothing.
+      # caddy/wikven.go goes to some trouble to propagate the child's status and says so in a
+      # comment; this is the assertion that the whole chain, Caddy command to php-cli to the inner
+      # maintenance run, actually delivers it.
+      #
+      # Checked with the cheapest refusal there is, a workdir with no src, so what is asserted is the
+      # exit code and not any particular diagnosis.
+      - name: A refused bake exits non-zero
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -uo pipefail
+          mkdir -p empty
+          status=0
+          ( cd empty && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" build ) || status=$?
+          echo "a bake with no source directory exited $status"
+          if [ "$status" -eq 0 ]; then
+            echo "::error::the binary refused the bake and still exited 0"
+            exit 1
+          fi
+
       # First, and before anything is installed, because that is the whole claim: somebody downloads
       # the binary onto a machine with no Lua on it and bakes a site with a module in it. Scribunto
       # carries its own lua binaries and falls back to them when luaPath is null, so where it ships
