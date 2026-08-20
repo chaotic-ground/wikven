@@ -33,6 +33,9 @@ docker pull ghcr.io/chaotic-ground/wikven
 </syntaxhighlight>
 
 <translate>
+<!--T:12-->
+The same image is published to Quay as well, at <code>quay.io/chaotic-ground/wikven</code>. One build pushes both addresses, so pull from whichever one answers.
+
 <!--T:7-->
 The untagged image tracks the latest build on the main branch. No version has been released yet, so there is no <code>:1.2.3</code> tag to pin instead; to hold a build still, pin its digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
 

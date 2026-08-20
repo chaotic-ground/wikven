@@ -20,6 +20,9 @@ on:
 permissions:
   contents: read
   packages: write
+  # The OIDC token exchanged for a quay.io robot token below. ghcr takes GITHUB_TOKEN instead, so
+  # this is the only registry credential in the job, and it lasts an hour.
+  id-token: write
 
 # Cancel superseded runs; pushes to main (including release-please's workflow_call) are left alone.
 concurrency:
@@ -30,6 +33,14 @@ jobs:
   docker-image:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      # Publishing is this repository on main: a fork and a pull request build the image and stop
+      # there. Every step below that logs in, pushes, or reads a tag back keys off this one value,
+      # so they cannot drift apart.
+      PUBLISH: ${{ github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main' }}
+      # Not a secret, only a name: the robot account quay.io federates to this repository's OIDC
+      # identity. What it authenticates with is minted per run by the exchange step.
+      QUAY_ROBOT: chaotic-ground+wikven_ci
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -40,11 +51,36 @@ jobs:
       - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
 
       - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
-        if: github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main'
+        if: env.PUBLISH == 'true'
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      # quay.io holds no secret of ours. The robot account is federated to this repository's OIDC
+      # identity -- issuer token.actions.githubusercontent.com, subject
+      # repo:chaotic-ground/wikven:ref:refs/heads/main -- and quay hands back a robot token that
+      # expires in an hour. The subject is an exact match, so a run on any other ref gets nothing
+      # back; that is the same set of runs PUBLISH already excludes, and a fork gets nothing either
+      # way. Nothing to rotate, and nothing to leak from the repository secrets.
+      - name: Exchange this run's OIDC token for a quay.io robot token
+        id: quay-auth
+        if: env.PUBLISH == 'true'
+        run: |
+          oidc=$(curl -fsS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -er .value)
+          echo "::add-mask::$oidc"
+          token=$(curl -fsS -u "$QUAY_ROBOT:$oidc" https://quay.io/oauth2/federation/robot/token \
+            | jq -er .token)
+          echo "::add-mask::$token"
+          echo "token=$token" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
+        if: env.PUBLISH == 'true'
+        with:
+          registry: quay.io
+          username: ${{ env.QUAY_ROBOT }}
+          password: ${{ steps.quay-auth.outputs.token }}
 
       # On a release (tag input set) publish the immutable version tags plus latest, else just latest.
       # metadata-action computes proper semver tags (a prerelease is not tagged :latest or a bare
@@ -54,7 +90,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302  # v6.2.0
         with:
-          images: ghcr.io/chaotic-ground/wikven
+          # Every tag rule below is multiplied across both images, so one build publishes both
+          # registries and the semver logic stays a single copy.
+          images: |
+            ghcr.io/chaotic-ground/wikven
+            quay.io/chaotic-ground/wikven
           # latest is handled explicitly below; the default "auto" keys off a tag push, and releases
           # reach this workflow through workflow_call with the tag as an input instead.
           flavor: latest=false
@@ -68,10 +108,25 @@ jobs:
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a  # v7.3.0
         with:
           context: .
-          push: ${{ github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main' }}
+          push: ${{ env.PUBLISH }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
           # Layer cache shared with the other image builds, so a PR reuses main's cached layers.
           cache-from: type=gha,scope=wikven-image
           cache-to: type=gha,mode=max,scope=wikven-image
+
+      # A second registry is only worth having if it actually answers, and buildx pushing both in
+      # one call does not prove that it did: a push that reached ghcr and not quay would otherwise
+      # be a green run, and stay one until a reader hit the dead address. Read every tag back from
+      # the registry that now holds it, so half a publish fails here instead.
+      - name: Check every published tag answers
+        if: env.PUBLISH == 'true'
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          for tag in $TAGS; do
+            echo "::group::$tag"
+            docker buildx imagetools inspect "$tag"
+            echo "::endgroup::"
+          done

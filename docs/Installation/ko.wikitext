@@ -19,6 +19,9 @@ arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파�
 <!--T:6 @26e9972a-->
 [https://www.docker.com/ Docker]가 설치된 모든 플랫폼에서 동작하므로, macOS와 Windows에서 사용할 선택지입니다. 이미지는 GitHub Container Registry에 게시됩니다:
 
+<!--T:12 @72e7649a-->
+같은 이미지는 Quay에도 <code>quay.io/chaotic-ground/wikven</code>으로 게시됩니다. 한 번의 빌드가 두 주소에 모두 푸시하므로, 응답하는 쪽에서 받으면 됩니다.
+
 <!--T:7 @16616659-->
 태그가 없는 이미지는 main 브랜치의 최신 빌드를 따라갑니다. 아직 릴리스된 버전이 없어 고정할 <code>:1.2.3</code> 태그가 없으므로, 빌드를 고정하려면 다이제스트(<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>)를 쓰십시오.
 
