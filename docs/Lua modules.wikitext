@@ -6,13 +6,13 @@ __TOC__
 A great many wikis keep their templates' logic in Lua, and {{SITENAME}} runs a real MediaWiki at build time, so a module runs the way it always does. The page that invokes it is written out with the module's answer already in it; the module itself never becomes a page of the published site. Lua on a MediaWiki is [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Scribunto</tvar> Scribunto], which MediaWiki bundles.
 
 <!--T:2-->
-{{note|The [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] cannot render Lua, and only the Docker image can. A build that is asked to do the impossible now stops and says so, rather than publishing pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them.}}
+{{note|Both products render Lua, but only the Docker image needs nothing from you; the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] wants an interpreter installed on arm64. The table below has the three cases. A build that cannot render Lua stops and says so, rather than publishing pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them.}}
 
 <!--T:3-->
 == Enabling it ==
 
 <!--T:4-->
-Name it in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]] and that is all. Scribunto ships inside the image, so it needs no [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] entry, and the engine needs no configuration: the image compiles <code>luasandbox</code> into its PHP and Scribunto finds it.
+Name it in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]] and that is all. Scribunto is bundled with MediaWiki, so it needs no [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] entry, and on most builds the engine needs no configuration either.
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
@@ -82,9 +82,43 @@ The module's output, and nothing else. <code>Module:</code> is not a content nam
 That is worth knowing when you decide what to put in a module. Anything a module computes from the wiki's own content — a table assembled from other pages, a sorted list, a page's own order in a series — is computed once and frozen. Anything a module would need at read time, like the reader's clock or a query, has nowhere to run.
 
 <!--T:15-->
-== When the build and the site disagree ==
+== Which product renders it ==
+
+<!--T:26-->
+Scribunto has two engines and picks between them itself. The first is <code>luasandbox</code>, a PHP extension; the second runs an external <code>lua</code> program, and falls back to an interpreter Scribunto carries in its own source tree. Which one you get depends on the product, and only one of the three arrangements asks anything of you.
+
+<!--T:27-->
+{| class="wikitable"
+! Product !! Engine !! What you configure
+|-
+| [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Docker image]] || <code>luasandbox</code>, compiled into its PHP || nothing
+|-
+| [[<tvar name="2">Special:MyLanguage/Standalone binary</tvar>|Standalone binary]], x86-64 || the interpreter Scribunto ships || nothing
+|-
+| [[<tvar name="3">Special:MyLanguage/Standalone binary</tvar>|Standalone binary]], arm64 || an interpreter you install || <code>luaPath</code>, below
+|}
+
+<!--T:28-->
+The arm64 row is not a wikven limitation. Scribunto chooses among its bundled interpreters by operating system and integer size and never looks at the processor, so on arm64 it selects the x86-64 one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; [<tvar name="4">https://luajit.org/</tvar> LuaJIT] serves too, being Lua 5.1 — and name it:
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - Scribunto
+config:
+  ScribuntoEngineConf:
+    luastandalone:
+      luaPath: /usr/bin/lua5.1
+</syntaxhighlight>
+
+<translate>
+<!--T:29-->
+That setting is read on every product, so a source tree carrying it builds the same everywhere.
 
 <!--T:16-->
+== When the build and the site disagree ==
+
+<!--T:30-->
 Two mismatches used to pass quietly and produce a broken site. One of them ends the build; the other is only reported, and the bake goes on.
 
 <!--T:17-->
@@ -100,22 +134,24 @@ those modules are meant to run.
 
 <translate>
 <!--T:18-->
-'''Scribunto with no engine.''' A site that lists Scribunto is refused wherever no Lua engine can run it, which is the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]]. The PHP it is built from carries no <code>luasandbox</code>, and Scribunto's other engine runs an external <code>lua</code> program that a single executable has no way to ship. This one is refused rather than reported: the site asked for Lua in so many words, and this build cannot give it.
+'''Scribunto with no engine.''' A site that lists Scribunto is refused wherever nothing can run it — in practice, the binary on arm64 with no <code>luaPath</code> set. This one is refused rather than reported: the site asked for Lua in so many words, and this build cannot give it. The engine is not merely looked for but run, because the interpreter Scribunto would have chosen on arm64 exists and is marked executable and still cannot start; nothing short of running it tells the difference.
 </translate>
 
 <syntaxhighlight lang="console">
 Wikven: this site lists Scribunto and no Lua engine is available here. The Docker image
-has one; the standalone binary has none, so it cannot bake a site that uses Lua modules.
-Bake this one with the image, or drop Scribunto from extensions and the Module: pages
-with it.
+compiles luasandbox into its PHP. The standalone binary carries no engine of its own and
+falls back to the lua interpreter Scribunto ships, which is built for 64-bit x86 Linux and
+did not run here. Install a Lua 5.1 interpreter and name it under
+ScribuntoEngineConf.luastandalone.luaPath, bake this site with the Docker image, or drop
+Scribunto from extensions and the Module: pages with it.
 </syntaxhighlight>
 
 <translate>
 <!--T:19-->
-So a site with Lua modules is a site built with the image. If you need the binary, keep the logic in [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> wikitext templates] and [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:ParserFunctions</tvar> ParserFunctions], both of which every product renders.
+A refused build says so in its exit status as well as in words, so a script that bakes and then deploys stops rather than shipping nothing.
 
 <!--T:20-->
-This documentation site uses a module itself, which is what keeps the two answers above honest: it is built with the image, and it could not be built with the binary.
+This documentation site uses a module itself, and the page you are reading is baked with the image on every change, with the module's answer asserted to be in it. The binary is held to the same rule on a source tree of its own, x86-64 on every change and arm64 on every nightly, so each row of the table above is something a machine checks rather than something this page claims.
 </translate>
 
 {{prevnext|Extensions|JavaScript}}
