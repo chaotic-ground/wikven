@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="client-nojs skin-theme-clientpref-day mf-font-size-clientpref-regular skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Lua modules - Wikven</title>
+<script>(function(){var className="client-js skin-theme-clientpref-day mf-font-size-clientpref-regular skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Lua_modules","wgTitle":"Lua modules","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages using Tabber parser tag"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_modules","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"source","wgTranslatePageTranslationGroup":"page-Lua modules","wgTranslatePriorityLanguages":[],"wgMinervaPermissions":{"watchable":true,"watch":false},"wgMinervaFeatures":{"donateBanner":false,"donate":true,"mobileOptionsLink":false,"categories":false,"pageIssues":false,"talkAtTop":true,"historyInPageActions":true,"overflowSubmenu":true,"tabsOnSpecials":true,"personalMenu":true,"mainMenuExpanded":true,"nightMode":false},"wgMinervaDownloadNamespaces":[0]};
+RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","ext.tabberNeue.init.styles":"ready","skins.minerva.styles":"ready","skins.minerva.content.styles.images":"ready","mediawiki.hlist":"ready","skins.minerva.codex.styles":"ready","skins.minerva.icons":"ready","skins.minerva.amc.styles":"ready","skins.minerva.personalMenu.icons":"ready","skins.minerva.mainMenu.advanced.icons":"ready","skins.minerva.overflow.icons":"ready","ext.translate.edit.documentation.styles":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","mobile.init.styles":"ready"};RLPAGEMODULES=[];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+
+<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","ext.tabberNeue","site","mediawiki.page.ready","skins.minerva.scripts","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.sifter.retarget","ext.gadget.PersistTabber"]);</script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+
+<meta name="generator" content="MediaWiki 1.46.0">
+<meta name="robots" content="noindex,follow,max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="././ext.translate.tag.languages.css">
+<link rel="stylesheet" href="././ext.pygments.css">
+<link rel="stylesheet" href="././ext.tabberNeue.init.styles.css">
+<link rel="stylesheet" href="././skins.minerva.styles.css">
+<link rel="stylesheet" href="././skins.minerva.content.styles.images.css">
+<link rel="stylesheet" href="././mediawiki.hlist.css">
+<link rel="stylesheet" href="././skins.minerva.codex.styles.css">
+<link rel="stylesheet" href="././skins.minerva.icons.css">
+<link rel="stylesheet" href="././skins.minerva.amc.styles.css">
+<link rel="stylesheet" href="././skins.minerva.personalMenu.icons.css">
+<link rel="stylesheet" href="././skins.minerva.mainMenu.advanced.icons.css">
+<link rel="stylesheet" href="././skins.minerva.overflow.icons.css">
+<link rel="stylesheet" href="././ext.translate.edit.documentation.styles.css">
+<link rel="stylesheet" href="././ext.translate.css">
+<link rel="stylesheet" href="././ext.Wikven.styles.css">
+<link rel="stylesheet" href="././mobile.init.styles.css">
+<link rel="canonical" href="../Lua_modules.html">
+<link rel="stylesheet" href="././webfonts.css"><link rel="stylesheet" href="././site.styles.css"></head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Lua_modules rootpage-Lua_modules skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
+<div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
+	<div id="mw-mf-page-center">
+		<a class="mw-mf-page-center__mask" href="#"></a>
+		<header class="header-container header-chrome">
+			<div class="minerva-header">
+				<nav class="navigation-drawer toggle-list view-border-box">
+					<input type="checkbox" id="main-menu-input"
+						data-event-name="ui.mainmenu"
+						class="toggle-list__checkbox" role="button" aria-haspopup="true" aria-expanded="false" aria-labelledby="mw-mf-main-menu-button">
+					<label for="main-menu-input" id="mw-mf-main-menu-button" aria-hidden="true" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet toggle-list__toggle">
+    <span class="minerva-icon minerva-icon--menu"></span>
+<span></span>
+</label>
+
+					<div id="mw-mf-page-left" class="menu view-border-box">
+	<ul id="p-navigation" class="toggle-list__list">
+			<li class="toggle-list-item ">
+				<a class="toggle-list-item__anchor menu__item--home" href="./index.html" data-mw-interface="1">
+					<span class="minerva-icon minerva-icon--home"></span>
+
+					<span class="toggle-list-item__label">Home</span>
+				</a>
+			</li>
+			<li class="toggle-list-item ">
+				<a class="toggle-list-item__anchor menu__item--random" href="./Special:Random.html" data-mw-interface="1">
+					<span class="minerva-icon minerva-icon--die"></span>
+
+					<span class="toggle-list-item__label">Random</span>
+				</a>
+			</li>
+	</ul><ul id="p-wikven-navigation" class="toggle-list__list"><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Why_wikitext.html"><span class="toggle-list-item__label">Why wikitext</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Installation.html"><span class="toggle-list-item__label">Installation</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Getting_Started.html"><span class="toggle-list-item__label">Getting Started</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Pages.html"><span class="toggle-list-item__label">Pages</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Editing_sidebar.html"><span class="toggle-list-item__label">Editing sidebar</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Images.html"><span class="toggle-list-item__label">Images</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Skins.html"><span class="toggle-list-item__label">Skins</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Extensions.html"><span class="toggle-list-item__label">Extensions</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Lua_modules.html"><span class="toggle-list-item__label">Lua modules</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./JavaScript.html"><span class="toggle-list-item__label">JavaScript</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Searching.html"><span class="toggle-list-item__label">Searching</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Translating.html"><span class="toggle-list-item__label">Translating</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Deploying.html"><span class="toggle-list-item__label">Deploying</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Troubleshooting.html"><span class="toggle-list-item__label">Troubleshooting</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Configuration.html"><span class="toggle-list-item__label">Configuration</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Standalone_binary.html"><span class="toggle-list-item__label">Standalone binary</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Commands.html"><span class="toggle-list-item__label">Commands</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Development.html"><span class="toggle-list-item__label">Development</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Writing_an_extension.html"><span class="toggle-list-item__label">Writing an extension</span></a></li><li class="toggle-list-item wikven-nav-item"><a class="toggle-list-item__anchor" href="./Licenses.html"><span class="toggle-list-item__label">Licenses</span></a></li></ul><ul id="p-wikven-settings" class="toggle-list__list"><li class="toggle-list-item" id="t-wikven-settings"><a class="toggle-list-item__anchor" href="./Settings.html"><span class="minerva-icon minerva-icon--settings"></span><span class="toggle-list-item__label">Settings</span></a></li></ul>
+	<ul id="p-interaction" class="toggle-list__list">
+			<li class="toggle-list-item ">
+				<a class="toggle-list-item__anchor menu__item--recentchanges" href="./Special:RecentChanges.html" data-event-name="menu.recentchanges" data-mw-interface="1">
+					<span class="minerva-icon minerva-icon--recentChanges"></span>
+
+					<span class="toggle-list-item__label">Recent changes</span>
+				</a>
+			</li>
+			<li class="toggle-list-item ">
+				<a class="toggle-list-item__anchor menu__item--specialPages" href="./Special:SpecialPages.html" data-event-name="menu.specialPages" data-mw-interface="1">
+					<span class="minerva-icon minerva-icon--specialPages"></span>
+
+					<span class="toggle-list-item__label">Special pages</span>
+				</a>
+			</li>
+	</ul>
+	<ul id="pt-preferences" class="toggle-list__list">
+			<li class="toggle-list-item ">
+				<a class="toggle-list-item__anchor menu__item--preferences" href="./Special:Preferences.html" data-event-name="menu.preferences" data-mw-interface="1">
+					<span class="minerva-icon minerva-icon--settings"></span>
+
+					<span class="toggle-list-item__label">Preferences</span>
+				</a>
+			</li>
+	</ul>
+	<ul class="hlist">
+			<li class="toggle-list-item ">
+				<a class="toggle-list-item__anchor menu__item--about" href="./About.html" data-mw-interface="1">
+					
+					<span class="toggle-list-item__label">About Wikven</span>
+				</a>
+			</li>
+	</ul>
+</div>
+
+					<label class="main-menu-mask" for="main-menu-input"></label>
+				</nav>
+				<div class="branding-box">
+					<a href="./index.html">
+						<span>
+Wikven
+</span>
+					</a>
+				</div>
+					<form role="search" action="/index.php" method="get" class="minerva-search-form">
+				<div class="search-box search-box--typeahead">
+					<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail cdx-typeahead-search--auto-expand-width">
+						<div class="cdx-search-input">
+							<div class="cdx-search-input__input-wrapper">
+								<div class="cdx-text-input cdx-text-input--has-start-icon">
+									<input type="hidden" name="title" value="Special:Search"/>
+									<input class="search skin-minerva-search-trigger cdx-text-input__input" id="searchInput"
+									 type="search" name="search" placeholder="Search Wikven" aria-label="Search Wikven" autocapitalize="none" spellcheck="false" title="Search Wikven [f]" accesskey="f" autocomplete="off">
+									<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button id="searchIcon" class="cdx-button cdx-button--size-large cdx-button--icon-only cdx-button--weight-quiet skin-minerva-search-trigger">
+	    <span class="minerva-icon minerva-icon--search"></span>
+<span>Search</span>
+	</button>
+</form>
+		<nav class="minerva-user-navigation" aria-label="User navigation">
+					
+				</nav>
+			</div>
+		</header>
+		<main id="content" class="mw-body">
+			<div class="banner-container">
+			<div id="siteNotice"></div>
+			</div>
+			
+			<div class="pre-content heading-holder">
+				<div class="page-heading">
+					<h1 id="firstHeading" class="firstHeading mw-first-heading"><span lang="en" dir="ltr"><span class="mw-page-title-main">Lua modules</span></span></h1>
+					<div class="tagline"></div>
+				</div>
+					<ul id="p-associated-pages" class="minerva__tab-container">
+							<li class="minerva__tab selected mw-list-item">
+								<a class="minerva__tab-text" href="./Lua_modules.html" rel="" data-event-name="tabs.main">Page</a>
+							</li>
+					</ul>
+				<nav class="page-actions-menu">
+	<ul id="p-views" class="page-actions-menu__list minerva-icon-only-menu">
+		<li id="language-selector" class="page-actions-menu__list-item">
+				<a role="button" href="" data-mw="interface" data-event-name="menu.languages" title="Language" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet language-selector disabled">
+				    <span class="minerva-icon minerva-icon--language"></span>
+<span>Language</span>
+				</a>
+		</li>
+		<li id="page-actions-watch" class="page-actions-menu__list-item">
+				<a role="button" id="ca-watch" href="./Special:UserLogin.html" data-event-name="menu.watch" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet menu__item--page-actions-watch">
+				    <span class="minerva-icon minerva-icon--star"></span>
+<span>Watch</span>
+				</a>
+		</li>
+		<li id="page-actions-history" class="page-actions-menu__list-item">
+				<a role="button" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules.wikitext" data-event-name="menu.history" data-mw-interface="1" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet menu__item--page-actions-history">
+				    <span class="minerva-icon minerva-icon--history"></span>
+<span>View history</span>
+				</a>
+		</li>
+		<li id="page-actions-edit" class="page-actions-menu__list-item">
+				<a role="button" id="ca-edit" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Lua%20modules.wikitext" data-event-name="menu.edit" data-mw-interface="1" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet edit-page menu__item--page-actions-edit">
+				    <span class="minerva-icon minerva-icon--edit"></span>
+<span>Edit</span>
+				</a>
+		</li>
+			<li id="page-actions-overflow" class="page-actions-menu__list-item">
+				<div class="toggle-list ">
+					<input
+						type="checkbox"
+						id="page-actions-overflow-checkbox"
+						class="toggle-list__checkbox"
+						role="button"
+						data-event-name="ui.overflowmenu"
+						aria-labelledby="page-actions-overflow-toggle"
+						aria-expanded="false"
+						aria-haspopup="true">
+					<label id="page-actions-overflow-toggle" for="page-actions-overflow-checkbox" aria-hidden="true" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet toggle-list__toggle">
+    <span class="minerva-icon minerva-icon--ellipsis"></span>
+<span>More</span>
+</label>
+
+					<ul class="toggle-list__list new page-actions-overflow-list toggle-list__list--drop-down" id="p-tb">
+								<li class="toggle-list-item">
+					<a class="toggle-list-item__anchor edit-link menu__item--page-actions-overflow-editfull" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Lua%20modules.wikitext" data-event-name="menu.editfull" data-mw-interface="1">
+						<span class="minerva-icon minerva-icon--edit"></span>
+
+						<span class="toggle-list-item__label">Edit full page</span>
+					</a>
+				</li>
+				</ul>
+				</div>
+			</li>
+	</ul>
+</nav>
+				<div id="mw-content-subtitle"></div>
+			</div>
+			<div id="bodyContent" class="content">
+				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="en" dir="ltr"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Enabling_it"><span class="tocnumber">1</span> <span class="toctext">Enabling it</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Writing_a_module"><span class="tocnumber">2</span> <span class="toctext">Writing a module</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#What_reaches_the_published_site"><span class="tocnumber">3</span> <span class="toctext">What reaches the published site</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Which_product_renders_it"><span class="tocnumber">4</span> <span class="toctext">Which product renders it</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#When_the_build_and_the_site_disagree"><span class="tocnumber">5</span> <span class="toctext">When the build and the site disagree</span></a></li>
+</ul>
+</div>
+
+<div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
+<li><a href="./Lua_modules/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="Lua 모듈 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<p>A great many wikis keep their templates' logic in Lua, and Wikven runs a real MediaWiki at build time, so a module runs the way it always does. The page that invokes it is written out with the module's answer already in it; the module itself never becomes a page of the published site. Lua on a MediaWiki is <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Scribunto">Scribunto</a>, which MediaWiki bundles.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r87">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Both products render Lua, but only the Docker image needs nothing from you; the <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> wants an interpreter installed on arm64. The table below has the three cases. A build that cannot render Lua stops and says so, rather than publishing pages with <code>{{#invoke:}}</code> showing in them.</p></div>
+</div>
+<div class="mw-heading mw-heading2"><h2 id="Enabling_it">Enabling it</h2></div>
+<p>Name it in <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code></a> and that is all. Scribunto is bundled with MediaWiki, so it needs no <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a> entry, and on most builds the engine needs no configuration either.
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Scribunto</span>
+</pre></div>
+<div class="mw-heading mw-heading2"><h2 id="Writing_a_module">Writing a module</h2></div>
+<p>A module is content, so it lives in your source tree beside your pages. Its file carries no <code>.wikitext</code> marker, because a <code>Module:</code> page's content model is Lua and not wikitext:
+</p>
+<div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>src/
+  Module:Example
+  Home.wikitext
+</pre></div>
+<p>A file named <code>Module:Example.wikitext</code> is imported too, but the bare name is the convention, and it is the one Wikven maps a page back to when it needs the file that page came from.
+</p><p>A name with no extension leaves your editor with nothing to go on, so it will not colour the file or offer you Lua anything. Every editor can be told once, by the name rather than the extension:
+</p>
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-VS_Code-label" href="#tabber-VS_Code" aria-controls="tabber-VS_Code">VS Code</a><a class="tabber__tab" role="tab" id="tabber-Helix-label" href="#tabber-Helix" aria-controls="tabber-Helix">Helix</a><a class="tabber__tab" role="tab" id="tabber-Vim-label" href="#tabber-Vim" aria-controls="tabber-Vim">Vim</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-VS_Code" aria-labelledby="tabber-VS_Code-label"><p class="mw-empty-elt">
+</p><p>In <code>.vscode/settings.json</code>, or your user settings:
+</p>
+<div class="mw-highlight mw-highlight-lang-json mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;files.associations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Module:*&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Helix" aria-labelledby="tabber-Helix-label"><p class="mw-empty-elt">
+</p><p>In <code>.helix/languages.toml</code> beside the source, or <code>~/.config/helix/languages.toml</code>:
+</p>
+<div class="mw-highlight mw-highlight-lang-toml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">[[language]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
+<span class="n">file-types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">glob</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Module:*&quot;</span><span class="w"> </span><span class="p">}]</span>
+</pre></div>
+<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Vim" aria-labelledby="tabber-Vim-label"><p class="mw-empty-elt">
+</p><p>In <code>~/.vim/filetype.vim</code>, or anywhere your <code>vimrc</code> is sourced from:
+</p>
+<div class="mw-highlight mw-highlight-lang-vim mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>autocmd <span class="nb">BufRead</span><span class="p">,</span><span class="nb">BufNewFile</span> Module:* <span class="k">setfiletype</span> <span class="k">lua</span>
+</pre></div>
+<p class="mw-empty-elt"></p></article></section></div>
+<p>The other way round works as well: a file named <code>Module:Example.lua</code> is imported, because the marker is only needed where the title would otherwise be wikitext. But the name is kept as it is, so the page becomes <code>Module:Example.lua</code> and every <code>{{#invoke:}}</code> has to spell it that way.
+</p><p>The module is ordinary Lua. This one is the module this site really has, in full:
+</p>
+<div class="mw-highlight mw-highlight-lang-lua mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">p</span><span class="p">.</span><span class="nf">thisPage</span><span class="p">(</span><span class="w"> </span><span class="nv">frame</span><span class="w"> </span><span class="p">)</span>
+<span class="w">	</span><span class="kr">return</span><span class="w"> </span><span class="s1">&#39;&lt;code&gt;&#39;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">mw</span><span class="p">.</span><span class="py">title</span><span class="p">.</span><span class="nf">getCurrentTitle</span><span class="p">().</span><span class="nv">text</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="s1">&#39;&lt;/code&gt;&#39;</span>
+<span class="kr">end</span>
+
+<span class="kr">return</span><span class="w"> </span><span class="nv">p</span>
+</pre></div>
+<p>and the page invokes it the ordinary way:
+</p>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nf">#invoke</span><span class="p">:</span>Example<span class="p">|</span>thisPage<span class="p">}}</span>
+</pre></div>
+<p>Which, run on this page as you read it, answered:
+</p><p><code>Lua modules</code>
+</p><p>The invocation sits outside the <code>&lt;translate&gt;</code> tags, because a module's return value is not a translation unit. It reaches a reader of any language exactly as the module wrote it, so the words belong in the sentence around it and not in the module.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="What_reaches_the_published_site">What reaches the published site</h2></div>
+<p>The module's output, and nothing else. <code>Module:</code> is not a content namespace, so the module is never exported as a page and its Lua source is not published; what a reader downloads is the page with that answer already in it. Nothing runs in the reader's browser, because nothing is left to run: the module ran once, at build time.
+</p><p>That is worth knowing when you decide what to put in a module. Anything a module computes from the wiki's own content — a table assembled from other pages, a sorted list, a page's own order in a series — is computed once and frozen. Anything a module would need at read time, like the reader's clock or a query, has nowhere to run.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Which_product_renders_it">Which product renders it</h2></div>
+<p>Scribunto has two engines and picks between them itself. The first is <code>luasandbox</code>, a PHP extension; the second runs an external <code>lua</code> program, and falls back to an interpreter Scribunto carries in its own source tree. Which one you get depends on the product, and only one of the three arrangements asks anything of you.
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Product</th>
+<th>Engine</th>
+<th>What you configure
+</th></tr>
+<tr>
+<td><a href="./Installation.html" title="Special:MyLanguage/Installation">Docker image</a></td>
+<td><code>luasandbox</code>, compiled into its PHP</td>
+<td>nothing
+</td></tr>
+<tr>
+<td><a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a>, x86-64</td>
+<td>the interpreter Scribunto ships</td>
+<td>nothing
+</td></tr>
+<tr>
+<td><a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a>, arm64</td>
+<td>an interpreter you install</td>
+<td><code>luaPath</code>, below
+</td></tr></tbody></table>
+<p>The arm64 row is not a wikven limitation. Scribunto chooses among its bundled interpreters by operating system and integer size and never looks at the processor, so on arm64 it selects the x86-64 one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; <a rel="nofollow" class="external text" href="https://luajit.org/">LuaJIT</a> serves too, being Lua 5.1 — and name it:
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Scribunto</span>
+<span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ScribuntoEngineConf</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">luastandalone</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">luaPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/lua5.1</span>
+</pre></div>
+<p>That setting is read on every product, so a source tree carrying it builds the same everywhere.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="When_the_build_and_the_site_disagree">When the build and the site disagree</h2></div>
+<p>Two mismatches used to pass quietly and produce a broken site. One of them ends the build; the other is only reported, and the bake goes on.
+</p><p><b>Modules with no Scribunto.</b> A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is built, and told what those files come to: a <code>{{#invoke:}}</code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read. The build says what it sees rather than deciding for you, because a <code>Module:</code> file is a guess read off a name and may be on its way in, on its way out, or kept for something else.
+</p>
+<div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: the source has 1 Lua module file(s) (Module:Example) and Scribunto is not in</span>
+<span class="go">extensions, so a {{#invoke:}} is left in the page as its own source text, and a module</span>
+<span class="go">named with the .wikitext marker is exported as a page. Add Scribunto to extensions if</span>
+<span class="go">those modules are meant to run.</span>
+</pre></div>
+<p><b>Scribunto with no engine.</b> A site that lists Scribunto is refused wherever nothing can run it — in practice, the binary on arm64 with no <code>luaPath</code> set. This one is refused rather than reported: the site asked for Lua in so many words, and this build cannot give it. The engine is not merely looked for but run, because the interpreter Scribunto would have chosen on arm64 exists and is marked executable and still cannot start; nothing short of running it tells the difference.
+</p>
+<div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: this site lists Scribunto and no Lua engine is available here. The Docker image</span>
+<span class="go">compiles luasandbox into its PHP. The standalone binary carries no engine of its own and</span>
+<span class="go">falls back to the lua interpreter Scribunto ships, which is built for 64-bit x86 Linux and</span>
+<span class="go">did not run here. Install a Lua 5.1 interpreter and name it under</span>
+<span class="go">ScribuntoEngineConf.luastandalone.luaPath, bake this site with the Docker image, or drop</span>
+<span class="go">Scribunto from extensions and the Module: pages with it.</span>
+</pre></div>
+<p>A refused build says so in its exit status as well as in words, so a script that bakes and then deploys stops rather than shipping nothing.
+</p><p>This documentation site uses a module itself, and the page you are reading is baked with the image on every change, with the module's answer asserted to be in it. The binary is held to the same rule on a source tree of its own, x86-64 on every change and arm64 on every nightly, so each row of the table above is something a machine checks rather than something this page claims.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Extensions.html" title="Special:MyLanguage/Extensions">Extensions</a></div><div class="wikven-prevnext-next"><a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a>&#160;&#8594;</div></div>
+
+</div>
+<div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Lua_modules.html">Lua_modules.html</a>"</div></div>
+				
+			</div>
+			<div class="post-content" id="page-secondary-actions">
+			</div>
+		</main>
+		<footer class="mw-footer minerva-footer" role="contentinfo">
+		  <a class="last-modified-bar" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules.wikitext">
+  	<div class="post-content last-modified-bar__content">
+  		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
+ 
+  		<span class="last-modified-bar__text modified-enhancement"
+  				data-user-name="Lens0021"
+  				data-user-gender="unknown"
+  				data-timestamp="1787241962">
+  				<span>Last edited on 20 August 2026, at 16:06</span>
+  		</span>
+  		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
+ 
+  	</div>
+  </a>
+	<div class="post-content footer-content">
+			
+			<div id="p-lang">
+	    <h4>Languages</h4>
+	    <section>
+	        <ul id="p-variants" class="minerva-languages"></ul>
+	        <p>This page is not available in other languages.</p>
+	    </section>
+	</div>
+	<div class="minerva-footer-logo">
+				
+Wikven
+
+				<ul id="" class="">
+</ul>
+			</div>
+			<ul id="footer-info" class="footer-info hlist hlist-separated">
+	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+</ul>
+
+			<ul id="footer-places" class="footer-places hlist hlist-separated">
+	<li id="footer-places-about"><a href="./About.html">About Wikven</a></li>
+	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+</ul>
+
+			</div>
+		</footer>
+			</div>
+</div>
+<div class="mw-portlet mw-portlet-dock-bottom emptyPortlet" id="p-dock-bottom">
+        <ul>
+                
+        </ul>
+</div>
+<div class="mw-notification-area" data-mw-interface></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":0});});</script>
+</body>
+</html>
