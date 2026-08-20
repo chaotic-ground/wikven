@@ -51,7 +51,7 @@ docker run --rm \
 </syntaxhighlight>
 <translate>
 <!--T:8-->
-The untagged image tracks the latest build on the main branch. No version has been released yet, so there is no <code>:1.2.3</code> tag to pin instead; to hold a build still, pin its digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
+The untagged image is the most recent nightly, built from the main branch on any day it gained a feature or a fix; once a version is released, that is what the untagged image will be instead. None has been released yet, so there is no <code>:1.2.3</code> tag to pin; to hold a build still, pin a dated <code>:nightly-YYYY-MM-DD</code> tag or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
 </translate>
 </tabber>
 
