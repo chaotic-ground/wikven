@@ -44,6 +44,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+      # Exchanged for a quay.io robot token. A called workflow can only lower what its caller grants,
+      # so leaving this off here fails the release with a permissions error rather than skipping quay.
+      id-token: write
     uses: ./.github/workflows/docker-image.yml
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
