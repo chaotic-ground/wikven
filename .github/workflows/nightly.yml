@@ -1,8 +1,10 @@
 ---
-name: Nightly binary
+name: Nightly
 
-# Build the standalone binary from the tip of main every day and publish it as a
-# dated pre-release: releases/download/nightly-<date>/wikven-linux-<arch>.
+# Build the tip of main every day and publish it under that day's date: the standalone binaries as
+# a dated pre-release (releases/download/nightly-<date>/wikven-linux-<arch>), and the container
+# image as nightly-<date>. This is the way to track main -- :latest is the newest released version,
+# and a plain push to main publishes nothing.
 #
 # GitHub's immutable releases lock a release's assets the moment it is published,
 # so a single rolling tag can't be refreshed in place. Instead each run creates
@@ -79,8 +81,21 @@ jobs:
     with:
       tag: ${{ needs.prepare.outputs.tag }}
 
+  # The image for this nightly, under the same dated tag as the binaries. It takes no other tag:
+  # :latest belongs to the newest release, and a nightly is not one.
+  docker:
+    needs: prepare
+    permissions:
+      contents: read
+      packages: write
+      # Exchanged for a quay.io robot token. A called workflow can only lower what its caller grants.
+      id-token: write
+    uses: ./.github/workflows/docker-image.yml
+    with:
+      tag: ${{ needs.prepare.outputs.tag }}
+
   publish:
-    needs: [prepare, binary]
+    needs: [prepare, binary, docker]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

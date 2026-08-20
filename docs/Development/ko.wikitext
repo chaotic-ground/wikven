@@ -144,14 +144,14 @@ e2e 실행은 GitHub Pages가 그러하듯 <code>dist/</code>를 <code>/wikven/<
 <!--T:22 @9c7c0fee-->
 == 지속적 통합 ==
 
-<!--T:23 @f45ed289-->
+<!--T:23 @9c452997-->
 * <code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행하고, 이 사이트가 {{SITENAME}}의 모든 설정 변수와 빌드의 모든 단계를 문서화하고 있는지 검사합니다.
 * <code>test.yml</code>과 <code>quibble.yml</code>은 PHPUnit 스위트와 MediaWiki 자체의 구조 테스트를 실행합니다.
 * <code>smoke.yml</code>은 이 사이트를 굽고 그 출력을 브라우저에서, 그리고 바이트 단위로 검증합니다.
 * <code>translations.yml</code>은 [[$2|check-translations 액션]]을 통해 <code>docs/</code>의 오래된 번역을 보고합니다.
-* <code>docker-image.yml</code>은 이미지를 빌드하여 <code>main</code>에서 한 번의 빌드로 <code>ghcr.io/chaotic-ground/wikven</code>과 <code>quay.io/chaotic-ground/wikven</code> 양쪽에 게시합니다. 게시한 뒤 모든 태그를 되읽으므로, 한쪽 레지스트리에만 도달한 게시는 통과하지 않고 실패합니다. quay.io 인증은 이 저장소의 OIDC 신원에 연합된 로봇 계정으로 이루어지므로, 저장소 시크릿에 레지스트리 토큰이 없습니다.
+* <code>docker-image.yml</code>은 이미지를 빌드합니다. 게시는 릴리스나 나이틀리가 태그를 주며 호출할 때만 하고, <code>main</code>에 푸시되면 빌드만 하고 멈춥니다. 이것이 풀 리퀘스트 job들이 읽는 레이어 캐시를 데워 두는 일입니다. 게시할 때는 한 번의 빌드로 <code>ghcr.io/chaotic-ground/wikven</code>과 <code>quay.io/chaotic-ground/wikven</code> 양쪽에 올리고, 그 뒤 모든 태그를 되읽으므로 한쪽 레지스트리에만 도달한 게시는 통과하지 않고 실패합니다. quay.io 인증은 이 저장소의 OIDC 신원에 연합된 로봇 계정으로 이루어지므로, 저장소 시크릿에 레지스트리 토큰이 없습니다.
 * <code>deploy-docs.yml</code>은 이미지로 <code>docs/</code> 디렉터리를 빌드하고 그 결과를 GitHub Pages에 배포하므로, 이 사이트 자체가 하나의 {{SITENAME}} 빌드입니다. <code>pr-preview.yml</code>은 풀 리퀘스트마다 같은 일을 하되, 풀 리퀘스트가 닫히면 사라지는 하위 디렉터리에 배포합니다.
-* <code>binary.yml</code>은 단독 실행 [[$1|바이너리]]를 빌드합니다. 해당 파일을 건드리는 풀 리퀘스트에서, 그리고 릴리스 때는 각 플랫폼용으로 실행됩니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다.
+* <code>binary.yml</code>은 단독 실행 [[$1|바이너리]]를 빌드합니다. 해당 파일을 건드리는 풀 리퀘스트에서, 그리고 릴리스 때는 각 플랫폼용으로 실행됩니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를, 같은 태그의 이미지와 함께 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다.
 * <code>updatecli.yml</code>은 이미지와 문서 사이트가 지닌 버전 핀을 옮기고, <code>tofu.yml</code>은 <code>.tf/</code>에 있는 저장소 자체의 설정을 적용합니다.
 <!--T:24 @b9edc4cf-->
 버전은 [https://www.conventionalcommits.org/ Conventional Commits]를 따르며, release-please가 이를 사용해 변경 로그를 생성하고 버전을 올립니다.

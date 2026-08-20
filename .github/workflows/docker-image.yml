@@ -2,8 +2,12 @@
 name: Docker image
 
 # Runs on every pull request, with no path filter: this is a required check, and a required check
-# that does not report leaves the pull request unmergeable for good. Pushes to main keep skipping
-# docs-only changes, which cannot affect the image and would only republish an identical one.
+# that does not report leaves the pull request unmergeable for good.
+#
+# Publishing happens only through workflow_call, from release-please.yml and nightly.yml. A push to
+# main builds the image and stops: what it is for is exporting the layer cache that smoke.yml,
+# translations.yml and pr-preview.yml read, so a pull request does not rebuild from nothing. It
+# keeps skipping docs-only changes, which cannot affect the image.
 on:
   push:
     branches: [main]
@@ -13,7 +17,9 @@ on:
   workflow_call:
     inputs:
       tag:
-        description: Release tag to publish a versioned image for (e.g. v1.0.0).
+        description: >-
+          The tag to publish this build under, and the only thing that makes this workflow publish
+          at all: a release tag (v1.0.0), or a nightly tag (nightly-YYYY-MM-DD).
         type: string
         required: true
 
@@ -34,10 +40,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # Publishing is this repository on main: a fork and a pull request build the image and stop
-      # there. Every step below that logs in, pushes, or reads a tag back keys off this one value,
-      # so they cannot drift apart.
-      PUBLISH: ${{ github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main' }}
+      # Publishing is this repository, on main, with a tag to publish under: a fork, a pull request
+      # and an untagged push to main all build the image and stop there. Every step below that logs
+      # in, pushes, or reads a tag back keys off this one value, so they cannot drift apart.
+      PUBLISH: >-
+        ${{ github.repository_owner == 'chaotic-ground' && github.ref == 'refs/heads/main'
+        && inputs.tag != '' }}
+      # release-please tags versions v1.2.3, and nightly.yml tags dates nightly-2026-01-01, so the
+      # prefix is what tells the two apart before metadata-action tries to read either as a version.
+      RELEASE: ${{ startsWith(inputs.tag, 'v') }}
       # Not a secret, only a name: the robot account quay.io federates to this repository's OIDC
       # identity. What it authenticates with is minted per run by the exchange step.
       QUAY_ROBOT: chaotic-ground+wikven_ci
@@ -82,10 +93,12 @@ jobs:
           username: ${{ env.QUAY_ROBOT }}
           password: ${{ steps.quay-auth.outputs.token }}
 
-      # On a release (tag input set) publish the immutable version tags plus latest, else just latest.
-      # metadata-action computes proper semver tags (a prerelease is not tagged :latest or a bare
-      # major/minor) and emits the org.opencontainers.image.* labels, without which GHCR does not link
-      # the published package back to this repository.
+      # A release tag becomes the three pinnable version tags, and :latest when it is a stable one --
+      # :latest is the newest released version, never the tip of main, so a prerelease does not take
+      # it and neither does a nightly. A nightly tag is published verbatim and alone: nightly-2026-01-01
+      # is a date, not a version, and metadata-action's semver patterns cannot read one.
+      # metadata-action also emits the org.opencontainers.image.* labels, without which GHCR does not
+      # link the published package back to this repository.
       - name: Compute image tags and labels
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302  # v6.2.0
@@ -99,10 +112,14 @@ jobs:
           # reach this workflow through workflow_call with the tag as an input instead.
           flavor: latest=false
           tags: |
-            type=semver,pattern={{version}},value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
-            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
-            type=semver,pattern={{major}},value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
-            type=raw,value=latest,enable=${{ inputs.tag == '' || !contains(inputs.tag, '-') }}
+            type=semver,pattern={{version}},value=${{ inputs.tag }},enable=${{ env.RELEASE }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.tag }},enable=${{ env.RELEASE }}
+            type=semver,pattern={{major}},value=${{ inputs.tag }},enable=${{ env.RELEASE }}
+            type=raw,value=${{ inputs.tag }},enable=${{ startsWith(inputs.tag, 'nightly-') }}
+            type=raw,value=latest,enable=${{ env.RELEASE == 'true' && !contains(inputs.tag, '-') }}
+            # A build that publishes nothing still names its image, so every run is the same shape.
+            # Nothing is pushed under this name and nothing outside the job reads it.
+            type=raw,value=main,enable=${{ env.PUBLISH != 'true' }}
 
       - name: Build and push the image
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a  # v7.3.0
