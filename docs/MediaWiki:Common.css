@@ -1,19 +1,58 @@
 /* Wikven uses a teal brand colour, so replace the skin's default Wikimedia blue
  * (the Codex "progressive" colour) with teal. Links and interactive accents read
- * these tokens, so overriding them recolours them site-wide. */
+ * these tokens, so overriding them recolours them site-wide.
+ *
+ * Stated once per theme, because a bare :root loses. Every skin here redefines the
+ * whole Codex set for night mode under html.skin-theme-clientpref-night (0,1,1) or
+ * :root.skin-theme-clientpref-night (0,2,0), and a bare :root is (0,1,0), so it is
+ * out-specified whatever the link order. Before this, night mode took the accent
+ * back to Codex blue while the links stayed teal -- 3.95:1 on the dark ground, and
+ * 2.55:1 for the visited colour, which the rule below had pinned rather than read.
+ *
+ * The selectors are core's own, from the darkmode-override() mixin in
+ * mediawiki.mixins.less: the class the appearance menu writes, and the OS query for
+ * a reader who left it on Automatic. Theme here is a class on <html>, not
+ * prefers-color-scheme -- a reader who picks Dark on a light OS gets the class and
+ * no media match, so handling only the query would miss exactly the people who asked.
+ */
 :root {
-	--color-progressive: #157f93;
-	--color-progressive--hover: #0f6173;
-	--color-progressive--active: #0c4d5b;
-	--color-progressive--focus: #157f93;
-	--color-link: #157f93;
+	/* #157f93 darkened a little: it was 4.44:1 on the #f8f9fa the skins use for a
+	 * subtle background, just under AA. Same hue, so it reads as the same brand. */
+	--color-progressive: #10707f;
+	--color-progressive--hover: #0d5c68;
+	--color-progressive--active: #0a4954;
+	--color-progressive--focus: #10707f;
+	/* A reference rather than a literal, so the accent and the links cannot drift
+	 * apart again the way they did in night mode. */
+	--color-link: var(--color-progressive);
 	--color-visited: #0e5f70;
 }
 
+@media screen {
+	html.skin-theme-clientpref-night {
+		--color-progressive: #4ec3da;
+		--color-progressive--hover: #79d0e0;
+		--color-progressive--active: #8ed8e6;
+		--color-progressive--focus: #4ec3da;
+		--color-visited: #a799cd;
+	}
+}
+
+@media screen and (prefers-color-scheme: dark) {
+	html.skin-theme-clientpref-os {
+		--color-progressive: #4ec3da;
+		--color-progressive--hover: #79d0e0;
+		--color-progressive--active: #8ed8e6;
+		--color-progressive--focus: #4ec3da;
+		--color-visited: #a799cd;
+	}
+}
+
 /* Visited links are coloured by a hard-coded a:visited rule in the skin, not the
- * token above, so recolour them to a darker teal here as well. */
+ * token above, so they need recolouring here as well -- but from the token, not
+ * from a literal, or they keep the light theme's teal on a dark ground. */
 a:visited {
-	color: #0e5f70;
+	color: var(--color-visited);
 }
 
 /* The external-link arrow is a fixed-colour background image in the skin; swap it
@@ -23,6 +62,26 @@ a:visited {
  * makes teal, so an image with no size or position of its own would tile over it. */
 body:not(.skin-citizen) .mw-parser-output a.external {
 	background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2020%2020'%3E%3Cpath%20fill='%23157f93'%20d='M17%2017H3V3h5V1H3a2%202%200%2000-2%202v14a2%202%200%20002%202h14a2%202%200%20002-2v-5h-2zM11%201v2h4.6L7.3%2011.3l1.4%201.4L17%204.4V9h2V1z'/%3E%3C/svg%3E");
+}
+
+/* The arrow is an image, so it cannot read the token: night mode needs its own copy,
+ * or the light theme's dark teal sits on the dark ground beside a light-teal link. */
+@media screen {
+	html.skin-theme-clientpref-night
+		body:not(.skin-citizen)
+		.mw-parser-output
+		a.external {
+		background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2020%2020'%3E%3Cpath%20fill='%234ec3da'%20d='M17%2017H3V3h5V1H3a2%202%200%2000-2%202v14a2%202%200%20002%202h14a2%202%200%20002-2v-5h-2zM11%201v2h4.6L7.3%2011.3l1.4%201.4L17%204.4V9h2V1z'/%3E%3C/svg%3E");
+	}
+}
+
+@media screen and (prefers-color-scheme: dark) {
+	html.skin-theme-clientpref-os
+		body:not(.skin-citizen)
+		.mw-parser-output
+		a.external {
+		background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2020%2020'%3E%3Cpath%20fill='%234ec3da'%20d='M17%2017H3V3h5V1H3a2%202%200%2000-2%202v14a2%202%200%20002%202h14a2%202%200%20002-2v-5h-2zM11%201v2h4.6L7.3%2011.3l1.4%201.4L17%204.4V9h2V1z'/%3E%3C/svg%3E");
+	}
 }
 
 /* A cleaner syntax-highlight palette in place of the default Pygments theme,
