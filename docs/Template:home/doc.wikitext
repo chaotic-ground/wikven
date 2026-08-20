@@ -1,0 +1,30 @@
+The landing page's layout: <code><nowiki>{{home}}</nowiki></code> loads the stylesheet, and
+<code><nowiki>{{home/route|Installation}}</nowiki></code> is one of the cards that start a reader off.
+
+== Why a template at all ==
+
+<code><nowiki>{{home}}</nowiki></code> takes no arguments and renders nothing. It exists so the
+stylesheet's name is written down once, in the same shape as
+<code><nowiki>{{prevnext}}</nowiki></code>, rather than in a bare
+<code><nowiki><templatestyles /></nowiki></code> on the page itself.
+
+<code><nowiki>{{home/route}}</nowiki></code> takes a page name and nothing else. The label is
+the target's own translated title, read by <code>Template:prevnext/label</code> — the same
+lookup, and for the same reason, that the bottom-of-page navigation uses: a label written into
+the call would be a second copy of a title that is already translated once, and one nothing
+checks.
+
+== Why the layout is not in the page ==
+
+Every band of the page is a <code>&lt;div&gt;</code> outside the translate tags, so no layout
+markup reaches a translator. That is the same rule
+<code>Template:prevnext/doc</code> sets out, and it is why this redesign changed no translation
+unit and needed no restamp.
+
+== Colours ==
+
+The stylesheet reads the skin's Codex custom properties and defines none. TemplateStyles drops a
+custom-property declaration, so a token cannot be made here; it can only be read. Tokens are
+defined in <code>MediaWiki:Common.css</code>, which is not sanitised. All three skins redefine
+the Codex set for night mode, so reading the tokens is what makes the page follow the reader's
+theme without knowing which one it is.

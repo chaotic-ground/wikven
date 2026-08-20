@@ -1,0 +1,3 @@
+<templatestyles src="home/styles.css" /><noinclude>
+{{home/doc}}
+</noinclude>

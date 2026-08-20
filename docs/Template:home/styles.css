@@ -1,0 +1,125 @@
+/* The landing page.
+ *
+ * Colours are read from the skin's Codex custom properties and never written here: all
+ * three skins redefine that set for night mode, so the page follows the reader's theme
+ * without knowing anything about it. The literal in each var() is the light value, a
+ * fallback for a skin that defines none. Defining one is not an option -- TemplateStyles
+ * drops a custom-property declaration, and drops it silently.
+ *
+ * Widths come from the container, not from media queries. The content column is a
+ * different width in each of the three skins, and in Vector it is a reader preference
+ * besides, so the viewport says nothing useful about the space a band actually has.
+ * repeat( auto-fit, minmax() ) measures the column instead of guessing at it.
+ */
+
+.wikven-home-lede {
+	margin-block: 0 1.5rem;
+	max-inline-size: 38rem;
+	font-size: 1.125rem;
+	line-height: 1.6;
+	color: var(--color-emphasized, #101418);
+}
+
+/* The paragraph a reader is actually weighing the tool against, so it gets the page's
+ * one accent rather than a heading it does not need. */
+.wikven-home-fit {
+	margin-block: 0 2rem;
+	max-inline-size: 38rem;
+	padding-inline-start: 1rem;
+	border-inline-start: 3px solid var(--color-progressive, #10707f);
+}
+
+.wikven-home-lede p,
+.wikven-home-fit p,
+.wikven-home-note p,
+.wikven-home-coda p {
+	margin: 0;
+}
+
+.wikven-home-routes {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+	gap: 0.75rem;
+	margin-block: 0 0.75rem;
+}
+
+/* The anchor is the card, so the whole box is the target and the skin's own focus ring
+ * lands on the box rather than on a word inside it. Styling a wrapper from its link
+ * would want :has(), which TemplateStyles rejects, and there is no script to hang a
+ * click on -- the export has no load.php to fetch one from. */
+.wikven-home-route a {
+	display: block;
+	padding: 0.75rem 0.875rem;
+	border: 1px solid var(--border-color-subtle, #c8ccd1);
+	border-radius: 2px;
+	background-color: var(--background-color-neutral-subtle, #f8f9fa);
+	font-size: 1.0625rem;
+	font-weight: bold;
+	line-height: 1.3;
+}
+
+.wikven-home-route a:hover,
+.wikven-home-route a:focus {
+	border: 1px solid var(--color-progressive, #10707f);
+	background-color: var(--background-color-interactive-subtle--hover, #eaecf0);
+}
+
+.wikven-home-note {
+	margin-block: 0 2.5rem;
+	max-inline-size: 38rem;
+	font-size: 0.875rem;
+	color: var(--color-subtle, #54595d);
+}
+
+/* The two lists are one comparison, so they sit side by side where both fit at a
+ * readable measure and stack where they do not. */
+.wikven-home-features {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+	gap: 1.5rem 2.5rem;
+	margin-block: 0 1.5rem;
+}
+
+.wikven-home-feature {
+	padding-block-start: 0.75rem;
+	border-block-start: 3px solid var(--border-color-muted, #dadde3);
+}
+
+.wikven-home-feature-supported {
+	border-block-start: 3px solid var(--color-progressive, #10707f);
+}
+
+/* MediaWiki 1.43+ wraps a heading in <div class="mw-heading">, and the skins hang the
+ * rule under a section heading off one or the other, so both are cleared. A selector
+ * for the bare h2 alone would match nothing. */
+.wikven-home-feature .mw-heading,
+.wikven-home-feature h2 {
+	margin-block: 0 0.5rem;
+	padding-block: 0;
+	border: 0;
+	font-size: 1.0625rem;
+	font-weight: bold;
+	line-height: 1.4;
+}
+
+.wikven-home-feature ul {
+	margin-block: 0.5rem 0;
+	line-height: 1.5;
+}
+
+.wikven-home-feature li {
+	margin-block-end: 0.4rem;
+}
+
+.wikven-home-feature-unsupported li {
+	color: var(--color-subtle, #54595d);
+}
+
+.wikven-home-coda {
+	margin-block: 0;
+	padding-block-start: 1rem;
+	max-inline-size: 38rem;
+	border-block-start: 1px solid var(--border-color-muted, #dadde3);
+	font-size: 0.9375rem;
+	color: var(--color-subtle, #54595d);
+}

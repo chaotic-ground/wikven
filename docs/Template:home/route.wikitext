@@ -1,0 +1,3 @@
+<onlyinclude><div class="wikven-home-route">[[Special:MyLanguage/{{{1}}}|{{prevnext/label|{{{1}}}}}]]</div></onlyinclude><noinclude>
+{{home/doc}}
+</noinclude>

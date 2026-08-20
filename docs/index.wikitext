@@ -1,11 +1,18 @@
 <languages />
+{{home}}
+
+<div class="wikven-home-lede">
 <translate>
 <!--T:1-->
 {{SITENAME}} is a static site generator built on [<tvar name="1">https://www.mediawiki.org/</tvar> MediaWiki], the software
 behind [<tvar name="2">https://www.wikipedia.org/</tvar> Wikipedia]. It turns a directory of wikitext
 into a plain HTML site you can host anywhere, with no server or database to run.
 This documentation site is itself built with {{SITENAME}}.
+</translate>
+</div>
 
+<div class="wikven-home-fit">
+<translate>
 <!--T:2-->
 Reach for {{SITENAME}} when your content is already MediaWiki wikitext, or when you
 want MediaWiki's templates, parser functions, gadgets and extensions but a static
@@ -13,13 +20,28 @@ result with nothing to run: a project's documentation site, an archived wiki
 you can browse as plain HTML, or a personal wiki. Unlike a general static-site generator
 such as [<tvar name="2">https://gohugo.io/</tvar> Hugo] or [<tvar name="3">https://www.mkdocs.org/</tvar> MkDocs], it renders real wikitext through MediaWiki itself, so it
 assumes you are comfortable with wikitext (see [[<tvar name="1">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for the trade-offs).
+</translate>
+</div>
 
+<div class="wikven-home-routes"><!--
+-->{{home/route|Why wikitext}}<!--
+-->{{home/route|Installation}}<!--
+-->{{home/route|Getting Started}}<!--
+--></div>
+
+<div class="wikven-home-note">
+<translate>
 <!--T:3-->
 See [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]] for the three ways to install {{SITENAME}}, the standalone
 [[<tvar name="2">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="3">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or
 [[<tvar name="4">Special:MyLanguage/Installation#Build from source</tvar>|from source]], then [[<tvar name="5">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build
 your first site.
+</translate>
+</div>
 
+<div class="wikven-home-features"><!--
+--><div class="wikven-home-feature wikven-home-feature-supported">
+<translate>
 <!--T:4-->
 == Supported features ==
 
@@ -34,7 +56,10 @@ With {{SITENAME}}, you can use the following features of MediaWiki.
 * [[<tvar name="5">Special:MyLanguage/Extensions</tvar>|Extensions]], bundled or fetched at build time, and [[<tvar name="9">Special:MyLanguage/Skins</tvar>|skins]] — several at once, with a switcher for the reader
 * [[<tvar name="6">Special:MyLanguage/Searching</tvar>|Search]] (client-side, built in via SifterSearch)
 * [[<tvar name="7">Special:MyLanguage/Translating</tvar>|Translation]] into multiple languages (via the Translate extension)
-
+</translate>
+</div><!--
+--><div class="wikven-home-feature wikven-home-feature-unsupported">
+<translate>
 <!--T:7-->
 == Unsupported features ==
 
@@ -49,9 +74,15 @@ These need a live wiki, so they are not part of the static export:
 * Accounts, and everything keyed to one: preferences, watchlists, notifications, user pages
 * Page histories and diffs, which live in your repository instead — the "View history" link leads there
 * Discussion pages as a workflow, and recent-changes feeds
+</translate>
+</div><!--
+--></div>
 
+<div class="wikven-home-coda">
+<translate>
 <!--T:10-->
 What replaces some of them is written down: the reader's own display choices are on a [[<tvar name="1">Special:MyLanguage/Skins#Settings</tvar>|Settings page]] the build writes, and searching is [[<tvar name="2">Special:MyLanguage/Searching</tvar>|done in the browser]].
 </translate>
+</div>
 
 {{DISPLAYTITLE:Wikven}}
