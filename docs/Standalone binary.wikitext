@@ -114,7 +114,7 @@ The output is the same as the Docker image's, give or take the one host tool nam
 == What it asks of the host ==
 
 <!--T:24-->
-'''[[<tvar name="1">Special:MyLanguage/Lua modules</tvar>|Lua modules]], on arm64.''' The PHP this binary is built from carries no <code>luasandbox</code>, so Scribunto falls back to running an external <code>lua</code> program — and to the interpreter it carries in its own source tree when no other is named. That interpreter is built for 64-bit x86, and Scribunto picks it by operating system and integer size without looking at the processor, so on arm64 it selects a program that cannot start. Install Lua 5.1 and name it under <code>ScribuntoEngineConf.luastandalone.luaPath</code>; on x86-64 nothing is needed.
+'''[[<tvar name="1">Special:MyLanguage/Lua modules</tvar>|Lua modules]], on arm64.''' The PHP this binary is built from carries no <code>luasandbox</code>, so Scribunto falls back to running an external <code>lua</code> program — and to the interpreter it carries in its own source tree when no other is named. That interpreter is built for 64-bit x86, and Scribunto has no arm64 one to offer instead — the five it bundles are all Intel. It picks among them by operating system and integer size, so on arm64 it selects a program that cannot start. Install Lua 5.1 and name it under <code>ScribuntoEngineConf.luastandalone.luaPath</code>; on x86-64 nothing is needed.
 
 <!--T:25-->
 {{note|A site that lists Scribunto where nothing can run it is refused, with a message saying what to install, rather than baked into pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them. The refusal is in the exit status too, so a script that bakes and then deploys stops instead of shipping nothing.}}

@@ -159,12 +159,13 @@ class Build extends Maintenance {
 	/**
 	 * Whether the lua binary Scribunto carries can run here.
 	 *
-	 * Existing is not enough, which is why this runs it. LuaStandaloneInterpreter picks among the
-	 * bundled binaries by PHP_OS and PHP_INT_SIZE and never looks at the architecture, so on arm it
-	 * selects the x86-64 one, passes its own is_executable() check on it, and only finds out when
-	 * the process will not start. The path below mirrors that choice for 64-bit Linux, which is the
-	 * only platform either wikven product runs on; executing it is what makes the mirror safe, since
-	 * a wrong guess answers no rather than promising Lua that never arrives.
+	 * Existing is not enough, which is why this runs it. None of the five binaries Scribunto bundles is
+	 * arm64 -- they are Intel, Linux and Windows in 32- and 64-bit and macOS in 64 -- and
+	 * LuaStandaloneInterpreter picks among them by PHP_OS and PHP_INT_SIZE, so on arm it selects the
+	 * x86-64 one, passes its own is_executable() check on it, and only finds out when the process will
+	 * not start. The path below mirrors that choice for 64-bit Linux, which is the only platform either
+	 * wikven product runs on; executing it is what makes the mirror safe, since a wrong guess answers
+	 * no rather than promising Lua that never arrives.
 	 */
 	private static function bundledLuaRuns(): bool {
 		$lua =
