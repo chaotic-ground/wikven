@@ -65,6 +65,17 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 		$this->assertArrayHasKey('view', $generated['views']);
 	}
 
+	/**
+	 * The discussion tab goes, wherever a skin reads it from: a static export carries no
+	 * discussion, and core has no setting that turns talk namespaces off (T35298). The subject
+	 * tab beside it stays, as it does in every skin the export renders.
+	 */
+	public function testNavigationDropsTheDiscussionTab() {
+		$links = $this->navigationFor('Real');
+		$this->assertSame(['main'], array_keys($links['associated-pages']));
+		$this->assertSame(['user'], array_keys($links['namespaces']), 'the legacy copy too');
+	}
+
 	private function navigationFor(string $titleText): array {
 		$sktemplate = $this->createMock(SkinTemplate::class);
 		$sktemplate->method('getTitle')->willReturn(Title::newFromText($titleText));
@@ -80,7 +91,11 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 				'viewsource' => ['x'],
 				'history' => ['x']
 			],
-			'actions' => ['watch' => ['x'], 'unwatch' => ['x']]
+			'actions' => ['watch' => ['x'], 'unwatch' => ['x']],
+			// The tab menus, in both the shapes core fills: the modern one, and the legacy copy a
+			// skin still asking for `namespaces` is rendered from.
+			'associated-pages' => ['main' => ['keep'], 'talk' => ['x']],
+			'namespaces' => ['user' => ['keep'], 'user_talk' => ['x']]
 		];
 		( new Hider() )->onSkinTemplateNavigation__Universal($sktemplate, $links);
 		return $links;
