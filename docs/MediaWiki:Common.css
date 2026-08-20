@@ -167,6 +167,38 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	color: #15803d;
 }
 
+/* The landing page's filled button, defined here because TemplateStyles drops a custom-property
+ * declaration and so cannot make a token, only read one. It has to be a pair and it has to
+ * invert: night mode moves --color-progressive to a pale teal that white text sits on at
+ * 2.07:1, while the brand teal it replaces sits on the night ground at 3.2:1 -- so a button
+ * pinned to either one stops being the loudest thing on the page in half the sessions. Light
+ * teal with near-black text is 8.9:1 against both the text and the ground.
+ *
+ * Scoped to the landing page by its root-page class, which is the one the translations carry
+ * too: the body of index/ko is page-index_ko, and only rootpage-index catches both. The
+ * selectors are core's own darkmode-override() pair, the same as the tokens above. */
+.rootpage-index .mw-parser-output {
+	--wikven-cta-bg: #10707f;
+	--wikven-cta-bg--hover: #0d5c68;
+	--wikven-cta-fg: #fff;
+}
+
+@media screen {
+	html.skin-theme-clientpref-night .rootpage-index .mw-parser-output {
+		--wikven-cta-bg: #4ec3da;
+		--wikven-cta-bg--hover: #79d0e0;
+		--wikven-cta-fg: #101418;
+	}
+}
+
+@media screen and (prefers-color-scheme: dark) {
+	html.skin-theme-clientpref-os .rootpage-index .mw-parser-output {
+		--wikven-cta-bg: #4ec3da;
+		--wikven-cta-bg--hover: #79d0e0;
+		--wikven-cta-fg: #101418;
+	}
+}
+
 /* MobileFrontend's footer toggle between the mobile and desktop views. It is a supported MediaWiki
  * feature, so wikven leaves it alone; this site hides it because it offers every skin it builds
  * from the toolbox already, and a second, differently-worded way to change the rendering is one

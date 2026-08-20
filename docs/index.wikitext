@@ -51,13 +51,13 @@ Every <code>.wikitext</code> file under <code>src/</code> comes out as a page un
 <div class="wikven-home-card-title">
 <translate>
 <!--T:6-->
-Templates, not copy-paste
+[[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Templates, not copy-paste]]
 </translate>
 </div>
 <div class="wikven-home-card-body">
 <translate>
 <!--T:7-->
-[[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Templates]], parser functions and [[<tvar name="2">Special:MyLanguage/Lua modules</tvar>|Lua modules]], all resolved at build time.
+Templates, parser functions and Lua modules, all resolved at build time.
 </translate>
 </div>
 </div><!--
@@ -65,13 +65,13 @@ Templates, not copy-paste
 <div class="wikven-home-card-title">
 <translate>
 <!--T:8-->
-Extensions and skins
+[[<tvar name="1">Special:MyLanguage/Extensions</tvar>|Extensions and skins]]
 </translate>
 </div>
 <div class="wikven-home-card-body">
 <translate>
 <!--T:9-->
-[[<tvar name="1">Special:MyLanguage/Extensions</tvar>|Bundled]], or fetched from Git as the site builds. Ship several [[<tvar name="2">Special:MyLanguage/Skins</tvar>|skins]] and let the reader choose.
+Bundled, or fetched from Git as the site builds. Ship several skins and let the reader choose.
 </translate>
 </div>
 </div><!--
@@ -79,13 +79,13 @@ Extensions and skins
 <div class="wikven-home-card-title">
 <translate>
 <!--T:10-->
-Search with nothing to query
+[[<tvar name="1">Special:MyLanguage/Searching</tvar>|Search with nothing to query]]
 </translate>
 </div>
 <div class="wikven-home-card-body">
 <translate>
 <!--T:11-->
-The [[<tvar name="1">Special:MyLanguage/Searching</tvar>|index]] is built with the site and runs in the reader's browser.
+The index is built with the site and runs in the reader's browser.
 </translate>
 </div>
 </div><!--
@@ -93,13 +93,13 @@ The [[<tvar name="1">Special:MyLanguage/Searching</tvar>|index]] is built with t
 <div class="wikven-home-card-title">
 <translate>
 <!--T:12-->
-Every language you write in
+[[<tvar name="1">Special:MyLanguage/Translating</tvar>|Every language you write in]]
 </translate>
 </div>
 <div class="wikven-home-card-body">
 <translate>
 <!--T:13-->
-[[<tvar name="1">Special:MyLanguage/Translating</tvar>|Each one]] comes out as its own set of pages.
+Each one comes out as its own set of pages.
 </translate>
 </div>
 </div><!--

@@ -55,7 +55,35 @@ defined in <code>MediaWiki:Common.css</code>, which is not sanitised. All three 
 the Codex set for night mode, so reading the tokens is what makes the page follow the reader's
 theme without knowing which one it is.
 
-The filled button is the exception, and the only literal colour on the page. A button carries its
-own background, so it cannot read <code>--color-progressive</code>: night mode moves that token to
-a pale teal that white text sits on at 2.07:1. The brand teal holds white at 5.76:1 and holds it
-in both themes, because the button looks the same in both.
+The filled button is the exception, and it is why <code>MediaWiki:Common.css</code> carries a
+<code>--wikven-cta-*</code> pair scoped to <code>.rootpage-index</code>. A button brings its own
+background, so it cannot read <code>--color-progressive</code> and be legible: night mode moves
+that token to a pale teal that white text sits on at 2.07:1, and the brand teal it replaces sits
+on the night ground at 3.2:1, so a button pinned to either one stops being the loudest thing on
+the page in half the sessions. The pair inverts instead — dark teal and white by day, light teal
+and near-black by night — which measures 5.76:1 and 8.93:1, for the text and for the button
+against the ground alike. The scope is the root-page class rather than the page class because the
+body of <code>index/ko</code> is <code>page-index_ko</code>, and only <code>rootpage-index</code>
+catches the translations too.
+
+== Sizes and lengths ==
+
+Two measures and no more: <code>34rem</code> for anything meant to be read in sentences, and
+<code>48rem</code> for the two objects that are looked at rather than read, the demo and the
+cards. Five different right edges down one page reads as decisions that accumulated rather than
+as a layout.
+
+Lengths come from 0.5 / 1 / 1.5 / 2 / 2.5 / 3.5 / 4 rem and nowhere else. A length cannot be
+tokenised here — TemplateStyles drops the declaration — so the scale is kept by hand, and the
+next editor inherits the rule from the stylesheet's own header rather than inheriting the values.
+
+The card grid is capped at <code>48rem</code> for a reason worth keeping: four equal items in an
+uncapped <code><nowiki>repeat( auto-fit, minmax() )</nowiki></code> orphan the fourth onto a row
+of its own at every width that fits three, and which widths those are depends on the skin's root
+font size. Three tracks of 16rem with two 1.5rem gaps is 51rem, so under a 48rem cap three cannot
+happen — two up on a column, one up on a phone, and both numbers in rem so they scale together.
+
+Section headings are sentence case at 1.375rem. They were a tracked-out caps label, which is a
+device for an eyebrow above a headline and was here doing a heading's whole job in the page's
+quietest type — and it only ever worked in Latin script, since <code>text-transform</code> does
+nothing to Hangul while the letter-spacing still loosens it.
