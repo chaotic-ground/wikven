@@ -25,11 +25,6 @@
  * to tokenise a length here, so the discipline has to be kept by hand.
  */
 
-/* The mark, at the top of the hero. The skins show it only as header chrome, at a size that
- * makes it a wayfinding icon rather than the product's own mark, and the tagline underneath is
- * about baking -- which is what the mark draws. alt is empty and the link is off because it is
- * decoration: the page title says the name, and says it to a screen reader even though
- * MediaWiki:Common.css takes it out of the sighted reader's way. */
 /* Hero. The page's h1 is the site name, so the line below it is a tagline rather than a
  * heading: it is set like one and is not one, which is also why it is not in the table of
  * contents this page suppresses. */
