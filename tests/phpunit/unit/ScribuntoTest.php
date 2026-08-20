@@ -46,6 +46,7 @@ class ScribuntoTest extends MediaWikiUnitTestCase {
 		$this->assertNotNull($problem);
 		$this->assertStringContainsString('no Lua engine', $problem);
 		$this->assertStringContainsString('standalone binary', $problem, 'the message names the product');
+		$this->assertStringContainsString('luaPath', $problem, 'and what the site can do about it');
 	}
 
 	/**
