@@ -140,7 +140,7 @@ Scribunto has two engines and picks between them itself. The first is <code>luas
 |}
 
 <!--T:28-->
-The arm64 row is not a wikven limitation. Scribunto chooses among its bundled interpreters by operating system and integer size and never looks at the processor, so on arm64 it selects the x86-64 one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; [<tvar name="4">https://luajit.org/</tvar> LuaJIT] serves too, being Lua 5.1 — and name it:
+The arm64 row is not a wikven limitation. Scribunto has no arm64 interpreter to offer. The five it bundles are all Intel — Linux and Windows in 32- and 64-bit, macOS in 64 — and it picks among them by operating system and integer size, so on arm64 it takes the x86-64 Linux one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; [<tvar name="4">https://luajit.org/</tvar> LuaJIT] serves too, being Lua 5.1 — and name it:
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
