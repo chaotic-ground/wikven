@@ -2,7 +2,6 @@ __NOTOC__
 {{home}}
 
 <div class="wikven-home-hero">
-<div class="wikven-home-mark">[[File:logo.svg|72px|link=|alt=]]</div>
 <div class="wikven-home-tagline">
 <translate>
 <!--T:1-->

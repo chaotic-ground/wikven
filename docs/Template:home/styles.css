@@ -30,11 +30,6 @@
  * about baking -- which is what the mark draws. alt is empty and the link is off because it is
  * decoration: the page title says the name, and says it to a screen reader even though
  * MediaWiki:Common.css takes it out of the sighted reader's way. */
-.wikven-home-mark img {
-	display: block;
-	margin-block-end: 1.5rem;
-}
-
 /* Hero. The page's h1 is the site name, so the line below it is a tagline rather than a
  * heading: it is set like one and is not one, which is also why it is not in the table of
  * contents this page suppresses. */
@@ -297,7 +292,6 @@
 .wikven-home-sub p,
 .wikven-home-caption p,
 .wikven-home-pane-label p,
-.wikven-home-mark p,
 .wikven-home-card-title p,
 .wikven-home-card-body p,
 .wikven-home-closing-line p,
