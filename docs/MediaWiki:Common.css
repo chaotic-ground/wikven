@@ -199,6 +199,15 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	}
 }
 
+/* MobileFrontend's footer toggle between the mobile and desktop views. It is a supported MediaWiki
+ * feature, so wikven leaves it alone; this site hides it because it offers every skin it builds
+ * from the toolbox already, and a second, differently-worded way to change the rendering is one
+ * thing too many to explain. */
+#footer-places-mobileview,
+#footer-places-desktop-toggle {
+	display: none;
+}
+
 /* The landing page sets its own tagline where a page title would go, so the title is taken out
  * of the flow there and nowhere else.
  *
@@ -225,13 +234,4 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	inline-size: 1px;
 	block-size: 1px;
 	white-space: nowrap;
-}
-
-/* MobileFrontend's footer toggle between the mobile and desktop views. It is a supported MediaWiki
- * feature, so wikven leaves it alone; this site hides it because it offers every skin it builds
- * from the toolbox already, and a second, differently-worded way to change the rendering is one
- * thing too many to explain. */
-#footer-places-mobileview,
-#footer-places-desktop-toggle {
-	display: none;
 }
