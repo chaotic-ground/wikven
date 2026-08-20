@@ -196,4 +196,4 @@ The e2e run serves <code>dist/</code> under a <code>/wikven/</code> path prefix,
 Versions follow [https://www.conventionalcommits.org/ Conventional Commits], which release-please uses to generate the changelog and bump the version.
 </translate>
 
-{{prevnext|Commands|Writing an extension}}
+{{prevnext}}

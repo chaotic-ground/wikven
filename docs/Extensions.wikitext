@@ -88,4 +88,4 @@ Scribunto is one of those, and the one most wikis reach for: it has a page of it
 An extension of your own can also be made to survive a build deliberately; [[<tvar name="1">Special:MyLanguage/Writing an extension</tvar>|Writing an extension]] is the contract for that.
 </translate>
 
-{{prevnext|Skins|Lua modules}}
+{{prevnext}}

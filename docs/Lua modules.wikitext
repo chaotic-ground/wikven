@@ -195,4 +195,4 @@ A refused build says so in its exit status as well as in words, so a script that
 This documentation site uses a module itself, and the page you are reading is baked with the image on every change, with the module's answer asserted to be in it. The binary is held to the same rule on a source tree of its own, x86-64 on every change and arm64 on every nightly, so each row of the table above is something a machine checks rather than something this page claims.
 </translate>
 
-{{prevnext|Extensions|JavaScript}}
+{{prevnext}}

@@ -61,4 +61,4 @@ This produces a local <code>wikven</code> image you run exactly like the publish
 Once you have {{SITENAME}}, head to [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build your first site.
 </translate>
 
-{{prevnext|Why wikitext|Getting Started}}
+{{prevnext}}

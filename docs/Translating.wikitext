@@ -147,4 +147,4 @@ $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven tra
 The [https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations check-translations action] runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
 </translate>
 
-{{prevnext|Searching|Deploying}}
+{{prevnext}}

@@ -1,11 +1,7 @@
 <templatestyles src="prevnext/styles.css" /><div class="wikven-prevnext"><!--
-  The next page is the last positional argument, so one argument is a next and two are a previous
-  and a next. The last page of the chain has a previous and no next, which no positional form can
-  spell -- an empty second argument reads the same as an absent one -- so that one names prev=.
-  -->{{#if:{{{2|}}}{{{prev|}}}|
-    <div class="wikven-prevnext-prev">&larr;&nbsp;[[Special:MyLanguage/{{{prev|{{{1|}}}}}}|{{prevnext/label|{{{prev|{{{1|}}}}}}}}]]</div>
-  }}<!--
-  -->{{#if:{{{2|{{{1|}}}}}}|<div class="wikven-prevnext-next">[[Special:MyLanguage/{{{2|{{{1|}}}}}}|{{prevnext/label|{{{2|{{{1|}}}}}}}}]]&nbsp;&rarr;</div>}}<!--
+  Takes no arguments: the order comes from MediaWiki:Sidebar, which is where it is written down.
+  See Module:Sequence.
+  -->{{#invoke:Sequence|row}}<!--
 --></div><noinclude>
 {{prevnext/doc}}
 </noinclude>

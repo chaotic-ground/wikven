@@ -87,4 +87,4 @@ saved as <code>Template:Note.wikitext</code> and used on a page as:
 renders as "'''Note:''' Back up your wiki first." Templates take positional (<code><nowiki>{{{1}}}</nowiki></code>) and named parameters and run [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions</tvar> parser functions] exactly as in MediaWiki. The syntax itself is standard MediaWiki; see [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> Help:Templates].
 </translate>
 
-{{prevnext|Getting Started|Editing sidebar}}
+{{prevnext}}

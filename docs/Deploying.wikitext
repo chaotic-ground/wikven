@@ -182,4 +182,4 @@ A <code>commit</code> that follows a branch is the same manifest with the source
 This site is the working example. Its manifests are in [<tvar name="1">https://github.com/chaotic-ground/wikven/tree/main/updatecli/updatecli.d</tvar> <code>updatecli/updatecli.d/</code>] (one release tag per <code>reference</code> pin, one branch head per <code>commit</code> pin), and [<tvar name="2">https://github.com/chaotic-ground/wikven/blob/main/.github/workflows/updatecli.yml</tvar> a weekly workflow] applies them, opening one pull request per pipeline. [<tvar name="3">https://www.updatecli.io/docs/</tvar> Upstream's own documentation] covers everything a manifest can do beyond the two shapes above.
 </translate>
 
-{{prevnext|Translating|Troubleshooting}}
+{{prevnext}}
