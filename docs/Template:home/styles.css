@@ -149,9 +149,12 @@
  * result in less time than that sentence takes to read. Two panes, so auto-fit never has an
  * odd one out, and no arrow between them -- an arrow has to turn around for a right-to-left
  * reader and says nothing to one who is not looking. The labels carry the direction. */
+/* 22rem, not the 18 the cards use: the longest line in the left pane is the echo, at 44
+ * characters, and a monospace pane narrower than that breaks a single command across two lines
+ * where it reads as two. Below the width for two panes they stack, and each gets the column. */
 .wikven-home-demo {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
 	gap: 1.5rem;
 	align-items: start;
 	max-inline-size: 54rem;
