@@ -153,4 +153,4 @@ The other six the skin reads off the configuration itself, so they behave as doc
 What the inert ones would have configured, {{SITENAME}} supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
 </translate>
 
-{{prevnext|Images|Extensions}}
+{{prevnext}}

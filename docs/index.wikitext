@@ -54,5 +54,4 @@ These need a live wiki, so they are not part of the static export:
 What replaces some of them is written down: the reader's own display choices are on a [[<tvar name="1">Special:MyLanguage/Skins#Settings</tvar>|Settings page]] the build writes, and searching is [[<tvar name="2">Special:MyLanguage/Searching</tvar>|done in the browser]].
 </translate>
 
-{{prevnext|Why wikitext}}
 {{DISPLAYTITLE:Wikven}}

@@ -128,4 +128,4 @@ echo '{{Note|Back up your wiki first.}}' >> src/index.wikitext
 Build again: the home page now shows the note. See [[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Pages#Templates]] for parameters and more.
 </translate>
 
-{{prevnext|Installation|Pages}}
+{{prevnext}}

@@ -81,4 +81,4 @@ containing…" action and its Enter key go to that page. This site uses a page
 titled <code>Search</code>.
 </translate>
 
-{{prevnext|JavaScript|Translating}}
+{{prevnext}}

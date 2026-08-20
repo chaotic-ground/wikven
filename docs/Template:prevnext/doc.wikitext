@@ -2,24 +2,31 @@ Bottom-of-page navigation between the steps of the documentation, as a row of on
 
 == Usage ==
 
- <nowiki>{{prevnext|next step}}
-{{prevnext|previous step|next step}}
-{{prevnext|prev=previous step}}</nowiki>
+ <nowiki>{{prevnext}}</nowiki>
 
-Each argument is a page name, not a link label: it is the link target, and the link text is the
-target's own title.
+No arguments. The order of the documentation is [[MediaWiki:Sidebar]], and
+<code>Module:Sequence.lua</code> reads it: the page before this one in the sidebar becomes the previous
+link, the page after it the next. The first and last pages of the sequence get one link rather than
+two, without having to say so, and a page the sidebar does not name gets no row at all.
 
-The next page is the last positional argument, so one of them is a next and two are a previous and
-a next. The last page of the chain is the one form that leaves out: it has a previous and no next,
-and an empty second argument reads the same as an absent one, so there is no positional way to say
-it. That page names <code>prev=</code> instead, which is otherwise the same previous link.
+It used to take the page names, which meant the order was written down twice -- once as the
+sidebar's and once across twenty-one calls -- with nothing checking that the two agreed. Twice they
+did not: a page reached the sidebar without a call naming it, and the last page of the chain had no
+row, because a lone argument read as the *next* step and there was no way to spell "nothing after
+this". Adding a page meant three edits, and forgetting the third was invisible. Now it is two: the
+sidebar, and a <code><nowiki>{{prevnext}}</nowiki></code> at the foot of the new page.
+
+The main page has no row. It is not a sidebar entry -- every skin already points its logo at it --
+and it is where a reader arrives rather than a step they walk, so it names its own way on in its
+opening lines instead.
 
 == Translated pages ==
 
 A prevnext sits outside the <code>&lt;translate&gt;</code> tags, so it is copied whole into every
-translation of the page it is on. That is why it takes page names alone: a label passed in would be
-a second copy of the target's title in every page that links to it, and one nothing checks, so
-renaming a page would leave the links to it quietly wrong in every language.
+translation of the page it is on. That is why no label is written into the call, and was not when
+the call still took page names: a label passed in would be a second copy of the target's title in
+every page that links to it, and one nothing checks, so renaming a page would leave the links to it
+quietly wrong in every language.
 
 <code>Template:prevnext/label</code> reads that title instead, from the one place it is translated:
 the target's <code>title</code> unit, which the build writes to Translate's "Page display title"

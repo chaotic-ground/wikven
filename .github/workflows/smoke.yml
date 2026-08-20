@@ -253,6 +253,41 @@ jobs:
             exit 1
           fi
 
+          # Every page the sidebar names gets a navigation row, and the two ends of the sequence get
+          # one link rather than two. The order lives in MediaWiki:Sidebar and Module:Sequence reads
+          # it (#455); before that it was restated in each call, and what went wrong twice was
+          # exactly this -- a page in the sidebar with no row, and the last page with none either.
+          missing=
+          while IFS= read -r page; do
+            file="dist/$(printf '%s' "$page" | tr ' ' '_').html"
+            # The link div, not the wrapper: prevnext always emits the wrapper, so matching that
+            # passes an empty row -- which is exactly what a broken module produces, and what the
+            # first draft of this check waved through.
+            if [ ! -s "$file" ] || ! grep -q 'class="wikven-prevnext-' "$file"; then
+              missing="$missing $page"
+            fi
+          done < <(sed -n 's@^\*\* *Special:MyLanguage/\([^|]*\).*@\1@p' 'docs/MediaWiki:Sidebar.wikitext')
+          if [ -n "$missing" ]; then
+            echo "::error::sidebar pages with no navigation row:$missing"
+            exit 1
+          fi
+
+          # The two ends of the sequence get one link rather than two, which the old shape could not
+          # spell: a lone argument was the next step, so the last page had no way to say it had none.
+          #
+          # Matched on the div rather than the class name. TemplateStyles inlines prevnext/styles.css
+          # into every page that has a row, so both class names appear in the page's own stylesheet
+          # whether or not either link was rendered -- which is what the first draft of this check
+          # tripped over.
+          if grep -q 'class="wikven-prevnext-prev"' dist/Why_wikitext.html; then
+            echo "::error::Why wikitext heads the sequence and should have no previous link"
+            exit 1
+          fi
+          if grep -q 'class="wikven-prevnext-next"' dist/Licenses.html; then
+            echo "::error::Licenses ends the sequence and should have no next link"
+            exit 1
+          fi
+
           # A prevnext link is labelled with the target page's own title, so on a translated page it
           # must carry the translated one. The label is not in the calling page's source: the call
           # sits outside the translate tags and passes a page name, and the template reads the

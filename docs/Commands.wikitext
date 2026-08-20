@@ -193,4 +193,4 @@ Runs <code>translate check</code> over a source tree and reports each finding as
 |}
 </translate>
 
-{{prevnext|Standalone binary|Development}}
+{{prevnext}}

@@ -75,4 +75,4 @@ Every parse of a page embedding a Commons image asks Commons for its thumbnail. 
 On a site with several skins, each is rendered by its own process and the build reports each one that failed by name (<code>build failed for skin ...</code>). The output of each pass is printed under its own heading, so read the section for the named skin rather than the end of the log. If the machine is short of memory, <code>WIKVEN_BUILD_JOBS=1</code> runs the passes one at a time; see [[<tvar name="1">Special:MyLanguage/Commands</tvar>|Commands]].
 </translate>
 
-{{prevnext|Deploying|Configuration}}
+{{prevnext}}
