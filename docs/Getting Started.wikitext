@@ -2,14 +2,9 @@
 <translate>
 <!--T:1-->
 On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{SITENAME}}.
-{{note|This page assumes a unix-like shell. The standalone binary is Linux-only; on macOS or Windows, use the Docker image.}}
 
 <!--T:2-->
-{{SITENAME}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="2">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or [[<tvar name="3">Special:MyLanguage/Installation#Build from source</tvar>|built from source]]. This guide uses the binary or Docker, pick whichever you have.
-
-<!--T:3-->
-; Requirement
-:* the standalone [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|binary]] (Linux), or [https://www.docker.com/ Docker] (any platform). See [[<tvar name="2">Special:MyLanguage/Installation</tvar>|Installation]] to get either.
+{{SITENAME}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|binary]] (Linux only), the [[<tvar name="2">Special:MyLanguage/Installation#Docker</tvar>|Docker image]] (any platform), or [[<tvar name="3">Special:MyLanguage/Installation#Build from source</tvar>|built from source]]. This guide uses the binary or Docker, so pick whichever you have.
 </translate>
 
 ----
@@ -33,7 +28,7 @@ Then build the site. The rendered pages are written to <code>dist/</code>. Pick 
 |-|Binary=
 <translate>
 <!--T:6-->
-Run it in the directory that holds <code>src/</code> (see [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|Installation]] to get it):
+Run it in the directory that holds <code>src/</code>:
 </translate>
 <syntaxhighlight lang="shell" copy>
 wikven build
