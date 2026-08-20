@@ -33,6 +33,12 @@ answers "should I use this" with a list of what is missing has answered the wron
 The bands are short on purpose and the page is long on purpose: a reader scrolls, and would
 rather scroll past four lines than read four paragraphs.
 
+"How it works" shows what goes in beside what comes out. The <code>dist/</code> pane is the real
+root of a build, shortened to the four entries that say what kind of thing it is: a page, a
+stylesheet, a script and the search index. There is no arrow between the panes — an arrow has to
+turn around for a right-to-left reader and says nothing at all to one who is not looking — so the
+two labels carry the direction instead.
+
 == The language bar ==
 
 <code><nowiki><languages /></nowiki></code> is at the foot of the page rather than the head.

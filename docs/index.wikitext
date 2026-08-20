@@ -2,6 +2,7 @@ __NOTOC__
 {{home}}
 
 <div class="wikven-home-hero">
+<div class="wikven-home-mark">[[File:logo.svg|72px|link=|alt=]]</div>
 <div class="wikven-home-tagline">
 <translate>
 <!--T:1-->
@@ -26,18 +27,41 @@ plain HTML. Nothing runs behind the published site.
 <!--T:3-->
 == How it works ==
 </translate>
-<div class="wikven-home-demo">
+<div class="wikven-home-demo"><!--
+--><div class="wikven-home-pane">
+<div class="wikven-home-pane-label">
+<translate>
+<!--T:20-->
+You run
+</translate>
+</div>
 <syntaxhighlight lang="shell" copy>
 mkdir src
 echo 'Hello, World!' > src/index.wikitext
 wikven build
 </syntaxhighlight>
+</div><!--
+--><div class="wikven-home-pane">
+<div class="wikven-home-pane-label">
+<translate>
+<!--T:21-->
+You get
+</translate>
+</div>
+<syntaxhighlight lang="text">
+dist/
+  index.html
+  site.styles.css
+  startup-static.js
+  pagefind/
+</syntaxhighlight>
+</div><!--
+--></div>
 <div class="wikven-home-caption">
 <translate>
 <!--T:4-->
-Every <code>.wikitext</code> file under <code>src/</code> comes out as a page under <code>dist/</code>.
+Every <code>.wikitext</code> file becomes a page.
 </translate>
-</div>
 </div>
 </div>
 

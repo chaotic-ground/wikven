@@ -25,6 +25,16 @@
  * to tokenise a length here, so the discipline has to be kept by hand.
  */
 
+/* The mark, at the top of the hero. The skins show it only as header chrome, at a size that
+ * makes it a wayfinding icon rather than the product's own mark, and the tagline underneath is
+ * about baking -- which is what the mark draws. alt is empty and the link is off because it is
+ * decoration: the page title says the name, and says it to a screen reader even though
+ * MediaWiki:Common.css takes it out of the sighted reader's way. */
+.wikven-home-mark img {
+	display: block;
+	margin-block-end: 1.5rem;
+}
+
 /* Hero. The page's h1 is the site name, so the line below it is a tagline rather than a
  * heading: it is set like one and is not one, which is also why it is not in the table of
  * contents this page suppresses. */
@@ -134,9 +144,23 @@
 	color: var(--color-emphasized, #101418);
 }
 
-/* The demo shares the cards' right edge, so the page has two edges and not three. */
+/* What goes in and what comes out, side by side. The section said "how it works" and then
+ * showed only what you type, leaving a sentence to describe the result; a reader can see the
+ * result in less time than that sentence takes to read. Two panes, so auto-fit never has an
+ * odd one out, and no arrow between them -- an arrow has to turn around for a right-to-left
+ * reader and says nothing to one who is not looking. The labels carry the direction. */
 .wikven-home-demo {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+	gap: 1.5rem;
+	align-items: start;
 	max-inline-size: 54rem;
+}
+
+.wikven-home-pane-label {
+	margin-block-end: 0.5rem;
+	font-size: 0.875rem;
+	color: var(--color-subtle, #54595d);
 }
 
 /* Only the margin. SyntaxHighlight draws the block's own box, and a border here landed on
@@ -269,6 +293,8 @@
  * no :is() or :where() to shorten this with -- the sanitiser drops any rule that uses one. */
 .wikven-home-sub p,
 .wikven-home-caption p,
+.wikven-home-pane-label p,
+.wikven-home-mark p,
 .wikven-home-card-title p,
 .wikven-home-card-body p,
 .wikven-home-closing-line p,
