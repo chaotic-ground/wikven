@@ -177,8 +177,36 @@ jobs:
 
           chmod +x "wikven-linux-$ARCH"
 
+      # First, and before anything is installed, because that is the whole claim: somebody downloads
+      # the binary onto a machine with no Lua on it and bakes a site with a module in it. Scribunto
+      # carries its own lua binaries and falls back to them when luaPath is null, so where it ships
+      # one for the architecture, this should work with nothing configured and nothing installed.
+      #
+      # Ordering matters more than it looks. Run after the install step and this passes for the wrong
+      # reason: wikven's own luaEngineAvailable() would find the interpreter on PATH, and the bake
+      # would never be asked whether it can manage without one.
+      #
+      # Asserted on x86_64 only, and not because the arm tarball is missing the files -- it carries
+      # exactly the same ones. LuaStandaloneInterpreter chooses by PHP_OS and PHP_INT_SIZE and never
+      # looks at the architecture, so on arm it picks lua5_1_5_linux_64_generic/lua, an x86-64 ELF,
+      # passes its own is_executable() check on it, and fails only when the process will not start.
+      # Asserting this on arm would be asserting somebody else's bug.
+      - name: Bake with Scribunto's own bundled lua
+        if: matrix.arch == 'x86_64'
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          cat > work/src/.wikven.yaml <<'EOF'
+          extensions:
+            - Scribunto
+          EOF
+          ( cd work && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" build )
+          test -s work/dist/index.html
+          grep -q 'lua ran on' work/dist/index.html
+
       # A Lua interpreter the host provides, which is the arrangement that works on any
-      # architecture. The step after this one covers the arrangement that does not.
+      # architecture -- and the only one arm has, per the step above.
       #
       # luajit is a real fallback and not a consolation: Scribunto's standalone engine reads
       # `lua -v` and takes `LuaJIT ...` as readily as `Lua ...`, and LuaJIT is Lua 5.1, which is the
@@ -199,6 +227,7 @@ jobs:
           ARCH: ${{ matrix.arch }}
         run: |
           set -euo pipefail
+          rm -rf work/dist
           cat > work/src/.wikven.yaml <<EOF
           extensions:
             - Scribunto
@@ -214,26 +243,3 @@ jobs:
             grep -o '{{#invoke[^}]*}}' work/dist/index.html || true
             exit 1
           fi
-
-      # Scribunto carries its own lua binaries and falls back to them when luaPath is null, so where
-      # it ships one for the architecture, the binary should render Lua with nothing configured.
-      #
-      # Asserted on x86_64 only, and not because the arm tarball is missing the files -- it carries
-      # exactly the same ones. LuaStandaloneInterpreter chooses by PHP_OS and PHP_INT_SIZE and never
-      # looks at the architecture, so on arm it picks lua5_1_5_linux_64_generic/lua, an x86-64 ELF,
-      # passes its own is_executable() check on it, and fails only when the process will not start.
-      # Asserting this on arm would be asserting somebody else's bug.
-      - name: Bake with Scribunto's own bundled lua
-        if: matrix.arch == 'x86_64'
-        env:
-          ARCH: ${{ matrix.arch }}
-        run: |
-          set -euo pipefail
-          rm -rf work/dist
-          cat > work/src/.wikven.yaml <<'EOF'
-          extensions:
-            - Scribunto
-          EOF
-          ( cd work && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" build )
-          test -s work/dist/index.html
-          grep -q 'lua ran on' work/dist/index.html
