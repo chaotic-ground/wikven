@@ -14,13 +14,15 @@ __TOC__
 * '''Structured linking''' — <code><nowiki>[[Page]]</nowiki></code> internal links, [<tvar name="5">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories</tvar> categories] and redirects, managed by the wiki rather than by hand.
 * '''Rich media and references''' — image [<tvar name="6">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Images</tvar> thumbnails and galleries] and footnotes in one consistent syntax.
 * '''An extension ecosystem''' — syntax highlighting, math and more, added as [[<tvar name="2">Special:MyLanguage/Configuration</tvar>|extensions]].
+* '''One definition''' — wikitext is whatever MediaWiki's parser makes of it, so a page renders the same wherever it is parsed. Markdown is less standardised than it looks: [<tvar name="7">https://commonmark.org/</tvar> CommonMark] pins down a core, but [<tvar name="8">https://github.github.com/gfm/</tvar> GitHub Flavored Markdown] and tool-specific variants (such as Phabricator's Remarkup) render the same text differently.
 
 <!--T:4-->
 == What Markdown does better ==
 
 <!--T:5-->
-* '''Simplicity''' — a smaller, more readable syntax with a gentler learning curve, especially for tables and templates.
-* '''Ubiquity''' — Markdown is supported almost everywhere and familiar to most writers, though it is less standardised than it looks: [https://commonmark.org/ CommonMark] pins down a core, but [https://github.github.com/gfm/ GitHub Flavored Markdown] and tool-specific variants (such as Phabricator's Remarkup) render the same text differently, so portability is imperfect. Wikitext is defined by MediaWiki's implementation, with thinner editor and linting tooling.
+* '''Simplicity''' — a smaller, more readable syntax with a gentler learning curve; wikitext's tables and template calls in particular take longer to pick up.
+* '''Ubiquity''' — Markdown is supported almost everywhere and familiar to most writers, so contributors usually arrive already knowing it.
+* '''Tooling''' — editors, formatters and linters for Markdown are plentiful and mature; the equivalents for wikitext are thinner outside a wiki.
 * '''Lightweight rendering''' — Markdown renders with a small library, whereas wikitext normally needs MediaWiki itself.
 
 <!--T:6-->
