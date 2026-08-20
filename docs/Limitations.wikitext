@@ -1,0 +1,36 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+A published {{SITENAME}} site is files: HTML, CSS, JavaScript and images, with nothing running
+behind them. Anything MediaWiki does by answering a request when a reader asks for it is therefore
+not part of the export. This page is the list, and what stands in for each where anything does.
+
+<!--T:2-->
+== What a live wiki does and an export does not ==
+
+<!--T:3-->
+* All special pages, and the action API behind them
+* All editors ([<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiEditor</tvar> WikiEditor], <!--
+-->[<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:VisualEditor</tvar> VisualEditor] and <!--
+-->[<tvar name="3">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CodeEditor</tvar> CodeEditor]); you edit the source files instead
+* Accounts, and everything keyed to one: preferences, watchlists, notifications, user pages
+* Page histories and diffs
+* Discussion pages as a workflow, and recent-changes feeds
+
+<!--T:4-->
+== What stands in for them ==
+
+<!--T:5-->
+; Editing and history
+: Your repository. The "Edit", "View history" and "View source" links on each page lead to the page's source file there, wherever you host it; see [[<tvar name="1">Special:MyLanguage/Configuration#WikvenEditUrl</tvar>|<code>WikvenEditUrl</code>]] and the two settings beside it.
+; Reading preferences
+: A [[<tvar name="2">Special:MyLanguage/Skins#Settings</tvar>|Settings page]] the build writes, carrying the reader's colour theme and, where a site builds more than one skin, which skin to read it in.
+; Search
+: [[<tvar name="3">Special:MyLanguage/Searching</tvar>|Done in the browser]]. The build writes a search index alongside the pages and the search box queries that.
+; <code>Special:Version</code>
+: The [[<tvar name="4">Special:MyLanguage/Configuration#WikvenAboutPage</tvar>|About page]], where the build lists the software, extensions and skins the site was made with.
+</translate>
+
+{{prevnext}}

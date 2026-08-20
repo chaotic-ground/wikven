@@ -17,9 +17,18 @@ checks.
 == Why the layout is not in the page ==
 
 Every band of the page is a <code>&lt;div&gt;</code> outside the translate tags, so no layout
-markup reaches a translator. That is the same rule
-<code>Template:prevnext/doc</code> sets out, and it is why this redesign changed no translation
-unit and needed no restamp.
+markup reaches a translator: a unit is a sentence, and moving a band or changing a card's border
+is not a change to any sentence. That is the same rule <code>Template:prevnext/doc</code> sets
+out.
+
+== What the bands are for ==
+
+The landing page carries what a reader who has just arrived needs, and sends the rest to the
+documentation. In order: what {{SITENAME}} is, the two commands that show it, the three pages to
+start from, four things it can do, and where it fits. The list of what a static export cannot do
+was on this page once; it is an appendix now, on [[Special:MyLanguage/Limitations|Limitations]],
+because a landing page that answers "should I use this" with a list of what is missing has
+answered the wrong question first.
 
 == Colours ==
 

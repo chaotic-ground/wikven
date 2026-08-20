@@ -4,23 +4,26 @@
 <div class="wikven-home-lede">
 <translate>
 <!--T:1-->
-{{SITENAME}} is a static site generator built on [<tvar name="1">https://www.mediawiki.org/</tvar> MediaWiki], the software
-behind [<tvar name="2">https://www.wikipedia.org/</tvar> Wikipedia]. It turns a directory of wikitext
-into a plain HTML site you can host anywhere, with no server or database to run.
-This documentation site is itself built with {{SITENAME}}.
+{{SITENAME}} is a static site generator that runs on [<tvar name="1">https://www.mediawiki.org/</tvar> MediaWiki], the
+software behind [<tvar name="2">https://www.wikipedia.org/</tvar> Wikipedia]. You write wikitext; {{SITENAME}} renders it
+through MediaWiki once, at build time, and writes out plain HTML. Nothing runs behind the published
+site: no MediaWiki, no PHP, no database.
 </translate>
 </div>
 
-<div class="wikven-home-fit">
+<div class="wikven-home-demo">
+<syntaxhighlight lang="shell" copy>
+mkdir src
+echo 'Hello, World!' > src/index.wikitext
+wikven build
+</syntaxhighlight>
+<div class="wikven-home-caption">
 <translate>
 <!--T:2-->
-Reach for {{SITENAME}} when your content is already MediaWiki wikitext, or when you
-want MediaWiki's templates, parser functions, gadgets and extensions but a static
-result with nothing to run: a project's documentation site, an archived wiki
-you can browse as plain HTML, or a personal wiki. Unlike a general static-site generator
-such as [<tvar name="2">https://gohugo.io/</tvar> Hugo] or [<tvar name="3">https://www.mkdocs.org/</tvar> MkDocs], it renders real wikitext through MediaWiki itself, so it
-assumes you are comfortable with wikitext (see [[<tvar name="1">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for the trade-offs).
+Every <code>.wikitext</code> file under <code>src/</code> comes out as a page under <code>dist/</code>.
+This site is one of those builds.
 </translate>
+</div>
 </div>
 
 <div class="wikven-home-routes"><!--
@@ -29,59 +32,47 @@ assumes you are comfortable with wikitext (see [[<tvar name="1">Special:MyLangua
 -->{{home/route|Getting Started}}<!--
 --></div>
 
-<div class="wikven-home-note">
+<div class="wikven-home-features"><!--
+--><div class="wikven-home-feature">
 <translate>
 <!--T:3-->
-See [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]] for the three ways to install {{SITENAME}}, the standalone
-[[<tvar name="2">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="3">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or
-[[<tvar name="4">Special:MyLanguage/Installation#Build from source</tvar>|from source]], then [[<tvar name="5">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build
-your first site.
-</translate>
-</div>
-
-<div class="wikven-home-features"><!--
---><div class="wikven-home-feature wikven-home-feature-supported">
-<translate>
-<!--T:4-->
-== Supported features ==
-
-<!--T:5-->
-With {{SITENAME}}, you can use the following features of MediaWiki.
-
-<!--T:6-->
-* [<tvar name="8">https://www.mediawiki.org/wiki/Special:MyLanguage/Wikitext</tvar> Wikitext] pages (see [[<tvar name="1">Special:MyLanguage/Pages</tvar>|Pages]])
-* [[<tvar name="2">Special:MyLanguage/Pages#Templates</tvar>|Templates]]
-* [[<tvar name="3">Special:MyLanguage/Images</tvar>|Images]] from Wikimedia Commons or local files
-* [[<tvar name="4">Special:MyLanguage/JavaScript</tvar>|JavaScript]] (MediaWiki:Common.js and gadgets)
-* [[<tvar name="5">Special:MyLanguage/Extensions</tvar>|Extensions]], bundled or fetched at build time, and [[<tvar name="9">Special:MyLanguage/Skins</tvar>|skins]] — several at once, with a switcher for the reader
-* [[<tvar name="6">Special:MyLanguage/Searching</tvar>|Search]] (client-side, built in via SifterSearch)
-* [[<tvar name="7">Special:MyLanguage/Translating</tvar>|Translation]] into multiple languages (via the Translate extension)
+'''[[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Templates]], parser functions and [[<tvar name="2">Special:MyLanguage/Lua modules</tvar>|Lua modules]]''' — the wiki's own way of not
+writing the same thing twice. All of it runs at build time, so what a reader downloads is the
+result, with none of the machinery behind it.
 </translate>
 </div><!--
---><div class="wikven-home-feature wikven-home-feature-unsupported">
+--><div class="wikven-home-feature">
 <translate>
-<!--T:7-->
-== Unsupported features ==
-
-<!--T:8-->
-These need a live wiki, so they are not part of the static export:
-
-<!--T:9-->
-* All special pages, and the action API behind them
-* All editors ([<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiEditor</tvar> WikiEditor], <!--
--->[<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:VisualEditor</tvar> VisualEditor] and <!--
--->[<tvar name="3">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CodeEditor</tvar> CodeEditor]); you edit the source files instead
-* Accounts, and everything keyed to one: preferences, watchlists, notifications, user pages
-* Page histories and diffs, which live in your repository instead — the "View history" link leads there
-* Discussion pages as a workflow, and recent-changes feeds
+<!--T:4-->
+'''[[<tvar name="1">Special:MyLanguage/Extensions</tvar>|Extensions]] and [[<tvar name="2">Special:MyLanguage/Skins</tvar>|skins]]''' — bundled, or fetched from Git as the site is
+built. Build several skins at once and the site carries a switcher, so the reader chooses how it
+looks.
+</translate>
+</div><!--
+--><div class="wikven-home-feature">
+<translate>
+<!--T:5-->
+'''[[<tvar name="1">Special:MyLanguage/Searching</tvar>|Search]], with nothing to query''' — the index is built with the site and runs in the
+reader's browser.
+</translate>
+</div><!--
+--><div class="wikven-home-feature">
+<translate>
+<!--T:6-->
+'''[[<tvar name="1">Special:MyLanguage/Translating</tvar>|Many languages]]''' — the Translate extension's workflow, run at build time; each
+language comes out as its own set of pages. This site is written in English and Korean.
 </translate>
 </div><!--
 --></div>
 
 <div class="wikven-home-coda">
 <translate>
-<!--T:10-->
-What replaces some of them is written down: the reader's own display choices are on a [[<tvar name="1">Special:MyLanguage/Skins#Settings</tvar>|Settings page]] the build writes, and searching is [[<tvar name="2">Special:MyLanguage/Searching</tvar>|done in the browser]].
+<!--T:7-->
+Unlike a general static-site generator such as [<tvar name="1">https://gohugo.io/</tvar> Hugo] or [<tvar name="2">https://www.mkdocs.org/</tvar> MkDocs],
+{{SITENAME}} renders real wikitext, so it suits content that is already a wiki: a project's
+documentation, an archived wiki to browse as plain HTML, a personal one. See
+[[<tvar name="3">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for how the markup compares with Markdown, and
+[[<tvar name="4">Special:MyLanguage/Limitations</tvar>|Limitations]] for what a live wiki does that a published site cannot.
 </translate>
 </div>
 

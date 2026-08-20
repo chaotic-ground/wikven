@@ -20,18 +20,28 @@
 	color: var(--color-emphasized, #101418);
 }
 
-/* The paragraph a reader is actually weighing the tool against, so it gets the page's
- * one accent rather than a heading it does not need. */
-.wikven-home-fit {
+/* The two lines that show the whole tool. Held to the lede's measure so the band reads as
+ * part of the opening rather than as the first of the documentation's code samples. */
+.wikven-home-demo {
 	margin-block: 0 2rem;
 	max-inline-size: 38rem;
-	padding-inline-start: 1rem;
-	border-inline-start: 3px solid var(--color-progressive, #10707f);
+}
+
+.wikven-home-demo .mw-highlight,
+.wikven-home-demo pre {
+	margin-block: 0;
+}
+
+.wikven-home-caption {
+	margin-block-start: 0.5rem;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	color: var(--color-subtle, #54595d);
 }
 
 .wikven-home-lede p,
-.wikven-home-fit p,
-.wikven-home-note p,
+.wikven-home-caption p,
+.wikven-home-feature p,
 .wikven-home-coda p {
 	margin: 0;
 }
@@ -40,7 +50,7 @@
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 	gap: 0.75rem;
-	margin-block: 0 0.75rem;
+	margin-block: 0 2.5rem;
 }
 
 /* The anchor is the card, so the whole box is the target and the skin's own focus ring
@@ -64,55 +74,20 @@
 	background-color: var(--background-color-interactive-subtle--hover, #eaecf0);
 }
 
-.wikven-home-note {
-	margin-block: 0 2.5rem;
-	max-inline-size: 38rem;
-	font-size: 0.875rem;
-	color: var(--color-subtle, #54595d);
-}
-
-/* The two lists are one comparison, so they sit side by side where both fit at a
- * readable measure and stack where they do not. */
+/* Four short claims, each one sentence. They are siblings rather than a list because no
+ * one of them is the point; the grid puts as many on a row as the column can hold a
+ * readable line in, which is four in Vector's widest setting and one on a phone. */
 .wikven-home-features {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-	gap: 1.5rem 2.5rem;
-	margin-block: 0 1.5rem;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+	gap: 1.5rem 2rem;
+	margin-block: 0 2.5rem;
 }
 
 .wikven-home-feature {
 	padding-block-start: 0.75rem;
-	border-block-start: 3px solid var(--border-color-muted, #dadde3);
-}
-
-.wikven-home-feature-supported {
 	border-block-start: 3px solid var(--color-progressive, #10707f);
-}
-
-/* MediaWiki 1.43+ wraps a heading in <div class="mw-heading">, and the skins hang the
- * rule under a section heading off one or the other, so both are cleared. A selector
- * for the bare h2 alone would match nothing. */
-.wikven-home-feature .mw-heading,
-.wikven-home-feature h2 {
-	margin-block: 0 0.5rem;
-	padding-block: 0;
-	border: 0;
-	font-size: 1.0625rem;
-	font-weight: bold;
-	line-height: 1.4;
-}
-
-.wikven-home-feature ul {
-	margin-block: 0.5rem 0;
 	line-height: 1.5;
-}
-
-.wikven-home-feature li {
-	margin-block-end: 0.4rem;
-}
-
-.wikven-home-feature-unsupported li {
-	color: var(--color-subtle, #54595d);
 }
 
 .wikven-home-coda {
@@ -121,5 +96,6 @@
 	max-inline-size: 38rem;
 	border-block-start: 1px solid var(--border-color-muted, #dadde3);
 	font-size: 0.9375rem;
+	line-height: 1.5;
 	color: var(--color-subtle, #54595d);
 }
