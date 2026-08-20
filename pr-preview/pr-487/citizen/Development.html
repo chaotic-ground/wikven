@@ -533,7 +533,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 <li><code>test.yml</code> and <code>quibble.yml</code> run the PHPUnit suites and MediaWiki's own structure tests.</li>
 <li><code>smoke.yml</code> bakes this site and asserts the output, in a browser and byte for byte.</li>
 <li><code>translations.yml</code> reports out-of-date translations in <code>docs/</code>, through the <a href="./Commands.html#check-translations" title="Special:MyLanguage/Commands">check-translations action</a>.</li>
-<li><code>docker-image.yml</code> builds the image and publishes it to <code>ghcr.io/chaotic-ground/wikven</code> on <code>main</code>.</li>
+<li><code>docker-image.yml</code> builds the image and publishes it on <code>main</code>, from the one build, to both <code>ghcr.io/chaotic-ground/wikven</code> and <code>quay.io/chaotic-ground/wikven</code>; it reads every tag back afterwards, so a publish that reaches one registry and not the other fails rather than passes. quay.io authenticates through a robot account federated to this repository's OIDC identity, so there is no registry token in the repository secrets.</li>
 <li><code>deploy-docs.yml</code> builds the <code>docs/</code> directory with the image and deploys the result to GitHub Pages, so this site is itself a Wikven build; <code>pr-preview.yml</code> does the same per pull request, into a subdirectory that is torn down when the pull request closes.</li>
 <li><code>binary.yml</code> builds the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a>, on pull requests that touch it and for each platform on a release. <code>release-please.yml</code> calls it to attach the binaries to a version release, and <code>nightly.yml</code> calls it daily to publish a dated <code>nightly-YYYY-MM-DD</code> pre-release. Both create the release as a draft, attach the binaries, then publish it, because GitHub's immutable releases lock a release's assets once it is published.</li>
 <li><code>updatecli.yml</code> moves the version pins the image and the docs site carry, and <code>tofu.yml</code> applies the repository's own settings from <code>.tf/</code>.</li></ul>
@@ -558,7 +558,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development.wikitext" title="This page was last edited on 20 August 2026, at 15:01." data-timestamp="1787238084"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development.wikitext" title="This page was last edited on 20 August 2026, at 15:03." data-timestamp="1787238219"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -779,7 +779,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 15:01.</div>
+		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 15:03.</div>
 		    </section>
 		</div>
 </footer>		</div>

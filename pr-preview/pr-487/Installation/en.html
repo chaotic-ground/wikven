@@ -533,7 +533,8 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
-<p>The untagged image tracks the latest build on the main branch. No version has been released yet, so there is no <code>:1.2.3</code> tag to pin instead; to hold a build still, pin its digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
+<p>The same image is published to Quay as well, at <code>quay.io/chaotic-ground/wikven</code>. One build pushes both addresses, so pull from whichever one answers.
+</p><p>The untagged image tracks the latest build on the main branch. No version has been released yet, so there is no <code>:1.2.3</code> tag to pin instead; to hold a build still, pin its digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Build_from_source">Build from source</h2></div>
 <p>To modify Wikven or run an unreleased commit, clone the repository and build the image yourself:
@@ -560,7 +561,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 15:01.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 15:03.</li>
 </ul>
 
 	<ul id="footer-places">
