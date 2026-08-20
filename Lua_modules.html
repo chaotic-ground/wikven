@@ -633,7 +633,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <td>an interpreter you install</td>
 <td><code>luaPath</code>, below
 </td></tr></tbody></table>
-<p>The arm64 row is not a wikven limitation. Scribunto chooses among its bundled interpreters by operating system and integer size and never looks at the processor, so on arm64 it selects the x86-64 one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; <a rel="nofollow" class="external text" href="https://luajit.org/">LuaJIT</a> serves too, being Lua 5.1 — and name it:
+<p>The arm64 row is not a wikven limitation. Scribunto has no arm64 interpreter to offer. The five it bundles are all Intel — Linux and Windows in 32- and 64-bit, macOS in 64 — and it picks among them by operating system and integer size, so on arm64 it takes the x86-64 Linux one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; <a rel="nofollow" class="external text" href="https://luajit.org/">LuaJIT</a> serves too, being Lua 5.1 — and name it:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Scribunto</span>
@@ -678,7 +678,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 17:28.</li>
 </ul>
 
 	<ul id="footer-places">

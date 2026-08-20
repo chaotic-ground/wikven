@@ -502,7 +502,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <td>an interpreter you install</td>
 <td><code>luaPath</code>, below
 </td></tr></tbody></table>
-<p>The arm64 row is not a wikven limitation. Scribunto chooses among its bundled interpreters by operating system and integer size and never looks at the processor, so on arm64 it selects the x86-64 one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; <a rel="nofollow" class="external text" href="https://luajit.org/">LuaJIT</a> serves too, being Lua 5.1 — and name it:
+<p>The arm64 row is not a wikven limitation. Scribunto has no arm64 interpreter to offer. The five it bundles are all Intel — Linux and Windows in 32- and 64-bit, macOS in 64 — and it picks among them by operating system and integer size, so on arm64 it takes the x86-64 Linux one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; <a rel="nofollow" class="external text" href="https://luajit.org/">LuaJIT</a> serves too, being Lua 5.1 — and name it:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Scribunto</span>
@@ -553,7 +553,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules.wikitext" title="This page was last edited on 20 August 2026, at 16:06." data-timestamp="1787241962"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules.wikitext" title="This page was last edited on 20 August 2026, at 17:28." data-timestamp="1787246919"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -664,7 +664,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 16:06.</div>
+		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 17:28.</div>
 		    </section>
 		</div>
 </footer>		</div>

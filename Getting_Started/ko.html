@@ -519,14 +519,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Getting_Started.html" title="Getting Started">Getting Started</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Getting%20Started/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Getting_Started.html" class="mw-pt-progress mw-pt-progress--complete" title="Getting Started (100% 번역함)" lang="en" dir="ltr">English</a></li>
 <li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>이 문서에서는 Wikven으로 기본적인 <a href="https://www.mediawiki.org/wiki/en:%22Hello,_World!%22_program" class="extiw" title="mw:en:&quot;Hello, World!&quot; program">Hello World</a> 문서를 만듭니다.
+</p><p>Wikven은 위키텍스트 디렉터리로부터 정적 웹사이트를 빌드합니다. 설치 방법은 세 가지로, 단독 실행 <a href="../Installation/ko.html#Binary" title="Special:MyLanguage/Installation">바이너리</a>(Linux 전용), <a href="../Installation/ko.html#Docker" title="Special:MyLanguage/Installation">Docker 이미지</a>(모든 플랫폼), <a href="../Installation/ko.html#Build_from_source" title="Special:MyLanguage/Installation">소스에서 빌드</a>입니다. 이 안내서에서는 바이너리나 Docker를 사용하니, 가지고 있는 쪽을 고르십시오.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r87">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>이 문서는 유닉스 계열 셸을 전제합니다. 단독 실행 바이너리는 Linux 전용이므로, macOS나 Windows에서는 Docker 이미지를 사용하십시오.</p></div>
-</div>
-<p>Wikven은 위키텍스트 디렉터리로부터 정적 웹사이트를 빌드합니다. 설치 방법은 세 가지로, 단독 실행 <a href="../Installation/ko.html#Binary" title="Special:MyLanguage/Installation">바이너리</a>, <a href="../Installation/ko.html#Docker" title="Special:MyLanguage/Installation">Docker 이미지</a>, <a href="../Installation/ko.html#Build_from_source" title="Special:MyLanguage/Installation">소스에서 빌드</a>입니다. 이 안내서에서는 바이너리나 Docker를 사용하니, 가지고 있는 쪽을 고르십시오.
-</p>
-<dl><dt>요구 사항</dt>
-<dd>
-<ul><li>단독 실행 <a href="../Installation/ko.html#Binary" title="Special:MyLanguage/Installation">바이너리</a>(Linux), 또는 <a rel="nofollow" class="external text" href="https://www.docker.com/">Docker</a>(모든 플랫폼). 둘 중 하나를 구하려면 <a href="../Installation/ko.html" title="Special:MyLanguage/Installation">설치</a>를 참고하십시오.</li></ul></dd></dl>
 <hr />
 <p>소스 디렉터리를 만들고 위키텍스트 파일을 추가합니다. <code>.wikitext</code>로 끝나는 파일은 모두 위키 문서가 됩니다. 진입 문서의 이름을 <code>index</code>로 지으면 <code>index.html</code>로 빌드되는데, 이는 브라우저가 사이트 루트에서 여는 파일입니다.
 </p>
@@ -536,7 +530,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>그런 다음 사이트를 빌드합니다. 렌더링된 문서는 <code>dist/</code>에 기록됩니다. Wikven을 실행하는 방식에 맞는 탭을 고르십시오:
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
-</p><p><code>src/</code>가 있는 디렉터리에서 실행합니다 (설치하려면 <a href="../Installation/ko.html#Binary" title="Special:MyLanguage/Installation">설치</a> 참고):
+</p><p><code>src/</code>가 있는 디렉터리에서 실행합니다:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
 </pre></div>
@@ -606,7 +600,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 20일 (목) 15:30에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 20일 (목) 17:29에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
