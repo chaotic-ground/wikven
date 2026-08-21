@@ -58,11 +58,20 @@ labels carry the direction for a reader who is not looking.
 
 == What is in MediaWiki:Common.css instead ==
 
-Three things the page needs and TemplateStyles cannot carry, all of them scoped to
-<code>rootpage-index</code>, which is the class the translations carry too:
+Three things the page needs and TemplateStyles cannot carry. None of them is scoped to the page:
+the <code>wikven-home-</code> classes are written by these templates and by nothing else, so the
+class is the scope. They were scoped once, to <code>rootpage-index</code>, and that was a bug —
+<code>Title::getRootText()</code> only strips a subpage where the namespace has them turned on,
+which the main namespace does not, so <code>index/ko</code> is one whole title whose classes are
+<code>page-index_ko</code> and <code>rootpage-index_ko</code>. Every one of these rules painted
+nothing on the translated page.
 
-; the filled button's two colours
+; the filled button's text colour
 : TemplateStyles drops a custom-property declaration, so a token can be read here but not made.
+The fill itself needs no token of its own: it is the brand accent, which the site already defines
+for both themes. What cannot be read off the accent is what goes on top of it — white sits on the
+light theme's teal at 5.6:1 and on night's pale teal at 2.07:1 — so the foreground inverts with it
+and is declared beside it, site-wide.
 ; the file-type marks
 : A <code>mask-image</code> is not colour-typed, so a <code>var()</code> in one cannot be checked
 and the declaration would be dropped. They are masks rather than images because an uploaded SVG is
