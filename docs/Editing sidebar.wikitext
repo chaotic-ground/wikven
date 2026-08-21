@@ -48,6 +48,15 @@ The main page keeps its plain <code>mainpage</code> entry, because that target i
 <!--T:4-->
 Some default sidebar blocks need a live wiki, so {{SITENAME}} drops them from the static export: the '''toolbox''' (What links here, Special pages, Printable version, and so on) and the '''search''' box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 
+<!--T:11-->
+== The page you are on ==
+
+<!--T:12-->
+Nothing marks the entry for the page being read: it stays an ordinary link to where the reader already is. That is MediaWiki's own behaviour rather than anything the export changes. Every sidebar item is built with its active flag set to false and nothing sets it otherwise, so the sidebar never compares an entry with the page around it — the tabs above an article do make that comparison, and the sidebar alone skips it. Writing the target as <code>Special:MyLanguage/Page</code> changes nothing here either way.
+
+<!--T:13-->
+A site that wants it marked can do that in its own JavaScript, since the reader's browser knows which page it is on: for each sidebar link that resolves to the page being read, drop the <code>href</code> and set <code>aria-current="page"</code>. A link with no <code>href</code> is no longer one — it cannot be clicked or focused, and it gives up the link colour by itself — and <code>aria-current</code> is what names the entry for a reader who is not looking at it. This site does it in a gadget, <code>MediaWiki:Gadget-SidebarCurrentPage.js</code>.
+
 <!--T:5-->
 == See also ==
 
