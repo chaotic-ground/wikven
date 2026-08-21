@@ -8,7 +8,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.interface"]);</script>
+<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.interface"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -298,11 +298,23 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<ul id="toc-What_is_removed-sublist" class="vector-toc-list">
 		</ul>
 	</li>
+	<li id="toc-The_page_you_are_on"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#The_page_you_are_on">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">3</span>
+				<span>The page you are on</span>
+			</div>
+		</a>
+		
+		<ul id="toc-The_page_you_are_on-sublist" class="vector-toc-list">
+		</ul>
+	</li>
 	<li id="toc-See_also"
 		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
 		<a class="vector-toc-link" href="#See_also">
 			<div class="vector-toc-text">
-				<span class="vector-toc-numb">3</span>
+				<span class="vector-toc-numb">4</span>
 				<span>See also</span>
 			</div>
 		</a>
@@ -531,6 +543,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
 </p>
+<meta property="mw:PageProp/toc" />
 <div class="mw-heading mw-heading2"><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div>
 <p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </p>
@@ -547,6 +560,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading2"><h2 id="What_is_removed">What is removed</h2></div>
 <p>Some default sidebar blocks need a live wiki, so Wikven drops them from the static export: the <b>toolbox</b> (What links here, Special pages, Printable version, and so on) and the <b>search</b> box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 </p>
+<div class="mw-heading mw-heading2"><h2 id="The_page_you_are_on">The page you are on</h2></div>
+<p>Nothing marks the entry for the page being read: it stays an ordinary link to where the reader already is. That is MediaWiki's own behaviour rather than anything the export changes. Every sidebar item is built with its active flag set to false and nothing sets it otherwise, so the sidebar never compares an entry with the page around it — the tabs above an article do make that comparison, and the sidebar alone skips it. Writing the target as <code>Special:MyLanguage/Page</code> changes nothing here either way.
+</p><p>A site that wants it marked can do that in its own JavaScript, since the reader's browser knows which page it is on: for each sidebar link that resolves to the page being read, drop the <code>href</code> and set <code>aria-current="page"</code>. A link with no <code>href</code> is no longer one — it cannot be clicked or focused, and it gives up the link colour by itself — and <code>aria-current</code> is what names the entry for a reader who is not looking at it. This site does it in a gadget, <code>MediaWiki:Gadget-SidebarCurrentPage.js</code>.
+</p>
 <div class="mw-heading mw-heading2"><h2 id="See_also">See also</h2></div>
 <ul><li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar">Manual:Interface/Sidebar</a></li></ul>
 <style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a></div><div class="wikven-prevnext-next"><a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a>&#160;&#8594;</div></div>
@@ -562,7 +579,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 21 August 2026, at 09:44.</li>
 </ul>
 
 	<ul id="footer-places">

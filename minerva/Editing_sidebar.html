@@ -222,6 +222,15 @@ Wikven
 </pre></div>
 <p>A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
 </p>
+<div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="en" dir="ltr"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Linking_on_a_translated_site"><span class="tocnumber">1</span> <span class="toctext">Linking on a translated site</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#What_is_removed"><span class="tocnumber">2</span> <span class="toctext">What is removed</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#The_page_you_are_on"><span class="tocnumber">3</span> <span class="toctext">The page you are on</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#See_also"><span class="tocnumber">4</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
 <div class="mw-heading mw-heading2"><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div>
 <p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </p>
@@ -237,6 +246,10 @@ Wikven
 </p>
 <div class="mw-heading mw-heading2"><h2 id="What_is_removed">What is removed</h2></div>
 <p>Some default sidebar blocks need a live wiki, so Wikven drops them from the static export: the <b>toolbox</b> (What links here, Special pages, Printable version, and so on) and the <b>search</b> box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="The_page_you_are_on">The page you are on</h2></div>
+<p>Nothing marks the entry for the page being read: it stays an ordinary link to where the reader already is. That is MediaWiki's own behaviour rather than anything the export changes. Every sidebar item is built with its active flag set to false and nothing sets it otherwise, so the sidebar never compares an entry with the page around it — the tabs above an article do make that comparison, and the sidebar alone skips it. Writing the target as <code>Special:MyLanguage/Page</code> changes nothing here either way.
+</p><p>A site that wants it marked can do that in its own JavaScript, since the reader's browser knows which page it is on: for each sidebar link that resolves to the page being read, drop the <code>href</code> and set <code>aria-current="page"</code>. A link with no <code>href</code> is no longer one — it cannot be clicked or focused, and it gives up the link colour by itself — and <code>aria-current</code> is what names the entry for a reader who is not looking at it. This site does it in a gadget, <code>MediaWiki:Gadget-SidebarCurrentPage.js</code>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="See_also">See also</h2></div>
 <ul><li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar">Manual:Interface/Sidebar</a></li></ul>
@@ -257,8 +270,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787241962">
-  				<span>Last edited on 20 August 2026, at 16:06</span>
+  				data-timestamp="1787305452">
+  				<span>Last edited on 21 August 2026, at 09:44</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -281,7 +294,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 21 August 2026, at 09:44.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

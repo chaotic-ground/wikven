@@ -8,7 +8,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src=".././startup-static.js"></script><script src=".././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSearchShortcuts","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface"]);</script>
+<script src=".././startup-static.js"></script><script src=".././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSearchShortcuts","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -423,6 +423,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
 </p>
+<meta property="mw:PageProp/toc"/>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div><section id="citizen-section-1" class="citizen-section">
 <p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </p>
@@ -439,7 +440,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="What_is_removed">What is removed</h2></div><section id="citizen-section-2" class="citizen-section">
 <p>Some default sidebar blocks need a live wiki, so Wikven drops them from the static export: the <b>toolbox</b> (What links here, Special pages, Printable version, and so on) and the <b>search</b> box. The navigation blocks you define in <code>MediaWiki:Sidebar</code> are kept as written.
 </p>
-</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="See_also">See also</h2></div><section id="citizen-section-3" class="citizen-section">
+</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="The_page_you_are_on">The page you are on</h2></div><section id="citizen-section-3" class="citizen-section">
+<p>Nothing marks the entry for the page being read: it stays an ordinary link to where the reader already is. That is MediaWiki's own behaviour rather than anything the export changes. Every sidebar item is built with its active flag set to false and nothing sets it otherwise, so the sidebar never compares an entry with the page around it — the tabs above an article do make that comparison, and the sidebar alone skips it. Writing the target as <code>Special:MyLanguage/Page</code> changes nothing here either way.
+</p><p>A site that wants it marked can do that in its own JavaScript, since the reader's browser knows which page it is on: for each sidebar link that resolves to the page being read, drop the <code>href</code> and set <code>aria-current="page"</code>. A link with no <code>href</code> is no longer one — it cannot be clicked or focused, and it gives up the link colour by itself — and <code>aria-current</code> is what names the entry for a reader who is not looking at it. This site does it in a gadget, <code>MediaWiki:Gadget-SidebarCurrentPage.js</code>.
+</p>
+</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="See_also">See also</h2></div><section id="citizen-section-4" class="citizen-section">
 <ul><li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Interface/Sidebar">Manual:Interface/Sidebar</a></li></ul>
 <style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Translating/en.html" title="Special:MyLanguage/Translating">Translating</a></div><div class="wikven-prevnext-next"><a href="../Deploying/en.html" title="Special:MyLanguage/Deploying">Deploying</a> →</div></div>
 
@@ -460,7 +465,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Editing%20sidebar/en.wikitext" title="This page was last edited on 20 August 2026, at 16:06." data-timestamp="1787241962"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Editing%20sidebar/en.wikitext" title="This page was last edited on 21 August 2026, at 09:44." data-timestamp="1787305452"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>21 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -516,12 +521,27 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-What_is_removed-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
+		<li id="toc-The_page_you_are_on"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#The_page_you_are_on" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">3</span>
+						<span class="citizen-toc-heading">The page you are on</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-The_page_you_are_on-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
 		<li id="toc-See_also"
 			class="citizen-toc-list-item citizen-toc-level-1">
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#See_also" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3</span>
+						<span class="citizen-toc-numb">4</span>
 						<span class="citizen-toc-heading">See also</span>
 					</div>
 					
@@ -541,7 +561,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 16:06.</div>
+		        <div class="page-info__text"> This page was last edited on 21 August 2026, at 09:44.</div>
 		    </section>
 		</div>
 </footer>		</div>
