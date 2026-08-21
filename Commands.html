@@ -8,7 +8,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","ext.tabberNeue","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.uls.interface"]);</script>
+<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","ext.tabberNeue","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.interface"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -614,7 +614,7 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 <div class="mw-heading mw-heading2"><h2 id="translate"><code>translate</code></h2></div>
 <p>The four helpers behind <a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a>. They work on your source tree and exit without building anything.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r94">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>These are available in the Docker image only. The standalone binary registers <code>build</code> and <code>serve</code> and nothing else, so <code>wikven translate</code> is not a command it has.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>These are available in the Docker image only. The standalone binary registers <code>build</code> and <code>serve</code> and nothing else, so <code>wikven translate</code> is not a command it has.</p></div>
 </div>
 <dl><dt><code>translate mark</code></dt>
 <dd>Inserts <code>&lt;!--T:n--&gt;</code> markers into the still-unmarked units of a source page. Keeps the numbers already there, so it is safe to re-run.</dd>
@@ -726,7 +726,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <td><code>true</code></td>
 <td>Fail the step when a source page is broken. A stale or missing translation is reported and never fails the step.
 </td></tr></tbody></table>
-<style data-mw-deduplicate="TemplateStyles:r98">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a></div><div class="wikven-prevnext-next"><a href="./Writing_an_extension.html" title="Special:MyLanguage/Writing an extension">Writing an extension</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a></div><div class="wikven-prevnext-next"><a href="./Writing_an_extension.html" title="Special:MyLanguage/Writing an extension">Writing an extension</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Commands.html">Commands.html</a>"</div></div>
