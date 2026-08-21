@@ -66,7 +66,12 @@ Your site
 --><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--html">index.html</span></div><!--
 --><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--html">Getting_Started.html</span></div><!--
 --><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--css">site.styles.css</span></div><!--
---><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--dir">pagefind/</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--dir">pagefind/</span><span class="wikven-home-gloss">
+<translate>
+<!--T:23-->
+the search index
+</translate>
+</span></div><!--
 --></div>
 </div>
 </div><!--

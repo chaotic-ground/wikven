@@ -203,6 +203,18 @@
 	color: var(--color-base, #202122);
 }
 
+/* One line in the output tree is a product name rather than a file type, so it says what it is.
+ * The other three are read off their extensions and need nothing. */
+.wikven-home-gloss {
+	margin-inline-start: 0.75rem;
+	color: var(--color-subtle, #54595d);
+}
+
+.wikven-home-gloss p {
+	display: inline;
+	margin: 0;
+}
+
 .wikven-home-tree-root {
 	font-weight: bold;
 	color: var(--color-emphasized, #101418);
