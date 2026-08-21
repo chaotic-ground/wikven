@@ -235,3 +235,138 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	block-size: 1px;
 	white-space: nowrap;
 }
+
+/* The diagram's file-type marks, and the caret in the command beside them.
+ *
+ * Both are here rather than in the page's own TemplateStyles because that file can carry
+ * neither: a mask-image is not colour-typed, so a var() in one cannot be checked and the whole
+ * declaration is dropped, and @keyframes is not a rule it can rely on either. This file is not
+ * sanitised, and the external-link arrow above is already a data-URI SVG, so the mechanism is one
+ * the site has proven.
+ *
+ * Masks rather than images, and rather than a filter. An uploaded SVG placed with [[File:...]] is
+ * a fixed-colour picture that cannot follow the theme -- the problem the arrow above solves by
+ * carrying two copies of itself -- and a filter could only invert or rotate the colours the file
+ * already has, which a set of five does not survive. A mask throws the source's colours away and
+ * paints the shape in whatever colour the rule gives it, so two glyphs serve every type in both
+ * themes.
+ *
+ * Only the four named types are marked. Anything else keeps the space, so the names in a tree
+ * still start on the same edge, and nothing is drawn in it. */
+.rootpage-index .wikven-home-f::before {
+	content: "";
+	display: inline-block;
+	inline-size: 1rem;
+	block-size: 1rem;
+	margin-inline-end: 0.45rem;
+	vertical-align: -0.18rem;
+}
+
+.rootpage-index .wikven-home-f--wikitext::before,
+.rootpage-index .wikven-home-f--html::before,
+.rootpage-index .wikven-home-f--css::before,
+.rootpage-index .wikven-home-f--dir::before {
+	-webkit-mask:
+		url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'><path%20d='M9.4%201.6H4.2a.6.6%200%200%200-.6.6v11.6a.6.6%200%200%200%20.6.6h7.6a.6.6%200%200%200%20.6-.6V4.6zM9.4%201.6v3h3'%20fill='none'%20stroke='%23000'%20stroke-width='1.3'%20stroke-linejoin='round'/></svg>")
+		no-repeat center / contain;
+	mask:
+		url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'><path%20d='M9.4%201.6H4.2a.6.6%200%200%200-.6.6v11.6a.6.6%200%200%200%20.6.6h7.6a.6.6%200%200%200%20.6-.6V4.6zM9.4%201.6v3h3'%20fill='none'%20stroke='%23000'%20stroke-width='1.3'%20stroke-linejoin='round'/></svg>")
+		no-repeat center / contain;
+}
+
+.rootpage-index .wikven-home-f--dir::before {
+	-webkit-mask-image: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'><path%20d='M1.7%203.4h4.1l1.6%202h6.9v7.2H1.7z'%20fill='none'%20stroke='%23000'%20stroke-width='1.3'%20stroke-linejoin='round'/></svg>");
+	mask-image: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'><path%20d='M1.7%203.4h4.1l1.6%202h6.9v7.2H1.7z'%20fill='none'%20stroke='%23000'%20stroke-width='1.3'%20stroke-linejoin='round'/></svg>");
+}
+
+/* .wikitext takes the brand teal, which makes the source pane one colour against a mixed output
+ * pane: one kind of thing goes in and several come out, said in colour rather than in a sentence.
+ * The other three are their own conventions, darkened for the light ground and lifted for the
+ * night one. These are graphics and want 3:1, which every pair here clears on both grounds. */
+.rootpage-index .wikven-home-f--wikitext::before {
+	background-color: #10707f;
+}
+
+.rootpage-index .wikven-home-f--html::before {
+	background-color: #b3541e;
+}
+
+.rootpage-index .wikven-home-f--css::before {
+	background-color: #2b6cb0;
+}
+
+.rootpage-index .wikven-home-f--dir::before {
+	background-color: #54595d;
+}
+
+@media screen {
+	html.skin-theme-clientpref-night
+		.rootpage-index
+		.wikven-home-f--wikitext::before {
+		background-color: #4ec3da;
+	}
+
+	html.skin-theme-clientpref-night
+		.rootpage-index
+		.wikven-home-f--html::before {
+		background-color: #e8a06a;
+	}
+
+	html.skin-theme-clientpref-night .rootpage-index .wikven-home-f--css::before {
+		background-color: #7fb3f0;
+	}
+
+	html.skin-theme-clientpref-night .rootpage-index .wikven-home-f--dir::before {
+		background-color: #a2a9b1;
+	}
+}
+
+@media screen and (prefers-color-scheme: dark) {
+	html.skin-theme-clientpref-os
+		.rootpage-index
+		.wikven-home-f--wikitext::before {
+		background-color: #4ec3da;
+	}
+
+	html.skin-theme-clientpref-os .rootpage-index .wikven-home-f--html::before {
+		background-color: #e8a06a;
+	}
+
+	html.skin-theme-clientpref-os .rootpage-index .wikven-home-f--css::before {
+		background-color: #7fb3f0;
+	}
+
+	html.skin-theme-clientpref-os .rootpage-index .wikven-home-f--dir::before {
+		background-color: #a2a9b1;
+	}
+}
+
+/* The caret is what makes the middle of the diagram read as a command rather than as a label with
+ * a dollar sign in front of it. A reader who has asked for less motion gets it still. */
+@keyframes wikven-caret {
+	0%,
+	100% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+}
+
+.rootpage-index .wikven-home-machine::after {
+	content: "";
+	display: inline-block;
+	inline-size: 0.55em;
+	block-size: 1.05em;
+	margin-inline-start: 0.35em;
+	vertical-align: -0.2em;
+	background-color: currentcolor;
+	animation: wikven-caret 1.1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.rootpage-index .wikven-home-machine::after {
+		animation: none;
+	}
+}

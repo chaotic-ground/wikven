@@ -32,37 +32,45 @@ plain HTML. Nothing runs behind the published site.
 Every <code>.wikitext</code> file becomes a page.
 </translate>
 </div>
-<div class="wikven-home-demo">
-<div class="wikven-home-pane-run">
+<div class="wikven-home-flow-scroll">
+<div class="wikven-home-flow"><!--
+--><div class="wikven-home-pane">
 <div class="wikven-home-pane-label">
 <translate>
 <!--T:20-->
-You run
+Your source
 </translate>
 </div>
-<syntaxhighlight lang="shell" copy>
-mkdir src
-echo 'Hello, World!' > src/index.wikitext
-wikven build
-</syntaxhighlight>
+<div class="wikven-home-tree">
+<div class="wikven-home-tree-root">src/</div>
+<div class="wikven-home-tree-branch"><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--wikitext">index.wikitext</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--wikitext">Getting Started.wikitext</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--wikitext">Template:note.wikitext</span></div><!--
+--></div>
 </div>
-<div class="wikven-home-pane-get">
+</div><!--
+--><div class="wikven-home-arrow"><div class="wikven-home-arrow-line"></div><div class="wikven-home-arrow-head"></div></div><!--
+--><div class="wikven-home-machine"><span class="wikven-home-prompt">$</span> wikven build</div><!--
+--><div class="wikven-home-arrow"><div class="wikven-home-arrow-line"></div><div class="wikven-home-arrow-head"></div></div><!--
+--><div class="wikven-home-pane">
 <div class="wikven-home-pane-label">
 <translate>
 <!--T:21-->
-You get
+Your site
 </translate>
 </div>
 <div class="wikven-home-tree">
 <div class="wikven-home-tree-root">dist/</div>
 <div class="wikven-home-tree-branch"><!--
---><div class="wikven-home-tree-item">index.html</div><!--
---><div class="wikven-home-tree-item">site.styles.css</div><!--
---><div class="wikven-home-tree-item">startup-static.js</div><!--
---><div class="wikven-home-tree-item">pagefind/</div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--html">index.html</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--html">Getting_Started.html</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--css">site.styles.css</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--dir">pagefind/</span></div><!--
 --></div>
 </div>
-</div>
+</div><!--
+--></div>
 </div>
 </div>
 
@@ -170,7 +178,7 @@ Markdown, and [[<tvar name="4">Special:MyLanguage/Limitations</tvar>|Limitations
 <div class="wikven-home-closing-line">
 <translate>
 <!--T:18-->
-Your first site is three commands away.
+Your first site is one command away.
 </translate>
 </div><!--
 -->{{home/route|Getting Started|primary}}<!--
