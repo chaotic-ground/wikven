@@ -134,6 +134,18 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	white-space: nowrap;
 }
 
+/* The landing page's focus ring. Here because the sanitiser does not know :focus-visible and
+ * drops the whole rule -- the page's own stylesheet carried this and it never reached a reader.
+ * It was written there in its own rule so that the unknown pseudo-class could not take the hover
+ * rules down with it, which worked; what it could not do is survive at all.
+ *
+ * Stated rather than left to the browser, which draws a dark ring on the pale teal button in
+ * night mode. */
+.wikven-home-route a:focus-visible {
+	outline: 2px solid var(--color-emphasized, #101418);
+	outline-offset: 2px;
+}
+
 /* The diagram's file-type marks, and the caret in the command beside them.
  *
  * Both are here rather than in the page's own TemplateStyles because that file can carry

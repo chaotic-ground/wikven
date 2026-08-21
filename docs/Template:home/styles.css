@@ -89,7 +89,7 @@
 }
 
 .wikven-home-route-primary a:hover {
-	border-color: var(--color-progressive--hover, #0d5c68);
+	border: 1px solid var(--color-progressive--hover, #0d5c68);
 	background-color: var(--color-progressive--hover, #0d5c68);
 }
 
@@ -102,16 +102,8 @@
 }
 
 .wikven-home-route-secondary a:hover {
-	border-color: var(--color-progressive, #10707f);
+	border: 1px solid var(--color-progressive, #10707f);
 	background-color: var(--background-color-interactive-subtle, #f8f9fa);
-}
-
-/* Its own rule, so that a pseudo-class the sanitiser does not know cannot take the hover rules
- * down with it -- one bad selector drops the whole list. The ring is stated rather than left to
- * the browser, which would draw a dark one on the pale teal button in night mode. */
-.wikven-home-route a:focus-visible {
-	outline: 2px solid var(--color-emphasized, #101418);
-	outline-offset: 2px;
 }
 
 .wikven-home-section {
