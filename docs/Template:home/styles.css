@@ -163,11 +163,15 @@
 	overflow-x: auto;
 }
 
+/* No min-content floor on the row. With it, the row refused to be narrower than the longest
+ * file name in either tree -- the trees are nowrap, so their min-content is that name -- and
+ * the gloss on the search index pushed the total past the column, which is what put a scrollbar
+ * under the diagram on a desktop. The panes have a floor of their own and each tree scrolls
+ * inside its own pane, so a long name moves the name rather than the diagram. */
 .wikven-home-flow {
 	display: flex;
 	align-items: center;
 	gap: 1.5rem;
-	min-inline-size: min-content;
 }
 
 /* Outlined and rounded, with room in it, and no fill: a box that is mostly padding reads as
