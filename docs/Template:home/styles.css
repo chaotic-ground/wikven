@@ -76,20 +76,21 @@
 	text-align: center;
 }
 
-/* The two colours come from MediaWiki:Common.css, which can declare a custom property where this
- * file cannot. They have to be a pair and they have to invert: night mode moves the accent to a
- * pale teal, which white text sits on at 2.07:1, and the brand teal it replaces sits on the night
- * ground at 3.2:1 -- a button that stops being the loudest thing on the page in half the
- * sessions. Pale teal with near-black text is 8.9:1 both ways. */
+/* The fill is the brand accent, which the skins already carry as a token in both themes. What
+ * cannot be read off it is the text on top: night mode moves the accent to a pale teal that
+ * white sits on at 2.07:1, so the foreground has to invert with it. That one token is declared
+ * in MediaWiki:Common.css, which can declare a custom property where this file cannot -- and
+ * declared site-wide beside the accent, not on the landing page, because a page class does not
+ * survive translation: the body of index/ko is page-index_ko. */
 .wikven-home-route-primary a {
-	border: 1px solid var(--wikven-cta-bg, #10707f);
-	background-color: var(--wikven-cta-bg, #10707f);
+	border: 1px solid var(--color-progressive, #10707f);
+	background-color: var(--color-progressive, #10707f);
 	color: var(--wikven-cta-fg, #fff);
 }
 
 .wikven-home-route-primary a:hover {
-	border-color: var(--wikven-cta-bg--hover, #0d5c68);
-	background-color: var(--wikven-cta-bg--hover, #0d5c68);
+	border: 1px solid var(--color-progressive--hover, #0d5c68);
+	background-color: var(--color-progressive--hover, #0d5c68);
 }
 
 /* The secondary button has no background of its own, so it can read the accent token and be
@@ -101,16 +102,8 @@
 }
 
 .wikven-home-route-secondary a:hover {
-	border-color: var(--color-progressive, #10707f);
+	border: 1px solid var(--color-progressive, #10707f);
 	background-color: var(--background-color-interactive-subtle, #f8f9fa);
-}
-
-/* Its own rule, so that a pseudo-class the sanitiser does not know cannot take the hover rules
- * down with it -- one bad selector drops the whole list. The ring is stated rather than left to
- * the browser, which would draw a dark one on the pale teal button in night mode. */
-.wikven-home-route a:focus-visible {
-	outline: 2px solid var(--color-emphasized, #101418);
-	outline-offset: 2px;
 }
 
 .wikven-home-section {
@@ -352,9 +345,9 @@
 .wikven-home-machine {
 	flex: 0 0 auto;
 	padding: 1.25rem 1.75rem;
-	border: 1px solid var(--wikven-cta-bg, #10707f);
+	border: 1px solid var(--color-progressive, #10707f);
 	border-radius: 1rem;
-	background-color: var(--wikven-cta-bg, #10707f);
+	background-color: var(--color-progressive, #10707f);
 	font-family: monospace;
 	font-size: 1rem;
 	white-space: nowrap;

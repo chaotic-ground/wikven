@@ -26,6 +26,12 @@
 	 * apart again the way they did in night mode. */
 	--color-link: var(--color-progressive);
 	--color-visited: #0e5f70;
+	/* What reads on the accent when the accent is a background rather than text, for the
+	 * landing page's filled button and the command beside it. It has to invert with the accent:
+	 * white sits on the light theme's brand teal at 5.6:1 and on night's pale teal at 2.07:1,
+	 * so the two themes need opposite ends of the range. TemplateStyles can read a token but
+	 * cannot declare one, which is why it is here rather than in the page's own stylesheet. */
+	--wikven-cta-fg: #fff;
 }
 
 @media screen {
@@ -35,6 +41,7 @@
 		--color-progressive--active: #8ed8e6;
 		--color-progressive--focus: #4ec3da;
 		--color-visited: #a799cd;
+		--wikven-cta-fg: #101418;
 	}
 }
 
@@ -45,6 +52,7 @@
 		--color-progressive--active: #8ed8e6;
 		--color-progressive--focus: #4ec3da;
 		--color-visited: #a799cd;
+		--wikven-cta-fg: #101418;
 	}
 }
 
@@ -93,38 +101,6 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	display: none;
 }
 
-/* The landing page's filled button, defined here because TemplateStyles drops a custom-property
- * declaration and so cannot make a token, only read one. It has to be a pair and it has to
- * invert: night mode moves --color-progressive to a pale teal that white text sits on at
- * 2.07:1, while the brand teal it replaces sits on the night ground at 3.2:1 -- so a button
- * pinned to either one stops being the loudest thing on the page in half the sessions. Light
- * teal with near-black text is 8.9:1 against both the text and the ground.
- *
- * Scoped to the landing page by its root-page class, which is the one the translations carry
- * too: the body of index/ko is page-index_ko, and only rootpage-index catches both. The
- * selectors are core's own darkmode-override() pair, the same as the tokens above. */
-.rootpage-index .mw-parser-output {
-	--wikven-cta-bg: #10707f;
-	--wikven-cta-bg--hover: #0d5c68;
-	--wikven-cta-fg: #fff;
-}
-
-@media screen {
-	html.skin-theme-clientpref-night .rootpage-index .mw-parser-output {
-		--wikven-cta-bg: #4ec3da;
-		--wikven-cta-bg--hover: #79d0e0;
-		--wikven-cta-fg: #101418;
-	}
-}
-
-@media screen and (prefers-color-scheme: dark) {
-	html.skin-theme-clientpref-os .rootpage-index .mw-parser-output {
-		--wikven-cta-bg: #4ec3da;
-		--wikven-cta-bg--hover: #79d0e0;
-		--wikven-cta-fg: #101418;
-	}
-}
-
 /* The landing page sets its own tagline where a page title would go, so the title is taken out
  * of the flow there and nowhere else.
  *
@@ -140,17 +116,34 @@ body:not(.skin-citizen) .mw-parser-output a.external {
  * the site name twice over.
  *
  * Here rather than in the page's own TemplateStyles because TemplateStyles prefixes every
- * selector with .mw-parser-output and the heading is outside the parser output. rootpage- so
- * that the translations (index/ko) are covered by the same rule as the source page; page- as
- * well, so the source page is covered even where the root class is not written. */
-.page-index #firstHeading,
-.rootpage-index #firstHeading {
+ * selector with .mw-parser-output and the heading is outside the parser output.
+ *
+ * Matched on a substring of the body class because neither of the two exact classes covers the
+ * translations. A page gets page-<title> and rootpage-<root title>, and Title::getRootText only
+ * strips a subpage where the namespace has them turned on, which the main namespace does not --
+ * so index/ko is one whole title and its classes are page-index_ko and rootpage-index_ko, which
+ * .page-index and .rootpage-index both miss. Module:Sequence matches the same names the same way
+ * and for the same reason. The substring catches all four, and can catch nothing else: the class
+ * is case-sensitive, so only a page whose title begins "index" reaches it. */
+[class*="page-index"] #firstHeading {
 	position: absolute;
 	overflow: hidden;
 	clip-path: inset(50%);
 	inline-size: 1px;
 	block-size: 1px;
 	white-space: nowrap;
+}
+
+/* The landing page's focus ring. Here because the sanitiser does not know :focus-visible and
+ * drops the whole rule -- the page's own stylesheet carried this and it never reached a reader.
+ * It was written there in its own rule so that the unknown pseudo-class could not take the hover
+ * rules down with it, which worked; what it could not do is survive at all.
+ *
+ * Stated rather than left to the browser, which draws a dark ring on the pale teal button in
+ * night mode. */
+.wikven-home-route a:focus-visible {
+	outline: 2px solid var(--color-emphasized, #101418);
+	outline-offset: 2px;
 }
 
 /* The diagram's file-type marks, and the caret in the command beside them.
@@ -161,6 +154,11 @@ body:not(.skin-citizen) .mw-parser-output a.external {
  * sanitised, and the external-link arrow above is already a data-URI SVG, so the mechanism is one
  * the site has proven.
  *
+ * Not scoped to the landing page. The wikven-home- classes are written by that page's templates
+ * and nothing else uses them, so the class is the scope; a page selector on top of it only added
+ * a way to be wrong, which it was -- these rules named .rootpage-index and so painted nothing on
+ * index/ko, where the class is rootpage-index_ko.
+ *
  * Masks rather than images, and rather than a filter. An uploaded SVG placed with [[File:...]] is
  * a fixed-colour picture that cannot follow the theme -- the problem the arrow above solves by
  * carrying two copies of itself -- and a filter could only invert or rotate the colours the file
@@ -170,7 +168,7 @@ body:not(.skin-citizen) .mw-parser-output a.external {
  *
  * Only the four named types are marked. Anything else keeps the space, so the names in a tree
  * still start on the same edge, and nothing is drawn in it. */
-.rootpage-index .wikven-home-f::before {
+.wikven-home-f::before {
 	content: "";
 	display: inline-block;
 	inline-size: 1rem;
@@ -179,10 +177,10 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	vertical-align: -0.18rem;
 }
 
-.rootpage-index .wikven-home-f--wikitext::before,
-.rootpage-index .wikven-home-f--html::before,
-.rootpage-index .wikven-home-f--css::before,
-.rootpage-index .wikven-home-f--dir::before {
+.wikven-home-f--wikitext::before,
+.wikven-home-f--html::before,
+.wikven-home-f--css::before,
+.wikven-home-f--dir::before {
 	-webkit-mask:
 		url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'><path%20d='M9.4%201.6H4.2a.6.6%200%200%200-.6.6v11.6a.6.6%200%200%200%20.6.6h7.6a.6.6%200%200%200%20.6-.6V4.6zM9.4%201.6v3h3'%20fill='none'%20stroke='%23000'%20stroke-width='1.3'%20stroke-linejoin='round'/></svg>")
 		no-repeat center / contain;
@@ -191,7 +189,7 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 		no-repeat center / contain;
 }
 
-.rootpage-index .wikven-home-f--dir::before {
+.wikven-home-f--dir::before {
 	-webkit-mask-image: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'><path%20d='M1.7%203.4h4.1l1.6%202h6.9v7.2H1.7z'%20fill='none'%20stroke='%23000'%20stroke-width='1.3'%20stroke-linejoin='round'/></svg>");
 	mask-image: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'><path%20d='M1.7%203.4h4.1l1.6%202h6.9v7.2H1.7z'%20fill='none'%20stroke='%23000'%20stroke-width='1.3'%20stroke-linejoin='round'/></svg>");
 }
@@ -200,60 +198,54 @@ body:not(.skin-citizen) .mw-parser-output a.external {
  * pane: one kind of thing goes in and several come out, said in colour rather than in a sentence.
  * The other three are their own conventions, darkened for the light ground and lifted for the
  * night one. These are graphics and want 3:1, which every pair here clears on both grounds. */
-.rootpage-index .wikven-home-f--wikitext::before {
+.wikven-home-f--wikitext::before {
 	background-color: #10707f;
 }
 
-.rootpage-index .wikven-home-f--html::before {
+.wikven-home-f--html::before {
 	background-color: #b3541e;
 }
 
-.rootpage-index .wikven-home-f--css::before {
+.wikven-home-f--css::before {
 	background-color: #2b6cb0;
 }
 
-.rootpage-index .wikven-home-f--dir::before {
+.wikven-home-f--dir::before {
 	background-color: #54595d;
 }
 
 @media screen {
-	html.skin-theme-clientpref-night
-		.rootpage-index
-		.wikven-home-f--wikitext::before {
+	html.skin-theme-clientpref-night .wikven-home-f--wikitext::before {
 		background-color: #4ec3da;
 	}
 
-	html.skin-theme-clientpref-night
-		.rootpage-index
-		.wikven-home-f--html::before {
+	html.skin-theme-clientpref-night .wikven-home-f--html::before {
 		background-color: #e8a06a;
 	}
 
-	html.skin-theme-clientpref-night .rootpage-index .wikven-home-f--css::before {
+	html.skin-theme-clientpref-night .wikven-home-f--css::before {
 		background-color: #7fb3f0;
 	}
 
-	html.skin-theme-clientpref-night .rootpage-index .wikven-home-f--dir::before {
+	html.skin-theme-clientpref-night .wikven-home-f--dir::before {
 		background-color: #a2a9b1;
 	}
 }
 
 @media screen and (prefers-color-scheme: dark) {
-	html.skin-theme-clientpref-os
-		.rootpage-index
-		.wikven-home-f--wikitext::before {
+	html.skin-theme-clientpref-os .wikven-home-f--wikitext::before {
 		background-color: #4ec3da;
 	}
 
-	html.skin-theme-clientpref-os .rootpage-index .wikven-home-f--html::before {
+	html.skin-theme-clientpref-os .wikven-home-f--html::before {
 		background-color: #e8a06a;
 	}
 
-	html.skin-theme-clientpref-os .rootpage-index .wikven-home-f--css::before {
+	html.skin-theme-clientpref-os .wikven-home-f--css::before {
 		background-color: #7fb3f0;
 	}
 
-	html.skin-theme-clientpref-os .rootpage-index .wikven-home-f--dir::before {
+	html.skin-theme-clientpref-os .wikven-home-f--dir::before {
 		background-color: #a2a9b1;
 	}
 }
@@ -271,7 +263,7 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	}
 }
 
-.rootpage-index .wikven-home-machine::after {
+.wikven-home-machine::after {
 	content: "";
 	display: inline-block;
 	inline-size: 0.55em;
@@ -283,7 +275,7 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.rootpage-index .wikven-home-machine::after {
+	.wikven-home-machine::after {
 		animation: none;
 	}
 }
