@@ -1,0 +1,461 @@
+/* The landing page.
+ *
+ * Colours are read from the skin's Codex custom properties and never written here: all three
+ * skins redefine that set for night mode, so the page follows the reader's theme without
+ * knowing anything about it. The literal in each var() is the light value, a fallback for a
+ * skin that defines none. Defining one is not an option -- TemplateStyles drops a
+ * custom-property declaration, and drops it silently.
+ *
+ * Two things this file deliberately does not do, both of them in MediaWiki:Common.css instead,
+ * scoped to this page: the file-type marks in the diagram, which are SVG masks, and the caret
+ * that blinks in the command. A mask-image is not colour-typed, so a var() in one cannot be
+ * checked and the declaration would go; @keyframes is not a rule this file can rely on either.
+ * Common.css is not sanitised and already carries a data-URI SVG for the external-link arrow.
+ *
+ * Every shape drawn here comes out of border-*-color or background-color, both colour-typed and
+ * so able to read a token. A var() inside linear-gradient() cannot be type-checked and the whole
+ * declaration is dropped, silently; that is the trap to know about.
+ *
+ * Widths come from the container, not from media queries. The content column is a different
+ * width in each of the three skins, and in Vector it is a reader preference besides, so the
+ * viewport says nothing useful about the space a band actually has.
+ *
+ * One measure for sentences, 36rem, and none at all for the objects: the diagram, the cards and
+ * the rules run the column. Prose inset while the objects reach the edge is a measure; prose
+ * inset while nothing reaches it is what read as the page having slipped to the left.
+ *
+ * Lengths come from 0.5 / 0.75 / 1 / 1.5 / 2 / 2.5 / 4 / 6 / 7 rem and nowhere else, and the
+ * interval between bands is 6rem, 7 around the diagram, which is the band worth looking at.
+ * There is no way to tokenise a length here, so the scale is kept by hand.
+ */
+
+/* No rule under the hero. The skin draws one under the title and another under the tab row, so a
+ * third within a couple of hundred pixels made the page's own rule indistinguishable from the
+ * furniture above it. The closing band keeps its rule and is the only one the page draws. */
+.wikven-home-hero {
+	margin-block: 4rem 6rem;
+}
+
+/* The cap is stated so the line breaks into two or three whatever language it is in. It is not
+ * tuned to the English string, which is what a cap in ch would have been -- Hangul is about two
+ * ch wide, so a cap set for English would fold the Korean tagline into a column. */
+.wikven-home-tagline {
+	margin-block: 0 1.5rem;
+	max-inline-size: 34rem;
+	font-size: 3.25rem;
+	font-weight: bold;
+	letter-spacing: -0.02em;
+	line-height: 1.05;
+	color: var(--color-emphasized, #101418);
+}
+
+.wikven-home-sub {
+	margin-block: 0 2.5rem;
+	max-inline-size: 36rem;
+	font-size: 1.375rem;
+	line-height: 1.55;
+	color: var(--color-base, #202122);
+}
+
+.wikven-home-cta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+/* A floor rather than a width: "설치" is two characters and would otherwise ship as a stub beside
+ * a button three times its size, while a longer language still grows to fit. */
+.wikven-home-route a {
+	display: block;
+	padding: 0.625rem 1.75rem;
+	min-inline-size: 9rem;
+	border-radius: 0.5rem;
+	font-size: 1.125rem;
+	font-weight: bold;
+	line-height: 2;
+	text-align: center;
+}
+
+/* The two colours come from MediaWiki:Common.css, which can declare a custom property where this
+ * file cannot. They have to be a pair and they have to invert: night mode moves the accent to a
+ * pale teal, which white text sits on at 2.07:1, and the brand teal it replaces sits on the night
+ * ground at 3.2:1 -- a button that stops being the loudest thing on the page in half the
+ * sessions. Pale teal with near-black text is 8.9:1 both ways. */
+.wikven-home-route-primary a {
+	border: 1px solid var(--wikven-cta-bg, #10707f);
+	background-color: var(--wikven-cta-bg, #10707f);
+	color: var(--wikven-cta-fg, #fff);
+}
+
+.wikven-home-route-primary a:hover {
+	border-color: var(--wikven-cta-bg--hover, #0d5c68);
+	background-color: var(--wikven-cta-bg--hover, #0d5c68);
+}
+
+/* The secondary button has no background of its own, so it can read the accent token and be
+ * whichever teal the theme is using. */
+.wikven-home-route-secondary a {
+	border: 1px solid var(--border-color-base, #a2a9b1);
+	background-color: transparent;
+	color: var(--color-progressive, #10707f);
+}
+
+.wikven-home-route-secondary a:hover {
+	border-color: var(--color-progressive, #10707f);
+	background-color: var(--background-color-interactive-subtle, #f8f9fa);
+}
+
+/* Its own rule, so that a pseudo-class the sanitiser does not know cannot take the hover rules
+ * down with it -- one bad selector drops the whole list. The ring is stated rather than left to
+ * the browser, which would draw a dark one on the pale teal button in night mode. */
+.wikven-home-route a:focus-visible {
+	outline: 2px solid var(--color-emphasized, #101418);
+	outline-offset: 2px;
+}
+
+.wikven-home-section {
+	margin-block: 0 6rem;
+}
+
+/* The page's proof gets more room than the list of features after it. */
+.wikven-home-section-demo {
+	margin-block: 0 7rem;
+}
+
+/* Sentence case, at a size that can carry the page's structure. It was a tracked-out caps label,
+ * which is a device for an eyebrow above a headline and was here doing the heading's whole job in
+ * the page's quietest type -- and it only ever worked in Latin script: text-transform does
+ * nothing to Hangul while the letter-spacing still loosens it.
+ *
+ * MediaWiki 1.43+ wraps a heading in <div class="mw-heading">, and the skins hang the rule under
+ * a section heading off one or the other, so both are cleared. */
+.wikven-home-section .mw-heading,
+.wikven-home-section h2 {
+	margin-block: 0 1.5rem;
+	padding-block: 0;
+	border: 0;
+	font-family: inherit;
+	font-size: 2rem;
+	font-weight: bold;
+	letter-spacing: normal;
+	line-height: 1.25;
+	text-transform: none;
+	color: var(--color-emphasized, #101418);
+}
+
+/* The rule stated before it is shown, at reading size. It was underneath the demonstration in the
+ * page's quietest type, which is a footnote to a thing the reader has already worked out. */
+.wikven-home-lede {
+	margin-block: 0 2rem;
+	max-inline-size: 36rem;
+	font-size: 1.25rem;
+	line-height: 1.6;
+	color: var(--color-base, #202122);
+}
+
+/* The diagram: source in, one command, site out.
+ *
+ * The row stacks below 46em and the arrows turn with it; see the media query further down. This
+ * overflow is the backstop under that -- a column too narrow even for the panes' own floors
+ * scrolls the diagram rather than pushing the page sideways. */
+.wikven-home-flow-scroll {
+	overflow-x: auto;
+}
+
+/* No min-content floor on the row. With it, the row refused to be narrower than the longest
+ * file name in either tree -- the trees are nowrap, so their min-content is that name -- and
+ * the gloss on the search index pushed the total past the column, which is what put a scrollbar
+ * under the diagram on a desktop. The panes have a floor of their own and each tree scrolls
+ * inside its own pane, so a long name moves the name rather than the diagram. */
+.wikven-home-flow {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+}
+
+/* Outlined and rounded, with room in it, and no fill: a box that is mostly padding reads as
+ * padding, and a filled one would not survive night mode anyway -- the subtle background token
+ * against the page ground is about 1.1:1 there. The label strip is clipped to the radius. */
+.wikven-home-pane {
+	overflow: hidden;
+	flex: 1 1 0;
+	min-inline-size: 15rem;
+	border: 1px solid var(--border-color-muted, #dadde3);
+	border-radius: 1rem;
+}
+
+.wikven-home-pane-label {
+	padding: 0.75rem 1.5rem;
+	border-block-end: 1px solid var(--border-color-muted, #dadde3);
+	background-color: var(--background-color-neutral-subtle, #f8f9fa);
+	font-size: 0.875rem;
+	font-weight: bold;
+	color: var(--color-base, #202122);
+}
+
+/* A directory, not code. Writing the output as a second <syntaxhighlight> made the band read as
+ * two code blocks that happened to be adjacent, which is what it was: lang="text" produces a
+ * .mw-highlight box with no tokens in it. */
+.wikven-home-tree {
+	padding: 1.5rem;
+	font-family: monospace;
+	font-size: 1rem;
+	overflow-x: auto;
+	line-height: 1.9;
+	white-space: nowrap;
+	color: var(--color-base, #202122);
+}
+
+/* One line in the output tree is a product name rather than a file type, so it says what it is.
+ * The other three are read off their extensions and need nothing. */
+.wikven-home-gloss {
+	margin-inline-start: 0.75rem;
+	color: var(--color-subtle, #54595d);
+}
+
+.wikven-home-gloss p {
+	display: inline;
+	margin: 0;
+}
+
+.wikven-home-tree-root {
+	font-weight: bold;
+	color: var(--color-emphasized, #101418);
+}
+
+.wikven-home-tree-branch {
+	margin-inline-start: 0.5rem;
+}
+
+/* The trunk. */
+.wikven-home-tree-item {
+	border-inline-start-width: 1px;
+	border-inline-start-style: solid;
+	border-inline-start-color: var(--border-color-base, #a2a9b1);
+}
+
+/* The tick off it: an inline box that is nothing but a bottom border. */
+.wikven-home-tree-item::before {
+	content: "";
+	display: inline-block;
+	inline-size: 0.75rem;
+	block-size: 0;
+	margin-inline-end: 0.5rem;
+	vertical-align: middle;
+	border-block-end-width: 1px;
+	border-block-end-style: solid;
+	border-block-end-color: var(--border-color-base, #a2a9b1);
+}
+
+/* The last item's trunk would otherwise run half a line past its own tick, so the stem moves into
+ * the pseudo-element and stops there. If :last-child is dropped, what is left is one hairline
+ * overhanging in a muted colour. */
+.wikven-home-tree-item:last-child {
+	border-inline-start-color: transparent;
+}
+
+.wikven-home-tree-item:last-child::before {
+	block-size: 0.95rem;
+	vertical-align: top;
+	border-inline-start-width: 1px;
+	border-inline-start-style: solid;
+	border-inline-start-color: var(--border-color-base, #a2a9b1);
+}
+
+/* The arrows. Only borders and only logical sides, so they turn themselves around for a
+ * right-to-left reader, and they are pseudo-free empty elements rather than text, so they are
+ * never announced -- the pane labels carry the direction for a reader who is not looking. */
+.wikven-home-arrow {
+	display: flex;
+	flex-direction: column;
+	flex: 0 0 auto;
+	align-self: center;
+}
+
+.wikven-home-arrow-line {
+	block-size: 0;
+	inline-size: 1.75rem;
+	border-block-start-width: 2px;
+	border-block-start-style: solid;
+	border-block-start-color: var(--border-color-base, #a2a9b1);
+}
+
+.wikven-home-arrow-head {
+	align-self: flex-end;
+	inline-size: 0;
+	block-size: 0;
+	margin-block-start: -0.45rem;
+	border-block: 0.45rem solid transparent;
+	border-inline-start-width: 0.5rem;
+	border-inline-start-style: solid;
+	border-inline-start-color: var(--border-color-base, #a2a9b1);
+}
+
+/* Stacked on a narrow screen, and the arrows turn to match.
+ *
+ * A viewport query is the wrong instrument for most of this stylesheet, because the content
+ * column is a different width in each skin and the viewport does not say which. It is the right
+ * one here: a wide column cannot happen inside a narrow viewport, so "the viewport is small"
+ * does imply "the column is small", even though the reverse does not hold. Below this width the
+ * row cannot fit anyway -- two 15rem panes, two arrows and four gaps come to about 39rem.
+ *
+ * The arrows are rebuilt rather than rotated. They are made of borders, so pointing them down is
+ * a matter of which sides carry the colour and which carry the transparency; a transform would
+ * be a second way of saying the same thing and one more property to be dropped. */
+@media screen and (max-width: 46em) {
+	.wikven-home-flow {
+		flex-direction: column;
+		align-items: stretch;
+		min-inline-size: 0;
+	}
+
+	/* flex-basis is measured along the main axis, and the main axis is now the block one, so the
+	 * 1 1 0 that makes the panes share the row would here make them nought pixels tall -- and
+	 * the container's height comes from its content, so there is no free space for the grow to
+	 * hand back. They collapsed to their own borders. Stacked, a pane is as tall as it is. */
+	.wikven-home-pane {
+		flex: 0 0 auto;
+		min-inline-size: 0;
+	}
+
+	.wikven-home-arrow {
+		align-items: center;
+		align-self: center;
+	}
+
+	.wikven-home-arrow-line {
+		inline-size: 0;
+		block-size: 1.75rem;
+		border-block-start-width: 0;
+		border-inline-start-width: 2px;
+		border-inline-start-style: solid;
+		border-inline-start-color: var(--border-color-base, #a2a9b1);
+	}
+
+	.wikven-home-arrow-head {
+		align-self: center;
+		margin-block-start: 0;
+		border-inline: 0.45rem solid transparent;
+		border-block-start-width: 0.5rem;
+		border-block-start-style: solid;
+		border-block-start-color: var(--border-color-base, #a2a9b1);
+		border-block-end-width: 0;
+	}
+
+	.wikven-home-machine {
+		align-self: center;
+	}
+}
+
+/* The command in the middle is the only filled object on the page besides the button, because it
+ * is the only thing on the page that does something. Its caret blinks; that is in Common.css. */
+.wikven-home-machine {
+	flex: 0 0 auto;
+	padding: 1.25rem 1.75rem;
+	border: 1px solid var(--wikven-cta-bg, #10707f);
+	border-radius: 1rem;
+	background-color: var(--wikven-cta-bg, #10707f);
+	font-family: monospace;
+	font-size: 1rem;
+	white-space: nowrap;
+	color: var(--wikven-cta-fg, #fff);
+}
+
+.wikven-home-prompt {
+	opacity: 0.65;
+}
+
+.wikven-home-cards {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4rem;
+}
+
+/* A flex basis rather than a grid track, because a grid track minimum does not shrink: an 18rem
+ * floor is 288px and a 320px phone has about that much content box, so the grid overflowed on the
+ * page a phone is likeliest to land on. A basis collapses instead. */
+.wikven-home-card {
+	flex: 1 1 20rem;
+	padding: 2rem;
+	border: 1px solid var(--border-color-muted, #dadde3);
+	border-radius: 1rem;
+}
+
+/* No hover on the card: the title is a link and the card is not, and there is no JavaScript here
+ * to make one. A card-wide hover state would be a lie about what is clickable. */
+.wikven-home-card-title {
+	margin-block-end: 0.75rem;
+	font-size: 1.375rem;
+	font-weight: bold;
+	line-height: 1.3;
+}
+
+.wikven-home-card-body {
+	font-size: 1.125rem;
+	line-height: 1.6;
+	color: var(--color-base, #202122);
+}
+
+/* A heading and one paragraph. It was three phrases on one line under a 2rem heading, which is
+ * eleven words wearing a whole section's worth of structure: not a sentence and not a list, so it
+ * read as a caption that had lost its bullets. The three uses are the first thing the paragraph
+ * says now, and the band has the shape every other short band on the page has. */
+.wikven-home-fits {
+	max-inline-size: 36rem;
+	font-size: 1.125rem;
+	line-height: 1.6;
+	color: var(--color-base, #202122);
+}
+
+/* A rule and a size, not a box. The button goes to the far edge so both ends of the rule are
+ * anchored rather than leaving half the column empty beside it. */
+.wikven-home-closing {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem 2rem;
+	align-items: center;
+	justify-content: space-between;
+	margin-block: 7rem 3rem;
+	padding-block-start: 4rem;
+	border-block-start: 1px solid var(--border-color-subtle, #c8ccd1);
+}
+
+.wikven-home-closing-line {
+	max-inline-size: 34rem;
+	font-size: 1.75rem;
+	font-weight: bold;
+	line-height: 1.25;
+	color: var(--color-emphasized, #101418);
+}
+
+.wikven-home-fineprint {
+	margin-block-start: 3rem;
+	max-inline-size: 36rem;
+	font-size: 0.875rem;
+	line-height: 1.6;
+	color: var(--color-subtle, #54595d);
+}
+
+/* Translate's language bar. It renders wherever <languages /> is put, and on this page that is
+ * the foot: a reader arriving at a landing page is choosing whether to read at all, not which
+ * language to read in, and every skin here carries a language control of its own for the reader
+ * who wants one sooner. Nothing is hidden, so it stays one tab stop from the end of the page
+ * rather than one from the start. */
+.wikven-home-languages {
+	margin-block-start: 4rem;
+	font-size: 0.875rem;
+}
+
+/* Load-bearing and it does not look it: every band that holds a translate block needs its
+ * paragraph margin cleared, so a new band has to be added here in the same edit. There is no
+ * :is() or :where() to shorten this with -- the sanitiser drops any rule that uses one. */
+.wikven-home-sub p,
+.wikven-home-lede p,
+.wikven-home-pane-label p,
+.wikven-home-card-title p,
+.wikven-home-card-body p,
+.wikven-home-fits p,
+.wikven-home-closing-line p,
+.wikven-home-fineprint p {
+	margin: 0;
+}

@@ -1,57 +1,184 @@
-<languages />
+__NOTOC__
+{{home}}
+
+<div class="wikven-home-hero">
+<div class="wikven-home-tagline">
 <translate>
 <!--T:1-->
-{{SITENAME}} is a static site generator built on [<tvar name="1">https://www.mediawiki.org/</tvar> MediaWiki], the software
-behind [<tvar name="2">https://www.wikipedia.org/</tvar> Wikipedia]. It turns a directory of wikitext
-into a plain HTML site you can host anywhere, with no server or database to run.
-This documentation site is itself built with {{SITENAME}}.
-
-<!--T:2-->
-Reach for {{SITENAME}} when your content is already MediaWiki wikitext, or when you
-want MediaWiki's templates, parser functions, gadgets and extensions but a static
-result with nothing to run: a project's documentation site, an archived wiki
-you can browse as plain HTML, or a personal wiki. Unlike a general static-site generator
-such as [<tvar name="2">https://gohugo.io/</tvar> Hugo] or [<tvar name="3">https://www.mkdocs.org/</tvar> MkDocs], it renders real wikitext through MediaWiki itself, so it
-assumes you are comfortable with wikitext (see [[<tvar name="1">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for the trade-offs).
-
-<!--T:3-->
-See [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]] for the three ways to install {{SITENAME}}, the standalone
-[[<tvar name="2">Special:MyLanguage/Installation#Binary</tvar>|binary]], the [[<tvar name="3">Special:MyLanguage/Installation#Docker</tvar>|Docker image]], or
-[[<tvar name="4">Special:MyLanguage/Installation#Build from source</tvar>|from source]], then [[<tvar name="5">Special:MyLanguage/Getting Started</tvar>|Getting Started]] to build
-your first site.
-
-<!--T:4-->
-== Supported features ==
-
-<!--T:5-->
-With {{SITENAME}}, you can use the following features of MediaWiki.
-
-<!--T:6-->
-* [<tvar name="8">https://www.mediawiki.org/wiki/Special:MyLanguage/Wikitext</tvar> Wikitext] pages (see [[<tvar name="1">Special:MyLanguage/Pages</tvar>|Pages]])
-* [[<tvar name="2">Special:MyLanguage/Pages#Templates</tvar>|Templates]]
-* [[<tvar name="3">Special:MyLanguage/Images</tvar>|Images]] from Wikimedia Commons or local files
-* [[<tvar name="4">Special:MyLanguage/JavaScript</tvar>|JavaScript]] (MediaWiki:Common.js and gadgets)
-* [[<tvar name="5">Special:MyLanguage/Extensions</tvar>|Extensions]], bundled or fetched at build time, and [[<tvar name="9">Special:MyLanguage/Skins</tvar>|skins]] — several at once, with a switcher for the reader
-* [[<tvar name="6">Special:MyLanguage/Searching</tvar>|Search]] (client-side, built in via SifterSearch)
-* [[<tvar name="7">Special:MyLanguage/Translating</tvar>|Translation]] into multiple languages (via the Translate extension)
-
-<!--T:7-->
-== Unsupported features ==
-
-<!--T:8-->
-These need a live wiki, so they are not part of the static export:
-
-<!--T:9-->
-* All special pages, and the action API behind them
-* All editors ([<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiEditor</tvar> WikiEditor], <!--
--->[<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:VisualEditor</tvar> VisualEditor] and <!--
--->[<tvar name="3">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CodeEditor</tvar> CodeEditor]); you edit the source files instead
-* Accounts, and everything keyed to one: preferences, watchlists, notifications, user pages
-* Page histories and diffs, which live in your repository instead — the "View history" link leads there
-* Discussion pages as a workflow, and recent-changes feeds
-
-<!--T:10-->
-What replaces some of them is written down: the reader's own display choices are on a [[<tvar name="1">Special:MyLanguage/Skins#Settings</tvar>|Settings page]] the build writes, and searching is [[<tvar name="2">Special:MyLanguage/Searching</tvar>|done in the browser]].
+Bake wikitext into a website.
 </translate>
+</div>
+<div class="wikven-home-sub">
+<translate>
+<!--T:2-->
+{{SITENAME}} renders your wikitext through [<tvar name="1">https://www.mediawiki.org/</tvar> MediaWiki] at build time and writes out
+plain HTML. Nothing runs behind the published site.
+</translate>
+</div>
+<div class="wikven-home-cta"><!--
+-->{{home/route|Getting Started|primary}}<!--
+-->{{home/route|Installation}}<!--
+--></div>
+</div>
+
+<div class="wikven-home-section wikven-home-section-demo">
+<translate>
+<!--T:3-->
+== How it works ==
+</translate>
+<div class="wikven-home-lede">
+<translate>
+<!--T:4-->
+Every <code>.wikitext</code> file becomes a page.
+</translate>
+</div>
+<div class="wikven-home-flow-scroll">
+<div class="wikven-home-flow"><!--
+--><div class="wikven-home-pane">
+<div class="wikven-home-pane-label">
+<translate>
+<!--T:20-->
+Your source
+</translate>
+</div>
+<div class="wikven-home-tree">
+<div class="wikven-home-tree-root">src/</div>
+<div class="wikven-home-tree-branch"><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--wikitext">index.wikitext</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--wikitext">Getting Started.wikitext</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--wikitext">Template:note.wikitext</span></div><!--
+--></div>
+</div>
+</div><!--
+--><div class="wikven-home-arrow"><div class="wikven-home-arrow-line"></div><div class="wikven-home-arrow-head"></div></div><!--
+--><div class="wikven-home-machine"><span class="wikven-home-prompt">$</span> wikven build</div><!--
+--><div class="wikven-home-arrow"><div class="wikven-home-arrow-line"></div><div class="wikven-home-arrow-head"></div></div><!--
+--><div class="wikven-home-pane">
+<div class="wikven-home-pane-label">
+<translate>
+<!--T:21-->
+Your site
+</translate>
+</div>
+<div class="wikven-home-tree">
+<div class="wikven-home-tree-root">dist/</div>
+<div class="wikven-home-tree-branch"><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--html">index.html</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--html">Getting_Started.html</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--css">site.styles.css</span></div><!--
+--><div class="wikven-home-tree-item"><span class="wikven-home-f wikven-home-f--dir">pagefind/</span><span class="wikven-home-gloss">
+<translate>
+<!--T:23-->
+the search index
+</translate>
+</span></div><!--
+--></div>
+</div>
+</div><!--
+--></div>
+</div>
+</div>
+
+<div class="wikven-home-section">
+<translate>
+<!--T:5-->
+== What you get ==
+</translate>
+<div class="wikven-home-cards"><!--
+--><div class="wikven-home-card">
+<div class="wikven-home-card-title">
+<translate>
+<!--T:6-->
+[[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Templates, not copy-paste]]
+</translate>
+</div>
+<div class="wikven-home-card-body">
+<translate>
+<!--T:7-->
+Templates, parser functions and Lua modules, all resolved at build time.
+</translate>
+</div>
+</div><!--
+--><div class="wikven-home-card">
+<div class="wikven-home-card-title">
+<translate>
+<!--T:8-->
+[[<tvar name="1">Special:MyLanguage/Extensions</tvar>|Extensions and skins]]
+</translate>
+</div>
+<div class="wikven-home-card-body">
+<translate>
+<!--T:9-->
+Bundled or fetched from Git, with several skins for the reader to choose between.
+</translate>
+</div>
+</div><!--
+--><div class="wikven-home-card">
+<div class="wikven-home-card-title">
+<translate>
+<!--T:10-->
+[[<tvar name="1">Special:MyLanguage/Searching</tvar>|Search with nothing to query]]
+</translate>
+</div>
+<div class="wikven-home-card-body">
+<translate>
+<!--T:11-->
+The index is built with the site and runs in the reader's browser.
+</translate>
+</div>
+</div><!--
+--><div class="wikven-home-card">
+<div class="wikven-home-card-title">
+<translate>
+<!--T:12-->
+[[<tvar name="1">Special:MyLanguage/Translating</tvar>|Every language you write in]]
+</translate>
+</div>
+<div class="wikven-home-card-body">
+<translate>
+<!--T:13-->
+Every language you write in comes out as its own set of pages.
+</translate>
+</div>
+</div><!--
+--></div>
+</div>
+
+<div class="wikven-home-section">
+<translate>
+<!--T:14-->
+== Where it fits ==
+</translate>
+<div class="wikven-home-fits">
+<translate>
+<!--T:22-->
+A project's documentation, an archived wiki, a personal wiki. Unlike a general static-site generator such as
+[<tvar name="1">https://gohugo.io/</tvar> Hugo] or [<tvar name="2">https://www.mkdocs.org/</tvar> MkDocs], {{SITENAME}} renders real wikitext, so it suits content
+that is already a wiki. See [[<tvar name="3">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for how the markup compares with
+Markdown, and [[<tvar name="4">Special:MyLanguage/Limitations</tvar>|Limitations]] for what a live wiki does that a published site cannot.
+</translate>
+</div>
+</div>
+
+<div class="wikven-home-closing">
+<div class="wikven-home-closing-line">
+<translate>
+<!--T:18-->
+Your first site is one command away.
+</translate>
+</div><!--
+-->{{home/route|Getting Started|primary}}<!--
+--></div>
+
+<div class="wikven-home-fineprint">
+<translate>
+<!--T:19-->
+This site is a {{SITENAME}} build.
+</translate>
+</div>
+
+<div class="wikven-home-languages">
+<languages />
+</div>
 
 {{DISPLAYTITLE:Wikven}}

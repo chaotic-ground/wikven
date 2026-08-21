@@ -1,0 +1,119 @@
+The landing page's layout: <code><nowiki>{{home}}</nowiki></code> loads the stylesheet, and
+<code><nowiki>{{home/route|Installation}}</nowiki></code> is one of the buttons that start a reader off.
+
+== Why a template at all ==
+
+<code><nowiki>{{home}}</nowiki></code> takes no arguments and renders nothing. It exists so the
+stylesheet's name is written down once, in the same shape as
+<code><nowiki>{{prevnext}}</nowiki></code>, rather than in a bare
+<code><nowiki><templatestyles /></nowiki></code> on the page itself.
+
+<code><nowiki>{{home/route}}</nowiki></code> takes a page name, and a second argument of any value
+makes that button the filled one. The label is the target's own translated title, read by
+<code>Template:prevnext/label</code> — the same lookup, and for the same reason, that the
+bottom-of-page navigation uses: a label written into the call would be a second copy of a title
+that is already translated once, and one nothing checks.
+
+== Why the layout is not in the page ==
+
+Every band of the page is a <code>&lt;div&gt;</code> outside the translate tags, so no layout
+markup reaches a translator: a unit is a sentence, and moving a band or changing a card's border
+is not a change to any sentence. That is the same rule <code>Template:prevnext/doc</code> sets out.
+
+== What the bands are for ==
+
+The landing page carries what a reader who has just arrived needs, and sends the rest to the
+documentation. In order: a tagline and two buttons; the rule the tool follows, then the diagram
+that shows it; four things {{SITENAME}} can do at a line apiece; where it fits and what it is
+instead of; one more button; the fine print. Everything else was moved or cut — the list of what a
+static export cannot do is an appendix now, on
+[[Special:MyLanguage/Limitations|Limitations]], because a landing page that answers "should I use
+this" with a list of what is missing has answered the wrong question first.
+
+The bands are short on purpose and the page is long on purpose: a reader scrolls, and would rather
+scroll past four lines than read four paragraphs.
+
+== The diagram ==
+
+Source in, one command, site out. It was two <code>&lt;syntaxhighlight&gt;</code> blocks side by
+side and read as two code blocks that happened to be adjacent, which is what it was:
+<code>lang="text"</code> produces a <code>.mw-highlight</code> box with no tokens in it, so no
+styling of the wrapper could have said anything else. Both trees are ordinary markup now, and the
+command between them is the only filled object on the page besides the button, because it is the
+only thing on the page that does something.
+
+On a narrow screen it stacks, and the arrows turn to match. A viewport query is the wrong
+instrument for most of this stylesheet, because the content column is a different width in each
+skin and the viewport does not say which; it is the right one here, because a wide column cannot
+happen inside a narrow viewport. "The viewport is small" does imply "the column is small", even
+though the reverse does not hold, and below that width the row could not fit anyway.
+
+The arrows are rebuilt rather than rotated. They are made of borders, so pointing them down is a
+matter of which sides carry the colour and which carry the transparency — a transform would be a
+second way of saying the same thing and one more property to be dropped.
+
+The arrows are drawn from logical borders, so they turn themselves around for a right-to-left
+reader, and they are empty elements rather than text, so they are never announced — the two pane
+labels carry the direction for a reader who is not looking.
+
+== What is in MediaWiki:Common.css instead ==
+
+Three things the page needs and TemplateStyles cannot carry, all of them scoped to
+<code>rootpage-index</code>, which is the class the translations carry too:
+
+; the filled button's two colours
+: TemplateStyles drops a custom-property declaration, so a token can be read here but not made.
+; the file-type marks
+: A <code>mask-image</code> is not colour-typed, so a <code>var()</code> in one cannot be checked
+and the declaration would be dropped. They are masks rather than images because an uploaded SVG is
+a fixed-colour picture that cannot follow the theme, and rather than a filter because a filter can
+only invert or rotate the colours the file already has.
+; the caret in the command
+: <code>@keyframes</code> is not a rule this stylesheet can rely on. It stops under
+<code>prefers-reduced-motion</code>.
+
+The page title is taken out of the flow there too. MediaWiki's own way to do that is to blank
+<code>MediaWiki:Mainpage-title</code>, which this site cannot use — that message is read only for
+the page <code>Title::isMainPage()</code> is true of, and pointing <code>MediaWiki:Mainpage</code>
+at <code>Special:MyLanguage/index</code> to keep the logo following the reader's language is what
+stops it being that page. The heading is clipped rather than removed, so it is still there for a
+reader who is not looking.
+
+== The language bar ==
+
+<code><nowiki><languages /></nowiki></code> is at the foot of the page rather than the head. It
+renders where it is put, so this is a move and not a hiding: a reader arriving at a landing page is
+deciding whether to read at all, not which language to read in, and each skin carries a language
+control of its own for the reader who wants one sooner.
+
+Translate's "this page is a translated version" notice is still at the head and is not touched,
+because the stylesheet cannot reach it either: TemplateStyles prefixes every selector with
+<code>.mw-parser-output</code>, and that notice is written before the parser output.
+
+== Colours ==
+
+The stylesheet reads the skin's Codex custom properties and defines none. All three skins redefine
+the Codex set for night mode, so reading the tokens is what makes the page follow the reader's
+theme without knowing which one it is.
+
+Every shape the page draws — the arrows, the tree's trunk and its ticks — comes out of
+<code>border-*-color</code> or <code>background-color</code>, both of which are colour-typed and so
+may read a token. A <code>var()</code> inside <code>linear-gradient()</code> cannot be
+type-checked, so the whole declaration is dropped, silently. That is the trap here.
+
+== Measures and lengths ==
+
+One measure for sentences, 36rem, and none at all for the objects: the diagram, the cards and the
+rules run the column. Prose inset while the objects reach the right edge is a measure; prose inset
+while nothing reaches it is what read as the page having slipped to the left. The tagline's cap is
+the exception, and it exists to control where the line breaks in any language rather than to set a
+reading width.
+
+Lengths come from 0.5 / 0.75 / 1 / 1.5 / 2 / 2.5 / 4 / 6 / 7 rem and nowhere else. A length cannot
+be tokenised here — TemplateStyles drops the declaration — so the scale is kept by hand, and the
+next editor inherits the rule from the stylesheet's own header rather than inheriting the values.
+Bands are 6rem apart, 7 around the diagram, which is the band worth looking at.
+
+The cards are laid out with a flex basis rather than a grid track, because a grid track minimum
+does not shrink: a 20rem floor is 320px, and a phone with about that much content box overflowed
+into a horizontal scroll on the page a phone is likeliest to land on. A basis collapses instead.

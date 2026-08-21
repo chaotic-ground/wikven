@@ -20,6 +20,7 @@
 ** Special:MyLanguage/Deploying|sidebar-deploying
 ** Special:MyLanguage/Troubleshooting|sidebar-troubleshooting
 * sidebar-references
+** Special:MyLanguage/Limitations|sidebar-limitations
 ** Special:MyLanguage/Configuration|sidebar-configuration
 ** Special:MyLanguage/Standalone binary|sidebar-standalone-binary
 ** Special:MyLanguage/Commands|sidebar-commands
