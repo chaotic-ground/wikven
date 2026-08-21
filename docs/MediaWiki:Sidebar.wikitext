@@ -5,25 +5,25 @@
      offers its own Home besides -- fillMinervaMenu.php drops an entry leading there for that
      reason, so this section only ever reached the two skins that show the logo anyway. -->
 * sidebar-docs
-** Special:MyLanguage/Why wikitext|sidebar-why-wikitext
 ** Special:MyLanguage/Installation|sidebar-installation
 ** Special:MyLanguage/Getting Started|sidebar-getting-started
 ** Special:MyLanguage/Pages|sidebar-pages
-** Special:MyLanguage/Editing sidebar|sidebar-editing-sidebar
 ** Special:MyLanguage/Images|sidebar-images
 ** Special:MyLanguage/Skins|sidebar-skins
+** Special:MyLanguage/Searching|sidebar-searching
 ** Special:MyLanguage/Extensions|sidebar-extensions
 ** Special:MyLanguage/Lua modules|sidebar-lua-modules
 ** Special:MyLanguage/JavaScript|sidebar-javascript
-** Special:MyLanguage/Searching|sidebar-searching
 ** Special:MyLanguage/Translating|sidebar-translating
+** Special:MyLanguage/Editing sidebar|sidebar-editing-sidebar
 ** Special:MyLanguage/Deploying|sidebar-deploying
 ** Special:MyLanguage/Troubleshooting|sidebar-troubleshooting
 * sidebar-references
 ** Special:MyLanguage/Limitations|sidebar-limitations
+** Special:MyLanguage/Why wikitext|sidebar-why-wikitext
 ** Special:MyLanguage/Configuration|sidebar-configuration
 ** Special:MyLanguage/Standalone binary|sidebar-standalone-binary
 ** Special:MyLanguage/Commands|sidebar-commands
-** Special:MyLanguage/Development|sidebar-development
 ** Special:MyLanguage/Writing an extension|sidebar-writing-an-extension
+** Special:MyLanguage/Development|sidebar-development
 ** Special:MyLanguage/Licenses|sidebar-licenses
