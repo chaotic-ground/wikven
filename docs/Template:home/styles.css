@@ -197,6 +197,7 @@
 	padding: 1.5rem;
 	font-family: monospace;
 	font-size: 1rem;
+	overflow-x: auto;
 	line-height: 1.9;
 	white-space: nowrap;
 	color: var(--color-base, #202122);
@@ -273,6 +274,57 @@
 	border-inline-start-width: 0.5rem;
 	border-inline-start-style: solid;
 	border-inline-start-color: var(--border-color-base, #a2a9b1);
+}
+
+/* Stacked on a narrow screen, and the arrows turn to match.
+ *
+ * A viewport query is the wrong instrument for most of this stylesheet, because the content
+ * column is a different width in each skin and the viewport does not say which. It is the right
+ * one here: a wide column cannot happen inside a narrow viewport, so "the viewport is small"
+ * does imply "the column is small", even though the reverse does not hold. Below this width the
+ * row cannot fit anyway -- two 15rem panes, two arrows and four gaps come to about 39rem.
+ *
+ * The arrows are rebuilt rather than rotated. They are made of borders, so pointing them down is
+ * a matter of which sides carry the colour and which carry the transparency; a transform would
+ * be a second way of saying the same thing and one more property to be dropped. */
+@media screen and (max-width: 46em) {
+	.wikven-home-flow {
+		flex-direction: column;
+		align-items: stretch;
+		min-inline-size: 0;
+	}
+
+	.wikven-home-pane {
+		min-inline-size: 0;
+	}
+
+	.wikven-home-arrow {
+		align-items: center;
+		align-self: center;
+	}
+
+	.wikven-home-arrow-line {
+		inline-size: 0;
+		block-size: 1.75rem;
+		border-block-start-width: 0;
+		border-inline-start-width: 2px;
+		border-inline-start-style: solid;
+		border-inline-start-color: var(--border-color-base, #a2a9b1);
+	}
+
+	.wikven-home-arrow-head {
+		align-self: center;
+		margin-block-start: 0;
+		border-inline: 0.45rem solid transparent;
+		border-block-start-width: 0.5rem;
+		border-block-start-style: solid;
+		border-block-start-color: var(--border-color-base, #a2a9b1);
+		border-block-end-width: 0;
+	}
+
+	.wikven-home-machine {
+		align-self: center;
+	}
 }
 
 /* The command in the middle is the only filled object on the page besides the button, because it

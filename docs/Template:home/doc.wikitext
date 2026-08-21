@@ -42,10 +42,15 @@ styling of the wrapper could have said anything else. Both trees are ordinary ma
 command between them is the only filled object on the page besides the button, because it is the
 only thing on the page that does something.
 
-It never wraps. The arrows mean something only read along one axis, and CSS has no way to say
-"horizontal side by side, vertical when stacked" without a container query, so on a column too
-narrow to hold the row the diagram scrolls in its own box rather than stacking into three parts
-with arrows pointing the wrong way.
+On a narrow screen it stacks, and the arrows turn to match. A viewport query is the wrong
+instrument for most of this stylesheet, because the content column is a different width in each
+skin and the viewport does not say which; it is the right one here, because a wide column cannot
+happen inside a narrow viewport. "The viewport is small" does imply "the column is small", even
+though the reverse does not hold, and below that width the row could not fit anyway.
+
+The arrows are rebuilt rather than rotated. They are made of borders, so pointing them down is a
+matter of which sides carry the colour and which carry the transparency — a transform would be a
+second way of saying the same thing and one more property to be dropped.
 
 The arrows are drawn from logical borders, so they turn themselves around for a right-to-left
 reader, and they are empty elements rather than text, so they are never announced — the two pane
