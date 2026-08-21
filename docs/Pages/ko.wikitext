@@ -63,5 +63,5 @@
 <!--T:20 @8c4ff658-->
 <code>Template:Note.wikitext</code>로 저장하고 문서에서 다음과 같이 사용하면:
 
-<!--T:21 @b3137057-->
-"'''Note:''' Back up your wiki first."로 렌더링됩니다. 틀은 위치 매개변수(<code><nowiki>{{{1}}}</nowiki></code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 [$1 파서 함수]를 실행합니다. 문법 자체는 표준 MediaWiki입니다. [$2 Help:Templates] 참고.
+<!--T:21 @88bcbed2-->
+"'''Note:''' Rebuild the site after every edit."로 렌더링됩니다. 틀은 위치 매개변수(<code><nowiki>{{{1}}}</nowiki></code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 [$1 파서 함수]를 실행합니다. 문법 자체는 표준 MediaWiki입니다. [$2 Help:Templates] 참고.

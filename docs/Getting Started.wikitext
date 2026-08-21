@@ -115,7 +115,7 @@ Templates, the main reason to reach for {{SITENAME}} over Markdown, let you reus
 
 <syntaxhighlight lang="shell" copy>
 echo "'''Note:''' {{{1}}}" > "src/Template:Note.wikitext"
-echo '{{Note|Back up your wiki first.}}' >> src/index.wikitext
+echo '{{Note|Rebuild the site after every edit.}}' >> src/index.wikitext
 </syntaxhighlight>
 
 <translate>
