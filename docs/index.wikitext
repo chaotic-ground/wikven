@@ -5,7 +5,7 @@ __NOTOC__
 <div class="wikven-home-tagline">
 <translate>
 <!--T:1-->
-Bake a wiki into a website.
+Bake wikitext into a website.
 </translate>
 </div>
 <div class="wikven-home-sub">
