@@ -134,6 +134,22 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	white-space: nowrap;
 }
 
+/* The sidebar entry for the page the reader is already on. The SidebarCurrentPage gadget marks
+ * it, because MediaWiki does not: Skin::createSidebarItem() sets every sidebar item's "active" to
+ * false and nothing sets it otherwise, so the entry for the current page is an ordinary link to
+ * where the reader is standing.
+ *
+ * Bold rather than a colour, which is how the skin list already marks the skin the page is
+ * rendered in. The entry has stopped being a link by then, so it has left the link colour behind
+ * and is not competing with one.
+ *
+ * On the attribute rather than on a class: it is the same thing the gadget sets for a reader who
+ * is not looking, so there is one mark and not two that could disagree. */
+.mw-portlet a[aria-current="page"],
+.wikven-nav-item a[aria-current="page"] {
+	font-weight: bold;
+}
+
 /* The landing page's focus ring. Here because the sanitiser does not know :focus-visible and
  * drops the whole rule -- the page's own stylesheet carried this and it never reached a reader.
  * It was written there in its own rule so that the unknown pseudo-class could not take the hover
