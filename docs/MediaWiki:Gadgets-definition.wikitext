@@ -1,1 +1,2 @@
 * PersistTabber[ResourceLoader|default]|PersistTabber.js
+* SidebarCurrentPage[ResourceLoader|default]|SidebarCurrentPage.js
