@@ -155,10 +155,9 @@
 
 /* The diagram: source in, one command, site out.
  *
- * It never wraps. The arrows only mean anything read along one axis, and CSS has no way to say
- * "horizontal when side by side, vertical when stacked" without a container query, so on a column
- * too narrow to hold the row the whole thing scrolls in its own box rather than stacking into
- * three parts with arrows pointing the wrong way. */
+ * The row stacks below 46em and the arrows turn with it; see the media query further down. This
+ * overflow is the backstop under that -- a column too narrow even for the panes' own floors
+ * scrolls the diagram rather than pushing the page sideways. */
 .wikven-home-flow-scroll {
 	overflow-x: auto;
 }
@@ -397,33 +396,11 @@
 	color: var(--color-base, #202122);
 }
 
-/* Three phrases run together as one line. They were three columns under three teal rules, which
- * drew a table header over content that has no columns in it. */
+/* A heading and one paragraph. It was three phrases on one line under a 2rem heading, which is
+ * eleven words wearing a whole section's worth of structure: not a sentence and not a list, so it
+ * read as a caption that had lost its bullets. The three uses are the first thing the paragraph
+ * says now, and the band has the shape every other short band on the page has. */
 .wikven-home-fits {
-	max-inline-size: 36rem;
-	font-size: 1.25rem;
-	line-height: 1.7;
-	color: var(--color-base, #202122);
-}
-
-/* inline-block, not inline: each phrase then wraps as a whole. Set inline they broke wherever the
- * line ran out, so a phrase could start on one line and finish on the next with a middot between
- * it and its own tail. */
-.wikven-home-fit {
-	display: inline-block;
-}
-
-.wikven-home-fit + .wikven-home-fit::before {
-	content: "·";
-	margin-inline: 0.5rem;
-	color: var(--color-subtle, #54595d);
-}
-
-/* What wikven is instead of. This was the last paragraph of the fine print, under the last call
- * to action, set as a disclaimer -- the one sentence on the page that distinguishes it, in the
- * page's quietest type. */
-.wikven-home-fits-note {
-	margin-block-start: 2rem;
 	max-inline-size: 36rem;
 	font-size: 1.125rem;
 	line-height: 1.6;
@@ -477,15 +454,8 @@
 .wikven-home-pane-label p,
 .wikven-home-card-title p,
 .wikven-home-card-body p,
-.wikven-home-fits-note p,
+.wikven-home-fits p,
 .wikven-home-closing-line p,
 .wikven-home-fineprint p {
-	margin: 0;
-}
-
-/* The three phrases are laid out inline, so the paragraphs MediaWiki wraps them in have to be
- * inline too. */
-.wikven-home-fit p {
-	display: inline;
 	margin: 0;
 }

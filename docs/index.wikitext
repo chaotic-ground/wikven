@@ -149,31 +149,12 @@ Every language you write in comes out as its own set of pages.
 <!--T:14-->
 == Where it fits ==
 </translate>
-<div class="wikven-home-fits"><!--
---><div class="wikven-home-fit">
-<translate>
-<!--T:15-->
-A project's documentation
-</translate>
-</div><!--
---><div class="wikven-home-fit">
-<translate>
-<!--T:16-->
-An archived wiki
-</translate>
-</div><!--
---><div class="wikven-home-fit">
-<translate>
-<!--T:17-->
-A personal wiki
-</translate>
-</div><!--
---></div>
-<div class="wikven-home-fits-note">
+<div class="wikven-home-fits">
 <translate>
 <!--T:22-->
-Unlike a general static-site generator such as [<tvar name="1">https://gohugo.io/</tvar> Hugo] or [<tvar name="2">https://www.mkdocs.org/</tvar> MkDocs], {{SITENAME}} renders real wikitext, so it
-suits content that is already a wiki. See [[<tvar name="3">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for how the markup compares with
+A project's documentation, an archived wiki, a personal wiki. Unlike a general static-site generator such as
+[<tvar name="1">https://gohugo.io/</tvar> Hugo] or [<tvar name="2">https://www.mkdocs.org/</tvar> MkDocs], {{SITENAME}} renders real wikitext, so it suits content
+that is already a wiki. See [[<tvar name="3">Special:MyLanguage/Why wikitext</tvar>|Why wikitext]] for how the markup compares with
 Markdown, and [[<tvar name="4">Special:MyLanguage/Limitations</tvar>|Limitations]] for what a live wiki does that a published site cannot.
 </translate>
 </div>
