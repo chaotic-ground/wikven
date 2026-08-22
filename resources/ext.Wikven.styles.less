@@ -170,3 +170,18 @@ a.new {
 .wikven-skin-item.active {
   font-weight: @font-weight-bold;
 }
+
+// A link whose label is code -- a linked `<code>` name, which the reference pages are full of --
+// was not reading as a link. Vector and Citizen both ship core's rule for the element
+// (`pre, code, .mw-code { color: var( --color-emphasized ) }`), and an element selector outranks
+// the colour a link passes down to its contents, so the code kept body-text colour inside the
+// anchor. Neither skin underlines a content link, which leaves the colour as the whole of the cue:
+// the reader saw a grey box where a link was.
+//
+// `inherit` rather than a link colour of its own, so the code follows the anchor into every state
+// the skin paints -- visited, hover, focus, and the red of a link to a page that does not exist --
+// instead of pinning one of them. The box and its border stay as they are: they say "code", which
+// is a different thing from "link" and worth keeping beside it.
+a code {
+  color: inherit;
+}
