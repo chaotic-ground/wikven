@@ -118,8 +118,8 @@
 <!--T:18 @a7473987-->
 == 서드파티 확장 기능과 스킨 ==
 
-<!--T:19 @89906bd2-->
-<code>extensions</code>/<code>skins</code>에 있는 이름 중 {{SITENAME}}에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 [[$1|<code>WikvenRepositories</code>]]에 선언된 소스(tarball, [$2 Git] 저장소, 또는 [$3 Composer] 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
+<!--T:19 @1c710a61-->
+<code>extensions</code>/<code>skins</code>에 있는 이름 중 {{SITENAME}}에 번들되지 않은 것은 빌드 시점에 <code>maintenance/fetchExtensions.php</code>가 [[$1|<code>WikvenRepositories</code> 맵]]에 선언된 소스(tarball, [$2 Git] 저장소, 또는 [$3 Composer] 패키지)에서 가져옵니다. 이는 설치 후 <code>WikvenSettings.php</code>가 연결되기 전에 실행되므로, MediaWiki가 구성 요소를 불러올 때쯤이면 이미 디스크에 있습니다.
 
 <!--T:20 @a974dfaf-->
 == 단독 실행 바이너리 ==

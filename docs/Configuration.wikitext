@@ -26,11 +26,11 @@ config:
 <translate>
 <!--T:4-->
 == <code>extensions</code> ==
-A list of extension names to load. An extension that ships inside {{SITENAME}} works by name alone; any other name is treated as third-party and fetched from a source you declare in [[#WikvenRepositories|<code>WikvenRepositories</code>]]. See [[<tvar name="1">Special:MyLanguage/Extensions</tvar>|Extensions]] for what ships and what does not.
+A list of extension names to load. An extension that ships inside {{SITENAME}} works by name alone; any other name is treated as third-party and fetched from a source you declare in the [[#WikvenRepositories|<code>WikvenRepositories</code> map]]. See [[<tvar name="1">Special:MyLanguage/Extensions</tvar>|Extensions]] for what ships and what does not.
 
 <!--T:5-->
 == <code>skins</code> ==
-A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from [[#WikvenRepositories|<code>WikvenRepositories</code>]]. See [[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]].
+A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from the [[#WikvenRepositories|<code>WikvenRepositories</code> map]]. See [[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]].
 
 <!--T:6-->
 == <code>config</code> ==
@@ -42,29 +42,29 @@ A map of configuration variables, each named without the <code>wg</code> prefix,
 {| class="wikitable"
 ! Variable !! Default !! What it sets
 |-
-| [[#WikvenMainPage|<code>WikvenMainPage</code>]] || <code>index</code> || The page written as <code>index.html</code>, the site root.
+| [[#WikvenMainPage|WikvenMainPage]] || <code>index</code> || The page written as <code>index.html</code>, the site root.
 |-
-| [[#WikvenAboutPage|<code>WikvenAboutPage</code>]] || <code>About</code> || The page the footer's "About" link leads to.
+| [[#WikvenAboutPage|WikvenAboutPage]] || <code>About</code> || The page the footer's "About" link leads to.
 |-
-| [[#WikvenSettingsPage|<code>WikvenSettingsPage</code>]] || <code>Settings</code> || The generated page holding the reader's colour theme and skin.
+| [[#WikvenSettingsPage|WikvenSettingsPage]] || <code>Settings</code> || The generated page holding the reader's colour theme and skin.
 |-
-| [[#WikvenEditUrl|<code>WikvenEditUrl</code>]] || empty || Target of the per-page "Edit" link.
+| [[#WikvenEditUrl|WikvenEditUrl]] || empty || Target of the per-page "Edit" link.
 |-
-| [[#WikvenEditUrl|<code>WikvenHistoryUrl</code>]] || empty || Target of the per-page "View history" link.
+| [[#WikvenEditUrl|WikvenHistoryUrl]] || empty || Target of the per-page "View history" link.
 |-
-| [[#WikvenEditUrl|<code>WikvenViewSourceUrl</code>]] || empty || Target of the per-page "View source" tab.
+| [[#WikvenEditUrl|WikvenViewSourceUrl]] || empty || Target of the per-page "View source" tab.
 |-
-| [[#WikvenFooterUrl|<code>WikvenFooterUrl</code>]] || empty || A link added to the site footer.
+| [[#WikvenFooterUrl|WikvenFooterUrl]] || empty || A link added to the site footer.
 |-
-| [[#WikvenLogos|<code>WikvenLogos</code>]] || empty || Header logos, named as source-directory files.
+| [[#WikvenLogos|WikvenLogos]] || empty || Header logos, named as source-directory files.
 |-
-| [[#WikvenRepositories|<code>WikvenRepositories</code>]] || empty || Where to fetch non-bundled extensions and skins from.
+| [[#WikvenRepositories|WikvenRepositories]] || empty || Where to fetch non-bundled extensions and skins from.
 |-
-| [[#WikvenBundleWebfonts|<code>WikvenBundleWebfonts</code>]] || <code>false</code> || Bake webfonts into the export for scripts the reader may lack a font for.
+| [[#WikvenBundleWebfonts|WikvenBundleWebfonts]] || <code>false</code> || Bake webfonts into the export for scripts the reader may lack a font for.
 |-
-| [[#WikvenStyleDirectory|<code>WikvenStyleDirectory</code>]] || <code>.</code> || Subdirectory of the output the CSS files are written to.
+| [[#WikvenStyleDirectory|WikvenStyleDirectory]] || <code>.</code> || Subdirectory of the output the CSS files are written to.
 |-
-| [[#WikvenStyleDirectory|<code>WikvenScriptDirectory</code>]] || <code>.</code> || Subdirectory of the output the JavaScript files are written to.
+| [[#WikvenStyleDirectory|WikvenScriptDirectory]] || <code>.</code> || Subdirectory of the output the JavaScript files are written to.
 |}
 
 <!--T:36-->

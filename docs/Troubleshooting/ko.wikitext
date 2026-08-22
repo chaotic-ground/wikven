@@ -46,8 +46,8 @@
 <!--T:15 @78d81226-->
 == 확장 기능이나 스킨이 불러와지지 않았습니다 ==
 
-<!--T:16 @601bcca8-->
-<code>skipping extension 'X' (not bundled in this image)</code>는, 스킨이라면 같은 형태의 메시지는, <code>extensions</code>나 <code>skins</code> 목록의 이름을 디스크에서 찾지 못했다는 뜻입니다. 철자가 틀렸거나, {{SITENAME}}이 함께 제공하는 구성 요소가 아니어서 [[$1|<code>WikvenRepositories</code>]]에 소스가 필요한 경우입니다. 빌드는 실패하는 대신 그것 없이 계속하므로, 어떤 기능이 조용히 아무 일도 하지 않는 모습으로 드러납니다. [[$2|확장 기능]]을 참고하십시오.
+<!--T:16 @098cfd10-->
+<code>skipping extension 'X' (not bundled in this image)</code>는, 스킨이라면 같은 형태의 메시지는, <code>extensions</code>나 <code>skins</code> 목록의 이름을 디스크에서 찾지 못했다는 뜻입니다. 철자가 틀렸거나, {{SITENAME}}이 함께 제공하는 구성 요소가 아니어서 [[$1|<code>WikvenRepositories</code> 맵]]에 소스가 필요한 경우입니다. 빌드는 실패하는 대신 그것 없이 계속하므로, 어떤 기능이 조용히 아무 일도 하지 않는 모습으로 드러납니다. [[$2|확장 기능]]을 참고하십시오.
 
 <!--T:17 @4293d876-->
 == 설정 파일이 둘인데 하나가 무시됩니다 ==

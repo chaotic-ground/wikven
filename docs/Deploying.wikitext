@@ -132,7 +132,7 @@ The rest follows from the same idea. A build runs with its clock frozen at <code
 == Keeping pinned sources current ==
 
 <!--T:21-->
-The pins that make those builds reproducible are the ones nothing moves for you. An exact [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] pin stays exact until you change it, and no bot will change it: <code>.wikven.yaml</code> is {{SITENAME}}'s own file, and Dependabot and Renovate only watch the ecosystems they recognise. A site can therefore sit years behind on a skin with every check green.
+The pins that make those builds reproducible are the ones nothing moves for you. An exact [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> pin]] stays exact until you change it, and no bot will change it: <code>.wikven.yaml</code> is {{SITENAME}}'s own file, and Dependabot and Renovate only watch the ecosystems they recognise. A site can therefore sit years behind on a skin with every check green.
 
 <!--T:22-->
 [<tvar name="1">https://www.updatecli.io/</tvar> updatecli] fills that hole, and it fills it by never having to recognise your file: you tell it where the pin is. A manifest names a '''source''' (where the current version is published) and a '''target''' (which key of which file holds the pin); applying it writes the source's value into the target and opens a pull request if that changed anything. Run it on a schedule in continuous integration and a pin that has fallen behind becomes a pull request you can review. Here is a whole manifest for one pin, a repository following a release tag:

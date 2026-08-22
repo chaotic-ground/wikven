@@ -9,7 +9,7 @@ __TOC__
 == Enabling translation ==
 
 <!--T:3-->
-Add <code>Translate</code> to <code>extensions</code> in your [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]], along with <code>UniversalLanguageSelector</code>, which Translate depends on. Both are bundled in the {{SITENAME}} image, so there is nothing to install.
+Add <code>Translate</code> to <code>extensions</code> in your [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code> file]], along with <code>UniversalLanguageSelector</code>, which Translate depends on. Both are bundled in the {{SITENAME}} image, so there is nothing to install.
 </translate>
 
 <syntaxhighlight lang="yaml" copy>

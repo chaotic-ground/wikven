@@ -45,7 +45,7 @@ docker run --rm \
 
 <translate>
 <!--T:8-->
-It takes no options; everything a build can be told is in your [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]]. A failed build exits non-zero and says which page or step failed.
+It takes no options; everything a build can be told is in your [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code> file]]. A failed build exits non-zero and says which page or step failed.
 
 <!--T:9-->
 == <code>serve</code> ==

@@ -22,7 +22,7 @@ Two consequences run through everything below:
 == Getting your extension into a build ==
 
 <!--T:7-->
-A site lists what it wants in its [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yml</code>]]. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
+A site lists what it wants in its [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yml</code> file]]. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
