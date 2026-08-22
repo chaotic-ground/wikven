@@ -160,7 +160,7 @@ That setting is read on every product, so a source tree carrying it builds the s
 == When the build and the site disagree ==
 
 <!--T:30-->
-Two mismatches used to pass quietly and produce a broken site. One of them ends the build; the other is only reported, and the bake goes on.
+Two things can be out of step here, and what the site asked for decides which is which: Lua the site asked for and this build cannot give ends the build, and Lua the site never asked for is only reported, with the bake going on.
 
 <!--T:17-->
 '''Modules with no Scribunto.''' A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is built, and told what those files come to: a <code><nowiki>{{#invoke:}}</nowiki></code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read. The build says what it sees rather than deciding for you, because a <code>Module:</code> file is a guess read off a name and may be on its way in, on its way out, or kept for something else.
@@ -189,7 +189,7 @@ Scribunto from extensions and the Module: pages with it.
 
 <translate>
 <!--T:19-->
-A refused build says so in its exit status as well as in words, so a script that bakes and then deploys stops rather than shipping nothing.
+That refusal is in the exit status as well as in words, so a script that bakes and then deploys stops rather than shipping nothing. The report above stays a report: a bake that prints it exits zero like any other, and writes the site it described.
 
 <!--T:20-->
 This documentation site uses a module itself, and the page you are reading is baked with the image on every change, with the module's answer asserted to be in it. The binary is held to the same rule on a source tree of its own, x86-64 on every change and arm64 on every nightly, so each row of the table above is something a machine checks rather than something this page claims.
