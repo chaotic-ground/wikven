@@ -69,22 +69,28 @@ To keep a maintenance or tracking category out of the footer instead, add the <c
 Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>. For example, this file:
 </translate>
 
+<translate nowrap>
+<!--T:22-->
 <syntaxhighlight lang="wikitext" copy>
-'''Note:''' {{{1}}}
+'''Note:''' <tvar name="1">{{{1}}}</tvar>
 </syntaxhighlight>
+</translate>
 
 <translate>
 <!--T:20-->
 saved as <code>Template:Note.wikitext</code> and used on a page as:
 </translate>
 
+<translate nowrap>
+<!--T:23-->
 <syntaxhighlight lang="wikitext" copy>
-{{Note|Back up your wiki first.}}
+<tvar name="1">{{Note|</tvar>Rebuild the site after every edit.<tvar name="2">}}</tvar>
 </syntaxhighlight>
+</translate>
 
 <translate>
 <!--T:21-->
-renders as "'''Note:''' Back up your wiki first." Templates take positional (<code><nowiki>{{{1}}}</nowiki></code>) and named parameters and run [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions</tvar> parser functions] exactly as in MediaWiki. The syntax itself is standard MediaWiki; see [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> Help:Templates].
+renders as "'''Note:''' Rebuild the site after every edit." Templates take positional (<code><nowiki>{{{1}}}</nowiki></code>) and named parameters and run [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions</tvar> parser functions] exactly as in MediaWiki. The syntax itself is standard MediaWiki; see [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> Help:Templates].
 </translate>
 
 {{prevnext}}
