@@ -12,7 +12,9 @@
 # minus what the build never needs (keeping all locales, so the binary is not
 # English-only).
 FROM wikven AS app
-COPY bin/build.php /var/www/html/build.php
+# The binary's own entry points, beside the app tree they drive: one per subcommand, plus the
+# prelude they share.
+COPY bin/build.php bin/prepare.php bin/translate.php /var/www/html/
 RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
  && rm -rf \
       /var/www/html/HISTORY \
@@ -29,9 +31,10 @@ RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
 FROM dunglas/frankenphp:static-builder-musl-1.12.6@sha256:e83b6dc244b8e170c5324cb8db32817b88703da495d40d14ce7751456e448a0d AS builder
 WORKDIR /go/src/app
 COPY --from=app /var/www/html ./dist/app
-# A small Caddy module registers the `build` subcommand, so the binary can be run
-# as `./wikven build` instead of `./wikven php-cli build.php`. It is linked into
-# the FrankenPHP binary alongside FrankenPHP's own default Caddy modules.
+# A small Caddy module registers the `build`, `serve` and `translate` subcommands,
+# so the binary can be run as `./wikven build` instead of `./wikven php-cli
+# build.php`. It is linked into the FrankenPHP binary alongside FrankenPHP's own
+# default Caddy modules.
 COPY caddy /go/wikven-caddy
 ENV SPC_CMD_VAR_FRANKENPHP_XCADDY_MODULES="--with github.com/dunglas/mercure/caddy --with github.com/dunglas/vulcain/caddy --with github.com/dunglas/caddy-cbrotli --with github.com/chaotic-ground/wikven/caddy=/go/wikven-caddy"
 ENV PHP_VERSION=8.3

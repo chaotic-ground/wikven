@@ -79,7 +79,7 @@ Only the binary takes <code>--listen</code>; the container always listens on 808
 The four helpers behind [[<tvar name="1">Special:MyLanguage/Translating</tvar>|Translating]]. They work on your source tree and exit without building anything.
 
 <!--T:14-->
-{{note|These are available in the Docker image only. The standalone binary registers <code>build</code> and <code>serve</code> and nothing else, so <code>wikven translate</code> is not a command it has.}}
+{{note|Both products have these. The image runs them against the mounted source tree; the binary runs them against the working directory, which is the only difference between the two forms below.}}
 
 <!--T:15-->
 ; <code>translate mark</code>
@@ -92,9 +92,19 @@ The four helpers behind [[<tvar name="1">Special:MyLanguage/Translating</tvar>|T
 : Reports broken source pages, and translations that are out of date or missing. Writes nothing.
 
 <!--T:16-->
-Each takes a single file, or <code>--all</code> for every page under the source directory. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source, so mount it writable; <code>check</code> only reads.
+Each takes a single file, or <code>--all</code> for every page under the source directory. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source: mount it writable under Docker, where the binary edits it in place. <code>check</code> only reads.
 </translate>
 
+<tabber>
+|-|Binary=
+<syntaxhighlight lang="shell" copy>
+wikven translate mark --all
+
+wikven translate scaffold ko "Getting Started.wikitext"
+
+wikven translate check --gate
+</syntaxhighlight>
+|-|Docker=
 <syntaxhighlight lang="shell" copy>
 docker run --rm -v "$(pwd)/src:/workspace/src" \
   ghcr.io/chaotic-ground/wikven translate mark --all
@@ -105,6 +115,7 @@ docker run --rm -v "$(pwd)/src:/workspace/src" \
 docker run --rm -v "$(pwd)/src:/workspace/src:ro" \
   ghcr.io/chaotic-ground/wikven translate check --gate
 </syntaxhighlight>
+</tabber>
 
 <translate>
 <!--T:17-->
