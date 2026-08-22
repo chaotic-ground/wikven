@@ -60,8 +60,18 @@
 <!--T:19 @aeb975e4-->
 소스에 <code>Template:Name.wikitext</code> 파일을 두고 아무 문서에서나 <code><nowiki>{{Name}}</nowiki></code>으로 사용하세요. 예를 들어 다음 파일을:
 
+<!--T:22 @f13ce61f-->
+<syntaxhighlight lang="wikitext" copy>
+'''참고:''' $1
+</syntaxhighlight>
+
 <!--T:20 @8c4ff658-->
 <code>Template:Note.wikitext</code>로 저장하고 문서에서 다음과 같이 사용하면:
 
+<!--T:23 @24d2f744-->
+<syntaxhighlight lang="wikitext" copy>
+$1편집할 때마다 사이트를 다시 빌드하세요.$2
+</syntaxhighlight>
+
 <!--T:21 @88bcbed2-->
-"'''Note:''' Rebuild the site after every edit."로 렌더링됩니다. 틀은 위치 매개변수(<code><nowiki>{{{1}}}</nowiki></code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 [$1 파서 함수]를 실행합니다. 문법 자체는 표준 MediaWiki입니다. [$2 Help:Templates] 참고.
+"'''참고:''' 편집할 때마다 사이트를 다시 빌드하세요."로 렌더링됩니다. 틀은 위치 매개변수(<code><nowiki>{{{1}}}</nowiki></code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 [$1 파서 함수]를 실행합니다. 문법 자체는 표준 MediaWiki입니다. [$2 Help:Templates] 참고.

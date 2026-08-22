@@ -69,18 +69,24 @@ To keep a maintenance or tracking category out of the footer instead, add the <c
 Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>. For example, this file:
 </translate>
 
+<translate nowrap>
+<!--T:22-->
 <syntaxhighlight lang="wikitext" copy>
-'''Note:''' {{{1}}}
+'''Note:''' <tvar name="1">{{{1}}}</tvar>
 </syntaxhighlight>
+</translate>
 
 <translate>
 <!--T:20-->
 saved as <code>Template:Note.wikitext</code> and used on a page as:
 </translate>
 
+<translate nowrap>
+<!--T:23-->
 <syntaxhighlight lang="wikitext" copy>
-{{Note|Rebuild the site after every edit.}}
+<tvar name="1">{{Note|</tvar>Rebuild the site after every edit.<tvar name="2">}}</tvar>
 </syntaxhighlight>
+</translate>
 
 <translate>
 <!--T:21-->
