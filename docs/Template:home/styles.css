@@ -311,10 +311,17 @@
 	/* flex-basis is measured along the main axis, and the main axis is now the block one, so the
 	 * 1 1 0 that makes the panes share the row would here make them nought pixels tall -- and
 	 * the container's height comes from its content, so there is no free space for the grow to
-	 * hand back. They collapsed to their own borders. Stacked, a pane is as tall as it is. */
+	 * hand back. They collapsed to their own borders. Stacked, a pane is as tall as it is.
+	 *
+	 * And as wide as it is. A pane clips to its border radius, which is what keeps the label strip
+	 * inside the corners -- and on a narrow screen that clip was landing on the file names instead:
+	 * "pagefind/ the search in" and nothing after it, cut at the border with no way to reach the
+	 * rest, because a clipped box has no overflow to scroll. Sized to its content the pane holds
+	 * its longest line, and the band goes back to scrolling sideways in the scroller that is
+	 * already around it for exactly this. */
 	.wikven-home-pane {
 		flex: 0 0 auto;
-		min-inline-size: 0;
+		min-inline-size: max-content;
 	}
 
 	.wikven-home-arrow {
