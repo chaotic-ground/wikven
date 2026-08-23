@@ -61,6 +61,13 @@ Your site
 </translate>
 </div>
 <div class="wikven-home-out">
+<div class="wikven-home-out-page"><div class="wikven-home-page"><!--
+--><div class="wikven-home-page-chrome"></div><!--
+--><div class="wikven-home-page-cols"><!--
+--><div class="wikven-home-page-side"></div><!--
+--><div class="wikven-home-page-main"></div><!--
+--></div>
+</div></div>
 <div class="wikven-home-out-tree">
 <div class="wikven-home-tree">
 <div class="wikven-home-tree-root">dist/</div>
@@ -77,13 +84,6 @@ the search index
 --></div>
 </div>
 </div>
-<div class="wikven-home-out-page"><div class="wikven-home-page"><!--
---><div class="wikven-home-page-chrome"></div><!--
---><div class="wikven-home-page-cols"><!--
---><div class="wikven-home-page-side"></div><!--
---><div class="wikven-home-page-main"></div><!--
---></div>
-</div></div>
 </div>
 </div><!--
 --></div>
