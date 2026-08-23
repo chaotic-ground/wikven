@@ -60,7 +60,7 @@ A silent one to check by eye: a <code>config</code> value '''replaces''' the def
 == Every page says it was edited on the same day ==
 
 <!--T:20-->
-Page dates come from the commit that last changed each source file, and a '''shallow checkout''' holds only one commit. Check out with <code>fetch-depth: 0</code>, as the workflow in [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|Deploying]] does. Building from a directory that is not a repository at all has the same effect, and neither case fails the build: the log says it happened, and every page is dated at the commit being built.
+Page dates come from the commit that last changed each source file, and a '''shallow clone''' holds only one commit. Build from a full one: clone without <code>--depth</code>, or deepen the clone you have with <code>git fetch --unshallow</code>. On GitHub Actions that is <code>fetch-depth: 0</code>, as the workflow in [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|Deploying]] does. Building from a directory that is not a repository at all has the same effect, and neither case fails the build: the log says it happened, and every page is dated at the commit being built.
 
 <!--T:21-->
 == The build fails on a Wikimedia Commons image ==
