@@ -247,7 +247,7 @@ Wikven
 </p><p>Pin a reference rather than tracking a branch. A build of a given revision of a site should fetch the code that revision was tested against, and the docs site pins every fetched component for that reason.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Local_URLs:_the_one_contract_to_read">Local URLs: the one contract to read</h2></div>
-<p>This is the part that catches extension authors, because the code is correct on a live wiki and wrong only here.
+<p>Read this section before you write anything that emits a URL. It is the one place where code that is correct on a live wiki is wrong, and being correct elsewhere is what makes it easy to miss here.
 </p><p>Wikven makes page URLs <b>document-relative</b>. <code>Title::getLocalURL()</code> answers <code>./Page.html</code>, and because a page whose title has a slash is exported into a real directory, a page one level down needs <code>../Page.html</code> to mean the same thing. <code>maintenance/rename.php</code> applies that correction per page, by the page's own depth.
 </p><p>It corrects two places:
 </p>
@@ -317,8 +317,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787469221">
-  				<span>Last edited on 23 August 2026, at 07:13</span>
+  				data-timestamp="1787478742">
+  				<span>Last edited on 23 August 2026, at 09:52</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -341,7 +341,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:13.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 09:52.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
