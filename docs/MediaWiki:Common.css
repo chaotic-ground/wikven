@@ -425,6 +425,74 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	animation: wikven-out-page 11s ease-in-out infinite;
 }
 
+/* Where the browser can drive an animation from the scroll position, it does, and the clock is
+ * left out of it: the pane turns over as the reader brings the diagram up the viewport, once,
+ * ending on the page and staying there. Nothing moves while it is being read.
+ *
+ * A feature query rather than both at once, because both at once is not a thing an animation can
+ * be: it has one timeline, and setting animation-timeline replaces the clock rather than joining
+ * it.
+ *
+ * The timeline is named on the band and referenced from inside it, rather than each layer taking
+ * its own view(). view() measures the subject against its nearest scroll container, and the layers
+ * have one much nearer than the page: the diagram's own horizontal scroller. overflow-x: auto
+ * makes overflow-y compute to auto as well -- there is no way to scroll one axis and leave the
+ * other alone -- so the layers were being measured against a box they never move inside, and the
+ * pane sat frozen mid-turn. The band is outside that scroller, so it is measured against the page.
+ *
+ * fill-mode is what makes it hold: outside the range an unfilled animation drops back to the base
+ * style, which here is both states at full opacity, one on top of the other. */
+@supports (animation-timeline: --wikven-out) {
+	.wikven-home-section-demo {
+		view-timeline-name: --wikven-out;
+	}
+
+	.wikven-home-out-tree,
+	.wikven-home-out-page {
+		animation-duration: auto;
+		animation-iteration-count: 1;
+		animation-fill-mode: both;
+		animation-timeline: --wikven-out;
+		animation-range: cover;
+	}
+
+	.wikven-home-out-tree {
+		animation-name: wikven-out-tree-scrolled;
+	}
+
+	.wikven-home-out-page {
+		animation-name: wikven-out-page-scrolled;
+	}
+}
+
+/* The scrolled pair ends where the timed pair only passes through: on the page, since a reader who
+ * has scrolled past has been shown the answer and should keep it. */
+@keyframes wikven-out-tree-scrolled {
+	0%,
+	35% {
+		opacity: 1;
+	}
+
+	55%,
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes wikven-out-page-scrolled {
+	0%,
+	35% {
+		opacity: 0;
+	}
+
+	55%,
+	100% {
+		opacity: 1;
+	}
+}
+
+/* Last, so it wins over both of the above: whichever timeline the browser has, a reader who asked
+ * for less motion gets neither, and the two states stand one under the other. */
 @media (prefers-reduced-motion: reduce) {
 	.wikven-home-out {
 		display: flex;
