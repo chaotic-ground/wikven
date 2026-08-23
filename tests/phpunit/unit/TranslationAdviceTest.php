@@ -129,7 +129,9 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 
 	/** An untranslated language falls back to English, and saying it all twice reads as a bug. */
 	public function testALanguageThatFallsBackIsNotRepeated() {
-		$advice = new TranslationAdvice(static fn(string $key): string => "text of $key");
+		$advice = new TranslationAdvice(static function (string $key): string {
+			return "text of $key";
+		});
 		$body = $advice->comment(
 			[['kind' => 'stale', 'file' => 'a/ko.wikitext', 'unit' => '1', 'lang' => 'ko']],
 			['en', 'ko']

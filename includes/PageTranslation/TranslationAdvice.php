@@ -78,7 +78,9 @@ class TranslationAdvice {
 		. "\n"
 		. $this->inEachLanguage(
 			$languages,
-			fn(string $language): string => $this->body($grouped, $language)
+			function (string $language) use ($grouped): string {
+				return $this->body($grouped, $language);
+			}
 		);
 	}
 
@@ -97,9 +99,9 @@ class TranslationAdvice {
 		. "\n"
 		. $this->inEachLanguage(
 			$languages,
-			fn(string $language): string => (
-				$this->heading($language) . $this->msg('wikven-translations-all-clear', $language) . "\n"
-			)
+			function (string $language): string {
+				return $this->heading($language) . $this->msg('wikven-translations-all-clear', $language) . "\n";
+			}
 		);
 	}
 
@@ -190,7 +192,11 @@ class TranslationAdvice {
 		);
 	}
 
-	/** @param list<string> $parameters */
+	/**
+	 * @param string $key Message key.
+	 * @param string $language Language code to render it in.
+	 * @param list<string> $parameters
+	 */
 	private function msg(string $key, string $language, array $parameters = []): string {
 		return ( $this->message )($key, $language, $parameters);
 	}
