@@ -10,7 +10,7 @@ on:
       - 'Dockerfile'
       - '.dockerignore'
       - 'binary.Dockerfile'
-      - 'bin/build.php'
+      - 'bin/**'
       - 'caddy/**'
       - '.github/workflows/binary.yml'
   workflow_call:
@@ -263,5 +263,59 @@ jobs:
           if ! grep -q 'lua ran on' work/dist/index.html; then
             echo "::error::the binary baked a site, but the module's answer is not in it"
             grep -o '{{#invoke[^}]*}}' work/dist/index.html || true
+            exit 1
+          fi
+
+      # The translation helpers, which the binary had none of until now: the four are maintenance
+      # scripts behind a booted MediaWiki, and the image was the only product that could boot one.
+      # Asserted end to end on a tree that is translated, out of date and then not: `mark` numbers
+      # the units, `scaffold` writes the skeleton, `check --gate` passes over a translation that is
+      # merely stale, and `stamp` brings it up to date. Every one of them has to write into the
+      # source tree the caller named, which under Docker is a mount and here is a plain directory.
+      - name: Mark, scaffold, stamp and check translations
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          bin="$GITHUB_WORKSPACE/wikven-linux-$ARCH"
+          mkdir -p translated/src
+          cat > translated/src/.wikven.yaml <<'EOF'
+          extensions:
+            - UniversalLanguageSelector
+            - Translate
+          EOF
+          cat > translated/src/index.wikitext <<'EOF'
+          <languages />
+          <translate>
+          Wikven builds static sites from MediaWiki.
+          </translate>
+          EOF
+
+          ( cd translated && WIKVEN_WORKDIR=. "$bin" translate mark --all )
+          grep -q '<!--T:1-->' translated/src/index.wikitext
+
+          ( cd translated && WIKVEN_WORKDIR=. "$bin" translate scaffold ko --all )
+          test -s translated/src/index/ko.wikitext
+
+          # Translated but unstamped, so check reports it and --gate still exits zero: a stale
+          # translation is a warning, and only a source page nobody can translate is an error.
+          printf '\n위크벤은 미디어위키로 정적 사이트를 만듭니다.\n' >> translated/src/index/ko.wikitext
+          ( cd translated && WIKVEN_WORKDIR=. "$bin" translate check --gate )
+
+          ( cd translated && WIKVEN_WORKDIR=. "$bin" translate stamp --all )
+          grep -qE '<!--T:1 @[0-9a-f]{8}-->' translated/src/index/ko.wikitext
+
+      # A subcommand the binary does not have is a usage error, not a boot: the check comes before
+      # the install, so a typo comes back at once rather than a minute later.
+      - name: An unknown translate subcommand is refused
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -uo pipefail
+          status=0
+          ( cd translated && WIKVEN_WORKDIR=. "$GITHUB_WORKSPACE/wikven-linux-$ARCH" translate nonsense ) || status=$?
+          echo "translate nonsense exited $status"
+          if [ "$status" -eq 0 ]; then
+            echo "::error::the binary accepted a translate subcommand it does not have"
             exit 1
           fi

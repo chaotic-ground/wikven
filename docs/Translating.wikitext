@@ -46,7 +46,7 @@ It runs a real MediaWiki at build time.
 You do not number the units by hand. Wrap the content in <code>&lt;translate&gt;</code> and add <code>&lt;languages/&gt;</code>, then run <code>translate mark</code> to insert the <code>&lt;!--T:n--&gt;</code> markers, mounting your source directory writable:
 
 <!--T:33-->
-{{note|The four <code>translate</code> helpers on this page come with the Docker image. The standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] builds and serves a site but has no <code>translate</code> command, so use the image for these steps even if you build with the binary. See [[<tvar name="2">Special:MyLanguage/Commands#translate</tvar>|Commands]].}}
+{{note|The four <code>translate</code> helpers come with both products. The commands on this page are the Docker form; the standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] runs the same four against its working directory, as <code>wikven translate mark --all</code> and so on, with no mount to arrange. See [[<tvar name="2">Special:MyLanguage/Commands#translate</tvar>|Commands]].}}
 </translate>
 
 <syntaxhighlight lang="console">

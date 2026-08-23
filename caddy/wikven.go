@@ -1,4 +1,5 @@
-// Package wikvencaddy registers the "build" and "serve" subcommands on the wikven binary.
+// Package wikvencaddy registers the "build", "serve" and "translate" subcommands on the wikven
+// binary.
 package wikvencaddy
 
 import (
@@ -42,6 +43,48 @@ func init() {
 				"--listen", fl.String("listen"))
 		},
 	})
+
+	// The flags the four helpers take, declared so this command accepts them: Caddy hands the set
+	// to cobra, which rejects a flag no command declares. They are not read here -- what reaches
+	// translate.php is the tail of the command line as the caller wrote it, so a helper's own
+	// option parsing is the only one there is, and a file name is passed through beside them.
+	//
+	// --source is deliberately absent. The helpers take one; here it always names the working
+	// directory's own source tree, exactly as the Docker entry point points them at the mounted
+	// one, so a run means the same thing on either product.
+	translateFlags := flag.NewFlagSet("translate", flag.ExitOnError)
+	translateFlags.Bool("all", false, "every translatable page under the source directory")
+	translateFlags.Bool("gate", false, "check: exit non-zero on a source page that cannot be translated")
+	translateFlags.String("path-prefix", "", "check: prefix reported file names with this")
+	caddycmd.RegisterCommand(caddycmd.Command{
+		Name:  "translate",
+		Usage: "<mark|scaffold|check|stamp> [<language>] [<file>|--all]",
+		Short: "Mark, scaffold, stamp or check the translations in a source tree",
+		Long: "Runs one of the translation helpers over WIKVEN_WORKDIR/src (WIKVEN_WORKDIR " +
+			"defaults to the current directory) and exits without building anything. mark, " +
+			"scaffold and stamp write into the source tree; check only reads it.",
+		Flags: translateFlags,
+		Func: func(_ caddycmd.Flags) (int, error) {
+			return reexec(append([]string{"php-cli", "translate.php"}, commandTail("translate")...)...)
+		},
+	})
+}
+
+// commandTail is everything the caller wrote after the named subcommand, verbatim.
+//
+// Verbatim because the helpers parse it themselves: their options and a file name arrive in one
+// list, and rebuilding that list from parsed flags would mean this file deciding what a helper
+// accepts -- a second, staler copy of the maintenance scripts' own option sets.
+// Scanning from argv[1], never argv[0]: the executable's own path is not one of the caller's
+// words, and a binary installed under the command's name would otherwise match itself and hand
+// the command word back as its own first argument.
+func commandTail(name string) []string {
+	for i := 1; i < len(os.Args); i++ {
+		if os.Args[i] == name {
+			return os.Args[i+1:]
+		}
+	}
+	return nil
 }
 
 // reexec runs this same binary with the given args, wiring stdio and the current environment.
