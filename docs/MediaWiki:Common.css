@@ -584,91 +584,92 @@ html[dir="rtl"] .wikven-home-sym--parts {
  * and warmth is the one part of that idea a landing page can carry without repeating the mark the
  * skin already shows in its header.
  *
- * isolation makes the hero its own stacking context, so the two fields sit behind the tagline and
- * nowhere else; without it a z-index of -1 escapes to the page ground and the skin paints over
- * them. They are allowed to bleed past the hero box -- that is what keeps them reading as light
- * rather than as a panel with a coloured background. */
+ * Both colours stay; what changed is that they stopped being objects. Two fields that each begin
+ * and end inside the band read as a pair of coloured spheres sitting behind the page rather than
+ * as light on it -- a thing in the picture instead of the picture's ground. What makes a wash read
+ * as ground is having no shape to find, so these two run the full width of the band and stack,
+ * warm over cool: the band is tinted from top to bottom and there is no outline anywhere in it.
+ *
+ * Two layers of one element rather than two elements, only because the night override is then one
+ * property instead of two.
+ *
+ * Two things keep the edge away. closest-side reaches nothing on every side, so each fade finishes
+ * exactly at the box rather than being cut part-opaque -- and the stops are eased rather than
+ * linear, most of the fall happening early, because a straight ramp leaves a soft disc in the
+ * middle of a band that is meant not to have one.
+ *
+ * isolation makes the hero its own stacking context, so the light sits behind the tagline and
+ * nowhere else; without it a z-index of -1 escapes to the page ground and the skin paints over it.
+ * The block axis is allowed to overrun the band, which is free -- the inline axis is not, and
+ * bleeding it is what put a sideways scroll on every phone in #525. */
 .wikven-home-hero {
 	position: relative;
 	isolation: isolate;
 }
 
-.wikven-home-hero::before,
-.wikven-home-hero::after {
+.wikven-home-hero::before {
 	content: "";
 	position: absolute;
 	z-index: -1;
 	pointer-events: none;
+	inset-block: -7rem;
+	inset-inline: 0;
+	background:
+		radial-gradient(
+			ellipse closest-side at 50% 26%,
+			rgba(255, 140, 26, 0.22) 0%,
+			rgba(255, 140, 26, 0.14) 34%,
+			rgba(255, 140, 26, 0.05) 66%,
+			rgba(255, 140, 26, 0) 100%
+		),
+		radial-gradient(
+			ellipse closest-side at 50% 74%,
+			rgba(16, 112, 127, 0.15) 0%,
+			rgba(16, 112, 127, 0.09) 34%,
+			rgba(16, 112, 127, 0.03) 66%,
+			rgba(16, 112, 127, 0) 100%
+		);
 }
 
-/* Two rules of geometry here, each of them a bug this had before it had them.
- *
- * closest-side, not a percentage stop. A percentage is taken against the farthest corner, so on a
- * box wider than it is tall the fade is still part-opaque when it reaches the near edge, and the
- * light ends in a straight line across the band. Sized to the closest side the falloff always
- * finishes inside the box, whatever shape the column gives it -- and it is the column that
- * decides, since the width is a reader preference in one of the skins.
- *
- * And neither field reaches past the hero on the inline axis. Bleeding a few rem to either side
- * is invisible in a skin that centres its content in a wide margin, and is horizontal scroll in
- * one that does not: Minerva runs its column to the edge, so the page grew 128px past a 360px
- * viewport and the reader got a sideways scroll and a white gutter. Each field is centred in a box
- * that stops at the hero's edge, which is also what gives it the largest radius closest-side
- * allows. */
-.wikven-home-hero::before {
-	inset-block: -5rem;
-	inset-inline: 0 30%;
-	background: radial-gradient(
-		circle closest-side at 50% 50%,
-		rgba(255, 140, 26, 0.32),
-		rgba(255, 140, 26, 0)
-	);
-}
-
-.wikven-home-hero::after {
-	inset-block: -4rem;
-	inset-inline: 40% 0;
-	background: radial-gradient(
-		circle closest-side at 50% 45%,
-		rgba(16, 112, 127, 0.2),
-		rgba(16, 112, 127, 0)
-	);
-}
-
-/* Night wants both fields weaker. At the daytime strength they stop reading as light on a dark
- * ground and start reading as two stains, which is the failure this kind of thing is known for. */
+/* Night wants both weaker. At the daytime strength they stop reading as light on a dark ground and
+ * start reading as stains, which is the failure this kind of thing is known for. The cool half
+ * moves to the pale teal the skins use after dark, for the same reason the accent does. */
 @media screen {
 	html.skin-theme-clientpref-night .wikven-home-hero::before {
-		background: radial-gradient(
-			circle closest-side at 50% 50%,
-			rgba(255, 140, 26, 0.18),
-			rgba(255, 140, 26, 0)
-		);
-	}
-
-	html.skin-theme-clientpref-night .wikven-home-hero::after {
-		background: radial-gradient(
-			circle closest-side at 50% 45%,
-			rgba(87, 188, 203, 0.14),
-			rgba(87, 188, 203, 0)
-		);
+		background:
+			radial-gradient(
+				ellipse closest-side at 50% 26%,
+				rgba(255, 140, 26, 0.14) 0%,
+				rgba(255, 140, 26, 0.09) 34%,
+				rgba(255, 140, 26, 0.03) 66%,
+				rgba(255, 140, 26, 0) 100%
+			),
+			radial-gradient(
+				ellipse closest-side at 50% 74%,
+				rgba(87, 188, 203, 0.1) 0%,
+				rgba(87, 188, 203, 0.06) 34%,
+				rgba(87, 188, 203, 0.02) 66%,
+				rgba(87, 188, 203, 0) 100%
+			);
 	}
 }
 
 @media screen and (prefers-color-scheme: dark) {
 	html.skin-theme-clientpref-os .wikven-home-hero::before {
-		background: radial-gradient(
-			circle closest-side at 50% 50%,
-			rgba(255, 140, 26, 0.18),
-			rgba(255, 140, 26, 0)
-		);
-	}
-
-	html.skin-theme-clientpref-os .wikven-home-hero::after {
-		background: radial-gradient(
-			circle closest-side at 50% 45%,
-			rgba(87, 188, 203, 0.14),
-			rgba(87, 188, 203, 0)
-		);
+		background:
+			radial-gradient(
+				ellipse closest-side at 50% 26%,
+				rgba(255, 140, 26, 0.14) 0%,
+				rgba(255, 140, 26, 0.09) 34%,
+				rgba(255, 140, 26, 0.03) 66%,
+				rgba(255, 140, 26, 0) 100%
+			),
+			radial-gradient(
+				ellipse closest-side at 50% 74%,
+				rgba(87, 188, 203, 0.1) 0%,
+				rgba(87, 188, 203, 0.06) 34%,
+				rgba(87, 188, 203, 0.02) 66%,
+				rgba(87, 188, 203, 0) 100%
+			);
 	}
 }
