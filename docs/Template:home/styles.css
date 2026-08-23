@@ -313,15 +313,24 @@
 	 * the container's height comes from its content, so there is no free space for the grow to
 	 * hand back. They collapsed to their own borders. Stacked, a pane is as tall as it is.
 	 *
-	 * And as wide as it is. A pane clips to its border radius, which is what keeps the label strip
-	 * inside the corners -- and on a narrow screen that clip was landing on the file names instead:
-	 * "pagefind/ the search in" and nothing after it, cut at the border with no way to reach the
-	 * rest, because a clipped box has no overflow to scroll. Sized to its content the pane holds
-	 * its longest line, and the band goes back to scrolling sideways in the scroller that is
-	 * already around it for exactly this. */
+	 * The width is left alone: making the pane as wide as its longest line does stop the clipping,
+	 * but it puts a sideways scroll on one figure in the middle of a page that has none anywhere
+	 * else, which is a stranger thing to meet than the problem it solves. What actually overran is
+	 * one line, and it is handled where it is. */
 	.wikven-home-pane {
 		flex: 0 0 auto;
-		min-inline-size: max-content;
+		min-inline-size: 0;
+	}
+
+	/* The gloss goes under the name it is about rather than after it. It is the one thing in
+	 * either tree long enough to need the room -- every other line is a file name, and the one
+	 * with a space in it wraps on the space by itself -- and the pane clips to its border radius,
+	 * which on a narrow screen was landing on this line and cutting it at "the search in" with no
+	 * overflow to scroll and so no scrollbar either. Indented to the name's own column, so it
+	 * still reads as a note on pagefind/ and not as another entry. */
+	.wikven-home-gloss {
+		display: block;
+		margin-inline-start: 2.5rem;
 	}
 
 	.wikven-home-arrow {
