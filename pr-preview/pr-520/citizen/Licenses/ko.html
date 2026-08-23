@@ -8,7 +8,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src=".././startup-static.js"></script><script src=".././modules-static.js"></script><script>mw.loader.load(["site","mediawiki.page.ready","jquery.tablesorter","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSearchShortcuts","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface"]);</script>
+<script src=".././startup-static.js"></script><script src=".././modules-static.js"></script><script>mw.loader.load(["site","mediawiki.page.ready","jquery.tablesorter","mediawiki.toc","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSearchShortcuts","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -29,7 +29,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <link rel="canonical" href="../../Licenses/ko.html">
 <script>window.clientPrefs=()=>{let className=document.documentElement.className;let storage;try{storage=localStorage.getItem('mwclientpreferences');}catch(e){}if(storage){storage.split(',').forEach((pref)=>{const pattern=new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)');if(pattern.test(className)){className=className.replace(pattern,'$1'+pref+'$2');}else{className+=' '+pref;}});document.documentElement.className=className;}};(()=>{window.clientPrefs();})();</script>
 <link rel="stylesheet" href=".././webfonts.css"><link rel="stylesheet" href=".././site.styles.css"></head>
-<body class="citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Licenses_ko rootpage-Licenses_ko skin-citizen action-view skin--responsive">
+<body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Licenses_ko rootpage-Licenses_ko skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
@@ -410,7 +410,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Licenses.html" title="Licenses">Licenses</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Licenses/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><section id="citizen-section-0" class="citizen-section"><meta property="mw:PageProp/toc"/>
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Licenses.html" class="mw-pt-progress mw-pt-progress--complete" title="Licenses (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><a href="../Licenses/km.html" class="mw-pt-progress mw-pt-progress--high" title="អាជ្ញាបណ្ណ (75% 번역함)" lang="km" dir="ltr">ភាសាខ្មែរ</a></li>
+<li><a href="../Licenses/km.html" class="mw-pt-progress mw-pt-progress--med" title="អាជ្ញាបណ្ណ (60% 번역함)" lang="km" dir="ltr">ភាសាខ្មែរ</a></li>
 <li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>Wikven 자체는 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/LICENSE">GPL-3.0-or-later</a>로 라이선스됩니다. Docker 이미지와 그것이 만들어 내는 단독 실행 바이너리는 서드파티 소프트웨어를 그 소프트웨어 자체의 라이선스에 따라 재배포하며, 이를 여기서 밝힙니다. (GPL-2.0-or-later와 GPL-3.0-or-later는 호환되므로, 이는 충돌이 아니라 출처 표시입니다.)
 </p>
@@ -446,19 +446,220 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <td>이미지
 </td></tr></tbody></table>
 <p>단독 실행 바이너리는 <a rel="nofollow" class="external text" href="https://frankenphp.dev/">FrankenPHP</a>로 컴파일되며, FrankenPHP는 여러 Caddy 모듈도 링크합니다. 그 라이선스는 FrankenPHP 프로젝트에서 확인하십시오. Docker 이미지는 MediaWiki 자체의 <code>COPYING</code>을 보존하며, 각 구성 요소의 전체 라이선스 텍스트는 해당 프로젝트에서 구할 수 있습니다.
+</p><p>그 밖에도 사이트마다 확장 기능과 스킨을 저마다 더하며, 그것들이 내놓는 문서와 스타일, 스크립트는 그 사이트가 게시하는 것의 일부입니다. 아래 목록은 각 구성 요소가 스스로 밝힌 정보를 빌드 때 모아 만들어지므로, 손으로 옮겨 적은 사본이 아니라 이 사이트 자신의 목록입니다. 여러분의 사이트에서도 같은 목록을 얻으려면 문서에 <code>{{Wikven components}}</code>를 넣으세요.
 </p>
+</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Installed_extensions">Installed extensions</h2></div><section id="citizen-section-1" class="citizen-section">
+<table class="wikitable">
+<tbody><tr>
+<th>Extension</th>
+<th>Version</th>
+<th>License
+</th></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:Gadgets">Gadgets</a>
+</td>
+<td>
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:MobileFrontend">MobileFrontend</a>
+</td>
+<td>2.4.1
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:ParserFunctions">ParserFunctions</a>
+</td>
+<td>1.6.1
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:Scribunto">Scribunto</a>
+</td>
+<td>
+</td>
+<td>GPL-2.0-or-later AND MIT
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:SifterSearch">SifterSearch</a>
+</td>
+<td>0.8.0
+</td>
+<td>GPL-3.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:SyntaxHighlight">SyntaxHighlight</a>
+</td>
+<td>2.0
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:TabberNeue">TabberNeue</a>
+</td>
+<td>4.0.0
+</td>
+<td>GPL-3.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:TemplateStyles">TemplateStyles</a>
+</td>
+<td>1.0
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:Translate">Translate</a>
+</td>
+<td>2025-07-31
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector">UniversalLanguageSelector</a>
+</td>
+<td>2026-02-25
+</td>
+<td>GPL-2.0-or-later OR MIT
+</td></tr>
+<tr>
+<td><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven">Wikven</a>
+</td>
+<td>0.1.0
+</td>
+<td>GPL-3.0-or-later
+</td></tr></tbody></table>
+</section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Installed_skins">Installed skins</h2></div><section id="citizen-section-2" class="citizen-section">
+<table class="wikitable">
+<tbody><tr>
+<th>Skin</th>
+<th>Version</th>
+<th>License
+</th></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Skin:Citizen">Citizen</a>
+</td>
+<td>3.17.0
+</td>
+<td>GPL-3.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Skin:MinervaNeue">MinervaNeue</a>
+</td>
+<td>
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Skin:MonoBook">MonoBook</a>
+</td>
+<td>
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Skin:Timeless">Timeless</a>
+</td>
+<td>0.9.1
+</td>
+<td>GPL-2.0-or-later
+</td></tr>
+<tr>
+<td><a class="external text" href="https://www.mediawiki.org/wiki/Skin:Vector">Vector</a>
+</td>
+<td>1.0.0
+</td>
+<td>GPL-2.0-or-later
+</td></tr></tbody></table>
 <style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Development/ko.html" title="Special:MyLanguage/Development">개발</a></div></div>
 
 </section></div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="../Licenses/ko.html">Licenses/ko.html</a>"</div></div>
 			</div>
 			
+<div class="citizen-page-sidebar">
+		<nav
+	id="citizen-sidebar-lastmod"
+	class="citizen-menu"
+	
+	
+>
+	<div class="citizen-menu__heading">
+		마지막 수정
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Licenses/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 10:18에 마지막으로 편집되었습니다." data-timestamp="1787480311"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
+			
+		</ul>
+		
+	</div></nav>
+
+	<div id="citizen-toc" class="citizen-toc citizen-dropdown">
+		<details class="citizen-dropdown-details">
+			<summary
+				class="citizen-dropdown-summary" 
+				title="목차"
+				aria-details="mw-panel-toc">
+				<span class="citizen-ui-icon mw-ui-icon-wikimedia-listBullet"></span>
+				<span>목차</span>
+			</summary>
+		</details>
+		<nav id="mw-panel-toc" class="citizen-toc-card citizen-menu__card" role="navigation" aria-labelledby="mw-panel-toc-label">
+			<div class="citizen-menu__card-content">
+				<a class="citizen-toc-top citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="" href="#top" role="button">
+					<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
+					<div class="citizen-toc-text">맨 위로 돌아가기</div>
+				</a>
+				<div class="citizen-menu__heading">목차</div>
+				<div class="citizen-toc-contents" id="mw-panel-toc-list">
+				<div class="citizen-toc-indicator"></div>
+				<ul class="citizen-toc-list">
+					<li id="toc-Installed_extensions"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Installed_extensions" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">1</span>
+						<span class="citizen-toc-heading">Installed extensions</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Installed_extensions-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Installed_skins"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Installed_skins" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">2</span>
+						<span class="citizen-toc-heading">Installed skins</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Installed_skins-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+	</ul>
+			</div>		</div>
+		</nav>
+	</div>
+	</div>
 			<footer class="citizen-page-footer">
 				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw-interface=""></div>
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 20일 (목) 14:38에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 10:18에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
