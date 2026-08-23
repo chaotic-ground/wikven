@@ -250,7 +250,7 @@ Wikven
 </p><p><span id="Local&#95;URLs:&#95;the&#95;one&#95;contract&#95;to&#95;read"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="로컬_URL:_반드시_읽어야_할_계약"><span id=".EB.A1.9C.EC.BB.AC_URL:_.EB.B0.98.EB.93.9C.EC.8B.9C_.EC.9D.BD.EC.96.B4.EC.95.BC_.ED.95.A0_.EA.B3.84.EC.95.BD"></span>로컬 URL: 반드시 읽어야 할 계약</h2></div>
-<p>확장 기능 작성자가 걸려 넘어지는 지점이 바로 여기입니다. 살아 있는 위키에서는 맞는 코드가 오직 여기서만 틀리기 때문입니다.
+<p>URL을 만들어 내는 코드를 쓰기 전에 이 절을 읽으십시오. 살아 있는 위키에서는 맞는 코드가 오직 여기서만 틀리며, 다른 곳에서 맞다는 바로 그 점 때문에 여기서 놓치기 쉽습니다.
 </p><p>Wikven은 문서 URL을 <b>문서 기준 상대 경로</b>로 만듭니다. <code>Title::getLocalURL()</code>은 <code>./Page.html</code>을 답하는데, 제목에 슬래시가 있는 문서는 실제 디렉터리로 내보내지므로 한 단계 아래 문서가 같은 뜻이 되려면 <code>../Page.html</code>이어야 합니다. <code>maintenance/rename.php</code>가 그 보정을 문서마다 자신의 깊이에 따라 적용합니다.
 </p><p>보정되는 곳은 두 군데입니다:
 </p>
@@ -269,7 +269,7 @@ Wikven
 <p><span id="Reproducibility"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="재현성"><span id=".EC.9E.AC.ED.98.84.EC.84.B1"></span>재현성</h2></div>
-<p>같은 원본을 두 번 빌드하면 <b>바이트까지 동일한</b> 출력이 나와야 하며, CI가 문서 사이트를 두 번 구워 결과를 비교해 이를 검증합니다. 빌드는 이를 위해 이미 시계를 고정하고, <code>page_touched</code>를 고정하고, MediaWiki가 문서마다 찍는 요청 및 렌더 식별자를 제거하고, 작업 큐를 정해진 순서로 실행합니다.
+<p>같은 원본을 두 번 빌드하면 <b>바이트까지 동일한</b> 출력이 나와야 합니다. 다시 빌드해 배포해도 안전한 것이 그 덕분입니다. 두 출력에서 어떤 문서가 다르다면 그것은 원본이 달라졌기 때문입니다. 빌드는 이를 위해 이미 시계를 고정하고, <code>page_touched</code>를 고정하고, MediaWiki가 문서마다 찍는 요청 및 렌더 식별자를 제거하고, 작업 큐를 정해진 순서로 실행하며, 여러분이 시계에서 읽은 값 하나면 그 전부가 무너집니다.
 </p><p>그러므로 렌더링된 출력에 다음을 넣지 마세요:
 </p>
 <ul><li>타임스탬프, 소요 시간, 그 밖에 시계에서 읽은 것;</li>
@@ -303,7 +303,7 @@ Wikven
 <p>특히 확인할 만한 것:
 </p>
 <ul><li><b>깊은 곳에 있는</b> 문서 — 제목에 슬래시가 있는 문서 — 를 열어 확장 기능이 렌더링한 링크를 따라가 보세요. URL 버그는 다른 데서는 드러나지 않습니다;</li>
-<li>서로 다른 디렉터리에 두 번 빌드해 <code>diff -r</code>로 비교하세요. CI보다 먼저 불안정한 값을 잡아냅니다;</li>
+<li>서로 다른 디렉터리에 두 번 빌드해 <code>diff -r</code>로 비교하세요. 출력에 섞인 불안정한 값은 이렇게 드러납니다;</li>
 <li>스킨을 둘 이상 설정해 빌드하세요. 자기 출력 밖으로 손을 뻗는 패스가 잡힙니다.</li></ul>
 <p><span id="See&#95;also"></span>
 </p>
@@ -328,8 +328,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787469221">
-  				<span>2026년 8월 23일 (일) 07:13에 마지막으로 편집됨</span>
+  				data-timestamp="1787478899">
+  				<span>2026년 8월 23일 (일) 09:54에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -352,7 +352,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 07:13에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 09:54에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

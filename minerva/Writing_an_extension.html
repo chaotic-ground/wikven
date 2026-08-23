@@ -247,7 +247,7 @@ Wikven
 </p><p>Pin a reference rather than tracking a branch. A build of a given revision of a site should fetch the code that revision was tested against, and the docs site pins every fetched component for that reason.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Local_URLs:_the_one_contract_to_read">Local URLs: the one contract to read</h2></div>
-<p>This is the part that catches extension authors, because the code is correct on a live wiki and wrong only here.
+<p>Read this section before you write anything that emits a URL. It is the one place where code that is correct on a live wiki is wrong, and being correct elsewhere is what makes it easy to miss here.
 </p><p>Wikven makes page URLs <b>document-relative</b>. <code>Title::getLocalURL()</code> answers <code>./Page.html</code>, and because a page whose title has a slash is exported into a real directory, a page one level down needs <code>../Page.html</code> to mean the same thing. <code>maintenance/rename.php</code> applies that correction per page, by the page's own depth.
 </p><p>It corrects two places:
 </p>
@@ -263,7 +263,7 @@ Wikven
 <li><b>Write only inside your pass's own output directory</b> (<code>$wgWikvenHtmlDirectory</code>). Note the trap: the main skin renders into the export root, which is the <b>parent</b> of every other skin's directory, so "everything below my output directory" is not the same set as "my pages" for that pass.</li>
 <li><b>Do not assume you are alone.</b> Anything you create outside your own directory can be raced by another pass.</li></ul>
 <div class="mw-heading mw-heading2"><h2 id="Reproducibility">Reproducibility</h2></div>
-<p>Two builds of the same source must produce <b>byte-identical</b> output, and CI asserts it by baking the docs site twice and diffing the results. The build already freezes the clock, pins <code>page_touched</code>, strips the request and render ids MediaWiki stamps into each page, and runs the job queue in a fixed order to get there.
+<p>Two builds of the same source must produce <b>byte-identical</b> output. That is what makes a rebuild safe to publish: a page that differs between two exports differs because the source did. The build already freezes the clock, pins <code>page_touched</code>, strips the request and render ids MediaWiki stamps into each page, and runs the job queue in a fixed order to get there, and one value of yours read from the clock undoes all of it.
 </p><p>So do not put into rendered output:
 </p>
 <ul><li>a timestamp, a duration, or anything else read from the clock;</li>
@@ -294,7 +294,7 @@ Wikven
 <p>Worth checking specifically:
 </p>
 <ul><li>open a page <b>at depth</b> — one whose title contains a slash — and follow the links your extension renders, since a URL bug shows up nowhere else;</li>
-<li>build twice into different directories and <code>diff -r</code> them, which catches an unstable value before CI does;</li>
+<li>build twice into different directories and <code>diff -r</code> them, which is how an unstable value in your output shows itself;</li>
 <li>build with more than one skin configured, so a pass that reaches outside its own output is caught.</li></ul>
 <div class="mw-heading mw-heading2"><h2 id="See_also">See also</h2></div>
 <ul><li><a href="./Configuration.html" title="Special:MyLanguage/Configuration">Configuration</a> — every setting a site can name, including <code>WikvenRepositories</code>.</li>
@@ -317,8 +317,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787469221">
-  				<span>Last edited on 23 August 2026, at 07:13</span>
+  				data-timestamp="1787478899">
+  				<span>Last edited on 23 August 2026, at 09:54</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -341,7 +341,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:13.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 09:54.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
