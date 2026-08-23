@@ -16,8 +16,8 @@
 <!--T:2 @2f0b756f-->
 == GitHub Pages ==
 
-<!--T:3 @8dd3954d-->
-이 워크플로는 푸시할 때마다 사이트를 다시 빌드하고 게시합니다. {{SITENAME}} [https://github.com/chaotic-ground/wikven/tree/main/action 복합 액션]으로 소스를 빌드한 뒤 <code>dist/</code>를 Pages에 업로드합니다.
+<!--T:3 @7754e924-->
+이 워크플로는 푸시할 때마다 사이트를 다시 빌드하고 게시합니다. {{SITENAME}} [$1 복합 액션]으로 소스를 빌드한 뒤 <code>dist/</code>를 Pages에 업로드합니다.
 
 <!--T:4 @cec23135-->
 저장소의 '''Settings → Pages → Build and deployment → Source: GitHub Actions'''에서 Pages를 활성화하세요. 이 문서 사이트도 이렇게 게시됩니다.
