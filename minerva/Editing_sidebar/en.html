@@ -219,7 +219,7 @@ Wikven
 </div>
 
 <div class="mw-heading mw-heading2"><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div>
-<p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+<p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the spelling MediaWiki's own wikis use, and the build resolves it instead — by a different rule than a live wiki would. There, that special page redirects at request time to the reader's own interface language, whatever page the link was on; a static export has no request and no reader to ask, so each link is resolved at build time by the language of the page it sits on. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> navigation
 <span class="k">**</span> mainpage|mainpage-description
@@ -257,8 +257,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787471572">
-  				<span>Last edited on 23 August 2026, at 07:52</span>
+  				data-timestamp="1787471860">
+  				<span>Last edited on 23 August 2026, at 07:57</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -281,7 +281,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:52.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:57.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
