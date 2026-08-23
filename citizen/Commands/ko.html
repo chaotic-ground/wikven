@@ -510,10 +510,13 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="bake_액션"><span id="bake_.EC.95.A1.EC.85.98"></span><code>bake</code> 액션</h2></div><section id="citizen-section-6" class="citizen-section">
 <p>GitHub Actions 러너에서 Docker 이미지로 소스 트리를 굽습니다. 완전한 워크플로는 <a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a>를 참고하십시오.
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@main</span>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r95"/><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>두 액션 모두 태그로 고정합니다. Wikven의 버전이 릴리스되기 전까지 그 태그는 나이틀리, 곧 날짜가 붙은 사전 릴리스 <code>nightly-YYYY-MM-DD</code>이며, 가장 최근 것은 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">릴리스 페이지</a>에서 고를 수 있습니다. 이미지도 같은 나이틀리로 함께 지정하십시오. 기본값에 맡기면 액션이 잘려 나온 릴리스의 이미지를 실행하는데, 아직 릴리스된 버전이 없습니다. 릴리스가 나온 뒤에는 <code>@1.2.3</code>만으로 충분합니다.</p></div>
+</div>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
 <span class="w">    </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 </pre></div>
 <table class="wikitable">
 <tbody><tr>
@@ -552,9 +555,10 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="check-translations_액션"><span id="check-translations_.EC.95.A1.EC.85.98"></span><code>check-translations</code> 액션</h2></div><section id="citizen-section-7" class="citizen-section">
 <p>소스 트리에 <code>translate check</code>를 실행하고, 발견한 것마다 해당 파일에 주석으로 보고합니다.
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@main</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 </pre></div>
 <table class="wikitable">
 <tbody><tr>
@@ -601,7 +605,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 07:13에 마지막으로 편집되었습니다." data-timestamp="1787469221"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 08:14에 마지막으로 편집되었습니다." data-timestamp="1787472880"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -742,7 +746,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 07:13에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 08:14에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

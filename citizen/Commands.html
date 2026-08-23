@@ -508,10 +508,13 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="The_bake_action">The <code>bake</code> action</h2></div><section id="citizen-section-6" class="citizen-section">
 <p>Bakes a source tree with the Docker image, on a GitHub Actions runner. See <a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a> for a complete workflow.
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@main</span>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r95"/><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Both actions are pinned by tag, and until a version of Wikven is released that tag is a nightly — the dated pre-releases, <code>nightly-YYYY-MM-DD</code>, newest on the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">releases page</a>. Name the image from the same nightly while you are there: an action left to its default runs the image of the release it was cut from, and no release exists yet. Once one does, <code>@1.2.3</code> on its own is enough.</p></div>
+</div>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
 <span class="w">    </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 </pre></div>
 <table class="wikitable">
 <tbody><tr>
@@ -550,9 +553,10 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="The_check-translations_action">The <code>check-translations</code> action</h2></div><section id="citizen-section-7" class="citizen-section">
 <p>Runs <code>translate check</code> over a source tree and reports each finding as an annotation on the file it belongs to.
 </p>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@main</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 </pre></div>
 <table class="wikitable">
 <tbody><tr>
@@ -599,7 +603,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands.wikitext" title="This page was last edited on 23 August 2026, at 07:13." data-timestamp="1787469221"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands.wikitext" title="This page was last edited on 23 August 2026, at 08:14." data-timestamp="1787472880"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -740,7 +744,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 07:13.</div>
+		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 08:14.</div>
 		    </section>
 		</div>
 </footer>		</div>
