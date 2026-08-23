@@ -147,13 +147,17 @@ There is one more, <code>WIKVEN_BUILD_SKIN</code>, which the build sets on itsel
 
 <!--T:23-->
 Bakes a source tree with the Docker image, on a GitHub Actions runner. See [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|Deploying]] for a complete workflow.
+
+<!--T:29-->
+{{note|Both actions are pinned by tag, and until a version of {{SITENAME}} is released that tag is a nightly — the dated pre-releases, <code>nightly-YYYY-MM-DD</code>, newest on the [<tvar name="2">https://github.com/chaotic-ground/wikven/releases</tvar> releases page]. Name the image from the same nightly while you are there: an action left to its default runs the image of the release it was cut from, and no release exists yet. Once one does, <code>@1.2.3</code> on its own is enough.}}
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
-- uses: chaotic-ground/wikven/actions/bake@main
+- uses: chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD
   with:
     source: src
     output: dist
+    image: ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD
 </syntaxhighlight>
 
 <translate>
@@ -184,9 +188,10 @@ Runs <code>translate check</code> over a source tree and reports each finding as
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
-- uses: chaotic-ground/wikven/actions/check-translations@main
+- uses: chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD
   with:
     source: src
+    image: ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD
 </syntaxhighlight>
 
 <translate>
