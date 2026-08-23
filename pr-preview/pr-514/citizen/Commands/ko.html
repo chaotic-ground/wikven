@@ -95,7 +95,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 						<div class="citizen-siteStats">
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--articles" title="문서">
 		<span class="citizen-ui-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span>
-		<span>50</span>
+		<span>52</span>
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--images" title="파일">
 		<span class="citizen-ui-icon mw-ui-icon-image mw-ui-icon-wikimedia-image"></span>
@@ -127,7 +127,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 		<ul class="citizen-menu__content-list">
 			
-			<li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/ko.html"><span>설치</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/ko.html"><span>시작하기</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/ko.html"><span>문서</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/ko.html"><span>이미지</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/ko.html"><span>스킨</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/ko.html"><span>검색</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/ko.html"><span>확장 기능</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="../Lua_modules/ko.html"><span>Lua 모듈</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/ko.html"><span>자바스크립트</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/ko.html"><span>번역</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/ko.html"><span>사이드바 편집</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying.html"><span>배포하기</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/ko.html"><span>문제 해결</span></a></li>
+			<li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/ko.html"><span>설치</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/ko.html"><span>시작하기</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/ko.html"><span>문서</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/ko.html"><span>이미지</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/ko.html"><span>스킨</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/ko.html"><span>검색</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/ko.html"><span>확장 기능</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="../Lua_modules/ko.html"><span>Lua 모듈</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/ko.html"><span>자바스크립트</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/ko.html"><span>번역</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/ko.html"><span>사이드바 편집</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying/ko.html"><span>배포하기</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/ko.html"><span>문제 해결</span></a></li>
 		</ul>
 		
 	</div></nav>
@@ -508,7 +508,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </p><p><span id="bake"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="bake_액션"><span id="bake_.EC.95.A1.EC.85.98"></span><code>bake</code> 액션</h2></div><section id="citizen-section-6" class="citizen-section">
-<p>GitHub Actions 러너에서 Docker 이미지로 소스 트리를 굽습니다. 완전한 워크플로는 <a href="../Deploying.html" title="Special:MyLanguage/Deploying">배포하기</a>를 참고하십시오.
+<p>GitHub Actions 러너에서 Docker 이미지로 소스 트리를 굽습니다. 완전한 워크플로는 <a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a>를 참고하십시오.
 </p>
 <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r95"/><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>두 액션 모두 태그로 고정합니다. Wikven의 버전이 릴리스되기 전까지 그 태그는 나이틀리, 곧 날짜가 붙은 사전 릴리스 <code>nightly-YYYY-MM-DD</code>이며, 가장 최근 것은 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">릴리스 페이지</a>에서 고를 수 있습니다. 이미지도 같은 나이틀리로 함께 지정하십시오. 기본값에 맡기면 액션이 잘려 나온 릴리스의 이미지를 실행하는데, 아직 릴리스된 버전이 없습니다. 릴리스가 나온 뒤에는 <code>@1.2.3</code>만으로 충분합니다.</p></div>
 </div>
@@ -555,6 +555,8 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="check-translations_액션"><span id="check-translations_.EC.95.A1.EC.85.98"></span><code>check-translations</code> 액션</h2></div><section id="citizen-section-7" class="citizen-section">
 <p>소스 트리에 <code>translate check</code>를 실행하고, 발견한 것마다 해당 파일에 주석으로 보고합니다.
 </p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r95"/><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>주석(annotation)은 변경사항을 읽는 사람을 위한 것입니다. 처음으로 번역을 보내는 기여자에게는 무엇을 실행해야 하는지 알려 주는 편이 낫고, <code>comment: true</code>가 그 일을 합니다. 풀 리퀘스트에 코멘트 하나를 남기고, 발견한 것을 문제 종류별로 묶어 각각 어떤 <code>translate</code> 명령으로 해결하는지 적어 줍니다. 실행할 때마다 새로 달지 않고 기존 코멘트를 고치며, 보고할 것이 없어지면 이상 없음으로 바뀝니다. 그 기여자는 본디 다른 언어로 일하는 사람이므로 코멘트가 그 언어로 말할 수 있습니다. <code>comment-languages: auto</code>를 주면 영어와, 그 코멘트가 다루는 번역의 언어로 함께 쓰이며, 문구는 wikven 자신의 인터페이스 메시지에서 옵니다. 잡에 <code>pull-requests: write</code> 권한이 필요하고, 포크에서 온 풀 리퀘스트는 읽기 전용 토큰이라 코멘트를 건너뛰며 로그에 그 사실을 남깁니다.</p></div>
+</div>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
@@ -585,6 +587,21 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <td><code>gate</code></td>
 <td><code>true</code></td>
 <td>원본 문서가 망가졌을 때 단계를 실패시킵니다. 오래되었거나 빠진 번역은 보고되기만 하고 단계를 실패시키지 않습니다.
+</td></tr>
+<tr>
+<td><code>comment</code></td>
+<td><code>false</code></td>
+<td>발견한 것을 종류별로 묶고 해결할 <code>translate</code> 명령을 적어 풀 리퀘스트에 코멘트도 남깁니다.
+</td></tr>
+<tr>
+<td><code>comment-languages</code></td>
+<td>영어만</td>
+<td>그 코멘트를 함께 쓸 언어. <code>auto</code>는 발견된 것들이 다루는 언어를 쓰고, <code>ko,fr</code>처럼 직접 나열할 수도 있습니다.
+</td></tr>
+<tr>
+<td><code>github-token</code></td>
+<td>잡 자체의 토큰</td>
+<td>코멘트를 남길 때 쓰는 토큰.
 </td></tr></tbody></table>
 <style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a></div><div class="wikven-prevnext-next"><a href="../Writing_an_extension/ko.html" title="Special:MyLanguage/Writing an extension">확장 기능 만들기</a> →</div></div>
 
@@ -605,7 +622,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 08:14에 마지막으로 편집되었습니다." data-timestamp="1787472880"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 11:28에 마지막으로 편집되었습니다." data-timestamp="1787484482"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -746,7 +763,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 08:14에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 11:28에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

@@ -64,7 +64,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 		<ul class="vector-menu-content-list">
 			
-			<li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/ko.html"><span>설치</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/ko.html"><span>시작하기</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/ko.html"><span>문서</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/ko.html"><span>이미지</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/ko.html"><span>스킨</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/ko.html"><span>검색</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/ko.html"><span>확장 기능</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="../Lua_modules/ko.html"><span>Lua 모듈</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/ko.html"><span>자바스크립트</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/ko.html"><span>번역</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/ko.html"><span>사이드바 편집</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying.html"><span>배포하기</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/ko.html"><span>문제 해결</span></a></li>
+			<li id="n-sidebar-installation" class="mw-list-item"><a href="../Installation/ko.html"><span>설치</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="../Getting_Started/ko.html"><span>시작하기</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="../Pages/ko.html"><span>문서</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="../Images/ko.html"><span>이미지</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="../Skins/ko.html"><span>스킨</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="../Searching/ko.html"><span>검색</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/ko.html"><span>확장 기능</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="../Lua_modules/ko.html"><span>Lua 모듈</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="../JavaScript/ko.html"><span>자바스크립트</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="../Translating/ko.html"><span>번역</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="../Editing_sidebar/ko.html"><span>사이드바 편집</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="../Deploying/ko.html"><span>배포하기</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="../Troubleshooting/ko.html"><span>문제 해결</span></a></li>
 		</ul>
 		
 	</div>
@@ -650,7 +650,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="Every&#95;page&#95;says&#95;it&#95;was&#95;edited&#95;on&#95;the&#95;same&#95;day"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="모든_문서가_같은_날_편집된_것으로_나옵니다"><span id=".EB.AA.A8.EB.93.A0_.EB.AC.B8.EC.84.9C.EA.B0.80_.EA.B0.99.EC.9D.80_.EB.82.A0_.ED.8E.B8.EC.A7.91.EB.90.9C_.EA.B2.83.EC.9C.BC.EB.A1.9C_.EB.82.98.EC.98.B5.EB.8B.88.EB.8B.A4"></span>모든 문서가 같은 날 편집된 것으로 나옵니다</h2></div>
-<p>문서 날짜는 각 소스 파일을 마지막으로 바꾼 커밋에서 오는데, <b>얕은 체크아웃</b>에는 커밋이 하나뿐입니다. <a href="../Deploying.html" title="Special:MyLanguage/Deploying">배포하기</a>의 워크플로처럼 <code>fetch-depth: 0</code>으로 체크아웃하십시오. 저장소가 아닌 디렉터리에서 빌드해도 마찬가지이며, 두 경우 모두 빌드가 실패하지는 않습니다. 로그가 그렇게 되었다고 적고, 모든 문서는 빌드 중인 커밋으로 날짜가 찍힙니다.
+<p>문서 날짜는 각 소스 파일을 마지막으로 바꾼 커밋에서 오는데, <b>얕은 클론</b>에는 커밋이 하나뿐입니다. 온전한 클론에서 빌드하십시오. <code>--depth</code> 없이 클론하거나, 이미 있는 얕은 클론이라면 <code>git fetch --unshallow</code>로 채우면 됩니다. GitHub Actions에서는 <a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a>의 워크플로처럼 <code>fetch-depth: 0</code>이 그것입니다. 저장소가 아닌 디렉터리에서 빌드해도 마찬가지이며, 두 경우 모두 빌드가 실패하지는 않습니다. 로그가 그렇게 되었다고 적고, 모든 문서는 빌드 중인 커밋으로 날짜가 찍힙니다.
 </p><p><span id="The&#95;build&#95;fails&#95;on&#95;a&#95;Wikimedia&#95;Commons&#95;image"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="위키미디어_공용_이미지에서_빌드가_실패합니다"><span id=".EC.9C.84.ED.82.A4.EB.AF.B8.EB.94.94.EC.96.B4_.EA.B3.B5.EC.9A.A9_.EC.9D.B4.EB.AF.B8.EC.A7.80.EC.97.90.EC.84.9C_.EB.B9.8C.EB.93.9C.EA.B0.80_.EC.8B.A4.ED.8C.A8.ED.95.A9.EB.8B.88.EB.8B.A4"></span>위키미디어 공용 이미지에서 빌드가 실패합니다</h2></div>
@@ -660,7 +660,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading2"><h2 id="어떤_스킨의_렌더링이_실패했습니다"><span id=".EC.96.B4.EB.96.A4_.EC.8A.A4.ED.82.A8.EC.9D.98_.EB.A0.8C.EB.8D.94.EB.A7.81.EC.9D.B4_.EC.8B.A4.ED.8C.A8.ED.96.88.EC.8A.B5.EB.8B.88.EB.8B.A4"></span>어떤 스킨의 렌더링이 실패했습니다</h2></div>
 <p>스킨이 여럿인 사이트에서는 각 스킨을 별도 프로세스가 렌더링하며, 빌드는 실패한 스킨을 이름과 함께 보고합니다(<code>build failed for skin ...</code>). 각 렌더링의 출력은 자기 제목 아래에 묶여 출력되므로, 로그의 끝이 아니라 그 스킨의 구간을 읽으십시오. 기계의 메모리가 부족하다면 <code>WIKVEN_BUILD_JOBS=1</code>로 렌더링을 하나씩 실행할 수 있습니다. <a href="../Commands/ko.html" title="Special:MyLanguage/Commands">명령어</a>를 참고하십시오.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a></div><div class="wikven-prevnext-next"><a href="../Limitations/ko.html" title="Special:MyLanguage/Limitations">제한 사항</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a></div><div class="wikven-prevnext-next"><a href="../Limitations/ko.html" title="Special:MyLanguage/Limitations">제한 사항</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="../Troubleshooting/ko.html">Troubleshooting/ko.html</a>"</div></div>
@@ -673,7 +673,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 07:13에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 09:00에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">

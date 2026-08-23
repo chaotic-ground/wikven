@@ -94,7 +94,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 						<div class="citizen-siteStats">
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--articles" title="articles">
 		<span class="citizen-ui-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span>
-		<span>50</span>
+		<span>52</span>
 	</div>
 	<div class="citizen-siteStats__item" id="citizen-siteStats__item--images" title="files">
 		<span class="citizen-ui-icon mw-ui-icon-image mw-ui-icon-wikimedia-image"></span>
@@ -439,7 +439,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><code>multiple site config files present</code> means your source directory holds more than one of the accepted names. The first in precedence order wins and the rest are ignored; delete the ones you do not want, rather than editing a file the build is not reading.
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Every_page_says_it_was_edited_on_the_same_day">Every page says it was edited on the same day</h2></div><section id="citizen-section-9" class="citizen-section">
-<p>Page dates come from the commit that last changed each source file, and a <b>shallow checkout</b> holds only one commit. Check out with <code>fetch-depth: 0</code>, as the workflow in <a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a> does. Building from a directory that is not a repository at all has the same effect, and neither case fails the build: the log says it happened, and every page is dated at the commit being built.
+<p>Page dates come from the commit that last changed each source file, and a <b>shallow clone</b> holds only one commit. Build from a full one: clone without <code>--depth</code>, or deepen the clone you have with <code>git fetch --unshallow</code>. On GitHub Actions that is <code>fetch-depth: 0</code>, as the workflow in <a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a> does. Building from a directory that is not a repository at all has the same effect, and neither case fails the build: the log says it happened, and every page is dated at the commit being built.
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="The_build_fails_on_a_Wikimedia_Commons_image">The build fails on a Wikimedia Commons image</h2></div><section id="citizen-section-10" class="citizen-section">
 <p>Every parse of a page embedding a Commons image asks Commons for its thumbnail. Wikven retries a failed lookup twice before giving up, and then names the image it could not resolve and stops, rather than publishing a page with a hole in it. Check the file name is right and still exists on Commons, and that the build host can reach the network — see also <i>Fetching fails over HTTPS</i> above.
@@ -466,7 +466,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Troubleshooting.wikitext" title="This page was last edited on 23 August 2026, at 07:13." data-timestamp="1787469221"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Troubleshooting.wikitext" title="This page was last edited on 23 August 2026, at 09:00." data-timestamp="1787475636"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -667,7 +667,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 07:13.</div>
+		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 09:00.</div>
 		    </section>
 		</div>
 </footer>		</div>

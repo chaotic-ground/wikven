@@ -362,6 +362,8 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <div class="mw-heading mw-heading2"><h2 id="The_check-translations_action">The <code>check-translations</code> action</h2></div>
 <p>Runs <code>translate check</code> over a source tree and reports each finding as an annotation on the file it belongs to.
 </p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r95" /><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Annotations are for whoever is reading the diff. A contributor sending their first translation is better served by being told what to run, which <code>comment: true</code> does: one comment on the pull request, the findings grouped by what went wrong, each group naming the command that answers it. It is edited on each run rather than added to, and replaced by an all-clear once nothing is left to report. That contributor is by definition working in another language, so the comment can speak it: <code>comment-languages: auto</code> writes it in English and in the language of the translation it is about, from wikven's own interface messages. The job needs <code>pull-requests: write</code>; a pull request from a fork carries a read-only token, and the comment is then skipped with a line in the log.</p></div>
+</div>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
@@ -392,6 +394,21 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <td><code>gate</code></td>
 <td><code>true</code></td>
 <td>Fail the step when a source page is broken. A stale or missing translation is reported and never fails the step.
+</td></tr>
+<tr>
+<td><code>comment</code></td>
+<td><code>false</code></td>
+<td>Also leave one comment on the pull request, grouping what was found and naming the <code>translate</code> command that answers it.
+</td></tr>
+<tr>
+<td><code>comment-languages</code></td>
+<td>English only</td>
+<td>Languages that comment is also written in: <code>auto</code> for the languages the findings are about, or a list such as <code>ko,fr</code>.
+</td></tr>
+<tr>
+<td><code>github-token</code></td>
+<td>the job's own token</td>
+<td>What the comment is posted with.
 </td></tr></tbody></table>
 <style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a></div><div class="wikven-prevnext-next"><a href="./Writing_an_extension.html" title="Special:MyLanguage/Writing an extension">Writing an extension</a>&#160;&#8594;</div></div>
 
@@ -410,8 +427,8 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787472880">
-  				<span>Last edited on 23 August 2026, at 08:14</span>
+  				data-timestamp="1787484482">
+  				<span>Last edited on 23 August 2026, at 11:28</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -434,7 +451,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 08:14.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 11:28.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
