@@ -22,6 +22,11 @@ __TOC__
 
 <!--T:3-->
 The standalone binary is compiled with [https://frankenphp.dev/ FrankenPHP], which also links several Caddy modules; see the FrankenPHP project for their licenses. The Docker image keeps MediaWiki's own <code>COPYING</code>, and each component's full license text is available from its project.
+
+<!--T:4-->
+Beyond that, every site adds extensions and skins of its own, and their pages, styles and scripts are part of what it publishes. The list below is generated at build time from what each one declares about itself, so it is this site's own set rather than a copy kept by hand; put <code><nowiki>{{Wikven components}}</nowiki></code> on a page of your own site for the same list of yours.
 </translate>
+
+{{Wikven components}}
 
 {{prevnext}}

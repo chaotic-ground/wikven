@@ -32,6 +32,16 @@ class Build extends Maintenance {
 	/** Template the generated software list is written to, so an About page can place it itself. */
 	private const SOFTWARE_TEMPLATE = 'Wikven software';
 
+	/**
+	 * Template holding the extensions and skins alone, with the licenses they declare.
+	 *
+	 * Split out of the list above rather than repeated, because the two answer different questions:
+	 * an About page says what runs the site, and a page acknowledging what the site redistributes
+	 * wants only the components and their licenses. That page is written by hand and cannot know
+	 * the set, which is exactly what the registry does know.
+	 */
+	private const COMPONENTS_TEMPLATE = 'Wikven components';
+
 	/** Names the directory a skin pass's own copy of the database goes in, beside the original. */
 	private const PASS_DATABASE_PREFIX = 'wikven-pass-';
 
@@ -58,6 +68,7 @@ class Build extends Maintenance {
 		$this->importImages("$ip/maintenance/importImages.php");
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
+		$this->setSoftwareTemplates();
 		$this->setAboutPage();
 		$this->setSettingsPage();
 		$this->dropDeadPlaceLinks();
@@ -1031,7 +1042,6 @@ class Build extends Maintenance {
 			return;
 		}
 
-		$this->savePage('Template:' . self::SOFTWARE_TEMPLATE, $this->softwareList(), 'Generate the software list');
 		if (!$title->exists()) {
 			$this->savePage(
 				$title->getPrefixedText(),
@@ -1040,6 +1050,22 @@ class Build extends Maintenance {
 			);
 		}
 		$this->savePage('MediaWiki:Aboutpage', $title->getPrefixedText(), 'Point the About link at the about page');
+	}
+
+	/**
+	 * Write the two generated lists of what this build is made of.
+	 *
+	 * Unconditional, and before the About page rather than inside it: a source page transcludes
+	 * either of these, and a site that writes its own About page -- or none at all -- would
+	 * otherwise transclude a template nobody generated.
+	 */
+	private function setSoftwareTemplates(): void {
+		$this->savePage(
+			'Template:' . self::COMPONENTS_TEMPLATE,
+			$this->componentLists(),
+			'Generate the component list'
+		);
+		$this->savePage('Template:' . self::SOFTWARE_TEMPLATE, $this->softwareList(), 'Generate the software list');
 	}
 
 	/** The installed software, extensions and skins, as the wikitext {{Wikven software}} holds. */
@@ -1064,6 +1090,11 @@ class Build extends Maintenance {
 		}
 		$text .= "|}\n\n";
 
+		return $text . '{{' . self::COMPONENTS_TEMPLATE . "}}\n";
+	}
+
+	/** The extensions and skins alone, as the wikitext {{Wikven components}} holds. */
+	private function componentLists(): string {
 		// Split components into extensions and skins (skins live under skins/), each in its own section.
 		$extensions = [];
 		$skins = [];
@@ -1074,9 +1105,10 @@ class Build extends Maintenance {
 				$extensions[$thingName] = $credits;
 			}
 		}
-		$text .= $this->componentTable('version-extensions', 'version-ext-colheader-name', $extensions);
-		$text .= $this->componentTable('version-skins', 'version-skin-colheader-name', $skins);
-		return $text;
+		return (
+			$this->componentTable('version-extensions', 'version-ext-colheader-name', $extensions)
+			. $this->componentTable('version-skins', 'version-skin-colheader-name', $skins)
+		);
 	}
 
 	/** Write one page the build generates, creating or replacing it. */
@@ -1097,7 +1129,16 @@ class Build extends Maintenance {
 		return wfMessage($key)->inContentLanguage()->text();
 	}
 
-	/** A wikitext table of components with versions and project links, under the given messages. */
+	/**
+	 * A wikitext table of components with versions, project links and licenses, under the given
+	 * messages.
+	 *
+	 * The license is the one the component declares in its own extension.json, which is the only
+	 * place that fact is kept and the reason a page acknowledging it need not be written by hand.
+	 * Special:Version links each one to the license text it ships; an export has no such page, so
+	 * the identifier stands on its own, and a component declaring none leaves the cell empty rather
+	 * than being guessed at.
+	 */
 	private function componentTable(string $headingKey, string $nameColKey, array $things): string {
 		if (!$things) {
 			return '';
@@ -1109,11 +1150,14 @@ class Build extends Maintenance {
 			. $this->contentMsg($nameColKey)
 			. ' !! '
 			. $this->contentMsg('version-ext-colheader-version')
+			. ' !! '
+			. $this->contentMsg('version-ext-colheader-license')
 			. "\n";
 		foreach ($things as $thingName => $credits) {
 			$url = $credits['url'] ?? '';
 			$label = $url !== '' ? "[$url $thingName]" : $thingName;
-			$text .= "|-\n| $label\n| " . ( $credits['version'] ?? '' ) . "\n";
+			$text .=
+				"|-\n| $label\n| " . ( $credits['version'] ?? '' ) . "\n| " . ( $credits['license-name'] ?? '' ) . "\n";
 		}
 		$text .= "|}\n";
 		return $text;
