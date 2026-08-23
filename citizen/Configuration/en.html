@@ -457,7 +457,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenAboutPage"><code>WikvenAboutPage</code></h3></div>
 <p><b>Default:</b> <code>About</code>
-</p><p>The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Write a source page of that name and it is used exactly as written; the build also generates a <code>Wikven software</code> template listing the installed software, extensions and skins (what <code>Special:Version</code> would show, which an export has no room for), so put <code>{{Wikven software}}</code> wherever you want that list, or leave it out. With no source page of that name, the build writes one holding an introduction with the list under it. Set it empty to write no page at all, and the footer link goes with it.
+</p><p>The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Write a source page of that name and it is used exactly as written. With no source page of that name, the build writes one holding an introduction with the software list under it. Set it empty to write no page at all, and the footer link goes with it.
+</p><p>Whatever this is set to, the build generates two templates, since an export has no <code>Special:Version</code> to send a reader to. Transclude either from any page you like: <code>{{Wikven software}}</code> is what that page would show — MediaWiki, PHP and the database, then the extensions and skins — and <code>{{Wikven components}}</code> is the extensions and skins alone, with the license each one declares, which is what a page acknowledging what your site redistributes wants.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenFooterUrl"><code>WikvenFooterUrl</code></h3></div>
 <p><b>Default:</b> empty
@@ -544,7 +545,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 23 August 2026, at 09:27." data-timestamp="1787477222"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 23 August 2026, at 10:18." data-timestamp="1787480311"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -795,7 +796,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 09:27.</div>
+		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 10:18.</div>
 		    </section>
 		</div>
 </footer>		</div>

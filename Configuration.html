@@ -702,7 +702,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenAboutPage"><code>WikvenAboutPage</code></h3></div>
 <p><b>Default:</b> <code>About</code>
-</p><p>The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Write a source page of that name and it is used exactly as written; the build also generates a <code>Wikven software</code> template listing the installed software, extensions and skins (what <code>Special:Version</code> would show, which an export has no room for), so put <code>{{Wikven software}}</code> wherever you want that list, or leave it out. With no source page of that name, the build writes one holding an introduction with the list under it. Set it empty to write no page at all, and the footer link goes with it.
+</p><p>The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Write a source page of that name and it is used exactly as written. With no source page of that name, the build writes one holding an introduction with the software list under it. Set it empty to write no page at all, and the footer link goes with it.
+</p><p>Whatever this is set to, the build generates two templates, since an export has no <code>Special:Version</code> to send a reader to. Transclude either from any page you like: <code>{{Wikven software}}</code> is what that page would show — MediaWiki, PHP and the database, then the extensions and skins — and <code>{{Wikven components}}</code> is the extensions and skins alone, with the license each one declares, which is what a page acknowledging what your site redistributes wants.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenFooterUrl"><code>WikvenFooterUrl</code></h3></div>
 <p><b>Default:</b> empty
@@ -783,7 +784,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 09:27.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 10:18.</li>
 </ul>
 
 	<ul id="footer-places">
