@@ -584,24 +584,23 @@ html[dir="rtl"] .wikven-home-sym--parts {
  * and warmth is the one part of that idea a landing page can carry without repeating the mark the
  * skin already shows in its header.
  *
- * Both colours stay; what changed is that they stopped being objects. Two fields that each begin
- * and end inside the band read as a pair of coloured spheres sitting behind the page rather than
- * as light on it -- a thing in the picture instead of the picture's ground. What makes a wash read
- * as ground is having no shape to find, so these two run the full width of the band and stack,
- * warm over cool: the band is tinted from top to bottom and there is no outline anywhere in it.
+ * What decides whether this reads as light or as an object is whether the reader can see the whole
+ * of it. A field that begins and ends inside the band is a thing in the picture -- two of them, in
+ * two colours, are a pair of coloured spheres parked behind the page, which is what #525 produced
+ * by pulling them inside to stop a sideways scroll. Ground is what runs off the edge of the frame.
  *
- * Two layers of one element rather than two elements, only because the night override is then one
- * property instead of two.
+ * So the box is much taller than the band and the fields fill it: their tops and bottoms fall well
+ * outside anything the reader is looking at, and inside the band there is no boundary to find.
+ * Only the block axis is spent on this. The inline axis stays at the band's edge, because bleeding
+ * that is what put the sideways scroll on every phone, and each field fades to nothing by the time
+ * it gets there, so the edge is never a seam either.
  *
- * Two things keep the edge away. closest-side reaches nothing on every side, so each fade finishes
- * exactly at the box rather than being cut part-opaque -- and the stops are eased rather than
- * linear, most of the fall happening early, because a straight ramp leaves a soft disc in the
- * middle of a band that is meant not to have one.
+ * Each ellipse is tangent to its own nearest sides -- 38% tall, centred 38% down and 62% down --
+ * so no fade is ever cut part-opaque, and the stops are eased rather than linear, most of the fall
+ * happening early, because a straight ramp leaves a soft disc where none is wanted.
  *
- * isolation makes the hero its own stacking context, so the light sits behind the tagline and
- * nowhere else; without it a z-index of -1 escapes to the page ground and the skin paints over it.
- * The block axis is allowed to overrun the band, which is free -- the inline axis is not, and
- * bleeding it is what put a sideways scroll on every phone in #525. */
+ * isolation makes the hero its own stacking context, so the light stays behind the page's own
+ * content; without it a z-index of -1 escapes to the page ground and the skin paints over it. */
 .wikven-home-hero {
 	position: relative;
 	isolation: isolate;
@@ -612,21 +611,21 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	position: absolute;
 	z-index: -1;
 	pointer-events: none;
-	inset-block: -7rem;
+	inset-block: -9rem -20rem;
 	inset-inline: 0;
 	background:
 		radial-gradient(
-			ellipse closest-side at 50% 26%,
-			rgba(255, 140, 26, 0.22) 0%,
-			rgba(255, 140, 26, 0.14) 34%,
-			rgba(255, 140, 26, 0.05) 66%,
+			ellipse 50% 38% at 50% 38%,
+			rgba(255, 140, 26, 0.3) 0%,
+			rgba(255, 140, 26, 0.19) 34%,
+			rgba(255, 140, 26, 0.07) 66%,
 			rgba(255, 140, 26, 0) 100%
 		),
 		radial-gradient(
-			ellipse closest-side at 50% 74%,
-			rgba(16, 112, 127, 0.15) 0%,
-			rgba(16, 112, 127, 0.09) 34%,
-			rgba(16, 112, 127, 0.03) 66%,
+			ellipse 50% 38% at 50% 62%,
+			rgba(16, 112, 127, 0.19) 0%,
+			rgba(16, 112, 127, 0.11) 34%,
+			rgba(16, 112, 127, 0.04) 66%,
 			rgba(16, 112, 127, 0) 100%
 		);
 }
@@ -638,17 +637,17 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	html.skin-theme-clientpref-night .wikven-home-hero::before {
 		background:
 			radial-gradient(
-				ellipse closest-side at 50% 26%,
-				rgba(255, 140, 26, 0.14) 0%,
-				rgba(255, 140, 26, 0.09) 34%,
-				rgba(255, 140, 26, 0.03) 66%,
+				ellipse 50% 38% at 50% 38%,
+				rgba(255, 140, 26, 0.17) 0%,
+				rgba(255, 140, 26, 0.11) 34%,
+				rgba(255, 140, 26, 0.04) 66%,
 				rgba(255, 140, 26, 0) 100%
 			),
 			radial-gradient(
-				ellipse closest-side at 50% 74%,
-				rgba(87, 188, 203, 0.1) 0%,
-				rgba(87, 188, 203, 0.06) 34%,
-				rgba(87, 188, 203, 0.02) 66%,
+				ellipse 50% 38% at 50% 62%,
+				rgba(87, 188, 203, 0.12) 0%,
+				rgba(87, 188, 203, 0.07) 34%,
+				rgba(87, 188, 203, 0.025) 66%,
 				rgba(87, 188, 203, 0) 100%
 			);
 	}
@@ -658,17 +657,17 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	html.skin-theme-clientpref-os .wikven-home-hero::before {
 		background:
 			radial-gradient(
-				ellipse closest-side at 50% 26%,
-				rgba(255, 140, 26, 0.14) 0%,
-				rgba(255, 140, 26, 0.09) 34%,
-				rgba(255, 140, 26, 0.03) 66%,
+				ellipse 50% 38% at 50% 38%,
+				rgba(255, 140, 26, 0.17) 0%,
+				rgba(255, 140, 26, 0.11) 34%,
+				rgba(255, 140, 26, 0.04) 66%,
 				rgba(255, 140, 26, 0) 100%
 			),
 			radial-gradient(
-				ellipse closest-side at 50% 74%,
-				rgba(87, 188, 203, 0.1) 0%,
-				rgba(87, 188, 203, 0.06) 34%,
-				rgba(87, 188, 203, 0.02) 66%,
+				ellipse 50% 38% at 50% 62%,
+				rgba(87, 188, 203, 0.12) 0%,
+				rgba(87, 188, 203, 0.07) 34%,
+				rgba(87, 188, 203, 0.025) 66%,
 				rgba(87, 188, 203, 0) 100%
 			);
 	}
