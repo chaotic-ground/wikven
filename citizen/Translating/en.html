@@ -489,7 +489,7 @@ It runs a real MediaWiki at build time.
 
 <span class="go">1 translation(s) out of date or missing.</span>
 </pre></div>
-<p>The <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations">check-translations action</a> runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
+<p>The <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations">check-translations action</a> runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. Set its <code>comment</code> input and it also leaves one comment on the pull request, grouping what it found and naming the command that answers each group — written for a contributor sending their first translation, who has the annotations but not the workflow behind them. Add <code>comment-languages: auto</code> and the comment is written in English and in the language of the translation it is about, from wikven's own interface messages. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">JavaScript</a></div><div class="wikven-prevnext-next"><a href="../Editing_sidebar/en.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a> →</div></div>
 
@@ -510,7 +510,7 @@ It runs a real MediaWiki at build time.
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/en.wikitext" title="This page was last edited on 23 August 2026, at 08:08." data-timestamp="1787472480"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/en.wikitext" title="This page was last edited on 23 August 2026, at 11:28." data-timestamp="1787484482"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -636,7 +636,7 @@ It runs a real MediaWiki at build time.
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 08:08.</div>
+		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 11:28.</div>
 		    </section>
 		</div>
 </footer>		</div>
