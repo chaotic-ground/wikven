@@ -426,10 +426,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="nt">WikvenHistoryUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/yourname/some-repository/commits/branch-name/path/to/$1</span>
 </pre></div>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="extensions"><code>extensions</code></h2></div><section id="citizen-section-1" class="citizen-section">
-<p>A list of extension names to load. An extension that ships inside Wikven works by name alone; any other name is treated as third-party and fetched from a source you declare in <a href="#WikvenRepositories"><code>WikvenRepositories</code></a>. See <a href="../Extensions/en.html" title="Special:MyLanguage/Extensions">Extensions</a> for what ships and what does not.
+<p>A list of extension names to load. An extension that ships inside Wikven works by name alone; any other name is treated as third-party and fetched from a source you declare in the <a href="#WikvenRepositories"><code>WikvenRepositories</code> map</a>. See <a href="../Extensions/en.html" title="Special:MyLanguage/Extensions">Extensions</a> for what ships and what does not.
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="skins"><code>skins</code></h2></div><section id="citizen-section-2" class="citizen-section">
-<p>A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from <a href="#WikvenRepositories"><code>WikvenRepositories</code></a>. See <a href="../Skins/en.html" title="Special:MyLanguage/Skins">Skins</a>.
+<p>A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from the <a href="#WikvenRepositories"><code>WikvenRepositories</code> map</a>. See <a href="../Skins/en.html" title="Special:MyLanguage/Skins">Skins</a>.
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="config"><code>config</code></h2></div><section id="citizen-section-3" class="citizen-section">
 <p>A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">configuration setting</a> can be defined here, and so can Wikven's own variables, which are these:
@@ -441,62 +441,62 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <th>What it sets
 </th></tr>
 <tr>
-<td><a href="#WikvenMainPage"><code>WikvenMainPage</code></a></td>
+<td><a href="#WikvenMainPage">WikvenMainPage</a></td>
 <td><code>index</code></td>
 <td>The page written as <code>index.html</code>, the site root.
 </td></tr>
 <tr>
-<td><a href="#WikvenAboutPage"><code>WikvenAboutPage</code></a></td>
+<td><a href="#WikvenAboutPage">WikvenAboutPage</a></td>
 <td><code>About</code></td>
 <td>The page the footer's "About" link leads to.
 </td></tr>
 <tr>
-<td><a href="#WikvenSettingsPage"><code>WikvenSettingsPage</code></a></td>
+<td><a href="#WikvenSettingsPage">WikvenSettingsPage</a></td>
 <td><code>Settings</code></td>
 <td>The generated page holding the reader's colour theme and skin.
 </td></tr>
 <tr>
-<td><a href="#WikvenEditUrl"><code>WikvenEditUrl</code></a></td>
+<td><a href="#WikvenEditUrl">WikvenEditUrl</a></td>
 <td>empty</td>
 <td>Target of the per-page "Edit" link.
 </td></tr>
 <tr>
-<td><a href="#WikvenEditUrl"><code>WikvenHistoryUrl</code></a></td>
+<td><a href="#WikvenEditUrl">WikvenHistoryUrl</a></td>
 <td>empty</td>
 <td>Target of the per-page "View history" link.
 </td></tr>
 <tr>
-<td><a href="#WikvenEditUrl"><code>WikvenViewSourceUrl</code></a></td>
+<td><a href="#WikvenEditUrl">WikvenViewSourceUrl</a></td>
 <td>empty</td>
 <td>Target of the per-page "View source" tab.
 </td></tr>
 <tr>
-<td><a href="#WikvenFooterUrl"><code>WikvenFooterUrl</code></a></td>
+<td><a href="#WikvenFooterUrl">WikvenFooterUrl</a></td>
 <td>empty</td>
 <td>A link added to the site footer.
 </td></tr>
 <tr>
-<td><a href="#WikvenLogos"><code>WikvenLogos</code></a></td>
+<td><a href="#WikvenLogos">WikvenLogos</a></td>
 <td>empty</td>
 <td>Header logos, named as source-directory files.
 </td></tr>
 <tr>
-<td><a href="#WikvenRepositories"><code>WikvenRepositories</code></a></td>
+<td><a href="#WikvenRepositories">WikvenRepositories</a></td>
 <td>empty</td>
 <td>Where to fetch non-bundled extensions and skins from.
 </td></tr>
 <tr>
-<td><a href="#WikvenBundleWebfonts"><code>WikvenBundleWebfonts</code></a></td>
+<td><a href="#WikvenBundleWebfonts">WikvenBundleWebfonts</a></td>
 <td><code>false</code></td>
 <td>Bake webfonts into the export for scripts the reader may lack a font for.
 </td></tr>
 <tr>
-<td><a href="#WikvenStyleDirectory"><code>WikvenStyleDirectory</code></a></td>
+<td><a href="#WikvenStyleDirectory">WikvenStyleDirectory</a></td>
 <td><code>.</code></td>
 <td>Subdirectory of the output the CSS files are written to.
 </td></tr>
 <tr>
-<td><a href="#WikvenStyleDirectory"><code>WikvenScriptDirectory</code></a></td>
+<td><a href="#WikvenStyleDirectory">WikvenScriptDirectory</a></td>
 <td><code>.</code></td>
 <td>Subdirectory of the output the JavaScript files are written to.
 </td></tr></tbody></table>
@@ -601,7 +601,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 20 August 2026, at 16:06." data-timestamp="1787241962"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 23 August 2026, at 07:13." data-timestamp="1787469221"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -852,7 +852,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 16:06.</div>
+		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 07:13.</div>
 		    </section>
 		</div>
 </footer>		</div>

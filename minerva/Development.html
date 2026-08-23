@@ -319,7 +319,7 @@ Wikven
 <p>A live wiki relies on <code>load.php</code>, an action API, and a database; a static host has none of these. Each pipeline step removes one such dependency: the file cache replaces the renderer, <code>buildStyles</code>/<code>buildScripts</code>/<code>rewriteScripts</code> replace <code>load.php</code>, <code>storeImages</code> replaces the thumbnail/Commons endpoints, and the extension's hooks remove the UI that would call the API. What is left is plain HTML, CSS, JS, and images.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Third-party_extensions_and_skins">Third-party extensions and skins</h2></div>
-<p>Names in <code>extensions</code>/<code>skins</code> that are not bundled with Wikven are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a> (a tarball, a <a rel="nofollow" class="external text" href="https://git-scm.com/">Git</a> repository, or a <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
+<p>Names in <code>extensions</code>/<code>skins</code> that are not bundled with Wikven are fetched at build time by <code>maintenance/fetchExtensions.php</code>, from a source declared in the <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a> (a tarball, a <a rel="nofollow" class="external text" href="https://git-scm.com/">Git</a> repository, or a <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> package). This runs after install but before <code>WikvenSettings.php</code> is wired in, so the components are on disk by the time MediaWiki loads them.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Standalone_binary">Standalone binary</h2></div>
 <p>The same MediaWiki + Wikven tree is embedded into a single <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">FrankenPHP executable</a> (see <code>binary.Dockerfile</code>), so a site can be built with no Docker. The binary extracts its app to a writable temporary directory at startup and runs the same pipeline, which is why all writable paths are kept under <code>WIKVEN_WORKDIR</code>. Its <code>build</code> and <code>serve</code> subcommands are registered by a small Caddy module in <code>caddy/</code>, and <code>bin/build.php</code> is the entry point they run.
@@ -373,8 +373,8 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787241962">
-  				<span>Last edited on 20 August 2026, at 16:06</span>
+  				data-timestamp="1787469221">
+  				<span>Last edited on 23 August 2026, at 07:13</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -397,7 +397,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:13.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

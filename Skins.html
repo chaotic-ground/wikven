@@ -628,21 +628,21 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading2"><h2 id="Building_more_than_one_skin">Building more than one skin</h2></div>
 <p>List more than one skin and the site is built in every one of them, and the reader picks. This documentation site does that with all three. It is one line of configuration and rather more than one line of consequences, so they are worth knowing:
 </p>
-<ul><li><b>The site is rendered once per skin.</b> A bake with three skins does three full renders and writes about three times as many files. The renders run beside each other, one per processor the build is allowed, so the time they add is what the machine has no processor to spare for: given three, a three-skin bake costs about what a one-skin bake does; given one — or <a href="./Commands.html#Environment_variables" title="Special:MyLanguage/Commands"><code>WIKVEN_BUILD_JOBS=1</code></a> — about three times as much.</li>
+<ul><li><b>The site is rendered once per skin.</b> A bake with three skins does three full renders and writes about three times as many files. The renders run beside each other, one per processor the build is allowed, so the time they add is what the machine has no processor to spare for: given three, a three-skin bake costs about what a one-skin bake does; given one — or with <a href="./Commands.html#Environment_variables" title="Special:MyLanguage/Commands"><code>WIKVEN_BUILD_JOBS</code> set to <code>1</code></a> — about three times as much.</li>
 <li><b>Each skin gets its own copy of every page.</b> The first skin in the list renders into the output root, as a single-skin site does, and every other renders into a directory named after it: <code>dist/citizen/Getting Started.html</code> beside <code>dist/Getting Started.html</code>. The copies are complete, down to their own <a href="./Searching.html" title="Special:MyLanguage/Searching">search index</a>, so a reader who chooses a skin stays in it while browsing and while searching.</li>
 <li><b>The copies are kept out of search engines.</b> Only the main skin's pages are indexable; the others are rendered <code>noindex</code>, so a search engine is not offered the same page three times.</li>
 <li><b>Every page gains a skin switcher.</b> Where it appears is up to the skin: Vector puts it in the appearance menu, Citizen in its preferences panel, and any other skin in the toolbox. A reader with no JavaScript still gets the plain list of links. MinervaNeue is the exception: the toolbox it would take is its page-actions menu, and which skin to read the site in is not an action on a page, so an article in it carries no switcher and the list is on the <a href="#Settings">Settings</a> page instead. Its main menu carries the site's own navigation and a link to that page.</li></ul>
 <p>With a single skin there is no switcher and no copy: the output is exactly what it was before.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Settings">Settings</h2></div>
-<p>The build writes one page of its own for the reader: <code>Settings</code>, named by <a href="./Configuration.html#WikvenSettingsPage" title="Special:MyLanguage/Configuration"><code>WikvenSettingsPage</code></a>. It stands in for the preferences a live wiki would offer, which a static site has no server for, and holds the choices that are the reader's rather than yours:
+<p>The build writes one page of its own for the reader: <code>Settings</code>, named by the <a href="./Configuration.html#WikvenSettingsPage" title="Special:MyLanguage/Configuration"><code>WikvenSettingsPage</code> setting</a>. It stands in for the preferences a live wiki would offer, which a static site has no server for, and holds the choices that are the reader's rather than yours:
 </p>
 <ul><li><b>which skin to read the site in</b>, on a site built with more than one; and</li>
 <li><b>the colour theme</b> (and text size, where the skin has one), which comes from MobileFrontend's own display controls, so this part appears only on a site that has <a href="./Extensions.html" title="Special:MyLanguage/Extensions">MobileFrontend</a> enabled.</li></ul>
 <p>Both choices are kept in the reader's browser, for that site alone, with no account and nothing stored on any server. Write a source page named <code>Settings</code> and yours is used instead; set <code>WikvenSettingsPage</code> empty and no page is written and nothing links to one.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Third-party_skins">Third-party skins</h2></div>
-<p>A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code></a>. It is fetched at build time and may be the default like any other. This documentation site fetches Citizen this way, offered alongside the other two.
+<p>A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in the <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a>. It is fetched at build time and may be the default like any other. This documentation site fetches Citizen this way, offered alongside the other two.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example</span>
@@ -707,7 +707,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 22 August 2026, at 16:31.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:13.</li>
 </ul>
 
 	<ul id="footer-places">

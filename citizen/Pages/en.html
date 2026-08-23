@@ -432,7 +432,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">JavaScript</a>). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.</li></ul>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="Categories">Categories</h2></div><section id="citizen-section-5" class="citizen-section">
 <p>Add <code>[[Category:Name]]</code> to a page to <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories">categorise</a> it; the categories show in the page footer, as on any wiki.
-</p><p>A category's own page is not exported by default, though. Wikven writes only <i>content</i> pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your <a href="../Configuration/en.html#ContentNamespaces" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code></a> and add a <code>Category:Name.wikitext</code> file to your source:
+</p><p>A category's own page is not exported by default, though. Wikven writes only <i>content</i> pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your <a href="../Configuration/en.html#ContentNamespaces" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a> and add a <code>Category:Name.wikitext</code> file to your source:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">ContentNamespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">14</span><span class="p p-Indicator">]</span>
@@ -470,7 +470,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages/en.wikitext" title="This page was last edited on 22 August 2026, at 16:10." data-timestamp="1787415049"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>22 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages/en.wikitext" title="This page was last edited on 23 August 2026, at 07:13." data-timestamp="1787469221"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -596,7 +596,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 22 August 2026, at 16:10.</div>
+		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 07:13.</div>
 		    </section>
 		</div>
 </footer>		</div>

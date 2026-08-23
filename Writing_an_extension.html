@@ -600,7 +600,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <ul><li><b>Your code runs at build time, not at view time.</b> There is no <code>load.php</code>, no action API and no database once the site is deployed. Anything your extension would normally do in response to a request has to happen during the build, or ship as static JavaScript that needs no server.</li>
 <li><b>The build is not a request.</b> <code>MW_ENTRY_POINT</code> is <code>cli</code>, there is no <code>WebRequest</code> worth reading, and a hook of yours that assumes a user, a session or a title from the URL will not find one. Wikven's own hooks guard on <code>MW_ENTRY_POINT === 'cli'</code> for this reason.</li></ul>
 <div class="mw-heading mw-heading2"><h2 id="Getting_your_extension_into_a_build">Getting your extension into a build</h2></div>
-<p>A site lists what it wants in its <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yml</code></a>. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
+<p>A site lists what it wants in its <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yml</code> file</a>. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MyExtension</span>
@@ -681,7 +681,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:13.</li>
 </ul>
 
 	<ul id="footer-places">

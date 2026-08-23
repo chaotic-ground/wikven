@@ -245,10 +245,10 @@ Wikven
 <span class="w">  </span><span class="nt">WikvenHistoryUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/yourname/some-repository/commits/branch-name/path/to/$1</span>
 </pre></div>
 <div class="mw-heading mw-heading2"><h2 id="extensions"><code>extensions</code></h2></div>
-<p>불러올 확장 기능 이름의 목록입니다. Wikven 안에 함께 들어 있는 확장 기능은 이름만으로 작동하며, 그 밖의 이름은 서드파티로 취급되어 <a href="#WikvenRepositories"><code>WikvenRepositories</code></a>에 선언한 소스에서 가져옵니다. 무엇이 들어 있고 무엇이 들어 있지 않은지는 <a href="../Extensions/ko.html" title="Special:MyLanguage/Extensions">확장 기능</a>을 참고하십시오.
+<p>불러올 확장 기능 이름의 목록입니다. Wikven 안에 함께 들어 있는 확장 기능은 이름만으로 작동하며, 그 밖의 이름은 서드파티로 취급되어 <a href="#WikvenRepositories"><code>WikvenRepositories</code> 맵</a>에 선언한 소스에서 가져옵니다. 무엇이 들어 있고 무엇이 들어 있지 않은지는 <a href="../Extensions/ko.html" title="Special:MyLanguage/Extensions">확장 기능</a>을 참고하십시오.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="skins"><code>skins</code></h2></div>
-<p>활성화할 스킨 이름의 목록입니다. 첫 번째가 기본 스킨으로 쓰입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 <a href="#WikvenRepositories"><code>WikvenRepositories</code></a>에서 가져옵니다. <a href="../Skins/ko.html" title="Special:MyLanguage/Skins">스킨</a>을 참고하십시오.
+<p>활성화할 스킨 이름의 목록입니다. 첫 번째가 기본 스킨으로 쓰입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 <a href="#WikvenRepositories"><code>WikvenRepositories</code> 맵</a>에서 가져옵니다. <a href="../Skins/ko.html" title="Special:MyLanguage/Skins">스킨</a>을 참고하십시오.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="config"><code>config</code></h2></div>
 <p>각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">설정 값</a>이든 여기에 정의할 수 있으며, Wikven 자체 변수도 다음과 같이 정의할 수 있습니다.
@@ -260,62 +260,62 @@ Wikven
 <th>설정하는 것
 </th></tr>
 <tr>
-<td><a href="#WikvenMainPage"><code>WikvenMainPage</code></a></td>
+<td><a href="#WikvenMainPage">WikvenMainPage</a></td>
 <td><code>index</code></td>
 <td>사이트 루트인 <code>index.html</code>로 쓰이는 문서.
 </td></tr>
 <tr>
-<td><a href="#WikvenAboutPage"><code>WikvenAboutPage</code></a></td>
+<td><a href="#WikvenAboutPage">WikvenAboutPage</a></td>
 <td><code>About</code></td>
 <td>바닥글의 "소개" 링크가 이어지는 문서.
 </td></tr>
 <tr>
-<td><a href="#WikvenSettingsPage"><code>WikvenSettingsPage</code></a></td>
+<td><a href="#WikvenSettingsPage">WikvenSettingsPage</a></td>
 <td><code>Settings</code></td>
 <td>독자의 색 테마와 스킨을 담아 생성되는 문서.
 </td></tr>
 <tr>
-<td><a href="#WikvenEditUrl"><code>WikvenEditUrl</code></a></td>
+<td><a href="#WikvenEditUrl">WikvenEditUrl</a></td>
 <td>비어 있음</td>
 <td>문서마다 붙는 "편집" 링크의 대상.
 </td></tr>
 <tr>
-<td><a href="#WikvenEditUrl"><code>WikvenHistoryUrl</code></a></td>
+<td><a href="#WikvenEditUrl">WikvenHistoryUrl</a></td>
 <td>비어 있음</td>
 <td>문서마다 붙는 "역사 보기" 링크의 대상.
 </td></tr>
 <tr>
-<td><a href="#WikvenEditUrl"><code>WikvenViewSourceUrl</code></a></td>
+<td><a href="#WikvenEditUrl">WikvenViewSourceUrl</a></td>
 <td>비어 있음</td>
 <td>문서마다 붙는 "원본 보기" 탭의 대상.
 </td></tr>
 <tr>
-<td><a href="#WikvenFooterUrl"><code>WikvenFooterUrl</code></a></td>
+<td><a href="#WikvenFooterUrl">WikvenFooterUrl</a></td>
 <td>비어 있음</td>
 <td>사이트 바닥글에 추가되는 링크.
 </td></tr>
 <tr>
-<td><a href="#WikvenLogos"><code>WikvenLogos</code></a></td>
+<td><a href="#WikvenLogos">WikvenLogos</a></td>
 <td>비어 있음</td>
 <td>소스 디렉터리의 파일 이름으로 지정하는 머리글 로고.
 </td></tr>
 <tr>
-<td><a href="#WikvenRepositories"><code>WikvenRepositories</code></a></td>
+<td><a href="#WikvenRepositories">WikvenRepositories</a></td>
 <td>비어 있음</td>
 <td>번들되지 않은 확장 기능과 스킨을 어디서 가져올지.
 </td></tr>
 <tr>
-<td><a href="#WikvenBundleWebfonts"><code>WikvenBundleWebfonts</code></a></td>
+<td><a href="#WikvenBundleWebfonts">WikvenBundleWebfonts</a></td>
 <td><code>false</code></td>
 <td>독자에게 글꼴이 없을 수 있는 문자를 위해 웹폰트를 내보내기에 구워 넣기.
 </td></tr>
 <tr>
-<td><a href="#WikvenStyleDirectory"><code>WikvenStyleDirectory</code></a></td>
+<td><a href="#WikvenStyleDirectory">WikvenStyleDirectory</a></td>
 <td><code>.</code></td>
 <td>CSS 파일을 쓸 출력 하위 디렉터리.
 </td></tr>
 <tr>
-<td><a href="#WikvenStyleDirectory"><code>WikvenScriptDirectory</code></a></td>
+<td><a href="#WikvenStyleDirectory">WikvenScriptDirectory</a></td>
 <td><code>.</code></td>
 <td>자바스크립트 파일을 쓸 출력 하위 디렉터리.
 </td></tr></tbody></table>
@@ -419,8 +419,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1786972111">
-  				<span>2026년 8월 17일 (월) 13:08에 마지막으로 편집됨</span>
+  				data-timestamp="1787469221">
+  				<span>2026년 8월 23일 (일) 07:13에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -443,7 +443,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 17일 (월) 13:08에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 07:13에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
