@@ -541,8 +541,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="k">*</span> sidebar-references
 <span class="k">**</span> Configuration|sidebar-configuration
 </pre></div>
-<p>A link target is looked up as a message too, and an entry whose target resolves to a message reading <code>-</code> is dropped from the sidebar without a trace. MediaWiki defines <code>licenses</code>, the upload form's list of license options, as <code>-</code>, so a page named <code>Licenses</code> disappears when written as a plain target. Prefix such a target with a colon, as in <code>:Licenses</code>, to link the page itself.
-</p>
+<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>A target is looked up as a message before it is read as a page name, the same way a label is, and MediaWiki drops an entry whose message says <code>-</code> — that is how it turns one of its own default entries off. So a target that happens to share a name with such a message leaves the sidebar without a word about it. The one worth knowing is <code>licenses</code>, the upload form's list of licence options, which MediaWiki defines as <code>-</code>: an entry for a page called <code>Licenses</code> is dropped when the target is written plainly. Write it with a leading colon, as <code>:Licenses</code>, to name the page itself and skip the lookup. The <code>Special:MyLanguage/</code> prefix below does the same, which is why this site's own sidebar needs no colon.</p></div>
+</div>
 <meta property="mw:PageProp/toc" />
 <div class="mw-heading mw-heading2"><h2 id="Linking_on_a_translated_site">Linking on a translated site</h2></div>
 <p>A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
@@ -579,7 +579,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:17.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:52.</li>
 </ul>
 
 	<ul id="footer-places">
