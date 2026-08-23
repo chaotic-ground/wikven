@@ -239,75 +239,8 @@ Wikven
 <p>A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from the <a href="#WikvenRepositories"><code>WikvenRepositories</code> map</a>. See <a href="../Skins/en.html" title="Special:MyLanguage/Skins">Skins</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="config"><code>config</code></h2></div>
-<p>A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">configuration setting</a> can be defined here, and so can Wikven's own variables, which are these:
-</p>
-<table class="wikitable">
-<tbody><tr>
-<th>Variable</th>
-<th>Default</th>
-<th>What it sets
-</th></tr>
-<tr>
-<td><a href="#WikvenMainPage">WikvenMainPage</a></td>
-<td><code>index</code></td>
-<td>The page written as <code>index.html</code>, the site root.
-</td></tr>
-<tr>
-<td><a href="#WikvenAboutPage">WikvenAboutPage</a></td>
-<td><code>About</code></td>
-<td>The page the footer's "About" link leads to.
-</td></tr>
-<tr>
-<td><a href="#WikvenSettingsPage">WikvenSettingsPage</a></td>
-<td><code>Settings</code></td>
-<td>The generated page holding the reader's colour theme and skin.
-</td></tr>
-<tr>
-<td><a href="#WikvenEditUrl">WikvenEditUrl</a></td>
-<td>empty</td>
-<td>Target of the per-page "Edit" link.
-</td></tr>
-<tr>
-<td><a href="#WikvenEditUrl">WikvenHistoryUrl</a></td>
-<td>empty</td>
-<td>Target of the per-page "View history" link.
-</td></tr>
-<tr>
-<td><a href="#WikvenEditUrl">WikvenViewSourceUrl</a></td>
-<td>empty</td>
-<td>Target of the per-page "View source" tab.
-</td></tr>
-<tr>
-<td><a href="#WikvenFooterUrl">WikvenFooterUrl</a></td>
-<td>empty</td>
-<td>A link added to the site footer.
-</td></tr>
-<tr>
-<td><a href="#WikvenLogos">WikvenLogos</a></td>
-<td>empty</td>
-<td>Header logos, named as source-directory files.
-</td></tr>
-<tr>
-<td><a href="#WikvenRepositories">WikvenRepositories</a></td>
-<td>empty</td>
-<td>Where to fetch non-bundled extensions and skins from.
-</td></tr>
-<tr>
-<td><a href="#WikvenBundleWebfonts">WikvenBundleWebfonts</a></td>
-<td><code>false</code></td>
-<td>Bake webfonts into the export for scripts the reader may lack a font for.
-</td></tr>
-<tr>
-<td><a href="#WikvenStyleDirectory">WikvenStyleDirectory</a></td>
-<td><code>.</code></td>
-<td>Subdirectory of the output the CSS files are written to.
-</td></tr>
-<tr>
-<td><a href="#WikvenStyleDirectory">WikvenScriptDirectory</a></td>
-<td><code>.</code></td>
-<td>Subdirectory of the output the JavaScript files are written to.
-</td></tr></tbody></table>
-<p>Three more exist and are not for you to set: <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code> and <code>WikvenSourceHistoryFile</code> are derived from <code>WIKVEN_WORKDIR</code> by the build itself (see <a href="../Commands/en.html" title="Special:MyLanguage/Commands">Commands</a>). Setting them in your file does nothing useful, and the build overwrites them anyway.
+<p>A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">configuration setting</a> can be defined here, and so can Wikven's own variables, which the sections below describe one by one.
+</p><p>Three more exist and are not for you to set: <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code> and <code>WikvenSourceHistoryFile</code> are derived from <code>WIKVEN_WORKDIR</code> by the build itself (see <a href="../Commands/en.html" title="Special:MyLanguage/Commands">Commands</a>). Setting them in your file does nothing useful, and the build overwrites them anyway.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenLogos"><code>WikvenLogos</code></h3></div>
 <p>The site's header logos. It mirrors MediaWiki's <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgLogos">$wgLogos</a>, with the same keys (<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code>, and so on), except each value is the name of an image file in your source directory rather than a URL:
@@ -316,12 +249,12 @@ Wikven
 <span class="w">  </span><span class="nt">WikvenLogos</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logo.svg</span>
 </pre></div>
-<p>The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file next to the HTML and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page.
+<p>The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file next to the HTML and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page. Empty by default, which leaves whatever logo MediaWiki itself would show.
 </p><p>Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
 </p><p><span id="WikvenEditUrl"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenEditUrl,_WikvenHistoryUrl_and_WikvenViewSourceUrl"><span id="WikvenEditUrl.2C_WikvenHistoryUrl_and_WikvenViewSourceUrl"></span><code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> and <code>WikvenViewSourceUrl</code></h3></div>
-<p>The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the <a href="#WikvenAboutPage">About</a> page, when the build writes it) has no source file, so these links are omitted for it.
+<p>The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. All three are empty by default; leave any of them unset to drop that link, a generated page (such as the <a href="#WikvenAboutPage">About</a> page, when the build writes it) has no source file, so these links are omitted for it.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenMainPage"><code>WikvenMainPage</code></h3></div>
 <p>The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Defaults to <code>index</code>, so naming your entry file <code>index.wikitext</code> works with no configuration. The page must be one you imported; the build fails if it is missing.
@@ -330,7 +263,7 @@ Wikven
 <p>The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Defaults to <code>About</code>. Write a source page of that name and it is used exactly as written; the build also generates a <code>Wikven software</code> template listing the installed software, extensions and skins (what <code>Special:Version</code> would show, which an export has no room for), so put <code>{{Wikven software}}</code> wherever you want that list, or leave it out. With no source page of that name, the build writes one holding an introduction with the list under it. Set it empty to write no page at all, and the footer link goes with it.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenFooterUrl"><code>WikvenFooterUrl</code></h3></div>
-<p>A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...).
+<p>A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...). Empty by default, and with no URL there is no such link.
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenSettingsPage"><code>WikvenSettingsPage</code></h3></div>
 <p>The title of a page the build writes for the reader's own display choices: the colour theme, and, on a site built with more than one skin, which skin to read it in. The choices are kept in the reader's browser and apply to that site alone; no account is involved. It stands in for the preferences a live wiki would offer, which a static export has no server for. Defaults to <code>Settings</code>.
@@ -348,7 +281,7 @@ Wikven
 <span class="w">  </span><span class="nt">WikvenScriptDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
 </pre></div>
 <div class="mw-heading mw-heading3"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
-<p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice.
+<p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. Empty by default: a name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here is skipped with a warning.
 </p><p>Each entry chooses one of three methods by the key it carries:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
@@ -406,8 +339,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787469221">
-  				<span>Last edited on 23 August 2026, at 07:13</span>
+  				data-timestamp="1787476158">
+  				<span>Last edited on 23 August 2026, at 09:09</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -430,7 +363,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:13.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 09:09.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
