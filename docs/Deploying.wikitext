@@ -61,12 +61,16 @@ jobs:
           # its source file. A shallow checkout knows only the latest commit.
           fetch-depth: 0
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
-      # No version has been released yet, so there is no tag to pin: pin a commit
-      # of main, and move it to a release tag once one exists.
-      - uses: chaotic-ground/wikven/actions/bake@main
+      # No version has been released yet, so there is no version tag to pin --
+      # and the action's default image is that unreleased version. Pin a nightly
+      # instead, and name the image from the same one: the tag is a commit of
+      # main, and that image was built from it. Both become @1.2.3 once a version
+      # exists. Pick the newest nightly from the releases page.
+      - uses: chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD
         with:
           source: src
           output: dist
+          image: ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
         with:
           path: dist
