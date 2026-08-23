@@ -116,8 +116,6 @@ docker run --rm -p 8080:8080 \
 </tabber>
 
 <translate>
-
-<translate>
 <!--T:12-->
 Any static server works too, for example <code>cd dist && python3 -m http.server</code>.
 
