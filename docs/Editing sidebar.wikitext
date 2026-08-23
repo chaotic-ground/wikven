@@ -25,7 +25,7 @@ Each top-level <code>*</code> line is a heading, and each <code>**</code> line b
 == Linking on a translated site ==
 
 <!--T:9-->
-A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the spelling MediaWiki's own wikis use, and the build resolves it instead — by a different rule than a live wiki would. There, that special page redirects at request time to the reader's own interface language, whatever page the link was on; a static export has no request and no reader to ask, so each link is resolved at build time by the language of the page it sits on. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the spelling MediaWiki's own wikis use, and the build resolves it per page instead: on a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </translate>
 
 <syntaxhighlight lang="wikitext" copy>
@@ -39,6 +39,9 @@ A target names one page, so an entry leads to that page and no other: a reader o
 </syntaxhighlight>
 
 <translate>
+<!--T:14-->
+{{note|The spelling is a wiki's; the rule behind it is not. On a wiki, that special page redirects at request time to the reader's own interface language, whatever page the link sat on, so two readers of one page follow the same entry to different translations. A static export has no request and no reader to ask, so the build settles each link once, by the language of the page holding it, and every reader of that page follows it to the same place.}}
+
 <!--T:10-->
 The main page keeps its plain <code>mainpage</code> entry, because that target is a message: the prefix goes in the message instead. Write <code>Special:MyLanguage/index</code> in <code>MediaWiki:Mainpage.wikitext</code> (<code>index</code> being whatever <code>WikvenMainPage</code> names), as Meta-Wiki does. Every skin points its logo at that same message, so the logo follows the reader's language too. The cost is that the wiki stops recognising the page as its main page: the page title shows in the browser tab, and MinervaNeue leaves out its main-page styling.
 
