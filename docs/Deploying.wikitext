@@ -36,7 +36,7 @@ Two things about that layout are worth knowing before you point a host at it. Li
 == GitHub Pages ==
 
 <!--T:3-->
-This workflow rebuilds and publishes the site on every push. It bakes the source with the {{SITENAME}} [https://github.com/chaotic-ground/wikven/tree/main/actions/bake composite action], then uploads <code>dist/</code> to Pages.
+This workflow rebuilds and publishes the site on every push. It bakes the source with the {{SITENAME}} [<tvar name="1">https://github.com/chaotic-ground/wikven/tree/main/actions/bake</tvar> composite action], then uploads <code>dist/</code> to Pages.
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
