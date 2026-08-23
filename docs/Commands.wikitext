@@ -185,6 +185,9 @@ The action also dumps the source tree's <code>git log</code> and hands it to the
 
 <!--T:27-->
 Runs <code>translate check</code> over a source tree and reports each finding as an annotation on the file it belongs to.
+
+<!--T:30-->
+{{note|Annotations are for whoever is reading the diff. A contributor sending their first translation is better served by being told what to run, which <code>comment: true</code> does: one comment on the pull request, the findings grouped by what went wrong, each group naming the command that answers it. It is edited on each run rather than added to, and replaced by an all-clear once nothing is left to report. The job needs <code>pull-requests: write</code>; a pull request from a fork carries a read-only token, and the comment is then skipped with a line in the log.}}
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
@@ -206,6 +209,10 @@ Runs <code>translate check</code> over a source tree and reports each finding as
 | <code>cache</code> || <code>true</code> || Cache the pulled image between runs.
 |-
 | <code>gate</code> || <code>true</code> || Fail the step when a source page is broken. A stale or missing translation is reported and never fails the step.
+|-
+| <code>comment</code> || <code>false</code> || Also leave one comment on the pull request, grouping what was found and naming the <code>translate</code> command that answers it.
+|-
+| <code>github-token</code> || the job's own token || What the comment is posted with.
 |}
 </translate>
 

@@ -15,6 +15,9 @@ on:
 
 permissions:
   contents: read
+  # The comment below; a pull request from a fork gets a read-only token anyway, and the action
+  # then says so in the log rather than failing.
+  pull-requests: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
@@ -49,3 +52,7 @@ jobs:
           # A broken source page fails here; staleness only annotates, since translating is not the
           # job of whoever edits the English source.
           gate: true
+          # Dogfooding the other half: one comment on the pull request, saying which translate
+          # command answers what was found. This repository takes translations from contributors,
+          # which is exactly who the comment is for.
+          comment: true

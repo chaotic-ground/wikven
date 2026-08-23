@@ -144,7 +144,7 @@ $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven tra
 
 <translate>
 <!--T:21-->
-The [<tvar name="1">https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations</tvar> check-translations action] runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
+The [<tvar name="1">https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations</tvar> check-translations action] runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. Set its <code>comment</code> input and it also leaves one comment on the pull request, grouping what it found and naming the command that answers each group — written for a contributor sending their first translation, who has the annotations but not the workflow behind them. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
 </translate>
 
 {{prevnext}}
