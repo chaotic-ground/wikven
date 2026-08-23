@@ -10,10 +10,14 @@ namespace MediaWiki\Extension\Wikven\PageTranslation;
  * meeting this workflow for the first time. An annotation says "Stale translation unit T:3 (ko)";
  * it does not say that a stamp is what makes a unit current, or which command writes one.
  *
- * So the same findings are also gathered here into one comment: grouped by what went wrong, each
- * group saying what to run, and the whole thing ending on what does and does not fail the build.
- * Pure string work over the findings array, so the wording is tested rather than inferred from a
- * workflow run.
+ * So the same findings are also gathered into one comment: grouped by what went wrong, each group
+ * saying what to run, and the whole thing ending on what does and does not fail the build.
+ *
+ * Every word of it is a message in i18n/, because the person being advised is by definition
+ * someone working in another language: the comment can be rendered once per language, so a
+ * contributor who sent a Korean translation reads the advice in Korean under the English. The
+ * messages are reached through a callable rather than wfMessage() directly, so the shape of the
+ * comment is tested without a wiki behind it.
  */
 class TranslationAdvice {
 	/**
@@ -29,101 +33,53 @@ class TranslationAdvice {
 	 */
 	public const CLEAR_MARKER = '<!-- wikven-check-translations:clear -->';
 
-	/** Where the reader is sent for the whole story, once the comment has said the short version. */
-	private const DOCUMENTATION = 'https://chaotic-ground.github.io/wikven/Translating.html';
+	/** What separates one language's rendering of the comment from the next. */
+	private const SEPARATOR = "\n---\n\n";
 
 	/**
-	 * The groups, in the order they are shown: the ones that stop a page being translated at all
-	 * first, then the ones about a translation of a page that is otherwise fine.
+	 * The kinds of finding, in the order they are shown: the ones that stop a page being translated
+	 * at all first, then the ones about a translation of a page that is otherwise fine.
 	 *
-	 * Each is a heading and the advice under it. The advice names the command, because the command
-	 * is the part a contributor cannot guess.
-	 *
-	 * @var array<string,array{0:string,1:string}>
+	 * Each names two messages, a heading and the advice under it. The advice names the command,
+	 * because the command is the part a contributor cannot guess.
 	 */
-	private const GROUPS = [
-		'parse' => [
-			'The source page cannot be read',
-			'Translate refuses the page, so nothing of it can be translated yet. The message is'
-				. ' Translate\'s own; it usually points at a `<!--T:n-->` marker somewhere other than'
-				. ' the start of its unit or the end of a line.'
-		],
-		'reserved' => [
-			'A unit is numbered `T:title`',
-			'That id belongs to the page\'s own title, which a translation carries instead of the'
-				. ' page repeating it. Renumber that unit and leave `T:title` to the title.'
-		],
-		'unmarked' => [
-			'Units have no `<!--T:n-->` marker',
-			'A unit is translated by its number, so an unnumbered one cannot be. Run `translate mark`'
-				. ' on the page; it keeps the numbers already there.'
-		],
-		'disagree' => [
-			'wikven and Translate read the page differently',
-			'The two disagree about where the units are, which means the export would translate'
-				. ' something other than what Translate marked. Re-run `translate mark` and, if it'
-				. ' persists, say so upstream: this is wikven\'s bug rather than yours.'
-		],
-		'orphan' => [
-			'A translation names a unit the source does not have',
-			'Its `<!--T:n-->` was renumbered or removed in the source, so the text under it reaches'
-				. ' no one. Run `translate scaffold <language>` to add the markers the source has'
-				. ' now, move the text under the right one, and delete what is left.'
-		],
-		'stale' => [
-			'Translated, but not stamped as current',
-			'A unit is current when its marker carries the source\'s hash: `<!--T:3 @a1b2c3d4-->`.'
-				. ' Read each unit below against the source, then run `translate stamp` to write the'
-				. ' stamps. Do not type a hash by hand.'
-		],
-		'untranslated' => [
-			'Not translated yet',
-			'These units are empty, which is not an error: the build renders them in the source'
-				. ' language, and the page can be translated a few units at a time. Listed so that'
-				. ' nothing is left behind by accident.'
-		]
-	];
+	private const KINDS = ['parse', 'reserved', 'unmarked', 'disagree', 'orphan', 'stale', 'untranslated'];
+
+	/** Kinds that are a translation falling behind rather than a page nobody can translate. */
+	private const TRANSLATION_KINDS = ['stale', 'untranslated'];
+
+	/** @var callable(string,string,list<string>):string Message key, language code and parameters. */
+	private $message;
+
+	/** @param callable(string,string,list<string>):string $message */
+	public function __construct(callable $message) {
+		$this->message = $message;
+	}
+
+	/** The advice as a wiki renders it: messages from i18n/, in whichever language is asked for. */
+	public static function usingMessages(): self {
+		return new self(static function (string $key, string $language, array $parameters): string {
+			return wfMessage($key, ...$parameters)->inLanguage($language)->text();
+		});
+	}
 
 	/**
 	 * The comment for a run that found something, or null for one that found nothing.
 	 *
 	 * @param list<array{kind:string,file:string,unit?:string,lang?:string,detail?:string}> $findings
+	 * @param list<string> $languages Rendered once each, in this order.
 	 */
-	public static function comment(array $findings): ?string {
+	public function comment(array $findings, array $languages = ['en']): ?string {
 		$grouped = self::group($findings);
 		if ($grouped === []) {
 			return null;
 		}
-
-		$body =
-			self::MARKER
-			. "\n## Translations in this pull request\n\n"
-			. '`translate check` read the source pages and their translations, and has this to say.'
-			. " Every line is also an annotation on the file it belongs to.\n";
-		foreach (self::GROUPS as $kind => [$heading, $advice]) {
-			if (!isset($grouped[$kind])) {
-				continue;
-			}
-			$body .= "\n### $heading\n\n$advice\n\n";
-			foreach ($grouped[$kind] as $file => $notes) {
-				$body .= '- `' . $file . '` — ' . implode('; ', $notes) . "\n";
-			}
-		}
-
-		// Which of the two closing lines is honest depends on what was found, not on how the check
-		// was configured: staleness never gates, and a broken page gates only where the workflow
-		// asked it to.
-		$onlyTranslations = array_diff(array_keys($grouped), ['stale', 'untranslated']) === [];
-		$body .=
-			"\n"
-			. (
-				$onlyTranslations
-					? 'None of this fails the check: a translation that is behind is the translation system'
-					. ' working, and the export marks such a unit as outdated for the reader.'
-					: 'A broken source page is the one thing here that can fail the check, and only where the'
-					. ' workflow asked it to; a translation that is merely behind or missing never does.'
-			);
-		return $body . ' See [Translating](' . self::DOCUMENTATION . ") for the whole workflow.\n";
+		return self::MARKER
+		. "\n"
+		. $this->inEachLanguage(
+			$languages,
+			fn(string $language): string => $this->body($grouped, $language)
+		);
 	}
 
 	/**
@@ -131,38 +87,128 @@ class TranslationAdvice {
 	 *
 	 * Edited over the old body rather than deleted, so the thread keeps its place in the
 	 * conversation and a reader who followed a notification finds the answer rather than a gap.
+	 *
+	 * @param list<string> $languages
 	 */
-	public static function allClear(): string {
-		return (
-			self::MARKER
-			. "\n"
-			. self::CLEAR_MARKER
-			. "\n## Translations in this pull request\n\n"
-			. '`translate check` found nothing to report: every source page reads cleanly, and every'
-			. " translation of one is stamped current.\n"
+	public function allClear(array $languages = ['en']): string {
+		return self::MARKER
+		. "\n"
+		. self::CLEAR_MARKER
+		. "\n"
+		. $this->inEachLanguage(
+			$languages,
+			fn(string $language): string => (
+				$this->heading($language) . $this->msg('wikven-translations-all-clear', $language) . "\n"
+			)
 		);
 	}
 
 	/**
-	 * Findings by kind, then by file, each file's notes in the order they were found.
+	 * One rendering per language, minus any that came out the same as one already there.
 	 *
-	 * A unit finding becomes "T:3 (ko)" and a page finding its own message, so one line can carry
-	 * several units of the same file without repeating the file name.
+	 * A language with no translation of these messages falls back to English and would otherwise
+	 * say everything twice, which reads as a bug rather than as the honest "not translated yet".
+	 *
+	 * @param list<string> $languages
+	 * @param callable(string):string $render
+	 */
+	private function inEachLanguage(array $languages, callable $render): string {
+		$renderings = [];
+		foreach ($languages as $language) {
+			$rendering = $render($language);
+			if (!in_array($rendering, $renderings, true)) {
+				$renderings[] = $rendering;
+			}
+		}
+		return implode(self::SEPARATOR, $renderings);
+	}
+
+	/**
+	 * The comment in one language: what was found, under a heading per kind, then what it costs.
+	 *
+	 * @param array<string,array<string,list<array{unit?:string,lang?:string,detail?:string}>>> $grouped
+	 */
+	private function body(array $grouped, string $language): string {
+		$body = $this->heading($language) . $this->msg('wikven-translations-lead', $language) . "\n";
+		foreach (self::KINDS as $kind) {
+			if (!isset($grouped[$kind])) {
+				continue;
+			}
+			$body .=
+				"\n### "
+				. $this->msg("wikven-translations-$kind-heading", $language)
+				. "\n\n"
+				. $this->msg("wikven-translations-$kind-advice", $language)
+				. "\n\n";
+			foreach ($grouped[$kind] as $file => $findings) {
+				$notes = [];
+				foreach ($findings as $finding) {
+					$notes[] = $this->note($finding, $language);
+				}
+				$body .= '- `' . $file . '` — ' . implode('; ', $notes) . "\n";
+			}
+		}
+
+		// Which of the two closing lines is honest depends on what was found, not on how the check
+		// was configured: staleness never gates, and a broken page gates only where the workflow
+		// asked it to.
+		$onlyTranslations = array_diff(array_keys($grouped), self::TRANSLATION_KINDS) === [];
+		$closing = $onlyTranslations ? 'wikven-translations-nothing-fails' : 'wikven-translations-can-fail';
+		return (
+			$body
+			. "\n"
+			. $this->msg($closing, $language)
+			. ' '
+			. $this->msg(
+				'wikven-translations-documentation',
+				$language,
+				[$this->msg('wikven-translations-documentation-url', $language)]
+			)
+			. "\n"
+		);
+	}
+
+	/** The comment's own title, which is also what tells a reader whose language a rendering is. */
+	private function heading(string $language): string {
+		return '## ' . $this->msg('wikven-translations-title', $language) . "\n\n";
+	}
+
+	/**
+	 * What one finding is called on its file's line: a unit by number and language, and anything
+	 * else by the message the check itself produced.
+	 *
+	 * @param array{unit?:string,lang?:string,detail?:string} $finding
+	 */
+	private function note(array $finding, string $language): string {
+		if (!isset($finding['unit'])) {
+			return (string)( $finding['detail'] ?? '' );
+		}
+		return (
+			isset($finding['lang'])
+				? $this->msg('wikven-translations-unit', $language, [$finding['unit'], $finding['lang']])
+				: $this->msg('wikven-translations-unit-plain', $language, [$finding['unit']])
+		);
+	}
+
+	/** @param list<string> $parameters */
+	private function msg(string $key, string $language, array $parameters = []): string {
+		return ( $this->message )($key, $language, $parameters);
+	}
+
+	/**
+	 * Findings by kind, then by file, each file's findings in the order they were found, so one
+	 * line can carry several units of the same file without repeating the file name.
 	 *
 	 * @param list<array{kind:string,file:string,unit?:string,lang?:string,detail?:string}> $findings
-	 * @return array<string,array<string,list<string>>>
+	 * @return array<string,array<string,list<array{unit?:string,lang?:string,detail?:string}>>>
 	 */
 	private static function group(array $findings): array {
 		$grouped = [];
 		foreach ($findings as $finding) {
-			$kind = $finding['kind'];
-			if (!isset(self::GROUPS[$kind])) {
+			if (!in_array($finding['kind'], self::KINDS, true)) {
 				continue;
 			}
-			$note = isset($finding['unit'])
-				? 'T:' . $finding['unit'] . ( isset($finding['lang']) ? ' (' . $finding['lang'] . ')' : '' )
-				: (string)( $finding['detail'] ?? '' );
-			$grouped[$kind][$finding['file']][] = $note;
+			$grouped[$finding['kind']][$finding['file']][] = $finding;
 		}
 		return $grouped;
 	}

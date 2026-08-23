@@ -56,3 +56,6 @@ jobs:
           # command answers what was found. This repository takes translations from contributors,
           # which is exactly who the comment is for.
           comment: true
+          # And the language half: whoever sent a translation reads the advice in the language they
+          # sent it in, under the English.
+          comment-languages: auto

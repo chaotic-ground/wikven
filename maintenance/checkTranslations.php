@@ -30,6 +30,13 @@ class CheckTranslations extends Maintenance {
 			false,
 			true
 		);
+		$this->addOption(
+			'comment-languages',
+			'Languages to write that comment in, besides English: "auto" for the languages the findings'
+			. ' are about, or a comma-separated list of codes.',
+			false,
+			true
+		);
 	}
 
 	/**
@@ -136,10 +143,49 @@ class CheckTranslations extends Maintenance {
 		if ($path === '') {
 			return;
 		}
-		$body = TranslationAdvice::comment($this->findings) ?? TranslationAdvice::allClear();
+		$advice = TranslationAdvice::usingMessages();
+		$languages = $this->commentLanguages();
+		$body = $advice->comment($this->findings, $languages) ?? $advice->allClear($languages);
 		if (file_put_contents($path, $body) === false) {
 			$this->fatalError("Wikven: could not write the comment body to '$path'.");
 		}
+	}
+
+	/**
+	 * The languages the comment is written in: English, then whatever --comment-languages asked for.
+	 *
+	 * English leads because it is the one language the workflow can count on a reader of the pull
+	 * request having in common with it. What follows is for the contributor: "auto" reads it off the
+	 * findings, so someone who sent a Korean translation is answered in Korean without the workflow
+	 * naming a language it cannot know in advance.
+	 *
+	 * @return list<string>
+	 */
+	private function commentLanguages(): array {
+		$languages = ['en'];
+		$option = trim((string)$this->getOption('comment-languages', ''));
+		if ($option === '') {
+			return $languages;
+		}
+		$wanted = $option === 'auto'
+			? array_column($this->findings, 'lang')
+			: array_map('trim', explode(',', $option));
+		sort($wanted);
+
+		$languageNameUtils = $this->getServiceContainer()->getLanguageNameUtils();
+		foreach ($wanted as $language) {
+			if ($language === '' || in_array($language, $languages, true)) {
+				continue;
+			}
+			// A code nobody knows is the caller's typo, not a reason to lose the comment: the
+			// English half is what most readers of the pull request read anyway.
+			if (!$languageNameUtils->isKnownLanguageTag($language)) {
+				$this->output("::warning::Unknown language '$language' for the translations comment; skipped\n");
+				continue;
+			}
+			$languages[] = $language;
+		}
+		return $languages;
 	}
 
 	/**

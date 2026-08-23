@@ -31,6 +31,16 @@ inputs:
       request. One comment per pull request, edited on each run, and replaced
       with an all-clear once the findings are answered.
     default: "false"
+  comment-languages:
+    description: >-
+      Languages the comment is written in besides English, which always leads.
+      "auto" takes them from what was found, so a contributor who sent a Korean
+      translation is answered in Korean under the English; a comma-separated
+      list of codes (e.g. "ko,fr") names them outright. The wording comes from
+      wikven's own i18n messages, so a language nobody has translated those into
+      falls back to English and is left out rather than repeated. Does nothing
+      unless "comment" is on.
+    default: ""
   github-token:
     description: >-
       Token the comment is posted with. The default job token is enough where
@@ -59,6 +69,7 @@ runs:
         IMAGE: ${{ inputs.image }}
         GATE: ${{ inputs.gate }}
         COMMENT: ${{ inputs.comment }}
+        COMMENT_LANGUAGES: ${{ inputs.comment-languages }}
         CACHE: ${{ inputs.cache }}
         GH_TOKEN: ${{ inputs.github-token }}
         REPOSITORY: ${{ github.repository }}
@@ -91,6 +102,9 @@ runs:
           mkdir -p "$report"
           mounts=(-v "$report:/report")
           comment=(--comment-file /report/comment.md)
+          if [ -n "$COMMENT_LANGUAGES" ]; then
+            comment+=(--comment-languages "$COMMENT_LANGUAGES")
+          fi
         fi
         # Source is read-only for a check; no dist mount, nothing of yours is written.
         # --path-prefix makes the annotation file names repo-relative (they resolve under $SOURCE).
