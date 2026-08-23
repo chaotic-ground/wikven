@@ -458,7 +458,7 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="translate"><code>translate</code></h2></div><section id="citizen-section-4" class="citizen-section">
 <p>The four helpers behind <a href="../Translating/en.html" title="Special:MyLanguage/Translating">Translating</a>. They work on your source tree and exit without building anything.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>These are available in the Docker image only. The standalone binary registers <code>build</code> and <code>serve</code> and nothing else, so <code>wikven translate</code> is not a command it has.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Both products have these. The image runs them against the mounted source tree; the binary runs them against the working directory, which is the only difference between the two forms below.</p></div>
 </div>
 <dl><dt><code>translate mark</code></dt>
 <dd>Inserts <code>&lt;!--T:n--></code> markers into the still-unmarked units of a source page. Keeps the numbers already there, so it is safe to re-run.</dd>
@@ -468,9 +468,17 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 <dd>Records the source version each translated unit matches, marking it up to date.</dd>
 <dt><code>translate check</code></dt>
 <dd>Reports broken source pages, and translations that are out of date or missing. Writes nothing.</dd></dl>
-<p>Each takes a single file, or <code>--all</code> for every page under the source directory. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source, so mount it writable; <code>check</code> only reads.
+<p>Each takes a single file, or <code>--all</code> for every page under the source directory. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source: mount it writable under Docker, where the binary edits it in place. <code>check</code> only reads.
 </p>
-<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span><span class="se">\</span>
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_3-label" href="#tabber-Binary_3" aria-controls="tabber-Binary_3">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_3-label" href="#tabber-Docker_3" aria-controls="tabber-Docker_3">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_3" aria-labelledby="tabber-Binary_3-label"><p class="mw-empty-elt">
+</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
+
+wikven<span class="w"> </span>translate<span class="w"> </span>scaffold<span class="w"> </span>ko<span class="w"> </span><span class="s2">"Getting Started.wikitext"</span>
+
+wikven<span class="w"> </span>translate<span class="w"> </span>check<span class="w"> </span>--gate
+</pre></div>
+<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_3" aria-labelledby="tabber-Docker_3-label"><p class="mw-empty-elt">
+</p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 
 docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span><span class="se">\</span>
@@ -479,6 +487,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src:ro"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>check<span class="w"> </span>--gate
 </pre></div>
+<p class="mw-empty-elt"></p></article></section></div>
 <p><code>check</code> takes two more:
 </p>
 <dl><dt><code>--gate</code></dt>
@@ -589,7 +598,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/en.wikitext" title="This page was last edited on 20 August 2026, at 16:06." data-timestamp="1787241962"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>20 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/en.wikitext" title="This page was last edited on 23 August 2026, at 07:08." data-timestamp="1787468925"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -730,7 +739,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 20 August 2026, at 16:06.</div>
+		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 07:08.</div>
 		    </section>
 		</div>
 </footer>		</div>

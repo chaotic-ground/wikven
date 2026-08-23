@@ -581,7 +581,7 @@ It runs a real MediaWiki at build time.
 </pre>
 <p>You do not number the units by hand. Wrap the content in <code>&lt;translate&gt;</code> and add <code>&lt;languages/&gt;</code>, then run <code>translate mark</code> to insert the <code>&lt;!--T:n--&gt;</code> markers, mounting your source directory writable:
 </p>
-<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The four <code>translate</code> helpers on this page come with the Docker image. The standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> builds and serves a site but has no <code>translate</code> command, so use the image for these steps even if you build with the binary. See <a href="./Commands.html#translate" title="Special:MyLanguage/Commands">Commands</a>.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The four <code>translate</code> helpers come with both products. The commands on this page are the Docker form; the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> runs the same four against its working directory, as <code>wikven translate mark --all</code> and so on, with no mount to arrange. See <a href="./Commands.html#translate" title="Special:MyLanguage/Commands">Commands</a>.</p></div>
 </div>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 </pre></div>
@@ -648,7 +648,7 @@ It runs a real MediaWiki at build time.
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:08.</li>
 </ul>
 
 	<ul id="footer-places">

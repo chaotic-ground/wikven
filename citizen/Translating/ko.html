@@ -439,7 +439,7 @@ It runs a real MediaWiki at build time.
 </pre>
 <p>단위 번호를 손으로 매기지 않습니다. 내용을 <code>&lt;translate></code>로 감싸고 <code>&lt;languages/></code>를 추가한 다음, <code>translate mark</code>를 실행하여 <code>&lt;!--T:n--></code> 표시자를 삽입합니다. 이때 소스 디렉터리를 쓰기 가능하게 마운트합니다:
 </p>
-<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>이 문서에 나오는 네 가지 <code>translate</code> 도우미는 Docker 이미지에 들어 있습니다. 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>는 사이트를 빌드하고 서비스할 수 있지만 <code>translate</code> 명령은 없으므로, 바이너리로 빌드하더라도 이 단계에서는 이미지를 쓰십시오. <a href="../Commands/ko.html#translate" title="Special:MyLanguage/Commands">명령어</a>를 참고하십시오.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>네 가지 <code>translate</code> 도우미는 두 제품 모두에 들어 있습니다. 이 문서의 명령은 Docker 형태이며, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>는 같은 넷을 자기 작업 디렉터리를 대상으로 <code>wikven translate mark --all</code>처럼 실행합니다. 마운트를 마련할 일도 없습니다. <a href="../Commands/ko.html#translate" title="Special:MyLanguage/Commands">명령어</a>를 참고하십시오.</p></div>
 </div>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 </pre></div>
@@ -516,7 +516,7 @@ It runs a real MediaWiki at build time.
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/ko.wikitext" title="이 문서는 2026년 8월 17일 (월) 11:33에 마지막으로 편집되었습니다." data-timestamp="1786966404"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 17일 (월)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 07:08에 마지막으로 편집되었습니다." data-timestamp="1787468925"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -642,7 +642,7 @@ It runs a real MediaWiki at build time.
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 17일 (월) 11:33에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 07:08에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

@@ -520,7 +520,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="When_the_build_and_the_site_disagree"></span>
 </p>
 </section><div class="mw-heading mw-heading2 citizen-section-heading"><span class="citizen-section-indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span><h2 id="빌드와_사이트가_어긋날_때"><span id=".EB.B9.8C.EB.93.9C.EC.99.80_.EC.82.AC.EC.9D.B4.ED.8A.B8.EA.B0.80_.EC.96.B4.EA.B8.8B.EB.82.A0_.EB.95.8C"></span>빌드와 사이트가 어긋날 때</h2></div><section id="citizen-section-5" class="citizen-section">
-<p>조용히 통과해 깨진 사이트를 만들던 불일치가 둘 있었습니다. 그중 하나는 빌드를 끝내고, 다른 하나는 알리기만 하며 베이크는 계속됩니다.
+<p>여기서 어긋날 수 있는 것은 둘이고, 어느 쪽인지는 사이트가 무엇을 요구했는지가 가릅니다. 사이트가 요구했는데 이 빌드가 줄 수 없는 Lua는 빌드를 끝내고, 사이트가 요구한 적 없는 Lua는 알리기만 하며 베이크는 계속됩니다.
 </p><p><b>Scribunto 없는 모듈.</b> <code>Module:</code> 파일이 있는데 <code>extensions</code>에 <code>Scribunto</code>가 없는 소스 트리도 빌드되며, 그 파일들이 무엇이 되는지를 알려줍니다. <code>{{#invoke:}}</code>는 문서에 자기 소스 텍스트로 남고, <code>.wikitext</code> 표시를 붙인 모듈은 문서로 게시됩니다. 여러분의 Lua가 세상에 읽히도록 내보내지는 것입니다. 빌드는 대신 결정하지 않고 본 것을 말하는데, <code>Module:</code> 파일이라는 판단은 이름에서 읽어낸 짐작이고 그 파일은 들어오는 중일 수도, 나가는 중일 수도, 다른 용도로 두고 있는 것일 수도 있기 때문입니다.
 </p>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: the source has 1 Lua module file(s) (Module:Example) and Scribunto is not in</span>
@@ -537,7 +537,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="go">ScribuntoEngineConf.luastandalone.luaPath, bake this site with the Docker image, or drop</span>
 <span class="go">Scribunto from extensions and the Module: pages with it.</span>
 </pre></div>
-<p>거부된 빌드는 말로만이 아니라 종료 코드로도 그 사실을 알립니다. 그래서 굽고 나서 배포하는 스크립트는 아무것도 없는 것을 올리는 대신 멈춥니다.
+<p>그 거부는 말뿐 아니라 종료 코드에도 담기므로, 굽고 나서 배포하는 스크립트는 아무것도 없는 것을 올리는 대신 멈춥니다. 위의 알림은 알림에 그칩니다. 그것을 출력한 베이크도 다른 베이크처럼 0으로 끝나며, 방금 설명한 그대로의 사이트를 씁니다.
 </p><p>이 문서 사이트도 모듈을 하나 쓰며, 지금 읽고 계신 이 문서는 바뀔 때마다 이미지로 구워지고 모듈의 답이 그 안에 있는지 확인됩니다. 바이너리도 자기 소스 트리로 같은 규칙을 적용받는데, x86-64는 바뀔 때마다 arm64는 나이틀리마다입니다. 그러니 위 표의 각 줄은 이 문서의 주장이 아니라 기계가 확인하는 것입니다.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Extensions/ko.html" title="Special:MyLanguage/Extensions">확장 기능</a></div><div class="wikven-prevnext-next"><a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">자바스크립트</a> →</div></div>
@@ -559,7 +559,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules/ko.wikitext" title="이 문서는 2026년 8월 20일 (목) 17:28에 마지막으로 편집되었습니다." data-timestamp="1787246919"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 20일 (목)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 07:08에 마지막으로 편집되었습니다." data-timestamp="1787468911"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -670,7 +670,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 20일 (목) 17:28에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 07:08에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
