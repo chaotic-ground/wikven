@@ -642,7 +642,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><code>multiple site config files present</code> means your source directory holds more than one of the accepted names. The first in precedence order wins and the rest are ignored; delete the ones you do not want, rather than editing a file the build is not reading.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Every_page_says_it_was_edited_on_the_same_day">Every page says it was edited on the same day</h2></div>
-<p>Page dates come from the commit that last changed each source file, and a <b>shallow checkout</b> holds only one commit. Check out with <code>fetch-depth: 0</code>, as the workflow in <a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a> does. Building from a directory that is not a repository at all has the same effect, and neither case fails the build: the log says it happened, and every page is dated at the commit being built.
+<p>Page dates come from the commit that last changed each source file, and a <b>shallow clone</b> holds only one commit. Build from a full one: clone without <code>--depth</code>, or deepen the clone you have with <code>git fetch --unshallow</code>. On GitHub Actions that is <code>fetch-depth: 0</code>, as the workflow in <a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a> does. Building from a directory that is not a repository at all has the same effect, and neither case fails the build: the log says it happened, and every page is dated at the commit being built.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="The_build_fails_on_a_Wikimedia_Commons_image">The build fails on a Wikimedia Commons image</h2></div>
 <p>Every parse of a page embedding a Commons image asks Commons for its thumbnail. Wikven retries a failed lookup twice before giving up, and then names the image it could not resolve and stops, rather than publishing a page with a hole in it. Check the file name is right and still exists on Commons, and that the build host can reach the network — see also <i>Fetching fails over HTTPS</i> above.
@@ -663,7 +663,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:13.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 09:00.</li>
 </ul>
 
 	<ul id="footer-places">

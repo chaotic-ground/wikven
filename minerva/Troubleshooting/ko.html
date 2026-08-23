@@ -260,7 +260,7 @@ Wikven
 </p><p><span id="Every&#95;page&#95;says&#95;it&#95;was&#95;edited&#95;on&#95;the&#95;same&#95;day"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="모든_문서가_같은_날_편집된_것으로_나옵니다"><span id=".EB.AA.A8.EB.93.A0_.EB.AC.B8.EC.84.9C.EA.B0.80_.EA.B0.99.EC.9D.80_.EB.82.A0_.ED.8E.B8.EC.A7.91.EB.90.9C_.EA.B2.83.EC.9C.BC.EB.A1.9C_.EB.82.98.EC.98.B5.EB.8B.88.EB.8B.A4"></span>모든 문서가 같은 날 편집된 것으로 나옵니다</h2></div>
-<p>문서 날짜는 각 소스 파일을 마지막으로 바꾼 커밋에서 오는데, <b>얕은 체크아웃</b>에는 커밋이 하나뿐입니다. <a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a>의 워크플로처럼 <code>fetch-depth: 0</code>으로 체크아웃하십시오. 저장소가 아닌 디렉터리에서 빌드해도 마찬가지이며, 두 경우 모두 빌드가 실패하지는 않습니다. 로그가 그렇게 되었다고 적고, 모든 문서는 빌드 중인 커밋으로 날짜가 찍힙니다.
+<p>문서 날짜는 각 소스 파일을 마지막으로 바꾼 커밋에서 오는데, <b>얕은 클론</b>에는 커밋이 하나뿐입니다. 온전한 클론에서 빌드하십시오. <code>--depth</code> 없이 클론하거나, 이미 있는 얕은 클론이라면 <code>git fetch --unshallow</code>로 채우면 됩니다. GitHub Actions에서는 <a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a>의 워크플로처럼 <code>fetch-depth: 0</code>이 그것입니다. 저장소가 아닌 디렉터리에서 빌드해도 마찬가지이며, 두 경우 모두 빌드가 실패하지는 않습니다. 로그가 그렇게 되었다고 적고, 모든 문서는 빌드 중인 커밋으로 날짜가 찍힙니다.
 </p><p><span id="The&#95;build&#95;fails&#95;on&#95;a&#95;Wikimedia&#95;Commons&#95;image"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="위키미디어_공용_이미지에서_빌드가_실패합니다"><span id=".EC.9C.84.ED.82.A4.EB.AF.B8.EB.94.94.EC.96.B4_.EA.B3.B5.EC.9A.A9_.EC.9D.B4.EB.AF.B8.EC.A7.80.EC.97.90.EC.84.9C_.EB.B9.8C.EB.93.9C.EA.B0.80_.EC.8B.A4.ED.8C.A8.ED.95.A9.EB.8B.88.EB.8B.A4"></span>위키미디어 공용 이미지에서 빌드가 실패합니다</h2></div>
@@ -287,8 +287,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787469221">
-  				<span>2026년 8월 23일 (일) 07:13에 마지막으로 편집됨</span>
+  				data-timestamp="1787475636">
+  				<span>2026년 8월 23일 (일) 09:00에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -311,7 +311,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 07:13에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 09:00에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
