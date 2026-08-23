@@ -309,6 +309,11 @@ Wikven
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Keeping_pinned_sources_current">Keeping pinned sources current</h2></div>
 <p>The pins that make those builds reproducible are the ones nothing moves for you. An exact <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> pin</a> stays exact until you change it, and no bot will change it: <code>.wikven.yaml</code> is Wikven's own file, and Dependabot only watches the ecosystems it recognises. A site can therefore sit years behind on a skin with every check green.
+</p><p>Which way out of that you take is yours to choose, and the two are not the same bargain:
+</p>
+<ul><li><b>Keep the pin exact and move it deliberately.</b> A <code>commit</code>, or a <code>tarball</code> with its <code>sha256</code>, builds the same site tomorrow as it does today, and every change to what you ship is a diff someone approved. What it costs is time-to-fix: a security release sits upstream until the pin is moved.</li>
+<li><b>Point the pin at something that moves.</b> A <code>reference</code> naming a release branch — <code>REL1_43</code>, say — takes whatever that branch holds when the build runs, so a fix arrives at the next bake with nothing to merge. What it costs is reproducibility: two bakes of one source tree can differ, and nothing in the tree records what changed between them.</li></ul>
+<p>The rest of this section is about making the first cheap enough to prefer.
 </p><p><a rel="nofollow" class="external text" href="https://www.updatecli.io/">updatecli</a> fills that hole, and it fills it by never having to recognise your file: you tell it where the pin is. A manifest names a <b>source</b> (where the current version is published) and a <b>target</b> (which key of which file holds the pin); applying it writes the source's value into the target and opens a pull request if that changed anything. Run it on a schedule in continuous integration and a pin that has fallen behind becomes a pull request you can review. Here is a whole manifest for one pin, a repository following a release tag:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nn">---</span>
@@ -365,8 +370,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787473741">
-  				<span>Last edited on 23 August 2026, at 08:29</span>
+  				data-timestamp="1787474324">
+  				<span>Last edited on 23 August 2026, at 08:38</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -389,7 +394,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 08:29.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 08:38.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
