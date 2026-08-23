@@ -21,6 +21,33 @@ inputs:
       stale or missing is always reported and never fails the step. Set to
       "false" to report even a broken page without failing.
     default: "true"
+  comment:
+    description: >-
+      Also leave what was found as a comment on the pull request, grouped by
+      what went wrong and saying which translate command fixes it. Off by
+      default: annotations are enough for a maintainer, and a comment is for a
+      contributor meeting the workflow for the first time. Needs
+      "pull-requests: write" on the job, and does nothing outside a pull
+      request. One comment per pull request, edited on each run, and replaced
+      with an all-clear once the findings are answered.
+    default: "false"
+  comment-languages:
+    description: >-
+      Languages the comment is written in besides English, which always leads.
+      "auto" takes them from what was found, so a contributor who sent a Korean
+      translation is answered in Korean under the English; a comma-separated
+      list of codes (e.g. "ko,fr") names them outright. The wording comes from
+      wikven's own i18n messages, so a language nobody has translated those into
+      falls back to English and is left out rather than repeated. Does nothing
+      unless "comment" is on.
+    default: ""
+  github-token:
+    description: >-
+      Token the comment is posted with. The default job token is enough where
+      the job has pull-requests: write; a pull request from a fork gets a
+      read-only one, and the comment is then skipped with a notice rather than
+      failing the run.
+    default: ${{ github.token }}
   cache:
     description: >-
       Cache the pulled image between runs, keyed on the image ref. Set to
@@ -41,7 +68,12 @@ runs:
         SOURCE: ${{ inputs.source }}
         IMAGE: ${{ inputs.image }}
         GATE: ${{ inputs.gate }}
+        COMMENT: ${{ inputs.comment }}
+        COMMENT_LANGUAGES: ${{ inputs.comment-languages }}
         CACHE: ${{ inputs.cache }}
+        GH_TOKEN: ${{ inputs.github-token }}
+        REPOSITORY: ${{ github.repository }}
+        PULL_REQUEST: ${{ github.event.pull_request.number }}
       run: |
         tar="$HOME/.cache/wikven/image.tar"
         if [ "$CACHE" = "true" ] && [ -f "$tar" ]; then
@@ -58,8 +90,62 @@ runs:
         if [ "$GATE" = "true" ]; then
           gate=(--gate)
         fi
-        # Source is read-only for a check; no dist mount, nothing is written.
+        # The comment body is written by the check itself, into a directory of its own that is the
+        # one thing this run mounts writable. Asked for only when it will be used, so a run without
+        # comments still writes nothing anywhere.
+        report="${RUNNER_TEMP:-/tmp}/wikven-translations"
+        body="$report/comment.md"
+        comment=()
+        mounts=()
+        if [ "$COMMENT" = "true" ]; then
+          rm -rf "$report"
+          mkdir -p "$report"
+          mounts=(-v "$report:/report")
+          comment=(--comment-file /report/comment.md)
+          if [ -n "$COMMENT_LANGUAGES" ]; then
+            comment+=(--comment-languages "$COMMENT_LANGUAGES")
+          fi
+        fi
+        # Source is read-only for a check; no dist mount, nothing of yours is written.
         # --path-prefix makes the annotation file names repo-relative (they resolve under $SOURCE).
+        #
+        # The status is kept rather than allowed to end the step, because a failing check is exactly
+        # when the comment is worth having: it is posted below, and the status is the step's again
+        # on the last line.
+        status=0
         docker run --rm \
           -v "$PWD/$SOURCE:/workspace/src:ro" \
-          "$IMAGE" translate check "${gate[@]}" --path-prefix "$SOURCE"
+          "${mounts[@]}" \
+          "$IMAGE" translate check "${gate[@]}" --path-prefix "$SOURCE" "${comment[@]}" || status=$?
+
+        if [ "$COMMENT" = "true" ] && [ -s "$body" ]; then
+          if [ -z "$PULL_REQUEST" ]; then
+            echo "wikven: not a pull request; the comment has nowhere to go."
+          else
+            # One comment per pull request: the body carries a hidden marker, so the one this action
+            # left before is found and edited instead of a new one arriving on every push.
+            existing=$(gh api "repos/$REPOSITORY/issues/$PULL_REQUEST/comments" --paginate \
+              --jq 'map(select(.body | startswith("<!-- wikven-check-translations -->")))
+                    | first | .id // empty' 2>/dev/null || true)
+            posted=true
+            if [ -n "$existing" ]; then
+              gh api -X PATCH "repos/$REPOSITORY/issues/comments/$existing" -F body=@"$body" \
+                >/dev/null || posted=false
+            elif grep -q '^<!-- wikven-check-translations:clear -->$' "$body"; then
+              # Nothing found and nothing said before: a pull request that never had a complaint has
+              # no use for a comment saying there is none.
+              posted=true
+            else
+              gh api -X POST "repos/$REPOSITORY/issues/$PULL_REQUEST/comments" -F body=@"$body" \
+                >/dev/null || posted=false
+            fi
+            if [ "$posted" != "true" ]; then
+              # A fork's token is read-only, and a job without pull-requests: write has no rights
+              # either. Neither is a reason to fail a check that has already reported everything it
+              # found as annotations.
+              echo "::warning::wikven: could not post the translations comment (needs" \
+                   "pull-requests: write, which a pull request from a fork does not get)."
+            fi
+          fi
+        fi
+        exit "$status"

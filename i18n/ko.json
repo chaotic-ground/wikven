@@ -1,0 +1,28 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"wikven-translations-title": "이 변경의 번역",
+	"wikven-translations-lead": "`translate check`가 원본 문서와 그 번역을 읽고 다음을 알려드립니다. 아래 각 줄은 해당 파일에 주석으로도 달려 있습니다.",
+	"wikven-translations-parse-heading": "원본 문서를 읽을 수 없습니다",
+	"wikven-translations-parse-advice": "Translate가 이 문서를 거부하므로 아직 이 문서의 어느 것도 번역할 수 없습니다. 메시지는 Translate 자신의 것이며, 보통 단위의 맨 앞도 줄의 끝도 아닌 곳에 있는 `<!--T:n-->` 표시를 가리킵니다.",
+	"wikven-translations-reserved-heading": "단위 번호가 `T:title`입니다",
+	"wikven-translations-reserved-advice": "그 번호는 문서 제목의 몫이며, 번역은 제목을 되풀이하는 대신 그 단위를 가져갑니다. 해당 단위의 번호를 바꾸고 `T:title`은 제목에 남겨 두세요.",
+	"wikven-translations-unmarked-heading": "`<!--T:n-->` 표시가 없는 단위가 있습니다",
+	"wikven-translations-unmarked-advice": "단위는 번호로 번역되므로 번호가 없는 단위는 번역할 수 없습니다. 문서에 `translate mark`를 실행하세요. 이미 붙어 있는 번호는 그대로 둡니다.",
+	"wikven-translations-disagree-heading": "wikven과 Translate가 문서를 다르게 읽습니다",
+	"wikven-translations-disagree-advice": "둘이 단위의 경계를 서로 다르게 보고 있으며, 이는 내보내기가 Translate가 표시한 것과 다른 것을 번역하게 된다는 뜻입니다. `translate mark`를 다시 실행하고, 그래도 남는다면 위로 알려주세요. 이것은 여러분이 아니라 wikven의 버그입니다.",
+	"wikven-translations-orphan-heading": "번역이 원본에 없는 단위를 가리킵니다",
+	"wikven-translations-orphan-advice": "원본에서 그 `<!--T:n-->`의 번호가 바뀌었거나 사라져서, 그 아래의 텍스트는 아무에게도 닿지 않습니다. `translate scaffold <언어>`를 실행해 지금 원본에 있는 표시를 채우고, 텍스트를 맞는 표시 아래로 옮긴 뒤 남은 것을 지우세요.",
+	"wikven-translations-stale-heading": "번역은 되었으나 최신으로 스탬프되지 않았습니다",
+	"wikven-translations-stale-advice": "단위는 그 표시가 원본의 해시를 지닐 때 최신입니다: `<!--T:3 @a1b2c3d4-->`. 아래 각 단위를 원본과 견주어 읽은 뒤 `translate stamp`로 스탬프를 쓰세요. 해시를 손으로 적지 마세요.",
+	"wikven-translations-untranslated-heading": "아직 번역되지 않았습니다",
+	"wikven-translations-untranslated-advice": "이 단위들은 비어 있으며, 이는 오류가 아닙니다. 빌드는 이들을 원본 언어로 렌더링하고, 문서는 한 번에 몇 단위씩 번역해 나갈 수 있습니다. 실수로 빠뜨리는 일이 없도록 적어 둡니다.",
+	"wikven-translations-unit": "T:$1 ($2)",
+	"wikven-translations-unit-plain": "T:$1",
+	"wikven-translations-nothing-fails": "이 가운데 어느 것도 검사를 실패시키지 않습니다. 번역이 뒤처지는 것은 번역 체계가 제대로 돌아가고 있다는 뜻이며, 내보내기는 그런 단위를 독자에게 오래된 것으로 표시합니다.",
+	"wikven-translations-can-fail": "여기서 검사를 실패시킬 수 있는 것은 깨진 원본 문서뿐이며, 그것도 워크플로가 그렇게 요청한 경우에만입니다. 단지 뒤처지거나 빠진 번역은 결코 실패시키지 않습니다.",
+	"wikven-translations-documentation": "전체 흐름은 [번역하기]($1)를 참고하세요.",
+	"wikven-translations-documentation-url": "https://chaotic-ground.github.io/wikven/Translating/ko.html",
+	"wikven-translations-all-clear": "`translate check`가 보고할 것을 찾지 못했습니다. 모든 원본 문서가 깨끗하게 읽히고, 그 번역은 모두 최신으로 스탬프되어 있습니다."
+}

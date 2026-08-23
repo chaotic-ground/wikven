@@ -6,6 +6,7 @@ use Maintenance;
 use MediaWiki\Extension\Translate\PageTranslation\ParsingFailure;
 use MediaWiki\Extension\Translate\Services as TranslateServices;
 use MediaWiki\Extension\Wikven\PageTranslation\StalenessComputer;
+use MediaWiki\Extension\Wikven\PageTranslation\TranslationAdvice;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
 use MediaWiki\Registration\ExtensionRegistry;
 
@@ -23,7 +24,29 @@ class CheckTranslations extends Maintenance {
 		$this->addOption('source', 'Source directory to check (default: $wgWikvenSourceDirectory).', false, true);
 		$this->addOption('path-prefix', 'Prefix for reported file names, making them repo-relative.', false, true);
 		$this->addOption('gate', 'Exit non-zero when a source page has an error. Staleness never gates.');
+		$this->addOption(
+			'comment-file',
+			'Write what was found as a Markdown comment body to post where the change is reviewed'
+			. ' (see TranslationAdvice).',
+			false,
+			true
+		);
+		$this->addOption(
+			'comment-languages',
+			'Languages to write that comment in, besides English: "auto" for the languages the findings'
+			. ' are about, or a comma-separated list of codes.',
+			false,
+			true
+		);
 	}
+
+	/**
+	 * Everything reported this run, for the comment body. The annotations above are one line each,
+	 * on the file they belong to; the comment groups the same findings and says what to run.
+	 *
+	 * @var list<array{kind:string,file:string,unit?:string,lang?:string,detail?:string}>
+	 */
+	private array $findings = [];
 
 	/**
 	 * @return bool Whether the run itself succeeded (what it found is reported, and gated, separately).
@@ -55,6 +78,7 @@ class CheckTranslations extends Maintenance {
 				$errors++;
 				$reportSource = $prefix . substr($baseFile, strlen($source) + 1);
 				$reserved = StalenessComputer::TITLE_UNIT_ID;
+				$this->findings[] = ['kind' => 'reserved', 'file' => $reportSource, 'unit' => $reserved];
 				$this->output(
 					"::error file=$reportSource::Reserved translation unit id T:$reserved"
 					. " (it belongs to the page title); renumber that unit\n"
@@ -73,6 +97,12 @@ class CheckTranslations extends Maintenance {
 						continue;
 					}
 					$stale++;
+					$this->findings[] = [
+						'kind' => $unit['status'],
+						'file' => $reportFile,
+						'unit' => (string)$unit['id'],
+						'lang' => $lang
+					];
 					// GitHub Actions annotation; a harmless plain line in any other console.
 					$this->output(
 						"::warning file=$reportFile::"
@@ -83,6 +113,7 @@ class CheckTranslations extends Maintenance {
 			}
 		}
 
+		$this->writeComment();
 		if ($errors === 0 && $stale === 0) {
 			$this->output("All translations are up to date.\n");
 			return true;
@@ -103,6 +134,62 @@ class CheckTranslations extends Maintenance {
 	}
 
 	/**
+	 * Write the comment body for --comment-file, or nothing when the option is not given.
+	 *
+	 * A clean run still writes one, saying so: the action edits its own earlier comment with it, so
+	 * a complaint that has been answered stops standing on the change.
+	 */
+	private function writeComment(): void {
+		$path = (string)$this->getOption('comment-file', '');
+		if ($path === '') {
+			return;
+		}
+		$advice = TranslationAdvice::usingMessages();
+		$languages = $this->commentLanguages();
+		$body = $advice->comment($this->findings, $languages) ?? $advice->allClear($languages);
+		if (file_put_contents($path, $body) === false) {
+			$this->fatalError("Wikven: could not write the comment body to '$path'.");
+		}
+	}
+
+	/**
+	 * The languages the comment is written in: English, then whatever --comment-languages asked for.
+	 *
+	 * English leads because it is the one language the workflow can count on a reader of the change
+	 * having in common with it. What follows is for the contributor: "auto" reads it off the
+	 * findings, so someone who sent a Korean translation is answered in Korean without the workflow
+	 * naming a language it cannot know in advance.
+	 *
+	 * @return list<string>
+	 */
+	private function commentLanguages(): array {
+		$languages = ['en'];
+		$option = trim((string)$this->getOption('comment-languages', ''));
+		if ($option === '') {
+			return $languages;
+		}
+		$wanted = $option === 'auto'
+			? array_column($this->findings, 'lang')
+			: array_map('trim', explode(',', $option));
+		sort($wanted);
+
+		$languageNameUtils = $this->getServiceContainer()->getLanguageNameUtils();
+		foreach ($wanted as $language) {
+			if ($language === '' || in_array($language, $languages, true)) {
+				continue;
+			}
+			// A code nobody knows is the caller's typo, not a reason to lose the comment: the
+			// English half is what most readers of the change read anyway.
+			if (!$languageNameUtils->isKnownLanguageTag($language)) {
+				$this->output("::warning::Unknown language '$language' for the translations comment; skipped\n");
+				continue;
+			}
+			$languages[] = $language;
+		}
+		return $languages;
+	}
+
+	/**
 	 * Read a source page with Translate's own parser and report where wikven would read it
 	 * differently, so the author hears it here rather than from a page that bakes wrong.
 	 *
@@ -113,6 +200,11 @@ class CheckTranslations extends Maintenance {
 			$output = TranslateServices::getInstance()->getTranslatablePageParser()->parse($sourceText);
 		} catch (ParsingFailure $failure) {
 			// The bake skips such a page, leaving it untranslated; nothing downstream would say why.
+			$this->findings[] = [
+				'kind' => 'parse',
+				'file' => $reportFile,
+				'detail' => $failure->getMessage()
+			];
 			$this->output(
 				"::error file=$reportFile::Translate cannot parse this page: {$failure->getMessage()}\n"
 			);
@@ -138,6 +230,11 @@ class CheckTranslations extends Maintenance {
 		$errors = 0;
 		if ($unmarked > 0) {
 			$errors++;
+			$this->findings[] = [
+				'kind' => 'unmarked',
+				'file' => $reportFile,
+				'detail' => "$unmarked unit(s)"
+			];
 			$this->output(
 				"::error file=$reportFile::$unmarked translation unit(s) have no <!--T:n--> marker;"
 				. " run translate mark\n"
@@ -145,6 +242,15 @@ class CheckTranslations extends Maintenance {
 		}
 		if (array_keys($wikven) !== array_keys($translate)) {
 			$errors++;
+			$this->findings[] = [
+				'kind' => 'disagree',
+				'file' => $reportFile,
+				'detail' =>
+					'Translate reads '
+						. $this->unitList(array_keys($translate))
+						. ' where wikven reads '
+						. $this->unitList(array_keys($wikven))
+			];
 			$this->output(
 				"::error file=$reportFile::Translate reads units "
 				. $this->unitList(array_keys($translate))
@@ -154,6 +260,11 @@ class CheckTranslations extends Maintenance {
 			);
 		} elseif ($wikven !== $translate) {
 			$errors++;
+			$this->findings[] = [
+				'kind' => 'disagree',
+				'file' => $reportFile,
+				'detail' => 'different text for ' . $this->unitList(array_keys(array_diff_assoc($wikven, $translate)))
+			];
 			$this->output(
 				"::error file=$reportFile::Translate and wikven read different text for unit(s) "
 				. $this->unitList(array_keys(array_diff_assoc($wikven, $translate)))
