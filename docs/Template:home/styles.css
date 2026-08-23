@@ -6,11 +6,13 @@
  * skin that defines none. Defining one is not an option -- TemplateStyles drops a
  * custom-property declaration, and drops it silently.
  *
- * Two things this file deliberately does not do, both of them in MediaWiki:Common.css instead,
- * scoped to this page: the file-type marks in the diagram, which are SVG masks, and the caret
- * that blinks in the command. A mask-image is not colour-typed, so a var() in one cannot be
- * checked and the declaration would go; @keyframes is not a rule this file can rely on either.
- * Common.css is not sanitised and already carries a data-URI SVG for the external-link arrow.
+ * Five things this file deliberately does not do, all of them in MediaWiki:Common.css instead:
+ * the file-type marks in the diagram and the symbol on each card, which are SVG masks; the caret
+ * that blinks in the command and the crossing between the output pane's two states, which are
+ * animations; and the warmth behind the hero, which is a pair of gradients. A mask-image is not
+ * colour-typed, so a var() in one cannot be checked and the declaration would go; @keyframes is
+ * not a rule this file can rely on either, and a gradient goes the way of the mask. Common.css is
+ * not sanitised and already carries a data-URI SVG for the external-link arrow.
  *
  * Every shape drawn here comes out of border-*-color or background-color, both colour-typed and
  * so able to read a token. A var() inside linear-gradient() cannot be type-checked and the whole
@@ -31,7 +33,11 @@
 
 /* No rule under the hero. The skin draws one under the title and another under the tab row, so a
  * third within a couple of hundred pixels made the page's own rule indistinguishable from the
- * furniture above it. The closing band keeps its rule and is the only one the page draws. */
+ * furniture above it. The closing band keeps its rule and is the only one the page draws.
+ *
+ * The band is not as empty as this rule makes it look: Common.css hangs two fields of light off
+ * ::before and ::after here, and makes this element a stacking context so they stay behind the
+ * tagline. Changing the margins moves them. */
 .wikven-home-hero {
 	margin-block: 4rem 6rem;
 }

@@ -60,6 +60,8 @@ Your source
 Your site
 </translate>
 </div>
+<div class="wikven-home-out">
+<div class="wikven-home-out-tree">
 <div class="wikven-home-tree">
 <div class="wikven-home-tree-root">dist/</div>
 <div class="wikven-home-tree-branch"><!--
@@ -74,6 +76,15 @@ the search index
 </span></div><!--
 --></div>
 </div>
+</div>
+<div class="wikven-home-out-page"><div class="wikven-home-page"><!--
+--><div class="wikven-home-page-chrome"></div><!--
+--><div class="wikven-home-page-cols"><!--
+--><div class="wikven-home-page-side"></div><!--
+--><div class="wikven-home-page-main"></div><!--
+--></div>
+</div></div>
+</div>
 </div><!--
 --></div>
 </div>
@@ -86,6 +97,7 @@ the search index
 </translate>
 <div class="wikven-home-cards"><!--
 --><div class="wikven-home-card">
+<div class="wikven-home-sym wikven-home-sym--template"></div>
 <div class="wikven-home-card-title">
 <translate>
 <!--T:6-->
@@ -100,6 +112,7 @@ Templates, parser functions and Lua modules, all resolved at build time.
 </div>
 </div><!--
 --><div class="wikven-home-card">
+<div class="wikven-home-sym wikven-home-sym--parts"></div>
 <div class="wikven-home-card-title">
 <translate>
 <!--T:8-->
@@ -114,6 +127,7 @@ Bundled or fetched from Git, with several skins for the reader to choose between
 </div>
 </div><!--
 --><div class="wikven-home-card">
+<div class="wikven-home-sym wikven-home-sym--search"></div>
 <div class="wikven-home-card-title">
 <translate>
 <!--T:10-->
@@ -128,6 +142,7 @@ The index is built with the site and runs in the reader's browser.
 </div>
 </div><!--
 --><div class="wikven-home-card">
+<div class="wikven-home-sym wikven-home-sym--languages"></div>
 <div class="wikven-home-card-title">
 <translate>
 <!--T:12-->
