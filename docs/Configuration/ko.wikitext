@@ -21,37 +21,8 @@ Wikven은 자체 기본값(정적 위키를 위한 합리적인 MediaWiki 설정
 <!--T:6 @df99ac49-->
 == <code>config</code> ==
 
-<!--T:7 @0c6a658a-->
-각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 [$1 설정 값]이든 여기에 정의할 수 있으며, Wikven 자체 변수도 다음과 같이 정의할 수 있습니다.
-
-<!--T:35 @7bd5922c-->
-{| class="wikitable"
-! 변수 !! 기본값 !! 설정하는 것
-|-
-| [[#WikvenMainPage|WikvenMainPage]] || <code>index</code> || 사이트 루트인 <code>index.html</code>로 쓰이는 문서.
-|-
-| [[#WikvenAboutPage|WikvenAboutPage]] || <code>About</code> || 바닥글의 "소개" 링크가 이어지는 문서.
-|-
-| [[#WikvenSettingsPage|WikvenSettingsPage]] || <code>Settings</code> || 독자의 색 테마와 스킨을 담아 생성되는 문서.
-|-
-| [[#WikvenEditUrl|WikvenEditUrl]] || 비어 있음 || 문서마다 붙는 "편집" 링크의 대상.
-|-
-| [[#WikvenEditUrl|WikvenHistoryUrl]] || 비어 있음 || 문서마다 붙는 "역사 보기" 링크의 대상.
-|-
-| [[#WikvenEditUrl|WikvenViewSourceUrl]] || 비어 있음 || 문서마다 붙는 "원본 보기" 탭의 대상.
-|-
-| [[#WikvenFooterUrl|WikvenFooterUrl]] || 비어 있음 || 사이트 바닥글에 추가되는 링크.
-|-
-| [[#WikvenLogos|WikvenLogos]] || 비어 있음 || 소스 디렉터리의 파일 이름으로 지정하는 머리글 로고.
-|-
-| [[#WikvenRepositories|WikvenRepositories]] || 비어 있음 || 번들되지 않은 확장 기능과 스킨을 어디서 가져올지.
-|-
-| [[#WikvenBundleWebfonts|WikvenBundleWebfonts]] || <code>false</code> || 독자에게 글꼴이 없을 수 있는 문자를 위해 웹폰트를 내보내기에 구워 넣기.
-|-
-| [[#WikvenStyleDirectory|WikvenStyleDirectory]] || <code>.</code> || CSS 파일을 쓸 출력 하위 디렉터리.
-|-
-| [[#WikvenStyleDirectory|WikvenScriptDirectory]] || <code>.</code> || 자바스크립트 파일을 쓸 출력 하위 디렉터리.
-|}
+<!--T:7 @f3474178-->
+각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 [$1 설정 값]이든 여기에 정의할 수 있으며, Wikven 자체 변수도 정의할 수 있는데, 아래 절들이 그것을 하나씩 설명합니다.
 
 <!--T:36 @5e65d649-->
 여기에 나오지 않는 세 가지가 더 있지만 여러분이 설정할 것은 아닙니다. <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code>, <code>WikvenSourceHistoryFile</code>은 빌드가 <code>WIKVEN_WORKDIR</code>에서 직접 이끌어냅니다([[$1|명령어]] 참고). 여러분의 파일에서 설정해도 쓸모가 없으며, 어차피 빌드가 덮어씁니다.
@@ -62,8 +33,8 @@ Wikven은 자체 기본값(정적 위키를 위한 합리적인 MediaWiki 설정
 <!--T:9 @ff3b56c1-->
 사이트의 헤더 로고입니다. MediaWiki의 [$1 $wgLogos]를 본떠 같은 키(<code>icon</code>, <code>1x</code>, <code>svg</code>, <code>wordmark</code> 등)를 쓰지만, 각 값이 URL이 아니라 소스 디렉터리에 있는 이미지 파일의 이름이라는 점만 다릅니다:
 
-<!--T:10 @6d6d8ee5-->
-파일의 주소는 여러분이 아니라 빌드가 정하기 때문에 값이 URL이 아니라 파일 이름입니다. 이름이 지정된 각 파일은 다른 소스 이미지와 마찬가지로 <code>File:</code> 이름공간에 업로드되고, Wikven이 여러분을 대신해 <code>$wgLogos</code>를 그 업로드로 가리키므로 여러분은 파일 이름만 대면 됩니다. 그런 다음 내보내기는 다른 이미지와 똑같이 로고를 HTML 옆의 단일 공유 파일로 복사하고 그것을 가리키도록 레퍼런스를 다시 씁니다. 그래서 로고가 모든 문서에 삽입되지는 않습니다.
+<!--T:10 @6659d63b-->
+파일의 주소는 여러분이 아니라 빌드가 정하기 때문에 값이 URL이 아니라 파일 이름입니다. 이름이 지정된 각 파일은 다른 소스 이미지와 마찬가지로 <code>File:</code> 이름공간에 업로드되고, Wikven이 여러분을 대신해 <code>$wgLogos</code>를 그 업로드로 가리키므로 여러분은 파일 이름만 대면 됩니다. 그런 다음 내보내기는 다른 이미지와 똑같이 로고를 HTML 옆의 단일 공유 파일로 복사하고 그것을 가리키도록 레퍼런스를 다시 씁니다. 그래서 로고가 모든 문서에 삽입되지는 않습니다. 기본값은 비어 있으며, 그러면 MediaWiki 자체가 보여 주는 로고가 그대로 쓰입니다.
 
 <!--T:11 @e6c198b6-->
 Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 않도록 작은 기본 파비콘도 함께 제공합니다. <code>config.Favicon</code>(URL이나 데이터 URI)으로 이를 재정의하십시오.
@@ -72,8 +43,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <span id="WikvenEditUrl"></span>
 === <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> 및 <code>WikvenViewSourceUrl</code> ===
 
-<!--T:13 @4d8db29e-->
-"편집", "역사 보기", "원본 보기" 링크가 가리키는 대상으로, 독자가 렌더링된 문서에서 리포지터리의 소스로 건너뛸 수 있게 합니다. 각 URL에서 <code>$1</code>은 확장자를 포함해 소스 디렉터리를 기준으로 한 문서 소스 파일 이름으로 치환됩니다. 제목이 자체 콘텐츠 모델을 지니는 문서는 그 이름을 그대로 유지하고(<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, <code>.json</code> 설정 문서, <code>Module:</code> 문서 등), 그 밖의 모든 문서는 <code>.wikitext</code> 파일이므로 평범한 문서는 <code>Getting Started.wikitext</code>가 됩니다. 이들 중 어느 것이든 설정하지 않으면 해당 링크가 빠집니다. 생성된 문서(빌드가 직접 쓴 [[#WikvenAboutPage|소개]] 문서 같은)에는 소스 파일이 없으므로 이 링크들은 생략됩니다.
+<!--T:13 @c9ead424-->
+"편집", "역사 보기", "원본 보기" 링크가 가리키는 대상으로, 독자가 렌더링된 문서에서 리포지터리의 소스로 건너뛸 수 있게 합니다. 각 URL에서 <code>$1</code>은 확장자를 포함해 소스 디렉터리를 기준으로 한 문서 소스 파일 이름으로 치환됩니다. 제목이 자체 콘텐츠 모델을 지니는 문서는 그 이름을 그대로 유지하고(<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, <code>.json</code> 설정 문서, <code>Module:</code> 문서 등), 그 밖의 모든 문서는 <code>.wikitext</code> 파일이므로 평범한 문서는 <code>Getting Started.wikitext</code>가 됩니다. 셋 다 기본값은 비어 있습니다. 어느 것이든 설정하지 않으면 해당 링크가 빠집니다. 생성된 문서(빌드가 직접 쓴 [[#WikvenAboutPage|소개]] 문서 같은)에는 소스 파일이 없으므로 이 링크들은 생략됩니다.
 
 <!--T:14 @c9fc389d-->
 === <code>WikvenMainPage</code> ===
@@ -90,8 +61,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:18 @c5bc8e2e-->
 === <code>WikvenFooterUrl</code> ===
 
-<!--T:19 @83359291-->
-여러분의 프로젝트(보통 그 리포지터리)를 가리키며 사이트 바닥글에 추가되는 링크입니다. 바닥글은 알려진 포지(GitHub, GitLab, Codeberg 등)의 경우 호스트 이름을 표시합니다.
+<!--T:19 @187124ef-->
+여러분의 프로젝트(보통 그 리포지터리)를 가리키며 사이트 바닥글에 추가되는 링크입니다. 바닥글은 알려진 포지(GitHub, GitLab, Codeberg 등)의 경우 호스트 이름을 표시합니다. 기본값은 비어 있으며, URL이 없으면 그런 링크도 없습니다.
 
 <!--T:37 @96b83a89-->
 === <code>WikvenSettingsPage</code> ===
@@ -118,8 +89,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:20 @c60c5ada-->
 === <code>WikvenRepositories</code> ===
 
-<!--T:21 @e3d7e14f-->
-<code>extensions</code>와 <code>skins</code>에 나열한 서드파티 확장 기능과 스킨의 소스입니다. 목록은 평범한 이름 그대로 유지되고(MediaWiki 자체가 쓰는 형태), 이 맵은 wikven에 번들되지 않은 것들을 어디서 가져올지 지정합니다. 이들은 MediaWiki가 불러오기 전에 빌드 시점에 가져옵니다. 항목이 확장 기능인지 스킨인지는 그 이름이 어느 목록에 나타나는지에 따라 정해지므로 이름을 두 번 쓸 일이 없습니다.
+<!--T:21 @1ee41151-->
+<code>extensions</code>와 <code>skins</code>에 나열한 서드파티 확장 기능과 스킨의 소스입니다. 목록은 평범한 이름 그대로 유지되고(MediaWiki 자체가 쓰는 형태), 이 맵은 wikven에 번들되지 않은 것들을 어디서 가져올지 지정합니다. 이들은 MediaWiki가 불러오기 전에 빌드 시점에 가져옵니다. 항목이 확장 기능인지 스킨인지는 그 이름이 어느 목록에 나타나는지에 따라 정해지므로 이름을 두 번 쓸 일이 없습니다. 기본값은 비어 있습니다. <code>extensions</code>나 <code>skins</code>에 적힌 이름이 번들되지도, 여기에 선언되지도 않았다면 경고와 함께 건너뜁니다.
 
 <!--T:22 @e205de74-->
 각 항목은 지닌 키에 따라 세 가지 방법 중 하나를 고릅니다:

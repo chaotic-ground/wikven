@@ -36,36 +36,7 @@ A list of skin names to enable. The first one is used as the default skin. As wi
 == <code>config</code> ==
 
 <!--T:7-->
-A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, and so can Wikven's own variables, which are these:
-
-<!--T:35-->
-{| class="wikitable"
-! Variable !! Default !! What it sets
-|-
-| [[#WikvenMainPage|WikvenMainPage]] || <code>index</code> || The page written as <code>index.html</code>, the site root.
-|-
-| [[#WikvenAboutPage|WikvenAboutPage]] || <code>About</code> || The page the footer's "About" link leads to.
-|-
-| [[#WikvenSettingsPage|WikvenSettingsPage]] || <code>Settings</code> || The generated page holding the reader's colour theme and skin.
-|-
-| [[#WikvenEditUrl|WikvenEditUrl]] || empty || Target of the per-page "Edit" link.
-|-
-| [[#WikvenEditUrl|WikvenHistoryUrl]] || empty || Target of the per-page "View history" link.
-|-
-| [[#WikvenEditUrl|WikvenViewSourceUrl]] || empty || Target of the per-page "View source" tab.
-|-
-| [[#WikvenFooterUrl|WikvenFooterUrl]] || empty || A link added to the site footer.
-|-
-| [[#WikvenLogos|WikvenLogos]] || empty || Header logos, named as source-directory files.
-|-
-| [[#WikvenRepositories|WikvenRepositories]] || empty || Where to fetch non-bundled extensions and skins from.
-|-
-| [[#WikvenBundleWebfonts|WikvenBundleWebfonts]] || <code>false</code> || Bake webfonts into the export for scripts the reader may lack a font for.
-|-
-| [[#WikvenStyleDirectory|WikvenStyleDirectory]] || <code>.</code> || Subdirectory of the output the CSS files are written to.
-|-
-| [[#WikvenStyleDirectory|WikvenScriptDirectory]] || <code>.</code> || Subdirectory of the output the JavaScript files are written to.
-|}
+A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, and so can Wikven's own variables, which the sections below describe one by one.
 
 <!--T:36-->
 Three more exist and are not for you to set: <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code> and <code>WikvenSourceHistoryFile</code> are derived from <code>WIKVEN_WORKDIR</code> by the build itself (see [[<tvar name="1">Special:MyLanguage/Commands</tvar>|Commands]]). Setting them in your file does nothing useful, and the build overwrites them anyway.
@@ -85,7 +56,7 @@ config:
 
 <translate>
 <!--T:10-->
-The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file next to the HTML and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page.
+The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file next to the HTML and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page. Empty by default, which leaves whatever logo MediaWiki itself would show.
 
 <!--T:11-->
 Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
@@ -95,7 +66,7 @@ Wikven also ships a small default favicon so browsers do not 404 on <code>/favic
 === <code>WikvenEditUrl</code>, <code>WikvenHistoryUrl</code> and <code>WikvenViewSourceUrl</code> ===
 
 <!--T:13-->
-The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the [[#WikvenAboutPage|About]] page, when the build writes it) has no source file, so these links are omitted for it.
+The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. All three are empty by default; leave any of them unset to drop that link, a generated page (such as the [[#WikvenAboutPage|About]] page, when the build writes it) has no source file, so these links are omitted for it.
 
 <!--T:14-->
 === <code>WikvenMainPage</code> ===
@@ -113,7 +84,7 @@ The title of the page that introduces your site, which MediaWiki's own "About" f
 === <code>WikvenFooterUrl</code> ===
 
 <!--T:19-->
-A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...).
+A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...). Empty by default, and with no URL there is no such link.
 
 <!--T:37-->
 === <code>WikvenSettingsPage</code> ===
@@ -149,7 +120,7 @@ config:
 === <code>WikvenRepositories</code> ===
 
 <!--T:21-->
-Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice.
+Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. Empty by default: a name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here is skipped with a warning.
 
 <!--T:22-->
 Each entry chooses one of three methods by the key it carries:
