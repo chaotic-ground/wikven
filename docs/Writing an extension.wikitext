@@ -80,7 +80,7 @@ A site with three skins renders three times. Each pass is a '''separate process'
 == Reproducibility ==
 
 <!--T:21-->
-Two builds of the same source must produce '''byte-identical''' output, and CI asserts it by baking the docs site twice and diffing the results. The build already freezes the clock, pins <code>page_touched</code>, strips the request and render ids MediaWiki stamps into each page, and runs the job queue in a fixed order to get there.
+Two builds of the same source must produce '''byte-identical''' output. That is what makes a rebuild safe to publish: a page that differs between two exports differs because the source did. The build already freezes the clock, pins <code>page_touched</code>, strips the request and render ids MediaWiki stamps into each page, and runs the job queue in a fixed order to get there, and one value of yours read from the clock undoes all of it.
 
 <!--T:22-->
 So do not put into rendered output:
@@ -136,7 +136,7 @@ Worth checking specifically:
 
 <!--T:35-->
 * open a page '''at depth''' — one whose title contains a slash — and follow the links your extension renders, since a URL bug shows up nowhere else;
-* build twice into different directories and <code>diff -r</code> them, which catches an unstable value before CI does;
+* build twice into different directories and <code>diff -r</code> them, which is how an unstable value in your output shows itself;
 * build with more than one skin configured, so a pass that reaches outside its own output is caught.
 </translate>
 
