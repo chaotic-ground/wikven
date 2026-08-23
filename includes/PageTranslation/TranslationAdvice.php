@@ -81,7 +81,7 @@ class TranslationAdvice {
 			'These units are empty, which is not an error: the build renders them in the source'
 				. ' language, and the page can be translated a few units at a time. Listed so that'
 				. ' nothing is left behind by accident.'
-		],
+		]
 	];
 
 	/**
@@ -95,8 +95,10 @@ class TranslationAdvice {
 			return null;
 		}
 
-		$body = self::MARKER . "\n## Translations in this pull request\n\n"
-			. "`translate check` read the source pages and their translations, and has this to say."
+		$body =
+			self::MARKER
+			. "\n## Translations in this pull request\n\n"
+			. '`translate check` read the source pages and their translations, and has this to say.'
 			. " Every line is also an annotation on the file it belongs to.\n";
 		foreach (self::GROUPS as $kind => [$heading, $advice]) {
 			if (!isset($grouped[$kind])) {
@@ -112,11 +114,15 @@ class TranslationAdvice {
 		// was configured: staleness never gates, and a broken page gates only where the workflow
 		// asked it to.
 		$onlyTranslations = array_diff(array_keys($grouped), ['stale', 'untranslated']) === [];
-		$body .= "\n" . ( $onlyTranslations
-			? 'None of this fails the check: a translation that is behind is the translation system'
-				. ' working, and the export marks such a unit as outdated for the reader.'
-			: 'A broken source page is the one thing here that can fail the check, and only where the'
-				. ' workflow asked it to; a translation that is merely behind or missing never does.' );
+		$body .=
+			"\n"
+			. (
+				$onlyTranslations
+					? 'None of this fails the check: a translation that is behind is the translation system'
+					. ' working, and the export marks such a unit as outdated for the reader.'
+					: 'A broken source page is the one thing here that can fail the check, and only where the'
+					. ' workflow asked it to; a translation that is merely behind or missing never does.'
+			);
 		return $body . ' See [Translating](' . self::DOCUMENTATION . ") for the whole workflow.\n";
 	}
 
@@ -127,9 +133,14 @@ class TranslationAdvice {
 	 * conversation and a reader who followed a notification finds the answer rather than a gap.
 	 */
 	public static function allClear(): string {
-		return self::MARKER . "\n" . self::CLEAR_MARKER . "\n## Translations in this pull request\n\n"
-			. "`translate check` found nothing to report: every source page reads cleanly, and every"
-			. " translation of one is stamped current.\n";
+		return (
+			self::MARKER
+			. "\n"
+			. self::CLEAR_MARKER
+			. "\n## Translations in this pull request\n\n"
+			. '`translate check` found nothing to report: every source page reads cleanly, and every'
+			. " translation of one is stamped current.\n"
+		);
 	}
 
 	/**

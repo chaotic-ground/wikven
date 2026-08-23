@@ -198,8 +198,11 @@ class CheckTranslations extends Maintenance {
 			$this->findings[] = [
 				'kind' => 'disagree',
 				'file' => $reportFile,
-				'detail' => 'Translate reads ' . $this->unitList(array_keys($translate))
-					. ' where wikven reads ' . $this->unitList(array_keys($wikven))
+				'detail' =>
+					'Translate reads '
+						. $this->unitList(array_keys($translate))
+						. ' where wikven reads '
+						. $this->unitList(array_keys($wikven))
 			];
 			$this->output(
 				"::error file=$reportFile::Translate reads units "
@@ -213,8 +216,7 @@ class CheckTranslations extends Maintenance {
 			$this->findings[] = [
 				'kind' => 'disagree',
 				'file' => $reportFile,
-				'detail' => 'different text for '
-					. $this->unitList(array_keys(array_diff_assoc($wikven, $translate)))
+				'detail' => 'different text for ' . $this->unitList(array_keys(array_diff_assoc($wikven, $translate)))
 			];
 			$this->output(
 				"::error file=$reportFile::Translate and wikven read different text for unit(s) "
