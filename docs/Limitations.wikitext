@@ -24,7 +24,7 @@ not part of the export. This page is the list, and what stands in for each where
 
 <!--T:5-->
 ; Editing and history
-: Your repository. The "Edit", "View history" and "View source" links on each page lead to the page's source file there, wherever you host it; see [[<tvar name="1">Special:MyLanguage/Configuration#WikvenEditUrl</tvar>|<code>WikvenEditUrl</code>]] and the two settings beside it.
+: Your repository. The "Edit", "View history" and "View source" links on each page lead to the page's source file there, wherever you host it; see the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenEditUrl</tvar>|<code>WikvenEditUrl</code> setting]] and the two beside it.
 ; Reading preferences
 : A [[<tvar name="2">Special:MyLanguage/Skins#Settings</tvar>|Settings page]] the build writes, carrying the reader's colour theme and, where a site builds more than one skin, which skin to read it in.
 ; Search

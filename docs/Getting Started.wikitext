@@ -76,7 +76,7 @@ Opening <code>dist/index.html</code> directly also works, though some links and 
 == Setting the title of the site ==
 
 <!--T:12-->
-For configuration, create a [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]] file in your <code>src</code> directory.
+For configuration, create a [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code> file]] in your <code>src</code> directory.
 </translate>
 
 <syntaxhighlight lang="shell" copy>

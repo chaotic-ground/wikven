@@ -12,7 +12,7 @@ A great many wikis keep their templates' logic in Lua, and {{SITENAME}} runs a r
 == Enabling it ==
 
 <!--T:4-->
-Name it in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]] and that is all. Scribunto is bundled with MediaWiki, so it needs no [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] entry, and on most builds the engine needs no configuration either.
+Name it in your [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code> file]] and that is all. Scribunto is bundled with MediaWiki, so it needs no [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> entry]], and on most builds the engine needs no configuration either.
 </translate>
 
 <syntaxhighlight lang="yaml" copy>

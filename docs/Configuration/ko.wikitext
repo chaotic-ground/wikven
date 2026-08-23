@@ -10,13 +10,13 @@
 <!--T:3 @0c9819f9-->
 Wikven은 자체 기본값(정적 위키를 위한 합리적인 MediaWiki 설정)을 제공하며 그 위에 여러분의 파일을 얹어 읽으므로, 여기서 설정한 것은 무엇이든 기본값을 덮어씁니다. 기본값은 이와 같은 형식을 쓰는 <code>default.yml</code>에 들어 있습니다. 아래 [[#기본값|기본값]]을 참고하십시오.
 
-<!--T:4 @31b354b1-->
+<!--T:4 @e0d816d6-->
 == <code>extensions</code> ==
-불러올 확장 기능 이름의 목록입니다. {{SITENAME}} 안에 함께 들어 있는 확장 기능은 이름만으로 작동하며, 그 밖의 이름은 서드파티로 취급되어 [[#WikvenRepositories|<code>WikvenRepositories</code>]]에 선언한 소스에서 가져옵니다. 무엇이 들어 있고 무엇이 들어 있지 않은지는 [[$1|확장 기능]]을 참고하십시오.
+불러올 확장 기능 이름의 목록입니다. {{SITENAME}} 안에 함께 들어 있는 확장 기능은 이름만으로 작동하며, 그 밖의 이름은 서드파티로 취급되어 [[#WikvenRepositories|<code>WikvenRepositories</code> 맵]]에 선언한 소스에서 가져옵니다. 무엇이 들어 있고 무엇이 들어 있지 않은지는 [[$1|확장 기능]]을 참고하십시오.
 
-<!--T:5 @fb3406bd-->
+<!--T:5 @4dd26dfc-->
 == <code>skins</code> ==
-활성화할 스킨 이름의 목록입니다. 첫 번째가 기본 스킨으로 쓰입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 [[#WikvenRepositories|<code>WikvenRepositories</code>]]에서 가져옵니다. [[$1|스킨]]을 참고하십시오.
+활성화할 스킨 이름의 목록입니다. 첫 번째가 기본 스킨으로 쓰입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 [[#WikvenRepositories|<code>WikvenRepositories</code> 맵]]에서 가져옵니다. [[$1|스킨]]을 참고하십시오.
 
 <!--T:6 @df99ac49-->
 == <code>config</code> ==
@@ -24,33 +24,33 @@ Wikven은 자체 기본값(정적 위키를 위한 합리적인 MediaWiki 설정
 <!--T:7 @0c6a658a-->
 각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 [$1 설정 값]이든 여기에 정의할 수 있으며, Wikven 자체 변수도 다음과 같이 정의할 수 있습니다.
 
-<!--T:35 @b79957b3-->
+<!--T:35 @7bd5922c-->
 {| class="wikitable"
 ! 변수 !! 기본값 !! 설정하는 것
 |-
-| [[#WikvenMainPage|<code>WikvenMainPage</code>]] || <code>index</code> || 사이트 루트인 <code>index.html</code>로 쓰이는 문서.
+| [[#WikvenMainPage|WikvenMainPage]] || <code>index</code> || 사이트 루트인 <code>index.html</code>로 쓰이는 문서.
 |-
-| [[#WikvenAboutPage|<code>WikvenAboutPage</code>]] || <code>About</code> || 바닥글의 "소개" 링크가 이어지는 문서.
+| [[#WikvenAboutPage|WikvenAboutPage]] || <code>About</code> || 바닥글의 "소개" 링크가 이어지는 문서.
 |-
-| [[#WikvenSettingsPage|<code>WikvenSettingsPage</code>]] || <code>Settings</code> || 독자의 색 테마와 스킨을 담아 생성되는 문서.
+| [[#WikvenSettingsPage|WikvenSettingsPage]] || <code>Settings</code> || 독자의 색 테마와 스킨을 담아 생성되는 문서.
 |-
-| [[#WikvenEditUrl|<code>WikvenEditUrl</code>]] || 비어 있음 || 문서마다 붙는 "편집" 링크의 대상.
+| [[#WikvenEditUrl|WikvenEditUrl]] || 비어 있음 || 문서마다 붙는 "편집" 링크의 대상.
 |-
-| [[#WikvenEditUrl|<code>WikvenHistoryUrl</code>]] || 비어 있음 || 문서마다 붙는 "역사 보기" 링크의 대상.
+| [[#WikvenEditUrl|WikvenHistoryUrl]] || 비어 있음 || 문서마다 붙는 "역사 보기" 링크의 대상.
 |-
-| [[#WikvenEditUrl|<code>WikvenViewSourceUrl</code>]] || 비어 있음 || 문서마다 붙는 "원본 보기" 탭의 대상.
+| [[#WikvenEditUrl|WikvenViewSourceUrl]] || 비어 있음 || 문서마다 붙는 "원본 보기" 탭의 대상.
 |-
-| [[#WikvenFooterUrl|<code>WikvenFooterUrl</code>]] || 비어 있음 || 사이트 바닥글에 추가되는 링크.
+| [[#WikvenFooterUrl|WikvenFooterUrl]] || 비어 있음 || 사이트 바닥글에 추가되는 링크.
 |-
-| [[#WikvenLogos|<code>WikvenLogos</code>]] || 비어 있음 || 소스 디렉터리의 파일 이름으로 지정하는 머리글 로고.
+| [[#WikvenLogos|WikvenLogos]] || 비어 있음 || 소스 디렉터리의 파일 이름으로 지정하는 머리글 로고.
 |-
-| [[#WikvenRepositories|<code>WikvenRepositories</code>]] || 비어 있음 || 번들되지 않은 확장 기능과 스킨을 어디서 가져올지.
+| [[#WikvenRepositories|WikvenRepositories]] || 비어 있음 || 번들되지 않은 확장 기능과 스킨을 어디서 가져올지.
 |-
-| [[#WikvenBundleWebfonts|<code>WikvenBundleWebfonts</code>]] || <code>false</code> || 독자에게 글꼴이 없을 수 있는 문자를 위해 웹폰트를 내보내기에 구워 넣기.
+| [[#WikvenBundleWebfonts|WikvenBundleWebfonts]] || <code>false</code> || 독자에게 글꼴이 없을 수 있는 문자를 위해 웹폰트를 내보내기에 구워 넣기.
 |-
-| [[#WikvenStyleDirectory|<code>WikvenStyleDirectory</code>]] || <code>.</code> || CSS 파일을 쓸 출력 하위 디렉터리.
+| [[#WikvenStyleDirectory|WikvenStyleDirectory]] || <code>.</code> || CSS 파일을 쓸 출력 하위 디렉터리.
 |-
-| [[#WikvenStyleDirectory|<code>WikvenScriptDirectory</code>]] || <code>.</code> || 자바스크립트 파일을 쓸 출력 하위 디렉터리.
+| [[#WikvenStyleDirectory|WikvenScriptDirectory]] || <code>.</code> || 자바스크립트 파일을 쓸 출력 하위 디렉터리.
 |}
 
 <!--T:36 @5e65d649-->

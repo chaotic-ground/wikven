@@ -10,8 +10,8 @@ Lua 모듈
 <!--T:3 @3625682d-->
 == 켜기 ==
 
-<!--T:4 @af88d52f-->
-[[$1|<code>.wikven.yaml</code>]]에 이름을 적으면 그것으로 끝입니다. Scribunto는 MediaWiki에 함께 들어 있으므로 [[$2|<code>WikvenRepositories</code>]] 항목이 필요 없고, 대부분의 빌드에서는 엔진도 설정할 것이 없습니다.
+<!--T:4 @b20f7282-->
+[[$1|<code>.wikven.yaml</code> 파일]]에 이름을 적으면 그것으로 끝입니다. Scribunto는 MediaWiki에 함께 들어 있으므로 [[$2|<code>WikvenRepositories</code> 항목]]이 필요 없고, 대부분의 빌드에서는 엔진도 설정할 것이 없습니다.
 
 <!--T:5 @d00c605f-->
 == 모듈 작성하기 ==

@@ -9,7 +9,7 @@ __TOC__
 == Enabling an extension ==
 
 <!--T:3-->
-List it in [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code>]] by name. Extensions that ship inside {{SITENAME}} need nothing else:
+List it in your [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code> file]] by name. Extensions that ship inside {{SITENAME}} need nothing else:
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
@@ -20,7 +20,7 @@ extensions:
 
 <translate>
 <!--T:4-->
-A name {{SITENAME}} cannot find on disk is skipped with a warning in the build log rather than failing the build, so a typo shows up as an extension that quietly did nothing. Anything not shipped has to say where it comes from, under [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]].
+A name {{SITENAME}} cannot find on disk is skipped with a warning in the build log rather than failing the build, so a typo shows up as an extension that quietly did nothing. Anything not shipped has to say where it comes from, under the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]].
 
 <!--T:5-->
 == What is already there ==
@@ -65,7 +65,7 @@ config:
 
 <translate>
 <!--T:11-->
-This documentation site fetches TabberNeue exactly like that — the tabs on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are it — along with MobileFrontend, which [[<tvar name="2">Special:MyLanguage/Skins</tvar>|MinervaNeue]] leans on. See [[<tvar name="3">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code>]] for the three ways to name a source, the host tools each one needs, and why to pin what you fetch.
+This documentation site fetches TabberNeue exactly like that — the tabs on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are it — along with MobileFrontend, which [[<tvar name="2">Special:MyLanguage/Skins</tvar>|MinervaNeue]] leans on. See the [[<tvar name="3">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]] for the three ways to name a source, the host tools each one needs, and why to pin what you fetch.
 
 <!--T:12-->
 == What will not work ==
