@@ -710,7 +710,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <div class="mw-heading mw-heading2"><h2 id="check-translations_액션"><span id="check-translations_.EC.95.A1.EC.85.98"></span><code>check-translations</code> 액션</h2></div>
 <p>소스 트리에 <code>translate check</code>를 실행하고, 발견한 것마다 해당 파일에 주석으로 보고합니다.
 </p>
-<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r95" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>주석(annotation)은 변경사항을 읽는 사람을 위한 것입니다. 처음으로 번역을 보내는 기여자에게는 무엇을 실행해야 하는지 알려 주는 편이 낫고, <code>comment: true</code>가 그 일을 합니다. 풀 리퀘스트에 코멘트 하나를 남기고, 발견한 것을 문제 종류별로 묶어 각각 어떤 <code>translate</code> 명령으로 해결하는지 적어 줍니다. 실행할 때마다 새로 달지 않고 기존 코멘트를 고치며, 보고할 것이 없어지면 이상 없음으로 바뀝니다. 잡에 <code>pull-requests: write</code> 권한이 필요하고, 포크에서 온 풀 리퀘스트는 읽기 전용 토큰이라 코멘트를 건너뛰며 로그에 그 사실을 남깁니다.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r95" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>주석(annotation)은 변경사항을 읽는 사람을 위한 것입니다. 처음으로 번역을 보내는 기여자에게는 무엇을 실행해야 하는지 알려 주는 편이 낫고, <code>comment: true</code>가 그 일을 합니다. 풀 리퀘스트에 코멘트 하나를 남기고, 발견한 것을 문제 종류별로 묶어 각각 어떤 <code>translate</code> 명령으로 해결하는지 적어 줍니다. 실행할 때마다 새로 달지 않고 기존 코멘트를 고치며, 보고할 것이 없어지면 이상 없음으로 바뀝니다. 그 기여자는 본디 다른 언어로 일하는 사람이므로 코멘트가 그 언어로 말할 수 있습니다. <code>comment-languages: auto</code>를 주면 영어와, 그 코멘트가 다루는 번역의 언어로 함께 쓰이며, 문구는 wikven 자신의 인터페이스 메시지에서 옵니다. 잡에 <code>pull-requests: write</code> 권한이 필요하고, 포크에서 온 풀 리퀘스트는 읽기 전용 토큰이라 코멘트를 건너뛰며 로그에 그 사실을 남깁니다.</p></div>
 </div>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
@@ -749,6 +749,11 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <td>발견한 것을 종류별로 묶고 해결할 <code>translate</code> 명령을 적어 풀 리퀘스트에 코멘트도 남깁니다.
 </td></tr>
 <tr>
+<td><code>comment-languages</code></td>
+<td>영어만</td>
+<td>그 코멘트를 함께 쓸 언어. <code>auto</code>는 발견된 것들이 다루는 언어를 쓰고, <code>ko,fr</code>처럼 직접 나열할 수도 있습니다.
+</td></tr>
+<tr>
 <td><code>github-token</code></td>
 <td>잡 자체의 토큰</td>
 <td>코멘트를 남길 때 쓰는 토큰.
@@ -766,7 +771,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 09:46에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 10:02에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
