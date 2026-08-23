@@ -76,7 +76,7 @@
 <!--T:31 @1214ffe2-->
 각 렌더링 과정은 사이트 전체를 자기 스킨으로, 자기 디렉터리에 렌더링합니다. <code>skins</code>의 첫 스킨은 출력 루트에, 나머지는 <code>dist/&lt;skin&gt;/</code>에 렌더링됩니다. 각 과정은 데이터베이스 사본을 하나씩 받는데, SQLite는 한 번에 하나만 쓸 수 있고 렌더링 과정도 객체 캐시에는 쓰기를 하기 때문입니다.
 
-<!--T:32 @df6c857e-->
+<!--T:32 @b6cc18ed-->
 ; <code>RebuildFileCache</code>
 : 모든 콘텐츠 문서를 HTML 파일로 렌더링합니다. MediaWiki 자체의 파일 캐시이며, {{SITENAME}}은 <code>File:</code>도 콘텐츠 네임스페이스로 취급하므로 모든 틀을 쏟아내지 않으면서 파일 설명 문서까지 내보냅니다.
 ; <code>retranslateChrome</code>
@@ -98,7 +98,7 @@
 ; <code>rename</code>
 : 네임스페이스 접두사가 붙은 캐시 파일에 읽을 수 있는 이름을 줍니다(예: <code>ns6%3A...</code>가 <code>File:...</code>이 됩니다). 각 문서의 상대 링크도 그 문서 자신의 깊이에 맞게 고칩니다.
 ; <code>resolveTranslationLinks</code>
-: 각 번역이 어느 경로에 있는지 확정된 뒤, 완성된 트리 위에서 <code>Special:MyLanguage/</code> 링크를 다시 써서 독자 자신의 언어로 이어지게 합니다.
+: 각 번역이 어느 경로에 있는지 확정된 뒤, 완성된 트리 위에서 <code>Special:MyLanguage/</code> 링크를 다시 써서 그 링크가 놓인 문서의 언어로 이어지게 합니다.
 
 <!--T:33 @912c87a5-->
 주 스킨이 아닌 스킨을 렌더링하는 과정은 검색 색인을 자기 디렉터리로 복사하기도 합니다. 그 사본에서 검색하면 그 안에서 답이 나오도록 하기 위해서입니다.

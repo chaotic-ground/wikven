@@ -25,7 +25,7 @@ A link target is looked up as a message too, and an entry whose target resolves 
 == Linking on a translated site ==
 
 <!--T:9-->
-A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the way MediaWiki's own wikis do, and the build resolves it per page instead. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
+A target names one page, so an entry leads to that page and no other: a reader on a translated page follows the sidebar back into the source language. Write the target as <code>Special:MyLanguage/Page</code>, the spelling MediaWiki's own wikis use, and the build resolves it instead — by a different rule than a live wiki would. There, that special page redirects at request time to the reader's own interface language, whatever page the link was on; a static export has no request and no reader to ask, so each link is resolved at build time by the language of the page it sits on. On a page in a given language the entry links to that language's translation of the target, and to the source page where there is none. The prefix also keeps a target out of the message lookup above, so <code>Licenses</code> needs no colon here:
 </translate>
 
 <syntaxhighlight lang="wikitext" copy>

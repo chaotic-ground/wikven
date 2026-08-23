@@ -119,7 +119,7 @@ Each pass renders the whole site in its own skin, into its own directory: the fi
 ; <code>rename</code>
 : Gives the namespace-prefixed cache files readable names (for example <code>ns6%3A...</code> becomes <code>File:...</code>), and reparents each page's relative links by its own depth.
 ; <code>resolveTranslationLinks</code>
-: Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the reader's own language.
+: Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.
 
 <!--T:33-->
 A pass that renders a non-default skin also copies the search index into its own directory, so a search from that copy answers inside it.
