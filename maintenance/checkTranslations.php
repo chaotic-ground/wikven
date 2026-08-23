@@ -26,7 +26,8 @@ class CheckTranslations extends Maintenance {
 		$this->addOption('gate', 'Exit non-zero when a source page has an error. Staleness never gates.');
 		$this->addOption(
 			'comment-file',
-			'Write what was found as a Markdown comment body for a pull request (see TranslationAdvice).',
+			'Write what was found as a Markdown comment body to post where the change is reviewed'
+			. ' (see TranslationAdvice).',
 			false,
 			true
 		);
@@ -136,7 +137,7 @@ class CheckTranslations extends Maintenance {
 	 * Write the comment body for --comment-file, or nothing when the option is not given.
 	 *
 	 * A clean run still writes one, saying so: the action edits its own earlier comment with it, so
-	 * a complaint that has been answered stops standing on the pull request.
+	 * a complaint that has been answered stops standing on the change.
 	 */
 	private function writeComment(): void {
 		$path = (string)$this->getOption('comment-file', '');
@@ -154,8 +155,8 @@ class CheckTranslations extends Maintenance {
 	/**
 	 * The languages the comment is written in: English, then whatever --comment-languages asked for.
 	 *
-	 * English leads because it is the one language the workflow can count on a reader of the pull
-	 * request having in common with it. What follows is for the contributor: "auto" reads it off the
+	 * English leads because it is the one language the workflow can count on a reader of the change
+	 * having in common with it. What follows is for the contributor: "auto" reads it off the
 	 * findings, so someone who sent a Korean translation is answered in Korean without the workflow
 	 * naming a language it cannot know in advance.
 	 *
@@ -178,7 +179,7 @@ class CheckTranslations extends Maintenance {
 				continue;
 			}
 			// A code nobody knows is the caller's typo, not a reason to lose the comment: the
-			// English half is what most readers of the pull request read anyway.
+			// English half is what most readers of the change read anyway.
 			if (!$languageNameUtils->isKnownLanguageTag($language)) {
 				$this->output("::warning::Unknown language '$language' for the translations comment; skipped\n");
 				continue;

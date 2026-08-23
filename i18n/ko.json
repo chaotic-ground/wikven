@@ -2,7 +2,7 @@
 	"@metadata": {
 		"authors": []
 	},
-	"wikven-translations-title": "이 풀 리퀘스트의 번역",
+	"wikven-translations-title": "이 변경의 번역",
 	"wikven-translations-lead": "`translate check`가 원본 문서와 그 번역을 읽고 다음을 알려드립니다. 아래 각 줄은 해당 파일에 주석으로도 달려 있습니다.",
 	"wikven-translations-parse-heading": "원본 문서를 읽을 수 없습니다",
 	"wikven-translations-parse-advice": "Translate가 이 문서를 거부하므로 아직 이 문서의 어느 것도 번역할 수 없습니다. 메시지는 Translate 자신의 것이며, 보통 단위의 맨 앞도 줄의 끝도 아닌 곳에 있는 `<!--T:n-->` 표시를 가리킵니다.",

@@ -28,8 +28,8 @@ class TranslationAdvice {
 
 	/**
 	 * Marks the body a clean run writes, which the action treats differently: it replaces a
-	 * complaint it left earlier, and is not worth a comment of its own on a pull request that never
-	 * had one.
+	 * complaint it left earlier, and is not worth a comment of its own on a change that never had
+	 * one.
 	 */
 	public const CLEAR_MARKER = '<!-- wikven-check-translations:clear -->';
 

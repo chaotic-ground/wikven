@@ -12,7 +12,7 @@
 	"wikven-settings": "Label of the link to the generated settings page, in Minerva's main menu, where the skin would otherwise link to Special:MobileOptions.",
 	"wikven-settings-intro": "Opening sentence of the generated settings page, explaining that a static export keeps display choices in the reader's browser.",
 	"wikven-skins-description": "Description under {{msg-mw|wikven-skins}} on the generated settings page.",
-	"wikven-translations-title": "Heading of the comment the check-translations action leaves on a pull request. Rendered once per language, so it is also what tells a reader which rendering is theirs.",
+	"wikven-translations-title": "Heading of the comment the check-translations action leaves where the change is reviewed. Rendered once per language, so it is also what tells a reader which rendering is theirs. \"Change\" is deliberately not any one forge's word for it: the same comment is posted on a GitHub pull request, a GitLab merge request or a Gerrit change, so translate it as whatever your language calls a set of edits offered for review.",
 	"wikven-translations-lead": "Opening line of the comment, saying where the same findings appear as annotations. The comment is Markdown, not wikitext.",
 	"wikven-translations-parse-heading": "Heading of the group for source pages the Translate extension cannot parse.",
 	"wikven-translations-parse-advice": "Advice under {{msg-mw|wikven-translations-parse-heading}}. The findings under it are Translate's own error messages.",

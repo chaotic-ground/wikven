@@ -118,8 +118,8 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 	public function testEachLanguageGetsItsOwnRendering() {
 		$findings = [['kind' => 'stale', 'file' => 'a/ko.wikitext', 'unit' => '1', 'lang' => 'ko']];
 		$body = $this->advice()->comment($findings, ['en', 'ko']);
-		$this->assertSame(1, substr_count($body, '## Translations in this pull request'));
-		$this->assertStringContainsString('[ko] Translations in this pull request', $body);
+		$this->assertSame(1, substr_count($body, '## Translations in this change'));
+		$this->assertStringContainsString('[ko] Translations in this change', $body);
 		// English leads, and the two renderings are told apart rather than run together.
 		$this->assertLessThan(strpos($body, '[ko]'), strpos($body, "\n---\n"));
 

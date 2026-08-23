@@ -12,7 +12,7 @@
 	"wikven-settings": "Settings",
 	"wikven-settings-intro": "These choices are kept in this browser. They apply to this site only, and no account is involved.",
 	"wikven-skins-description": "Read this site in another skin. Each one renders the same pages.",
-	"wikven-translations-title": "Translations in this pull request",
+	"wikven-translations-title": "Translations in this change",
 	"wikven-translations-lead": "`translate check` read the source pages and their translations, and has this to say. Every line is also an annotation on the file it belongs to.",
 	"wikven-translations-parse-heading": "The source page cannot be read",
 	"wikven-translations-parse-advice": "Translate refuses the page, so nothing of it can be translated yet. The message is Translate's own; it usually points at a `<!--T:n-->` marker somewhere other than the start of its unit or the end of a line.",
