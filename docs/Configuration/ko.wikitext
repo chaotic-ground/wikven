@@ -67,8 +67,11 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:48 @d8b59d5d-->
 '''기본값:''' <code>About</code>
 
-<!--T:17 @de30c2a8-->
-사이트를 소개하는 문서의 제목으로, MediaWiki 자체의 "소개" 바닥글 링크가 이 문서를 가리킵니다. 같은 이름의 소스 문서를 쓰면 그 내용이 그대로 쓰이며, 빌드는 설치된 소프트웨어·확장 기능·스킨을 나열하는 <code>Wikven software</code> 틀(<code>Special:Version</code>이 보여 줄 내용으로, export에는 그런 특수문서가 없습니다)도 함께 생성하므로, 그 목록을 원하는 자리에 <code><nowiki>{{Wikven software}}</nowiki></code>로 넣거나 아예 빼면 됩니다. 같은 이름의 소스 문서가 없으면 빌드가 소개 문장과 그 아래 목록을 담은 문서를 씁니다. 비워 두면 문서를 아예 쓰지 않으며, 바닥글 링크도 함께 사라집니다.
+<!--T:17 @08f930ca-->
+사이트를 소개하는 문서의 제목으로, MediaWiki 자체의 "소개" 바닥글 링크가 이 문서를 가리킵니다. 같은 이름의 소스 문서를 쓰면 그 내용이 그대로 쓰입니다. 같은 이름의 소스 문서가 없으면 빌드가 소개 문장과 그 아래 소프트웨어 목록을 담은 문서를 씁니다. 비워 두면 문서를 아예 쓰지 않으며, 바닥글 링크도 함께 사라집니다.
+
+<!--T:55 @ded75a7b-->
+이 설정을 무엇으로 두든, 빌드는 틀 두 개를 생성합니다. export에는 독자를 보낼 <code>Special:Version</code>이 없기 때문입니다. 어느 문서에서든 원하는 자리에 넣으십시오. <code><nowiki>{{Wikven software}}</nowiki></code>는 그 특수문서가 보여 줄 내용 — MediaWiki와 PHP, 데이터베이스, 그리고 확장 기능과 스킨 — 이고, <code><nowiki>{{Wikven components}}</nowiki></code>는 확장 기능과 스킨만을 각각이 밝힌 라이선스와 함께 담은 것으로, 사이트가 재배포하는 것을 밝히는 문서에 필요한 쪽입니다.
 
 <!--T:18 @c5bc8e2e-->
 === <code>WikvenFooterUrl</code> ===
