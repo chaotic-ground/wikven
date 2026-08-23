@@ -47,7 +47,7 @@ Pin a reference rather than tracking a branch. A build of a given revision of a 
 == Local URLs: the one contract to read ==
 
 <!--T:11-->
-This is the part that catches extension authors, because the code is correct on a live wiki and wrong only here.
+Read this section before you write anything that emits a URL. It is the one place where code that is correct on a live wiki is wrong, and being correct elsewhere is what makes it easy to miss here.
 
 <!--T:12-->
 {{SITENAME}} makes page URLs '''document-relative'''. <code>Title::getLocalURL()</code> answers <code>./Page.html</code>, and because a page whose title has a slash is exported into a real directory, a page one level down needs <code>../Page.html</code> to mean the same thing. <code>maintenance/rename.php</code> applies that correction per page, by the page's own depth.
