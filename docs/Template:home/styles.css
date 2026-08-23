@@ -207,8 +207,17 @@
 
 /* One line in the output tree is a product name rather than a file type, so it says what it is.
  * The other three are read off their extensions and need nothing. */
+/* The gloss goes under the name it is about rather than after it, at every width. It is the one
+ * thing in either tree long enough to need the room -- every other line is a file name, and the
+ * one with a space in it wraps on the space by itself -- and the pane clips to its border radius,
+ * which is what keeps the label strip inside the corners and was landing on this line instead,
+ * cutting it at "the search in" with no overflow to scroll and so no scrollbar either. It was
+ * fixed for the stacked layout first, on measurements taken only at phone widths; the row layout
+ * loses between 33 and 95 pixels of it and had been doing so all along. Indented to the name's own
+ * column, so it still reads as a note on pagefind/ and not as another entry. */
 .wikven-home-gloss {
-	margin-inline-start: 0.75rem;
+	display: block;
+	margin-inline-start: 2.5rem;
 	color: var(--color-subtle, #54595d);
 }
 
@@ -320,17 +329,6 @@
 	.wikven-home-pane {
 		flex: 0 0 auto;
 		min-inline-size: 0;
-	}
-
-	/* The gloss goes under the name it is about rather than after it. It is the one thing in
-	 * either tree long enough to need the room -- every other line is a file name, and the one
-	 * with a space in it wraps on the space by itself -- and the pane clips to its border radius,
-	 * which on a narrow screen was landing on this line and cutting it at "the search in" with no
-	 * overflow to scroll and so no scrollbar either. Indented to the name's own column, so it
-	 * still reads as a note on pagefind/ and not as another entry. */
-	.wikven-home-gloss {
-		display: block;
-		margin-inline-start: 2.5rem;
 	}
 
 	.wikven-home-arrow {

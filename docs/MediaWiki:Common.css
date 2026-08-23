@@ -383,37 +383,44 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	inset: 0;
 }
 
+/* Positioned, and after the page in the source, so it paints over it: an absolutely positioned
+ * box outranks in-flow content whatever the order, so the tree has to be positioned too before
+ * being second in the document means being on top. */
+.wikven-home-out-tree {
+	position: relative;
+}
+
 @keyframes wikven-out-tree {
 	0%,
 	40% {
-		opacity: 1;
+		opacity: 0;
 	}
 
 	48%,
 	90% {
-		opacity: 0;
+		opacity: 1;
 	}
 
 	98%,
 	100% {
-		opacity: 1;
+		opacity: 0;
 	}
 }
 
 @keyframes wikven-out-page {
 	0%,
 	40% {
-		opacity: 0;
+		opacity: 1;
 	}
 
 	48%,
 	90% {
-		opacity: 1;
+		opacity: 0.28;
 	}
 
 	98%,
 	100% {
-		opacity: 0;
+		opacity: 1;
 	}
 }
 
@@ -470,24 +477,24 @@ html[dir="rtl"] .wikven-home-sym--parts {
 @keyframes wikven-out-tree-scrolled {
 	0%,
 	35% {
-		opacity: 1;
+		opacity: 0;
 	}
 
 	55%,
 	100% {
-		opacity: 0;
+		opacity: 1;
 	}
 }
 
 @keyframes wikven-out-page-scrolled {
 	0%,
 	35% {
-		opacity: 0;
+		opacity: 1;
 	}
 
 	55%,
 	100% {
-		opacity: 1;
+		opacity: 0.28;
 	}
 }
 
