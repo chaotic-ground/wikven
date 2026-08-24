@@ -298,7 +298,9 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 
 /* The card symbols, the two states of the diagram's output pane, and the hero's warmth. All three
  * are here for the reason the marks above are: TemplateStyles drops a mask-image, a @keyframes and
- * a gradient alike, and drops them without saying so.
+ * a gradient alike, and drops them without saying so. The warmth has a second reason now, which is
+ * that it asks the page itself to clip what runs off the sides: TemplateStyles scopes every
+ * selector it is given to the parser output, and the body is not in there.
  *
  * The symbols are OOUI's own, which is the point of them. A reader who has used a MediaWiki wiki
  * has met the jigsaw piece on a template and the 文A on a language menu, so the glyph is doing
@@ -440,17 +442,26 @@ html[dir="rtl"] .wikven-home-sym--parts {
  * be: it has one timeline, and setting animation-timeline replaces the clock rather than joining
  * it.
  *
- * The timeline is named on the band and referenced from inside it, rather than each layer taking
- * its own view(). view() measures the subject against its nearest scroll container, and the layers
- * have one much nearer than the page: the diagram's own horizontal scroller. overflow-x: auto
- * makes overflow-y compute to auto as well -- there is no way to scroll one axis and leave the
- * other alone -- so the layers were being measured against a box they never move inside, and the
- * pane sat frozen mid-turn. The band is outside that scroller, so it is measured against the page.
+ * The timeline is named on the diagram's own scroller and referenced from inside it, rather than
+ * each layer taking its own view(). view() measures the subject against its nearest scroll
+ * container, and the layers have one much nearer than the page: that same horizontal scroller.
+ * overflow-x: auto makes overflow-y compute to auto as well -- there is no way to scroll one axis
+ * and leave the other alone -- so the layers were being measured against a box they never move
+ * inside, and the pane sat frozen mid-turn. A scroll container is not its own ancestor, so naming
+ * the timeline on the scroller itself measures it against the page, one box out.
+ *
+ * That box is also the smallest honest one. Named on the whole section, as it was, the timeline
+ * counted the heading and the lede as part of the subject, and the turn was spent while the
+ * diagram was still arriving; contain over the diagram alone runs from the moment it is fully in
+ * view to the moment it starts to leave, so the pane turns over with the diagram in the middle of
+ * the screen rather than at the bottom edge of it. (Where the diagram is taller than the screen,
+ * which is a phone stacking it, contain is the other way round -- top edge to bottom edge -- and
+ * the turn lands while it fills the screen, which is the same answer.)
  *
  * fill-mode is what makes it hold: outside the range an unfilled animation drops back to the base
  * style, which here is both states at full opacity, one on top of the other. */
 @supports (animation-timeline: --wikven-out) {
-	.wikven-home-section-demo {
+	.wikven-home-flow-scroll {
 		view-timeline-name: --wikven-out;
 	}
 
@@ -460,7 +471,7 @@ html[dir="rtl"] .wikven-home-sym--parts {
 		animation-iteration-count: 1;
 		animation-fill-mode: both;
 		animation-timeline: --wikven-out;
-		animation-range: cover;
+		animation-range: contain;
 	}
 
 	.wikven-home-out-tree {
@@ -592,25 +603,31 @@ html[dir="rtl"] .wikven-home-sym--parts {
  * skin already shows in its header.
  *
  * What decides whether this reads as light or as an object is whether the reader can see the whole
- * of it. A field that begins and ends inside the band is a thing in the picture -- two of them, in
- * two colours, are a pair of coloured spheres parked behind the page, which is what #525 produced
- * by pulling them inside to stop a sideways scroll. Ground is what runs off the edge of the frame.
+ * of it, and a field that begins and ends inside the frame is a thing in the picture however soft
+ * its edges are. #525 pulled the fields inside the band to stop a sideways scroll and #529 spent
+ * the block axis on pushing their tops and bottoms out of sight, but each one still ended on both
+ * sides of the text, where anyone could see it end. Ground is what runs off the edge of the frame.
  *
- * So the box is much taller than the band and the fields fill it: their tops and bottoms fall well
- * outside anything the reader is looking at, and inside the band there is no boundary to find.
- * Only the block axis is spent on this. The inline axis stays at the band's edge, because bleeding
- * that is what put the sideways scroll on every phone, and each field fades to nothing by the time
- * it gets there, so the edge is never a seam either.
+ * So the light is cut by the screen instead, which is the one edge a reader does not read as the
+ * edge of something. Each field is far wider than the viewport -- the custom property is a radius,
+ * so 120vw spans 240 -- the box holding them runs past both sides of the screen rather than
+ * stopping at the width of the text, and the page is told to clip what falls off, so nothing
+ * scrolls sideways: the failure #525 was fixed for. What is left to see is the fall from warm to
+ * nothing down the page, which is what light from behind the top of the screen looks like, and
+ * across the screen there is barely a fall at all: at that radius the sides are gone before the
+ * eye can find where they were going.
  *
- * Each ellipse is tangent to its own nearest sides -- 38% tall, centred 38% down and 62% down --
- * so no fade is ever cut part-opaque, and the stops are eased rather than linear, most of the fall
- * happening early, because a straight ramp leaves a soft disc where none is wanted.
+ * Both halves of that stand on :has() and on clip, so both are asked for together. Without either
+ * the fields stay inside the band and fade out by its edges: the older picture, which is safe if
+ * it is not right. Safari had :has() for two versions before it had overflow: clip, which is
+ * exactly the browser that would otherwise scroll sideways.
  *
  * isolation makes the hero its own stacking context, so the light stays behind the page's own
  * content; without it a z-index of -1 escapes to the page ground and the skin paints over it. */
 .wikven-home-hero {
 	position: relative;
 	isolation: isolate;
+	--wikven-glow-x: 50%;
 }
 
 .wikven-home-hero::before {
@@ -622,19 +639,47 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	inset-inline: 0;
 	background:
 		radial-gradient(
-			ellipse 50% 38% at 50% 38%,
+			ellipse var(--wikven-glow-x) 20rem at 50% 30%,
 			rgba(255, 140, 26, 0.3) 0%,
 			rgba(255, 140, 26, 0.19) 34%,
-			rgba(255, 140, 26, 0.07) 66%,
+			rgba(255, 140, 26, 0.05) 66%,
 			rgba(255, 140, 26, 0) 100%
 		),
 		radial-gradient(
-			ellipse 50% 38% at 50% 62%,
-			rgba(16, 112, 127, 0.19) 0%,
-			rgba(16, 112, 127, 0.11) 34%,
-			rgba(16, 112, 127, 0.04) 66%,
+			ellipse var(--wikven-glow-x) 18rem at 50% 76%,
+			rgba(16, 112, 127, 0.16) 0%,
+			rgba(16, 112, 127, 0.09) 34%,
+			rgba(16, 112, 127, 0.03) 66%,
 			rgba(16, 112, 127, 0) 100%
 		);
+}
+
+@supports selector(:has(a)) and (overflow: clip) {
+	/* Both elements, and clip rather than hidden: clip is the one value that leaves the other axis
+	 * scrolling as it was, and asking only one of the two leaves the page scrolling sideways --
+	 * whichever of them the viewport ends up taking its overflow from, the other one is still a
+	 * box the light overflows. Scoped to the page that lights its hero, since no other page has
+	 * anything to clip. */
+	html:has(.wikven-home-hero),
+	body:has(.wikven-home-hero) {
+		overflow-x: clip;
+	}
+
+	.wikven-home-hero {
+		--wikven-glow-x: 120vw;
+	}
+
+	.wikven-home-hero::before {
+		inset-inline: -100vw;
+	}
+
+	/* Vector pins its appearance menu in a column of its own, on a white ground and above the
+	 * hero in paint order, which cut a white notch out of the light on every wide screen. The
+	 * ground is there to cover the text the menu scrolls over; on this page there is none beside
+	 * it, so taking it away costs nothing and the light runs behind the menu instead. */
+	body:has(.wikven-home-hero) .vector-pinned-container {
+		background-color: transparent;
+	}
 }
 
 /* Night wants both weaker. At the daytime strength they stop reading as light on a dark ground and
@@ -644,17 +689,17 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	html.skin-theme-clientpref-night .wikven-home-hero::before {
 		background:
 			radial-gradient(
-				ellipse 50% 38% at 50% 38%,
-				rgba(255, 140, 26, 0.17) 0%,
-				rgba(255, 140, 26, 0.11) 34%,
-				rgba(255, 140, 26, 0.04) 66%,
+				ellipse var(--wikven-glow-x) 20rem at 50% 30%,
+				rgba(255, 140, 26, 0.15) 0%,
+				rgba(255, 140, 26, 0.09) 34%,
+				rgba(255, 140, 26, 0.03) 66%,
 				rgba(255, 140, 26, 0) 100%
 			),
 			radial-gradient(
-				ellipse 50% 38% at 50% 62%,
-				rgba(87, 188, 203, 0.12) 0%,
-				rgba(87, 188, 203, 0.07) 34%,
-				rgba(87, 188, 203, 0.025) 66%,
+				ellipse var(--wikven-glow-x) 18rem at 50% 76%,
+				rgba(87, 188, 203, 0.1) 0%,
+				rgba(87, 188, 203, 0.06) 34%,
+				rgba(87, 188, 203, 0.02) 66%,
 				rgba(87, 188, 203, 0) 100%
 			);
 	}
@@ -664,17 +709,17 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	html.skin-theme-clientpref-os .wikven-home-hero::before {
 		background:
 			radial-gradient(
-				ellipse 50% 38% at 50% 38%,
-				rgba(255, 140, 26, 0.17) 0%,
-				rgba(255, 140, 26, 0.11) 34%,
-				rgba(255, 140, 26, 0.04) 66%,
+				ellipse var(--wikven-glow-x) 20rem at 50% 30%,
+				rgba(255, 140, 26, 0.15) 0%,
+				rgba(255, 140, 26, 0.09) 34%,
+				rgba(255, 140, 26, 0.03) 66%,
 				rgba(255, 140, 26, 0) 100%
 			),
 			radial-gradient(
-				ellipse 50% 38% at 50% 62%,
-				rgba(87, 188, 203, 0.12) 0%,
-				rgba(87, 188, 203, 0.07) 34%,
-				rgba(87, 188, 203, 0.025) 66%,
+				ellipse var(--wikven-glow-x) 18rem at 50% 76%,
+				rgba(87, 188, 203, 0.1) 0%,
+				rgba(87, 188, 203, 0.06) 34%,
+				rgba(87, 188, 203, 0.02) 66%,
 				rgba(87, 188, 203, 0) 100%
 			);
 	}
