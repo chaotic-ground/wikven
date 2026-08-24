@@ -50,7 +50,7 @@ config:
     # which updatecli moves.
     TabberNeue:
       repository: https://github.com/StarCitizenTools/mediawiki-extensions-TabberNeue.git
-      reference: v4.0.0
+      reference: v4.0.2
     # Citizen is a third-party skin, fetched rather than bundled. Wikven handles
     # what it does that a static export cannot serve, so nothing is needed here.
     # Pinned to a release tag, which updatecli moves.
