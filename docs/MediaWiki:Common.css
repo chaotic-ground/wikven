@@ -600,30 +600,41 @@ html[dir="rtl"] .wikven-home-sym--parts {
  * and warmth is the one part of that idea a landing page can carry without repeating the mark the
  * skin already shows in its header.
  *
- * The light comes from two corners rather than from the middle. A field centred in the band is a
- * thing in the picture however soft its edges are, which is what #525, #528 and #529 kept
- * producing and what #531 answered by making the fields wider than the screen so the screen cut
- * them -- at the cost of a clip on the root element, a feature query, and a rule reaching into
- * Vector's sidebar to keep its white ground off the light. Anchored at the edges instead, each
- * field is most of the way outside the frame already: the warm one just inside the near side, the
- * cool one on the far side, both close to twice the size of the band. What is left on the page is
- * the fall away from each corner, warm behind the first line of the title and cooling towards the
- * far bottom one, with no boundary in it anywhere. The fade is spent by 62% of the radius, so each
- * one is thin long before it reaches the other and they never mix into a third colour.
+ * The light comes from two corners of the screen. A field centred in the band is a thing in the
+ * picture however soft its edges are, which is what #525, #528 and #529 kept producing; anchored at
+ * the edges instead, each field is most of the way outside the frame already, and what is left on
+ * the page is the fall away from each corner -- warm behind the first line of the title, cooling
+ * towards the far bottom one, with no boundary in it anywhere. The fade is spent by 62% of the
+ * radius, so each one is thin long before it reaches the other and they never mix into a third
+ * colour.
  *
- * The mask is what the box costs. Cut off at the inline edges the light reads as light, because
- * that is where the text column ends and the reader is being shown the edge of the page anyway;
- * cut off at the top and bottom it reads as a band, because there is nothing there to be an edge
- * of -- a straight line across white, a few rows below the tab strip and again in the gap above
- * How it works. So the box reaches further than it needs to on the block axis and the mask fades
- * the last eighth of it at each end, which puts both of those lines where the light has already
- * gone. A mask-image is another thing TemplateStyles drops, which is why this is here.
+ * Of the screen, not of the text column, which is what #536 got wrong. Cut at the column the light
+ * leaves a white margin down both sides of a phone, where the column is the screen less its
+ * padding, and on a wide screen it starts exactly where the title starts, so the text sits on the
+ * edge of it with nothing to the left and everything to the right. So the box runs a viewport past
+ * both sides and the page clips what falls off -- on the root element and on the body, since
+ * whichever of the two the viewport takes its overflow from, the other is still a box the light
+ * overflows. Inside that box the fields are placed and sized in vw, from the middle out, because
+ * the box is no longer the width of anything the reader can see.
+ *
+ * Both of those stand on :has() and on clip, so both are asked for together; without either, the
+ * light stays inside the column and is placed as a share of it, which is the older, safe picture.
+ * Safari carried :has() for two versions before it carried overflow: clip, and that is exactly the
+ * browser that would otherwise scroll sideways.
+ *
+ * The mask is what the block axis costs. Cut off at the top and bottom the light reads as a band,
+ * and both of those cuts land on white -- a straight line a few rows under the tab strip, and
+ * another in the gap above How it works. So the box reaches further than it needs to below the
+ * band and the mask fades the last eighth at each end, which puts both lines where the light has
+ * already gone. A mask-image is another thing TemplateStyles drops, which is why this is here.
  *
  * isolation makes the hero its own stacking context, so the light stays behind the page's own
  * content; without it a z-index of -1 escapes to the page ground and the skin paints over it. */
 .wikven-home-hero {
 	position: relative;
 	isolation: isolate;
+	--wikven-glow-warm: 90% 120% at 8% 30%;
+	--wikven-glow-cool: 100% 130% at 96% 62%;
 }
 
 .wikven-home-hero::before {
@@ -635,12 +646,12 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	inset-inline: 0;
 	background:
 		radial-gradient(
-			ellipse 90% 120% at 8% 30%,
+			ellipse var(--wikven-glow-warm),
 			rgba(255, 140, 26, 0.22),
 			rgba(255, 140, 26, 0) 62%
 		),
 		radial-gradient(
-			ellipse 100% 130% at 96% 62%,
+			ellipse var(--wikven-glow-cool),
 			rgba(16, 112, 127, 0.14),
 			rgba(16, 112, 127, 0) 62%
 		);
@@ -660,21 +671,45 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	);
 }
 
+@supports selector(:has(a)) and (overflow: clip) {
+	html:has(.wikven-home-hero),
+	body:has(.wikven-home-hero) {
+		overflow-x: clip;
+	}
+
+	.wikven-home-hero {
+		--wikven-glow-warm: 90vw 120% at calc(50% - 42vw) 30%;
+		--wikven-glow-cool: 100vw 130% at calc(50% + 46vw) 62%;
+	}
+
+	.wikven-home-hero::before {
+		inset-inline: -100vw;
+	}
+
+	/* Vector pins its appearance menu in a column of its own, on a white ground and above the hero
+	 * in paint order, which cuts a white notch out of the light once the light reaches that far.
+	 * The ground is there to cover the text the menu scrolls over; on this page there is none
+	 * beside it, so taking it away costs nothing. */
+	body:has(.wikven-home-hero) .vector-pinned-container {
+		background-color: transparent;
+	}
+}
+
 /* Night wants both weaker. At the daytime strength they stop reading as light on a dark ground and
  * start reading as stains, which is the failure this kind of thing is known for. The cool half
  * moves to the pale teal the skins use after dark, for the same reason the accent does. Only the
- * colours change: the shape of the light, and the mask that keeps its ends off the page, are the
- * same after dark. */
+ * colours change: where the light comes from, and the mask that keeps its ends off the page, are
+ * the same after dark. */
 @media screen {
 	html.skin-theme-clientpref-night .wikven-home-hero::before {
 		background:
 			radial-gradient(
-				ellipse 90% 120% at 8% 30%,
+				ellipse var(--wikven-glow-warm),
 				rgba(255, 140, 26, 0.13),
 				rgba(255, 140, 26, 0) 62%
 			),
 			radial-gradient(
-				ellipse 100% 130% at 96% 62%,
+				ellipse var(--wikven-glow-cool),
 				rgba(87, 188, 203, 0.1),
 				rgba(87, 188, 203, 0) 62%
 			);
@@ -685,12 +720,12 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	html.skin-theme-clientpref-os .wikven-home-hero::before {
 		background:
 			radial-gradient(
-				ellipse 90% 120% at 8% 30%,
+				ellipse var(--wikven-glow-warm),
 				rgba(255, 140, 26, 0.13),
 				rgba(255, 140, 26, 0) 62%
 			),
 			radial-gradient(
-				ellipse 100% 130% at 96% 62%,
+				ellipse var(--wikven-glow-cool),
 				rgba(87, 188, 203, 0.1),
 				rgba(87, 188, 203, 0) 62%
 			);
