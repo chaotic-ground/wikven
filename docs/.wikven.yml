@@ -56,7 +56,7 @@ config:
     # Pinned to a release tag, which updatecli moves.
     Citizen:
       repository: https://github.com/StarCitizenTools/mediawiki-skins-Citizen.git
-      reference: v3.17.0
+      reference: v3.21.0
     # Minerva is bundled with MediaWiki but MobileFrontend, which it leans on, is not: without it
     # the skin skips initMobile.js entirely (see its setup.js). This site builds the pair so the
     # configuration wikven recommends for Minerva is the one CI renders. Mirrored from Gerrit,
