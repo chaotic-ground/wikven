@@ -132,8 +132,7 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 	 * long before this change belongs to the annotations, not to whoever is reading this diff.
 	 */
 	public function testAScopedCommentIsOnlyAboutWhatTheChangeTouches() {
-		$body = $this
-			->advice()
+		$body = $this->advice()
 			->about(['docs/Pages/ko.wikitext'])
 			->comment([
 				[
@@ -162,8 +161,7 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 	 * is told about them even though they never opened the translation file.
 	 */
 	public function testTouchingASourcePageCarriesItsTranslations() {
-		$body = $this
-			->advice()
+		$body = $this->advice()
 			->about(['docs/Pages.wikitext'])
 			->comment([
 				[
@@ -182,8 +180,7 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 	 * as English, so whoever sent that translation is owed the reason.
 	 */
 	public function testTouchingATranslationCarriesItsSourcePage() {
-		$body = $this
-			->advice()
+		$body = $this->advice()
 			->about(['docs/Pages/ko.wikitext'])
 			->comment([
 				['kind' => 'parse', 'file' => 'docs/Pages.wikitext', 'detail' => 'pt-shake-position']
