@@ -127,6 +127,87 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString('[ko] `translate check` found nothing', $clear);
 	}
 
+	/**
+	 * A check reads the whole tree; a comment on one change should not. A page that fell behind
+	 * long before this change belongs to the annotations, not to whoever is reading this diff.
+	 */
+	public function testAScopedCommentIsOnlyAboutWhatTheChangeTouches() {
+		$body = $this
+			->advice()
+			->about(['docs/Pages/ko.wikitext'])
+			->comment([
+				[
+					'kind' => 'stale',
+					'file' => 'docs/Pages/ko.wikitext',
+					'source' => 'docs/Pages.wikitext',
+					'unit' => '3',
+					'lang' => 'ko'
+				],
+				[
+					'kind' => 'stale',
+					'file' => 'docs/Licenses/km.wikitext',
+					'source' => 'docs/Licenses.wikitext',
+					'unit' => '2',
+					'lang' => 'km'
+				]
+			]);
+		$this->assertStringContainsString('docs/Pages/ko.wikitext', $body);
+		$this->assertStringNotContainsString('km.wikitext', $body);
+		// And says so, rather than letting the reader think the rest of the wiki is clean.
+		$this->assertStringContainsString('the pages this change touches', $body);
+	}
+
+	/**
+	 * Editing an English page is what puts its translations behind, so the person who edited it
+	 * is told about them even though they never opened the translation file.
+	 */
+	public function testTouchingASourcePageCarriesItsTranslations() {
+		$body = $this
+			->advice()
+			->about(['docs/Pages.wikitext'])
+			->comment([
+				[
+					'kind' => 'stale',
+					'file' => 'docs/Pages/ko.wikitext',
+					'source' => 'docs/Pages.wikitext',
+					'unit' => '3',
+					'lang' => 'ko'
+				]
+			]);
+		$this->assertStringContainsString('docs/Pages/ko.wikitext', $body);
+	}
+
+	/**
+	 * And the other way round: a source page nobody can read is why a translation of it renders
+	 * as English, so whoever sent that translation is owed the reason.
+	 */
+	public function testTouchingATranslationCarriesItsSourcePage() {
+		$body = $this
+			->advice()
+			->about(['docs/Pages/ko.wikitext'])
+			->comment([
+				['kind' => 'parse', 'file' => 'docs/Pages.wikitext', 'detail' => 'pt-shake-position']
+			]);
+		$this->assertStringContainsString('docs/Pages.wikitext', $body);
+	}
+
+	public function testAChangeThatTouchesNoneOfThemIsToldNothingIsWrongWithIt() {
+		$advice = $this->advice()->about(['docs/index.wikitext']);
+		$this->assertNull($advice->comment([
+			[
+				'kind' => 'stale',
+				'file' => 'docs/Licenses/km.wikitext',
+				'source' => 'docs/Licenses.wikitext',
+				'unit' => '2',
+				'lang' => 'km'
+			]
+		]));
+		// The all-clear is narrowed with it: the wiki may well have pages waiting for a
+		// translation, and this comment is in no position to say otherwise.
+		$this->assertStringContainsString('about this change', $advice->allClear());
+		$this->assertStringContainsString('every source page', $this->advice()->allClear());
+	}
+
 	/** An untranslated language falls back to English, and saying it all twice reads as a bug. */
 	public function testALanguageThatFallsBackIsNotRepeated() {
 		$advice = new TranslationAdvice(static function (string $key): string {

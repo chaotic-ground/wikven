@@ -14,6 +14,7 @@
 	"wikven-skins-description": "Description under {{msg-mw|wikven-skins}} on the generated settings page.",
 	"wikven-translations-title": "Heading of the comment the check-translations action leaves where the change is reviewed. Rendered once per language, so it is also what tells a reader which rendering is theirs. \"Change\" is deliberately not any one forge's word for it: the same comment is posted on a GitHub pull request, a GitLab merge request or a Gerrit change, so translate it as whatever your language calls a set of edits offered for review.",
 	"wikven-translations-lead": "Opening line of the comment, saying where the same findings appear as annotations. The comment is Markdown, not wikitext.",
+	"wikven-translations-lead-scoped": "Opening line of the comment when it has been kept to the files the change touches, used in place of {{msg-wikven|wikven-translations-lead}}. \"This change\" is deliberately not any one forge's word for a pull or merge request. The comment is Markdown, not wikitext.",
 	"wikven-translations-parse-heading": "Heading of the group for source pages the Translate extension cannot parse.",
 	"wikven-translations-parse-advice": "Advice under {{msg-mw|wikven-translations-parse-heading}}. The findings under it are Translate's own error messages.",
 	"wikven-translations-reserved-heading": "Heading of the group for a source page that numbers a unit with the id reserved for the page title.",
@@ -34,5 +35,6 @@
 	"wikven-translations-can-fail": "Closing line used when a source page is broken, which is the one kind of finding that can fail the check.",
 	"wikven-translations-documentation": "Sentence sending the reader to the Translating page, appended to whichever closing line was used. $1 is {{msg-mw|wikven-translations-documentation-url}}. Markdown link syntax, not wikitext.",
 	"wikven-translations-documentation-url": "URL of the Translating page linked from the comment. Translate this to the address of that page in your language where the wikven documentation has one, and leave it as is otherwise.",
-	"wikven-translations-all-clear": "The whole comment for a run that found nothing, which replaces an earlier complaint once it has been answered."
+	"wikven-translations-all-clear": "The whole comment for a run that found nothing, which replaces an earlier complaint once it has been answered.",
+	"wikven-translations-all-clear-scoped": "Body of the comment when the check found nothing about the files the change touches, used in place of {{msg-wikven|wikven-translations-all-clear}}. It says nothing about pages the change did not touch, which may still be waiting for a translation."
 }
