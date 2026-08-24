@@ -51,7 +51,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 # different Translate from the same wikven commit a week later. Bumped by updatecli, which reads the
 # branch these follow from its own manifest, so that branch moves there when this image's does.
 ARG TRANSLATE_VERSION=79db5ae621f57e043350b280ffceaaa7dec6d991
-ARG ULS_VERSION=ab91c5b52bc362c07c81a17dd7908a97ed27b9f1
+ARG ULS_VERSION=2abc262e45f5cda98bdcdcd1a0c32d9bb8ef7130
 # Translate asks for its two runtime deps by range, so an unpinned install takes whatever Packagist
 # serves that day. Core's own answer to this is exact versions and no lock file, so: exact versions,
 # passed as temporary constraints rather than written into Translate's manifest. Bumped by updatecli.
