@@ -32,6 +32,13 @@ class CheckTranslations extends Maintenance {
 			true
 		);
 		$this->addOption(
+			'comment-paths',
+			'File listing the paths the change touches, one per line; the comment is then only about'
+			. ' those files and the translations of them.',
+			false,
+			true
+		);
+		$this->addOption(
 			'comment-languages',
 			'Languages to write that comment in, besides English: "auto" for the languages the findings'
 			. ' are about, or a comma-separated list of codes.',
@@ -97,9 +104,14 @@ class CheckTranslations extends Maintenance {
 						continue;
 					}
 					$stale++;
+					// The source page is carried alongside because editing it is what puts a
+					// translation of it behind: a comment kept to one change counts such a finding
+					// as belonging to whoever moved the source, not only to whoever last touched
+					// the translation.
 					$this->findings[] = [
 						'kind' => $unit['status'],
 						'file' => $reportFile,
+						'source' => $prefix . substr($baseFile, strlen($source) + 1),
 						'unit' => (string)$unit['id'],
 						'lang' => $lang
 					];
@@ -145,11 +157,44 @@ class CheckTranslations extends Maintenance {
 			return;
 		}
 		$advice = TranslationAdvice::usingMessages();
+		$paths = $this->commentPaths();
+		if ($paths !== null) {
+			$advice = $advice->about($paths);
+		}
 		$languages = $this->commentLanguages();
 		$body = $advice->comment($this->findings, $languages) ?? $advice->allClear($languages);
 		if (file_put_contents($path, $body) === false) {
 			$this->fatalError("Wikven: could not write the comment body to '$path'.");
 		}
+	}
+
+	/**
+	 * The paths --comment-paths named, or null when it named none and the comment is about the
+	 * whole tree.
+	 *
+	 * The file is written by whatever knows what the change touches -- the action asks the forge
+	 * for the list -- so a run that cannot read it says so and comments about everything, which
+	 * is the behaviour this option narrows rather than a state worth failing a check over.
+	 *
+	 * @return list<string>|null
+	 */
+	private function commentPaths(): ?array {
+		$path = (string)$this->getOption('comment-paths', '');
+		if ($path === '') {
+			return null;
+		}
+		if (!is_readable($path)) {
+			$this->output("::warning::Cannot read '$path'; the translations comment covers every page\n");
+			return null;
+		}
+		$paths = [];
+		foreach (explode("\n", (string)file_get_contents($path)) as $line) {
+			$line = trim($line);
+			if ($line !== '') {
+				$paths[] = $line;
+			}
+		}
+		return $paths;
 	}
 
 	/**

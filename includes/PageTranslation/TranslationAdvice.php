@@ -51,6 +51,13 @@ class TranslationAdvice {
 	/** @var callable(string,string,list<string>):string Message key, language code and parameters. */
 	private $message;
 
+	/**
+	 * The paths the comment is about, or null for all of them.
+	 *
+	 * @var list<string>|null
+	 */
+	private ?array $paths = null;
+
 	/** @param callable(string,string,list<string>):string $message */
 	public function __construct(callable $message) {
 		$this->message = $message;
@@ -64,13 +71,34 @@ class TranslationAdvice {
 	}
 
 	/**
+	 * The same advice, but only about the paths a change touches.
+	 *
+	 * A check reads the whole source tree, which is what a maintainer wants and the opposite of
+	 * what a comment wants: a page that has been waiting for a translation since long before this
+	 * change is not this contributor's to answer, and saying so on every change is how a comment
+	 * stops being read at all. So the comment is kept to the files in front of the reader.
+	 *
+	 * A translation counts as touched when its own file was, and also when the source page it
+	 * translates was: editing an English page is exactly what makes its translations stale, and
+	 * the person who did it is the one who needs to hear so.
+	 *
+	 * @param list<string> $paths As the findings name their files: repo-relative, in the same
+	 *   shape --path-prefix produces.
+	 */
+	public function about(array $paths): self {
+		$scoped = clone $this;
+		$scoped->paths = array_values($paths);
+		return $scoped;
+	}
+
+	/**
 	 * The comment for a run that found something, or null for one that found nothing.
 	 *
-	 * @param list<array{kind:string,file:string,unit?:string,lang?:string,detail?:string}> $findings
+	 * @param list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,detail?:string}> $findings
 	 * @param list<string> $languages Rendered once each, in this order.
 	 */
 	public function comment(array $findings, array $languages = ['en']): ?string {
-		$grouped = self::group($findings);
+		$grouped = self::group($this->inScope($findings));
 		if ($grouped === []) {
 			return null;
 		}
@@ -100,7 +128,11 @@ class TranslationAdvice {
 		. $this->inEachLanguage(
 			$languages,
 			function (string $language): string {
-				return $this->heading($language) . $this->msg('wikven-translations-all-clear', $language) . "\n";
+				return (
+					$this->heading($language)
+					. $this->msg($this->key('wikven-translations-all-clear'), $language)
+					. "\n"
+				);
 			}
 		);
 	}
@@ -131,7 +163,7 @@ class TranslationAdvice {
 	 * @param array<string,array<string,list<array{unit?:string,lang?:string,detail?:string}>>> $grouped
 	 */
 	private function body(array $grouped, string $language): string {
-		$body = $this->heading($language) . $this->msg('wikven-translations-lead', $language) . "\n";
+		$body = $this->heading($language) . $this->msg($this->key('wikven-translations-lead'), $language) . "\n";
 		foreach (self::KINDS as $kind) {
 			if (!isset($grouped[$kind])) {
 				continue;
@@ -199,6 +231,52 @@ class TranslationAdvice {
 	 */
 	private function msg(string $key, string $language, array $parameters = []): string {
 		return ( $this->message )($key, $language, $parameters);
+	}
+
+	/**
+	 * The message for a comment about everything, or the one that says it is about a change.
+	 *
+	 * Two messages rather than one hedged wording, because a comment that has been narrowed and
+	 * one that has not are saying different things, and a reader deciding whether the check is
+	 * quiet about the rest of the wiki should not have to guess which they are holding.
+	 */
+	private function key(string $key): string {
+		return $this->paths === null ? $key : "$key-scoped";
+	}
+
+	/**
+	 * The findings a scoped comment is about; all of them where nothing was scoped.
+	 *
+	 * @param list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,detail?:string}> $findings
+	 * @return list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,detail?:string}>
+	 */
+	private function inScope(array $findings): array {
+		if ($this->paths === null) {
+			return $findings;
+		}
+		$paths = $this->paths;
+		return array_values(array_filter($findings, static function (array $finding) use ($paths): bool {
+			if (in_array($finding['file'], $paths, true)) {
+				return true;
+			}
+			// A translation is also this change's when the source page it translates is.
+			if (isset($finding['source']) && in_array($finding['source'], $paths, true)) {
+				return true;
+			}
+			// And the other way round: a source page nobody can read is why a translation of it
+			// renders as English, so whoever touched that translation is owed the reason. The
+			// translations of docs/Page.wikitext are the files under docs/Page/.
+			$directory = preg_replace('/\.wikitext$/', '/', $finding['file']);
+			if ($directory === $finding['file']) {
+				return false;
+			}
+			foreach ($paths as $path) {
+				if (str_starts_with($path, $directory)) {
+					return true;
+				}
+			}
+			return false;
+		}));
 	}
 
 	/**
