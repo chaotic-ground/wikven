@@ -53,7 +53,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+      - uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
 
       # Reads the layer cache docker-image.yml writes. Three jobs build this image per pull request;
       # only that one exports, since concurrent mode=max writers each upload the whole cache to

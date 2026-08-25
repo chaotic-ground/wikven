@@ -14,6 +14,7 @@
 	"wikven-skins-description": "Read this site in another skin. Each one renders the same pages.",
 	"wikven-translations-title": "Translations in this change",
 	"wikven-translations-lead": "`translate check` read the source pages and their translations, and has this to say. Every line is also an annotation on the file it belongs to.",
+	"wikven-translations-lead-scoped": "`translate check` read the pages this change touches, and their translations, and has this to say. Nothing here is about the rest of the wiki: every finding, wherever it is, is also an annotation on the file it belongs to.",
 	"wikven-translations-parse-heading": "The source page cannot be read",
 	"wikven-translations-parse-advice": "Translate refuses the page, so nothing of it can be translated yet. The message is Translate's own; it usually points at a `<!--T:n-->` marker somewhere other than the start of its unit or the end of a line.",
 	"wikven-translations-reserved-heading": "A unit is numbered `T:title`",
@@ -34,5 +35,6 @@
 	"wikven-translations-can-fail": "A broken source page is the one thing here that can fail the check, and only where the workflow asked it to; a translation that is merely behind or missing never does.",
 	"wikven-translations-documentation": "See [Translating]($1) for the whole workflow.",
 	"wikven-translations-documentation-url": "https://chaotic-ground.github.io/wikven/Translating.html",
-	"wikven-translations-all-clear": "`translate check` found nothing to report: every source page reads cleanly, and every translation of one is stamped current."
+	"wikven-translations-all-clear": "`translate check` found nothing to report: every source page reads cleanly, and every translation of one is stamped current.",
+	"wikven-translations-all-clear-scoped": "`translate check` found nothing to report about this change: the pages it touches read cleanly, and their translations are stamped current."
 }

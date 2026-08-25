@@ -29,7 +29,10 @@ inputs:
       contributor meeting the workflow for the first time. Needs
       "pull-requests: write" on the job, and does nothing outside a pull
       request. One comment per pull request, edited on each run, and replaced
-      with an all-clear once the findings are answered.
+      with an all-clear once the findings are answered. The comment is about
+      the files the pull request touches -- and the translations of any source
+      page it touches -- rather than about the whole tree, so a page that fell
+      behind long before this change is left to the annotations.
     default: "false"
   comment-languages:
     description: >-
@@ -104,6 +107,23 @@ runs:
           comment=(--comment-file /report/comment.md)
           if [ -n "$COMMENT_LANGUAGES" ]; then
             comment+=(--comment-languages "$COMMENT_LANGUAGES")
+          fi
+          # What the pull request touches, so the comment can be about that and not about the
+          # whole wiki. A page that has been waiting for a translation since long before this
+          # change is not this contributor's to answer, and a comment that says so on every
+          # change is one nobody reads. The annotations still cover everything.
+          #
+          # Asked of the forge rather than worked out from the checkout, which is a shallow one
+          # and has no base commit to compare against. A list that cannot be had is not worth
+          # failing over: the check then comments about everything, which is what it did before.
+          if [ -n "$PULL_REQUEST" ]; then
+            if gh api "repos/$REPOSITORY/pulls/$PULL_REQUEST/files" --paginate \
+                 --jq '.[].filename' > "$report/changed.txt"; then
+              comment+=(--comment-paths /report/changed.txt)
+            else
+              echo "::warning::wikven: could not read what this change touches;" \
+                   "the translations comment will cover every page."
+            fi
           fi
         fi
         # Source is read-only for a check; no dist mount, nothing of yours is written.

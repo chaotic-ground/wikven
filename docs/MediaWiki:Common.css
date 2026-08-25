@@ -298,9 +298,7 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 
 /* The card symbols, the two states of the diagram's output pane, and the hero's warmth. All three
  * are here for the reason the marks above are: TemplateStyles drops a mask-image, a @keyframes and
- * a gradient alike, and drops them without saying so. The warmth has a second reason now, which is
- * that it asks the page itself to clip what runs off the sides: TemplateStyles scopes every
- * selector it is given to the parser output, and the body is not in there.
+ * a gradient alike, and drops them without saying so.
  *
  * The symbols are OOUI's own, which is the point of them. A reader who has used a MediaWiki wiki
  * has met the jigsaw piece on a template and the 文A on a language menu, so the glyph is doing
@@ -374,6 +372,13 @@ html[dir="rtl"] .wikven-home-sym--parts {
  * box; the page is laid over it and inherits that size, which also means the box grows with a
  * language whose file list runs longer.
  *
+ * The crossing is long on purpose. A short one is read as a switch being thrown -- the pane was
+ * showing one thing and now it is showing the other -- and what is true of the export is that it
+ * is both at once: a directory of files that is also a site. So the two spend most of the cycle,
+ * and most of the pass under the reader's scroll, part way through each other rather than
+ * arriving. The page never leaves either; it settles at a quarter strength and stays behind the
+ * tree.
+ *
  * A reader who has asked for less motion is not shown one of the two: the pair unstacks and both
  * stand, which is the same information without the crossing. */
 .wikven-home-out {
@@ -394,16 +399,15 @@ html[dir="rtl"] .wikven-home-sym--parts {
 
 @keyframes wikven-out-tree {
 	0%,
-	40% {
+	16% {
 		opacity: 0;
 	}
 
-	48%,
-	90% {
+	50%,
+	80% {
 		opacity: 1;
 	}
 
-	98%,
 	100% {
 		opacity: 0;
 	}
@@ -411,16 +415,15 @@ html[dir="rtl"] .wikven-home-sym--parts {
 
 @keyframes wikven-out-page {
 	0%,
-	40% {
+	16% {
 		opacity: 1;
 	}
 
-	48%,
-	90% {
+	50%,
+	80% {
 		opacity: 0.28;
 	}
 
-	98%,
 	100% {
 		opacity: 1;
 	}
@@ -452,11 +455,16 @@ html[dir="rtl"] .wikven-home-sym--parts {
  *
  * That box is also the smallest honest one. Named on the whole section, as it was, the timeline
  * counted the heading and the lede as part of the subject, and the turn was spent while the
- * diagram was still arriving; contain over the diagram alone runs from the moment it is fully in
- * view to the moment it starts to leave, so the pane turns over with the diagram in the middle of
- * the screen rather than at the bottom edge of it. (Where the diagram is taller than the screen,
- * which is a phone stacking it, contain is the other way round -- top edge to bottom edge -- and
- * the turn lands while it fills the screen, which is the same answer.)
+ * diagram was still arriving.
+ *
+ * cover over the diagram alone, rather than contain: cover is the diagram's whole pass, from
+ * first edge in to last edge out, and it is halfway through exactly when the diagram is centred
+ * on the screen, which is where the crossing should be halfway too. contain -- fully in view to
+ * starting to leave -- puts the middle in the same place but has no length to spend on a phone,
+ * where the stacked diagram is nearly as tall as the screen: the range there was 37 pixels of
+ * scrolling, and a crossing spent over 37 pixels is a switch being thrown. Over cover the same
+ * phone has around 1400, and the keyframes hold flat for the first fifth while the diagram is
+ * arriving and then cross the rest of the way, which is what makes it read as a dissolve.
  *
  * fill-mode is what makes it hold: outside the range an unfilled animation drops back to the base
  * style, which here is both states at full opacity, one on top of the other. */
@@ -471,7 +479,11 @@ html[dir="rtl"] .wikven-home-sym--parts {
 		animation-iteration-count: 1;
 		animation-fill-mode: both;
 		animation-timeline: --wikven-out;
-		animation-range: contain;
+		animation-range: cover;
+		/* Linear, unlike the clock's pair: on a scroll timeline the easing is spent against
+		 * distance scrolled rather than against time, and anything but linear makes the middle of
+		 * the pass turn over faster than the hand moving it. */
+		animation-timing-function: linear;
 	}
 
 	.wikven-home-out-tree {
@@ -484,14 +496,16 @@ html[dir="rtl"] .wikven-home-sym--parts {
 }
 
 /* The scrolled pair ends where the timed pair only passes through: on the page, since a reader who
- * has scrolled past has been shown the answer and should keep it. */
+ * has scrolled past has been shown the answer and should keep it. It also spends nearly the whole
+ * range crossing -- flat for an eighth at each end and moving in between -- so that what the
+ * reader sees is tied to how far they have scrolled rather than to having passed a line. */
 @keyframes wikven-out-tree-scrolled {
 	0%,
-	35% {
+	20% {
 		opacity: 0;
 	}
 
-	55%,
+	85%,
 	100% {
 		opacity: 1;
 	}
@@ -499,11 +513,11 @@ html[dir="rtl"] .wikven-home-sym--parts {
 
 @keyframes wikven-out-page-scrolled {
 	0%,
-	35% {
+	20% {
 		opacity: 1;
 	}
 
-	55%,
+	85%,
 	100% {
 		opacity: 0.28;
 	}
@@ -602,32 +616,41 @@ html[dir="rtl"] .wikven-home-sym--parts {
  * and warmth is the one part of that idea a landing page can carry without repeating the mark the
  * skin already shows in its header.
  *
- * What decides whether this reads as light or as an object is whether the reader can see the whole
- * of it, and a field that begins and ends inside the frame is a thing in the picture however soft
- * its edges are. #525 pulled the fields inside the band to stop a sideways scroll and #529 spent
- * the block axis on pushing their tops and bottoms out of sight, but each one still ended on both
- * sides of the text, where anyone could see it end. Ground is what runs off the edge of the frame.
+ * The light comes from two corners of the screen. A field centred in the band is a thing in the
+ * picture however soft its edges are, which is what #525, #528 and #529 kept producing; anchored at
+ * the edges instead, each field is most of the way outside the frame already, and what is left on
+ * the page is the fall away from each corner -- warm behind the first line of the title, cooling
+ * towards the far bottom one, with no boundary in it anywhere. The fade is spent by 62% of the
+ * radius, so each one is thin long before it reaches the other and they never mix into a third
+ * colour.
  *
- * So the light is cut by the screen instead, which is the one edge a reader does not read as the
- * edge of something. Each field is far wider than the viewport -- the custom property is a radius,
- * so 120vw spans 240 -- the box holding them runs past both sides of the screen rather than
- * stopping at the width of the text, and the page is told to clip what falls off, so nothing
- * scrolls sideways: the failure #525 was fixed for. What is left to see is the fall from warm to
- * nothing down the page, which is what light from behind the top of the screen looks like, and
- * across the screen there is barely a fall at all: at that radius the sides are gone before the
- * eye can find where they were going.
+ * Of the screen, not of the text column, which is what #536 got wrong. Cut at the column the light
+ * leaves a white margin down both sides of a phone, where the column is the screen less its
+ * padding, and on a wide screen it starts exactly where the title starts, so the text sits on the
+ * edge of it with nothing to the left and everything to the right. So the box runs a viewport past
+ * both sides and the page clips what falls off -- on the root element and on the body, since
+ * whichever of the two the viewport takes its overflow from, the other is still a box the light
+ * overflows. Inside that box the fields are placed and sized in vw, from the middle out, because
+ * the box is no longer the width of anything the reader can see.
  *
- * Both halves of that stand on :has() and on clip, so both are asked for together. Without either
- * the fields stay inside the band and fade out by its edges: the older picture, which is safe if
- * it is not right. Safari had :has() for two versions before it had overflow: clip, which is
- * exactly the browser that would otherwise scroll sideways.
+ * Both of those stand on :has() and on clip, so both are asked for together; without either, the
+ * light stays inside the column and is placed as a share of it, which is the older, safe picture.
+ * Safari carried :has() for two versions before it carried overflow: clip, and that is exactly the
+ * browser that would otherwise scroll sideways.
+ *
+ * The mask is what the block axis costs. Cut off at the top and bottom the light reads as a band,
+ * and both of those cuts land on white -- a straight line a few rows under the tab strip, and
+ * another in the gap above How it works. So the box reaches further than it needs to below the
+ * band and the mask fades the last eighth at each end, which puts both lines where the light has
+ * already gone. A mask-image is another thing TemplateStyles drops, which is why this is here.
  *
  * isolation makes the hero its own stacking context, so the light stays behind the page's own
  * content; without it a z-index of -1 escapes to the page ground and the skin paints over it. */
 .wikven-home-hero {
 	position: relative;
 	isolation: isolate;
-	--wikven-glow-x: 50%;
+	--wikven-glow-warm: 90% 120% at 8% 30%;
+	--wikven-glow-cool: 100% 130% at 96% 62%;
 }
 
 .wikven-home-hero::before {
@@ -635,48 +658,54 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	position: absolute;
 	z-index: -1;
 	pointer-events: none;
-	inset-block: -9rem -20rem;
+	inset-block: -7rem -12rem;
 	inset-inline: 0;
 	background:
 		radial-gradient(
-			ellipse var(--wikven-glow-x) 20rem at 50% 30%,
-			rgba(255, 140, 26, 0.3) 0%,
-			rgba(255, 140, 26, 0.19) 34%,
-			rgba(255, 140, 26, 0.05) 66%,
-			rgba(255, 140, 26, 0) 100%
+			ellipse var(--wikven-glow-warm),
+			rgba(255, 140, 26, 0.22),
+			rgba(255, 140, 26, 0) 62%
 		),
 		radial-gradient(
-			ellipse var(--wikven-glow-x) 18rem at 50% 76%,
-			rgba(16, 112, 127, 0.16) 0%,
-			rgba(16, 112, 127, 0.09) 34%,
-			rgba(16, 112, 127, 0.03) 66%,
-			rgba(16, 112, 127, 0) 100%
+			ellipse var(--wikven-glow-cool),
+			rgba(16, 112, 127, 0.14),
+			rgba(16, 112, 127, 0) 62%
 		);
+	-webkit-mask: linear-gradient(
+		to bottom,
+		transparent 0%,
+		#000 12%,
+		#000 88%,
+		transparent 100%
+	);
+	mask: linear-gradient(
+		to bottom,
+		transparent 0%,
+		#000 12%,
+		#000 88%,
+		transparent 100%
+	);
 }
 
 @supports selector(:has(a)) and (overflow: clip) {
-	/* Both elements, and clip rather than hidden: clip is the one value that leaves the other axis
-	 * scrolling as it was, and asking only one of the two leaves the page scrolling sideways --
-	 * whichever of them the viewport ends up taking its overflow from, the other one is still a
-	 * box the light overflows. Scoped to the page that lights its hero, since no other page has
-	 * anything to clip. */
 	html:has(.wikven-home-hero),
 	body:has(.wikven-home-hero) {
 		overflow-x: clip;
 	}
 
 	.wikven-home-hero {
-		--wikven-glow-x: 120vw;
+		--wikven-glow-warm: 90vw 120% at calc(50% - 42vw) 30%;
+		--wikven-glow-cool: 100vw 130% at calc(50% + 46vw) 62%;
 	}
 
 	.wikven-home-hero::before {
 		inset-inline: -100vw;
 	}
 
-	/* Vector pins its appearance menu in a column of its own, on a white ground and above the
-	 * hero in paint order, which cut a white notch out of the light on every wide screen. The
-	 * ground is there to cover the text the menu scrolls over; on this page there is none beside
-	 * it, so taking it away costs nothing and the light runs behind the menu instead. */
+	/* Vector pins its appearance menu in a column of its own, on a white ground and above the hero
+	 * in paint order, which cuts a white notch out of the light once the light reaches that far.
+	 * The ground is there to cover the text the menu scrolls over; on this page there is none
+	 * beside it, so taking it away costs nothing. */
 	body:has(.wikven-home-hero) .vector-pinned-container {
 		background-color: transparent;
 	}
@@ -684,23 +713,21 @@ html[dir="rtl"] .wikven-home-sym--parts {
 
 /* Night wants both weaker. At the daytime strength they stop reading as light on a dark ground and
  * start reading as stains, which is the failure this kind of thing is known for. The cool half
- * moves to the pale teal the skins use after dark, for the same reason the accent does. */
+ * moves to the pale teal the skins use after dark, for the same reason the accent does. Only the
+ * colours change: where the light comes from, and the mask that keeps its ends off the page, are
+ * the same after dark. */
 @media screen {
 	html.skin-theme-clientpref-night .wikven-home-hero::before {
 		background:
 			radial-gradient(
-				ellipse var(--wikven-glow-x) 20rem at 50% 30%,
-				rgba(255, 140, 26, 0.15) 0%,
-				rgba(255, 140, 26, 0.09) 34%,
-				rgba(255, 140, 26, 0.03) 66%,
-				rgba(255, 140, 26, 0) 100%
+				ellipse var(--wikven-glow-warm),
+				rgba(255, 140, 26, 0.13),
+				rgba(255, 140, 26, 0) 62%
 			),
 			radial-gradient(
-				ellipse var(--wikven-glow-x) 18rem at 50% 76%,
-				rgba(87, 188, 203, 0.1) 0%,
-				rgba(87, 188, 203, 0.06) 34%,
-				rgba(87, 188, 203, 0.02) 66%,
-				rgba(87, 188, 203, 0) 100%
+				ellipse var(--wikven-glow-cool),
+				rgba(87, 188, 203, 0.1),
+				rgba(87, 188, 203, 0) 62%
 			);
 	}
 }
@@ -709,18 +736,14 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	html.skin-theme-clientpref-os .wikven-home-hero::before {
 		background:
 			radial-gradient(
-				ellipse var(--wikven-glow-x) 20rem at 50% 30%,
-				rgba(255, 140, 26, 0.15) 0%,
-				rgba(255, 140, 26, 0.09) 34%,
-				rgba(255, 140, 26, 0.03) 66%,
-				rgba(255, 140, 26, 0) 100%
+				ellipse var(--wikven-glow-warm),
+				rgba(255, 140, 26, 0.13),
+				rgba(255, 140, 26, 0) 62%
 			),
 			radial-gradient(
-				ellipse var(--wikven-glow-x) 18rem at 50% 76%,
-				rgba(87, 188, 203, 0.1) 0%,
-				rgba(87, 188, 203, 0.06) 34%,
-				rgba(87, 188, 203, 0.02) 66%,
-				rgba(87, 188, 203, 0) 100%
+				ellipse var(--wikven-glow-cool),
+				rgba(87, 188, 203, 0.1),
+				rgba(87, 188, 203, 0) 62%
 			);
 	}
 }
