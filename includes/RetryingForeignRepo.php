@@ -53,8 +53,14 @@ class RetryingForeignRepo extends ForeignAPIRepo {
 	 *
 	 * Answering with a body or with false is what Attempts::until reads as worked or did not, so
 	 * the loop is the one the fetching side of the build uses, and the waits are the same waits.
+	 *
+	 * It is also where every request this repository makes passes, which makes it the place to
+	 * say who is asking: core would otherwise sign each lookup "MediaWiki/" and its version,
+	 * naming the library rather than the tool, and Commons is the server wikven asks most. A
+	 * caller that brought its own string keeps it.
 	 */
 	public function httpGet($url, $timeout = 'default', $options = [], &$mtime = false) {
+		$options['userAgent'] ??= UserAgent::string();
 		return Attempts::until(
 			function () use ($url, $timeout, $options, &$mtime) {
 				return parent::httpGet($url, $timeout, $options, $mtime);
