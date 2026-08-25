@@ -17,22 +17,30 @@ use Wikimedia\ObjectCache\WANObjectCache;
 class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 	use MockHttpTrait;
 
-	/** A repository with its own empty cache, so one test's lookups cannot answer another's. */
-	private function newRepo(): RetryingForeignRepo {
-		return new RetryingForeignRepo([
-			'name' => 'testcommons',
-			'apibase' => 'https://commons.example.org/w/api.php',
-			'url' => 'https://upload.example.org/commons',
-			'thumbUrl' => 'https://upload.example.org/commons/thumb',
-			'hashLevels' => 2,
-			'apiThumbCacheExpiry' => 0,
-			'wanCache' => WANObjectCache::newEmpty(),
-			'backend' => new FSFileBackend([
-				'name' => 'testcommons-backend',
-				'domainId' => 'testcommons',
-				'basePath' => $this->getNewTempDirectory()
-			])
-		]);
+	/**
+	 * A repository with its own empty cache, so one test's lookups cannot answer another's.
+	 *
+	 * @param array $extra Repository settings on top of the defaults, as a site's own
+	 *   $wgForeignFileRepos entry would carry.
+	 */
+	private function newRepo(array $extra = []): RetryingForeignRepo {
+		return new RetryingForeignRepo(
+			$extra
+			+ [
+				'name' => 'testcommons',
+				'apibase' => 'https://commons.example.org/w/api.php',
+				'url' => 'https://upload.example.org/commons',
+				'thumbUrl' => 'https://upload.example.org/commons/thumb',
+				'hashLevels' => 2,
+				'apiThumbCacheExpiry' => 0,
+				'wanCache' => WANObjectCache::newEmpty(),
+				'backend' => new FSFileBackend([
+					'name' => 'testcommons-backend',
+					'domainId' => 'testcommons',
+					'basePath' => $this->getNewTempDirectory()
+				])
+			]
+		);
 	}
 
 	/**
@@ -131,26 +139,22 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 		foreach ($agents as $agent) {
 			$this->assertStringStartsWith('Wikven/', $agent);
 			$this->assertStringContainsString('(+https://github.com/chaotic-ground/wikven)', $agent);
+			$this->assertStringContainsString('ForeignAPIRepo/', $agent);
 		}
 	}
 
-	/** A caller that brought its own string keeps it: this names wikven, it does not insist. */
-	public function testACallerThatNamesItselfIsLeftAlone() {
-		$agents = [];
-		$this->installMockHttp(function ($url, $options) use (&$agents) {
-			$agents[] = (string)( $options['userAgent'] ?? '' );
-			return $this->makeFakeHttpRequest('answered', 200);
-		});
+	/**
+	 * And keeps everything core said, including what a site asked for: the tool goes in front
+	 * of that string rather than in place of it, so the library, the class and a site's own
+	 * contact are all still there.
+	 */
+	public function testTheStringCoreBuildsIsKeptBehindIt() {
+		$agent = $this->newRepo(['userAgent' => 'Example Wiki (admin@example.org)'])->getUserAgent();
 
-		$mtime = false;
-		$this->newRepo()->httpGet(
-			'https://commons.example.org/w/api.php',
-			'default',
-			['userAgent' => 'Something Else/1.0'],
-			$mtime
-		);
-
-		$this->assertSame(['Something Else/1.0'], $agents);
+		$this->assertStringStartsWith('Wikven/', $agent);
+		$this->assertStringContainsString('MediaWiki/', $agent);
+		$this->assertStringContainsString('ForeignAPIRepo/', $agent);
+		$this->assertStringContainsString('Example Wiki (admin@example.org)', $agent);
 	}
 
 	public function testTheMessageSaysWhichRepositoryAndSizeAndWhatToDo() {

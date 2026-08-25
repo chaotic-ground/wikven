@@ -53,14 +53,8 @@ class RetryingForeignRepo extends ForeignAPIRepo {
 	 *
 	 * Answering with a body or with false is what Attempts::until reads as worked or did not, so
 	 * the loop is the one the fetching side of the build uses, and the waits are the same waits.
-	 *
-	 * It is also where every request this repository makes passes, which makes it the place to
-	 * say who is asking: core would otherwise sign each lookup "MediaWiki/" and its version,
-	 * naming the library rather than the tool, and Commons is the server wikven asks most. A
-	 * caller that brought its own string keeps it.
 	 */
 	public function httpGet($url, $timeout = 'default', $options = [], &$mtime = false) {
-		$options['userAgent'] ??= UserAgent::string();
 		return Attempts::until(
 			function () use ($url, $timeout, $options, &$mtime) {
 				return parent::httpGet($url, $timeout, $options, $mtime);
@@ -68,5 +62,21 @@ class RetryingForeignRepo extends ForeignAPIRepo {
 			Attempts::FETCH,
 			[Attempts::class, 'sleep']
 		);
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * Named here rather than passed to each request, because httpGet() above hands core the
+	 * options and core writes this key over whatever came in: the string a lookup goes out
+	 * under is this method's answer and nothing else. Left alone it is "MediaWiki/1.46.0
+	 * (server) ForeignAPIRepo/2.1", which names the library and the class doing the asking but
+	 * not the tool that wanted it -- and a bake asks Commons more than it asks anyone: a page
+	 * with ten images is ten lookups. wikven goes in front, where the policy wants the thing
+	 * making the requests, and core's own string keeps everything it said, including the extra
+	 * a repository configured with 'userAgent' asked for.
+	 */
+	public function getUserAgent() {
+		return UserAgent::tool() . ' ' . parent::getUserAgent();
 	}
 }
