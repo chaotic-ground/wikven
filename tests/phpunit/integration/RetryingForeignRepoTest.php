@@ -17,22 +17,30 @@ use Wikimedia\ObjectCache\WANObjectCache;
 class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 	use MockHttpTrait;
 
-	/** A repository with its own empty cache, so one test's lookups cannot answer another's. */
-	private function newRepo(): RetryingForeignRepo {
-		return new RetryingForeignRepo([
-			'name' => 'testcommons',
-			'apibase' => 'https://commons.example.org/w/api.php',
-			'url' => 'https://upload.example.org/commons',
-			'thumbUrl' => 'https://upload.example.org/commons/thumb',
-			'hashLevels' => 2,
-			'apiThumbCacheExpiry' => 0,
-			'wanCache' => WANObjectCache::newEmpty(),
-			'backend' => new FSFileBackend([
-				'name' => 'testcommons-backend',
-				'domainId' => 'testcommons',
-				'basePath' => $this->getNewTempDirectory()
-			])
-		]);
+	/**
+	 * A repository with its own empty cache, so one test's lookups cannot answer another's.
+	 *
+	 * @param array $extra Repository settings on top of the defaults, as a site's own
+	 *   $wgForeignFileRepos entry would carry.
+	 */
+	private function newRepo(array $extra = []): RetryingForeignRepo {
+		return new RetryingForeignRepo(
+			$extra
+			+ [
+				'name' => 'testcommons',
+				'apibase' => 'https://commons.example.org/w/api.php',
+				'url' => 'https://upload.example.org/commons',
+				'thumbUrl' => 'https://upload.example.org/commons/thumb',
+				'hashLevels' => 2,
+				'apiThumbCacheExpiry' => 0,
+				'wanCache' => WANObjectCache::newEmpty(),
+				'backend' => new FSFileBackend([
+					'name' => 'testcommons-backend',
+					'domainId' => 'testcommons',
+					'basePath' => $this->getNewTempDirectory()
+				])
+			]
+		);
 	}
 
 	/**
@@ -106,6 +114,47 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 		$this->expectException(RuntimeException::class);
 		$this->expectExceptionMessage('Xclamation SVG.svg');
 		$this->newRepo()->getThumbUrlFromCache('Xclamation SVG.svg', 32, -1);
+	}
+
+	/**
+	 * Every lookup this repository makes says which tool made it and where to go about it.
+	 *
+	 * Core would sign them "MediaWiki/" and its version, which names the library rather than
+	 * the thing that asked, and Commons is the server a bake asks most: one page with ten
+	 * images is ten lookups. UserAgent holds the string; this is the wiring that carries it.
+	 */
+	public function testALookupSaysWhichToolIsAskingAndWhereToGoAboutIt() {
+		$agents = [];
+		$this->installMockHttp(function ($url, $options) use (&$agents) {
+			$agents[] = (string)( $options['userAgent'] ?? '' );
+			return $this->makeFakeHttpRequest(
+				$this->imageInfo('https://upload.example.org/commons/thumb/32px-Bakery_oven.jpg'),
+				200
+			);
+		});
+
+		$this->newRepo()->getThumbUrlFromCache('Bakery oven.jpg', 32, -1);
+
+		$this->assertNotSame([], $agents, 'the lookup should have made a request');
+		foreach ($agents as $agent) {
+			$this->assertStringStartsWith('Wikven/', $agent);
+			$this->assertStringContainsString('(+https://github.com/chaotic-ground/wikven)', $agent);
+			$this->assertStringContainsString('ForeignAPIRepo/', $agent);
+		}
+	}
+
+	/**
+	 * And keeps everything core said, including what a site asked for: the tool goes in front
+	 * of that string rather than in place of it, so the library, the class and a site's own
+	 * contact are all still there.
+	 */
+	public function testTheStringCoreBuildsIsKeptBehindIt() {
+		$agent = $this->newRepo(['userAgent' => 'Example Wiki (admin@example.org)'])->getUserAgent();
+
+		$this->assertStringStartsWith('Wikven/', $agent);
+		$this->assertStringContainsString('MediaWiki/', $agent);
+		$this->assertStringContainsString('ForeignAPIRepo/', $agent);
+		$this->assertStringContainsString('Example Wiki (admin@example.org)', $agent);
 	}
 
 	public function testTheMessageSaysWhichRepositoryAndSizeAndWhatToDo() {

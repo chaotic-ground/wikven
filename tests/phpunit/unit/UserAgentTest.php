@@ -31,6 +31,16 @@ class UserAgentTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * A client that names MediaWiki itself gets the tool alone: ForeignAPIRepo already signs
+	 * its lookups with the version it is running, and saying it twice is noise.
+	 */
+	public function testTheToolAloneNamesNoLibrary() {
+		$this->assertStringStartsWith('Wikven/' . $this->version() . ' ', UserAgent::tool());
+		$this->assertStringNotContainsString('MediaWiki', UserAgent::tool());
+		$this->assertStringStartsWith(UserAgent::tool(), UserAgent::string());
+	}
+
+	/**
 	 * git signs its own requests, and some proxies only carry git traffic that still looks like
 	 * git's, so wikven is added after that string rather than in place of it.
 	 */

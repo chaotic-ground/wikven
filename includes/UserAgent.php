@@ -33,21 +33,31 @@ class UserAgent {
 	 */
 	private const URL = 'https://github.com/chaotic-ground/wikven';
 
-	/** Built once: it names a release and a running MediaWiki, and neither changes mid-build. */
-	private static ?string $string = null;
+	/** Built once: it names a release, which does not change mid-build. */
+	private static ?string $tool = null;
 
-	/** The string every request wikven makes goes out under. */
+	/**
+	 * The string a request goes out under where wikven is the whole of what is sending it.
+	 *
+	 * The library is named after the tool, which is the order the policy asks for and the order
+	 * a reader wants: what made this request, then what it was built with.
+	 */
 	public static function string(): string {
-		if (self::$string === null) {
-			self::$string =
-				'Wikven/'
-				. self::version()
-				. ' (+'
-				. self::URL
-				. ')'
-				. ( defined('MW_VERSION') ? ' MediaWiki/' . MW_VERSION : '' );
+		return defined('MW_VERSION') ? self::tool() . ' MediaWiki/' . MW_VERSION : self::tool();
+	}
+
+	/**
+	 * wikven alone, for a client that names the library it is built on itself.
+	 *
+	 * ForeignAPIRepo is the one: it signs its requests "MediaWiki/1.46.0 (server)
+	 * ForeignAPIRepo/2.1" and there is no sense in that carrying a second MediaWiki version
+	 * behind it.
+	 */
+	public static function tool(): string {
+		if (self::$tool === null) {
+			self::$tool = 'Wikven/' . self::version() . ' (+' . self::URL . ')';
 		}
-		return self::$string;
+		return self::$tool;
 	}
 
 	/**
