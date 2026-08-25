@@ -65,4 +65,4 @@ config:
     # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      commit: e00881d4d6f2e91f57026e8fa81a7dd8ad71cda4
+      commit: fe7cb1a753c901d5a9b84bae7f727037e8820bec
