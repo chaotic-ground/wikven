@@ -92,10 +92,7 @@ class StoreImages extends Maintenance {
 			return "./$name";
 		}
 
-		$options = [
-			'timeout' => 30,
-			'userAgent' => 'wikven static-site builder (https://github.com/chaotic-ground/wikven)'
-		];
+		$options = ['timeout' => 30, 'userAgent' => UserAgent::string()];
 		$tmp = "$dest.tmp";
 		// Retry with backoff: Commons may 5xx while generating an uncached thumbnail. A 4xx (e.g. a
 		// dead File: link) won't change on retry, so stop as soon as one comes back.

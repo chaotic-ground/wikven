@@ -27,6 +27,14 @@ RUN apk add --no-cache rsvg-convert imagemagick-jpeg imagemagick-webp
 # curl counts a connection reset as a non-transient error and would otherwise not repeat it.
 ARG CURL_RETRY="--retry 5 --retry-delay 2 --retry-all-errors"
 
+# And to say who is asking. curl signs a request with its own version and nothing else, which
+# tells the operator on the other end which library made it and not which project: these three
+# downloads are the image build reaching GitHub and Gerrit, and the same rule applies to them as
+# to the fetching a bake does, which carries UserAgent::string(). No version here, because the
+# release this image is cut from is not known until wikven's own code is copied in, well after
+# these run.
+ARG CURL_AGENT="Wikven image build (+https://github.com/chaotic-ground/wikven)"
+
 # SifterSearch (client-side Pagefind search) ships built in. Its release tarball carries the
 # per-arch Pagefind binary a git clone omits, so fetch the one matching this build's architecture.
 #
@@ -37,7 +45,7 @@ ARG TARGETARCH
 ARG SIFTERSEARCH_VERSION=v0.8.0
 RUN arch="$TARGETARCH" \
  && if [ "$arch" = amd64 ]; then arch=x64; fi \
- && curl -fsSL $CURL_RETRY -o /tmp/siftersearch.tar.gz \
+ && curl -fsSL $CURL_RETRY -A "$CURL_AGENT" -o /tmp/siftersearch.tar.gz \
       "https://github.com/chaotic-ground/SifterSearch/releases/download/${SIFTERSEARCH_VERSION}/SifterSearch-linux-${arch}.tar.gz" \
  && tar -xzf /tmp/siftersearch.tar.gz -C /var/www/html/extensions/ \
  && rm /tmp/siftersearch.tar.gz
@@ -68,9 +76,9 @@ ARG COMPOSER_INSTALLERS_VERSION=v2.3.0
 # matching what the ARGs pin, so a new upstream dependency cannot slip in unpinned.
 RUN composer config --global policy.advisories.block false \
  && ext=/var/www/html/extensions \
- && curl -fsSL $CURL_RETRY -o /tmp/uls.tar.gz \
+ && curl -fsSL $CURL_RETRY -A "$CURL_AGENT" -o /tmp/uls.tar.gz \
       "https://codeload.github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector/tar.gz/$ULS_VERSION" \
- && curl -fsSL $CURL_RETRY -o /tmp/translate.tar.gz \
+ && curl -fsSL $CURL_RETRY -A "$CURL_AGENT" -o /tmp/translate.tar.gz \
       "https://codeload.github.com/wikimedia/mediawiki-extensions-Translate/tar.gz/$TRANSLATE_VERSION" \
  && mkdir -p "$ext/UniversalLanguageSelector" "$ext/Translate" \
  && tar -xzf /tmp/uls.tar.gz --strip-components=1 -C "$ext/UniversalLanguageSelector" \

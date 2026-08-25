@@ -7,6 +7,7 @@ use Maintenance;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Settings\Source\Format\JsonFormat;
 use MediaWiki\Settings\Source\Format\YamlFormat;
+use MediaWiki\Utils\ExecutableFinder;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -18,11 +19,19 @@ require_once "$IP/maintenance/Maintenance.php";
 
 // Wikven's autoloader is not active this early: making the extensions MediaWiki will load present is
 // what this script is for, so it runs before that. Loaded directly for the same reason loadConfig()
-// loads SiteConfig directly below, and the class is dependency-free so that is all it takes.
+// loads SiteConfig directly below, and both classes are dependency-free so that is all it takes.
 require_once __DIR__ . '/../includes/Attempts.php';
+require_once __DIR__ . '/../includes/UserAgent.php';
 
 /** Fetch third-party extensions/skins declared in .wikven.yaml before MediaWiki loads them. */
 class FetchExtensions extends Maintenance {
+	/**
+	 * argv up to git's subcommand, worked out once: it asks git what version it is.
+	 *
+	 * @var string[]|null
+	 */
+	private ?array $gitCommand = null;
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription(
@@ -214,12 +223,12 @@ class FetchExtensions extends Maintenance {
 			$this->run(['git', '-C', $dest, 'remote', 'add', 'origin', $repo], "configure $kind '$name'");
 			// No reset: a fetch that failed leaves a repository another fetch is happy to reuse.
 			$this->runOnNetwork(
-				['git', '-C', $dest, 'fetch', '--depth', '1', 'origin', $commit],
+				array_merge($this->gitCommand(), ['-C', $dest, 'fetch', '--depth', '1', 'origin', $commit]),
 				"fetch $kind '$name' @ $commit"
 			);
 			$this->run(['git', '-C', $dest, 'checkout', '--quiet', '--detach', 'FETCH_HEAD'], "checkout $kind '$name'");
 		} else {
-			$cmd = ['git', 'clone', '--depth', '1'];
+			$cmd = array_merge($this->gitCommand(), ['clone', '--depth', '1']);
 			if (!empty($spec['reference'])) {
 				// --branch takes a tag or a branch (not an arbitrary commit SHA).
 				$cmd[] = '--branch';
@@ -269,7 +278,11 @@ class FetchExtensions extends Maintenance {
 		$httpStatus = 0;
 		$ok = Attempts::until(
 			function () use ($http, $url, $dest, $caller, &$httpStatus) {
-				$req = $http->create($url, ['followRedirects' => true], $caller);
+				$req = $http->create(
+					$url,
+					['followRedirects' => true, 'userAgent' => UserAgent::string()],
+					$caller
+				);
 				// Opened per attempt, and truncating, so a retry replaces a partial body rather
 				// than appending a second one to it.
 				$fh = fopen($dest, 'wb');
@@ -300,6 +313,59 @@ class FetchExtensions extends Maintenance {
 			unlink($dest);
 			$this->fatalError("Wikven: failed to $what (HTTP $httpStatus).");
 		}
+	}
+
+	/**
+	 * How to call git, with the User-Agent it should send in front of the subcommand.
+	 *
+	 * A clone or a fetch over HTTPS is wikven reaching somebody else's server, and git signs it
+	 * with nothing but its own version: the operator on the other end sees a git, like every
+	 * other git, with no way to tell whose build it is or where to go about it. http.userAgent
+	 * replaces that string, so git's own goes back in front of wikven's rather than being taken
+	 * away -- there are proxies that carry git traffic only while the User-Agent still looks
+	 * like a git client's, and none of them are visible from here.
+	 *
+	 * A git that will not say what version it is keeps the string it had; naming a version this
+	 * never read would be worse than saying nothing. (composer, which some extensions need
+	 * afterwards, signs its own requests and offers no way to add to them.)
+	 *
+	 * @return string[] argv up to but not including the subcommand.
+	 */
+	private function gitCommand(): array {
+		if ($this->gitCommand === null) {
+			$version = self::gitVersion();
+			$this->gitCommand = $version === null
+				? ['git']
+				: ['git', '-c', 'http.userAgent=' . UserAgent::after($version)];
+		}
+		return $this->gitCommand;
+	}
+
+	/** What git calls itself over HTTP, "git/2.43.0", or null if it would not say. */
+	private static function gitVersion(): ?string {
+		// Located rather than spawned by name, as SourceHistory does: proc_open() warns of its
+		// own when the command is not there, and a host without git is an answer this can give.
+		$binary = ExecutableFinder::findInDefaultPaths(['git']) ?: null;
+		if ($binary === null) {
+			return null;
+		}
+		$descriptors = [
+			0 => ['file', '/dev/null', 'r'],
+			1 => ['pipe', 'w'],
+			2 => ['file', '/dev/null', 'w']
+		];
+		$pipes = [];
+		$process = proc_open([$binary, '--version'], $descriptors, $pipes);
+		if ($process === false) {
+			return null;
+		}
+		$output = (string)stream_get_contents($pipes[1]);
+		fclose($pipes[1]);
+		if (proc_close($process) !== 0) {
+			return null;
+		}
+		// "git version 2.43.0", which git itself sends as "git/2.43.0".
+		return preg_match('/\bversion\s+(\S+)/', $output, $matches) ? 'git/' . $matches[1] : null;
 	}
 
 	/**
