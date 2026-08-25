@@ -243,7 +243,7 @@ Wikven
 <p><code>Module:Example.wikitext</code>라는 이름도 가져오기는 하지만, 표시 없는 이름이 관례이며 Wikven이 어떤 문서가 어느 파일에서 왔는지 되짚을 때 쓰는 이름도 그것입니다.
 </p><p>확장자가 없는 이름은 편집기에게 아무 단서도 주지 않아서, 파일에 색이 입혀지지도 Lua 관련 기능이 뜨지도 않습니다. 어느 편집기든 확장자 대신 이름으로 한 번 알려주면 됩니다:
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-VS_Code-label" href="#tabber-VS_Code" aria-controls="tabber-VS_Code">VS Code</a><a class="tabber__tab" role="tab" id="tabber-Helix-label" href="#tabber-Helix" aria-controls="tabber-Helix">Helix</a><a class="tabber__tab" role="tab" id="tabber-Vim-label" href="#tabber-Vim" aria-controls="tabber-Vim">Vim</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-VS_Code" aria-labelledby="tabber-VS_Code-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-VS_Code-label" href="#tabber-VS_Code" aria-controls="tabber-VS_Code">VS Code</a><a class="tabber__tab" role="tab" id="tabber-Helix-label" href="#tabber-Helix" aria-controls="tabber-Helix">Helix</a><a class="tabber__tab" role="tab" id="tabber-Vim-label" href="#tabber-Vim" aria-controls="tabber-Vim">Vim</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-VS_Code" aria-labelledby="tabber-VS_Code-label"><p class="mw-empty-elt">
 </p><p><code>.vscode/settings.json</code>이나 사용자 설정에:
 </p>
 <div class="mw-highlight mw-highlight-lang-json mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{</span>
@@ -252,19 +252,19 @@ Wikven
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Helix" aria-labelledby="tabber-Helix-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Helix" aria-labelledby="tabber-Helix-label"><p class="mw-empty-elt">
 </p><p>소스 옆의 <code>.helix/languages.toml</code>이나 <code>~/.config/helix/languages.toml</code>에:
 </p>
 <div class="mw-highlight mw-highlight-lang-toml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">[[language]]</span>
 <span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
 <span class="n">file-types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">glob</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Module:*&quot;</span><span class="w"> </span><span class="p">}]</span>
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Vim" aria-labelledby="tabber-Vim-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Vim" aria-labelledby="tabber-Vim-label"><p class="mw-empty-elt">
 </p><p><code>~/.vim/filetype.vim</code>이나 <code>vimrc</code>가 읽어들이는 아무 곳에:
 </p>
 <div class="mw-highlight mw-highlight-lang-vim mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>autocmd <span class="nb">BufRead</span><span class="p">,</span><span class="nb">BufNewFile</span> Module:* <span class="k">setfiletype</span> <span class="k">lua</span>
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p>반대 방향도 됩니다. <code>Module:Example.lua</code>라는 파일도 가져와지는데, 표시자는 제목이 그러지 않으면 위키텍스트가 되는 곳에서만 필요하기 때문입니다. 다만 이름은 그대로 유지되므로 문서가 <code>Module:Example.lua</code>가 되고, 모든 <code>{{#invoke:}}</code>가 그렇게 적어줘야 합니다.
 </p><p>모듈은 평범한 Lua입니다. 아래는 이 사이트가 실제로 가진 모듈 전체입니다:
 </p>

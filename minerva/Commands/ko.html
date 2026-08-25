@@ -238,31 +238,31 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="build"><code>build</code></h2></div>
 <p><code>src/</code>를 <code>dist/</code>로 빌드합니다. 이미지의 기본 명령이므로 Docker 쪽은 인자가 필요 없습니다:
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p>옵션은 없습니다. 빌드에 알려 줄 수 있는 것은 모두 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> 파일</a>에 있습니다. 실패한 빌드는 0이 아닌 값으로 끝나며 어느 문서나 단계에서 실패했는지 알려 줍니다.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="serve"><code>serve</code></h2></div>
 <p>이미 빌드된 <code>dist/</code>를 로컬 미리보기용으로 8080 포트에서 제공합니다. 빌드는 하지 않으므로 <code>build</code>를 먼저 실행하십시오.
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
 wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="w"> </span><span class="m">127</span>.0.0.1:3000
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>serve
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p><code>--listen</code>은 바이너리만 받습니다. 컨테이너는 안에서 항상 8080을 듣고, 바깥 포트는 Docker 자신의 <code>-p</code>로 정합니다.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="translate"><code>translate</code></h2></div>
@@ -280,14 +280,14 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 <dd>망가진 원본 문서와, 오래되었거나 빠진 번역을 보고합니다. 아무것도 쓰지 않습니다.</dd></dl>
 <p>각각 파일 하나를 받거나, 소스 디렉터리 아래 모든 문서를 대상으로 하는 <code>--all</code>을 받습니다. <code>mark</code>, <code>scaffold</code>, <code>stamp</code>는 소스에 씁니다. Docker에서는 쓰기 가능하게 마운트하고, 바이너리는 그 자리에서 바로 고칩니다. <code>check</code>는 읽기만 합니다.
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_3-label" href="#tabber-Binary_3" aria-controls="tabber-Binary_3">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_3-label" href="#tabber-Docker_3" aria-controls="tabber-Docker_3">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_3" aria-labelledby="tabber-Binary_3-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_3-label" href="#tabber-Binary_3" aria-controls="tabber-Binary_3">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_3-label" href="#tabber-Docker_3" aria-controls="tabber-Docker_3">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_3" aria-labelledby="tabber-Binary_3-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 
 wikven<span class="w"> </span>translate<span class="w"> </span>scaffold<span class="w"> </span>ko<span class="w"> </span><span class="s2">&quot;Getting Started.wikitext&quot;</span>
 
 wikven<span class="w"> </span>translate<span class="w"> </span>check<span class="w"> </span>--gate
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_3" aria-labelledby="tabber-Docker_3-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_3" aria-labelledby="tabber-Docker_3-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 
@@ -297,7 +297,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src:ro&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>check<span class="w"> </span>--gate
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p><code>check</code>는 두 가지를 더 받습니다:
 </p>
 <dl><dt><code>--gate</code></dt>

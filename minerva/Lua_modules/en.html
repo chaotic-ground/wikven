@@ -227,7 +227,7 @@ Wikven
 <p>A file named <code>Module:Example.wikitext</code> is imported too, but the bare name is the convention, and it is the one Wikven maps a page back to when it needs the file that page came from.
 </p><p>A name with no extension leaves your editor with nothing to go on, so it will not colour the file or offer you Lua anything. Every editor can be told once, by the name rather than the extension:
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-VS_Code-label" href="#tabber-VS_Code" aria-controls="tabber-VS_Code">VS Code</a><a class="tabber__tab" role="tab" id="tabber-Helix-label" href="#tabber-Helix" aria-controls="tabber-Helix">Helix</a><a class="tabber__tab" role="tab" id="tabber-Vim-label" href="#tabber-Vim" aria-controls="tabber-Vim">Vim</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-VS_Code" aria-labelledby="tabber-VS_Code-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-VS_Code-label" href="#tabber-VS_Code" aria-controls="tabber-VS_Code">VS Code</a><a class="tabber__tab" role="tab" id="tabber-Helix-label" href="#tabber-Helix" aria-controls="tabber-Helix">Helix</a><a class="tabber__tab" role="tab" id="tabber-Vim-label" href="#tabber-Vim" aria-controls="tabber-Vim">Vim</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-VS_Code" aria-labelledby="tabber-VS_Code-label"><p class="mw-empty-elt">
 </p><p>In <code>.vscode/settings.json</code>, or your user settings:
 </p>
 <div class="mw-highlight mw-highlight-lang-json mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{</span>
@@ -236,19 +236,19 @@ Wikven
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Helix" aria-labelledby="tabber-Helix-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Helix" aria-labelledby="tabber-Helix-label"><p class="mw-empty-elt">
 </p><p>In <code>.helix/languages.toml</code> beside the source, or <code>~/.config/helix/languages.toml</code>:
 </p>
 <div class="mw-highlight mw-highlight-lang-toml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">[[language]]</span>
 <span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
 <span class="n">file-types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">glob</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Module:*&quot;</span><span class="w"> </span><span class="p">}]</span>
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Vim" aria-labelledby="tabber-Vim-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Vim" aria-labelledby="tabber-Vim-label"><p class="mw-empty-elt">
 </p><p>In <code>~/.vim/filetype.vim</code>, or anywhere your <code>vimrc</code> is sourced from:
 </p>
 <div class="mw-highlight mw-highlight-lang-vim mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>autocmd <span class="nb">BufRead</span><span class="p">,</span><span class="nb">BufNewFile</span> Module:* <span class="k">setfiletype</span> <span class="k">lua</span>
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p>The other way round works as well: a file named <code>Module:Example.lua</code> is imported, because the marker is only needed where the title would otherwise be wikitext. But the name is kept as it is, so the page becomes <code>Module:Example.lua</code> and every <code>{{#invoke:}}</code> has to spell it that way.
 </p><p>The module is ordinary Lua. This one is the module this site really has, in full:
 </p>

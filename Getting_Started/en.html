@@ -529,12 +529,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>Then build the site. The rendered pages are written to <code>dist/</code>. Pick the tab for how you run Wikven:
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
 </p><p>Run it in the directory that holds <code>src/</code>:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
 </p><p>Mount the source and output directories into the container:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
@@ -544,18 +544,18 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>The untagged image is the most recent nightly, built from the main branch on any day it gained a feature or a fix; once a version is released, that is what the untagged image will be instead. None has been released yet, so there is no <code>:1.2.3</code> tag to pin; to hold a build still, pin a dated <code>:nightly-YYYY-MM-DD</code> tag or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
 </p>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p>Preview the site locally, then open <code><a rel="nofollow" class="external free" href="http://localhost:8080">http://localhost:8080</a></code>:
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>serve
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p>Opening <code>dist/index.html</code> directly also works, though some links and assets resolve correctly only when served. To publish it online, see <a href="../Deploying/en.html" title="Special:MyLanguage/Deploying">Deploying</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Setting_the_title_of_the_site">Setting the title of the site</h2></div>

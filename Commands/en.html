@@ -583,31 +583,31 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading2"><h2 id="build"><code>build</code></h2></div>
 <p>Builds <code>src/</code> into <code>dist/</code>. This is the image's default command, so the Docker form needs no argument:
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>build
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p>It takes no options; everything a build can be told is in your <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a>. A failed build exits non-zero and says which page or step failed.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="serve"><code>serve</code></h2></div>
 <p>Serves an already-built <code>dist/</code> for local preview, on port 8080. It builds nothing: run <code>build</code> first.
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_2-label" href="#tabber-Binary_2" aria-controls="tabber-Binary_2">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_2-label" href="#tabber-Docker_2" aria-controls="tabber-Docker_2">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_2" aria-labelledby="tabber-Binary_2-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
 wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="w"> </span><span class="m">127</span>.0.0.1:3000
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_2" aria-labelledby="tabber-Docker_2-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>serve
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p>Only the binary takes <code>--listen</code>; the container always listens on 8080 inside, and you choose the outside port with Docker's own <code>-p</code>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="translate"><code>translate</code></h2></div>
@@ -625,14 +625,14 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 <dd>Reports broken source pages, and translations that are out of date or missing. Writes nothing.</dd></dl>
 <p>Each takes a single file, or <code>--all</code> for every page under the source directory. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source: mount it writable under Docker, where the binary edits it in place. <code>check</code> only reads.
 </p>
-<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_3-label" href="#tabber-Binary_3" aria-controls="tabber-Binary_3">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_3-label" href="#tabber-Docker_3" aria-controls="tabber-Docker_3">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><section class="tabber__section"><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_3" aria-labelledby="tabber-Binary_3-label"><p class="mw-empty-elt">
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_3-label" href="#tabber-Binary_3" aria-controls="tabber-Binary_3">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_3-label" href="#tabber-Docker_3" aria-controls="tabber-Docker_3">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_3" aria-labelledby="tabber-Binary_3-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 
 wikven<span class="w"> </span>translate<span class="w"> </span>scaffold<span class="w"> </span>ko<span class="w"> </span><span class="s2">&quot;Getting Started.wikitext&quot;</span>
 
 wikven<span class="w"> </span>translate<span class="w"> </span>check<span class="w"> </span>--gate
 </pre></div>
-<p class="mw-empty-elt"></p></article><article class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_3" aria-labelledby="tabber-Docker_3-label"><p class="mw-empty-elt">
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker_3" aria-labelledby="tabber-Docker_3-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 
@@ -642,7 +642,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/src:/workspace/src:ro&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>check<span class="w"> </span>--gate
 </pre></div>
-<p class="mw-empty-elt"></p></article></section></div>
+<p class="mw-empty-elt"></p></div></div></div>
 <p><code>check</code> takes two more:
 </p>
 <dl><dt><code>--gate</code></dt>
