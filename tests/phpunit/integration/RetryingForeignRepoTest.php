@@ -108,6 +108,51 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 		$this->newRepo()->getThumbUrlFromCache('Xclamation SVG.svg', 32, -1);
 	}
 
+	/**
+	 * Every lookup this repository makes says which tool made it and where to go about it.
+	 *
+	 * Core would sign them "MediaWiki/" and its version, which names the library rather than
+	 * the thing that asked, and Commons is the server a bake asks most: one page with ten
+	 * images is ten lookups. UserAgent holds the string; this is the wiring that carries it.
+	 */
+	public function testALookupSaysWhichToolIsAskingAndWhereToGoAboutIt() {
+		$agents = [];
+		$this->installMockHttp(function ($url, $options) use (&$agents) {
+			$agents[] = (string)( $options['userAgent'] ?? '' );
+			return $this->makeFakeHttpRequest(
+				$this->imageInfo('https://upload.example.org/commons/thumb/32px-Bakery_oven.jpg'),
+				200
+			);
+		});
+
+		$this->newRepo()->getThumbUrlFromCache('Bakery oven.jpg', 32, -1);
+
+		$this->assertNotSame([], $agents, 'the lookup should have made a request');
+		foreach ($agents as $agent) {
+			$this->assertStringStartsWith('Wikven/', $agent);
+			$this->assertStringContainsString('(+https://github.com/chaotic-ground/wikven)', $agent);
+		}
+	}
+
+	/** A caller that brought its own string keeps it: this names wikven, it does not insist. */
+	public function testACallerThatNamesItselfIsLeftAlone() {
+		$agents = [];
+		$this->installMockHttp(function ($url, $options) use (&$agents) {
+			$agents[] = (string)( $options['userAgent'] ?? '' );
+			return $this->makeFakeHttpRequest('answered', 200);
+		});
+
+		$mtime = false;
+		$this->newRepo()->httpGet(
+			'https://commons.example.org/w/api.php',
+			'default',
+			['userAgent' => 'Something Else/1.0'],
+			$mtime
+		);
+
+		$this->assertSame(['Something Else/1.0'], $agents);
+	}
+
 	public function testTheMessageSaysWhichRepositoryAndSizeAndWhatToDo() {
 		$this->answerWith([['body' => $this->imageInfo(null)]], $made);
 
