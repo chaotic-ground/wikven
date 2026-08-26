@@ -495,31 +495,48 @@ html[dir="rtl"] .wikven-home-sym--parts {
 	}
 }
 
-/* The scrolled pair ends where the timed pair only passes through: on the page, since a reader who
- * has scrolled past has been shown the answer and should keep it. It also spends nearly the whole
- * range crossing -- flat for an eighth at each end and moving in between -- so that what the
- * reader sees is tied to how far they have scrolled rather than to having passed a line. */
+/* The scrolled pair rises to the tree as the diagram comes up the screen, stands while it is in
+ * front of the reader, and settles back on the page as it leaves: what the pane is showing is
+ * where the reader is, rather than a line they crossed once.
+ *
+ * The peak is a little past halfway rather than at it, and the fall is late and short, because the
+ * subject of the timeline is the whole diagram and the pane is one end of it -- the right end of a
+ * row on a wide screen, the bottom of a stack on a phone. Halfway through the diagram's pass is
+ * not halfway through the pane's: measured on the deployed layout, the pane sits at eye level at
+ * 52% of the range at 1280 and 58% at 360, so the tree is full by then and stays full through the
+ * band either side of it. A reader who stops to read it is never watching it fade.
+ *
+ * Nothing here is instant: a fifth of a second of scrolling changes it a little, which is what
+ * makes it read as one thing moving rather than two states swapping. */
 @keyframes wikven-out-tree-scrolled {
 	0%,
-	20% {
+	12% {
 		opacity: 0;
 	}
 
-	85%,
-	100% {
+	56%,
+	84% {
 		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
 	}
 }
 
 @keyframes wikven-out-page-scrolled {
 	0%,
-	20% {
+	12% {
 		opacity: 1;
 	}
 
-	85%,
-	100% {
+	56%,
+	84% {
 		opacity: 0.28;
+	}
+
+	100% {
+		opacity: 1;
 	}
 }
 
