@@ -170,3 +170,19 @@ a.new {
 .wikven-skin-item.active {
   font-weight: @font-weight-bold;
 }
+
+// A word too long for the screen wraps rather than taking the page with it.
+//
+// One identifier in a paragraph is all it takes: an unbreakable token runs past the right edge, and
+// because the page is one document the whole of it scrolls sideways after it -- every heading and
+// every line of prose shifted, on the phone where a docs site is read. docs/Development names three
+// settings in a row joined by slashes, which is 430 pixels of text with nowhere to break in it, and
+// that page scrolled 95 pixels wide at every width below 455.
+//
+// Minerva and Citizen both wrap content this way already; Vector 2022 does it for links alone, so
+// the export is where the three skins are made to agree. break-word rather than anywhere: a token
+// is only broken when it would not fit a line of its own, so nothing that fits is ever split, and a
+// <pre> is untouched -- it does not wrap at all, and scrolls inside its own box instead.
+.mw-parser-output {
+  overflow-wrap: break-word;
+}
