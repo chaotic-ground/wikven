@@ -21,6 +21,7 @@ require_once "$IP/maintenance/Maintenance.php";
 // what this script is for, so it runs before that. Loaded directly for the same reason loadConfig()
 // loads SiteConfig directly below, and both classes are dependency-free so that is all it takes.
 require_once __DIR__ . '/../includes/Attempts.php';
+require_once __DIR__ . '/../includes/FetchPin.php';
 require_once __DIR__ . '/../includes/UserAgent.php';
 
 /** Fetch third-party extensions/skins declared in .wikven.yaml before MediaWiki loads them. */
@@ -79,9 +80,8 @@ class FetchExtensions extends Maintenance {
 			}
 
 			$dest = "$baseDir/$name";
-			if (is_dir($dest)) {
-				// Already bundled or cloned by an earlier run; never overwrite it.
-				$this->output("Wikven: $kind '$name' already present, skipping.\n");
+			$pin = FetchPin::of($spec);
+			if (is_dir($dest) && !$this->isStale($spec, $dest, $pin, $name, $kind)) {
 				continue;
 			}
 
@@ -94,6 +94,17 @@ class FetchExtensions extends Maintenance {
 				$this->fatalError(
 					"Wikven: $kind '$name' must declare one of: tarball, repository, package."
 				);
+			}
+
+			// Written last: a tree stamped before its fetch finished would be taken for a good one
+			// by the next build, which is the state this is here to catch. The commit goes in with
+			// it, because a reference is not a pin: the tag or branch it names can be moved, and
+			// this is what the next build compares the remote against.
+			$commit = isset($spec['repository'])
+				? self::gitOutput(['-C', $dest, 'rev-parse', 'HEAD'])
+				: null;
+			if (!FetchPin::stamp($dest, $pin, $commit)) {
+				$this->fatalError("Wikven: could not record what $kind '$name' was fetched from.");
 			}
 		}
 
@@ -134,6 +145,80 @@ class FetchExtensions extends Maintenance {
 			}
 		}
 		return $set;
+	}
+
+	/**
+	 * Whether an existing $dest has to go before the fetch, saying either way what it decided.
+	 *
+	 * Three answers, and the quiet one is the common one. A tree fetched from this same source
+	 * is the fetch already made. A tree with no pin in it was not fetched by wikven -- it is
+	 * bundled in the image, or somebody put it there -- and is left alone, which is what this
+	 * check has always done. A tree fetched from a different source is the one worth acting on:
+	 * a pin moved under a build that would otherwise keep the old code and say nothing.
+	 */
+	private function isStale(array $spec, string $dest, string $pin, string $name, string $kind): bool {
+		$stamp = FetchPin::inside($dest);
+		if ($stamp === null) {
+			$this->output("Wikven: $kind '$name' already present, skipping.\n");
+			return false;
+		}
+		if ($stamp['source'] !== $pin) {
+			$this->output(
+				"Wikven: $kind '$name' was fetched from {$stamp['source']}; the source is now $pin,"
+				. " fetching again.\n"
+			);
+			self::removeTree($dest);
+			return true;
+		}
+
+		$moved = $this->movedReference($spec, $stamp['commit'], $name, $kind);
+		if ($moved === null) {
+			$this->output("Wikven: $kind '$name' already fetched from this source, skipping.\n");
+			return false;
+		}
+		$this->output(
+			"Wikven: $kind '$name' has {$stamp['commit']} and {$spec['reference']} now points at"
+			. " $moved, fetching again.\n"
+		);
+		self::removeTree($dest);
+		return true;
+	}
+
+	/**
+	 * The commit the declared reference points at now, where that is not the one on disk.
+	 *
+	 * Only for a spec that names a reference: a commit is already the whole answer, a tarball
+	 * has no reference to move, and a tree that recorded no commit was not fetched by git. The
+	 * ask is one `git ls-remote`, made only where the tree is already there -- a build that has
+	 * to clone anyway never makes it -- and a remote that will not answer leaves what is on disk
+	 * alone rather than failing a build over a question nobody asked.
+	 *
+	 * @return string|null The commit to fetch, or null where there is nothing to do.
+	 */
+	private function movedReference(array $spec, ?string $commit, string $name, string $kind): ?string {
+		$reference = trim((string)( $spec['reference'] ?? '' ));
+		if ($reference === '' || $commit === null || empty($spec['repository'])) {
+			return null;
+		}
+		// Both the reference and its peeled form: git matches a pattern against whole ref
+		// components, so "v4.0.2" alone never lists "refs/tags/v4.0.2^{}" -- and for an
+		// annotated tag that line is the only one carrying the commit a checkout lands on. Ask
+		// for the tag alone and every build would read the tag object as a moved reference.
+		$answer = self::gitOutput([
+			'ls-remote',
+			'--',
+			(string)$spec['repository'],
+			$reference,
+			$reference . '^{}'
+		]);
+		if ($answer === null) {
+			$this->output(
+				"Wikven: could not ask where $kind '$name' points at $reference now;" . " keeping what is on disk.\n"
+			);
+			return null;
+		}
+		$now = FetchPin::pointedAt($answer);
+		return $now === null || $now === strtolower($commit) ? null : $now;
 	}
 
 	/**
@@ -343,8 +428,25 @@ class FetchExtensions extends Maintenance {
 
 	/** What git calls itself over HTTP, "git/2.43.0", or null if it would not say. */
 	private static function gitVersion(): ?string {
-		// Located rather than spawned by name, as SourceHistory does: proc_open() warns of its
-		// own when the command is not there, and a host without git is an answer this can give.
+		$output = self::gitOutput(['--version']);
+		if ($output === null) {
+			return null;
+		}
+		// "git version 2.43.0", which git itself sends as "git/2.43.0".
+		return preg_match('/\bversion\s+(\S+)/', $output, $matches) ? 'git/' . $matches[1] : null;
+	}
+
+	/**
+	 * What `git $arguments` printed, or null where it could not be run or did not succeed.
+	 *
+	 * Located rather than spawned by name, as SourceHistory does: proc_open() warns of its own
+	 * when the command is not there, and a host without git is an answer this can give. An array
+	 * argv never reaches a shell, so a repository URL needs no quoting; git's own complaints go
+	 * nowhere, since every caller here has something to say for itself when the answer is null.
+	 *
+	 * @param string[] $arguments
+	 */
+	private static function gitOutput(array $arguments): ?string {
 		$binary = ExecutableFinder::findInDefaultPaths(['git']) ?: null;
 		if ($binary === null) {
 			return null;
@@ -355,17 +457,13 @@ class FetchExtensions extends Maintenance {
 			2 => ['file', '/dev/null', 'w']
 		];
 		$pipes = [];
-		$process = proc_open([$binary, '--version'], $descriptors, $pipes);
+		$process = proc_open(array_merge([$binary], $arguments), $descriptors, $pipes);
 		if ($process === false) {
 			return null;
 		}
 		$output = (string)stream_get_contents($pipes[1]);
 		fclose($pipes[1]);
-		if (proc_close($process) !== 0) {
-			return null;
-		}
-		// "git version 2.43.0", which git itself sends as "git/2.43.0".
-		return preg_match('/\bversion\s+(\S+)/', $output, $matches) ? 'git/' . $matches[1] : null;
+		return proc_close($process) === 0 ? trim($output) : null;
 	}
 
 	/**
