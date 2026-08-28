@@ -118,6 +118,9 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:60 @238a1040-->
 누군가 읽는 사이트에서는 꺼두십시오. 로그인과 주시문서 목록과 토론 탭을 내밀면서 그 뒤에 아무것도 없는 내보내기는, 아예 내밀지 않는 것보다 나쁩니다.
 
+<!--T:61 @a3803495-->
+함께 빌드할 소스 트리가 있습니다. {{SITENAME}} 리포지터리의 <code>examples/skin-preview</code>로, 스킨이 스타일을 입혀야 하는 요소를 모두 담은 문서 하나가 들어 있습니다. 그 안의 <code>.wikven.yml</code>에 자기 스킨을 적고 그 디렉터리를 빌드하십시오.
+
 <!--T:42 @58d2c2e3-->
 <span id="WikvenStyleDirectory"></span>
 === <code>WikvenStyleDirectory</code>와 <code>WikvenScriptDirectory</code> ===

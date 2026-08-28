@@ -1,0 +1,6 @@
+A subpage. Skins that draw a breadcrumb or a subpage marker draw it from a title like this one,
+and a title this long is the case that decides whether the marker wraps, truncates or overflows.
+
+Back up to [[Second page]], or to the [[index|specimen]].
+
+[[Category:Specimen pages]]

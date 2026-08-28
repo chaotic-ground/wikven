@@ -1,0 +1,4 @@
+* navigation
+** index|Specimen
+** Second page|Second page
+** Second page/A subpage with a rather long title|A subpage with a rather long title
