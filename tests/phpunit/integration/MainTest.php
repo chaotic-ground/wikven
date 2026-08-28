@@ -169,6 +169,28 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$this->assertArrayNotHasKey('wikven-viewsource', $this->viewsFor('Version', 'citizen'));
 	}
 
+	/**
+	 * A skin preview gets no tab of wikven's own.
+	 *
+	 * The row of page actions is the skin's layout, and a skin author baking pages to look at it
+	 * has not asked for an extra tab in it. Everything this class does to make the output work as
+	 * files -- rewriting a link to "./X.html" above all -- is untouched, so there is still a
+	 * preview to look at.
+	 */
+	public function testASkinPreviewGetsNoTabOfOurOwn() {
+		$dir = $this->getNewTempDirectory();
+		file_put_contents("$dir/Real.wikitext", '');
+		$this->overrideConfigValue('WikvenSourceDirectory', $dir);
+		$this->overrideConfigValue('WikvenViewSourceUrl', 'https://repo/blob/$1');
+		$this->overrideConfigValue('WikvenSkinPreview', true);
+
+		$this->assertSame([], $this->viewsFor('Real', 'citizen'));
+
+		$url = '/wiki/Real';
+		$this->main()->onGetLocalURL(Title::newFromText('Real'), $url, '');
+		$this->assertSame('./Real.html', $url, 'the links a preview is browsed by still work');
+	}
+
 	/** @return array The 'views' menu the hook leaves behind, keyed as the skins read it. */
 	private function viewsFor(string $titleText, string $skin): array {
 		$sktemplate = $this->createMock(SkinTemplate::class);

@@ -1,0 +1,10 @@
+A second page, so that the [[index|specimen]]'s internal links have somewhere to land and the
+sidebar has more than one entry to draw. A skin's navigation cannot be judged on a site with one
+page in it.
+
+== A section ==
+
+Enough text for the table of contents on this page to have something in it, and for the "next"
+and "previous" affordances a skin may draw to have a neighbour to point at.
+
+[[Category:Specimen pages]]

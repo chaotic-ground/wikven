@@ -1,0 +1,181 @@
+__TOC__
+
+This page exists to be looked at. It is one page carrying every element a skin has to style, so
+that a skin author can bake it and see the whole surface at once instead of discovering, three
+sites later, that nobody ever gave the definition lists a margin. Nothing here is documentation;
+if a sentence reads like filler, it is filler, and it is here because running text is the only
+way to judge a measure and a line height.
+
+Bake this directory with your own skin listed in <code>.wikven.yml</code>. It sets
+<code>WikvenSkinPreview</code>, so wikven leaves the chrome alone and what you see is your skin's
+own work: its personal menu, its tabs, its toolbox. See
+[[Second page]] for what a second page and a sidebar entry look like, and
+[[Second page/A subpage with a rather long title]] for a subpage.
+
+== Headings ==
+
+The heading above is a level two, which is the first one a page body can hold: the level one is
+the page title, drawn by the skin rather than by the wikitext. What follows is the rest of the
+ladder, which is worth seeing in one column because the gap between a level four and a level five
+is where a type scale usually gives up.
+
+=== Level three ===
+
+Sits under a level two, and most skins still give it a rule or a weight of its own.
+
+==== Level four ====
+
+By here a skin has usually run out of size and started using weight or colour instead.
+
+===== Level five =====
+
+Rare in real pages, common in the templates that generate them.
+
+====== Level six ======
+
+The last one MediaWiki has. If it is indistinguishable from bold body text, that is a decision
+rather than an accident, but it should be a decision.
+
+== Running text ==
+
+A paragraph of ordinary prose, long enough to wrap several times at any sensible measure, because
+a line height that looks generous on two lines can look loose on eight. The words are chosen to be
+unremarkable. Their job is to be a grey block at arm's length and a readable one up close, and a
+skin that gets the first right and the second wrong is a skin that was only ever looked at in a
+screenshot.
+
+A second paragraph, to show what a skin does with the space between two of them. Some skins
+separate paragraphs with a margin and some with an indent, and the two look very different once
+there are five in a row. This one also runs long enough to wrap, since the interesting question is
+not what one line does but what the block does.
+
+A third, shorter one, because not every paragraph is a wall.
+
+=== Inline formatting ===
+
+Text can be '''bold''', ''italic'', '''''both at once''''', <s>struck through</s>, <small>small</small>,
+<code>monospaced</code>, or carry a <sup>superscript</sup> and a <sub>subscript</sub>. It can hold an
+[[Second page|internal link]], a [[A page that does not exist|red link to a page that does not
+exist]], an [https://www.mediawiki.org/ external link], and an external link with
+[https://www.mediawiki.org/wiki/Manual:Contents no visible protocol]. A skin that colours these
+four identically has thrown away information the reader uses.
+
+It can also hold a token no line break will fit:
+<code>ThisIsAnUnreasonablyLongIdentifierNobodyWouldWriteButSomebodyAlwaysDoes</code>. That is here
+because an unbreakable run is what puts a horizontal scrollbar on a phone, and the only way to know
+whether your skin wraps it is to look at it.
+
+== Lists ==
+
+* A bulleted list.
+* Its second item.
+** A nested one, which is where list indentation either reads or does not.
+*** And a third level, since templates generate them.
+* Back to the top level.
+
+# A numbered list.
+# Its second item.
+## Nested, and numbered separately.
+## Which is the case that catches a skin styling only the outer counter.
+# Back to the top level.
+
+* A bulleted item with a numbered list under it:
+*# because mixed nesting is legal
+*# and skins disagree about it
+
+; A definition list
+: The term above, and this description. Definition lists carry the glossaries, the parameter
+  tables that were not tables, and half the templates on any wiki, and they are the element most
+  often left with browser defaults.
+; A second term
+: With its own description, so the spacing between two pairs is visible.
+
+== Tables ==
+
+{| class="wikitable"
+|+ A table with a caption, which skins style separately from the table
+! Header !! Another header !! A third
+|-
+| A cell || Another cell || A third
+|-
+| A row with a longer cell in it, to see what the table does when one column wants more room than
+the others || Short || Short
+|-
+| Last row || Last row || Last row
+|}
+
+A table can also float, which is what every infobox on every wiki is:
+
+{| class="wikitable" style="float: right; margin-left: 1em; max-width: 20em;"
+|+ A floating table
+! Field
+| A value
+|-
+! Another field
+| Another value, long enough to wrap inside a narrow float
+|-
+! A third
+| A value
+|}
+
+And here is the paragraph that has to flow around it. It needs to be long enough to actually reach
+past the bottom of the float, because the interesting failure is not the text beside the box but
+the heading that comes after it and forgets to clear. Skins that set a clearfix on headings look
+fine here; skins that do not will show it in the next section, which is exactly why this paragraph
+goes on for as long as it does rather than stopping at a polite two lines.
+
+== Images ==
+
+[[File:Specimen.svg|thumb|right|A thumbnail floated right, with a caption long enough to wrap
+inside the frame.]]
+
+A thumbnail is the most-styled image element on a wiki: it has a frame, a caption, a float, and a
+magnify affordance, and each of them is somebody's stylesheet. The paragraph beside it is here so
+the float has something to float against, and it runs on for a few lines so that the wrap is
+visible rather than theoretical.
+
+[[File:Specimen.svg|thumb|left|And one floated left, which is the case skins forget.]]
+
+Left floats are rarer and therefore less tested. The text beside this one exists for the same
+reason as the text beside the last one, and if the two paragraphs read alike that is because their
+job is the same.
+
+<div style="clear: both;"></div>
+
+A frameless image, inline with the text: [[File:Specimen.svg|frameless|60px]] and the sentence
+carries on after it, which is where baseline alignment either works or does not.
+
+<gallery mode="packed" heights="100">
+File:Specimen.svg|A gallery caption
+File:Specimen.svg|A second one, longer, so the captions are not all the same width
+File:Specimen.svg|A third
+</gallery>
+
+== Quotations and indentation ==
+
+<blockquote>
+A block quotation. Skins vary in whether this gets a rule, an indent, a background or a different
+face, and a page that quotes anything at all will show which was chosen.
+</blockquote>
+
+: A single indent, which is what a colon does.
+:: A second level.
+::: And a third, which is how every discussion page on every wiki is laid out.
+
+== Preformatted and code ==
+
+A line beginning with a space is preformatted:
+
+ This block keeps its  spacing   exactly
+ and does not wrap, so it is the other way a page ends up with a horizontal scrollbar.
+
+<pre>
+A pre block, which is the same element by a different route.
+</pre>
+
+----
+
+The rule above is a horizontal rule, which is the last block element MediaWiki draws and the one
+most often left at the browser default.
+
+[[Category:Specimen pages]]

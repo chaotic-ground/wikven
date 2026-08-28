@@ -1,0 +1,2 @@
+Every page in this example, so that the category links in the page footers lead somewhere rather
+than to a file the static host does not serve.

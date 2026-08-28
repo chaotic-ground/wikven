@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\Wikven\Search;
+use MediaWiki\Extension\Wikven\SkinPreview;
 use MediaWiki\Extension\Wikven\SourceFile;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
@@ -241,6 +242,11 @@ class Main implements
 	 */
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
 		global $wgWikvenViewSourceUrl;
+		// A tab of wikven's own, added to the row the skin lays out: chrome, and a preview keeps
+		// the row the skin would have drawn. See SkinPreview.
+		if (SkinPreview::isOn()) {
+			return;
+		}
 		$title = $sktemplate->getTitle();
 		// A generated page (e.g. Version) has no source file; skip rather than emit a 404 link.
 		if (

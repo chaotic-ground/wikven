@@ -51,6 +51,13 @@ class FillMinervaMenu extends Maintenance {
 		if ($wgDefaultSkin !== 'minerva' || $dir === '' || !is_dir($dir)) {
 			return;
 		}
+		// The site's own navigation written into the skin's menu is the largest edit wikven makes
+		// to any skin's chrome, so it is the first thing a skin preview does without: what Minerva
+		// builds from its own definitions is what a skin author came to look at. See SkinPreview.
+		if (SkinPreview::isOn()) {
+			$this->output("Skin preview: leaving Minerva's main menu as the skin builds it\n");
+			return;
+		}
 
 		// The navigation and the settings link are the same on every page; the switcher is not,
 		// since each page links to its own copy in the other skins.
