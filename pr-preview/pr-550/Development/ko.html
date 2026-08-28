@@ -673,7 +673,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading3"><h3 id="1단계:_위키_채우기"><span id="1.EB.8B.A8.EA.B3.84:_.EC.9C.84.ED.82.A4_.EC.B1.84.EC.9A.B0.EA.B8.B0"></span>1단계: 위키 채우기</h3></div>
 <dl><dt><code>checkLuaAgainstThisBuild</code></dt>
-<dd>이 사이트의 <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">Lua</a>와 이 빌드의 Lua가 서로를 어떻게 보는지를, 다른 어떤 일이 벌어지기 전에 말합니다. Scribunto를 나열했지만 그것을 실행할 엔진이 없는 사이트는 빌드를 끝내는데, 이 빌드가 할 수 없는 일을 요구했기 때문입니다. 반면 Scribunto를 나열한 적 없이 <code>Module:</code> 파일만 있는 사이트에는 그 파일들이 무엇이 되는지를 알려주기만 합니다. 둘 다 예전에는 조용히 통과해 호출문이 그대로 보이는 문서를 게시했습니다. 가장 먼저 실행되므로, 사이트가 거부될 때 지난 빌드 결과가 아직 그대로 남아 있습니다.</dd>
+<dd>이 사이트의 <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">Lua</a>와 이 빌드의 Lua가 서로를 어떻게 보는지를, 다른 어떤 일이 벌어지기 전에 말합니다. Scribunto를 나열했지만 그것을 실행할 엔진이 없는 사이트는 빌드를 끝내는데, 이 빌드가 할 수 없는 일을 요구했기 때문입니다. 반면 Scribunto를 나열한 적 없이 <code>Module:</code> 파일만 있는 사이트에는 그 파일들이 무엇이 되는지를 알려주기만 합니다. 실행할 엔진이 없으면 <code>#invoke</code>는 호출문 그대로 문서에 실리기 때문입니다. 가장 먼저 실행되므로, 사이트가 거부될 때 지난 빌드 결과가 아직 그대로 남아 있습니다.</dd>
 <dt><code>clearOutputDirectory</code></dt>
 <dd>출력 디렉터리를 비워, 이전 빌드의 파일이 남지 않도록 합니다.</dd>
 <dt><code>setMainPage</code></dt>
@@ -702,7 +702,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dl><dt><code>RebuildFileCache</code></dt>
 <dd>모든 콘텐츠 문서를 HTML 파일로 렌더링합니다. MediaWiki 자체의 파일 캐시이며, Wikven은 <code>File:</code>도 콘텐츠 네임스페이스로 취급하므로 모든 틀을 쏟아내지 않으면서 파일 설명 문서까지 내보냅니다.</dd>
 <dt><code>retranslateChrome</code></dt>
-<dd>번역된 각 문서를 그 문서 자신의 언어를 인터페이스 언어로 삼아 다시 렌더링합니다. 파일 캐시는 표준 익명 열람만 캐시하므로, 그대로 두면 한국어 문서가 영어 인터페이스를 두르게 됩니다.</dd>
+<dd>번역된 각 문서를 그 문서 자신의 언어를 인터페이스 언어로 삼아 다시 렌더링합니다. 파일 캐시는 표준 익명 열람만 캐시하므로, 그대로 두면 모든 번역 문서가 콘텐츠 언어의 인터페이스를 두르게 됩니다.</dd>
 <dt><code>stripBuildStamps</code></dt>
 <dd>MediaWiki가 렌더링된 문서마다 찍는 요청 id, 렌더 id, 시각을 제거합니다. 빌드마다 달라지는 값들입니다.</dd>
 <dt><code>buildStyles</code></dt>
@@ -786,7 +786,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 23일 (일) 07:57에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 28일 (금) 04:43에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">

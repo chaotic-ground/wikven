@@ -667,7 +667,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading3"><h3 id="Phase_1:_filling_the_wiki">Phase 1: filling the wiki</h3></div>
 <dl><dt><code>checkLuaAgainstThisBuild</code></dt>
-<dd>Says what this site's <a href="./Translating.html" title="Special:MyLanguage/Translating">Lua</a> and this build's Lua make of each other, before anything else happens. A site that lists Scribunto where no engine can run it ends the build, because it asked for something this build cannot do; a site with <code>Module:</code> files that never listed Scribunto is only told what those files come to. Both used to pass quietly and publish pages with the invocation showing in them. It runs first so the last bake is still in place when a site is refused.</dd>
+<dd>Says what this site's <a href="./Translating.html" title="Special:MyLanguage/Translating">Lua</a> and this build's Lua make of each other, before anything else happens. A site that lists Scribunto where no engine can run it ends the build, because it asked for something this build cannot do; a site with <code>Module:</code> files that never listed Scribunto is only told what those files come to, since with no engine to run them an <code>#invoke</code> is published as the text of the call. It runs first so the last bake is still in place when a site is refused.</dd>
 <dt><code>clearOutputDirectory</code></dt>
 <dd>Empties the output directory, so a bake never inherits a file from the last one.</dd>
 <dt><code>setMainPage</code></dt>
@@ -694,7 +694,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dl><dt><code>RebuildFileCache</code></dt>
 <dd>Renders every content page to an HTML file. This is MediaWiki's own file cache; Wikven treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.</dd>
 <dt><code>retranslateChrome</code></dt>
-<dd>Re-renders each translated page with its own language as the interface language. The file cache only caches the canonical anonymous view, which would leave a Korean page wearing English chrome.</dd>
+<dd>Re-renders each translated page with its own language as the interface language. The file cache only caches the canonical anonymous view, which would leave every translation wearing the content language's chrome.</dd>
 <dt><code>stripBuildStamps</code></dt>
 <dd>Removes the request ids, render ids and timestamps MediaWiki stamps into every rendered page, which differ between bakes.</dd>
 <dt><code>buildStyles</code></dt>
@@ -772,7 +772,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:57.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 28 August 2026, at 04:43.</li>
 </ul>
 
 	<ul id="footer-places">
