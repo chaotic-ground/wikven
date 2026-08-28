@@ -111,7 +111,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</li>
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--edits" role="listitem">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit" title="edits"></span>
-		<span>1.1K</span>
+		<span>1.2K</span>
 		<span class="citizen-siteStats__label">edits</span>
 	</li>
 </ul>
@@ -439,14 +439,30 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 </section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Subpages">Subpages</h2></div>
 <p>Put a file in a subdirectory to create a <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages">subpage</a>: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup".
+</p><p><span id="reserved-names"></span>
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Namespaces">Namespaces</h2></div>
+<section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="Names_a_subpage_cannot_take">Names a subpage cannot take</h3></div>
+<p>A subpage is a directory in the output, and three directories there are the build's own. A page that lands on one is not refused; the file is written where something else already goes, and what the reader gets is whichever finished last. Only subpages are affected, because only a subpage makes a directory: a page named <code>citizen</code> builds to <code>citizen.html</code> and sits beside everything else quite happily.
+</p>
+<dl><dt>Any skin after the first</dt>
+<dd>Each one renders the whole site into a directory of its own, so a site building Citizen has a <code>citizen/</code> holding a second copy of every page. A page "citizen/Setup" is written into that directory, where the Citizen copy of a page "Setup" also goes. The name to avoid is the skin's own, which is lower-case and not always what you listed it by: <code>vector-2022</code>, <code>citizen</code>, <code>minerva</code>. See <a href="../Skins/en.html" title="Special:MyLanguage/Skins">Skins</a>.</dd>
+<dt><code>pagefind</code></dt>
+<dd>Where <a href="../Searching/en.html" title="Special:MyLanguage/Searching">search</a> writes its index, unless <code>SifterSearchOutputDir</code> puts it elsewhere.</dd>
+<dt><code>history</code></dt>
+<dd>Removed from the output at the end of every pass, with a line saying so. A static host has no page histories to serve, so nothing is expected to be there.</dd></dl>
+<p><span id="translation-not-subpage"></span>
+</p>
+</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="A_translation_is_not_a_subpage">A translation is not a subpage</h3></div>
+<p>A <a href="../Translating/en.html" title="Special:MyLanguage/Translating">translatable</a> page -- one whose source wraps content in <code>&lt;translate></code> -- claims every subpage of itself named for a language. Beside a translatable <code>Guide.wikitext</code>, the file <code>Guide/ko.wikitext</code> is the Korean translation of "Guide" and not a page "Guide/ko", and nothing warns about it, because that naming is what the feature is built on.
+</p><p>All three have to hold at once, so any one of them is the way out: a subpage of a page carrying no <code>&lt;translate></code> is a subpage as written, and so is any name that is not a language code. Where you need a translatable page and that subpage both, the subpage is the one to rename.
+</p>
+</section></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Namespaces">Namespaces</h2></div>
 <p>Prefix the file name with a namespace to place the page there:
 </p>
 <ul><li><code>Template:Infobox.wikitext</code> is the template "Template:Infobox" (see <a href="../Pages/en.html#Templates" title="Special:MyLanguage/Pages">Templates</a>).</li>
 <li><code>File:Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see <a href="../Images/en.html" title="Special:MyLanguage/Images">Images</a>).</li>
 <li><code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">JavaScript</a>). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.</li></ul>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Categories">Categories</h2></div>
+</section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Categories">Categories</h2></div>
 <p>Add <code>[[Category:Name]]</code> to a page to <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories">categorise</a> it; the categories show in the page footer, as on any wiki.
 </p><p>A category's own page is not exported by default, though. Wikven writes only <i>content</i> pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your <a href="../Configuration/en.html#ContentNamespaces" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a> and add a <code>Category:Name.wikitext</code> file to your source:
 </p>
@@ -456,7 +472,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>This key replaces the default rather than extending it, so keep <code>0</code> and <code>6</code> in the list, or the main and File: pages stop being exported.
 </p><p>To keep a maintenance or tracking category out of the footer instead, add the <code>__HIDDENCAT__</code> <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words">magic word</a> to its category page; a static export has no logged-in readers, so a hidden category is off the footer for everyone.
 </p>
-</section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Templates">Templates</h2></div>
+</section><section id="citizen-section-8" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Templates">Templates</h2></div>
 <p>Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code>{{Name}}</code>. For example, this file:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="gs">'''Note:'''</span> <span class="p">{{{</span><span class="nv">1</span><span class="p">}}}</span>
@@ -487,7 +503,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages/en.wikitext" title="This page was last edited on 23 August 2026, at 07:13." data-timestamp="1787469221"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages/en.wikitext" title="This page was last edited on 28 August 2026, at 04:50." data-timestamp="1787892659"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>28 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -555,8 +571,43 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 				</div>
 			</a>
 			
+				<button aria-controls="toc-Subpages-sublist" class="citizen-toc-toggle cdx-button cdx-button--weight-quiet cdx-button--icon-only cdx-button--size-medium">
+					<span class="citizen-ui-icon mw-ui-icon-wikimedia-collapse"></span>
+					<span>Toggle Subpages subsection</span>
+				</button>
+			
 			<ul id="toc-Subpages-sublist" class="citizen-toc-list">
+				<li id="toc-Names_a_subpage_cannot_take"
+			class="citizen-toc-list-item citizen-toc-level-2">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Names_a_subpage_cannot_take" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">3.1</span>
+						<span class="citizen-toc-heading">Names a subpage cannot take</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Names_a_subpage_cannot_take-sublist" class="citizen-toc-list">
 			</ul>
+		</li>
+		<li id="toc-A_translation_is_not_a_subpage"
+			class="citizen-toc-list-item citizen-toc-level-2">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#A_translation_is_not_a_subpage" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">3.2</span>
+						<span class="citizen-toc-heading">A translation is not a subpage</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-A_translation_is_not_a_subpage-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+	</ul>
 		</li>
 		<li id="toc-Namespaces"
 			class="citizen-toc-list-item citizen-toc-level-1">
@@ -613,7 +664,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 07:13.</div>
+		        <div class="page-info__text"> This page was last edited on 28 August 2026, at 04:50.</div>
 		    </section>
 		</div>
 </footer>		</div>
