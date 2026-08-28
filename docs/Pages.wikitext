@@ -29,6 +29,29 @@ Link with <code><nowiki>[[Title]]</nowiki></code>, or <code><nowiki>[[Title|labe
 <!--T:9-->
 Put a file in a subdirectory to create a [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages</tvar> subpage]: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup".
 
+<!--T:24-->
+=== Names a subpage cannot take ===
+
+<!--T:25-->
+A subpage is a directory in the output, and three directories there are the build's own. A page that lands on one is not refused; the file is written where something else already goes, and what the reader gets is whichever finished last. Only subpages are affected, because only a subpage makes a directory: a page named <code>citizen</code> builds to <code>citizen.html</code> and sits beside everything else quite happily.
+
+<!--T:26-->
+; Any skin after the first
+: Each one renders the whole site into a directory of its own, so a site building Citizen has a <code>citizen/</code> holding a second copy of every page. A page "citizen/Setup" is written into that directory, where the Citizen copy of a page "Setup" also goes. The name to avoid is the skin's own, which is lower-case and not always what you listed it by: <code>vector-2022</code>, <code>citizen</code>, <code>minerva</code>. See [[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]].
+; <code>pagefind</code>
+: Where [[<tvar name="2">Special:MyLanguage/Searching</tvar>|search]] writes its index, unless <code>SifterSearchOutputDir</code> puts it elsewhere.
+; <code>history</code>
+: Removed from the output at the end of every pass, with a line saying so. A static host has no page histories to serve, so nothing is expected to be there.
+
+<!--T:27-->
+=== A translation is not a subpage ===
+
+<!--T:28-->
+A [[<tvar name="1">Special:MyLanguage/Translating</tvar>|translatable]] page -- one whose source wraps content in <code><nowiki><translate></nowiki></code> -- claims every subpage of itself named for a language. Beside a translatable <code>Guide.wikitext</code>, the file <code>Guide/ko.wikitext</code> is the Korean translation of "Guide" and not a page "Guide/ko", and nothing warns about it, because that naming is what the feature is built on.
+
+<!--T:29-->
+All three have to hold at once, so any one of them is the way out: a subpage of a page carrying no <code><nowiki><translate></nowiki></code> is a subpage as written, and so is any name that is not a language code. Where you need a translatable page and that subpage both, the subpage is the one to rename.
+
 <!--T:10-->
 == Namespaces ==
 
