@@ -101,7 +101,7 @@ Each pass renders the whole site in its own skin, into its own directory: the fi
 ; <code>RebuildFileCache</code>
 : Renders every content page to an HTML file. This is MediaWiki's own file cache; {{SITENAME}} treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.
 ; <code>retranslateChrome</code>
-: Re-renders each translated page with its own language as the interface language. The file cache only caches the canonical anonymous view, which would leave a Korean page wearing English chrome.
+: Re-renders each translated page with its own language as the interface language. The file cache only caches the canonical anonymous view, which would leave every translation wearing the content language's chrome.
 ; <code>stripBuildStamps</code>
 : Removes the request ids, render ids and timestamps MediaWiki stamps into every rendered page, which differ between bakes.
 ; <code>buildStyles</code>

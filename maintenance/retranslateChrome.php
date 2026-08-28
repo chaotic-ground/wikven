@@ -18,10 +18,11 @@ require_once "$IP/maintenance/Maintenance.php";
 
 /**
  * RebuildFileCache renders every page in the wiki's content language, because HTMLFileCache only
- * caches the canonical anonymous view (interface language == content language). That leaves a
- * translated page such as "index/ko" with English chrome. Re-render each non-source-language
- * translation page with its own language as the interface language and overwrite its cache file,
- * so a reader browsing the Korean page gets a Korean interface too.
+ * caches the canonical anonymous view (interface language == content language). That leaves every
+ * translation -- "index/ko", "index/km", all of them -- wearing the content language's chrome.
+ * Re-render each non-source-language translation page with its own language as the interface
+ * language and overwrite its cache file, so a reader browsing a translation gets an interface in
+ * the language they are reading.
  */
 class RetranslateChrome extends Maintenance {
 	public function __construct() {
