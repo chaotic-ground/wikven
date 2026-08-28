@@ -39,7 +39,8 @@ Docker 이미지는 작업 디렉터리가 <code>/workspace</code>이고, 그래
 <!--T:11 @8221d3a9-->
 <code>--listen</code>은 바이너리만 받습니다. 컨테이너는 안에서 항상 8080을 듣고, 바깥 포트는 Docker 자신의 <code>-p</code>로 정합니다.
 
-<!--T:12 @4cfaef70-->
+<!--T:12 @801eba12-->
+<span id="translate"></span>
 == <code>translate</code> ==
 
 <!--T:13 @29242b5c-->
