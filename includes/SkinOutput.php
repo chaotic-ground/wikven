@@ -18,9 +18,18 @@ use SplFileInfo;
  * resolves its links against the wrong root when read from here, and writing one races the pass
  * that owns it once the passes run together (#407, #409).
  *
- * A skin's directory is named after the skin, so it cannot be mistaken for a page's: the cache
- * writes a page under its title, and MediaWiki capitalizes a title's first letter, while the
- * canonical skin names these directories take are lowercase.
+ * Which directory belongs to which is decided by name, and a page can take a skin's name. Nothing
+ * capitalizes it out of the way: wikven's own defaults set CapitalLinks off, so a title keeps the
+ * case its file was written in, and a subpage of "citizen" makes the same dist/citizen/ the Citizen
+ * pass renders into. The exclusion below is by name too, so on such a site the main pass skips that
+ * page along with the skin's copies -- resolveTranslationLinks, the only caller, leaves its
+ * Special:MyLanguage links unresolved.
+ *
+ * That is not a case to fix here. Once the two are in one directory nothing tells them apart: a
+ * name is all either has, and reading the page would mean writing into the directory the Citizen
+ * pass is writing to, which is the race this exists to prevent. Choosing the skin's copies is the
+ * safe half of an unresolvable collision. What fixes it is not naming a page after a skin, which
+ * Special:MyLanguage/Pages#reserved-names asks of a site.
  */
 class SkinOutput {
 	/**
