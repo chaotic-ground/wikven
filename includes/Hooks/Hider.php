@@ -3,19 +3,31 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Extension\Wikven\Search;
+use MediaWiki\Extension\Wikven\SkinPreview;
 use MediaWiki\Extension\Wikven\SourceFile;
 
+/**
+ * Everything this class takes away is an affordance a static host cannot answer for, which makes
+ * all of it chrome: a skin preview keeps the lot, because a skin author is looking at exactly
+ * these menus. See SkinPreview.
+ */
 class Hider implements
 	\MediaWiki\Hook\ParserOutputPostCacheTransformHook,
 	\MediaWiki\Hook\SidebarBeforeOutputHook,
 	\MediaWiki\Hook\SkinTemplateNavigation__UniversalHook {
 	/** @inheritDoc */
 	public function onParserOutputPostCacheTransform($parserOutput, &$text, &$options): void {
+		if (SkinPreview::isOn()) {
+			return;
+		}
 		$options['enableSectionEditLinks'] = false;
 	}
 
 	/** @inheritDoc */
 	public function onSidebarBeforeOutput($skin, &$sidebar): void {
+		if (SkinPreview::isOn()) {
+			return;
+		}
 		// Drop server tools a static export can't serve; keep SEARCH only if SifterSearch wires a box.
 		$keys = ['TOOLBOX'];
 		if (!Search::isActive()) {
@@ -31,6 +43,9 @@ class Hider implements
 
 	/** @inheritDoc */
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
+		if (SkinPreview::isOn()) {
+			return;
+		}
 		// Hide personal tools (login, talk, prefs); empty groups so skins like Minerva keep them.
 		foreach (['user-menu', 'user-page', 'user-interface-preferences', 'notifications'] as $key) {
 			if (isset($links[$key])) {

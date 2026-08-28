@@ -304,6 +304,72 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		return $sidebar;
 	}
 
+	/**
+	 * A skin preview is added nothing that changes how the page looks.
+	 *
+	 * No repository link in the footer, no skin list in the sidebar, and none of wikven's own
+	 * styles or appearance modules: what the skin renders is what a skin author is looking at.
+	 */
+	public function testASkinPreviewIsAddedNoChromeOfOurOwn() {
+		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$this->overrideConfigValue('WikvenFooterUrl', 'https://github.com/owner/repo');
+		$this->overrideConfigValue('WikvenSkins', ['vector-2022', 'minerva']);
+
+		$footerItems = [];
+		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+		$this->assertSame([], $footerItems, 'no repository link goes into the footer');
+
+		$sidebar = ['TOOLBOX' => []];
+		( new Adder() )->onSidebarBeforeOutput($this->skin('vector-2022'), $sidebar);
+		$this->assertSame(['TOOLBOX' => []], $sidebar, 'no skin list goes into the sidebar');
+
+		$styles = [];
+		$out = $this->outputPage();
+		$out->method('addModuleStyles')->willReturnCallback(static function ($name) use (&$styles) {
+			$styles = array_merge($styles, (array)$name);
+		});
+		$out->expects($this->never())->method('addInlineStyle');
+		$skin = $this->createMock(Skin::class);
+		$skin->method('getSkinName')->willReturn('vector-2022');
+
+		( new Adder() )->onBeforePageDisplay($out, $skin);
+
+		$this->assertNotContains('ext.Wikven.styles', $styles);
+	}
+
+	/**
+	 * What a preview keeps is what stops the page asking for something that is not there.
+	 *
+	 * Citizen's service worker registers against a load.php no export has, and its search
+	 * shortcuts reach for modules no export ships. Neither is an opinion about how the page should
+	 * look, so neither is a preview's to drop.
+	 */
+	public function testASkinPreviewStillStopsTheExportAskingForWhatIsNotThere() {
+		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$this->overrideConfigValue('WikvenSkins', ['citizen']);
+
+		$vars = [];
+		$modules = [];
+		$out = $this->outputPage();
+		$out->method('addJsConfigVars')->willReturnCallback(
+			static function ($keys, $value = null) use (&$vars) {
+				$vars[$keys] = $value;
+			}
+		);
+		$out->method('addModules')->willReturnCallback(static function ($name) use (&$modules) {
+			$modules = array_merge($modules, (array)$name);
+		});
+		$skin = $this->createMock(Skin::class);
+		$skin->method('getSkinName')->willReturn('citizen');
+
+		( new Adder() )->onBeforePageDisplay($out, $skin);
+
+		$this->assertArrayHasKey('wgScriptPath', $vars);
+		$this->assertNull($vars['wgScriptPath']);
+		$this->assertContains('ext.Wikven.citizenSearchShortcuts', $modules);
+		$this->assertNotContains('ext.Wikven.citizenSkins', $modules, 'the skin list is chrome');
+	}
+
 	private function skin(string $name = 'vector'): Skin {
 		$skin = $this->createMock(Skin::class);
 		$skin->method('msg')->willReturnCallback(static function (string $key, ...$params) {

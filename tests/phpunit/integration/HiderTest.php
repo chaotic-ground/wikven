@@ -100,4 +100,38 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 		( new Hider() )->onSkinTemplateNavigation__Universal($sktemplate, $links);
 		return $links;
 	}
+
+	/**
+	 * A skin preview keeps every affordance this class would take away.
+	 *
+	 * The whole of Hider is an argument about what a static host can answer for, and a skin author
+	 * baking pages to look at their skin is not asking that question: the personal menu, the
+	 * toolbox, the talk tab and the section edit links are the skin's work, and the work is the
+	 * thing being looked at.
+	 */
+	public function testASkinPreviewIsLeftTheChromeTheSkinDrew() {
+		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$hider = new Hider();
+
+		$text = '';
+		$options = ['enableSectionEditLinks' => true];
+		$hider->onParserOutputPostCacheTransform(null, $text, $options);
+		$this->assertTrue($options['enableSectionEditLinks']);
+
+		$sidebar = ['TOOLBOX' => ['tool'], 'SEARCH' => ['box']];
+		$hider->onSidebarBeforeOutput($this->createMock(Skin::class), $sidebar);
+		$this->assertSame(['TOOLBOX' => ['tool'], 'SEARCH' => ['box']], $sidebar);
+
+		$links = [
+			'user-menu' => ['logout'],
+			'actions' => ['watch' => []],
+			'associated-pages' => ['talk' => []],
+			'views' => ['edit' => [], 'history' => []]
+		];
+		$hider->onSkinTemplateNavigation__Universal($this->createMock(SkinTemplate::class), $links);
+		$this->assertSame(['logout'], $links['user-menu'], 'the skin draws its own personal menu');
+		$this->assertArrayHasKey('watch', $links['actions']);
+		$this->assertArrayHasKey('talk', $links['associated-pages']);
+		$this->assertSame(['edit' => [], 'history' => []], $links['views']);
+	}
 }

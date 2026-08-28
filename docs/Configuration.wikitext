@@ -125,6 +125,21 @@ Write a source page of that name and it takes precedence, exactly as for the Abo
 <!--T:41-->
 When set, and UniversalLanguageSelector is enabled, the build bakes that extension's webfonts for the languages your pages use into a stylesheet the export serves itself, so a reader whose system has no font for a script sees the intended typeface instead of empty boxes. It is off unless asked for, because the fonts are extra payload for a site whose readers may not need them. It does nothing without UniversalLanguageSelector; see [[<tvar name="1">Special:MyLanguage/Translating</tvar>|Translating]].
 
+<!--T:56-->
+=== <code>WikvenSkinPreview</code> ===
+
+<!--T:57-->
+'''Default:''' <code>false</code>
+
+<!--T:58-->
+For looking at a skin rather than publishing a site. {{SITENAME}} normally trims the chrome around a page to what a static host can stand behind: the personal menu, the toolbox, the talk tab and the watch star are emptied, the article tabs are replaced with links to your source files, a link to the repository goes in the footer, and a stylesheet of its own hides the rest. Every one of those is a judgement about a reader, and none of them is wanted by a skin author who has pointed the build at a few pages to see how their skin renders: the menus being edited are the thing they came to look at. Set this and they are all left as the skin drew them.
+
+<!--T:59-->
+What the build still does is everything that makes the output a working set of files. Links are rewritten to <code>./Page.html</code>, styles and scripts are baked into local copies, and the two fixes that stop a page asking for something no export has -- Citizen's service worker and its search shortcuts -- stay on, because a preview has no <code>load.php</code> behind it either. The generated [[<tvar name="1">Special:MyLanguage/Configuration#WikvenAboutPage</tvar>|About]] and [[<tvar name="2">Special:MyLanguage/Configuration#WikvenSettingsPage</tvar>|Settings]] pages are content rather than chrome and are still written; set those empty to leave them out too.
+
+<!--T:60-->
+Leave it off for a site anyone reads. A published export that offers a login, a watchlist and a talk tab with nothing behind any of them is worse than one that offers none.
+
 <!--T:42-->
 <span id="WikvenStyleDirectory"></span>
 === <code>WikvenStyleDirectory</code> and <code>WikvenScriptDirectory</code> ===

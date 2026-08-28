@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SkinList;
+use MediaWiki\Extension\Wikven\SkinPreview;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Output\OutputPage;
@@ -42,6 +43,11 @@ class Adder implements
 	 * @inheritDoc
 	 */
 	public function onSidebarBeforeOutput($skin, &$sidebar): void {
+		// A list of skins to read the site in is wikven's, not the skin's, and a preview is of one
+		// skin. See SkinPreview.
+		if (SkinPreview::isOn()) {
+			return;
+		}
 		$current = $skin->getSkinName();
 		if ($current === 'minerva' || !isset($sidebar['TOOLBOX'])) {
 			return;
@@ -65,6 +71,29 @@ class Adder implements
 
 	/** @inheritDoc */
 	public function onBeforePageDisplay($out, $skin): void {
+		// Ahead of the preview guard, because neither of these is an opinion about how the page
+		// should look: both stop the export asking for something it does not have, which a preview
+		// has no more of than a published site does.
+		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'citizen') {
+			// Citizen registers a service worker at "$wgScriptPath/load.php" whenever the client-side
+			// script path is the wiki root (""), which is what the build installs with, and the request
+			// 404s on every page. There is no script path in a static export -- no index.php, load.php
+			// or api.php -- so say so, and the registration returns early on its own guard. Citizen is
+			// the only thing that reads the value for a decision; what else reads it builds api.php and
+			// rest.php URLs, which are dead here whichever way it is set.
+			$out->addJsConfigVars('wgScriptPath', null);
+
+			// The skin's search shortcuts outlive the command palette the bake leaves out: skin.js
+			// binds them whether or not the trigger they open is still there, so "/" and Ctrl+K reach
+			// for two modules the export does not ship. The module tells the loader as much, so the
+			// request is never built, and opens the search form the export does have instead.
+			$out->addModules('ext.Wikven.citizenSearchShortcuts');
+		}
+
+		if (SkinPreview::isOn()) {
+			return;
+		}
+
 		$out->addModuleStyles('ext.Wikven.styles');
 		$out->addModules('ext.Wikven.pinnableState');
 
@@ -81,22 +110,6 @@ class Adder implements
 			// module takes the list from the chrome, wherever the skin keeps it, and leaves where
 			// the build has already written one -- which is Minerva, and Minerva alone.
 			$out->addModules('ext.Wikven.appearance');
-		}
-
-		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'citizen') {
-			// Citizen registers a service worker at "$wgScriptPath/load.php" whenever the client-side
-			// script path is the wiki root (""), which is what the build installs with, and the request
-			// 404s on every page. There is no script path in a static export -- no index.php, load.php
-			// or api.php -- so say so, and the registration returns early on its own guard. Citizen is
-			// the only thing that reads the value for a decision; what else reads it builds api.php and
-			// rest.php URLs, which are dead here whichever way it is set.
-			$out->addJsConfigVars('wgScriptPath', null);
-
-			// The skin's search shortcuts outlive the command palette the bake leaves out: skin.js
-			// binds them whether or not the trigger they open is still there, so "/" and Ctrl+K reach
-			// for two modules the export does not ship. The module tells the loader as much, so the
-			// request is never built, and opens the search form the export does have instead.
-			$out->addModules('ext.Wikven.citizenSearchShortcuts');
 		}
 
 		// Citizen's preferences panel is where its readers change how a page looks, so the skin list
@@ -188,6 +201,11 @@ class Adder implements
 
 	/** @inheritDoc */
 	public function onSkinAddFooterLinks(Skin $skin, string $key, array &$footerItems) {
+		// A row in the footer that the skin did not put there. See SkinPreview.
+		if (SkinPreview::isOn()) {
+			return;
+		}
+
 		global $wgWikvenFooterUrl;
 
 		if ($key !== 'places') {
