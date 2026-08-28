@@ -3,6 +3,8 @@
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\RetryingForeignRepo;
+use MediaWiki\Http\MWHttpRequest;
+use MediaWiki\Status\Status;
 use MediaWikiIntegrationTestCase;
 use MockHttpTrait;
 use RuntimeException;
@@ -59,11 +61,47 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 			if (!isset($response['body'])) {
 				return $this->makeFakeTimeoutRequest();
 			}
-			$headers = isset($response['lastModified'])
-				? ['Last-Modified' => $response['lastModified']]
-				: [];
-			return $this->makeFakeHttpRequest($response['body'], 200, $headers);
+			if (!isset($response['lastModified'])) {
+				return $this->makeFakeHttpRequest($response['body'], 200);
+			}
+			return $this->answering($response['body'], ['Last-Modified' => $response['lastModified']]);
 		});
+	}
+
+	/**
+	 * A successful response carrying headers, answered the way MWHttpRequest answers them.
+	 *
+	 * getResponseHeader() is documented case-insensitive and the real class implements it that
+	 * way, lowercasing the name it is asked for. MockHttpTrait's fake lowercases the name it was
+	 * *given* and compares that to the name asked for, so it answers a lowercase ask and nothing
+	 * else -- and core asks for "Last-Modified". Every header a test hands it therefore reads back
+	 * as absent, which is not a fake of MWHttpRequest but of a different class. This is one, for
+	 * the one method that differs; the rest of the response is still the trait's.
+	 *
+	 * @param string $body The response body.
+	 * @param array<string,string> $headers The response headers, in any case.
+	 */
+	private function answering(string $body, array $headers): MWHttpRequest {
+		$response = $this->createNoOpMock(
+			MWHttpRequest::class,
+			['execute', 'setHeader', 'getStatus', 'getContent', 'getResponseHeaders', 'getResponseHeader']
+		);
+		$response->method('execute')->willReturn(Status::newGood(200));
+		$response->method('getStatus')->willReturn(200);
+		$response->method('getContent')->willReturn($body);
+		$response->method('getResponseHeaders')->willReturn($headers);
+		$response->method('getResponseHeader')
+			->willReturnCallback(
+				static function (string $name) use ($headers): ?string {
+					foreach ($headers as $header => $value) {
+						if (strcasecmp($header, $name) === 0) {
+							return $value;
+						}
+					}
+					return null;
+				}
+			);
+		return $response;
 	}
 
 	/** An imageinfo response body, with a thumbnail URL unless $thumbUrl is null. */
