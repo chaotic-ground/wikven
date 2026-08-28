@@ -84,6 +84,7 @@ The targets the "Edit", "View history" and "View source" links point at, so a re
 The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Naming your entry file <code>index.wikitext</code> therefore takes no configuration at all. The page must be one you imported; the build fails if it is missing.
 
 <!--T:16-->
+<span id="WikvenAboutPage"></span>
 === <code>WikvenAboutPage</code> ===
 
 <!--T:48-->
@@ -105,6 +106,7 @@ Whatever this is set to, the build generates two templates, since an export has 
 A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...). With no URL there is no such link.
 
 <!--T:37-->
+<span id="WikvenSettingsPage"></span>
 === <code>WikvenSettingsPage</code> ===
 
 <!--T:50-->
@@ -117,6 +119,7 @@ The title of a page the build writes for the reader's own display choices: the c
 Write a source page of that name and it takes precedence, exactly as for the About page. Set it empty to write no page at all, and the entries pointing at it go with it. See [[<tvar name="1">Special:MyLanguage/Skins#settings</tvar>|Skins]] for what the page offers a reader.
 
 <!--T:40-->
+<span id="WikvenBundleWebfonts"></span>
 === <code>WikvenBundleWebfonts</code> ===
 
 <!--T:51-->
@@ -162,6 +165,7 @@ config:
 
 <translate>
 <!--T:20-->
+<span id="WikvenRepositories"></span>
 === <code>WikvenRepositories</code> ===
 
 <!--T:53-->
@@ -214,6 +218,7 @@ Nothing moves an exact pin for you, though: this file belongs to no ecosystem a 
 This very site fetches [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue</tvar> TabberNeue] this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 
 <!--T:27-->
+<span id="ContentNamespaces"></span>
 === <code>ContentNamespaces</code> ===
 
 <!--T:54-->

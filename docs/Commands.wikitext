@@ -73,6 +73,7 @@ docker run --rm -p 8080:8080 \
 Only the binary takes <code>--listen</code>; the container always listens on 8080 inside, and you choose the outside port with Docker's own <code>-p</code>.
 
 <!--T:12-->
+<span id="translate"></span>
 == <code>translate</code> ==
 
 <!--T:13-->

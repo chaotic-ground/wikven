@@ -14,7 +14,8 @@ x86_64와 arm64 Linux용으로 MediaWiki를 내장한 단일 자체 완결형 �
 <!--T:4 @b679cc4f-->
 arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파일을 <code>PATH</code>에 설치하는 방법, 나이틀리 빌드, 그리고 이 파일이 사용하는 선택적 호스트 도구에 관해서는 [[$1|단독 실행 바이너리]]를 참고하십시오.
 
-<!--T:5 @77dff36a-->
+<!--T:5 @7436e800-->
+<span id="Docker"></span>
 == Docker ==
 
 <!--T:6 @26e9972a-->

@@ -61,7 +61,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:15 @46cc8c49-->
 사이트 루트로 쓰이는 문서의 제목으로, <code>index.html</code>로 작성되어 사이트 최상단에서 제공됩니다. 진입 파일 이름을 <code>index.wikitext</code>로 지으면 별도 설정이 전혀 필요 없습니다. 이 문서는 여러분이 가져온 문서여야 하며, 없으면 빌드가 실패합니다.
 
-<!--T:16 @af5c0b04-->
+<!--T:16 @7e0aaa2a-->
+<span id="WikvenAboutPage"></span>
 === <code>WikvenAboutPage</code> ===
 
 <!--T:48 @d8b59d5d-->
@@ -82,7 +83,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:19 @336524d0-->
 여러분의 프로젝트(보통 그 리포지터리)를 가리키며 사이트 바닥글에 추가되는 링크입니다. 바닥글은 알려진 포지(GitHub, GitLab, Codeberg 등)의 경우 호스트 이름을 표시합니다. URL이 없으면 그런 링크도 없습니다.
 
-<!--T:37 @96b83a89-->
+<!--T:37 @8bc6c748-->
+<span id="WikvenSettingsPage"></span>
 === <code>WikvenSettingsPage</code> ===
 
 <!--T:50 @0caa505b-->
@@ -94,7 +96,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:39 @bb7171ab-->
 그 이름의 소스 문서를 쓰면 소개 문서와 똑같이 그쪽이 우선합니다. 빈 값으로 두면 문서를 아예 쓰지 않으며, 그곳을 가리키던 항목들도 함께 사라집니다. 이 문서가 독자에게 무엇을 제공하는지는 [[$1|스킨]]을 참고하십시오.
 
-<!--T:40 @fcd29ea8-->
+<!--T:40 @39b09490-->
+<span id="WikvenBundleWebfonts"></span>
 === <code>WikvenBundleWebfonts</code> ===
 
 <!--T:51 @4f128b66-->
@@ -131,7 +134,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:43 @6ad7acb3-->
 빌드가 MediaWiki에서 뽑아낸 CSS와 자바스크립트를 출력 디렉터리 아래 어디에 쓸지입니다. <code>.</code>은 출력 루트입니다. 생성된 자산을 문서들과 섞이지 않게 두려면 설정하십시오. 경로는 출력 디렉터리 기준이고 빌드가 링크도 거기에 맞춰 쓰므로, 따로 알려 줄 것은 없습니다.
 
-<!--T:20 @c60c5ada-->
+<!--T:20 @a9d8c62a-->
+<span id="WikvenRepositories"></span>
 === <code>WikvenRepositories</code> ===
 
 <!--T:53 @6ab2d6cb-->
@@ -172,7 +176,8 @@ $1
 <!--T:26 @b03dacba-->
 바로 이 사이트도 이 방식으로 [$2 TabberNeue]를 가져옵니다(그 <code>.wikven.yaml</code> 참고). [[$1|시작하기]]에 있는 탭 형식의 Docker/바이너리 명령 예시는 가져온 이 확장 기능이 렌더링한 것입니다. (이 사이트의 틀이 쓰는 TemplateStyles는 MediaWiki에 번들되어 있어 여기에 소스가 필요 없습니다.)
 
-<!--T:27 @40cc4afa-->
+<!--T:27 @8c96352f-->
+<span id="ContentNamespaces"></span>
 === <code>ContentNamespaces</code> ===
 
 <!--T:54 @a3511c46-->
