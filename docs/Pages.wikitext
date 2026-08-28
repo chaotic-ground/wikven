@@ -30,6 +30,7 @@ Link with <code><nowiki>[[Title]]</nowiki></code>, or <code><nowiki>[[Title|labe
 Put a file in a subdirectory to create a [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages</tvar> subpage]: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup".
 
 <!--T:24-->
+<span id="reserved-names"></span>
 === Names a subpage cannot take ===
 
 <!--T:25-->
@@ -44,6 +45,7 @@ A subpage is a directory in the output, and three directories there are the buil
 : Removed from the output at the end of every pass, with a line saying so. A static host has no page histories to serve, so nothing is expected to be there.
 
 <!--T:27-->
+<span id="translation-not-subpage"></span>
 === A translation is not a subpage ===
 
 <!--T:28-->
