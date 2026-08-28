@@ -9,12 +9,12 @@ No arguments. The order of the documentation is [[MediaWiki:Sidebar]], and
 link, the page after it the next. The first and last pages of the sequence get one link rather than
 two, without having to say so, and a page the sidebar does not name gets no row at all.
 
-It used to take the page names, which meant the order was written down twice -- once as the
-sidebar's and once across twenty-one calls -- with nothing checking that the two agreed. Twice they
-did not: a page reached the sidebar without a call naming it, and the last page of the chain had no
-row, because a lone argument read as the *next* step and there was no way to spell "nothing after
-this". Adding a page meant three edits, and forgetting the third was invisible. Now it is two: the
-sidebar, and a <code><nowiki>{{prevnext}}</nowiki></code> at the foot of the new page.
+Naming the pages in the call would write the order down twice -- once as the sidebar's and once
+across twenty-one calls -- with nothing to check that the two agree: a page can reach the sidebar
+with no call naming it, and a lone argument cannot say "nothing after this", which leaves the last
+page of the chain without a row. Reading the sidebar makes adding a page two edits, the sidebar and
+a <code><nowiki>{{prevnext}}</nowiki></code> at the foot of the new page, rather than three with the
+third invisible when it is forgotten.
 
 The main page has no row. It is not a sidebar entry -- every skin already points its logo at it --
 and it is where a reader arrives rather than a step they walk, so it names its own way on in its
