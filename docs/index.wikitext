@@ -101,7 +101,7 @@ the search index
 <div class="wikven-home-card-title">
 <translate>
 <!--T:6-->
-[[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Templates, not copy-paste]]
+[[<tvar name="1">Special:MyLanguage/Pages#templates</tvar>|Templates, not copy-paste]]
 </translate>
 </div>
 <div class="wikven-home-card-body">

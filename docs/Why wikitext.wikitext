@@ -9,7 +9,7 @@ __TOC__
 == What wikitext adds ==
 
 <!--T:3-->
-* '''[<tvar name="3">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> Templates]''' — reusable, parameterised snippets transcluded with <code><nowiki>{{...}}</nowiki></code>. Markdown has no equivalent; you copy and paste instead. See [[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Pages#Templates]].
+* '''[<tvar name="3">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> Templates]''' — reusable, parameterised snippets transcluded with <code><nowiki>{{...}}</nowiki></code>. Markdown has no equivalent; you copy and paste instead. See [[<tvar name="1">Special:MyLanguage/Pages#templates</tvar>|Pages#Templates]].
 * '''[<tvar name="4">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions</tvar> Parser functions] and magic words''' — light logic and computed values (<code><nowiki>{{#if:}}</nowiki></code>, dates, page info) written in the page itself.
 * '''Structured linking''' — <code><nowiki>[[Page]]</nowiki></code> internal links, [<tvar name="5">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories</tvar> categories] and redirects, managed by the wiki rather than by hand.
 * '''Rich media and references''' — image [<tvar name="6">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Images</tvar> thumbnails and galleries] and footnotes in one consistent syntax.

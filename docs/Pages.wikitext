@@ -61,11 +61,12 @@ All three have to hold at once, so any one of them is the way out: a subpage of 
 Prefix the file name with a namespace to place the page there:
 
 <!--T:12-->
-* <code>Template:Infobox.wikitext</code> is the template "Template:Infobox" (see [[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Templates]]).
+* <code>Template:Infobox.wikitext</code> is the template "Template:Infobox" (see [[<tvar name="1">Special:MyLanguage/Pages#templates</tvar>|Templates]]).
 * <code>File:Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see [[<tvar name="2">Special:MyLanguage/Images</tvar>|Images]]).
 * <code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see [[<tvar name="3">Special:MyLanguage/JavaScript</tvar>|JavaScript]]). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.
 
 <!--T:13-->
+<span id="categories"></span>
 == Categories ==
 
 <!--T:14-->
@@ -88,6 +89,7 @@ This key replaces the default rather than extending it, so keep <code>0</code> a
 To keep a maintenance or tracking category out of the footer instead, add the <code><nowiki>__HIDDENCAT__</nowiki></code> [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words</tvar> magic word] to its category page; a static export has no logged-in readers, so a hidden category is off the footer for everyone.
 
 <!--T:18-->
+<span id="templates"></span>
 == Templates ==
 
 <!--T:19-->

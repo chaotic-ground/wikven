@@ -114,7 +114,7 @@ A link added to the site footer, pointing at your project (typically its reposit
 The title of a page the build writes for the reader's own display choices: the colour theme, and, on a site built with more than one skin, which skin to read it in. The choices are kept in the reader's browser and apply to that site alone; no account is involved. It stands in for the preferences a live wiki would offer, which a static export has no server for.
 
 <!--T:39-->
-Write a source page of that name and it takes precedence, exactly as for the About page. Set it empty to write no page at all, and the entries pointing at it go with it. See [[<tvar name="1">Special:MyLanguage/Skins#Settings</tvar>|Skins]] for what the page offers a reader.
+Write a source page of that name and it takes precedence, exactly as for the About page. Set it empty to write no page at all, and the entries pointing at it go with it. See [[<tvar name="1">Special:MyLanguage/Skins#settings</tvar>|Skins]] for what the page offers a reader.
 
 <!--T:40-->
 === <code>WikvenBundleWebfonts</code> ===
@@ -208,7 +208,7 @@ Each method needs a host tool present at build time: <code>tarball</code> uses <
 {{note|The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}
 
 <!--T:44-->
-Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See [[<tvar name="1">Special:MyLanguage/Deploying#Keeping pinned sources current</tvar>|Deploying]] for keeping one current.
+Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See [[<tvar name="1">Special:MyLanguage/Deploying#keeping-pins-current</tvar>|Deploying]] for keeping one current.
 
 <!--T:26-->
 This very site fetches [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue</tvar> TabberNeue] this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
@@ -220,7 +220,7 @@ This very site fetches [<tvar name="2">https://www.mediawiki.org/wiki/Special:My
 '''Default:''' <code>[0, 6]</code>
 
 <!--T:28-->
-A standard MediaWiki setting ([<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces</tvar> <code>$wgContentNamespaces</code>]) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven sets the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see [[<tvar name="1">Special:MyLanguage/Pages#Categories</tvar>|Pages#Categories]]. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
+A standard MediaWiki setting ([<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces</tvar> <code>$wgContentNamespaces</code>]) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven sets the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see [[<tvar name="1">Special:MyLanguage/Pages#categories</tvar>|Pages#Categories]]. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
 
 <!--T:29-->
 == Defaults ==

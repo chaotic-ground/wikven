@@ -70,10 +70,11 @@ Docker 이미지는 작업 디렉터리가 <code>/workspace</code>이고, 그래
 ; <code>--path-prefix &lt;접두사&gt;</code>
 : 보고되는 파일 이름 앞에 접두사를 붙여, 컨테이너 안의 경로가 아니라 저장소의 경로로 읽히게 합니다.
 
-<!--T:19 @71dbe2f0-->
+<!--T:19 @78a1401f-->
+<span id="environment-variables"></span>
 == 환경 변수 ==
 
-<!--T:20 @0898dd5d-->
+<!--T:20 @a585c6e8-->
 ; <code>WIKVEN_WORKDIR</code>
 : 위에서 설명한 작업 디렉터리. 이미지에서는 <code>/workspace</code>, 바이너리에서는 현재 디렉터리가 기본값입니다.
 ; <code>SOURCE_DATE_EPOCH</code>

@@ -30,7 +30,7 @@ dist/
 
 <translate>
 <!--T:15-->
-Two things about that layout are worth knowing before you point a host at it. Links between pages are '''relative''', so the site works at a domain root and in a subdirectory alike, and even from the filesystem. But anything addressed from the site root rather than from the page — the search bundle most visibly — has to be told the base path; that is the note under GitHub Pages below. And each extra skin's directory is a '''complete copy''', so a three-skin site is roughly three times the files: see [[<tvar name="1">Special:MyLanguage/Skins#Building more than one skin</tvar>|Skins]].
+Two things about that layout are worth knowing before you point a host at it. Links between pages are '''relative''', so the site works at a domain root and in a subdirectory alike, and even from the filesystem. But anything addressed from the site root rather than from the page — the search bundle most visibly — has to be told the base path; that is the note under GitHub Pages below. And each extra skin's directory is a '''complete copy''', so a three-skin site is roughly three times the files: see [[<tvar name="1">Special:MyLanguage/Skins#building-more-than-one-skin</tvar>|Skins]].
 
 <!--T:2-->
 == GitHub Pages ==
@@ -92,6 +92,7 @@ Enable Pages for the repository under '''Settings → Pages → Build and deploy
 Because <code>dist/</code> is just files, you can serve it from any static host ([<tvar name="1">https://www.netlify.com/</tvar> Netlify], [<tvar name="2">https://pages.cloudflare.com/</tvar> Cloudflare Pages], an object store like [<tvar name="3">https://aws.amazon.com/s3/</tvar> S3], or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
 
 <!--T:8-->
+<span id="preview-locally"></span>
 == Preview locally ==
 
 <!--T:9-->
@@ -136,6 +137,7 @@ That history has to be reachable. The [[<tvar name="1">Special:MyLanguage/Comman
 The rest follows from the same idea. A build runs with its clock frozen at <code>SOURCE_DATE_EPOCH</code> — the commit's own date, when the action sets it — so two builds of one commit produce '''byte-identical''' output, down to the timestamps in the pages. It means a redeploy of unchanged content changes nothing on the host, and a diff between two builds only ever shows what you actually edited. {{SITENAME}}'s own continuous integration asserts it by baking this site twice and comparing the results.
 
 <!--T:20-->
+<span id="keeping-pins-current"></span>
 == Keeping pinned sources current ==
 
 <!--T:21-->

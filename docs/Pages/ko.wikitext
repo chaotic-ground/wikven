@@ -59,12 +59,13 @@
 <!--T:11 @beac209b-->
 파일 이름 앞에 이름공간을 붙이면 문서가 그 이름공간에 놓입니다:
 
-<!--T:12 @e935d2c1-->
+<!--T:12 @592b2111-->
 * <code>Template:Infobox.wikitext</code>는 "Template:Infobox" 틀입니다 ([[$1|틀]] 참고).
 * <code>File:Logo.png.wikitext</code>는 업로드된 <code>Logo.png</code>의 설명 문서입니다 ([[$2|이미지]] 참고).
 * <code>MediaWiki:Common.css</code>와 <code>MediaWiki:Common.js</code>는 사이트 전역 스타일시트와 스크립트입니다 ([[$3|자바스크립트]] 참고). 이 파일들은 이름 자체가 콘텐츠 유형을 담고 있으므로 확장자를 그대로 유지하며 <code>.wikitext</code> 표시가 필요 없습니다.
 
-<!--T:13 @624ef152-->
+<!--T:13 @c4cd0c79-->
+<span id="categories"></span>
 == 분류 ==
 
 <!--T:14 @e9a884a8-->
@@ -79,7 +80,8 @@
 <!--T:17 @c7601eb9-->
 유지보수용이나 추적용 분류를 하단에서 빼려면, 그 분류 문서에 <code><nowiki>__HIDDENCAT__</nowiki></code> [$1 매직 워드]를 추가하세요. 정적 내보내기에는 로그인한 독자가 없으므로, 숨겨진 분류는 모두에게 하단에서 보이지 않습니다.
 
-<!--T:18 @9d4575a8-->
+<!--T:18 @aed217e6-->
+<span id="templates"></span>
 == 틀 ==
 
 <!--T:19 @aeb975e4-->

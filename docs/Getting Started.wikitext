@@ -4,7 +4,7 @@
 On this page, we build a basic [[mw:en:"Hello, World!" program|Hello World]] page with {{SITENAME}}.
 
 <!--T:2-->
-{{SITENAME}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[<tvar name="1">Special:MyLanguage/Installation#Binary</tvar>|binary]] (Linux only), the [[<tvar name="2">Special:MyLanguage/Installation#Docker</tvar>|Docker image]] (any platform), or [[<tvar name="3">Special:MyLanguage/Installation#Build from source</tvar>|built from source]]. This guide uses the binary or Docker, so pick whichever you have.
+{{SITENAME}} builds a static website from a directory of wikitext. There are three ways to install it: the standalone [[<tvar name="1">Special:MyLanguage/Installation#binary</tvar>|binary]] (Linux only), the [[<tvar name="2">Special:MyLanguage/Installation#Docker</tvar>|Docker image]] (any platform), or [[<tvar name="3">Special:MyLanguage/Installation#build-from-source</tvar>|built from source]]. This guide uses the binary or Docker, so pick whichever you have.
 </translate>
 
 ----
@@ -123,7 +123,7 @@ echo '{{Note|</tvar>Rebuild the site after every edit.<tvar name="3">}}' >> src/
 
 <translate>
 <!--T:19-->
-Build again: the home page now shows the note. See [[<tvar name="1">Special:MyLanguage/Pages#Templates</tvar>|Pages#Templates]] for parameters and more.
+Build again: the home page now shows the note. See [[<tvar name="1">Special:MyLanguage/Pages#templates</tvar>|Pages#Templates]] for parameters and more.
 </translate>
 
 {{prevnext}}
