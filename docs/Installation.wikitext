@@ -6,6 +6,7 @@ __TOC__
 {{SITENAME}} runs in three ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. Build from source if you want to modify {{SITENAME}} or run an unreleased version.
 
 <!--T:2-->
+<span id="binary"></span>
 == Binary ==
 
 <!--T:3-->
@@ -40,6 +41,7 @@ The same image is published to Quay as well, at <code>quay.io/chaotic-ground/wik
 The untagged image is the most recent nightly, built from the main branch on any day it gained a feature or a fix; once a version is released, that is what the untagged image will be instead. None has been released yet, so there is no <code>:1.2.3</code> tag to pin; to hold a build still, pin a dated <code>:nightly-YYYY-MM-DD</code> tag or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
 
 <!--T:8-->
+<span id="build-from-source"></span>
 == Build from source ==
 
 <!--T:9-->

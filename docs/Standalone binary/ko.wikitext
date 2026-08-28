@@ -49,7 +49,7 @@ root 권한이 없다면, 대신 <code>PATH</code>에 있는 개인 디렉터리
 <!--T:16 @eb644b5b-->
 위키텍스트와 [[$1|.wikven.yaml]]을 <code>src/</code> 디렉터리에 넣은 다음 빌드하십시오:
 
-<!--T:17 @1abf9a67-->
+<!--T:17 @d211b6a0-->
 렌더링된 사이트는 <code>dist/</code>에 기록됩니다. <code>wikven serve</code>로 미리 볼 수 있습니다 ([[$1|배포하기]] 참고). 번역은 <code>wikven translate</code>가 <code>src/</code>를 그 자리에서 고치며 처리합니다 ([[$2|번역하기]] 참고). 작업 디렉터리는 기본값이 현재 디렉터리이며, 다른 곳의 프로젝트를 빌드하려면 <code>WIKVEN_WORKDIR</code>을 설정하십시오:
 
 <!--T:18 @c1071d9c-->

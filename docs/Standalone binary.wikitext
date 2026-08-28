@@ -99,7 +99,7 @@ wikven build
 
 <translate>
 <!--T:17-->
-The rendered site is written to <code>dist/</code>. Preview it with <code>wikven serve</code> (see [[<tvar name="1">Special:MyLanguage/Deploying#Preview locally</tvar>|Deploying]]), and translate it with <code>wikven translate</code>, which edits <code>src/</code> in place (see [[<tvar name="2">Special:MyLanguage/Translating</tvar>|Translating]]). The working directory defaults to the current directory; set <code>WIKVEN_WORKDIR</code> to build a project elsewhere:
+The rendered site is written to <code>dist/</code>. Preview it with <code>wikven serve</code> (see [[<tvar name="1">Special:MyLanguage/Deploying#preview-locally</tvar>|Deploying]]), and translate it with <code>wikven translate</code>, which edits <code>src/</code> in place (see [[<tvar name="2">Special:MyLanguage/Translating</tvar>|Translating]]). The working directory defaults to the current directory; set <code>WIKVEN_WORKDIR</code> to build a project elsewhere:
 </translate>
 
 <syntaxhighlight lang="shell" copy>

@@ -4,7 +4,8 @@
 <!--T:1 @0e6313f4-->
 {{SITENAME}}은 세 가지 방식으로 실행됩니다. Linux에서는 Docker가 필요 없는 단일 파일인 단독 실행 바이너리가 가장 간단합니다. macOS나 Windows에서는 Docker 이미지를 사용하십시오. {{SITENAME}}을 수정하거나 아직 배포되지 않은 버전을 실행하려면 소스에서 빌드하십시오.
 
-<!--T:2 @9383077a-->
+<!--T:2 @91714a41-->
+<span id="binary"></span>
 == 바이너리 ==
 
 <!--T:3 @e71d6223-->
@@ -25,7 +26,8 @@ arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파�
 <!--T:7 @9fc132fd-->
 태그가 없는 이미지는 가장 최근의 나이틀리로, main 브랜치에 기능이나 수정이 들어온 날마다 그 브랜치에서 빌드됩니다. 버전이 릴리스되면 그때부터는 태그 없는 이미지가 그 릴리스를 가리킵니다. 아직 릴리스된 버전이 없어 고정할 <code>:1.2.3</code> 태그가 없으므로, 빌드를 고정하려면 날짜가 붙은 <code>:nightly-YYYY-MM-DD</code> 태그나 다이제스트(<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>)를 쓰십시오.
 
-<!--T:8 @b85c6b45-->
+<!--T:8 @02225fca-->
+<span id="build-from-source"></span>
 == 소스에서 빌드 ==
 
 <!--T:9 @4a29b67a-->
