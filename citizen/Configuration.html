@@ -8,7 +8,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSearchShortcuts","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface","skins.citizen.toc"]);</script>
+<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.citizenSearchShortcuts","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface","skins.citizen.toc"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -489,9 +489,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><section id="citizen-section-10" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenBundleWebfonts"><code>WikvenBundleWebfonts</code></h3></div>
 <p><b>Default:</b> <code>false</code>
 </p><p>When set, and UniversalLanguageSelector is enabled, the build bakes that extension's webfonts for the languages your pages use into a stylesheet the export serves itself, so a reader whose system has no font for a script sees the intended typeface instead of empty boxes. It is off unless asked for, because the fonts are extra payload for a site whose readers may not need them. It does nothing without UniversalLanguageSelector; see <a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a>.
+</p>
+</section><section id="citizen-section-11" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenSkinPreview"><code>WikvenSkinPreview</code></h3></div>
+<p><b>Default:</b> <code>false</code>
+</p><p>For looking at a skin rather than publishing a site. Wikven normally trims the chrome around a page to what a static host can stand behind: the personal menu, the toolbox, the talk tab and the watch star are emptied, the article tabs are replaced with links to your source files, a link to the repository goes in the footer, and a stylesheet of its own hides the rest. Every one of those is a judgement about a reader, and none of them is wanted by a skin author who has pointed the build at a few pages to see how their skin renders: the menus being edited are the thing they came to look at. Set this and they are all left as the skin drew them.
+</p><p>What the build still does is everything that makes the output a working set of files. Links are rewritten to <code>./Page.html</code>, styles and scripts are baked into local copies, and the two fixes that stop a page asking for something no export has -- Citizen's service worker and its search shortcuts -- stay on, because a preview has no <code>load.php</code> behind it either. The generated <a href="./Configuration.html#WikvenAboutPage" title="Special:MyLanguage/Configuration">About</a> and <a href="./Configuration.html#WikvenSettingsPage" title="Special:MyLanguage/Configuration">Settings</a> pages are content rather than chrome and are still written; set those empty to leave them out too.
+</p><p>Leave it off for a site anyone reads. A published export that offers a login, a watchlist and a talk tab with nothing behind any of them is worse than one that offers none.
+</p><p>There is a source tree to bake with it: <code>examples/skin-preview</code> in the Wikven repository, one page carrying every element a skin has to style. Add your skin to its <code>.wikven.yml</code> and build that directory.
 </p><p><span id="WikvenStyleDirectory"></span>
 </p>
-</section><section id="citizen-section-11" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenStyleDirectory_and_WikvenScriptDirectory"><code>WikvenStyleDirectory</code> and <code>WikvenScriptDirectory</code></h3></div>
+</section><section id="citizen-section-12" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenStyleDirectory_and_WikvenScriptDirectory"><code>WikvenStyleDirectory</code> and <code>WikvenScriptDirectory</code></h3></div>
 <p><b>Default:</b> <code>.</code>
 </p><p>Where under the output directory the build writes the CSS and JavaScript it dumps out of MediaWiki. <code>.</code> is the output root. Set them to keep the generated assets out of the way of your pages; the paths are relative to the output directory and the build writes the links to match, so nothing else needs telling.
 </p>
@@ -499,7 +506,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="nt">WikvenStyleDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
 <span class="w">  </span><span class="nt">WikvenScriptDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
 </pre></div>
-</section><section id="citizen-section-12" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
+</section><section id="citizen-section-13" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
 <p><b>Default:</b> empty
 </p><p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. A name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here is skipped with a warning.
 </p><p>Each entry chooses one of three methods by the key it carries:
@@ -530,11 +537,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See <a href="./Deploying.html#Keeping_pinned_sources_current" title="Special:MyLanguage/Deploying">Deploying</a> for keeping one current.
 </p><p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 </p>
-</section><section id="citizen-section-13" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
+</section><section id="citizen-section-14" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
 <p><b>Default:</b> <code>[0, 6]</code>
 </p><p>A standard MediaWiki setting (<a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces"><code>$wgContentNamespaces</code></a>) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven sets the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see <a href="./Pages.html#Categories" title="Special:MyLanguage/Pages">Pages#Categories</a>. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
 </p>
-</section></section><section id="citizen-section-14" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Defaults">Defaults</h2></div>
+</section></section><section id="citizen-section-15" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Defaults">Defaults</h2></div>
 <p>Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. It also ships an <code>extensions</code> and a <code>skins</code> default, so every site gets <a href="./Searching.html" title="Special:MyLanguage/Searching">SifterSearch</a> search and the Vector skin without listing them. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
 </p><p>Titles are kept as written (rather than first-letter-capitalized, MediaWiki's default) so the entry page can be the lowercase <code>index</code>, which the build writes as <code>index.html</code>, the file a static host serves at the site root. The file is otherwise commented; each comment notes why Wikven sets that value.
 </p><p>To see the current defaults, read the bundled <code>default.yml</code>. From the Docker image:
@@ -563,7 +570,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration.wikitext" title="This page was last edited on 23 August 2026, at 10:18." data-timestamp="1787480311"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration.wikitext" title="This page was last edited on 28 August 2026, at 05:10." data-timestamp="1787893850"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>28 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -742,12 +749,27 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-WikvenBundleWebfonts-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
+		<li id="toc-WikvenSkinPreview"
+			class="citizen-toc-list-item citizen-toc-level-2">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenSkinPreview" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">3.8</span>
+						<span class="citizen-toc-heading">WikvenSkinPreview</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-WikvenSkinPreview-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
 		<li id="toc-WikvenStyleDirectory_and_WikvenScriptDirectory"
 			class="citizen-toc-list-item citizen-toc-level-2">
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenStyleDirectory_and_WikvenScriptDirectory" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3.8</span>
+						<span class="citizen-toc-numb">3.9</span>
 						<span class="citizen-toc-heading">WikvenStyleDirectory and WikvenScriptDirectory</span>
 					</div>
 					
@@ -762,7 +784,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenRepositories" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3.9</span>
+						<span class="citizen-toc-numb">3.10</span>
 						<span class="citizen-toc-heading">WikvenRepositories</span>
 					</div>
 					
@@ -777,7 +799,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#ContentNamespaces" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3.10</span>
+						<span class="citizen-toc-numb">3.11</span>
 						<span class="citizen-toc-heading">ContentNamespaces</span>
 					</div>
 					
@@ -814,7 +836,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 10:18.</div>
+		        <div class="page-info__text"> This page was last edited on 28 August 2026, at 05:10.</div>
 		    </section>
 		</div>
 </footer>		</div>
