@@ -218,6 +218,7 @@ Wikven
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
 <li><a href="./Installation/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="설치 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven runs in three ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. Build from source if you want to modify Wikven or run an unreleased version.
+</p><p><span id="binary"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Binary">Binary</h2></div>
 <p>A single self-contained executable that embeds MediaWiki, for Linux on x86_64 and arm64. Download it and make it executable:
@@ -234,6 +235,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </pre></div>
 <p>The same image is published to Quay as well, at <code>quay.io/chaotic-ground/wikven</code>. One build pushes both addresses, so pull from whichever one answers.
 </p><p>The untagged image is the most recent nightly, built from the main branch on any day it gained a feature or a fix; once a version is released, that is what the untagged image will be instead. None has been released yet, so there is no <code>:1.2.3</code> tag to pin; to hold a build still, pin a dated <code>:nightly-YYYY-MM-DD</code> tag or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
+</p><p><span id="build-from-source"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Build_from_source">Build from source</h2></div>
 <p>To modify Wikven or run an unreleased commit, clone the repository and build the image yourself:
@@ -264,8 +266,8 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787241962">
-  				<span>Last edited on 20 August 2026, at 16:06</span>
+  				data-timestamp="1787917464">
+  				<span>Last edited on 28 August 2026, at 11:44</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -288,7 +290,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 20 August 2026, at 16:06.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 28 August 2026, at 11:44.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

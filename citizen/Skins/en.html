@@ -444,14 +444,17 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
 </pre></div>
+<p><span id="building-more-than-one-skin"></span>
+</p>
 </section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Building_more_than_one_skin">Building more than one skin</h2></div>
 <p>List more than one skin and the site is built in every one of them, and the reader picks. This documentation site does that with all three. It is one line of configuration and rather more than one line of consequences, so they are worth knowing:
 </p>
-<ul><li><b>The site is rendered once per skin.</b> A bake with three skins does three full renders and writes about three times as many files. The renders run beside each other, one per processor the build is allowed, so the time they add is what the machine has no processor to spare for: given three, a three-skin bake costs about what a one-skin bake does; given one — or with <a href="../Commands/en.html#Environment_variables" title="Special:MyLanguage/Commands"><code>WIKVEN_BUILD_JOBS</code> set to <code>1</code></a> — about three times as much.</li>
+<ul><li><b>The site is rendered once per skin.</b> A bake with three skins does three full renders and writes about three times as many files. The renders run beside each other, one per processor the build is allowed, so the time they add is what the machine has no processor to spare for: given three, a three-skin bake costs about what a one-skin bake does; given one — or with <a href="../Commands/en.html#environment-variables" title="Special:MyLanguage/Commands"><code>WIKVEN_BUILD_JOBS</code> set to <code>1</code></a> — about three times as much.</li>
 <li><b>Each skin gets its own copy of every page.</b> The first skin in the list renders into the output root, as a single-skin site does, and every other renders into a directory named after it: <code>dist/citizen/Getting Started.html</code> beside <code>dist/Getting Started.html</code>. The copies are complete, down to their own <a href="../Searching/en.html" title="Special:MyLanguage/Searching">search index</a>, so a reader who chooses a skin stays in it while browsing and while searching.</li>
 <li><b>The copies are kept out of search engines.</b> Only the main skin's pages are indexable; the others are rendered <code>noindex</code>, so a search engine is not offered the same page three times.</li>
 <li><b>Every page gains a skin switcher.</b> Where it appears is up to the skin: Vector puts it in the appearance menu, Citizen in its preferences panel, and any other skin in the toolbox. A reader with no JavaScript still gets the plain list of links. MinervaNeue is the exception: the toolbox it would take is its page-actions menu, and which skin to read the site in is not an action on a page, so an article in it carries no switcher and the list is on the <a href="#Settings">Settings</a> page instead. Its main menu carries the site's own navigation and a link to that page.</li></ul>
 <p>With a single skin there is no switcher and no copy: the output is exactly what it was before.
+</p><p><span id="settings"></span>
 </p>
 </section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Settings">Settings</h2></div>
 <p>The build writes one page of its own for the reader: <code>Settings</code>, named by the <a href="../Configuration/en.html#WikvenSettingsPage" title="Special:MyLanguage/Configuration"><code>WikvenSettingsPage</code> setting</a>. It stands in for the preferences a live wiki would offer, which a static site has no server for, and holds the choices that are the reader's rather than yours:
@@ -533,7 +536,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Skins/en.wikitext" title="This page was last edited on 23 August 2026, at 07:13." data-timestamp="1787469221"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Skins/en.wikitext" title="This page was last edited on 28 August 2026, at 11:44." data-timestamp="1787917464"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>28 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -724,7 +727,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 07:13.</div>
+		        <div class="page-info__text"> This page was last edited on 28 August 2026, at 11:44.</div>
 		    </section>
 		</div>
 </footer>		</div>

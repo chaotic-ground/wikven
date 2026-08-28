@@ -574,7 +574,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 ├── pagefind/                the search index
 └── citizen/                 a complete copy of the site, per extra skin
 </pre></div>
-<p>Two things about that layout are worth knowing before you point a host at it. Links between pages are <b>relative</b>, so the site works at a domain root and in a subdirectory alike, and even from the filesystem. But anything addressed from the site root rather than from the page — the search bundle most visibly — has to be told the base path; that is the note under GitHub Pages below. And each extra skin's directory is a <b>complete copy</b>, so a three-skin site is roughly three times the files: see <a href="../Skins/en.html#Building_more_than_one_skin" title="Special:MyLanguage/Skins">Skins</a>.
+<p>Two things about that layout are worth knowing before you point a host at it. Links between pages are <b>relative</b>, so the site works at a domain root and in a subdirectory alike, and even from the filesystem. But anything addressed from the site root rather than from the page — the search bundle most visibly — has to be told the base path; that is the note under GitHub Pages below. And each extra skin's directory is a <b>complete copy</b>, so a three-skin site is roughly three times the files: see <a href="../Skins/en.html#building-more-than-one-skin" title="Special:MyLanguage/Skins">Skins</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="GitHub_Pages">GitHub Pages</h2></div>
 <p>This workflow rebuilds and publishes the site on every push. It bakes the source with the Wikven <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/bake">composite action</a>, then uploads <code>dist/</code> to Pages.
@@ -622,6 +622,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </div>
 <div class="mw-heading mw-heading2"><h2 id="Any_static_host">Any static host</h2></div>
 <p>Because <code>dist/</code> is just files, you can serve it from any static host (<a rel="nofollow" class="external text" href="https://www.netlify.com/">Netlify</a>, <a rel="nofollow" class="external text" href="https://pages.cloudflare.com/">Cloudflare Pages</a>, an object store like <a rel="nofollow" class="external text" href="https://aws.amazon.com/s3/">S3</a>, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
+</p><p><span id="preview-locally"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Preview_locally">Preview locally</h2></div>
 <p>Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. Wikven has a built-in <code>serve</code> command for this.
@@ -645,6 +646,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>Each page's "last edited" line names the commit that last changed <b>that page's source file</b>, and credits that commit's author. The wiki a build fills has no history of its own — every page is written in one import pass — so the repository's history is where those two facts come from.
 </p><p>That history has to be reachable. The <a href="../Commands/en.html#bake" title="Special:MyLanguage/Commands">bake action</a> reads it on the runner and hands it to the build, but a <b>shallow checkout knows only the last commit</b>, which is why the workflow above checks out with <code>fetch-depth: 0</code>. Without the full history nothing fails: every page is simply dated at the commit being built and credited to nobody. The action says so in the log when it happens, and that line is the only warning you get.
 </p><p>The rest follows from the same idea. A build runs with its clock frozen at <code>SOURCE_DATE_EPOCH</code> — the commit's own date, when the action sets it — so two builds of one commit produce <b>byte-identical</b> output, down to the timestamps in the pages. It means a redeploy of unchanged content changes nothing on the host, and a diff between two builds only ever shows what you actually edited. Wikven's own continuous integration asserts it by baking this site twice and comparing the results.
+</p><p><span id="keeping-pins-current"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Keeping_pinned_sources_current">Keeping pinned sources current</h2></div>
 <p>The pins that make those builds reproducible are the ones nothing moves for you. An exact <a href="../Configuration/en.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> pin</a> stays exact until you change it, and no bot will change it: <code>.wikven.yaml</code> is Wikven's own file, and Dependabot only watches the ecosystems it recognises. A site can therefore sit years behind on a skin with every check green.
@@ -705,7 +707,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 11:39.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 28 August 2026, at 11:44.</li>
 </ul>
 
 	<ul id="footer-places">

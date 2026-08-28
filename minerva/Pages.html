@@ -257,9 +257,11 @@ Wikven
 <div class="mw-heading mw-heading2"><h2 id="Namespaces">Namespaces</h2></div>
 <p>Prefix the file name with a namespace to place the page there:
 </p>
-<ul><li><code>Template:Infobox.wikitext</code> is the template "Template:Infobox" (see <a href="./Pages.html#Templates" title="Special:MyLanguage/Pages">Templates</a>).</li>
+<ul><li><code>Template:Infobox.wikitext</code> is the template "Template:Infobox" (see <a href="./Pages.html#templates" title="Special:MyLanguage/Pages">Templates</a>).</li>
 <li><code>File:Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see <a href="./Images.html" title="Special:MyLanguage/Images">Images</a>).</li>
 <li><code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see <a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a>). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.</li></ul>
+<p><span id="categories"></span>
+</p>
 <div class="mw-heading mw-heading2"><h2 id="Categories">Categories</h2></div>
 <p>Add <code>[[Category:Name]]</code> to a page to <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories">categorise</a> it; the categories show in the page footer, as on any wiki.
 </p><p>A category's own page is not exported by default, though. Wikven writes only <i>content</i> pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your <a href="./Configuration.html#ContentNamespaces" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a> and add a <code>Category:Name.wikitext</code> file to your source:
@@ -269,6 +271,7 @@ Wikven
 </pre></div>
 <p>This key replaces the default rather than extending it, so keep <code>0</code> and <code>6</code> in the list, or the main and File: pages stop being exported.
 </p><p>To keep a maintenance or tracking category out of the footer instead, add the <code>__HIDDENCAT__</code> <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words">magic word</a> to its category page; a static export has no logged-in readers, so a hidden category is off the footer for everyone.
+</p><p><span id="templates"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Templates">Templates</h2></div>
 <p>Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code>{{Name}}</code>. For example, this file:
@@ -298,8 +301,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787892659">
-  				<span>Last edited on 28 August 2026, at 04:50</span>
+  				data-timestamp="1787917464">
+  				<span>Last edited on 28 August 2026, at 11:44</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -322,7 +325,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 28 August 2026, at 04:50.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 28 August 2026, at 11:44.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
