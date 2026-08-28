@@ -735,6 +735,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>For looking at a skin rather than publishing a site. Wikven normally trims the chrome around a page to what a static host can stand behind: the personal menu, the toolbox, the talk tab and the watch star are emptied, the article tabs are replaced with links to your source files, a link to the repository goes in the footer, and a stylesheet of its own hides the rest. Every one of those is a judgement about a reader, and none of them is wanted by a skin author who has pointed the build at a few pages to see how their skin renders: the menus being edited are the thing they came to look at. Set this and they are all left as the skin drew them.
 </p><p>What the build still does is everything that makes the output a working set of files. Links are rewritten to <code>./Page.html</code>, styles and scripts are baked into local copies, and the two fixes that stop a page asking for something no export has -- Citizen's service worker and its search shortcuts -- stay on, because a preview has no <code>load.php</code> behind it either. The generated <a href="./Configuration.html#WikvenAboutPage" title="Special:MyLanguage/Configuration">About</a> and <a href="./Configuration.html#WikvenSettingsPage" title="Special:MyLanguage/Configuration">Settings</a> pages are content rather than chrome and are still written; set those empty to leave them out too.
 </p><p>Leave it off for a site anyone reads. A published export that offers a login, a watchlist and a talk tab with nothing behind any of them is worse than one that offers none.
+</p><p>There is a source tree to bake with it: <code>examples/skin-preview</code> in the Wikven repository, one page carrying every element a skin has to style. Add your skin to its <code>.wikven.yml</code> and build that directory.
 </p><p><span id="WikvenStyleDirectory"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenStyleDirectory_and_WikvenScriptDirectory"><code>WikvenStyleDirectory</code> and <code>WikvenScriptDirectory</code></h3></div>
@@ -802,7 +803,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 28 August 2026, at 04:55.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 28 August 2026, at 05:03.</li>
 </ul>
 
 	<ul id="footer-places">
