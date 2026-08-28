@@ -470,6 +470,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenMainPage"><code>WikvenMainPage</code></h3></div>
 <p><b>Default:</b> <code>index</code>
 </p><p>The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Naming your entry file <code>index.wikitext</code> therefore takes no configuration at all. The page must be one you imported; the build fails if it is missing.
+</p><p><span id="WikvenAboutPage"></span>
 </p>
 </section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenAboutPage"><code>WikvenAboutPage</code></h3></div>
 <p><b>Default:</b> <code>About</code>
@@ -479,11 +480,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </section><section id="citizen-section-8" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenFooterUrl"><code>WikvenFooterUrl</code></h3></div>
 <p><b>Default:</b> empty
 </p><p>A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...). With no URL there is no such link.
+</p><p><span id="WikvenSettingsPage"></span>
 </p>
 </section><section id="citizen-section-9" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenSettingsPage"><code>WikvenSettingsPage</code></h3></div>
 <p><b>Default:</b> <code>Settings</code>
 </p><p>The title of a page the build writes for the reader's own display choices: the colour theme, and, on a site built with more than one skin, which skin to read it in. The choices are kept in the reader's browser and apply to that site alone; no account is involved. It stands in for the preferences a live wiki would offer, which a static export has no server for.
 </p><p>Write a source page of that name and it takes precedence, exactly as for the About page. Set it empty to write no page at all, and the entries pointing at it go with it. See <a href="../Skins/en.html#settings" title="Special:MyLanguage/Skins">Skins</a> for what the page offers a reader.
+</p><p><span id="WikvenBundleWebfonts"></span>
 </p>
 </section><section id="citizen-section-10" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenBundleWebfonts"><code>WikvenBundleWebfonts</code></h3></div>
 <p><b>Default:</b> <code>false</code>
@@ -505,6 +508,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="nt">WikvenStyleDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
 <span class="w">  </span><span class="nt">WikvenScriptDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
 </pre></div>
+<p><span id="WikvenRepositories"></span>
+</p>
 </section><section id="citizen-section-13" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
 <p><b>Default:</b> empty
 </p><p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. A name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here is skipped with a warning.
@@ -535,6 +540,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </div>
 <p>Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See <a href="../Deploying/en.html#keeping-pins-current" title="Special:MyLanguage/Deploying">Deploying</a> for keeping one current.
 </p><p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="../Getting_Started/en.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
+</p><p><span id="ContentNamespaces"></span>
 </p>
 </section><section id="citizen-section-14" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
 <p><b>Default:</b> <code>[0, 6]</code>
@@ -569,7 +575,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 28 August 2026, at 11:44." data-timestamp="1787917464"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>28 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 28 August 2026, at 13:28." data-timestamp="1787923709"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>28 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -835,7 +841,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 28 August 2026, at 11:44.</div>
+		        <div class="page-info__text"> This page was last edited on 28 August 2026, at 13:28.</div>
 		    </section>
 		</div>
 </footer>		</div>

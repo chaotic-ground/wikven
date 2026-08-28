@@ -710,6 +710,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading3"><h3 id="WikvenMainPage"><code>WikvenMainPage</code></h3></div>
 <p><b>기본값:</b> <code>index</code>
 </p><p>사이트 루트로 쓰이는 문서의 제목으로, <code>index.html</code>로 작성되어 사이트 최상단에서 제공됩니다. 진입 파일 이름을 <code>index.wikitext</code>로 지으면 별도 설정이 전혀 필요 없습니다. 이 문서는 여러분이 가져온 문서여야 하며, 없으면 빌드가 실패합니다.
+</p><p><span id="WikvenAboutPage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenAboutPage"><code>WikvenAboutPage</code></h3></div>
 <p><b>기본값:</b> <code>About</code>
@@ -719,11 +720,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading3"><h3 id="WikvenFooterUrl"><code>WikvenFooterUrl</code></h3></div>
 <p><b>기본값:</b> 비어 있음
 </p><p>여러분의 프로젝트(보통 그 리포지터리)를 가리키며 사이트 바닥글에 추가되는 링크입니다. 바닥글은 알려진 포지(GitHub, GitLab, Codeberg 등)의 경우 호스트 이름을 표시합니다. URL이 없으면 그런 링크도 없습니다.
+</p><p><span id="WikvenSettingsPage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenSettingsPage"><code>WikvenSettingsPage</code></h3></div>
 <p><b>기본값:</b> <code>Settings</code>
 </p><p>빌드가 독자 자신의 표시 선택을 위해 쓰는 문서의 제목입니다. 색 테마, 그리고 스킨을 둘 이상으로 빌드한 사이트에서는 어떤 스킨으로 읽을지가 여기에 담깁니다. 이 선택은 독자의 브라우저에 보관되며 해당 사이트에만 적용되고, 계정은 관여하지 않습니다. 살아 있는 위키라면 제공했을 환경 설정을 대신하는데, 정적 내보내기에는 그럴 서버가 없기 때문입니다.
 </p><p>그 이름의 소스 문서를 쓰면 소개 문서와 똑같이 그쪽이 우선합니다. 빈 값으로 두면 문서를 아예 쓰지 않으며, 그곳을 가리키던 항목들도 함께 사라집니다. 이 문서가 독자에게 무엇을 제공하는지는 <a href="../Skins/ko.html#settings" title="Special:MyLanguage/Skins">스킨</a>을 참고하십시오.
+</p><p><span id="WikvenBundleWebfonts"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenBundleWebfonts"><code>WikvenBundleWebfonts</code></h3></div>
 <p><b>기본값:</b> <code>false</code>
@@ -745,6 +748,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="nt">WikvenStyleDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
 <span class="w">  </span><span class="nt">WikvenScriptDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
 </pre></div>
+<p><span id="WikvenRepositories"></span>
+</p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
 <p><b>기본값:</b> 비어 있음
 </p><p><code>extensions</code>와 <code>skins</code>에 나열한 서드파티 확장 기능과 스킨의 소스입니다. 목록은 평범한 이름 그대로 유지되고(MediaWiki 자체가 쓰는 형태), 이 맵은 wikven에 번들되지 않은 것들을 어디서 가져올지 지정합니다. 이들은 MediaWiki가 불러오기 전에 빌드 시점에 가져옵니다. 항목이 확장 기능인지 스킨인지는 그 이름이 어느 목록에 나타나는지에 따라 정해지므로 이름을 두 번 쓸 일이 없습니다. <code>extensions</code>나 <code>skins</code>에 적힌 이름이 번들되지도, 여기에 선언되지도 않았다면 경고와 함께 건너뜁니다.
@@ -775,6 +780,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </div>
 <p>다만 정확한 핀을 여러분 대신 옮겨 주는 것은 없습니다. 이 파일은 의존성 봇이 읽는 어떤 생태계에도 속하지 않으므로, 그대로 둔 핀은 뒤처진 핀이 됩니다. 핀을 최신으로 유지하는 방법은 <a href="../Deploying/ko.html#keeping-pins-current" title="Special:MyLanguage/Deploying">배포하기</a>를 참고하십시오.
 </p><p>바로 이 사이트도 이 방식으로 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a>를 가져옵니다(그 <code>.wikven.yaml</code> 참고). <a href="../Getting_Started/ko.html" title="Special:MyLanguage/Getting Started">시작하기</a>에 있는 탭 형식의 Docker/바이너리 명령 예시는 가져온 이 확장 기능이 렌더링한 것입니다. (이 사이트의 틀이 쓰는 TemplateStyles는 MediaWiki에 번들되어 있어 여기에 소스가 필요 없습니다.)
+</p><p><span id="ContentNamespaces"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
 <p><b>기본값:</b> <code>[0, 6]</code>
@@ -803,7 +809,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 28일 (금) 11:44에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 28일 (금) 13:28에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
