@@ -18,17 +18,11 @@ Wikven은 자체 기본값(정적 위키를 위한 합리적인 MediaWiki 설정
 == <code>skins</code> ==
 활성화할 스킨 이름의 목록입니다. 첫 번째가 기본 스킨으로 쓰입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 [[#WikvenRepositories|<code>WikvenRepositories</code> 맵]]에서 가져옵니다. [[$1|스킨]]을 참고하십시오.
 
-<!--T:6 @df99ac49-->
-== <code>config</code> ==
-
 <!--T:7 @f3474178-->
 각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 [$1 설정 값]이든 여기에 정의할 수 있으며, Wikven 자체 변수도 정의할 수 있는데, 아래 절들이 그것을 하나씩 설명합니다.
 
 <!--T:36 @5e65d649-->
 여기에 나오지 않는 세 가지가 더 있지만 여러분이 설정할 것은 아닙니다. <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code>, <code>WikvenSourceHistoryFile</code>은 빌드가 <code>WIKVEN_WORKDIR</code>에서 직접 이끌어냅니다([[$1|명령어]] 참고). 여러분의 파일에서 설정해도 쓸모가 없으며, 어차피 빌드가 덮어씁니다.
-
-<!--T:8 @6495a3e5-->
-=== <code>WikvenLogos</code> ===
 
 <!--T:45 @6ab2d6cb-->
 '''기본값:''' 비어 있음
@@ -52,18 +46,11 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:13 @4d8db29e-->
 "편집", "역사 보기", "원본 보기" 링크가 가리키는 대상으로, 독자가 렌더링된 문서에서 리포지터리의 소스로 건너뛸 수 있게 합니다. 각 URL에서 <code>$1</code>은 확장자를 포함해 소스 디렉터리를 기준으로 한 문서 소스 파일 이름으로 치환됩니다. 제목이 자체 콘텐츠 모델을 지니는 문서는 그 이름을 그대로 유지하고(<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, <code>.json</code> 설정 문서, <code>Module:</code> 문서 등), 그 밖의 모든 문서는 <code>.wikitext</code> 파일이므로 평범한 문서는 <code>Getting Started.wikitext</code>가 됩니다. 이들 중 어느 것이든 설정하지 않으면 해당 링크가 빠집니다. 생성된 문서(빌드가 직접 쓴 [[#WikvenAboutPage|소개]] 문서 같은)에는 소스 파일이 없으므로 이 링크들은 생략됩니다.
 
-<!--T:14 @c9fc389d-->
-=== <code>WikvenMainPage</code> ===
-
 <!--T:47 @18a7e6ab-->
 '''기본값:''' <code>index</code>
 
 <!--T:15 @46cc8c49-->
 사이트 루트로 쓰이는 문서의 제목으로, <code>index.html</code>로 작성되어 사이트 최상단에서 제공됩니다. 진입 파일 이름을 <code>index.wikitext</code>로 지으면 별도 설정이 전혀 필요 없습니다. 이 문서는 여러분이 가져온 문서여야 하며, 없으면 빌드가 실패합니다.
-
-<!--T:16 @7e0aaa2a-->
-<span id="WikvenAboutPage"></span>
-=== <code>WikvenAboutPage</code> ===
 
 <!--T:48 @d8b59d5d-->
 '''기본값:''' <code>About</code>
@@ -74,18 +61,11 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:55 @ded75a7b-->
 이 설정을 무엇으로 두든, 빌드는 틀 두 개를 생성합니다. export에는 독자를 보낼 <code>Special:Version</code>이 없기 때문입니다. 어느 문서에서든 원하는 자리에 넣으십시오. <code><nowiki>{{Wikven software}}</nowiki></code>는 그 특수문서가 보여 줄 내용 — MediaWiki와 PHP, 데이터베이스, 그리고 확장 기능과 스킨 — 이고, <code><nowiki>{{Wikven components}}</nowiki></code>는 확장 기능과 스킨만을 각각이 밝힌 라이선스와 함께 담은 것으로, 사이트가 재배포하는 것을 밝히는 문서에 필요한 쪽입니다.
 
-<!--T:18 @c5bc8e2e-->
-=== <code>WikvenFooterUrl</code> ===
-
 <!--T:49 @6ab2d6cb-->
 '''기본값:''' 비어 있음
 
 <!--T:19 @336524d0-->
 여러분의 프로젝트(보통 그 리포지터리)를 가리키며 사이트 바닥글에 추가되는 링크입니다. 바닥글은 알려진 포지(GitHub, GitLab, Codeberg 등)의 경우 호스트 이름을 표시합니다. URL이 없으면 그런 링크도 없습니다.
-
-<!--T:37 @8bc6c748-->
-<span id="WikvenSettingsPage"></span>
-=== <code>WikvenSettingsPage</code> ===
 
 <!--T:50 @0caa505b-->
 '''기본값:''' <code>Settings</code>
@@ -96,18 +76,11 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:39 @bb7171ab-->
 그 이름의 소스 문서를 쓰면 소개 문서와 똑같이 그쪽이 우선합니다. 빈 값으로 두면 문서를 아예 쓰지 않으며, 그곳을 가리키던 항목들도 함께 사라집니다. 이 문서가 독자에게 무엇을 제공하는지는 [[$1|스킨]]을 참고하십시오.
 
-<!--T:40 @39b09490-->
-<span id="WikvenBundleWebfonts"></span>
-=== <code>WikvenBundleWebfonts</code> ===
-
 <!--T:51 @4f128b66-->
 '''기본값:''' <code>false</code>
 
 <!--T:41 @10727db1-->
 이 값을 설정하고 UniversalLanguageSelector를 켜면, 빌드가 문서에서 쓰는 언어들의 웹폰트를 내보내기가 스스로 제공하는 스타일시트로 구워 넣습니다. 어떤 문자의 글꼴이 시스템에 없는 독자도 빈 네모 대신 의도한 글꼴을 보게 됩니다. 따로 요청하지 않으면 꺼져 있는데, 글꼴은 그것이 필요하지 않을 수도 있는 독자에게까지 추가로 전송되는 용량이기 때문입니다. UniversalLanguageSelector가 없으면 아무 일도 하지 않습니다. [[$1|번역하기]]를 참고하십시오.
-
-<!--T:56 @a14fba24-->
-=== <code>WikvenSkinPreview</code> ===
 
 <!--T:57 @4f128b66-->
 '''기본값:''' <code>false</code>
@@ -133,10 +106,6 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 
 <!--T:43 @6ad7acb3-->
 빌드가 MediaWiki에서 뽑아낸 CSS와 자바스크립트를 출력 디렉터리 아래 어디에 쓸지입니다. <code>.</code>은 출력 루트입니다. 생성된 자산을 문서들과 섞이지 않게 두려면 설정하십시오. 경로는 출력 디렉터리 기준이고 빌드가 링크도 거기에 맞춰 쓰므로, 따로 알려 줄 것은 없습니다.
-
-<!--T:20 @a9d8c62a-->
-<span id="WikvenRepositories"></span>
-=== <code>WikvenRepositories</code> ===
 
 <!--T:53 @6ab2d6cb-->
 '''기본값:''' 비어 있음
@@ -175,10 +144,6 @@ $1
 
 <!--T:26 @b03dacba-->
 바로 이 사이트도 이 방식으로 [$2 TabberNeue]를 가져옵니다(그 <code>.wikven.yaml</code> 참고). [[$1|시작하기]]에 있는 탭 형식의 Docker/바이너리 명령 예시는 가져온 이 확장 기능이 렌더링한 것입니다. (이 사이트의 틀이 쓰는 TemplateStyles는 MediaWiki에 번들되어 있어 여기에 소스가 필요 없습니다.)
-
-<!--T:27 @8c96352f-->
-<span id="ContentNamespaces"></span>
-=== <code>ContentNamespaces</code> ===
 
 <!--T:54 @a3511c46-->
 '''기본값:''' <code>[0, 6]</code>

@@ -31,10 +31,11 @@ dist/
 <translate>
 <!--T:15-->
 Two things about that layout are worth knowing before you point a host at it. Links between pages are '''relative''', so the site works at a domain root and in a subdirectory alike, and even from the filesystem. But anything addressed from the site root rather than from the page — the search bundle most visibly — has to be told the base path; that is the note under GitHub Pages below. And each extra skin's directory is a '''complete copy''', so a three-skin site is roughly three times the files: see [[<tvar name="1">Special:MyLanguage/Skins#building-more-than-one-skin</tvar>|Skins]].
+</translate>
 
-<!--T:2-->
 == GitHub Pages ==
 
+<translate>
 <!--T:3-->
 This workflow rebuilds and publishes the site on every push. It bakes the source with the {{SITENAME}} [<tvar name="1">https://github.com/chaotic-ground/wikven/tree/main/actions/bake</tvar> composite action], then uploads <code>dist/</code> to Pages.
 </translate>

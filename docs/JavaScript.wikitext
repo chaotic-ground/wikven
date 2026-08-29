@@ -2,10 +2,11 @@
 <translate>
 <!--T:1-->
 {{SITENAME}} bundles the wiki's own JavaScript into the static export at build time, so site scripts and gadgets run without a live server or <code>load.php</code>.
+</translate>
 
-<!--T:2-->
 == MediaWiki:Common.js ==
 
+<translate>
 <!--T:3-->
 Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a regular wiki. Create a <code>MediaWiki:Common.js</code> file in your source directory and it runs on every page. A <code>.js</code> page carries its own content model, so it needs no <code>.wikitext</code> marker. The skin's <code>MediaWiki:Vector.js</code> (and so on) works the same way.
 

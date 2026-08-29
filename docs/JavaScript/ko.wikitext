@@ -4,9 +4,6 @@
 <!--T:1 @a2318c13-->
 {{SITENAME}}은 빌드 시점에 위키 자체의 JavaScript를 정적 내보내기에 번들로 포함하므로, 구동 중인 서버나 <code>load.php</code> 없이도 사이트 스크립트와 소도구가 실행됩니다.
 
-<!--T:2 @4e04a5f5-->
-== MediaWiki:Common.js ==
-
 <!--T:3 @de97939a-->
 사이트 전역 JavaScript는 일반 위키에서와 마찬가지로 <code>MediaWiki:Common.js</code>에 둡니다. 소스 디렉터리에 <code>MediaWiki:Common.js</code> 파일을 만들면 모든 문서에서 실행됩니다. <code>.js</code> 문서는 자체 콘텐츠 모델을 가지므로 <code>.wikitext</code> 표시가 필요 없습니다. 스킨의 <code>MediaWiki:Vector.js</code>(등등)도 같은 방식으로 동작합니다.
 

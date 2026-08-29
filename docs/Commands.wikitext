@@ -21,10 +21,11 @@ Every way of running {{SITENAME}} — the [[<tvar name="1">Special:MyLanguage/In
 
 <!--T:5-->
 The Docker image has the working directory at <code>/workspace</code>, which is why builds mount <code>src</code> and <code>dist</code> under it. The binary uses the current directory. Either way, <code>WIKVEN_WORKDIR</code> overrides it.
+</translate>
 
-<!--T:6-->
 == <code>build</code> ==
 
+<translate>
 <!--T:7-->
 Builds <code>src/</code> into <code>dist/</code>. This is the image's default command, so the Docker form needs no argument:
 </translate>
@@ -46,10 +47,11 @@ docker run --rm \
 <translate>
 <!--T:8-->
 It takes no options; everything a build can be told is in your [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code> file]]. A failed build exits non-zero and says which page or step failed.
+</translate>
 
-<!--T:9-->
 == <code>serve</code> ==
 
+<translate>
 <!--T:10-->
 Serves an already-built <code>dist/</code> for local preview, on port 8080. It builds nothing: run <code>build</code> first.
 </translate>
@@ -71,11 +73,12 @@ docker run --rm -p 8080:8080 \
 <translate>
 <!--T:11-->
 Only the binary takes <code>--listen</code>; the container always listens on 8080 inside, and you choose the outside port with Docker's own <code>-p</code>.
+</translate>
 
-<!--T:12-->
 <span id="translate"></span>
 == <code>translate</code> ==
 
+<translate>
 <!--T:13-->
 The four helpers behind [[<tvar name="1">Special:MyLanguage/Translating</tvar>|Translating]]. They work on your source tree and exit without building anything.
 

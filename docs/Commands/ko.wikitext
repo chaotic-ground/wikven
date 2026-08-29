@@ -21,27 +21,17 @@
 <!--T:5 @9fa0a4fb-->
 Docker 이미지는 작업 디렉터리가 <code>/workspace</code>이고, 그래서 빌드가 <code>src</code>와 <code>dist</code>를 그 아래에 마운트합니다. 바이너리는 현재 디렉터리를 씁니다. 어느 쪽이든 <code>WIKVEN_WORKDIR</code>이 이를 덮어씁니다.
 
-<!--T:6 @39afb933-->
-== <code>build</code> ==
-
 <!--T:7 @5b4b14d4-->
 <code>src/</code>를 <code>dist/</code>로 빌드합니다. 이미지의 기본 명령이므로 Docker 쪽은 인자가 필요 없습니다:
 
 <!--T:8 @b825cf71-->
 옵션은 없습니다. 빌드에 알려 줄 수 있는 것은 모두 [[$1|<code>.wikven.yaml</code> 파일]]에 있습니다. 실패한 빌드는 0이 아닌 값으로 끝나며 어느 문서나 단계에서 실패했는지 알려 줍니다.
 
-<!--T:9 @4839de7e-->
-== <code>serve</code> ==
-
 <!--T:10 @c2352ed4-->
 이미 빌드된 <code>dist/</code>를 로컬 미리보기용으로 8080 포트에서 제공합니다. 빌드는 하지 않으므로 <code>build</code>를 먼저 실행하십시오.
 
 <!--T:11 @8221d3a9-->
 <code>--listen</code>은 바이너리만 받습니다. 컨테이너는 안에서 항상 8080을 듣고, 바깥 포트는 Docker 자신의 <code>-p</code>로 정합니다.
-
-<!--T:12 @801eba12-->
-<span id="translate"></span>
-== <code>translate</code> ==
 
 <!--T:13 @29242b5c-->
 [[$1|번역하기]] 뒤에 있는 네 가지 도우미입니다. 소스 트리를 대상으로 동작하며 아무것도 빌드하지 않고 끝납니다.
