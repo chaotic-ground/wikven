@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-0 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Deploying - Wikven</title>
+<script>(function(){var className="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-0 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )my_wikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Deploying","wgTitle":"Deploying","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages using Tabber parser tag"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Deploying","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"source","wgTranslatePageTranslationGroup":"page-Deploying","wgTranslatePriorityLanguages":[],"wgULSPosition":"personal","wgULSisCompactLinksEnabled":false,"wgVector2022LanguageInHeader":true,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
+RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","ext.tabberNeue.init.styles":"ready","skins.vector.search.codex.styles":"ready","skins.vector.styles":"ready","skins.vector.icons":"ready","ext.translate.edit.documentation.styles":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","ext.uls.pt":"ready"};RLPAGEMODULES=[];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+
+<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","ext.tabberNeue","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.interface"]);</script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+
+<meta name="generator" content="MediaWiki 1.46.0">
+<meta name="robots" content="max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="././ext.translate.tag.languages.css">
+<link rel="stylesheet" href="././ext.pygments.css">
+<link rel="stylesheet" href="././ext.tabberNeue.init.styles.css">
+<link rel="stylesheet" href="././skins.vector.search.codex.styles.css">
+<link rel="stylesheet" href="././skins.vector.styles.css">
+<link rel="stylesheet" href="././skins.vector.icons.css">
+<link rel="stylesheet" href="././ext.translate.edit.documentation.styles.css">
+<link rel="stylesheet" href="././ext.translate.css">
+<link rel="stylesheet" href="././ext.Wikven.styles.css">
+<link rel="stylesheet" href="././ext.uls.pt.css">
+<link rel="stylesheet" href="././webfonts.css"><link rel="stylesheet" href="././site.styles.css"></head>
+<body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Deploying rootpage-Deploying skin-vector-2022 action-view">
+<div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
+<div class="vector-header-container">
+	<header class="vector-header mw-header no-font-mode-scale">
+		<div class="vector-header-start">
+			<nav class="vector-main-menu-landmark" aria-label="Site">
+				
+<div id="vector-main-menu-dropdown" class="vector-dropdown vector-main-menu-dropdown vector-button-flush-left vector-button-flush-right"  title="Main menu" >
+	<input type="checkbox" id="vector-main-menu-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-main-menu-dropdown" class="vector-dropdown-checkbox "  aria-label="Main menu"  >
+	<label id="vector-main-menu-dropdown-label" for="vector-main-menu-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-menu mw-ui-icon-wikimedia-menu"></span>
+
+<span class="vector-dropdown-label-text">Main menu</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+				<div id="vector-main-menu-unpinned-container" class="vector-unpinned-container">
+		
+<div id="vector-main-menu" class="vector-main-menu vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-main-menu-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="main-menu-pinned"
+	data-pinnable-element-id="vector-main-menu"
+	data-pinned-container-id="vector-main-menu-pinned-container"
+	data-unpinned-container-id="vector-main-menu-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Main menu</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-main-menu.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-main-menu.unpin">hide</button>
+</div>
+
+	
+<div id="p-sidebar-docs" class="vector-menu mw-portlet mw-portlet-sidebar-docs"  >
+	<div class="vector-menu-heading">
+		Docs
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-sidebar-installation" class="mw-list-item"><a href="./Installation.html"><span>Installation</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="./Getting_Started.html"><span>Getting Started</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="./Pages.html"><span>Pages</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="./Images.html"><span>Images</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="./Skins.html"><span>Skins</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="./Searching.html"><span>Searching</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="./Extensions.html"><span>Extensions</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="./Lua_modules.html"><span>Lua modules</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="./JavaScript.html"><span>JavaScript</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="./Translating.html"><span>Translating</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="./Editing_sidebar.html"><span>Editing sidebar</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="./Deploying.html"><span>Deploying</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="./Troubleshooting.html"><span>Troubleshooting</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-sidebar-references" class="vector-menu mw-portlet mw-portlet-sidebar-references"  >
+	<div class="vector-menu-heading">
+		References
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-sidebar-limitations" class="mw-list-item"><a href="./Limitations.html"><span>Limitations</span></a></li><li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="./Why_wikitext.html"><span>Why wikitext</span></a></li><li id="n-sidebar-configuration" class="mw-list-item"><a href="./Configuration.html"><span>Configuration</span></a></li><li id="n-sidebar-standalone-binary" class="mw-list-item"><a href="./Standalone_binary.html"><span>Standalone binary</span></a></li><li id="n-sidebar-commands" class="mw-list-item"><a href="./Commands.html"><span>Commands</span></a></li><li id="n-sidebar-writing-an-extension" class="mw-list-item"><a href="./Writing_an_extension.html"><span>Writing an extension</span></a></li><li id="n-sidebar-development" class="mw-list-item"><a href="./Development.html"><span>Development</span></a></li><li id="n-sidebar-licenses" class="mw-list-item"><a href="./Licenses.html"><span>Licenses</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+				</div>
+
+	</div>
+</div>
+
+		</nav>
+			
+<a href="./index.html" class="mw-logo">
+	<img class="mw-logo-icon" src="./img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
+	<span class="mw-logo-container skin-invert">
+		<strong class="mw-logo-wordmark">Wikven</strong>
+	</span>
+</a>
+
+		</div>
+		<div class="vector-header-end">
+			
+<div id="p-search" role="search" class="vector-search-box-vue  vector-search-box-collapses vector-search-box">
+	<a href="./Search.html" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only search-toggle" title="Search Wikven [f]" accesskey="f"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+	</a>
+	<div class="vector-typeahead-search-container">
+		<div class="cdx-typeahead-search">
+			<form action="/index.php" id="searchform" class="cdx-search-input cdx-search-input--has-end-button">
+				<div id="simpleSearch" class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+					<div class="cdx-text-input cdx-text-input--has-start-icon">
+						<input
+							class="cdx-text-input__input mw-searchInput" autocomplete="off"
+							 type="search" name="search" placeholder="Search Wikven" aria-label="Search Wikven" autocapitalize="none" spellcheck="false" title="Search Wikven [f]" accesskey="f" id="searchInput"
+							>
+						<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+					</div>
+					<input type="hidden" name="title" value="Special:Search">
+				</div>
+				<button class="cdx-button cdx-search-input__end-button">Search</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+			<nav class="vector-user-links vector-user-links-wide" aria-label="Personal tools">
+	<div class="vector-user-links-main">
+	
+<div id="p-vector-user-menu-preferences" class="vector-menu mw-portlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="ca-uls" class="mw-list-item active user-links-collapsible-item"><a data-mw-interface  href="#" class="uls-trigger cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet"><span class="vector-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span>
+
+<span>English</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-userpage" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	<nav class="vector-appearance-landmark" aria-label="Appearance">
+		
+<div id="vector-appearance-dropdown" class="vector-dropdown "  title="Change the appearance of the page&#039;s font size, width, and color" >
+	<input type="checkbox" id="vector-appearance-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-appearance-dropdown" class="vector-dropdown-checkbox "  aria-label="Appearance"  >
+	<label id="vector-appearance-dropdown-label" for="vector-appearance-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-appearance mw-ui-icon-wikimedia-appearance"></span>
+
+<span class="vector-dropdown-label-text">Appearance</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+			<div id="vector-appearance-unpinned-container" class="vector-unpinned-container">
+				
+			</div>
+		
+	</div>
+</div>
+
+	</nav>
+	
+<div id="p-vector-user-menu-notifications" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-overflow" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	</div>
+	
+<div id="vector-user-links-dropdown" class="vector-dropdown vector-user-menu vector-button-flush-right vector-user-menu-logged-out user-links-collapsible-item--none"  title="Personal settings" >
+	<input type="checkbox" id="vector-user-links-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-user-links-dropdown" class="vector-dropdown-checkbox "  aria-label="Personal tools"  >
+	<label id="vector-user-links-dropdown-label" for="vector-user-links-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-icon mw-ui-icon- mw-ui-icon-wikimedia-"></span>
+
+<span class="vector-dropdown-label-text">Personal tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+		
+<div id="p-personal" class="vector-menu mw-portlet mw-portlet-personal emptyPortlet user-links-collapsible-item"  title="User menu" >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+</nav>
+
+		</div>
+	</header>
+</div>
+<div class="mw-page-container">
+	<div class="mw-page-container-inner">
+		<div class="vector-sitenotice-container">
+			<div id="siteNotice"></div>
+		</div>
+		<div class="vector-column-start">
+			<div class="vector-main-menu-container">
+		<div id="mw-navigation">
+			<nav id="mw-panel" class="vector-main-menu-landmark" aria-label="Site">
+				<div id="vector-main-menu-pinned-container" class="vector-pinned-container">
+				
+				</div>
+		</nav>
+		</div>
+	</div>
+	<div class="vector-sticky-pinned-container">
+				<nav id="mw-panel-toc" aria-label="Contents" data-event-name="ui.sidebar-toc" class="mw-table-of-contents-container vector-toc-landmark">
+					<div id="vector-toc-pinned-container" class="vector-pinned-container">
+					<div id="vector-toc" class="vector-toc vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-toc-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="toc-pinned"
+	data-pinnable-element-id="vector-toc"
+	data-pinned-container-id="vector-toc-pinned-container"
+	data-unpinned-container-id="vector-toc-unpinned-container"
+>
+	<h2 class="vector-pinnable-header-label">Contents</h2>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-toc.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-toc.unpin">hide</button>
+</div>
+
+
+	<ul class="vector-toc-contents" id="mw-panel-toc-list">
+		<li id="toc-mw-content-text"
+			class="vector-toc-list-item vector-toc-level-1">
+			<a href="#" class="vector-toc-link">
+				<div class="vector-toc-text">Beginning</div>
+			</a>
+		</li>
+		<li id="toc-What_a_build_writes"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#What_a_build_writes">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">1</span>
+				<span>What a build writes</span>
+			</div>
+		</a>
+		
+		<ul id="toc-What_a_build_writes-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-GitHub_Pages"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#GitHub_Pages">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">2</span>
+				<span>GitHub Pages</span>
+			</div>
+		</a>
+		
+		<ul id="toc-GitHub_Pages-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Any_static_host"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Any_static_host">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">3</span>
+				<span>Any static host</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Any_static_host-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Preview_locally"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Preview_locally">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">4</span>
+				<span>Preview locally</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Preview_locally-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Dates,_authors_and_reproducible_builds"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Dates,_authors_and_reproducible_builds">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">5</span>
+				<span>Dates, authors and reproducible builds</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Dates,_authors_and_reproducible_builds-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Keeping_pinned_sources_current"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Keeping_pinned_sources_current">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">6</span>
+				<span>Keeping pinned sources current</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Keeping_pinned_sources_current-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+</ul>
+</div>
+
+					</div>
+		</nav>
+			</div>
+		</div>
+		<div class="mw-content-container">
+			<main id="content" class="mw-body">
+				<header class="mw-body-header vector-page-titlebar no-font-mode-scale">
+					<nav aria-label="Contents" class="vector-toc-landmark">
+						
+<div id="vector-page-titlebar-toc" class="vector-dropdown vector-page-titlebar-toc vector-button-flush-left"  title="Table of Contents" >
+	<input type="checkbox" id="vector-page-titlebar-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-titlebar-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+	<label id="vector-page-titlebar-toc-label" for="vector-page-titlebar-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+							<div id="vector-page-titlebar-toc-unpinned-container" class="vector-unpinned-container">
+			</div>
+		
+	</div>
+</div>
+
+					</nav>
+					<h1 id="firstHeading" class="firstHeading mw-first-heading"><span lang="en" dir="ltr"><span class="mw-page-title-main">Deploying</span></span></h1>
+				</header>
+				<div class="vector-page-toolbar vector-feature-custom-font-size-clientpref--excluded">
+					<div class="vector-page-toolbar-container">
+						<div id="left-navigation">
+							<nav aria-label="Namespaces">
+								
+<div id="p-associated-pages" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-associated-pages"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-nstab-main" class="selected vector-tab-noicon mw-list-item"><a href="./Deploying.html" title="View the content page [c]" accesskey="c"><span>Page</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+								
+<div id="vector-variants-dropdown" class="vector-dropdown emptyPortlet"  >
+	<input type="checkbox" id="vector-variants-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-variants-dropdown" class="vector-dropdown-checkbox " aria-label="Change language variant"   >
+	<label id="vector-variants-dropdown-label" for="vector-variants-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">English</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+					
+<div id="p-variants" class="vector-menu mw-portlet mw-portlet-variants emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+						<div id="right-navigation" class="vector-collapsible">
+							<nav aria-label="Views">
+								
+<div id="p-views" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-views"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-view" class="selected vector-tab-noicon mw-list-item"><a href="./Deploying.html"><span>Read</span></a></li><li id="ca-edit" class="vector-tab-noicon mw-list-item"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Deploying.wikitext" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-history" class="vector-tab-noicon mw-list-item"><a href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying.wikitext" title="Past revisions of this page [h]" accesskey="h"><span>View history</span></a></li><li id="ca-wikven-viewsource" class="vector-tab-noicon mw-list-item"><a href="https://github.com/chaotic-ground/wikven/blob/main/docs/Deploying.wikitext"><span>View source</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+							</nav>
+				
+							<nav class="vector-page-tools-landmark" aria-label="Page tools">
+								
+<div id="vector-page-tools-dropdown" class="vector-dropdown vector-page-tools-dropdown"  >
+	<input type="checkbox" id="vector-page-tools-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-tools-dropdown" class="vector-dropdown-checkbox "  aria-label="Tools"  >
+	<label id="vector-page-tools-dropdown-label" for="vector-page-tools-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">Tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+									<div id="vector-page-tools-unpinned-container" class="vector-unpinned-container">
+						
+<div id="vector-page-tools" class="vector-page-tools vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-page-tools-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="page-tools-pinned"
+	data-pinnable-element-id="vector-page-tools"
+	data-pinned-container-id="vector-page-tools-pinned-container"
+	data-unpinned-container-id="vector-page-tools-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Tools</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-page-tools.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-page-tools.unpin">hide</button>
+</div>
+
+	
+<div id="p-cactions" class="vector-menu mw-portlet mw-portlet-cactions emptyPortlet vector-has-collapsible-items"  title="More options" >
+	<div class="vector-menu-heading">
+		Actions
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-more-view" class="selected vector-more-collapsible-item mw-list-item"><a href="./Deploying.html"><span>Read</span></a></li><li id="ca-more-edit" class="vector-more-collapsible-item mw-list-item"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Deploying.wikitext" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-more-history" class="vector-more-collapsible-item mw-list-item"><a href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying.wikitext"><span>View history</span></a></li><li id="ca-more-wikven-viewsource" class="vector-more-collapsible-item mw-list-item"><a href="https://github.com/chaotic-ground/wikven/blob/main/docs/Deploying.wikitext"><span>View source</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-tb" class="vector-menu mw-portlet mw-portlet-tb emptyPortlet"  >
+	<div class="vector-menu-heading">
+		General
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-wikven-skins" class="vector-menu mw-portlet mw-portlet-wikven-skins"  >
+	<div class="vector-menu-heading">
+		Skins
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-wikven-skin-vector-2022" class="mw-list-item active"><span>Vector (2022)</span></li><li id="t-wikven-skin-citizen" class="mw-list-item"><a href="./citizen/Deploying.html"><span>Citizen</span></a></li><li id="t-wikven-skin-minerva" class="mw-list-item"><a href="./minerva/Deploying.html"><span>MinervaNeue</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+									</div>
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="vector-column-end no-font-mode-scale">
+					<div class="vector-sticky-pinned-container">
+						<div class="wp25eastereggs-vector-sitenotice-landmark"></div>
+						<nav class="vector-page-tools-landmark" aria-label="Page tools">
+							<div id="vector-page-tools-pinned-container" class="vector-pinned-container">
+				
+							</div>
+		</nav>
+						<nav class="vector-appearance-landmark" aria-label="Appearance">
+							<div id="vector-appearance-pinned-container" class="vector-pinned-container">
+				<div id="vector-appearance" class="vector-appearance vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-appearance-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="appearance-pinned"
+	data-pinnable-element-id="vector-appearance"
+	data-pinned-container-id="vector-appearance-pinned-container"
+	data-unpinned-container-id="vector-appearance-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Appearance</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-appearance.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-appearance.unpin">hide</button>
+</div>
+
+
+</div>
+
+							</div>
+		</nav>
+					</div>
+				</div>
+				<div id="bodyContent" class="vector-body" aria-labelledby="firstHeading" data-mw-ve-target-container>
+					<div class="vector-body-before-content">
+							<div class="mw-indicators">
+		</div>
+
+						<div id="siteSub" class="noprint">From Wikven</div>
+					</div>
+					<div id="contentSub"><div id="mw-content-subtitle"></div></div>
+					
+					
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><meta property="mw:PageProp/toc" />
+<div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
+<li><a href="./Deploying/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="배포하기 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<p>Wikven writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="What_a_build_writes">What a build writes</h2></div>
+<p>Everything the site needs is in <code>dist/</code>, and nothing in it is fetched from anywhere else at view time:
+</p>
+<div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>dist/
+├── index.html               the main page, served at the site root
+├── Getting Started.html     one file per page
+├── Guide/
+│   └── Setup.html           a page whose title has a slash becomes a directory
+├── File:Logo.png.html       file description pages
+├── img-1a2b3c4d5e6f.png     every image the pages use, named by content
+├── site.styles.css          MediaWiki:Common.css and the skin&#39;s own CSS
+├── startup-static.js        the module loader, with its network fetch removed
+├── modules-static.js        every module the pages need, bundled
+├── webfonts.css + fonts/    only with WikvenBundleWebfonts set
+├── pagefind/                the search index
+└── citizen/                 a complete copy of the site, per extra skin
+</pre></div>
+<p>Two things about that layout are worth knowing before you point a host at it. Links between pages are <b>relative</b>, so the site works at a domain root and in a subdirectory alike, and even from the filesystem. But anything addressed from the site root rather than from the page — the search bundle most visibly — has to be told the base path; that is the note under GitHub Pages below. And each extra skin's directory is a <b>complete copy</b>, so a three-skin site is roughly three times the files: see <a href="./Skins.html#building-more-than-one-skin" title="Special:MyLanguage/Skins">Skins</a>.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="GitHub_Pages">GitHub Pages</h2></div>
+<p>This workflow rebuilds and publishes the site on every push. It bakes the source with the Wikven <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/bake">composite action</a>, then uploads <code>dist/</code> to Pages.
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<span class="nt">permissions</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
+<span class="w">  </span><span class="nt">pages</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+<span class="w">  </span><span class="nt">id-token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github-pages</span>
+<span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.deploy.outputs.page_url }}</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10</span><span class="w">  </span><span class="c1"># v6.0.3</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="c1"># Whole history, so each page is dated at the commit that last changed</span>
+<span class="w">          </span><span class="c1"># its source file. A shallow checkout knows only the latest commit.</span>
+<span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d</span><span class="w">  </span><span class="c1"># v6.0.0</span>
+<span class="w">      </span><span class="c1"># No version has been released yet, so there is no version tag to pin --</span>
+<span class="w">      </span><span class="c1"># and the action&#39;s default image is that unreleased version. Pin a nightly</span>
+<span class="w">      </span><span class="c1"># instead, and name the image from the same one: the tag is a commit of</span>
+<span class="w">      </span><span class="c1"># main, and that image was built from it. Both become @1.2.3 once a version</span>
+<span class="w">      </span><span class="c1"># exists. Pick the newest nightly from the releases page.</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
+<span class="w">          </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9</span><span class="w">  </span><span class="c1"># v5.0.0</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128</span><span class="w">  </span><span class="c1"># v5.0.0</span>
+</pre></div>
+<p>Enable Pages for the repository under <b>Settings → Pages → Build and deployment → Source: GitHub Actions</b>. This documentation site is published this way.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>A GitHub <b>project</b> page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because Wikven writes them relative, but anything that needs an absolute path must include that base path: set <a href="./Searching.html" title="Special:MyLanguage/Searching">search</a>'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A <b>user/organization</b> page (served at the domain root) needs no such setting.</p></div>
+</div>
+<div class="mw-heading mw-heading2"><h2 id="Any_static_host">Any static host</h2></div>
+<p>Because <code>dist/</code> is just files, you can serve it from any static host (<a rel="nofollow" class="external text" href="https://www.netlify.com/">Netlify</a>, <a rel="nofollow" class="external text" href="https://pages.cloudflare.com/">Cloudflare Pages</a>, an object store like <a rel="nofollow" class="external text" href="https://aws.amazon.com/s3/">S3</a>, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
+</p><p><span id="preview-locally"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Preview_locally">Preview locally</h2></div>
+<p>Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. Wikven has a built-in <code>serve</code> command for this.
+</p>
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
+</p><p>The <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> serves <code>dist/</code> on <code><a rel="nofollow" class="external free" href="http://localhost:8080">http://localhost:8080</a></code>, and takes <code>--listen</code> for another address:
+</p>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>serve
+</pre></div>
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Docker" aria-labelledby="tabber-Docker-label"><p class="mw-empty-elt">
+</p><p>The image runs the same command; publish the port, and have the build output in the mounted <code>dist/</code> already:
+</p>
+<div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/dist:/workspace/dist&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>serve
+</pre></div>
+<p class="mw-empty-elt"></p></div></div></div>
+<p>Any static server works too, for example <code>cd dist &amp;&amp; python3 -m http.server</code>.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Dates,_authors_and_reproducible_builds"><span id="Dates.2C_authors_and_reproducible_builds"></span>Dates, authors and reproducible builds</h2></div>
+<p>Each page's "last edited" line names the commit that last changed <b>that page's source file</b>, and credits that commit's author. The wiki a build fills has no history of its own — every page is written in one import pass — so the repository's history is where those two facts come from.
+</p><p>That history has to be reachable. The <a href="./Commands.html#bake" title="Special:MyLanguage/Commands">bake action</a> reads it on the runner and hands it to the build, but a <b>shallow checkout knows only the last commit</b>, which is why the workflow above checks out with <code>fetch-depth: 0</code>. Without the full history nothing fails: every page is simply dated at the commit being built and credited to nobody. The action says so in the log when it happens, and that line is the only warning you get.
+</p><p>The rest follows from the same idea. A build runs with its clock frozen at <code>SOURCE_DATE_EPOCH</code> — the commit's own date, when the action sets it — so two builds of one commit produce <b>byte-identical</b> output, down to the timestamps in the pages. It means a redeploy of unchanged content changes nothing on the host, and a diff between two builds only ever shows what you actually edited. Wikven's own continuous integration asserts it by baking this site twice and comparing the results.
+</p><p><span id="keeping-pins-current"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Keeping_pinned_sources_current">Keeping pinned sources current</h2></div>
+<p>The pins that make those builds reproducible are the ones nothing moves for you. An exact <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> pin</a> stays exact until you change it, and no bot will change it: <code>.wikven.yaml</code> is Wikven's own file, and Dependabot only watches the ecosystems it recognises. A site can therefore sit years behind on a skin with every check green.
+</p><p>Which way out of that you take is yours to choose, and the two are not the same bargain:
+</p>
+<ul><li><b>Keep the pin exact and move it deliberately.</b> A <code>commit</code>, or a <code>tarball</code> with its <code>sha256</code>, builds the same site tomorrow as it does today, and every change to what you ship is a diff someone approved. What it costs is time-to-fix: a security release sits upstream until the pin is moved.</li>
+<li><b>Point the pin at something that moves.</b> A <code>reference</code> naming a release branch — <code>REL1_43</code>, say — takes whatever that branch holds when the build runs, so a fix arrives at the next bake with nothing to merge. What it costs is reproducibility: two bakes of one source tree can differ, and nothing in the tree records what changed between them.</li></ul>
+<p>The rest of this section is about making the first cheap enough to prefer.
+</p><p><a rel="nofollow" class="external text" href="https://www.updatecli.io/">updatecli</a> fills that hole, and it fills it by never having to recognise your file: you tell it where the pin is. A manifest names a <b>source</b> (where the current version is published) and a <b>target</b> (which key of which file holds the pin); applying it writes the source's value into the target and opens a pull request if that changed anything. Run it on a schedule in continuous integration and a pin that has fallen behind becomes a pull request you can review. Here is a whole manifest for one pin, a repository following a release tag:
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nn">---</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;build(deps):</span><span class="nv"> </span><span class="s">bump</span><span class="nv"> </span><span class="s">Citizen&quot;</span>
+<span class="nt">pipelineid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">citizen</span>
+<span class="nt">scms</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yourname</span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some-repository</span>
+<span class="w">      </span><span class="nt">branch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="w">      </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github-actions[bot]</span>
+<span class="w">      </span><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">41898282+github-actions[bot]@users.noreply.github.com</span>
+<span class="nt">actions</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github/pullrequest</span>
+<span class="w">    </span><span class="nt">scmid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="nt">sources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">citizen</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">githubrelease</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StarCitizenTools</span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mediawiki-skins-Citizen</span>
+<span class="w">      </span><span class="nt">versionfilter</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semver</span>
+<span class="nt">targets</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">citizen</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;build(deps):</span><span class="nv"> </span><span class="s">bump</span><span class="nv"> </span><span class="s">Citizen</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">source</span><span class="nv"> </span><span class="s">&quot;citizen&quot;</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yaml</span>
+<span class="w">    </span><span class="nt">scmid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">    </span><span class="nt">sourceid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">citizen</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.wikven.yaml</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$.config.WikvenRepositories.Citizen.reference</span>
+</pre></div>
+<p>A <code>commit</code> that follows a branch is the same manifest with the source swapped: <code>kind: gitcommit</code>, given the repository's URL and the branch to track, writing to a key that ends in <code>commit</code> instead of <code>reference</code>. A <code>tarball</code> and its <code>sha256</code> are <b>not</b> covered here: the two keys have to move together, and the archive names Special:ExtensionDistributor hands out carry a build hash that no version feed publishes, so a source has nothing to read. Declare anything you want watched as a <code>repository</code>. And there is no shortcut past writing one: updatecli's autodiscovery crawls the ecosystems it knows (npm, cargo, dockerfile, maven, ...), which a bespoke configuration file will never be, so a hand-written manifest is the whole story for this file.
+</p><p>This site is the working example. Its manifests are in <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/updatecli/updatecli.d"><code>updatecli/updatecli.d/</code></a> (one release tag per <code>reference</code> pin, one branch head per <code>commit</code> pin), and <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/.github/workflows/updatecli.yml">a weekly workflow</a> applies them, opening one pull request per pipeline. <a rel="nofollow" class="external text" href="https://www.updatecli.io/docs/">Upstream's own documentation</a> covers everything a manifest can do beyond the two shapes above.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r99">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Editing_sidebar.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a></div><div class="wikven-prevnext-next"><a href="./Troubleshooting.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a>&#160;&#8594;</div></div>
+
+</div>
+<div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Deploying.html">Deploying.html</a>"</div></div>
+					<div id="catlinks" class="catlinks catlinks-allhidden" data-mw-interface=""><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden category: <ul><li><a href="./Category:Pages_using_Tabber_parser_tag.html" title="Category:Pages using Tabber parser tag">Pages using Tabber parser tag</a></li></ul></div></div>
+				</div>
+			</main>
+			
+		</div>
+		<div class="mw-footer-container">
+			
+<footer id="footer" class="mw-footer" >
+	<ul id="footer-info">
+	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 12:00.</li>
+</ul>
+
+	<ul id="footer-places">
+	<li id="footer-places-about"><a href="./About.html">About Wikven</a></li>
+	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
+	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+</ul>
+
+	<ul id="" class="noprint">
+</ul>
+
+</footer>
+
+		</div>
+	</div> 
+</div> 
+<div class="vector-header-container vector-sticky-header-container no-font-mode-scale">
+	<div id="vector-sticky-header" class="vector-sticky-header">
+		<div class="vector-sticky-header-start">
+			<div class="vector-sticky-header-icon-start vector-button-flush-left" aria-hidden="true">
+				<button class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-sticky-header-search-toggle" tabindex="-1" data-event-name="ui.vector-sticky-search-form.icon"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+			</button>
+		</div>
+			
+		<div role="search" class="vector-search-box-vue vector-search-box">
+			<div class="vector-typeahead-search-container">
+				<div class="cdx-typeahead-search">
+					<form action="/index.php" id="vector-sticky-search-form" class="cdx-search-input cdx-search-input--has-end-button">
+						<div  class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+							<div class="cdx-text-input cdx-text-input--has-start-icon">
+								<input
+									class="cdx-text-input__input mw-searchInput" autocomplete="off"
+									
+									type="search" name="search" placeholder="Search Wikven">
+								<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+							</div>
+							<input type="hidden" name="title" value="Special:Search">
+						</div>
+						<button class="cdx-button cdx-search-input__end-button">Search</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-context-bar">
+				<nav aria-label="Contents" class="vector-toc-landmark">
+						
+					<div id="vector-sticky-header-toc" class="vector-dropdown mw-portlet mw-portlet-sticky-header-toc vector-sticky-header-toc vector-button-flush-left"  >
+						<input type="checkbox" id="vector-sticky-header-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-sticky-header-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+						<label id="vector-sticky-header-toc-label" for="vector-sticky-header-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+						</label>
+						<div class="vector-dropdown-content">
+					
+						<div id="vector-sticky-header-toc-unpinned-container" class="vector-unpinned-container">
+						</div>
+					
+						</div>
+					</div>
+			</nav>
+				<div class="vector-sticky-header-context-bar-primary" aria-hidden="true" ><span lang="en" dir="ltr"><span class="mw-page-title-main">Deploying</span></span></div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-end" aria-hidden="true">
+			<div class="vector-sticky-header-icons">
+				<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-talk-sticky-header" tabindex="-1" data-event-name="talk-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbles mw-ui-icon-wikimedia-speechBubbles"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-subject-sticky-header" tabindex="-1" data-event-name="subject-sticky-header"><span class="vector-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-history-sticky-header" tabindex="-1" data-event-name="history-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-history mw-ui-icon-wikimedia-wikimedia-history"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only mw-watchlink" id="ca-watchstar-sticky-header" tabindex="-1" data-event-name="watch-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-star mw-ui-icon-wikimedia-wikimedia-star"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-edit-sticky-header" tabindex="-1" data-event-name="wikitext-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-wikiText mw-ui-icon-wikimedia-wikimedia-wikiText"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-ve-edit-sticky-header" tabindex="-1" data-event-name="ve-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-edit mw-ui-icon-wikimedia-wikimedia-edit"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-viewsource-sticky-header" tabindex="-1" data-event-name="ve-edit-protected-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-editLock mw-ui-icon-wikimedia-wikimedia-editLock"></span>
+
+<span></span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-buttons">
+				<button class="cdx-button cdx-button--weight-quiet mw-interlanguage-selector" id="p-lang-btn-sticky-header" tabindex="-1" data-event-name="ui.dropdown-p-lang-btn-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span>
+
+<span>Add languages</span>
+			</button>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive" id="ca-addsection-sticky-header" tabindex="-1" data-event-name="addsection-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbleAdd-progressive mw-ui-icon-wikimedia-speechBubbleAdd-progressive"></span>
+
+<span>Add topic</span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-icon-end">
+				<div class="vector-user-links">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mw-portlet mw-portlet-dock-bottom emptyPortlet" id="p-dock-bottom">
+	<ul>
+		
+	</ul>
+</div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":0});});</script>
+</body>
+</html>
