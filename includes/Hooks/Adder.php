@@ -10,6 +10,7 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Skin;
+use MediaWiki\Title\Title;
 
 class Adder implements
 	\MediaWiki\Hook\BeforePageDisplayHook,
@@ -221,6 +222,24 @@ class Adder implements
 					: $skin->msg('wikven-footer-source-plain')->text()
 			);
 		}
+
+		// What the site redistributes, on every page, because the page saying it is no use if only
+		// the reader who goes looking finds it. The href is root-relative like every other link the
+		// build writes, so rename.php reparents it for a subpage along with the rest.
+		$licenses = $this->licensesTitle();
+		if ($licenses !== null) {
+			$footerItems['wikven-licenses'] = Html::element(
+				'a',
+				['href' => './' . Title::makeName($licenses->getNamespace(), $licenses->getDBkey()) . '.html'],
+				$skin->msg('wikven-footer-licenses')->text()
+			);
+		}
+	}
+
+	/** The page listing what the site redistributes, or null where the site asked for none. */
+	private function licensesTitle(): ?Title {
+		$name = (string)( $GLOBALS['wgWikvenLicensesPage'] ?? '' );
+		return $name === '' ? null : Title::newFromText($name);
 	}
 
 	/** Display name for the project URL's host; forges prettified, others as-is, no host null. */

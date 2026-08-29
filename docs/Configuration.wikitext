@@ -74,7 +74,7 @@ Wikven also ships a small default favicon so browsers do not 404 on <code>/favic
 '''Default:''' empty
 
 <!--T:13-->
-The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the [[#WikvenAboutPage|About]] page, when the build writes it) has no source file, so these links are omitted for it.
+The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the [[#WikvenLicensesPage|Licenses]] page, when the build writes it) has no source file, so these links are omitted for it.
 </translate>
 
 === <code>WikvenMainPage</code> ===
@@ -87,15 +87,18 @@ The targets the "Edit", "View history" and "View source" links point at, so a re
 The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Naming your entry file <code>index.wikitext</code> therefore takes no configuration at all. The page must be one you imported; the build fails if it is missing.
 </translate>
 
-<span id="WikvenAboutPage"></span>
-=== <code>WikvenAboutPage</code> ===
+<span id="WikvenLicensesPage"></span>
+=== <code>WikvenLicensesPage</code> ===
 
 <translate>
 <!--T:48-->
-'''Default:''' <code>About</code>
+'''Default:''' <code>Licenses</code>
 
 <!--T:17-->
-The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Write a source page of that name and it is used exactly as written. With no source page of that name, the build writes one holding an introduction with the software list under it. Set it empty to write no page at all, and the footer link goes with it.
+The title of the page saying what your site is made of and under which licenses, which the footer links from every page. A built site publishes MediaWiki's own scripts and each skin's and extension's styles alongside your words, so something has to acknowledge them, and a page nothing links to does not. Write a source page of that name and it is used exactly as written. With no source page of that name, the build writes one holding a line of introduction with the software list under it. Set it empty to write no page at all, and the footer link goes with it.
+
+<!--T:62-->
+MediaWiki's own "About" footer link is a separate thing, and not one the build fills in: with no page where <code>MediaWiki:Aboutpage</code> points, that entry is blanked along with the other dead ones. A site that wants it writes its own introduction and a <code>MediaWiki:Aboutpage.wikitext</code> naming that page.
 
 <!--T:55-->
 Whatever this is set to, the build generates two templates, since an export has no <code>Special:Version</code> to send a reader to. Transclude either from any page you like: <code><nowiki>{{Wikven/software}}</nowiki></code> is what that page would show — MediaWiki, PHP and the database, then the extensions and skins — and <code><nowiki>{{Wikven/components}}</nowiki></code> is the extensions and skins alone, with the license each one declares, which is what a page acknowledging what your site redistributes wants. The former names <code><nowiki>{{Wikven software}}</nowiki></code> and <code><nowiki>{{Wikven components}}</nowiki></code> still work; they are removed at the next major.
@@ -122,7 +125,7 @@ A link added to the site footer, pointing at your project (typically its reposit
 The title of a page the build writes for the reader's own display choices: the colour theme, and, on a site built with more than one skin, which skin to read it in. The choices are kept in the reader's browser and apply to that site alone; no account is involved. It stands in for the preferences a live wiki would offer, which a static export has no server for.
 
 <!--T:39-->
-Write a source page of that name and it takes precedence, exactly as for the About page. Set it empty to write no page at all, and the entries pointing at it go with it. See [[<tvar name="1">Special:MyLanguage/Skins#settings</tvar>|Skins]] for what the page offers a reader.
+Write a source page of that name and it takes precedence, exactly as for the Licenses page. Set it empty to write no page at all, and the entries pointing at it go with it. See [[<tvar name="1">Special:MyLanguage/Skins#settings</tvar>|Skins]] for what the page offers a reader.
 </translate>
 
 <span id="WikvenBundleWebfonts"></span>
@@ -146,7 +149,7 @@ When set, and UniversalLanguageSelector is enabled, the build bakes that extensi
 For looking at a skin rather than publishing a site. {{SITENAME}} normally trims the chrome around a page to what a static host can stand behind: the personal menu, the toolbox, the talk tab and the watch star are emptied, the article tabs are replaced with links to your source files, a link to the repository goes in the footer, and a stylesheet of its own hides the rest. Every one of those is a judgement about a reader, and none of them is wanted by a skin author who has pointed the build at a few pages to see how their skin renders: the menus being edited are the thing they came to look at. Set this and they are all left as the skin drew them.
 
 <!--T:59-->
-What the build still does is everything that makes the output a working set of files. Links are rewritten to <code>./Page.html</code>, styles and scripts are baked into local copies, and the two fixes that stop a page asking for something no export has -- Citizen's service worker and its search shortcuts -- stay on, because a preview has no <code>load.php</code> behind it either. The generated [[<tvar name="1">Special:MyLanguage/Configuration#WikvenAboutPage</tvar>|About]] and [[<tvar name="2">Special:MyLanguage/Configuration#WikvenSettingsPage</tvar>|Settings]] pages are content rather than chrome and are still written; set those empty to leave them out too.
+What the build still does is everything that makes the output a working set of files. Links are rewritten to <code>./Page.html</code>, styles and scripts are baked into local copies, and the two fixes that stop a page asking for something no export has -- Citizen's service worker and its search shortcuts -- stay on, because a preview has no <code>load.php</code> behind it either. The generated [[<tvar name="1">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses]] and [[<tvar name="2">Special:MyLanguage/Configuration#WikvenSettingsPage</tvar>|Settings]] pages are content rather than chrome and are still written; set those empty to leave them out too. The footer link to the Licenses page is chrome, so it is not added, and the build says so as it passes.
 
 <!--T:60-->
 Leave it off for a site anyone reads. A published export that offers a login, a watchlist and a talk tab with nothing behind any of them is worse than one that offers none.

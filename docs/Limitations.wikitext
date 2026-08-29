@@ -30,7 +30,7 @@ not part of the export. This page is the list, and what stands in for each where
 ; Search
 : [[<tvar name="3">Special:MyLanguage/Searching</tvar>|Done in the browser]]. The build writes a search index alongside the pages and the search box queries that.
 ; <code>Special:Version</code>
-: The [[<tvar name="4">Special:MyLanguage/Configuration#WikvenAboutPage</tvar>|About page]], where the build lists the software, extensions and skins the site was made with.
+: The [[<tvar name="4">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses page]], where the build lists the software, extensions and skins the site was made with, and the licenses they declare.
 
 <!--T:6-->
 == Limits on what you write ==
