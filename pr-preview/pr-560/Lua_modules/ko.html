@@ -545,7 +545,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>많은 위키가 틀의 논리를 Lua로 관리하며, Wikven은 빌드 시점에 진짜 MediaWiki를 실행하므로 모듈도 늘 그렇듯 작동합니다. 모듈을 호출한 문서는 모듈의 답이 이미 담긴 상태로 기록되고, 모듈 자체는 게시된 사이트의 문서가 되지 않습니다. MediaWiki에서 Lua는 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Scribunto">Scribunto</a>이며, MediaWiki에 함께 들어 있습니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r96">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>두 제품 다 Lua를 렌더링하지만, 아무것도 요구하지 않는 쪽은 Docker 이미지뿐입니다. <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>는 arm64에서 인터프리터를 하나 설치해주기를 바랍니다. 아래 표에 세 경우가 있습니다. Lua를 렌더링할 수 없는 빌드는 <code>{{#invoke:}}</code>가 그대로 보이는 문서를 게시하는 대신 중단하고 그 사실을 말합니다.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r94">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>두 제품 다 Lua를 렌더링하지만, 아무것도 요구하지 않는 쪽은 Docker 이미지뿐입니다. <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>는 arm64에서 인터프리터를 하나 설치해주기를 바랍니다. 아래 표에 세 경우가 있습니다. Lua를 렌더링할 수 없는 빌드는 <code>{{#invoke:}}</code>가 그대로 보이는 문서를 게시하는 대신 중단하고 그 사실을 말합니다.</p></div>
 </div>
 <p><span id="Enabling&#95;it"></span>
 </p>
@@ -671,7 +671,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>그 거부는 말뿐 아니라 종료 코드에도 담기므로, 굽고 나서 배포하는 스크립트는 아무것도 없는 것을 올리는 대신 멈춥니다. 위의 알림은 알림에 그칩니다. 그것을 출력한 베이크도 다른 베이크처럼 0으로 끝나며, 방금 설명한 그대로의 사이트를 씁니다.
 </p><p>이 문서 사이트도 모듈을 하나 쓰며, 지금 읽고 계신 이 문서는 바뀔 때마다 이미지로 구워지고 모듈의 답이 그 안에 있는지 확인됩니다. 바이너리도 자기 소스 트리로 같은 규칙을 적용받는데, x86-64는 바뀔 때마다 arm64는 나이틀리마다입니다. 그러니 위 표의 각 줄은 이 문서의 주장이 아니라 기계가 확인하는 것입니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r100">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Extensions/ko.html" title="Special:MyLanguage/Extensions">확장 기능</a></div><div class="wikven-prevnext-next"><a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">자바스크립트</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r98">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Extensions/ko.html" title="Special:MyLanguage/Extensions">확장 기능</a></div><div class="wikven-prevnext-next"><a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">자바스크립트</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="../Lua_modules/ko.html">Lua_modules/ko.html</a>"</div></div>
@@ -688,7 +688,6 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </ul>
 
 	<ul id="footer-places">
-	<li id="footer-places-about"><a href="../About.html">Wikven 소개</a></li>
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 	<li id="footer-places-wikven-licenses"><a href="../Licenses.html">Licenses</a></li>
 	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>

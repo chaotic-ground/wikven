@@ -91,12 +91,6 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			</li>
 	</ul>
 	<ul class="hlist">
-			<li class="toggle-list-item ">
-				<a class="toggle-list-item__anchor menu__item--about" href="./About.html" data-mw-interface="1">
-					
-					<span class="toggle-list-item__label">About Wikven</span>
-				</a>
-			</li>
 	</ul>
 </div>
 
@@ -246,7 +240,7 @@ It runs a real MediaWiki at build time.
 </pre>
 <p>You do not number the units by hand. Wrap the content in <code>&lt;translate&gt;</code> and add <code>&lt;languages/&gt;</code>, then run <code>translate mark</code> to insert the <code>&lt;!--T:n--&gt;</code> markers, mounting your source directory writable:
 </p>
-<style data-mw-deduplicate="TemplateStyles:r96">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The four <code>translate</code> helpers come with both products. The commands on this page are the Docker form; the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> runs the same four against its working directory, as <code>wikven translate mark --all</code> and so on, with no mount to arrange. See <a href="./Commands.html#translate" title="Special:MyLanguage/Commands">Commands</a>.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r94">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The four <code>translate</code> helpers come with both products. The commands on this page are the Docker form; the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> runs the same four against its working directory, as <code>wikven translate mark --all</code> and so on, with no mount to arrange. See <a href="./Commands.html#translate" title="Special:MyLanguage/Commands">Commands</a>.</p></div>
 </div>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 </pre></div>
@@ -300,7 +294,7 @@ It runs a real MediaWiki at build time.
 </pre></div>
 <p>The <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations">check-translations action</a> runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. Set its <code>comment</code> input and it also leaves one comment on the pull request, grouping what it found and naming the command that answers each group — written for a contributor sending their first translation, who has the annotations but not the workflow behind them. Add <code>comment-languages: auto</code> and the comment is written in English and in the language of the translation it is about, from wikven's own interface messages. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r100">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a></div><div class="wikven-prevnext-next"><a href="./Editing_sidebar.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a>&#160;&#8594;</div></div>
+<style data-mw-deduplicate="TemplateStyles:r98">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a></div><div class="wikven-prevnext-next"><a href="./Editing_sidebar.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a>&#160;&#8594;</div></div>
 
 </div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Translating.html">Translating.html</a>"</div></div>
@@ -345,7 +339,6 @@ Wikven
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
-	<li id="footer-places-about"><a href="./About.html">About Wikven</a></li>
 	<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
 	<li id="footer-places-wikven-licenses"><a href="./Licenses.html">Licenses</a></li>
 	<li id="footer-places-mobileview"><a class="noprint stopMobileRedirectToggle">Mobile view</a></li>
