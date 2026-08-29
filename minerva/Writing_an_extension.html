@@ -232,7 +232,7 @@ Wikven
 <ul><li><b>Your code runs at build time, not at view time.</b> There is no <code>load.php</code>, no action API and no database once the site is deployed. Anything your extension would normally do in response to a request has to happen during the build, or ship as static JavaScript that needs no server.</li>
 <li><b>The build is not a request.</b> <code>MW_ENTRY_POINT</code> is <code>cli</code>, there is no <code>WebRequest</code> worth reading, and a hook of yours that assumes a user, a session or a title from the URL will not find one. Wikven's own hooks guard on <code>MW_ENTRY_POINT === 'cli'</code> for this reason.</li></ul>
 <div class="mw-heading mw-heading2"><h2 id="Getting_your_extension_into_a_build">Getting your extension into a build</h2></div>
-<p>A site lists what it wants in its <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yml</code> file</a>. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
+<p>A site lists what it wants in its <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a>. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MyExtension</span>
@@ -317,8 +317,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787478899">
-  				<span>Last edited on 23 August 2026, at 09:54</span>
+  				data-timestamp="1788008880">
+  				<span>Last edited on 29 August 2026, at 13:08</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -341,7 +341,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 09:54.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 13:08.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

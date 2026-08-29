@@ -436,7 +436,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <ul><li><b>Your code runs at build time, not at view time.</b> There is no <code>load.php</code>, no action API and no database once the site is deployed. Anything your extension would normally do in response to a request has to happen during the build, or ship as static JavaScript that needs no server.</li>
 <li><b>The build is not a request.</b> <code>MW_ENTRY_POINT</code> is <code>cli</code>, there is no <code>WebRequest</code> worth reading, and a hook of yours that assumes a user, a session or a title from the URL will not find one. Wikven's own hooks guard on <code>MW_ENTRY_POINT === 'cli'</code> for this reason.</li></ul>
 </section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Getting_your_extension_into_a_build">Getting your extension into a build</h2></div>
-<p>A site lists what it wants in its <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration"><code>.wikven.yml</code> file</a>. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
+<p>A site lists what it wants in its <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a>. Extensions bundled with the image are named and nothing else is needed; anything else is fetched at build time from a source declared under <code>WikvenRepositories</code> — a tarball, a Git repository, or a Composer package.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MyExtension</span>
@@ -524,7 +524,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Writing%20an%20extension/en.wikitext" title="This page was last edited on 23 August 2026, at 09:54." data-timestamp="1787478899"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Writing%20an%20extension/en.wikitext" title="This page was last edited on 29 August 2026, at 13:08." data-timestamp="1788008880"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>29 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -695,7 +695,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 09:54.</div>
+		        <div class="page-info__text"> This page was last edited on 29 August 2026, at 13:08.</div>
 		    </section>
 		</div>
 </footer>		</div>
