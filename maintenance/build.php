@@ -1130,34 +1130,46 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * MediaWiki's own row: the version the site was built on, and the license it is under.
+	 * What the build ran on: MediaWiki, PHP and the database, with their versions.
 	 *
-	 * One row, and it is the one that carries the most. Every page of the export loads
-	 * modules-static.js, which is MediaWiki's module closure, so core is redistributed by every
-	 * site whatever else it installs -- and it is the component the registry below cannot answer
-	 * for, since it is not an entry in it.
+	 * Only one of the three is redistributed, and it is the one that carries the most: every page
+	 * of the export loads modules-static.js, which is MediaWiki's module closure, so core goes out
+	 * with every site whatever else it installs -- and it is the component the registry below
+	 * cannot answer for, since it is not an entry in it. So only MediaWiki's license is named. PHP
+	 * and the database ran the build and stayed behind; a license beside them would read as a claim
+	 * that the site ships them, and it ships neither. The lead-in says so, because an empty cell on
+	 * its own would read as a component that declared nothing.
 	 *
-	 * The license is read from core's own composer.json rather than written here, the same way
-	 * each extension's is read from its extension.json: this file should not be the second place
-	 * that fact is kept. Unreadable leaves the cell empty, as a component declaring no license
-	 * does, because a guess on a licenses page is worse than a gap.
+	 * They are here at all because "what built this" is worth knowing and an export has no
+	 * Special:Version to ask.
+	 *
+	 * MediaWiki's license is read from core's own composer.json rather than written here, the same
+	 * way each extension's is read from its extension.json: this file should not be the second
+	 * place that fact is kept. Unreadable leaves the cell empty, because a guess on a licenses page
+	 * is worse than a gap.
 	 */
 	private function coreTable(?string $lang): string {
-		return (
-			'== '
-			. $this->contentMsg('version-software', $lang)
-			. " ==\n{| class=\"wikitable\"\n! "
+		$db = $this->getServiceContainer()->getConnectionProvider()->getReplicaDatabase();
+		$software = [
+			['[https://www.mediawiki.org/ MediaWiki]', MW_VERSION, self::coreLicense()],
+			['[https://www.php.net/ PHP]', PHP_VERSION . ' (' . PHP_SAPI . ')', ''],
+			[ucfirst($db->getType()), $db->getServerVersion(), '']
+		];
+
+		$text = '== ' . $this->contentMsg('version-software', $lang) . " ==\n";
+		$text .= $this->contentMsg('wikven-licenses-software', $lang) . "\n\n";
+		$text .=
+			"{| class=\"wikitable\"\n! "
 			. $this->contentMsg('version-software-product', $lang)
 			. ' !! '
 			. $this->contentMsg('version-software-version', $lang)
 			. ' !! '
 			. $this->contentMsg('version-ext-colheader-license', $lang)
-			. "\n|-\n| [https://www.mediawiki.org/ MediaWiki]\n| "
-			. MW_VERSION
-			. "\n| "
-			. self::coreLicense()
-			. "\n|}\n\n"
-		);
+			. "\n";
+		foreach ($software as [$product, $version, $license]) {
+			$text .= "|-\n| $product\n| $version\n| $license\n";
+		}
+		return $text . "|}\n\n";
 	}
 
 	/** The license MediaWiki declares for itself, or '' where its manifest cannot be read. */

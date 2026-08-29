@@ -27,3 +27,4 @@
 ** Special:MyLanguage/Commands|sidebar-commands
 ** Special:MyLanguage/Writing an extension|sidebar-writing-an-extension
 ** Special:MyLanguage/Development|sidebar-development
+** Special:MyLanguage/Bundled licenses|sidebar-bundled-licenses

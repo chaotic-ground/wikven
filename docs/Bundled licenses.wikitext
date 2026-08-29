@@ -1,0 +1,30 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+{{SITENAME}} itself is licensed [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]. The Docker image and the standalone binary it produces redistribute third-party software under that software's own licenses, acknowledged here. (GPL-2.0-or-later and GPL-3.0-or-later are compatible, so this is attribution, not a conflict.)
+
+<!--T:2-->
+{| class="wikitable sortable"
+! Component !! License !! Bundled in
+|-
+| [<tvar name="1">https://www.mediawiki.org/</tvar> MediaWiki], with its bundled skins and extensions || GPL-2.0-or-later || image, binary
+|-
+| [<tvar name="2">https://www.php.net/</tvar> PHP] || PHP License 3.01 || binary
+|-
+| [<tvar name="3">https://frankenphp.dev/</tvar> FrankenPHP] || MIT || binary
+|-
+| [<tvar name="4">https://caddyserver.com/</tvar> Caddy] || Apache-2.0 || binary
+|-
+| [<tvar name="5">https://getcomposer.org/</tvar> Composer] || MIT || image
+|}
+
+<!--T:3-->
+The standalone binary is compiled with [https://frankenphp.dev/ FrankenPHP], which also links several Caddy modules; see the FrankenPHP project for their licenses. The Docker image keeps MediaWiki's own <code>COPYING</code>, and each component's full license text is available from its project.
+
+<!--T:5-->
+That is what {{SITENAME}} itself ships. What a site built with it publishes is its own set — MediaWiki's scripts, and every extension and skin the site installs — and each build writes that out: this site's is on [[<tvar name="1">Special:MyLanguage/Licenses</tvar>|Licenses]].
+</translate>
+
+{{prevnext}}

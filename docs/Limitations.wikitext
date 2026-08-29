@@ -30,7 +30,7 @@ not part of the export. This page is the list, and what stands in for each where
 ; Search
 : [[<tvar name="3">Special:MyLanguage/Searching</tvar>|Done in the browser]]. The build writes a search index alongside the pages and the search box queries that.
 ; <code>Special:Version</code>
-: Partly. The [[<tvar name="4">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses page]] lists MediaWiki and the extensions and skins the site publishes, with the licenses they declare. What ran the build and stayed behind — the PHP version, the database — is not there, because the published site does not carry it.
+: The [[<tvar name="4">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses page]], where the build lists what it ran on and the extensions and skins the site publishes, with the licenses they declare.
 
 <!--T:6-->
 == Limits on what you write ==

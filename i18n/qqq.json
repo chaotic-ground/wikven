@@ -36,5 +36,6 @@
 	"wikven-translations-all-clear": "The whole comment for a run that found nothing, which replaces an earlier complaint once it has been answered.",
 	"wikven-translations-all-clear-scoped": "Body of the comment when the check found nothing about the files the change touches, used in place of {{msg-wikven|wikven-translations-all-clear}}. It says nothing about pages the change did not touch, which may still be waiting for a translation.",
 	"wikven-licenses-intro": "Opening paragraph of the generated licenses page, above the tables of what the site publishes.",
+	"wikven-licenses-software": "Lead-in under the software heading of the generated licenses page, saying why only MediaWiki's license is filled in there and the other rows leave that column empty.",
 	"wikven-footer-licenses": "Label of the footer link to the generated licenses page. Keep it short; it sits beside the other footer place links."
 }

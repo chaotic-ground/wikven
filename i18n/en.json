@@ -36,5 +36,6 @@
 	"wikven-translations-all-clear": "`translate check` found nothing to report: every source page reads cleanly, and every translation of one is stamped current.",
 	"wikven-translations-all-clear-scoped": "`translate check` found nothing to report about this change: the pages it touches read cleanly, and their translations are stamped current.",
 	"wikven-licenses-intro": "Every page of this site carries software that is not its own: MediaWiki's scripts, and the styles and scripts of each skin and extension below. They are listed here with the licenses they are published under.",
+	"wikven-licenses-software": "MediaWiki, PHP and the database are what this build ran on. Only MediaWiki's own scripts are published with the site, so only its license is named below; the rest is here for reference, and the site redistributes none of it.",
 	"wikven-footer-licenses": "Licenses"
 }
