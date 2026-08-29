@@ -86,7 +86,7 @@
 		},
 		"WikvenAboutPage": {
 			"value": "About",
-			"description": "Title of the page introducing the site, which MediaWiki's own \"About\" footer link is pointed at. A source page of that name is used as written; with no source page, the build writes an introduction with the software list under it. Empty writes no page, and the footer link goes with it. Whatever this is set to, the build generates two templates any page can transclude: {{Wikven software}}, what Special:Version would show (MediaWiki, PHP and the database, then the extensions and skins), and {{Wikven components}}, the extensions and skins alone with the licenses they declare."
+			"description": "Title of the page introducing the site, which MediaWiki's own \"About\" footer link is pointed at. A source page of that name is used as written; with no source page, the build writes an introduction with the software list under it. Empty writes no page, and the footer link goes with it. Whatever this is set to, the build generates two templates any page can transclude: {{Wikven/software}}, what Special:Version would show (MediaWiki, PHP and the database, then the extensions and skins), and {{Wikven/components}}, the extensions and skins alone with the licenses they declare. The former names {{Wikven software}} and {{Wikven components}} still work and are removed at the next major."
 		},
 		"WikvenSourceDirectory": {
 			"value": "",

@@ -29,8 +29,15 @@ class Build extends Maintenance {
 	/** Fallback for the frozen timestamps when the caller names none; chosen only for being fixed. */
 	private const FROZEN_TIMESTAMP = '20000101000000';
 
-	/** Template the generated software list is written to, so an About page can place it itself. */
-	private const SOFTWARE_TEMPLATE = 'Wikven software';
+	/**
+	 * Template the generated software list is written to, so an About page can place it itself.
+	 *
+	 * A subpage of "Wikven" rather than a name in the open: these are written unconditionally, so
+	 * whatever they are called is a title a site cannot use for a template of its own -- the build
+	 * would overwrite it and say nothing. Under one parent the reservation is one name instead of
+	 * several, and it reads as wikven's rather than as a template the site forgot writing.
+	 */
+	private const SOFTWARE_TEMPLATE = 'Wikven/software';
 
 	/**
 	 * Template holding the extensions and skins alone, with the licenses they declare.
@@ -40,7 +47,20 @@ class Build extends Maintenance {
 	 * wants only the components and their licenses. That page is written by hand and cannot know
 	 * the set, which is exactly what the registry does know.
 	 */
-	private const COMPONENTS_TEMPLATE = 'Wikven components';
+	private const COMPONENTS_TEMPLATE = 'Wikven/components';
+
+	/**
+	 * What each generated template used to be called, still written and still transcluding the new
+	 * one, so a page that says {{Wikven software}} keeps working.
+	 *
+	 * Renaming a template a site may transclude is a breaking change, and this one lands the way
+	 * the versioning policy asks: both names work now, the old pair goes at the next bump of the
+	 * bundled MediaWiki. Kept as a map so removing them is deleting this constant and its use.
+	 */
+	private const RENAMED_TEMPLATES = [
+		'Wikven software' => self::SOFTWARE_TEMPLATE,
+		'Wikven components' => self::COMPONENTS_TEMPLATE
+	];
 
 	/** Names the directory a skin pass's own copy of the database goes in, beside the original. */
 	private const PASS_DATABASE_PREFIX = 'wikven-pass-';
@@ -1026,7 +1046,7 @@ class Build extends Maintenance {
 	 *
 	 * An export has no Special:Version to send a reader to, and what that page holds -- what built
 	 * this site -- is something a wiki's About page carries anyway. So this is one page rather than
-	 * two: the software list is generated into {{Wikven software}}, and an About page transcludes
+	 * two: the software list is generated into {{Wikven/software}}, and an About page transcludes
 	 * it. A source page of the configured name is left exactly as written, so a site introduces
 	 * itself in its own words and puts the list where it wants it (or leaves it out); with no
 	 * source page, the build writes an introduction with the list under it.
@@ -1066,9 +1086,12 @@ class Build extends Maintenance {
 			'Generate the component list'
 		);
 		$this->savePage('Template:' . self::SOFTWARE_TEMPLATE, $this->softwareList(), 'Generate the software list');
+		foreach (self::RENAMED_TEMPLATES as $was => $now) {
+			$this->savePage("Template:$was", '{{' . $now . '}}', 'Keep the former template name working');
+		}
 	}
 
-	/** The installed software, extensions and skins, as the wikitext {{Wikven software}} holds. */
+	/** The installed software, extensions and skins, as the wikitext {{Wikven/software}} holds. */
 	private function softwareList(): string {
 		$db = $this->getServiceContainer()->getConnectionProvider()->getReplicaDatabase();
 		$software = [
@@ -1093,7 +1116,7 @@ class Build extends Maintenance {
 		return $text . '{{' . self::COMPONENTS_TEMPLATE . "}}\n";
 	}
 
-	/** The extensions and skins alone, as the wikitext {{Wikven components}} holds. */
+	/** The extensions and skins alone, as the wikitext {{Wikven/components}} holds. */
 	private function componentLists(): string {
 		// Split components into extensions and skins (skins live under skins/), each in its own section.
 		$extensions = [];

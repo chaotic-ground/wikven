@@ -5,7 +5,7 @@
 	"wikven-footer-source": "Footer link to the project's source repository. $1 is the repository host name (e.g. GitHub, GitLab) or a bare domain.",
 	"wikven-footer-source-plain": "Footer link to the project's source repository, used when no host can be derived from the URL.",
 	"wikven-about-intro": "Opening sentence of the About page the build writes when the source provides none.",
-	"wikven-about-software": "Lead-in to the software tables in the generated {{Wikven software}} template, which an About page transcludes.",
+	"wikven-about-software": "Lead-in to the software tables in the generated {{Wikven/software}} template, which an About page transcludes.",
 	"wikven-skins": "Heading of the sidebar section holding the export's other skins, used by skins that render their own sections in the page-tools menu. The section key is the message key.",
 	"wikven-skin": "Label of the skin chooser wikven adds to Citizen's preferences panel, beside the theme and text size. Singular: it names one setting, not the list.",
 	"wikven-skin-description": "Description under {{msg-mw|wikven-skin}}, in the style of Citizen's own preference descriptions (no full stop).",
