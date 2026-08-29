@@ -98,7 +98,7 @@ The title of the page used as the site root, written as <code>index.html</code> 
 The title of the page that introduces your site, which MediaWiki's own "About" footer link is pointed at. Write a source page of that name and it is used exactly as written. With no source page of that name, the build writes one holding an introduction with the software list under it. Set it empty to write no page at all, and the footer link goes with it.
 
 <!--T:55-->
-Whatever this is set to, the build generates two templates, since an export has no <code>Special:Version</code> to send a reader to. Transclude either from any page you like: <code><nowiki>{{Wikven software}}</nowiki></code> is what that page would show — MediaWiki, PHP and the database, then the extensions and skins — and <code><nowiki>{{Wikven components}}</nowiki></code> is the extensions and skins alone, with the license each one declares, which is what a page acknowledging what your site redistributes wants.
+Whatever this is set to, the build generates two templates, since an export has no <code>Special:Version</code> to send a reader to. Transclude either from any page you like: <code><nowiki>{{Wikven/software}}</nowiki></code> is what that page would show — MediaWiki, PHP and the database, then the extensions and skins — and <code><nowiki>{{Wikven/components}}</nowiki></code> is the extensions and skins alone, with the license each one declares, which is what a page acknowledging what your site redistributes wants. The former names <code><nowiki>{{Wikven software}}</nowiki></code> and <code><nowiki>{{Wikven components}}</nowiki></code> still work; they are removed at the next major.
 </translate>
 
 === <code>WikvenFooterUrl</code> ===
