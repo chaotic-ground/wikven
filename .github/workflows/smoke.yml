@@ -153,7 +153,8 @@ jobs:
           # English was counted twice for every translated page (#454). Only the source page is
           # indexed now, and what says so is the absence of any "/en.html" from the English index --
           # a count would not, since the pages indexed are not the source files: the build generates
-          # Settings, which has no file, and the search results page has a file but is not indexed.
+          # Licenses and Settings, which have no files, and the search results page has a file but
+          # is not indexed.
           # Those two cancelled out the day this was written, so a count read off the source tree
           # would have passed by luck and broken on the next page added.
           #

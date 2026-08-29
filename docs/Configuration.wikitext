@@ -95,13 +95,10 @@ The title of the page used as the site root, written as <code>index.html</code> 
 '''Default:''' <code>Licenses</code>
 
 <!--T:17-->
-The title of the page saying what your site is made of and under which licenses, which the footer links from every page. A built site publishes MediaWiki's own scripts and each skin's and extension's styles alongside your words, so something has to acknowledge them, and a page nothing links to does not. Write a source page of that name and it is used exactly as written. With no source page of that name, the build writes one holding a line of introduction with the software list under it. Set it empty to write no page at all, and the footer link goes with it.
+The title of the page saying what your site publishes that is not your own, and under which licenses, which the footer links from every page. A built site publishes MediaWiki's own scripts and each skin's and extension's styles alongside your words, so something has to acknowledge them, and a page nothing links to does not. The build lists MediaWiki, then your extensions and skins, each with the version and license it declares for itself; PHP, the database and the tools that made the build are left out, because a static site does not ship them. Write a source page of that name and it is used exactly as written instead. Set it empty to write no page at all, and the footer link goes with it.
 
 <!--T:62-->
 MediaWiki's own "About" footer link is a separate thing, and not one the build fills in: with no page where <code>MediaWiki:Aboutpage</code> points, that entry is blanked along with the other dead ones. A site that wants it writes its own introduction and a <code>MediaWiki:Aboutpage.wikitext</code> naming that page.
-
-<!--T:55-->
-Whatever this is set to, the build generates two templates, since an export has no <code>Special:Version</code> to send a reader to. Transclude either from any page you like: <code><nowiki>{{Wikven/software}}</nowiki></code> is what that page would show — MediaWiki, PHP and the database, then the extensions and skins — and <code><nowiki>{{Wikven/components}}</nowiki></code> is the extensions and skins alone, with the license each one declares, which is what a page acknowledging what your site redistributes wants. The former names <code><nowiki>{{Wikven software}}</nowiki></code> and <code><nowiki>{{Wikven components}}</nowiki></code> still work; they are removed at the next major.
 </translate>
 
 === <code>WikvenFooterUrl</code> ===

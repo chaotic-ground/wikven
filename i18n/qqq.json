@@ -4,7 +4,6 @@
 	},
 	"wikven-footer-source": "Footer link to the project's source repository. $1 is the repository host name (e.g. GitHub, GitLab) or a bare domain.",
 	"wikven-footer-source-plain": "Footer link to the project's source repository, used when no host can be derived from the URL.",
-	"wikven-software-intro": "Lead-in to the software tables in the generated {{Wikven/software}} template, which the licenses page and any page of a site's own transclude.",
 	"wikven-skins": "Heading of the sidebar section holding the export's other skins, used by skins that render their own sections in the page-tools menu. The section key is the message key.",
 	"wikven-skin": "Label of the skin chooser wikven adds to Citizen's preferences panel, beside the theme and text size. Singular: it names one setting, not the list.",
 	"wikven-skin-description": "Description under {{msg-mw|wikven-skin}}, in the style of Citizen's own preference descriptions (no full stop).",
@@ -36,6 +35,6 @@
 	"wikven-translations-documentation-url": "URL of the Translating page linked from the comment. Translate this to the address of that page in your language where the wikven documentation has one, and leave it as is otherwise.",
 	"wikven-translations-all-clear": "The whole comment for a run that found nothing, which replaces an earlier complaint once it has been answered.",
 	"wikven-translations-all-clear-scoped": "Body of the comment when the check found nothing about the files the change touches, used in place of {{msg-wikven|wikven-translations-all-clear}}. It says nothing about pages the change did not touch, which may still be waiting for a translation.",
-	"wikven-licenses-intro": "Opening paragraph of the generated licenses page, above the {{Wikven/software}} template it transcludes.",
+	"wikven-licenses-intro": "Opening paragraph of the generated licenses page, above the tables of what the site publishes.",
 	"wikven-footer-licenses": "Label of the footer link to the generated licenses page. Keep it short; it sits beside the other footer place links."
 }

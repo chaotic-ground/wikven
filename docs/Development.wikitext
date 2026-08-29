@@ -79,7 +79,7 @@ The division is what makes the passes safe to run beside each other: the orchest
 ; <code>importWikitext</code>
 : Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.
 ; <code>setLicensesPage</code> and <code>setSettingsPage</code>
-: Write the two pages a build generates: the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses page]] with its software list, which the footer links from every page, and the [[<tvar name="2">Special:MyLanguage/Skins#settings</tvar>|Settings page]] carrying the reader's colour theme and skin. A source page of either name is used instead of the generated one.
+: Write the two pages a build generates: the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses page]] listing what the site publishes and under which licenses, which the footer links from every page, and the [[<tvar name="2">Special:MyLanguage/Skins#settings</tvar>|Settings page]] carrying the reader's colour theme and skin. A source page of either name is used instead of the generated one.
 ; <code>dropDeadPlaceLinks</code> and <code>dropDeadCategoryLink</code>
 : Blank the system messages behind footer and menu entries that would link pages the export does not contain (privacy policy, disclaimers, community portal).
 ; <code>buildTranslations</code>

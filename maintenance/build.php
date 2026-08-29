@@ -29,39 +29,6 @@ class Build extends Maintenance {
 	/** Fallback for the frozen timestamps when the caller names none; chosen only for being fixed. */
 	private const FROZEN_TIMESTAMP = '20000101000000';
 
-	/**
-	 * Template the generated software list is written to, so any page can place it itself.
-	 *
-	 * A subpage of "Wikven" rather than a name in the open: these are written unconditionally, so
-	 * whatever they are called is a title a site cannot use for a template of its own -- the build
-	 * would overwrite it and say nothing. Under one parent the reservation is one name instead of
-	 * several, and it reads as wikven's rather than as a template the site forgot writing.
-	 */
-	private const SOFTWARE_TEMPLATE = 'Wikven/software';
-
-	/**
-	 * Template holding the extensions and skins alone, with the licenses they declare.
-	 *
-	 * Split out of the list above rather than repeated, because the two answer different questions:
-	 * one is what runs the site, versions and all, and this one is what the site ships and under
-	 * what terms. A page asking the second is written by hand and cannot know the set, which is
-	 * exactly what the registry does know.
-	 */
-	private const COMPONENTS_TEMPLATE = 'Wikven/components';
-
-	/**
-	 * What each generated template used to be called, still written and still transcluding the new
-	 * one, so a page that says {{Wikven software}} keeps working.
-	 *
-	 * Renaming a template a site may transclude is a breaking change, and this one lands the way
-	 * the versioning policy asks: both names work now, the old pair goes at the next bump of the
-	 * bundled MediaWiki. Kept as a map so removing them is deleting this constant and its use.
-	 */
-	private const RENAMED_TEMPLATES = [
-		'Wikven software' => self::SOFTWARE_TEMPLATE,
-		'Wikven components' => self::COMPONENTS_TEMPLATE
-	];
-
 	/** Names the directory a skin pass's own copy of the database goes in, beside the original. */
 	private const PASS_DATABASE_PREFIX = 'wikven-pass-';
 
@@ -88,7 +55,6 @@ class Build extends Maintenance {
 		$this->importImages("$ip/maintenance/importImages.php");
 		$this->step(ImportWikitext::class, "$own/importWikitext.php");
 		$this->assertMainPageExists();
-		$this->setSoftwareTemplates();
 		$this->setLicensesPage();
 		$this->setSettingsPage();
 		$this->dropDeadPlaceLinks();
@@ -1055,10 +1021,17 @@ class Build extends Maintenance {
 	 * introduction, and is the one thing here the build knows and the author cannot. So the
 	 * introduction is left alone and this is what gets generated.
 	 *
-	 * {{Wikven/software}} rather than {{Wikven/components}}: the components template is the
-	 * extensions and skins with the licenses they declare, which is most of the answer and not the
-	 * start of it. What modules-static.js holds is MediaWiki, and MediaWiki is in the software
-	 * list; that list ends by transcluding the components, so this page carries both.
+	 * The whole page is written here rather than assembled from generated templates. Templates
+	 * were the earlier shape and their cost fell on every site rather than on this one: a template
+	 * the build writes unconditionally is a title in the site's own Template namespace that the
+	 * site can no longer use, and no site should carry a reserved name so that this page can be
+	 * built out of parts.
+	 *
+	 * What it lists is what the published site carries and nothing else. MediaWiki, because
+	 * buildScripts bakes its module closure into modules-static.js; the extensions and skins,
+	 * because buildStyles writes their CSS and their scripts go into the same bundle. PHP, the
+	 * database and the tools that made the build are not in it: a static site does not ship them,
+	 * and a licenses page that named them would be claiming a redistribution that never happened.
 	 *
 	 * A source page of the configured name is used as written, as every generated page's is: a site
 	 * that writes this one itself has taken the question on deliberately. Set the name empty and no
@@ -1075,7 +1048,10 @@ class Build extends Maintenance {
 		if (!$title->exists()) {
 			$this->savePage(
 				$title->getPrefixedText(),
-				$this->contentMsg('wikven-licenses-intro') . "\n\n{{" . self::SOFTWARE_TEMPLATE . "}}\n",
+				$this->contentMsg('wikven-licenses-intro')
+				. "\n\n"
+				. rtrim($this->coreTable() . $this->componentLists())
+				. "\n",
 				'Generate the licenses page'
 			);
 		}
@@ -1093,50 +1069,47 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * Write the two generated lists of what this build is made of.
+	 * MediaWiki's own row: the version the site was built on, and the license it is under.
 	 *
-	 * Unconditional, and before the licenses page rather than inside it: any page may transclude
-	 * either of these, and a site that writes its own licenses page -- or none at all -- would
-	 * otherwise transclude a template nobody generated.
+	 * One row, and it is the one that carries the most. Every page of the export loads
+	 * modules-static.js, which is MediaWiki's module closure, so core is redistributed by every
+	 * site whatever else it installs -- and it is the component the registry below cannot answer
+	 * for, since it is not an entry in it.
+	 *
+	 * The license is read from core's own composer.json rather than written here, the same way
+	 * each extension's is read from its extension.json: this file should not be the second place
+	 * that fact is kept. Unreadable leaves the cell empty, as a component declaring no license
+	 * does, because a guess on a licenses page is worse than a gap.
 	 */
-	private function setSoftwareTemplates(): void {
-		$this->savePage(
-			'Template:' . self::COMPONENTS_TEMPLATE,
-			$this->componentLists(),
-			'Generate the component list'
-		);
-		$this->savePage('Template:' . self::SOFTWARE_TEMPLATE, $this->softwareList(), 'Generate the software list');
-		foreach (self::RENAMED_TEMPLATES as $was => $now) {
-			$this->savePage("Template:$was", '{{' . $now . '}}', 'Keep the former template name working');
-		}
-	}
-
-	/** The installed software, extensions and skins, as the wikitext {{Wikven/software}} holds. */
-	private function softwareList(): string {
-		$db = $this->getServiceContainer()->getConnectionProvider()->getReplicaDatabase();
-		$software = [
-			['[https://www.mediawiki.org/ MediaWiki]', MW_VERSION],
-			['[https://www.php.net/ PHP]', PHP_VERSION . ' (' . PHP_SAPI . ')'],
-			[ucfirst($db->getType()), $db->getServerVersion()]
-		];
-
-		$text = $this->contentMsg('wikven-software-intro') . "\n\n";
-		$text .= '== ' . $this->contentMsg('version-software') . " ==\n";
-		$text .=
-			"{| class=\"wikitable\"\n! "
+	private function coreTable(): string {
+		return (
+			'== '
+			. $this->contentMsg('version-software')
+			. " ==\n{| class=\"wikitable\"\n! "
 			. $this->contentMsg('version-software-product')
 			. ' !! '
 			. $this->contentMsg('version-software-version')
-			. "\n";
-		foreach ($software as [$product, $version]) {
-			$text .= "|-\n| $product\n| $version\n";
-		}
-		$text .= "|}\n\n";
-
-		return $text . '{{' . self::COMPONENTS_TEMPLATE . "}}\n";
+			. ' !! '
+			. $this->contentMsg('version-ext-colheader-license')
+			. "\n|-\n| [https://www.mediawiki.org/ MediaWiki]\n| "
+			. MW_VERSION
+			. "\n| "
+			. self::coreLicense()
+			. "\n|}\n\n"
+		);
 	}
 
-	/** The extensions and skins alone, as the wikitext {{Wikven/components}} holds. */
+	/** The license MediaWiki declares for itself, or '' where its manifest cannot be read. */
+	private static function coreLicense(): string {
+		$manifest = MW_INSTALL_PATH . '/composer.json';
+		if (!is_readable($manifest)) {
+			return '';
+		}
+		$declared = json_decode((string)file_get_contents($manifest), true);
+		return is_array($declared) && is_string($declared['license'] ?? null) ? $declared['license'] : '';
+	}
+
+	/** The extensions and skins, with the version and license each one declares for itself. */
 	private function componentLists(): string {
 		// Split components into extensions and skins (skins live under skins/), each in its own section.
 		$extensions = [];
@@ -1187,9 +1160,13 @@ class Build extends Maintenance {
 			return '';
 		}
 		ksort($things);
+		// Sortable: a reader looking for one license reads down the license column, and these are
+		// the only tables on the page long enough for that to be the difference between finding it
+		// and reading everything. buildScripts sees the class and puts jquery.tablesorter in the
+		// bundle, which an export needs because nothing can fetch it later (#483).
 		$text = '== ' . $this->contentMsg($headingKey) . " ==\n";
 		$text .=
-			"{| class=\"wikitable\"\n! "
+			"{| class=\"wikitable sortable\"\n! "
 			. $this->contentMsg($nameColKey)
 			. ' !! '
 			. $this->contentMsg('version-ext-colheader-version')
@@ -1202,7 +1179,7 @@ class Build extends Maintenance {
 			$text .=
 				"|-\n| $label\n| " . ( $credits['version'] ?? '' ) . "\n| " . ( $credits['license-name'] ?? '' ) . "\n";
 		}
-		$text .= "|}\n";
+		$text .= "|}\n\n";
 		return $text;
 	}
 
