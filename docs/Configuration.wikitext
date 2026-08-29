@@ -152,7 +152,7 @@ What the build still does is everything that makes the output a working set of f
 Leave it off for a site anyone reads. A published export that offers a login, a watchlist and a talk tab with nothing behind any of them is worse than one that offers none.
 
 <!--T:61-->
-There is a source tree to bake with it: <code>examples/skin-preview</code> in the {{SITENAME}} repository, one page carrying every element a skin has to style. Add your skin to its <code>.wikven.yml</code> and build that directory.
+There is a source tree to bake with it: <code>examples/skin-preview</code> in the {{SITENAME}} repository, one page carrying every element a skin has to style. Add your skin to its <code>.wikven.yaml</code> and build that directory.
 
 <!--T:42-->
 <span id="WikvenStyleDirectory"></span>

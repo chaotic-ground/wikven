@@ -56,7 +56,7 @@ test("the skin list is in the appearance menu, and every skin is on it", async (
 	await expect(list).toBeVisible();
 
 	// Every skin the export renders, which is what the section held under Tools; asserted against
-	// the entries in the document rather than against a count, so this follows docs/.wikven.yml.
+	// the entries in the document rather than against a count, so this follows docs/.wikven.yaml.
 	const entries = await page.locator('[id^="t-wikven-skin-"]').count();
 	expect(entries).toBeGreaterThan(1);
 	await expect(list.locator(".mw-list-item")).toHaveCount(entries);

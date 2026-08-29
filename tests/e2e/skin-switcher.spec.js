@@ -113,7 +113,7 @@ const expectKoreanArticle = async (page) => {
 };
 
 // Which skins this export has, discovered from the switcher itself so the tests
-// follow docs/.wikven.yml rather than restating it.
+// follow docs/.wikven.yaml rather than restating it.
 let main;
 let others;
 // The non-main skins a journey can start from, which is what the tests below switch away from.

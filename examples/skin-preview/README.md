@@ -8,12 +8,12 @@ floating one, thumbnails on both sides, a frameless image, a gallery, a block qu
 preformatted text and an unbreakable token — so you can bake it once and see the surface all at
 once, instead of finding out three sites later that nobody gave the definition lists a margin.
 
-`.wikven.yml` sets `WikvenSkinPreview`, so wikven leaves the chrome alone: the personal menu, the
+`.wikven.yaml` sets `WikvenSkinPreview`, so wikven leaves the chrome alone: the personal menu, the
 toolbox, the tabs and the footer are your skin's own work, not wikven's reading of them.
 
 ## Using it
 
-Add your skin to `.wikven.yml`:
+Add your skin to `.wikven.yaml`:
 
 ```yaml
 skins:

@@ -245,7 +245,7 @@ jobs:
             fi
             expected=$(( expected + langs * ( langs + 1 ) ))
           done
-          # Once per skin the site renders: the default plus the two docs/.wikven.yml adds.
+          # Once per skin the site renders: the default plus the two docs/.wikven.yaml adds.
           expected=$(( expected * 3 ))
           found=$(find dist -name '*.html' -exec grep -ho 'mw-pt-progress--' {} + | wc -l)
           if [ "$found" -ne "$expected" ]; then
