@@ -60,7 +60,41 @@ class RetranslateChrome extends Maintenance {
 			}
 		}
 
+		$this->recacheGeneratedLicenses($source, $contentLang, $isKnownLanguage);
+
 		return true;
+	}
+
+	/**
+	 * The licenses page's own language copies, which the walk above cannot reach.
+	 *
+	 * That walk finds translations by their source files, and these have none: build.php writes
+	 * them, message by message, in each language the site is built in. They are pages in that
+	 * language all the same -- the Declarer hook answers for them -- so the chrome around them has
+	 * to follow, or a Korean page keeps an English menu and footer.
+	 *
+	 * Skipped where the site wrote its own licenses page, because then the build wrote no copies
+	 * and whatever sits under that title is the site's, or Translate's, and is handled above.
+	 *
+	 * @param string $source
+	 * @param string $contentLang
+	 * @param callable(string):bool $isKnownLanguage
+	 */
+	private function recacheGeneratedLicenses(string $source, string $contentLang, callable $isKnownLanguage): void {
+		$page = LicensesPage::title();
+		if ($page === null || SourceFile::exists($page->getPrefixedText())) {
+			return;
+		}
+
+		foreach (TranslationSource::languages($source, $isKnownLanguage) as $lang) {
+			if ($lang === $contentLang) {
+				continue;
+			}
+			$title = Title::newFromText(LicensesPage::inLanguage($page, $lang));
+			if ($title && $title->exists()) {
+				$this->recache($title, $lang);
+			}
+		}
 	}
 
 	/** Render one page with $lang as the interface language and overwrite its view cache file. */

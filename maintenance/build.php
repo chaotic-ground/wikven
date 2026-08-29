@@ -1051,8 +1051,7 @@ class Build extends Maintenance {
 	 * at -- several hundred of them, once per skin, in the search index.
 	 */
 	private function setLicensesPage(): void {
-		$name = (string)( $GLOBALS['wgWikvenLicensesPage'] ?? '' );
-		$title = $name === '' ? null : Title::newFromText($name);
+		$title = LicensesPage::title();
 		if (!$title) {
 			return;
 		}
@@ -1063,11 +1062,16 @@ class Build extends Maintenance {
 		if (!$title->exists()) {
 			$this->savePage($title->getPrefixedText(), $this->licensesText(null), 'Generate the licenses page');
 			foreach ($this->translatedLanguages() as $lang) {
-				$this->savePage(
-					$title->getPrefixedText() . "/$lang",
-					$this->licensesText($lang),
-					"Generate the licenses page in $lang"
-				);
+				// Left alone for the same reason as the page above it: a page the source provided
+				// under this title is the site's, and overwriting it would say nothing.
+				$copy = Title::newFromText(LicensesPage::inLanguage($title, $lang));
+				if ($copy && !$copy->exists()) {
+					$this->savePage(
+						$copy->getPrefixedText(),
+						$this->licensesText($lang),
+						"Generate the licenses page in $lang"
+					);
+				}
 			}
 		}
 
@@ -1097,10 +1101,8 @@ class Build extends Maintenance {
 	 * Every language the source tree carries a translation in, bar the content language, which the
 	 * page at the unsuffixed title is already written in.
 	 *
-	 * Read from the files rather than from a setting, the same way retranslateChrome reads them:
-	 * the languages a site is built in are the ones its pages have translations for, and there is
-	 * no second list to fall out of step with that one. Empty without Translate, where nothing
-	 * renders a per-language page and resolveTranslationLinks never runs to link one.
+	 * Empty without Translate, where nothing renders a per-language page and
+	 * resolveTranslationLinks never runs to link one.
 	 *
 	 * @return list<string>
 	 */
@@ -1115,18 +1117,12 @@ class Build extends Maintenance {
 
 		$services = $this->getServiceContainer();
 		$contentLanguage = $services->getContentLanguage()->getCode();
-		$isKnownLanguage = [$services->getLanguageNameUtils(), 'isKnownLanguageTag'];
-
-		$languages = [];
-		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
-			foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
-				if ($lang !== $contentLanguage) {
-					$languages[$lang] = true;
-				}
-			}
-		}
-		ksort($languages);
-		return array_keys($languages);
+		$languages = TranslationSource::languages(
+			$source,
+			[$services->getLanguageNameUtils(), 'isKnownLanguageTag']
+		);
+		// The page at the unsuffixed title is written in the content language already.
+		return array_values(array_diff($languages, [$contentLanguage]));
 	}
 
 	/**
