@@ -400,8 +400,12 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 * Every page carries a link to what the site redistributes.
 	 *
 	 * The built site ships MediaWiki's own JavaScript and each skin's CSS, and the page saying so
-	 * is no use if only a reader who goes looking finds it. The href is root-relative, as every
-	 * link the build writes is, so rename.php reparents it for a subpage.
+	 * is no use if only a reader who goes looking finds it.
+	 *
+	 * Which of the two hrefs is written depends on whether Translate is installed beside this
+	 * suite, and the jobs disagree: the coverage run has it and the phpunit runs do not. So what is
+	 * asserted here is that the link is present and leads to the page; the exact spelling of each
+	 * route is pinned by the two cases above, which pass the flag in rather than reading it.
 	 */
 	public function testTheFooterSaysWhereToFindWhatTheSiteRedistributes() {
 		$this->overrideConfigValue('WikvenLicensesPage', 'Licenses');
@@ -412,7 +416,10 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
 
 		$this->assertArrayHasKey('wikven-licenses', $footerItems);
-		$this->assertStringContainsString('./Licenses.html', $footerItems['wikven-licenses']);
+		$this->assertMatchesRegularExpression(
+			'~href="\./(?:Special:MyLanguage/)?Licenses\.html"~',
+			$footerItems['wikven-licenses']
+		);
 	}
 
 	/** A site that will acknowledge this its own way sets the name empty, and the link goes too. */
