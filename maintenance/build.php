@@ -6,6 +6,7 @@ use ImportImages;
 use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
+use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
@@ -1037,6 +1038,17 @@ class Build extends Maintenance {
 	 * that writes this one itself has taken the question on deliberately. Set the name empty and no
 	 * page is written and the footer entry goes with it, which is a site saying it will acknowledge
 	 * this its own way.
+	 *
+	 * It is written once per language the site is built in, at "<Page>/<lang>", because a notice
+	 * nobody can read is not one either: every string on it is a message, wikven's own and core's
+	 * Special:Version ones, so each language costs a render and nothing else. The footer's
+	 * Special:MyLanguage link then lands on the reader's own copy.
+	 *
+	 * The languages are the ones the source tree has translations in, not every language MediaWiki
+	 * knows. Nothing could reach the rest: resolveTranslationLinks settles each link by the
+	 * language of the page carrying it, and a reader is only ever on a page in a language the site
+	 * has content in, so a copy in any other language would be a file no link in the export points
+	 * at -- several hundred of them, once per skin, in the search index.
 	 */
 	private function setLicensesPage(): void {
 		$name = (string)( $GLOBALS['wgWikvenLicensesPage'] ?? '' );
@@ -1045,15 +1057,18 @@ class Build extends Maintenance {
 			return;
 		}
 
+		// Only where the site left the page to the build. A site that wrote its own is writing the
+		// language pages under it too, or marking it for translation and letting buildTranslations
+		// write them; either way a copy of ours under its title would be one it never asked for.
 		if (!$title->exists()) {
-			$this->savePage(
-				$title->getPrefixedText(),
-				$this->contentMsg('wikven-licenses-intro')
-				. "\n\n"
-				. rtrim($this->coreTable() . $this->componentLists())
-				. "\n",
-				'Generate the licenses page'
-			);
+			$this->savePage($title->getPrefixedText(), $this->licensesText(null), 'Generate the licenses page');
+			foreach ($this->translatedLanguages() as $lang) {
+				$this->savePage(
+					$title->getPrefixedText() . "/$lang",
+					$this->licensesText($lang),
+					"Generate the licenses page in $lang"
+				);
+			}
 		}
 
 		// The footer entry is chrome, and a skin preview has none of wikven's -- see SkinPreview.
@@ -1066,6 +1081,52 @@ class Build extends Maintenance {
 				. " a published site links it from every page.\n"
 			);
 		}
+	}
+
+	/** The whole licenses page, in the named language or the wiki's content language for null. */
+	private function licensesText(?string $lang): string {
+		return (
+			$this->contentMsg('wikven-licenses-intro', $lang)
+			. "\n\n"
+			. rtrim($this->coreTable($lang) . $this->componentLists($lang))
+			. "\n"
+		);
+	}
+
+	/**
+	 * Every language the source tree carries a translation in, bar the content language, which the
+	 * page at the unsuffixed title is already written in.
+	 *
+	 * Read from the files rather than from a setting, the same way retranslateChrome reads them:
+	 * the languages a site is built in are the ones its pages have translations for, and there is
+	 * no second list to fall out of step with that one. Empty without Translate, where nothing
+	 * renders a per-language page and resolveTranslationLinks never runs to link one.
+	 *
+	 * @return list<string>
+	 */
+	private function translatedLanguages(): array {
+		if (!ExtensionRegistry::getInstance()->isLoaded('Translate')) {
+			return [];
+		}
+		$source = rtrim((string)( $GLOBALS['wgWikvenSourceDirectory'] ?? '' ), '/');
+		if ($source === '' || !is_dir($source)) {
+			return [];
+		}
+
+		$services = $this->getServiceContainer();
+		$contentLanguage = $services->getContentLanguage()->getCode();
+		$isKnownLanguage = [$services->getLanguageNameUtils(), 'isKnownLanguageTag'];
+
+		$languages = [];
+		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
+			foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
+				if ($lang !== $contentLanguage) {
+					$languages[$lang] = true;
+				}
+			}
+		}
+		ksort($languages);
+		return array_keys($languages);
 	}
 
 	/**
@@ -1081,16 +1142,16 @@ class Build extends Maintenance {
 	 * that fact is kept. Unreadable leaves the cell empty, as a component declaring no license
 	 * does, because a guess on a licenses page is worse than a gap.
 	 */
-	private function coreTable(): string {
+	private function coreTable(?string $lang): string {
 		return (
 			'== '
-			. $this->contentMsg('version-software')
+			. $this->contentMsg('version-software', $lang)
 			. " ==\n{| class=\"wikitable\"\n! "
-			. $this->contentMsg('version-software-product')
+			. $this->contentMsg('version-software-product', $lang)
 			. ' !! '
-			. $this->contentMsg('version-software-version')
+			. $this->contentMsg('version-software-version', $lang)
 			. ' !! '
-			. $this->contentMsg('version-ext-colheader-license')
+			. $this->contentMsg('version-ext-colheader-license', $lang)
 			. "\n|-\n| [https://www.mediawiki.org/ MediaWiki]\n| "
 			. MW_VERSION
 			. "\n| "
@@ -1110,7 +1171,7 @@ class Build extends Maintenance {
 	}
 
 	/** The extensions and skins, with the version and license each one declares for itself. */
-	private function componentLists(): string {
+	private function componentLists(?string $lang): string {
 		// Split components into extensions and skins (skins live under skins/), each in its own section.
 		$extensions = [];
 		$skins = [];
@@ -1122,8 +1183,8 @@ class Build extends Maintenance {
 			}
 		}
 		return (
-			$this->componentTable('version-extensions', 'version-ext-colheader-name', $extensions)
-			. $this->componentTable('version-skins', 'version-skin-colheader-name', $skins)
+			$this->componentTable('version-extensions', 'version-ext-colheader-name', $extensions, $lang)
+			. $this->componentTable('version-skins', 'version-skin-colheader-name', $skins, $lang)
 		);
 	}
 
@@ -1140,9 +1201,13 @@ class Build extends Maintenance {
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment($summary));
 	}
 
-	/** A message in the wiki's content language (the pages here are content, not UI chrome). */
-	private function contentMsg(string $key): string {
-		return wfMessage($key)->inContentLanguage()->text();
+	/**
+	 * A message in the language a generated page is written in (these pages are content, not UI
+	 * chrome), which is the wiki's content language unless a language is named.
+	 */
+	private function contentMsg(string $key, ?string $lang = null): string {
+		$message = wfMessage($key);
+		return ( $lang === null ? $message->inContentLanguage() : $message->inLanguage($lang) )->text();
 	}
 
 	/**
@@ -1155,7 +1220,12 @@ class Build extends Maintenance {
 	 * the identifier stands on its own, and a component declaring none leaves the cell empty rather
 	 * than being guessed at.
 	 */
-	private function componentTable(string $headingKey, string $nameColKey, array $things): string {
+	private function componentTable(
+		string $headingKey,
+		string $nameColKey,
+		array $things,
+		?string $lang
+	): string {
 		if (!$things) {
 			return '';
 		}
@@ -1164,14 +1234,14 @@ class Build extends Maintenance {
 		// the only tables on the page long enough for that to be the difference between finding it
 		// and reading everything. buildScripts sees the class and puts jquery.tablesorter in the
 		// bundle, which an export needs because nothing can fetch it later (#483).
-		$text = '== ' . $this->contentMsg($headingKey) . " ==\n";
+		$text = '== ' . $this->contentMsg($headingKey, $lang) . " ==\n";
 		$text .=
 			"{| class=\"wikitable sortable\"\n! "
-			. $this->contentMsg($nameColKey)
+			. $this->contentMsg($nameColKey, $lang)
 			. ' !! '
-			. $this->contentMsg('version-ext-colheader-version')
+			. $this->contentMsg('version-ext-colheader-version', $lang)
 			. ' !! '
-			. $this->contentMsg('version-ext-colheader-license')
+			. $this->contentMsg('version-ext-colheader-license', $lang)
 			. "\n";
 		foreach ($things as $thingName => $credits) {
 			$url = $credits['url'] ?? '';
