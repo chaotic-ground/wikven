@@ -21,11 +21,12 @@ chmod +x wikven
 <translate>
 <!--T:4-->
 On arm64, use <code>wikven-linux-aarch64</code>. See [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|Standalone binary]] for installing it onto your <code>PATH</code>, nightly builds, and the optional host tools it uses.
+</translate>
 
-<!--T:5-->
 <span id="Docker"></span>
 == Docker ==
 
+<translate>
 <!--T:6-->
 Works on any platform with [https://www.docker.com/ Docker], so it is the option to use on macOS and Windows. The image is published to the GitHub Container Registry:
 </translate>

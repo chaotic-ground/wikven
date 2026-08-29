@@ -31,19 +31,21 @@ A list of extension names to load. An extension that ships inside {{SITENAME}} w
 <!--T:5-->
 == <code>skins</code> ==
 A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from the [[#WikvenRepositories|<code>WikvenRepositories</code> map]]. See [[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]].
+</translate>
 
-<!--T:6-->
 == <code>config</code> ==
 
+<translate>
 <!--T:7-->
 A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, and so can Wikven's own variables, which the sections below describe one by one.
 
 <!--T:36-->
 Three more exist and are not for you to set: <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code> and <code>WikvenSourceHistoryFile</code> are derived from <code>WIKVEN_WORKDIR</code> by the build itself (see [[<tvar name="1">Special:MyLanguage/Commands</tvar>|Commands]]). Setting them in your file does nothing useful, and the build overwrites them anyway.
+</translate>
 
-<!--T:8-->
 === <code>WikvenLogos</code> ===
 
+<translate>
 <!--T:45-->
 '''Default:''' empty
 
@@ -73,20 +75,22 @@ Wikven also ships a small default favicon so browsers do not 404 on <code>/favic
 
 <!--T:13-->
 The targets the "Edit", "View history" and "View source" links point at, so a reader can jump from a rendered page to its source in your repository. In each URL, <code>$1</code> is replaced with the page's source file name relative to your source directory, including its extension. A page whose title carries its own content model keeps that name verbatim (<code>MediaWiki:Common.css</code>, <code>MediaWiki:Common.js</code>, a <code>.json</code> config page, a <code>Module:</code> page, ...); every other page is a <code>.wikitext</code> file, so a normal page becomes <code>Getting Started.wikitext</code>. Leave any of them unset to drop that link; a generated page (such as the [[#WikvenAboutPage|About]] page, when the build writes it) has no source file, so these links are omitted for it.
+</translate>
 
-<!--T:14-->
 === <code>WikvenMainPage</code> ===
 
+<translate>
 <!--T:47-->
 '''Default:''' <code>index</code>
 
 <!--T:15-->
 The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Naming your entry file <code>index.wikitext</code> therefore takes no configuration at all. The page must be one you imported; the build fails if it is missing.
+</translate>
 
-<!--T:16-->
 <span id="WikvenAboutPage"></span>
 === <code>WikvenAboutPage</code> ===
 
+<translate>
 <!--T:48-->
 '''Default:''' <code>About</code>
 
@@ -95,20 +99,22 @@ The title of the page that introduces your site, which MediaWiki's own "About" f
 
 <!--T:55-->
 Whatever this is set to, the build generates two templates, since an export has no <code>Special:Version</code> to send a reader to. Transclude either from any page you like: <code><nowiki>{{Wikven software}}</nowiki></code> is what that page would show — MediaWiki, PHP and the database, then the extensions and skins — and <code><nowiki>{{Wikven components}}</nowiki></code> is the extensions and skins alone, with the license each one declares, which is what a page acknowledging what your site redistributes wants.
+</translate>
 
-<!--T:18-->
 === <code>WikvenFooterUrl</code> ===
 
+<translate>
 <!--T:49-->
 '''Default:''' empty
 
 <!--T:19-->
 A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...). With no URL there is no such link.
+</translate>
 
-<!--T:37-->
 <span id="WikvenSettingsPage"></span>
 === <code>WikvenSettingsPage</code> ===
 
+<translate>
 <!--T:50-->
 '''Default:''' <code>Settings</code>
 
@@ -117,20 +123,22 @@ The title of a page the build writes for the reader's own display choices: the c
 
 <!--T:39-->
 Write a source page of that name and it takes precedence, exactly as for the About page. Set it empty to write no page at all, and the entries pointing at it go with it. See [[<tvar name="1">Special:MyLanguage/Skins#settings</tvar>|Skins]] for what the page offers a reader.
+</translate>
 
-<!--T:40-->
 <span id="WikvenBundleWebfonts"></span>
 === <code>WikvenBundleWebfonts</code> ===
 
+<translate>
 <!--T:51-->
 '''Default:''' <code>false</code>
 
 <!--T:41-->
 When set, and UniversalLanguageSelector is enabled, the build bakes that extension's webfonts for the languages your pages use into a stylesheet the export serves itself, so a reader whose system has no font for a script sees the intended typeface instead of empty boxes. It is off unless asked for, because the fonts are extra payload for a site whose readers may not need them. It does nothing without UniversalLanguageSelector; see [[<tvar name="1">Special:MyLanguage/Translating</tvar>|Translating]].
+</translate>
 
-<!--T:56-->
 === <code>WikvenSkinPreview</code> ===
 
+<translate>
 <!--T:57-->
 '''Default:''' <code>false</code>
 
@@ -163,11 +171,10 @@ config:
   WikvenScriptDirectory: assets
 </syntaxhighlight>
 
-<translate>
-<!--T:20-->
 <span id="WikvenRepositories"></span>
 === <code>WikvenRepositories</code> ===
 
+<translate>
 <!--T:53-->
 '''Default:''' empty
 
@@ -216,11 +223,12 @@ Nothing moves an exact pin for you, though: this file belongs to no ecosystem a 
 
 <!--T:26-->
 This very site fetches [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue</tvar> TabberNeue] this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
+</translate>
 
-<!--T:27-->
 <span id="ContentNamespaces"></span>
 === <code>ContentNamespaces</code> ===
 
+<translate>
 <!--T:54-->
 '''Default:''' <code>[0, 6]</code>
 
