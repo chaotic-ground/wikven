@@ -28,5 +28,3 @@ Beyond that, every site adds extensions and skins of its own, and their pages, s
 </translate>
 
 {{Wikven/components}}
-
-{{prevnext}}

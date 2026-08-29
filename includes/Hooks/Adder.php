@@ -224,16 +224,40 @@ class Adder implements
 		}
 
 		// What the site redistributes, on every page, because the page saying it is no use if only
-		// the reader who goes looking finds it. The href is root-relative like every other link the
-		// build writes, so rename.php reparents it for a subpage along with the rest.
+		// the reader who goes looking finds it.
 		$licenses = $this->licensesTitle();
 		if ($licenses !== null) {
 			$footerItems['wikven-licenses'] = Html::element(
 				'a',
-				['href' => './' . Title::makeName($licenses->getNamespace(), $licenses->getDBkey()) . '.html'],
+				[
+					'href' => self::licensesHref(
+						$licenses,
+						ExtensionRegistry::getInstance()->isLoaded('Translate')
+					)
+				],
 				$skin->msg('wikven-footer-licenses')->text()
 			);
 		}
+	}
+
+	/**
+	 * Where the footer's licenses link points.
+	 *
+	 * Root-relative like every other link the build writes, so rename.php reparents it for a
+	 * subpage along with the rest.
+	 *
+	 * Through Special:MyLanguage where Translate is loaded, which is the condition
+	 * resolveTranslationLinks.php runs on: that pass rewrites the link to the reader's own
+	 * language, or to the source page where that language has no translation. Without the prefix a
+	 * Korean reader on Licenses/ko.html would be sent to the English page, and since this link is
+	 * the site's only guaranteed route to it, there is no second way in.
+	 *
+	 * Written plainly where Translate is not loaded, because then the pass never runs and the
+	 * special page, which no export contains, would be left standing in the href.
+	 */
+	public static function licensesHref(Title $licenses, bool $translated): string {
+		$page = Title::makeName($licenses->getNamespace(), $licenses->getDBkey());
+		return './' . ( $translated ? 'Special:MyLanguage/' : '' ) . $page . '.html';
 	}
 
 	/** The page listing what the site redistributes, or null where the site asked for none. */

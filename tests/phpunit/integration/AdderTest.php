@@ -371,6 +371,32 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * A translated site's footer link goes through Special:MyLanguage, so a reader is sent to what
+	 * they can read.
+	 *
+	 * resolveTranslationLinks.php runs on exactly this condition and settles the link by the
+	 * language of the page holding it. Without the prefix a Korean reader on Licenses/ko.html
+	 * would follow the footer to the English page -- and this link is the site's only guaranteed
+	 * route there, so there is no second way in.
+	 */
+	public function testATranslatedSiteLinksTheReaderToTheirOwnLanguage() {
+		$licenses = Title::newFromText('Licenses');
+
+		$this->assertSame(
+			'./Special:MyLanguage/Licenses.html',
+			Adder::licensesHref($licenses, true)
+		);
+	}
+
+	/**
+	 * A site without Translate gets the page itself: the pass that resolves the prefix never runs,
+	 * and no export contains the special page it names.
+	 */
+	public function testASiteWithoutTranslationsLinksThePageItself() {
+		$this->assertSame('./Licenses.html', Adder::licensesHref(Title::newFromText('Licenses'), false));
+	}
+
+	/**
 	 * Every page carries a link to what the site redistributes.
 	 *
 	 * The built site ships MediaWiki's own JavaScript and each skin's CSS, and the page saying so
