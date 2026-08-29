@@ -159,6 +159,29 @@ class TranslationSource {
 	}
 
 	/**
+	 * Every language the source tree carries a translation in.
+	 *
+	 * The languages a site is built in are the ones its pages have translations for. Read from the
+	 * files rather than from a setting, because there is no setting: nothing declares a site's
+	 * languages, so a second list to keep in step with this one would be a list to fall out of step
+	 * with it.
+	 *
+	 * @param string $sourceDir
+	 * @param callable(string):bool $isKnownLanguage
+	 * @return string[] Language codes, sorted, each once.
+	 */
+	public static function languages(string $sourceDir, callable $isKnownLanguage): array {
+		$languages = [];
+		foreach (self::baseFiles($sourceDir, $isKnownLanguage) as $baseFile) {
+			foreach (self::translationLanguages($baseFile, $isKnownLanguage) as $language) {
+				$languages[$language] = true;
+			}
+		}
+		ksort($languages);
+		return array_keys($languages);
+	}
+
+	/**
 	 * Every translatable base page under a source directory.
 	 *
 	 * A translation is never one, whatever it holds. A <translate> it quotes is real to Translate as

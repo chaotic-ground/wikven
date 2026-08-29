@@ -55,7 +55,8 @@
 		"GetLocalURL": "main",
 		"OutputPageAfterGetHeadLinksArray": "main",
 		"SetupAfterCache": ["retrier", "main"],
-		"SifterSearchIndexPage": "indexer"
+		"SifterSearchIndexPage": "indexer",
+		"PageContentLanguage": "declarer"
 	},
 	"HookHandlers": {
 		"main": {
@@ -73,6 +74,10 @@
 		},
 		"retrier": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Retrier"
+		},
+		"declarer": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Declarer",
+			"services": ["LanguageFactory", "LanguageNameUtils"]
 		}
 	},
 	"config": {
