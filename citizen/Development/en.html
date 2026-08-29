@@ -489,7 +489,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dl><dt><code>RebuildFileCache</code></dt>
 <dd>Renders every content page to an HTML file. This is MediaWiki's own file cache; Wikven treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.</dd>
 <dt><code>retranslateChrome</code></dt>
-<dd>Re-renders each translated page with its own language as the interface language. The file cache only caches the canonical anonymous view, which would leave every translation wearing the content language's chrome.</dd>
+<dd>Re-renders each page written in a language other than the wiki's own — the translations, and the language copies of the <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">Licenses page</a> the build writes — with that language as the interface language. The file cache only caches the canonical anonymous view, which would leave every one of them wearing the content language's chrome.</dd>
 <dt><code>stripBuildStamps</code></dt>
 <dd>Removes the request ids, render ids and timestamps MediaWiki stamps into every rendered page, which differ between bakes.</dd>
 <dt><code>buildStyles</code></dt>
@@ -574,7 +574,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/en.wikitext" title="This page was last edited on 29 August 2026, at 15:41." data-timestamp="1788018104"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>29 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/en.wikitext" title="This page was last edited on 29 August 2026, at 16:03." data-timestamp="1788019380"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>29 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -795,7 +795,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 29 August 2026, at 15:41.</div>
+		        <div class="page-info__text"> This page was last edited on 29 August 2026, at 16:03.</div>
 		    </section>
 		</div>
 </footer>		</div>
