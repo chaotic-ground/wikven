@@ -29,7 +29,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <link rel="stylesheet" href="././ext.uls.pt.css">
 <link rel="canonical" href="../Configuration.html">
 <script>window.clientPrefs=()=>{let className=document.documentElement.className;let storage;try{storage=localStorage.getItem('mwclientpreferences');}catch(e){}if(storage){storage.split(',').forEach((pref)=>{const pattern=new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)');if(pattern.test(className)){className=className.replace(pattern,'$1'+pref+'$2');}else{className+=' '+pref;}});document.documentElement.className=className;}};(()=>{window.clientPrefs();})();</script>
-<link rel="stylesheet" href="././webfonts.css"><link rel="stylesheet" href="././site.styles.css"></head>
+<link rel="stylesheet" href="././site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration rootpage-Configuration skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
 <a class="mw-jump-link citizen-jump-link" href="#bodyContent">Jump to content</a>
@@ -97,7 +97,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <ul class="citizen-siteStats" role="list" aria-label="Statistics">
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--articles" role="listitem">
 		<span class="citizen-ui-icon mw-ui-icon-article mw-ui-icon-wikimedia-article" title="articles"></span>
-		<span>50</span>
+		<span>48</span>
 		<span class="citizen-siteStats__label">articles</span>
 	</li>
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--images" role="listitem">
@@ -475,9 +475,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 </section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenLicensesPage"><code>WikvenLicensesPage</code></h3></div>
 <p><b>Default:</b> <code>Licenses</code>
-</p><p>The title of the page saying what your site is made of and under which licenses, which the footer links from every page. A built site publishes MediaWiki's own scripts and each skin's and extension's styles alongside your words, so something has to acknowledge them, and a page nothing links to does not. Write a source page of that name and it is used exactly as written. With no source page of that name, the build writes one holding a line of introduction with the software list under it. Set it empty to write no page at all, and the footer link goes with it.
+</p><p>The title of the page saying what your site publishes that is not your own, and under which licenses, which the footer links from every page. A built site publishes MediaWiki's own scripts and each skin's and extension's styles alongside your words, so something has to acknowledge them, and a page nothing links to does not. The build lists MediaWiki, then your extensions and skins, each with the version and license it declares for itself; PHP, the database and the tools that made the build are left out, because a static site does not ship them. Write a source page of that name and it is used exactly as written instead. Set it empty to write no page at all, and the footer link goes with it.
 </p><p>MediaWiki's own "About" footer link is a separate thing, and not one the build fills in: with no page where <code>MediaWiki:Aboutpage</code> points, that entry is blanked along with the other dead ones. A site that wants it writes its own introduction and a <code>MediaWiki:Aboutpage.wikitext</code> naming that page.
-</p><p>Whatever this is set to, the build generates two templates, since an export has no <code>Special:Version</code> to send a reader to. Transclude either from any page you like: <code>{{Wikven/software}}</code> is what that page would show — MediaWiki, PHP and the database, then the extensions and skins — and <code>{{Wikven/components}}</code> is the extensions and skins alone, with the license each one declares, which is what a page acknowledging what your site redistributes wants. The former names <code>{{Wikven software}}</code> and <code>{{Wikven components}}</code> still work; they are removed at the next major.
 </p>
 </section><section id="citizen-section-8" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenFooterUrl"><code>WikvenFooterUrl</code></h3></div>
 <p><b>Default:</b> empty
@@ -538,7 +537,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A name in <code>WikvenRepositories</code> that is already bundled with wikven is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
 </p><p>Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> they must be on your <code>PATH</code>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r92">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
 </div>
 <p>Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See <a href="./Deploying.html#keeping-pins-current" title="Special:MyLanguage/Deploying">Deploying</a> for keeping one current.
 </p><p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
@@ -557,7 +556,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>It is also in the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/default.yml">repository</a>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r96">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Why_wikitext.html" title="Special:MyLanguage/Why wikitext">Why wikitext</a></div><div class="wikven-prevnext-next"><a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a> →</div></div>
+<style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Why_wikitext.html" title="Special:MyLanguage/Why wikitext">Why wikitext</a></div><div class="wikven-prevnext-next"><a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a> →</div></div>
 
 </section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="Configuration.html">Configuration.html</a>"</div></div>
@@ -577,7 +576,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration.wikitext" title="This page was last edited on 29 August 2026, at 13:35." data-timestamp="1788010536"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>29 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration.wikitext" title="This page was last edited on 29 August 2026, at 14:14." data-timestamp="1788012891"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>29 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -843,7 +842,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 29 August 2026, at 13:35.</div>
+		        <div class="page-info__text"> This page was last edited on 29 August 2026, at 14:14.</div>
 		    </section>
 		</div>
 </footer>		</div>
