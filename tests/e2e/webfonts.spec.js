@@ -3,7 +3,10 @@
 
 const { test, expect } = require("@playwright/test");
 
-const KHMER_PAGE = "Licenses/km.html";
+// A translation from the source tree, so MediaWiki knows the page is Khmer and :lang(km) applies
+// to what it renders. Not the build's own Licenses/km: that page carries core's Khmer headings,
+// but it is a plain subpage, so its page language is the site's content language.
+const KHMER_PAGE = "Searching/km.html";
 const FONT = "KhmerOSbattambang";
 
 test("the Khmer page fetches its bundled font from the export", async ({

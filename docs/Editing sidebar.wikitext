@@ -19,7 +19,7 @@ Each top-level <code>*</code> line is a heading, and each <code>**</code> line b
 
 <translate>
 <!--T:7-->
-{{note|A target is looked up as a message before it is read as a page name, the same way a label is, and MediaWiki drops an entry whose message says <code>-</code> — that is how it turns one of its own default entries off. So a target that happens to share a name with such a message leaves the sidebar without a word about it. The one worth knowing is <code>licenses</code>, the upload form's list of licence options, which MediaWiki defines as <code>-</code>: an entry for a page called <code>Licenses</code> is dropped when the target is written plainly. Write it with a leading colon, as <code>:Licenses</code>, to name the page itself and skip the lookup. The <code>Special:MyLanguage/</code> prefix below does the same, which is why this site's own sidebar needs no colon.}}
+{{note|A target is looked up as a message before it is read as a page name, the same way a label is, and MediaWiki drops an entry whose message says <code>-</code> — that is how it turns one of its own default entries off. So a target that happens to share a name with such a message leaves the sidebar without a word about it. The one worth knowing is <code>licenses</code>, the upload form's list of licence options, which MediaWiki defines as <code>-</code>: an entry for a page called <code>Licenses</code> is dropped when the target is written plainly. Write it with a leading colon, as <code>:Licenses</code>, to name the page itself and skip the lookup. The <code>Special:MyLanguage/</code> prefix below does the same, which is why the example under it needs no colon.}}
 
 <!--T:8-->
 == Linking on a translated site ==

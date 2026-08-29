@@ -4,8 +4,6 @@
 	},
 	"wikven-footer-source": "View project on $1",
 	"wikven-footer-source-plain": "View project source",
-	"wikven-about-intro": "This site is built from wikitext source files with [https://github.com/chaotic-ground/wikven wikven], which renders them into static pages.",
-	"wikven-about-software": "This site is generated with the following open-source software.",
 	"wikven-skins": "Skins",
 	"wikven-skin": "Skin",
 	"wikven-skin-description": "Read this page in another skin",
@@ -36,5 +34,8 @@
 	"wikven-translations-documentation": "See [Translating]($1) for the whole workflow.",
 	"wikven-translations-documentation-url": "https://chaotic-ground.github.io/wikven/Translating.html",
 	"wikven-translations-all-clear": "`translate check` found nothing to report: every source page reads cleanly, and every translation of one is stamped current.",
-	"wikven-translations-all-clear-scoped": "`translate check` found nothing to report about this change: the pages it touches read cleanly, and their translations are stamped current."
+	"wikven-translations-all-clear-scoped": "`translate check` found nothing to report about this change: the pages it touches read cleanly, and their translations are stamped current.",
+	"wikven-licenses-intro": "Every page of this site carries software that is not its own: MediaWiki's scripts, and the styles and scripts of each skin and extension below. They are listed here with the licenses they are published under.",
+	"wikven-licenses-software": "MediaWiki, PHP and the database are what this build ran on. Only MediaWiki's own scripts are published with the site, so only its license is named below; the rest is here for reference, and the site redistributes none of it.",
+	"wikven-footer-licenses": "Licenses"
 }

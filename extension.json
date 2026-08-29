@@ -84,9 +84,9 @@
 			"value": "Settings",
 			"description": "Title of an auto-generated page holding the reader's display choices (colour theme, and the skin to read the site in), which a static export keeps in the browser. Stands in for Special:MobileOptions, which no bake writes. Empty disables it; a same-named source page takes precedence."
 		},
-		"WikvenAboutPage": {
-			"value": "About",
-			"description": "Title of the page introducing the site, which MediaWiki's own \"About\" footer link is pointed at. A source page of that name is used as written; with no source page, the build writes an introduction with the software list under it. Empty writes no page, and the footer link goes with it. Whatever this is set to, the build generates two templates any page can transclude: {{Wikven/software}}, what Special:Version would show (MediaWiki, PHP and the database, then the extensions and skins), and {{Wikven/components}}, the extensions and skins alone with the licenses they declare. The former names {{Wikven software}} and {{Wikven components}} still work and are removed at the next major."
+		"WikvenLicensesPage": {
+			"value": "Licenses",
+			"description": "Title of the page saying what the site publishes that is not its own, and under which licenses, linked from the footer of every page. A built site carries MediaWiki's own JavaScript and each skin's and extension's CSS, so something has to say so, and a page nobody links does not. The build writes what it ran on (MediaWiki, PHP and the database), then the extensions and skins with the version and license each declares for itself. Only MediaWiki's license is named among the first three: its scripts go out with the site and the other two do not, so a license beside them would read as a claim the site ships them. A source page of that name is used as written instead. Empty writes no page and drops the footer link, for a site that will acknowledge this its own way. A skin preview writes the page but does not link it, and says so."
 		},
 		"WikvenSourceDirectory": {
 			"value": "",

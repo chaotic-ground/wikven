@@ -7,8 +7,8 @@
 <!--T:2 @16a29b70-->
 최상위 <code>*</code> 줄은 각각 제목이고, 그 아래 <code>**</code> 줄은 각각 <code>page|label</code> 형식으로 쓴 링크입니다. 제목과 라벨은 먼저 시스템 메시지로 조회되고, 그런 메시지가 없을 때만 적힌 글자를 그대로 씁니다(그래서 <code>mainpage</code>와 <code>mainpage-description</code>은 대문서와 그 라벨로 해석됩니다). 라벨을 번역할 수 있게 해 주는 것이 바로 메시지이므로, 여러분의 것도 메시지 이름으로 쓰세요. 소스 언어의 문구는 <code>MediaWiki:Sidebar-docs.wikitext</code>에, 각 언어의 번역은 <code>MediaWiki:Sidebar-docs/&lt;언어&gt;.wikitext</code>에 다른 문서들과 나란히 둡니다. 번역되는 다른 문서의 이름 규칙과 같습니다. 그러면 사이드바는 다음과 같은 모양이 됩니다:
 
-<!--T:7 @0b18613a-->
-{{note|대상도 라벨과 마찬가지로 문서 이름으로 읽히기 전에 먼저 메시지로 조회되며, 그 메시지가 <code>-</code>이면 MediaWiki가 그 항목을 사이드바에서 뺍니다. 자기 기본 항목을 끄는 방식이 그것입니다. 그래서 그런 메시지와 이름이 겹치는 대상은 아무 말 없이 사이드바에서 사라집니다. 알아 둘 것은 업로드 양식의 라이선스 선택 목록인 <code>licenses</code>로, MediaWiki가 이를 <code>-</code>로 정의해 두었습니다. <code>Licenses</code>라는 문서를 대상에 그대로 쓰면 그 항목이 빠지는 이유입니다. 앞에 콜론을 붙여 <code>:Licenses</code>로 쓰면 문서 자체를 가리키며 메시지 조회를 건너뜁니다. 아래의 <code>Special:MyLanguage/</code> 접두사도 같은 일을 하며, 그래서 이 사이트의 사이드바에는 콜론이 없습니다.}}
+<!--T:7 @49a134a8-->
+{{note|대상도 라벨과 마찬가지로 문서 이름으로 읽히기 전에 먼저 메시지로 조회되며, 그 메시지가 <code>-</code>이면 MediaWiki가 그 항목을 사이드바에서 뺍니다. 자기 기본 항목을 끄는 방식이 그것입니다. 그래서 그런 메시지와 이름이 겹치는 대상은 아무 말 없이 사이드바에서 사라집니다. 알아 둘 것은 업로드 양식의 라이선스 선택 목록인 <code>licenses</code>로, MediaWiki가 이를 <code>-</code>로 정의해 두었습니다. <code>Licenses</code>라는 문서를 대상에 그대로 쓰면 그 항목이 빠지는 이유입니다. 앞에 콜론을 붙여 <code>:Licenses</code>로 쓰면 문서 자체를 가리키며 메시지 조회를 건너뜁니다. 아래의 <code>Special:MyLanguage/</code> 접두사도 같은 일을 하며, 그래서 그 아래 예시에는 콜론이 없습니다.}}
 
 <!--T:8 @140bba9d-->
 == 번역된 사이트에서 링크하기 ==

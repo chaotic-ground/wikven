@@ -1,5 +1,6 @@
 <!-- Targets go through Special:MyLanguage so a reader on a translated page stays in their language.
-     The prefix also stops "Licenses" being read as the message that would drop the entry.
+     The prefix also keeps a target out of the message lookup, which silently drops an entry
+     whose message resolves to "-"; Editing sidebar has the one worth knowing.
 
      No main-page entry: every skin already points its logo at MediaWiki:Mainpage, and Minerva
      offers its own Home besides -- fillMinervaMenu.php drops an entry leading there for that
@@ -26,4 +27,3 @@
 ** Special:MyLanguage/Commands|sidebar-commands
 ** Special:MyLanguage/Writing an extension|sidebar-writing-an-extension
 ** Special:MyLanguage/Development|sidebar-development
-** Special:MyLanguage/Licenses|sidebar-licenses

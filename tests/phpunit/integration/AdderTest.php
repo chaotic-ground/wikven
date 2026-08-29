@@ -370,6 +370,84 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->assertNotContains('ext.Wikven.citizenSkins', $modules, 'the skin list is chrome');
 	}
 
+	/**
+	 * A translated site's footer link goes through Special:MyLanguage, so a reader is sent to what
+	 * they can read.
+	 *
+	 * resolveTranslationLinks.php runs on exactly this condition and settles the link by the
+	 * language of the page holding it. Without the prefix a Korean reader on Licenses/ko.html
+	 * would follow the footer to the English page -- and this link is the site's only guaranteed
+	 * route there, so there is no second way in.
+	 */
+	public function testATranslatedSiteLinksTheReaderToTheirOwnLanguage() {
+		$licenses = Title::newFromText('Licenses');
+
+		$this->assertSame(
+			'./Special:MyLanguage/Licenses.html',
+			Adder::licensesHref($licenses, true)
+		);
+	}
+
+	/**
+	 * A site without Translate gets the page itself: the pass that resolves the prefix never runs,
+	 * and no export contains the special page it names.
+	 */
+	public function testASiteWithoutTranslationsLinksThePageItself() {
+		$this->assertSame('./Licenses.html', Adder::licensesHref(Title::newFromText('Licenses'), false));
+	}
+
+	/**
+	 * Every page carries a link to what the site redistributes.
+	 *
+	 * The built site ships MediaWiki's own JavaScript and each skin's CSS, and the page saying so
+	 * is no use if only a reader who goes looking finds it.
+	 *
+	 * Which of the two hrefs is written depends on whether Translate is installed beside this
+	 * suite, and the jobs disagree: the coverage run has it and the phpunit runs do not. So what is
+	 * asserted here is that the link is present and leads to the page; the exact spelling of each
+	 * route is pinned by the two cases above, which pass the flag in rather than reading it.
+	 */
+	public function testTheFooterSaysWhereToFindWhatTheSiteRedistributes() {
+		$this->overrideConfigValue('WikvenLicensesPage', 'Licenses');
+		$this->overrideConfigValue('WikvenFooterUrl', '');
+		$this->overrideConfigValue('WikvenSkins', ['vector']);
+
+		$footerItems = [];
+		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+
+		$this->assertArrayHasKey('wikven-licenses', $footerItems);
+		$this->assertMatchesRegularExpression(
+			'~href="\./(?:Special:MyLanguage/)?Licenses\.html"~',
+			$footerItems['wikven-licenses']
+		);
+	}
+
+	/** A site that will acknowledge this its own way sets the name empty, and the link goes too. */
+	public function testNoLicensesPageMeansNoFooterLink() {
+		$this->overrideConfigValue('WikvenLicensesPage', '');
+		$this->overrideConfigValue('WikvenSkins', ['vector']);
+
+		$footerItems = [];
+		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+
+		$this->assertArrayNotHasKey('wikven-licenses', $footerItems);
+	}
+
+	/**
+	 * A skin preview gets the page but not the link: the footer is the skin's, and wikven adds
+	 * nothing to it here. build.php says so on the way past, so the omission is not silent.
+	 */
+	public function testASkinPreviewIsNotGivenTheLicensesLinkEither() {
+		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$this->overrideConfigValue('WikvenLicensesPage', 'Licenses');
+		$this->overrideConfigValue('WikvenSkins', ['vector']);
+
+		$footerItems = [];
+		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+
+		$this->assertSame([], $footerItems);
+	}
+
 	private function skin(string $name = 'vector'): Skin {
 		$skin = $this->createMock(Skin::class);
 		$skin->method('msg')->willReturnCallback(static function (string $key, ...$params) {

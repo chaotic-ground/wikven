@@ -50,8 +50,8 @@ RUN arch="$TARGETARCH" \
  && tar -xzf /tmp/siftersearch.tar.gz -C /var/www/html/extensions/ \
  && rm /tmp/siftersearch.tar.gz
 
-# Content i18n (opt-in via WikvenI18nLanguages): Translate renders translated pages and the
-# <languages/> bar; UniversalLanguageSelector is its hard load-time dependency. Both track this
+# Content i18n (opt-in by listing Translate in a site's .wikven.yaml): it renders translated
+# pages and the <languages/> bar; UniversalLanguageSelector is its hard load-time dependency. Both track this
 # image's MediaWiki branch. Translate pulls its runtime Composer deps (spyc) into its own vendor/,
 # which its load_composer_autoloader then loads.
 ENV COMPOSER_ALLOW_SUPERUSER=1
