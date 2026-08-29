@@ -74,5 +74,5 @@ targets:
     scmid: default
     sourceid: mobilefrontend
     spec:
-      file: docs/.wikven.yml
+      file: docs/.wikven.yaml
       key: $.config.WikvenRepositories.MobileFrontend.commit

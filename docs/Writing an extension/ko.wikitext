@@ -20,8 +20,8 @@
 <!--T:6 @d14803de-->
 == 확장 기능을 빌드에 넣기 ==
 
-<!--T:7 @759ca503-->
-사이트는 필요한 것을 [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yml</code> 파일]]에 적습니다. 이미지에 함께 들어 있는 확장 기능은 이름만 적으면 되고, 그 밖의 것은 <code>WikvenRepositories</code> 아래 선언한 출처에서 빌드 시점에 가져옵니다 — 타르볼, Git 저장소, 또는 Composer 패키지.
+<!--T:7 @273c1abd-->
+사이트는 필요한 것을 [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|<code>.wikven.yaml</code> 파일]]에 적습니다. 이미지에 함께 들어 있는 확장 기능은 이름만 적으면 되고, 그 밖의 것은 <code>WikvenRepositories</code> 아래 선언한 출처에서 빌드 시점에 가져옵니다 — 타르볼, Git 저장소, 또는 Composer 패키지.
 
 <!--T:8 @95a3637a-->
 설정에는 {{SITENAME}}의 지원이 따로 필요하지 않습니다. 사이트의 <code>config</code> 맵은 MediaWiki 자신의 설정 로더를 통해 적용되므로, <code>extension.json</code>의 <code>config</code>에 선언한 키라면 무엇이든 거기서 지정할 수 있고, 이미 읽고 있던 그 전역 변수로 도착합니다.
