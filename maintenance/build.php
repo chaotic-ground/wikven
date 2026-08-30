@@ -33,6 +33,12 @@ class Build extends Maintenance {
 	/** Names the directory a skin pass's own copy of the database goes in, beside the original. */
 	private const PASS_DATABASE_PREFIX = 'wikven-pass-';
 
+	/**
+	 * Whether the job that builds the search index ran, which is what tells a bundle that failed to
+	 * build from a site that had nothing to index. Only the orchestrator queues it.
+	 */
+	private bool $searchIndexRan = false;
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Run the full wikven static-site build in a single process.');
@@ -50,6 +56,7 @@ class Build extends Maintenance {
 
 		// Before the output directory is emptied, because a site this build cannot render is better
 		// told so with its last bake still in place.
+		$this->assertEverythingListedIsHere();
 		$this->checkLuaAgainstThisBuild();
 		$this->clearOutputDirectory();
 		$this->setMainPage();
@@ -200,6 +207,7 @@ class Build extends Maintenance {
 		}
 		if (in_array(Search::INDEX_JOB, $group->getQueuesWithJobs(), true)) {
 			$this->runJobsOfType($file, Search::INDEX_JOB);
+			$this->searchIndexRan = true;
 		}
 	}
 
@@ -747,7 +755,18 @@ class Build extends Maintenance {
 		}
 		$path = "$bundle/" . Search::INDEX_ENTRY_FILE;
 		if (!is_file($path)) {
-			// Search is off, or on with nothing indexed. Either way there is no bundle to settle.
+			// Three things used to end here together, and only two of them are fine: search off,
+			// search on with nothing to index, and search on with an index that did not get built.
+			// The job having run is what tells the third from the other two -- a Pagefind run that
+			// died leaves the site with a search box wired to a bundle that is not there, since
+			// Search::isActive() asks only whether the setting is set.
+			if ($this->searchIndexRan) {
+				$this->fatalError(
+					"Wikven: the search index was not written ($path), though the job that builds it"
+					. ' ran. Every page would ship a search box with nothing behind it; aborting the'
+					. ' build. Set SifterSearchOutputDir to an empty value to build without search.'
+				);
+			}
 			return;
 		}
 		$stable = Search::stableIndexEntry((string)file_get_contents($path));
@@ -868,16 +887,57 @@ class Build extends Maintenance {
 		}
 	}
 
+	/**
+	 * Stop on a name in the site's extensions or skins list that nothing here provides.
+	 *
+	 * WikvenSettings collects these rather than failing on them, because fetchExtensions.php boots
+	 * it to install the very components that are missing while it runs. By here they are installed,
+	 * so a name still unaccounted for is one nothing will account for -- and a build that carries on
+	 * publishes a site missing whatever the author asked that name for, with one line in a log of
+	 * thousands to say so. A typo in a skin name is the ordinary case.
+	 */
+	private function assertEverythingListedIsHere(): void {
+		$missing = $GLOBALS['wgWikvenMissing'] ?? [];
+		if (!is_array($missing) || $missing === []) {
+			return;
+		}
+		foreach ($missing as $one) {
+			$this->error("Wikven: nothing provides $one");
+		}
+		$this->fatalError(
+			'Wikven: the site lists '
+			. count($missing)
+			. ' name(s) nothing here provides, and a'
+			. ' build that went on would publish a site without them; aborting the build.'
+		);
+	}
+
 	/** Import source-dir images into the File: namespace so pages render with local thumbnails. */
 	private function importImages(string $file): void {
 		$directory = rtrim($GLOBALS['wgWikvenSourceDirectory'], '/');
 		$extensions = $GLOBALS['wgFileExtensions'];
 		$sources = ImageImport::sources($directory, $extensions);
 
+		// A File: title is the file's name alone, so two images sharing a name in two directories
+		// are one page, and --skip-dupes below would take the first and drop the second with a line
+		// nobody reads. Said here, with both paths, before anything is imported.
+		$collisions = ImageImport::collisions($sources);
+		if ($collisions !== []) {
+			foreach ($collisions as $name => $paths) {
+				$this->error("Wikven: '$name' is the name of more than one image: " . implode(', ', $paths));
+			}
+			$this->fatalError(
+				'Wikven: an image is named by its file name alone, so each of those would be the same'
+				. ' page. Rename all but one of each; aborting the build.'
+			);
+		}
+
 		$child = $this->createChild(ImportImages::class, $file);
 		$child->setArg(0, $directory);
 		$child->setOption('extensions', implode(',', $extensions));
 		$child->setOption('skip-dupes', true);
+		// Subdirectories, because pages are read from them: sources() above counts the same files.
+		$child->setOption('search-recursively', true);
 		// An image the wiki rejected leaves every page embedding it with a red File: link, so this
 		// step aborts the build the way step() aborts it for a page that did not import. A source
 		// holding no image at all is answered with the same false and is not a failure.

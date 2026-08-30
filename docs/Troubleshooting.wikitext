@@ -48,7 +48,7 @@ A silent one to check by eye: a <code>config</code> value '''replaces''' the def
 == An extension or skin was not loaded ==
 
 <!--T:16-->
-<code>skipping extension 'X' (not bundled in this image)</code>, or the same for a skin, means the name in your <code>extensions</code> or <code>skins</code> list was not found on disk. Either it is misspelled, or it is not one of the components {{SITENAME}} ships and needs a source under the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]]. The build carries on without it rather than failing, so this shows up as a feature that quietly did nothing. See [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|Extensions]].
+<code>nothing provides extension 'X'</code>, or the same for a skin, means the name in your <code>extensions</code> or <code>skins</code> list was not found on disk, and the build stopped rather than publish a site without it. Either it is misspelled, or it is not one of the components {{SITENAME}} ships and needs a source under the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]]. See [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|Extensions]].
 
 <!--T:17-->
 == Two configuration files, one of them ignored ==
