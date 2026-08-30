@@ -27,7 +27,7 @@ Link with <code><nowiki>[[Title]]</nowiki></code>, or <code><nowiki>[[Title|labe
 == Subpages ==
 
 <!--T:9-->
-Put a file in a subdirectory to create a [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages</tvar> subpage]: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup".
+Put a file in a subdirectory to create a [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages</tvar> subpage]: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup". Images in a subdirectory are imported too, but a picture is named by its file name alone -- <code>src/Guide/diagram.png</code> is <code>[[File:diagram.png]]</code>, not "Guide/diagram.png" -- so two directories cannot both hold a <code>diagram.png</code>. The build stops and names both rather than publish one page showing the other's picture.
 
 <!--T:24-->
 <span id="reserved-names"></span>

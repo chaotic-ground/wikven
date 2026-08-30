@@ -25,8 +25,8 @@
 <!--T:8 @654ede6a-->
 == 하위 문서 ==
 
-<!--T:9 @5b5d14c0-->
-파일을 하위 디렉터리에 두면 [$1 하위 문서]가 만들어집니다. <code>src/Guide/Setup.wikitext</code>는 "Guide/Setup" 문서가 됩니다.
+<!--T:9 @ed4749ad-->
+파일을 하위 디렉터리에 두면 [$1 하위 문서]가 만들어집니다. <code>src/Guide/Setup.wikitext</code>는 "Guide/Setup" 문서가 됩니다. 하위 디렉터리의 그림도 함께 가져오지만, 그림의 이름은 파일 이름뿐입니다. <code>src/Guide/diagram.png</code>는 "Guide/diagram.png"가 아니라 <code>[[File:diagram.png]]</code>이므로, 두 디렉터리가 같은 <code>diagram.png</code>를 가질 수 없습니다. 그런 경우 빌드는 한 문서가 다른 문서의 그림을 보여주는 사이트를 발행하는 대신, 둘 다 이름을 대고 멈춥니다.
 
 <!--T:24 @938e2292-->
 <span id="reserved-names"></span>

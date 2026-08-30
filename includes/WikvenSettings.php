@@ -229,8 +229,11 @@ $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_
 // them.
 
 // Anything named below that is not on disk is a name whose settings nobody here can account for;
-// the report at the end of this file says why that silences it.
-$wikvenAllPresent = true;
+// the report at the end of this file says why that silences it. Collected rather than counted,
+// because the build fails on it and has to be able to say which names: this file cannot fail on it
+// itself, since fetchExtensions.php boots this file in order to install the very names that are
+// missing at that point.
+$GLOBALS['wgWikvenMissing'] = [];
 
 // Register each bundled skin; canonical name (may differ from dir) read from skin.json.
 $wgWikvenSkins = [];
@@ -239,13 +242,14 @@ foreach ($config['skins'] ?? [] as $skin) {
 		continue;
 	}
 	if (!MediaWiki\Extension\Wikven\SiteConfig::isComponentName($skin)) {
-		error_log("Wikven: refusing skin '$skin' (a name here is a directory in this image, not a path)");
-		$wikvenAllPresent = false;
+		error_log("Wikven: refusing skin '$skin' (a name here is a directory, not a path)");
+		$GLOBALS['wgWikvenMissing'][] = "skin '$skin' (a name here is a directory, not a path)";
 		continue;
 	}
 	if (!is_file("$IP/skins/$skin/skin.json")) {
-		error_log("Wikven: skipping skin '$skin' (not bundled in this image)");
-		$wikvenAllPresent = false;
+		error_log("Wikven: skipping skin '$skin' (nothing here provides it)");
+		$GLOBALS['wgWikvenMissing'][] =
+			"skin '$skin' (not bundled, and no WikvenRepositories entry" . ' says where to fetch it)';
 		continue;
 	}
 	wfLoadSkin($skin);
@@ -315,15 +319,16 @@ foreach ($config['extensions'] ?? [] as $extension) {
 	}
 	// The same directory-name check the skins above make; see there for why it is made here.
 	if (!MediaWiki\Extension\Wikven\SiteConfig::isComponentName($extension)) {
-		error_log("Wikven: refusing extension '$extension' (a name here is a directory in this image, not a path)");
-		$wikvenAllPresent = false;
+		error_log("Wikven: refusing extension '$extension' (a name here is a directory, not a path)");
+		$GLOBALS['wgWikvenMissing'][] = "extension '$extension' (a name here is a directory, not a path)";
 		continue;
 	}
 	if (is_file("$IP/extensions/$extension/extension.json")) {
 		wfLoadExtension($extension);
 	} else {
-		error_log("Wikven: skipping extension '$extension' (not bundled in this image)");
-		$wikvenAllPresent = false;
+		error_log("Wikven: skipping extension '$extension' (nothing here provides it)");
+		$GLOBALS['wgWikvenMissing'][] =
+			"extension '$extension' (not bundled, and no WikvenRepositories" . ' entry says where to fetch it)';
 	}
 }
 
@@ -370,7 +375,7 @@ if (
 // Silent while a name in this site's lists is missing from the image, because the extensions that
 // would account for its settings are exactly the ones that are not there. fetchExtensions.php
 // boots this file to install them, and so boots it before they exist.
-if ($wikvenSiteFile !== null && $wikvenAllPresent) {
+if ($wikvenSiteFile !== null && $GLOBALS['wgWikvenMissing'] === []) {
 	// Core's names are already in hand, and most of a config file is core settings. Only what they
 	// leave over is worth opening two dozen manifests for, which is usually nothing at all -- and
 	// this runs in every process a build starts.

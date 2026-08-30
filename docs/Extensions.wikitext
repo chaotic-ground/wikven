@@ -20,7 +20,7 @@ extensions:
 
 <translate>
 <!--T:4-->
-A name {{SITENAME}} cannot find on disk is skipped with a warning in the build log rather than failing the build, so a typo shows up as an extension that quietly did nothing. Anything not shipped has to say where it comes from, under the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]].
+A name {{SITENAME}} cannot find on disk fails the build, naming it. A typo would otherwise show up as an extension that quietly did nothing, on a site already published. Anything not shipped has to say where it comes from, under the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]].
 
 <!--T:5-->
 == What is already there ==

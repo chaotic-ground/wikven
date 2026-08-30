@@ -21,15 +21,12 @@ class ImageImportTest extends MediaWikiUnitTestCase {
 	}
 
 	protected function tearDown(): void {
-		foreach (glob($this->directory . '/*/*') ?: [] as $path) {
-			unlink($path);
-		}
-		foreach (glob($this->directory . '/*') ?: [] as $path) {
-			if (is_dir($path)) {
-				rmdir($path);
-			} else {
-				unlink($path);
-			}
+		$entries = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($this->directory, \FilesystemIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::CHILD_FIRST
+		);
+		foreach ($entries as $entry) {
+			$entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
 		}
 		rmdir($this->directory);
 		parent::tearDown();
@@ -73,12 +70,61 @@ class ImageImportTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	/** The build does not pass --search-recursively, so a subdirectory holds nothing to import. */
-	public function testItLooksNoDeeperThanTheImporterDoes() {
-		mkdir($this->directory . '/Subpage');
-		touch($this->directory . '/Subpage/nested.png');
+	/**
+	 * The failure this exists to catch. Pages are read from subdirectories -- "Guide/Setup.wikitext"
+	 * is the page "Guide/Setup" -- so an image beside one used to be the half of that directory the
+	 * build could not see: the page imported, the image did not, and the reader got a red link with
+	 * nothing in the log about it.
+	 */
+	public function testItReadsTheSubdirectoriesPagesAreReadFrom() {
+		mkdir($this->directory . '/Guide/Deep', 0777, true);
+		touch($this->directory . '/Guide/diagram.png');
+		touch($this->directory . '/Guide/Deep/nested.svg');
+		touch($this->directory . '/Guide/Setup.wikitext');
+		touch($this->directory . '/top.png');
 
-		$this->assertSame([], ImageImport::sources($this->directory, self::EXTENSIONS));
+		$this->assertSame(
+			['diagram.png', 'nested.svg', 'top.png'],
+			$this->basenames(ImageImport::sources($this->directory, self::EXTENSIONS))
+		);
+	}
+
+	/**
+	 * What reading subdirectories makes reachable: core names a File: page after the file alone
+	 * (wfBaseName), so two directories holding one name are one page, and --skip-dupes would take
+	 * the first and drop the second with a line among thousands.
+	 */
+	public function testTwoDirectoriesCannotShareAnImageName() {
+		mkdir($this->directory . '/Guide');
+		mkdir($this->directory . '/Setup');
+		touch($this->directory . '/Guide/diagram.png');
+		touch($this->directory . '/Setup/diagram.png');
+
+		$collisions = ImageImport::collisions(ImageImport::sources($this->directory, self::EXTENSIONS));
+
+		$this->assertSame(['diagram.png'], array_keys($collisions));
+		$this->assertCount(2, $collisions['diagram.png']);
+	}
+
+	/** Every name its own: nothing to report. */
+	public function testNamesThatDifferAreNotACollision() {
+		mkdir($this->directory . '/Guide');
+		touch($this->directory . '/Guide/diagram.png');
+		touch($this->directory . '/overview.png');
+
+		$this->assertSame([], ImageImport::collisions(ImageImport::sources($this->directory, self::EXTENSIONS)));
+	}
+
+	/**
+	 * default.yml sets CapitalLinks to false, so these are two titles rather than one and calling
+	 * them a collision would fail a build that is fine.
+	 */
+	public function testNamesDifferingOnlyInCaseAreTwoPagesHere() {
+		mkdir($this->directory . '/Guide');
+		touch($this->directory . '/Guide/diagram.png');
+		touch($this->directory . '/Diagram.png');
+
+		$this->assertSame([], ImageImport::collisions(ImageImport::sources($this->directory, self::EXTENSIONS)));
 	}
 
 	/** A source directory that is not there yet offers nothing, rather than warning about it. */
