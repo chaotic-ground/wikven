@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": []
 	},
+	"wikven-desc": "위키 원본 파일 디렉터리로 정적 사이트를 빌드합니다.",
 	"wikven-footer-source": "$1에서 프로젝트 보기",
 	"wikven-footer-source-plain": "프로젝트 소스 보기",
 	"wikven-skins": "스킨",

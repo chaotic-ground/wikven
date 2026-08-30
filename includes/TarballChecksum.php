@@ -21,11 +21,19 @@ class TarballChecksum {
 	 * Says nothing about whether the value is a checksum; that is isValid()'s question, asked
 	 * separately so a spec that pins nonsense is told apart from one that pins nothing.
 	 *
+	 * Null is a pin, not the absence of one. "sha256:" with nothing after it is how YAML spells a
+	 * key whose value the author has not filled in yet, and reading that as "pins nothing" fetched
+	 * the tarball unverified without a word -- the one outcome the key exists to prevent. Only a
+	 * spec with no sha256 key at all pins nothing.
+	 *
 	 * @param array $spec One WikvenRepositories entry.
 	 */
 	public static function wanted(array $spec): ?string {
-		if (!isset($spec['sha256'])) {
+		if (!array_key_exists('sha256', $spec)) {
 			return null;
+		}
+		if ($spec['sha256'] === null) {
+			return '';
 		}
 		if (is_array($spec['sha256']) || is_object($spec['sha256'])) {
 			return '';
