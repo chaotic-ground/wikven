@@ -113,6 +113,66 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 		);
 	}
 
+	/**
+	 * Hundreds of language codes are also ordinary English words -- "id", "no", "is", "it", "as",
+	 * "be" -- so a name alone had a translatable page's "API/id" subpage read as an Indonesian
+	 * translation, and the page then went missing from the built site with nothing said about it.
+	 * The unit markers are what settle it: a page written to stand on its own has no reason to
+	 * carry a source page's unit numbers.
+	 */
+	public function testASubpageNamedForALanguageIsAPageOfItsOwnWithoutMarkers() {
+		$dir = $this->getNewTempDirectory();
+		mkdir("$dir/API");
+		file_put_contents("$dir/API.wikitext", "<languages/>\n<translate>\n<!--T:1-->\nHi.\n</translate>");
+		// What "id" means here is an identifier, and the page says so in English.
+		file_put_contents("$dir/API/id.wikitext", 'An id names one thing.');
+		file_put_contents("$dir/API/ko.wikitext", "<!--T:1-->\n안녕하세요.");
+
+		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
+
+		$this->assertSame(
+			['ko'],
+			TranslationSource::translationLanguages("$dir/API.wikitext", $isKnownLanguage),
+			'only the marked file is a translation'
+		);
+		$this->assertSame(
+			['id' => "$dir/API/id.wikitext"],
+			TranslationSource::pagesNamedForALanguage("$dir/API.wikitext", $isKnownLanguage),
+			'the unmarked one is reported as a page of its own'
+		);
+		$this->assertContains(
+			"$dir/API/id.wikitext",
+			TranslationSource::baseFiles($dir, $isKnownLanguage),
+			'and it reaches the site, which is the whole point'
+		);
+		$this->assertFalse(
+			TranslationSource::isTranslationFile("$dir/API/id.wikitext", $isKnownLanguage)
+		);
+		$this->assertTrue(
+			TranslationSource::isTranslationFile("$dir/API/ko.wikitext", $isKnownLanguage)
+		);
+	}
+
+	/**
+	 * The cost the marker rule carries, kept in view: a translation written by hand, without
+	 * running translate scaffold, is imported as an ordinary subpage. It is visible in the built
+	 * site under its own name rather than lost, and translate check says so.
+	 */
+	public function testAnUnmarkedTranslationIsImportedUnderItsOwnName() {
+		$dir = $this->getNewTempDirectory();
+		mkdir("$dir/Pages");
+		file_put_contents("$dir/Pages.wikitext", "<languages/>\n<translate>\n<!--T:1-->\nHi.\n</translate>");
+		file_put_contents("$dir/Pages/ko.wikitext", '안녕하세요.');
+
+		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
+
+		$this->assertSame([], TranslationSource::translationLanguages("$dir/Pages.wikitext", $isKnownLanguage));
+		$this->assertSame(
+			['ko' => "$dir/Pages/ko.wikitext"],
+			TranslationSource::pagesNamedForALanguage("$dir/Pages.wikitext", $isKnownLanguage)
+		);
+	}
+
 	/** @dataProvider provideTranslatableTitle */
 	public function testTranslatableTitle(string $baseFile, string $text, ?string $expected) {
 		$this->assertSame($expected, TranslationSource::translatableTitle($baseFile, '/src', $text));

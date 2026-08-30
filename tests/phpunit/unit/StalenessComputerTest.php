@@ -340,6 +340,28 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	/**
+	 * What tells a translation from a page that merely sits where one would. A page written to
+	 * stand on its own has no reason to carry a source page's unit numbers.
+	 *
+	 * @dataProvider provideHasUnitMarkers
+	 */
+	public function testHasUnitMarkers(string $text, bool $expected) {
+		$this->assertSame($expected, StalenessComputer::hasUnitMarkers($text));
+	}
+
+	public static function provideHasUnitMarkers(): array {
+		return [
+			'a scaffolded unit' => ["<!--T:1-->\n", true],
+			'a stamped unit' => ["<!--T:1 @a1b2c3d4-->\nHi.", true],
+			'the page title unit' => ["<!--T:title @a1b2c3d4-->\nHi.", true],
+			// The case the rule exists for: a page about identifiers, sitting at "API/id".
+			'a page of its own' => ['An id names one thing.', false],
+			'an ordinary comment' => ['<!-- not a unit -->', false],
+			'nothing at all' => ['', false]
+		];
+	}
+
 	public function testRestampLeavesAMarkerTheTranslationMerelyShowsAlone() {
 		// Stamping one would edit the sentence around it whenever its id matched a real unit.
 		$source = "<translate>\n<!--T:1-->\nHello.\n</translate>";

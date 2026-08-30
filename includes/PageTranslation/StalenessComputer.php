@@ -145,6 +145,20 @@ class StalenessComputer {
 	}
 
 	/**
+	 * Whether a page carries any <!--T:n--> unit marker.
+	 *
+	 * This is what tells a translation from a page that merely sits where one would: a translation
+	 * is written unit by unit against a marked source and carries that source's numbers, and
+	 * nothing else in a source tree has a reason to. scaffold() writes them for a new one, so every
+	 * translation made the documented way has them from the moment it is created.
+	 *
+	 * @param string $text A page's wikitext.
+	 */
+	public static function hasUnitMarkers(string $text): bool {
+		return preg_match(self::MARKER, $text) === 1;
+	}
+
+	/**
 	 * Split a translation file into units keyed by their <!--T:n--> marker id.
 	 *
 	 * @return array<string,array{hash:?string,text:string}> id => [synced-source hash, unit text]

@@ -23,6 +23,8 @@
 	"wikven-translations-disagree-advice": "둘이 단위의 경계를 서로 다르게 보고 있으며, 이는 내보내기가 Translate가 표시한 것과 다른 것을 번역하게 된다는 뜻입니다. `translate mark`를 다시 실행하고, 그래도 남는다면 위로 알려주세요. 이것은 여러분이 아니라 wikven의 버그입니다.",
 	"wikven-translations-orphan-heading": "번역이 원본에 없는 단위를 가리킵니다",
 	"wikven-translations-orphan-advice": "원본에서 그 `<!--T:n-->`의 번호가 바뀌었거나 사라져서, 그 아래의 텍스트는 아무에게도 닿지 않습니다. `translate scaffold <언어>`를 실행해 지금 원본에 있는 표시를 채우고, 텍스트를 맞는 표시 아래로 옮긴 뒤 남은 것을 지우세요.",
+	"wikven-translations-standalone-heading": "언어 이름이 붙은 하위 문서를 독립된 문서로 읽었습니다",
+	"wikven-translations-standalone-advice": "`<문서>/<언어>.wikitext`는 원본 문서의 `<!--T:n-->` 표시를 지니고 있을 때에만 번역으로 읽힙니다. 언어 코드 수백 개가 평범한 낱말이기도 해서, `API/id`는 대개 인도네시아어가 아니라 식별자에 관한 문서이기 때문입니다. 아래 파일에는 그 표시가 없어 평범한 하위 문서로 들어갔습니다. 정말 그런 문서라면 그것이 맞고, 번역이라면 `translate scaffold <언어>`를 실행해 표시를 채운 뒤 텍스트를 그 아래로 옮기세요.",
 	"wikven-translations-stale-heading": "번역은 되었으나 최신으로 스탬프되지 않았습니다",
 	"wikven-translations-stale-advice": "단위는 그 표시가 원본의 해시를 지닐 때 최신입니다: `<!--T:3 @a1b2c3d4-->`. 아래 각 단위를 원본과 견주어 읽은 뒤 `translate stamp`로 스탬프를 쓰세요. 해시를 손으로 적지 마세요.",
 	"wikven-translations-untranslated-heading": "아직 번역되지 않았습니다",

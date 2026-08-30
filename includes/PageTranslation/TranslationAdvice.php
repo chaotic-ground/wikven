@@ -43,10 +43,23 @@ class TranslationAdvice {
 	 * Each names two messages, a heading and the advice under it. The advice names the command,
 	 * because the command is the part a contributor cannot guess.
 	 */
-	private const KINDS = ['parse', 'reserved', 'unmarked', 'disagree', 'orphan', 'stale', 'untranslated'];
+	private const KINDS = [
+		'parse',
+		'reserved',
+		'unmarked',
+		'disagree',
+		'orphan',
+		'standalone',
+		'stale',
+		'untranslated'
+	];
 
-	/** Kinds that are a translation falling behind rather than a page nobody can translate. */
-	private const TRANSLATION_KINDS = ['stale', 'untranslated'];
+	/**
+	 * Kinds that never fail the check, whatever the workflow asked for: a translation falling
+	 * behind, and a subpage read as a page of its own, which nothing here can tell from a page that
+	 * is meant to be one.
+	 */
+	private const NON_GATING_KINDS = ['standalone', 'stale', 'untranslated'];
 
 	/** @var callable(string,string,list<string>):string Message key, language code and parameters. */
 	private $message;
@@ -186,8 +199,8 @@ class TranslationAdvice {
 		// Which of the two closing lines is honest depends on what was found, not on how the check
 		// was configured: staleness never gates, and a broken page gates only where the workflow
 		// asked it to.
-		$onlyTranslations = array_diff(array_keys($grouped), self::TRANSLATION_KINDS) === [];
-		$closing = $onlyTranslations ? 'wikven-translations-nothing-fails' : 'wikven-translations-can-fail';
+		$nothingGates = array_diff(array_keys($grouped), self::NON_GATING_KINDS) === [];
+		$closing = $nothingGates ? 'wikven-translations-nothing-fails' : 'wikven-translations-can-fail';
 		return (
 			$body
 			. "\n"
