@@ -57,10 +57,13 @@ if [ "$command" = "translate" ]; then
     check) script=checkTranslations.php ;;
     stamp) script=stampTranslations.php ;;
   esac
+  code=0
+  # The status is kept rather than allowed to end the script, because set -e would take the chown
+  # below with it: a scaffold that wrote half a language and then stopped leaves those files in the
+  # caller's own src/, owned by root and not theirs to edit or delete.
   php maintenance/run.php \
     "/var/www/html/extensions/Wikven/maintenance/$script" \
-    --source "$WIKVEN_WORKDIR/src" "$@"
-  code=$?
+    --source "$WIKVEN_WORKDIR/src" "$@" || code=$?
   # These run as root; hand any files they created/edited in src back to the mount owner so the
   # translator can edit them without sudo. A no-op on a read-only mount (check).
   chown -R "$(stat -c '%u:%g' "$WIKVEN_WORKDIR/src")" "$WIKVEN_WORKDIR/src" 2>/dev/null || true
@@ -71,10 +74,14 @@ fi
 # does not create; a no-op when no bundled extension adds tables.
 php maintenance/run.php update --quick
 
-php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/build.php
+# Kept for the same reason as above: a build that aborts has still written some of dist/, and
+# leaving that root-owned in the caller's mount is a worse answer than the failure itself.
+code=0
+php maintenance/run.php /var/www/html/extensions/Wikven/maintenance/build.php || code=$?
 rm -rf "$WIKVEN_WORKDIR/dist/history/"
 
 # The build runs as root; hand dist/ back to the mount owner so they can edit it without sudo.
 if [ -d "$WIKVEN_WORKDIR/dist" ]; then
   chown -R "$(stat -c '%u:%g' "$WIKVEN_WORKDIR/dist")" "$WIKVEN_WORKDIR/dist"
 fi
+exit "$code"

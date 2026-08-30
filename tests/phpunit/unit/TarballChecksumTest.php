@@ -40,6 +40,18 @@ class TarballChecksumTest extends MediaWikiUnitTestCase {
 		$this->assertFalse(TarballChecksum::isValid(''));
 	}
 
+	/**
+	 * "sha256:" with nothing after it is how YAML spells a key whose value has not been filled in
+	 * yet. Reading that as "pins nothing" fetched the tarball unverified without a word -- the one
+	 * outcome the key exists to prevent -- so it is a pin that fails validation instead.
+	 */
+	public function testASpecWhoseChecksumIsEmptyHasPinnedSomethingUnreadable() {
+		$this->assertSame('', TarballChecksum::wanted(['sha256' => null]));
+		$this->assertSame('', TarballChecksum::wanted(['sha256' => '']));
+		$this->assertSame('', TarballChecksum::wanted(['sha256' => "  \n"]));
+		$this->assertFalse(TarballChecksum::isValid(''));
+	}
+
 	public function testACheckSumIsTakenAsWrittenOnceLowercasedAndTrimmed() {
 		$upper = strtoupper(self::WIKVEN);
 

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": []
 	},
+	"wikven-desc": "Builds a static site from a directory of wiki source files.",
 	"wikven-footer-source": "View project on $1",
 	"wikven-footer-source-plain": "View project source",
 	"wikven-skins": "Skins",
