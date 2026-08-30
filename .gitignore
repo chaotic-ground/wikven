@@ -15,3 +15,6 @@
 /.tf/.terraform/
 /.tf/terraform.tfstate
 /.tf/terraform.tfstate.backup
+
+# Claude Code agent worktrees
+/.claude/worktrees/
