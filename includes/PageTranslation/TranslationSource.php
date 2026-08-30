@@ -14,9 +14,10 @@ use Throwable;
  * Locates translatable source pages and their translations by wikven's naming convention.
  *
  * A base page "<Page>.wikitext" that wraps content in <translate> is translatable; its
- * translations live at "<Page>/<lang>.wikitext" for any known language code. Which languages
- * exist is discovered from the files present, not declared. Shared by checkTranslations (CI) and
- * buildTranslations (materialize) so both agree on what is a base and what is a translation.
+ * translations live at "<Page>/<lang>.wikitext" for any known language code, and carry that base
+ * page's <!--T:n--> unit markers. Which languages exist is discovered from the files present, not
+ * declared. Shared by checkTranslations (CI) and buildTranslations (materialize) so both agree on
+ * what is a base and what is a translation.
  */
 class TranslationSource {
 	/** A translate tag of either half, as Translate's own containsMarkup() looks for one. */
@@ -114,8 +115,16 @@ class TranslationSource {
 	/**
 	 * Whether an absolute path is a translation file.
 	 *
-	 * True when it is named "<lang>.wikitext" for a known language and its sibling base page
-	 * "<dir>.wikitext" is translatable. Used to keep translation files out of the plain import.
+	 * True when it is named "<lang>.wikitext" for a known language, its sibling base page
+	 * "<dir>.wikitext" is translatable, and it carries <!--T:n--> unit markers. Used to keep
+	 * translation files out of the plain import.
+	 *
+	 * The markers are what settle it. Hundreds of language codes are also ordinary English words --
+	 * "id", "no", "is", "it", "as", "be" -- so the name alone had a translatable page's "API/id"
+	 * subpage read as an Indonesian translation, and the page then went missing from the site with
+	 * nothing said. A page written to stand on its own has no reason to carry a source page's unit
+	 * numbers, and a translation cannot be written without them: they are how a unit is translated
+	 * at all, and scaffold() puts them in a new translation before anyone types into it.
 	 *
 	 * @param string $absolutePath
 	 * @param callable(string):bool $isKnownLanguage
@@ -125,23 +134,70 @@ class TranslationSource {
 			return false;
 		}
 		$base = preg_replace('#/[^/]+\.wikitext$#', '.wikitext', $absolutePath);
-		return $base !== $absolutePath && is_file($base) && self::isTranslatable((string)file_get_contents($base));
+		return (
+			$base !== $absolutePath
+			&& is_file($base)
+			&& self::isTranslatable((string)file_get_contents($base))
+			&& StalenessComputer::hasUnitMarkers((string)file_get_contents($absolutePath))
+		);
 	}
 
 	/**
 	 * The languages a base page is translated into: sibling "<Page>/<lang>.wikitext" files whose
-	 * segment is a known language code.
+	 * segment is a known language code and which carry <!--T:n--> unit markers.
 	 *
 	 * @param string $baseFile
 	 * @param callable(string):bool $isKnownLanguage
 	 * @return string[] Language codes, sorted.
 	 */
 	public static function translationLanguages(string $baseFile, callable $isKnownLanguage): array {
+		$languages = [];
+		foreach (self::filesNamedForALanguage($baseFile, $isKnownLanguage) as $lang => $path) {
+			if (StalenessComputer::hasUnitMarkers((string)file_get_contents($path))) {
+				$languages[] = $lang;
+			}
+		}
+		sort($languages);
+		return $languages;
+	}
+
+	/**
+	 * Subpages that a language code names but that are read as pages of their own, keyed by code.
+	 *
+	 * The other half of what filesNamedForALanguage() finds: named for a language, sitting under a
+	 * translatable page, and carrying no unit marker, so nothing here reads them as translations.
+	 * That is usually right -- "API/id" is about identifiers, not Indonesian -- and when it is not,
+	 * this is what lets checkTranslations say so instead of leaving a translation quietly imported
+	 * as an ordinary subpage.
+	 *
+	 * @param string $baseFile
+	 * @param callable(string):bool $isKnownLanguage
+	 * @return array<string,string> Absolute paths, keyed by the language code that names them.
+	 */
+	public static function pagesNamedForALanguage(string $baseFile, callable $isKnownLanguage): array {
+		$pages = [];
+		foreach (self::filesNamedForALanguage($baseFile, $isKnownLanguage) as $lang => $path) {
+			if (!StalenessComputer::hasUnitMarkers((string)file_get_contents($path))) {
+				$pages[$lang] = $path;
+			}
+		}
+		ksort($pages);
+		return $pages;
+	}
+
+	/**
+	 * Every sibling "<Page>/<lang>.wikitext" whose name is a known language code, marked or not.
+	 *
+	 * @param string $baseFile
+	 * @param callable(string):bool $isKnownLanguage
+	 * @return array<string,string> Absolute paths, keyed by language code.
+	 */
+	private static function filesNamedForALanguage(string $baseFile, callable $isKnownLanguage): array {
 		$directory = preg_replace('/\.wikitext$/', '', $baseFile);
 		if (!is_dir($directory)) {
 			return [];
 		}
-		$languages = [];
+		$found = [];
 		// The directory name comes from a page title, and *, ? and [ are legal there; a glob pattern
 		// built from it would expand them in every path component, so "C*-algebra" would also match the
 		// translations of "Clifford-algebra" and import their units into the wrong page.
@@ -151,11 +207,10 @@ class TranslationSource {
 			}
 			$lang = $file->getBasename('.wikitext');
 			if ($isKnownLanguage($lang)) {
-				$languages[] = $lang;
+				$found[$lang] = $file->getPathname();
 			}
 		}
-		sort($languages);
-		return $languages;
+		return $found;
 	}
 
 	/**
@@ -206,7 +261,7 @@ class TranslationSource {
 	 *
 	 * A translation is never one, whatever it holds. A <translate> it quotes is real to Translate as
 	 * much as to wikven, so nothing downstream would object to "<Page>/<lang>" being marked as a page
-	 * in its own right; the naming convention is what says it is not.
+	 * in its own right; the unit markers it carries are what say it is not (see isTranslationFile).
 	 *
 	 * @param string $sourceDir
 	 * @param callable(string):bool $isKnownLanguage

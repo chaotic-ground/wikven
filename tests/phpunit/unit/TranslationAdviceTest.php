@@ -84,6 +84,19 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString('None of this fails the check', $body);
 	}
 
+	/**
+	 * A subpage a language code names, with no markers, is read as a page of its own. Nothing here
+	 * can tell that from a page that is meant to be one, so it is said and not gated.
+	 */
+	public function testAPageOfItsOwnSaysItFailsNothing() {
+		$body = $this->advice()->comment([
+			['kind' => 'standalone', 'file' => 'API/id.wikitext', 'source' => 'API.wikitext', 'detail' => 'id']
+		]);
+		$this->assertStringContainsString('read as a page of its own', $body);
+		$this->assertStringContainsString('translate scaffold', $body);
+		$this->assertStringContainsString('None of this fails the check', $body);
+	}
+
 	public function testABrokenPageSaysWhatCanFail() {
 		$body = $this->advice()->comment([
 			['kind' => 'parse', 'file' => 'a.wikitext', 'detail' => 'pt-shake-position'],

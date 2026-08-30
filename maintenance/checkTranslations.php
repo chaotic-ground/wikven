@@ -123,6 +123,26 @@ class CheckTranslations extends Maintenance {
 					);
 				}
 			}
+
+			// Named for a language but carrying none of the source's unit markers, so read as a page
+			// in its own right. That is usually what it is -- "API/id" is about identifiers, not
+			// Indonesian -- and nothing here can tell the two apart, so this is said and not counted:
+			// it gates nothing and is not a translation falling behind either. The language code goes
+			// in as detail rather than as lang, because this finding is not about translating into
+			// that language and an --comment-languages=auto run should not write in it.
+			foreach (TranslationSource::pagesNamedForALanguage($baseFile, $isKnownLanguage) as $lang => $page) {
+				$reportPage = $prefix . substr($page, strlen($source) + 1);
+				$this->findings[] = [
+					'kind' => 'standalone',
+					'file' => $reportPage,
+					'source' => $prefix . substr($baseFile, strlen($source) + 1),
+					'detail' => $lang
+				];
+				$this->output(
+					"::notice file=$reportPage::Read as a page of its own rather than as the $lang"
+					. " translation of this page's parent; it carries no <!--T:n--> marker\n"
+				);
+			}
 		}
 
 		$this->writeComment();

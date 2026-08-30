@@ -23,6 +23,8 @@
 	"wikven-translations-disagree-advice": "The two disagree about where the units are, which means the export would translate something other than what Translate marked. Re-run `translate mark` and, if it persists, say so upstream: this is wikven's bug rather than yours.",
 	"wikven-translations-orphan-heading": "A translation names a unit the source does not have",
 	"wikven-translations-orphan-advice": "Its `<!--T:n-->` was renumbered or removed in the source, so the text under it reaches no one. Run `translate scaffold <language>` to add the markers the source has now, move the text under the right one, and delete what is left.",
+	"wikven-translations-standalone-heading": "A subpage named for a language is read as a page of its own",
+	"wikven-translations-standalone-advice": "`<Page>/<lang>.wikitext` is read as a translation only when it carries the source page's `<!--T:n-->` markers, because hundreds of language codes are also ordinary words and `API/id` is usually about identifiers rather than Indonesian. These files have no markers, so they are imported as ordinary subpages. That is right if that is what they are; if one is a translation, run `translate scaffold <language>` to put the markers in and move the text under them.",
 	"wikven-translations-stale-heading": "Translated, but not stamped as current",
 	"wikven-translations-stale-advice": "A unit is current when its marker carries the source's hash: `<!--T:3 @a1b2c3d4-->`. Read each unit below against the source, then run `translate stamp` to write the stamps. Do not type a hash by hand.",
 	"wikven-translations-untranslated-heading": "Not translated yet",

@@ -72,6 +72,9 @@ $ docker run --rm -v "$PWD/src:/workspace/src" ghcr.io/chaotic-ground/wikven tra
 <!--T:12-->
 Pass <code>--all</code> in place of a file to scaffold every translatable page. Re-running is safe: it keeps what you have translated and only appends markers for new units.
 
+<!--T:34-->
+Those markers are also what makes the file a translation rather than a subpage. Hundreds of language codes are ordinary English words too — <code>id</code>, <code>no</code>, <code>is</code>, <code>it</code>, <code>as</code>, <code>be</code> — so <code>API/id</code> under a translatable <code>API</code> is far more often a page about identifiers than an Indonesian translation. {{SITENAME}} reads it as a translation only when it carries the source's <code>&lt;!--T:n--&gt;</code> markers, and builds it as a page of its own otherwise. Write a translation with <code>translate scaffold</code> and this never comes up; write one by hand and <code>translate check</code> will tell you the file was read as a page.
+
 <!--T:13-->
 Then fill each unit's translation under its marker:
 </translate>
