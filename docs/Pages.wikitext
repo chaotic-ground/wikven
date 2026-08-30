@@ -12,7 +12,7 @@ Each file in your source directory becomes a page. {{SITENAME}} derives the page
 A file ending in <code>.wikitext</code> becomes a wiki page whose title is the path with <code>.wikitext</code> removed, so <code>src/Help.wikitext</code> is the page "Help", served at <code>Help.html</code>.
 
 <!--T:4-->
-Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
+Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. The title is where a space survives; the file it builds to is <code>Getting_Started.html</code>, because MediaWiki writes a space in a title as an underscore in a path. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
 
 <!--T:5-->
 If a file name does not map cleanly to a title (MediaWiki would normalise it differently), the build warns, because the page's edit and history links are derived from the file name and would otherwise not resolve. Rename the file to a title that is already normalised.

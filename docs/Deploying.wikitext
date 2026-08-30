@@ -15,7 +15,7 @@ Everything the site needs is in <code>dist/</code>, and nothing in it is fetched
 <syntaxhighlight lang="text">
 dist/
 ├── index.html               the main page, served at the site root
-├── Getting Started.html     one file per page
+├── Getting_Started.html     one file per page
 ├── Guide/
 │   └── Setup.html           a page whose title has a slash becomes a directory
 ├── File:Logo.png.html       file description pages
@@ -67,8 +67,10 @@ jobs:
       # No version has been released yet, so there is no version tag to pin --
       # and the action's default image is that unreleased version. Pin a nightly
       # instead, and name the image from the same one: the tag is a commit of
-      # main, and that image was built from it. Both become @1.2.3 once a version
-      # exists. Pick the newest nightly from the releases page.
+      # main, and that image was built from it. Once a version exists these
+      # become @v1.2.3 and :1.2.3 -- the git tag carries the v, the image tag
+      # does not -- or drop the image line and take the action's default. Pick
+      # the newest nightly from the releases page.
       - uses: chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD
         with:
           source: src
