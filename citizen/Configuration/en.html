@@ -541,6 +541,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
 </div>
 <p>Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See <a href="../Deploying/en.html#keeping-pins-current" title="Special:MyLanguage/Deploying">Deploying</a> for keeping one current.
+</p><p>Moving wikven moves the core underneath these pins. A wikven major accompanies every bump of the bundled MediaWiki, which is about twice a year, and a site that declares <code>WikvenRepositories</code> is carrying code wikven does not test, released on a calendar that is not wikven's. Crossing a major hands that code a MediaWiki it has never run on.
+</p><p>Two things can happen then, and only one of them is caught. A component that declares a core range excluding the new core stops the build: MediaWiki's <code>VersionChecker</code> raises <code>incompatible-core</code>, naming the component and the range it asked for. A component that declares only a lower bound and breaks anyway is not detected at all. The second is the normal case rather than the exception — Citizen v3.21.0 and TabberNeue v4.0.2, both pinned by this site, require <code>MediaWiki: >= 1.43.0</code> with nothing above it. That is the honest thing for them to declare: the requirement is written at release, before the core it would have to exclude exists, and the ecosystem has nowhere to record the incompatibility once someone finds it. No check can be written for what nobody can write down.
+</p><p>Re-check your pinned components yourself, then, whenever you move wikven across a major: build the site and read the pages they render. A green build says the pins resolved and the ranges they declared were satisfied; it is not evidence that anything still works.
 </p><p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="../Getting_Started/en.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 </p><p><span id="ContentNamespaces"></span>
 </p>
@@ -577,7 +580,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 30 August 2026, at 07:46." data-timestamp="1788075999"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 30 August 2026, at 08:34." data-timestamp="1788078893"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -843,7 +846,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 07:46.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 08:34.</div>
 		    </section>
 		</div>
 </footer>		</div>

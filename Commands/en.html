@@ -700,11 +700,17 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <td>Cache the pulled image between runs, keyed on the image reference. Set to <code>false</code> to always pull fresh.
 </td></tr>
 <tr>
-<td><code>date-epoch</code></td>
+<td><code>source-date-epoch</code></td>
 <td>the commit date of <code>HEAD</code></td>
 <td><code>SOURCE_DATE_EPOCH</code> for the bake, so every bake of a commit dates its pages identically.
+</td></tr>
+<tr>
+<td><code>jobs</code></td>
+<td>one per processor</td>
+<td><code>WIKVEN_BUILD_JOBS</code> for the bake: how many skin passes render beside each other. A runner short of memory renders one at a time with <code>1</code>.
 </td></tr></tbody></table>
-<p>The action also dumps the source tree's <code>git log</code> and hands it to the build, which is how each page is dated at the commit that last changed it. That needs the whole history: check out with <code>fetch-depth: 0</code>, or every page is dated at the commit being built. The action says so in the log when it happens.
+<p>An input that takes <code>true</code> or <code>false</code> — <code>cache</code> here, and <code>gate</code> and <code>comment</code> on the other action below — takes nothing else. A value that is neither used to read as <code>false</code>, so <code>cache: npm</code>, the spelling <code>setup-node</code> and <code>setup-python</code> take where the value names what to cache, turned caching off without saying so. Both actions now stop and name the input instead.
+</p><p>The action also dumps the source tree's <code>git log</code> and hands it to the build, which is how each page is dated at the commit that last changed it. That needs the whole history: check out with <code>fetch-depth: 0</code>, or every page is dated at the commit being built. The action says so in the log when it happens.
 </p><p><span id="check-translations"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="The_check-translations_action">The <code>check-translations</code> action</h2></div>
@@ -771,7 +777,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 02:39.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 08:36.</li>
 </ul>
 
 	<ul id="footer-places">
