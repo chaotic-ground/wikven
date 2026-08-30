@@ -140,16 +140,21 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 			TranslationSource::pagesNamedForALanguage("$dir/API.wikitext", $isKnownLanguage),
 			'the unmarked one is reported as a page of its own'
 		);
-		$this->assertContains(
-			"$dir/API/id.wikitext",
-			TranslationSource::baseFiles($dir, $isKnownLanguage),
-			'and it reaches the site, which is the whole point'
-		);
+		// isTranslationFile() is what importWikitext.php holds every source file against, so this
+		// pair is the whole point: the page reaches the site, and the translation still does not.
 		$this->assertFalse(
-			TranslationSource::isTranslationFile("$dir/API/id.wikitext", $isKnownLanguage)
+			TranslationSource::isTranslationFile("$dir/API/id.wikitext", $isKnownLanguage),
+			'the page is imported'
 		);
 		$this->assertTrue(
-			TranslationSource::isTranslationFile("$dir/API/ko.wikitext", $isKnownLanguage)
+			TranslationSource::isTranslationFile("$dir/API/ko.wikitext", $isKnownLanguage),
+			'the translation is not imported as a page of its own'
+		);
+		// baseFiles() answers a narrower question -- which pages are translatable -- and a page that
+		// carries no <translate> is not one of them whichever way this reads.
+		$this->assertSame(
+			["$dir/API.wikitext"],
+			TranslationSource::baseFiles($dir, $isKnownLanguage)
 		);
 	}
 
