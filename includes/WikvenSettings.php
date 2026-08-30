@@ -4,12 +4,17 @@ wfLoadExtension('Wikven');
 
 // Static-export build internals; user-overridable defaults live in default.yml.
 
-// Paths derive from one workdir (src input, dist output, .cache ephemeral state).
+// Paths derive from one workdir (src input, dist output, .cache ephemeral state). BuildPaths holds
+// the rule; this file asks it again after a site's configuration is applied, and one copy of the
+// rule cannot disagree with the other. Required by hand: wfLoadExtension above only queues the
+// extension, so its autoloader is not there yet.
+require_once "$IP/extensions/Wikven/includes/BuildPaths.php";
 $wikvenWorkEnv = getenv('WIKVEN_WORKDIR');
 $wikvenWork = $wikvenWorkEnv !== false && $wikvenWorkEnv !== '' ? $wikvenWorkEnv : '/workspace';
-$wikvenSrc = "$wikvenWork/src";
-$wikvenDist = "$wikvenWork/dist";
-$wikvenCache = "$wikvenWork/.cache";
+$wikvenPaths = MediaWiki\Extension\Wikven\BuildPaths::fromWorkdir($wikvenWork);
+$wikvenSrc = $wikvenPaths['source'];
+$wikvenDist = $wikvenPaths['dist'];
+$wikvenCache = $wikvenPaths['cache'];
 
 // The static export is MediaWiki's own file cache, written to the output dir.
 $wgUseFileCache = true;
@@ -29,8 +34,7 @@ $GLOBALS['wgActions']['history'] = MediaWiki\Extension\Wikven\SkippedHistoryActi
 // cannot reach it -- actions/bake mounts the source directory alone, without the .git beside it --
 // so the action dumps the log on the runner and mounts it here instead. Absent, the build asks git
 // directly, which answers when the source directory is itself in a checkout (see SourceHistory).
-$wikvenHistoryFile = "$wikvenWork/source-history";
-$wgWikvenSourceHistoryFile = is_file($wikvenHistoryFile) ? $wikvenHistoryFile : '';
+$wgWikvenSourceHistoryFile = $wikvenPaths['history'];
 
 // $wgCacheEpoch would otherwise follow LocalSettings.php's mtime, which the entrypoint rewrites
 // every bake, and it is a version input of any module carrying a versionCallback.
@@ -203,9 +207,9 @@ $wgSettings->apply();
 // read from without moving where its own config file was looked for -- SiteConfig::locate() ran
 // against the workdir long before this line -- so it would be configured from one tree and built
 // from another. SiteConfig::lint() warns about the key; this is what makes the warning true.
-$wgWikvenSourceDirectory = $wikvenSrc;
-$wgWikvenHtmlDirectory = $wikvenDist;
-$wgWikvenSourceHistoryFile = is_file($wikvenHistoryFile) ? $wikvenHistoryFile : '';
+$wgWikvenSourceDirectory = $wikvenPaths['source'];
+$wgWikvenHtmlDirectory = $wikvenPaths['dist'];
+$wgWikvenSourceHistoryFile = $wikvenPaths['history'];
 
 // Dedupe so each extension/skin loads at most once.
 $config['extensions'] = array_values(array_unique(array_filter($config['extensions'], 'is_string'), SORT_STRING));
