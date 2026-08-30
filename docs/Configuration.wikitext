@@ -61,7 +61,7 @@ config:
 
 <translate>
 <!--T:10-->
-The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file next to the HTML and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page. Name none and the skin keeps whatever logo MediaWiki itself would show.
+The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file in the [[#WikvenAssetDirectory|asset directory]] and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page. Name none and the skin keeps whatever logo MediaWiki itself would show.
 
 <!--T:11-->
 Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).

@@ -23,7 +23,7 @@ dist/
 │   ├── site.styles.css      MediaWiki:Common.css and the skin's own CSS
 │   ├── startup-static.js    the module loader, with its network fetch removed
 │   ├── modules-static.js    every module the pages need, bundled
-│   ├── img-1a2b3c4d5e6f.png every image the pages use, named by content
+│   ├── img-1a2b3c4d5e6f.png every image, from a page or from CSS
 │   └── webfonts.css         only with WikvenBundleWebfonts set
 ├── fonts/                   the webfont files themselves, likewise
 ├── pagefind/                the search index
