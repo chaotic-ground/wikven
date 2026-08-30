@@ -8,8 +8,8 @@ floating one, thumbnails on both sides, a frameless image, a gallery, a block qu
 preformatted text and an unbreakable token — so you can bake it once and see the surface all at
 once, instead of finding out three sites later that nobody gave the definition lists a margin.
 
-`.wikven.yaml` sets `WikvenSkinPreview`, so wikven leaves the chrome alone: the personal menu, the
-toolbox, the tabs and the footer are your skin's own work, not wikven's reading of them.
+`.wikven.yaml` sets `WikvenBuildFor: skin-preview`, so wikven leaves the chrome alone: the personal
+menu, the toolbox, the tabs and the footer are your skin's own work, not wikven's reading of them.
 
 ## Using it
 
@@ -33,18 +33,22 @@ where `/workspace/src` is this directory and the site is written to `/workspace/
 workflow, point the bake action at it:
 
 ```yaml
-- uses: chaotic-ground/wikven/actions/bake@main
+- uses: chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD
   with:
     source: examples/skin-preview
 ```
+
+Pin the action to a tag rather than a branch. Until a version of wikven is released that tag is a
+nightly — the dated pre-releases on the releases page, newest first; once one is released, `@1.2.3`
+on its own is enough.
 
 Open `dist/index.html`, and `dist/<your-skin>/index.html` for every skin after the first.
 
 ## What you will see that a real site would not
 
 A toolbox full of `Special:` links that go nowhere, a login that does nothing, a talk tab with
-nothing behind it. That is the point: it is what your skin renders. `WikvenSkinPreview` is off by
-default for exactly this reason, and a published site should leave it off.
+nothing behind it. That is the point: it is what your skin renders. `WikvenBuildFor` is `site` by
+default for exactly this reason, and a published site should leave it there.
 
 ## Editing it
 
