@@ -202,7 +202,7 @@ Wikven
 			</div>
 			<div id="bodyContent" class="content">
 				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="스킨 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Skins/ko.html" class="mw-pt-progress mw-pt-progress--high" title="스킨 (94% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>You can choose <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins">bundled skins</a> in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p>
 <div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="en" dir="ltr"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
@@ -233,18 +233,26 @@ Wikven
 </p><p>Minerva needs more said about it than the other two, a build working around parts of the skin rather than configuring them. That is collected in the <a href="./Skins.html#minerva-appendix" title="Special:MyLanguage/Skins">appendix</a> rather than here.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Configuring_the_skin">Configuring the skin</h2></div>
-<p>You can change the skin by setting <code>skins</code>. The first skin in the list is used as the default.
+<p><code>skins</code> says which skins to build. Wikven builds Vector whatever else you list, so naming another one adds it rather than replaces it:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
 </pre></div>
-<p><span id="building-more-than-one-skin"></span>
+<p>Which of them the site is read in is a separate question, and MediaWiki already has the setting for it. Name the skin in <code>config</code> under <code>DefaultSkin</code>, by its canonical name -- which is what MediaWiki calls a skin, and is not always what you listed it by: <code>minerva</code> for MinervaNeue, <code>vector-2022</code> for Vector.
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
+<span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">DefaultSkin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minerva</span>
+</pre></div>
+<p>Without it the site is read in the first skin built, which is the only answer a site with one skin needs. A <code>DefaultSkin</code> naming a skin the site does not build is reported and ignored, since a default nothing renders would leave the output root with no pages in it.
+</p><p><span id="building-more-than-one-skin"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Building_more_than_one_skin">Building more than one skin</h2></div>
 <p>List more than one skin and the site is built in every one of them, and the reader picks. This documentation site does that with all three. It is one line of configuration and rather more than one line of consequences, so they are worth knowing:
 </p>
 <ul><li><b>The site is rendered once per skin.</b> A bake with three skins does three full renders and writes about three times as many files. The renders run beside each other, one per processor the build is allowed, so the time they add is what the machine has no processor to spare for: given three, a three-skin bake costs about what a one-skin bake does; given one — or with <a href="./Commands.html#environment-variables" title="Special:MyLanguage/Commands"><code>WIKVEN_BUILD_JOBS</code> set to <code>1</code></a> — about three times as much.</li>
-<li><b>Each skin gets its own copy of every page.</b> The first skin in the list renders into the output root, as a single-skin site does, and every other renders into a directory named after it: <code>dist/citizen/Getting Started.html</code> beside <code>dist/Getting Started.html</code>. The copies are complete, down to their own <a href="./Searching.html" title="Special:MyLanguage/Searching">search index</a>, so a reader who chooses a skin stays in it while browsing and while searching.</li>
+<li><b>Each skin gets its own copy of every page.</b> The one the site is read in renders into the output root, as a single-skin site does, and every other renders into a directory named after it: <code>dist/citizen/Getting Started.html</code> beside <code>dist/Getting Started.html</code>. The copies are complete, down to their own <a href="./Searching.html" title="Special:MyLanguage/Searching">search index</a>, so a reader who chooses a skin stays in it while browsing and while searching.</li>
 <li><b>The copies are kept out of search engines.</b> Only the main skin's pages are indexable; the others are rendered <code>noindex</code>, so a search engine is not offered the same page three times.</li>
 <li><b>Every page gains a skin switcher.</b> Where it appears is up to the skin: Vector puts it in the appearance menu, Citizen in its preferences panel, and any other skin in the toolbox. A reader with no JavaScript still gets the plain list of links. MinervaNeue is the exception: the toolbox it would take is its page-actions menu, and which skin to read the site in is not an action on a page, so an article in it carries no switcher and the list is on the <a href="#Settings">Settings</a> page instead. Its main menu carries the site's own navigation and a link to that page.</li></ul>
 <p>With a single skin there is no switcher and no copy: the output is exactly what it was before.
@@ -327,8 +335,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1787917464">
-  				<span>Last edited on 28 August 2026, at 11:44</span>
+  				data-timestamp="1788094091">
+  				<span>Last edited on 30 August 2026, at 12:48</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -351,7 +359,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 28 August 2026, at 11:44.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 12:48.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
