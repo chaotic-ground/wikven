@@ -3,6 +3,8 @@
 /composer.lock
 /dist/
 /dist-again/
+# Baking examples/skin-preview writes here; the readme's own command says so.
+examples/*/dist/
 /out/
 /test-results/
 /playwright-report/

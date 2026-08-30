@@ -26,11 +26,15 @@ the wikven site has the shape of one.
 Then bake this directory as the source. With the image:
 
 ```sh
-docker run --rm -v "$PWD:/workspace" ghcr.io/chaotic-ground/wikven
+docker run --rm \
+  -v "$PWD:/workspace/src" \
+  -v "$PWD/dist:/workspace/dist" \
+  ghcr.io/chaotic-ground/wikven
 ```
 
-where `/workspace/src` is this directory and the site is written to `/workspace/dist`. In a
-workflow, point the bake action at it:
+The source mount is this directory itself: the build reads `/workspace/src`, so mounting the tree
+one level up at `/workspace` leaves it with nothing to read. In a workflow, point the bake action
+at it, which does the mounting for you:
 
 ```yaml
 - uses: chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD

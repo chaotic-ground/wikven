@@ -84,7 +84,7 @@ The targets the "Edit", "View history" and "View source" links point at, so a re
 '''Default:''' <code>index</code>
 
 <!--T:15-->
-The title of the page used as the site root, written as <code>index.html</code> and served at the top of the site. Naming your entry file <code>index.wikitext</code> therefore takes no configuration at all. The page must be one you imported; the build fails if it is missing.
+The title of the page a static host serves at the top of the site. Every page is written as its own title with <code>.html</code> after it, so this is the one whose title has to be <code>index</code> -- naming your entry file <code>index.wikitext</code> therefore takes no configuration at all. Point this at a page called something else and it is written as <code>&lt;that title&gt;.html</code>, and the site has no <code>index.html</code> for a host to serve. The page must be one you imported; the build fails if it is missing.
 </translate>
 
 <span id="WikvenLicensesPage"></span>
@@ -222,7 +222,7 @@ With <code>package</code>, the name is Composer's to choose rather than yours: a
 A <code>package</code> constraint that is not an exact version — <code>~4.1</code>, <code>^4</code>, <code>*</code> — is warned about in the build log for the reason the note below gives. It is not an error: taking whatever the registry serves is a bargain you are entitled to make, the same one a moving <code>reference</code> makes, and the build only says you have made it.
 
 <!--T:24-->
-Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and [<tvar name="2">https://getcomposer.org/</tvar> Composer] when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] they must be on your <code>PATH</code>.
+Each method needs a host tool present at build time: <code>tarball</code> uses <code>tar</code>, <code>repository</code> uses <code>git</code> (and [<tvar name="2">https://getcomposer.org/</tvar> Composer] when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] they must be on your <code>PATH</code>.
 
 <!--T:25-->
 {{note|The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}

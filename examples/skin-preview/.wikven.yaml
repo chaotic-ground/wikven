@@ -2,9 +2,11 @@
 # A source tree for looking at a skin. Bake it, open dist/, and what you see is your skin
 # rendering a page that carries every element a skin has to style.
 #
-#   docker run --rm -v "$PWD:/workspace" ghcr.io/chaotic-ground/wikven
+#   docker run --rm -v "$PWD:/workspace/src" -v "$PWD/dist:/workspace/dist" \
+#     ghcr.io/chaotic-ground/wikven
 #
-# with this directory as /workspace/src, or point the bake action's `source:` at it.
+# This directory is the source mount itself, not its parent. Or point the bake action's
+# `source:` at it, which does the mounting for you.
 
 # Put your skin here. A skin wikven does not bundle is fetched from a source you declare in
 # WikvenRepositories; see Special:MyLanguage/Extensions on the wikven site. Vector comes from
