@@ -86,7 +86,7 @@ GitHub Actions 러너에서 Docker 이미지로 소스 트리를 굽습니다. �
 <!--T:29 @bd75cf1a-->
 {{note|두 액션 모두 태그로 고정합니다. {{SITENAME}}의 버전이 릴리스되기 전까지 그 태그는 나이틀리, 곧 날짜가 붙은 사전 릴리스 <code>nightly-YYYY-MM-DD</code>이며, 가장 최근 것은 [$2 릴리스 페이지]에서 고를 수 있습니다. 이미지도 같은 나이틀리로 함께 지정하십시오. 기본값에 맡기면 액션이 잘려 나온 릴리스의 이미지를 실행하는데, 아직 릴리스된 버전이 없습니다. 릴리스가 나온 뒤에는 <code>@1.2.3</code>만으로 충분합니다.}}
 
-<!--T:24 @07a27602-->
+<!--T:24 @bfca7f25-->
 {| class="wikitable"
 ! 입력 !! 기본값 !! 하는 일
 |-
@@ -98,8 +98,13 @@ GitHub Actions 러너에서 Docker 이미지로 소스 트리를 굽습니다. �
 |-
 | <code>cache</code> || <code>true</code> || 이미지 참조를 키로 삼아 받아 온 이미지를 실행 사이에 캐시합니다. 항상 새로 받으려면 <code>false</code>로 두십시오.
 |-
-| <code>date-epoch</code> || <code>HEAD</code>의 커밋 시각 || 굽기에 쓸 <code>SOURCE_DATE_EPOCH</code>. 한 커밋을 몇 번 구워도 문서 날짜가 같아집니다.
+| <code>source-date-epoch</code> || <code>HEAD</code>의 커밋 시각 || 굽기에 쓸 <code>SOURCE_DATE_EPOCH</code>. 한 커밋을 몇 번 구워도 문서 날짜가 같아집니다.
+|-
+| <code>jobs</code> || 프로세서당 하나 || 굽기에 쓸 <code>WIKVEN_BUILD_JOBS</code>. 스킨 렌더링을 몇 개까지 나란히 돌릴지를 정합니다. 메모리가 모자란 러너에서는 <code>1</code>로 한 번에 하나씩 렌더링합니다.
 |}
+
+<!--T:31 @42406439-->
+<code>true</code>나 <code>false</code>를 받는 입력은 — 여기서는 <code>cache</code>, 아래 다른 액션에서는 <code>gate</code>와 <code>comment</code> — 그 둘 말고는 받지 않습니다. 예전에는 둘 중 어느 것도 아닌 값이 <code>false</code>로 읽혔습니다. 그래서 <code>setup-node</code>와 <code>setup-python</code>이 값으로 캐시할 대상을 받는 철자대로 <code>cache: npm</code>이라고 쓰면, 아무 말 없이 캐시가 꺼졌습니다. 이제는 두 액션 모두 멈춰 서서 어느 입력인지 알려 줍니다.
 
 <!--T:25 @84f8a7eb-->
 액션은 소스 트리의 <code>git log</code>를 덤프해 빌드에 넘기기도 합니다. 각 문서가 그것을 마지막으로 바꾼 커밋의 날짜를 갖는 것이 그 덕분입니다. 그러려면 전체 역사가 필요하므로 <code>fetch-depth: 0</code>으로 체크아웃하십시오. 그러지 않으면 모든 문서가 빌드 중인 커밋의 날짜를 갖게 됩니다. 그런 일이 생기면 액션이 로그에 그렇게 적습니다.

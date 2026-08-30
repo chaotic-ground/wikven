@@ -19,7 +19,8 @@ inputs:
       Fail the step (non-zero exit) when a source page is broken: one Translate
       cannot parse, or one the two readings disagree on. A translation that is
       stale or missing is always reported and never fails the step. Set to
-      "false" to report even a broken page without failing.
+      "false" to report even a broken page without failing. Takes "true" or
+      "false" and refuses anything else.
     default: "true"
   comment:
     description: >-
@@ -32,7 +33,8 @@ inputs:
       with an all-clear once the findings are answered. The comment is about
       the files the pull request touches -- and the translations of any source
       page it touches -- rather than about the whole tree, so a page that fell
-      behind long before this change is left to the annotations.
+      behind long before this change is left to the annotations. Takes "true"
+      or "false" and refuses anything else.
     default: "false"
   comment-languages:
     description: >-
@@ -54,7 +56,8 @@ inputs:
   cache:
     description: >-
       Cache the pulled image between runs, keyed on the image ref. Set to
-      "false" to always pull fresh.
+      "false" to always pull fresh. Takes "true" or "false" and refuses
+      anything else, rather than reading it as "false" and going quiet.
     default: "true"
 
 runs:
@@ -78,6 +81,22 @@ runs:
         REPOSITORY: ${{ github.repository }}
         PULL_REQUEST: ${{ github.event.pull_request.number }}
       run: |
+        # A value neither "true" nor "false" used to read as "false", so `cache: npm` -- the
+        # spelling setup-node and setup-python take, where the value names what to cache -- turned
+        # caching off and said nothing. Refuse it instead: a workflow that meant something by a
+        # value deserves to hear that this action did not take it.
+        require_boolean() {
+          case "$2" in
+            true | false) ;;
+            *)
+              echo "::error::wikven: '$1' takes \"true\" or \"false\", not \"$2\"."
+              exit 1
+              ;;
+          esac
+        }
+        require_boolean cache "$CACHE"
+        require_boolean gate "$GATE"
+        require_boolean comment "$COMMENT"
         tar="$HOME/.cache/wikven/image.tar"
         if [ "$CACHE" = "true" ] && [ -f "$tar" ]; then
           docker load -i "$tar"

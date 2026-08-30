@@ -20,15 +20,23 @@ inputs:
   cache:
     description: >-
       Cache the pulled image between runs, keyed on the image ref. Set to
-      "false" to always pull fresh.
+      "false" to always pull fresh. Takes "true" or "false" and refuses
+      anything else, rather than reading it as "false" and going quiet.
     default: "true"
-  date-epoch:
+  source-date-epoch:
     description: >-
       Unix time the built site should claim its content was last written, as
       SOURCE_DATE_EPOCH (https://reproducible-builds.org/docs/source-date-epoch/).
       Defaults to the commit date of HEAD, which makes the "last edited" dates
       true of the commit and identical for every bake of it. Left unset if the
       checkout has no git history, and the bake then uses a fixed date.
+    default: ""
+  jobs:
+    description: >-
+      How many skin passes to render beside each other, as WIKVEN_BUILD_JOBS.
+      A pass is a MediaWiki boot with a boot's worth of memory, so a runner
+      that runs out of it renders one at a time with "1". Left unset the build
+      counts the processors it is allowed and uses one pass per processor.
     default: ""
 
 runs:
@@ -46,8 +54,35 @@ runs:
         OUTPUT: ${{ inputs.output }}
         IMAGE: ${{ inputs.image }}
         CACHE: ${{ inputs.cache }}
-        DATE_EPOCH: ${{ inputs.date-epoch }}
+        SOURCE_DATE_EPOCH_IN: ${{ inputs.source-date-epoch }}
+        JOBS: ${{ inputs.jobs }}
       run: |
+        # A value neither "true" nor "false" used to read as "false", so `cache: npm` -- the
+        # spelling setup-node and setup-python take, where the value names what to cache -- turned
+        # caching off and said nothing. Refuse it instead: a workflow that meant something by a
+        # value deserves to hear that this action did not take it.
+        require_boolean() {
+          case "$2" in
+            true | false) ;;
+            *)
+              echo "::error::wikven: '$1' takes \"true\" or \"false\", not \"$2\"."
+              exit 1
+              ;;
+          esac
+        }
+        require_boolean cache "$CACHE"
+        # The same shape the build accepts, so a value it would drop back from is refused here
+        # instead: WIKVEN_BUILD_JOBS reads /^[1-9]\d*$/ on a trimmed value and silently counts
+        # processors otherwise, which would leave "0" or "007" looking like it had been taken.
+        # `read` does the trimming the build does, so the two agree on every string.
+        read -r JOBS <<< "$JOBS" || true
+        case "$JOBS" in
+          '' | [1-9] | [1-9][0-9]*) ;;
+          *)
+            echo "::error::wikven: 'jobs' takes a whole number of passes from 1 up, not \"$JOBS\"."
+            exit 1
+            ;;
+        esac
         tar="$HOME/.cache/wikven/image.tar"
         if [ "$CACHE" = "true" ] && [ -f "$tar" ]; then
           docker load -i "$tar"
@@ -61,14 +96,18 @@ runs:
         fi
         mkdir -p "$OUTPUT"
         # Unset unless resolved: the bake falls back to a fixed date rather than the build clock.
-        if [ -z "$DATE_EPOCH" ]; then
-          DATE_EPOCH=$(git log -1 --format=%ct 2>/dev/null || true)
+        if [ -z "$SOURCE_DATE_EPOCH_IN" ]; then
+          SOURCE_DATE_EPOCH_IN=$(git log -1 --format=%ct 2>/dev/null || true)
         fi
         epoch=()
-        case "$DATE_EPOCH" in
+        case "$SOURCE_DATE_EPOCH_IN" in
           '' | *[!0-9]*) ;;
-          *) epoch=(-e "SOURCE_DATE_EPOCH=$DATE_EPOCH") ;;
+          *) epoch=(-e "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH_IN") ;;
         esac
+        jobs=()
+        if [ -n "$JOBS" ]; then
+          jobs=(-e "WIKVEN_BUILD_JOBS=$JOBS")
+        fi
         # Each page is dated at the commit that last touched its source file, and credited to that
         # commit's author. Only this side can see the history -- the container is given the source
         # directory alone, with no .git beside it -- so dump the log for it here. Paths come out
@@ -91,5 +130,6 @@ runs:
           -v "$PWD/$SOURCE:/workspace/src" \
           -v "$PWD/$OUTPUT:/workspace/dist" \
           "${epoch[@]}" \
+          "${jobs[@]}" \
           "${history[@]}" \
           "$IMAGE"
