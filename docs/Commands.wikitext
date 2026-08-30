@@ -91,12 +91,12 @@ The four helpers behind [[<tvar name="1">Special:MyLanguage/Translating</tvar>|T
 ; <code>translate scaffold &lt;language&gt;</code>
 : Writes an empty marker per source unit into <code>&lt;Page&gt;/&lt;language&gt;.wikitext</code>, as a skeleton to translate into. Keeps what is already translated.
 ; <code>translate stamp</code>
-: Records the source version each translated unit matches, marking it up to date.
+: Records, for one translation you have read, the source version its units were written against.
 ; <code>translate check</code>
 : Reports broken source pages, and translations that are out of date or missing. Writes nothing.
 
 <!--T:16-->
-Each takes a single file, or <code>--all</code> for every page under the source directory. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source: mount it writable under Docker, where the binary edits it in place. <code>check</code> only reads.
+<code>mark</code> and <code>scaffold</code> take a single file, or <code>--all</code> for every page under the source directory: what they write is worked out from the source, so sweeping the tree says nothing that naming a file would not. <code>stamp</code> takes one file and has no <code>--all</code>, because what it writes is your reading rather than anything the tool can derive, and nobody reads a whole tree at once. <code>check</code> takes neither; it always reads every page it can find. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source: mount it writable under Docker, where the binary edits it in place. <code>check</code> only reads.
 </translate>
 
 <tabber>

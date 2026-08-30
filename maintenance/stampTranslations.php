@@ -12,37 +12,31 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-/** Rewrite translation marker stamps (@hash) to the current source unit hashes, marking them fresh. */
+/**
+ * Rewrite one translation's marker stamps (@hash) to the current source unit hashes.
+ *
+ * A stamp is not a fact the tool can work out: it records that whoever wrote the translation wrote
+ * it against this version of the source. Translate keeps that record in the database when a
+ * translator saves through the wiki; a translation that arrives as a committed file never passes
+ * through there, so this command writes it instead -- and only the person who did the reading can
+ * say it is true. So it takes the translation they read, one file, and has no sweep: a sweep would
+ * be that assertion made about pages nobody opened, which is how a stale translation comes to call
+ * itself current.
+ */
 class StampTranslations extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->addDescription('Update translation marker stamps to the current source unit hashes.');
+		$this->addDescription('Record the source version a translation you have read was written against.');
 		$this->addOption('source', 'Source directory (default: $wgWikvenSourceDirectory).', false, true);
-		$this->addOption('all', 'Restamp every translation under the source directory.');
-		$this->addArg('file', 'A single translation file to restamp (omit when using --all).', false);
+		$this->addArg('file', 'The translation file to stamp.', true);
 	}
 
 	public function execute() {
 		$source = rtrim((string)$this->getOption('source', $GLOBALS['wgWikvenSourceDirectory'] ?? ''), '/');
 
-		if ($this->hasOption('all')) {
-			if ($source === '' || !is_dir($source)) {
-				$this->fatalError("Wikven: source directory '$source' does not exist.");
-			}
-			$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
-			foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
-				$sourceText = (string)file_get_contents($baseFile);
-				$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
-				foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
-					$this->restampFile($sourceText, TranslationSource::translationPath($baseFile, $lang), $pageTitle);
-				}
-			}
-			return;
-		}
-
 		$translationFile = $this->getArg(0);
 		if ($translationFile === null) {
-			$this->fatalError('Wikven: pass a translation file, or --all.');
+			$this->fatalError('Wikven: pass the translation file to stamp.');
 		}
 		// A relative path is taken within the source directory (what the src mount maps to).
 		if (!str_starts_with($translationFile, '/')) {

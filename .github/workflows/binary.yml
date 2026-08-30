@@ -302,7 +302,7 @@ jobs:
           printf '\n위크벤은 미디어위키로 정적 사이트를 만듭니다.\n' >> translated/src/index/ko.wikitext
           ( cd translated && WIKVEN_WORKDIR=. "$bin" translate check --gate )
 
-          ( cd translated && WIKVEN_WORKDIR=. "$bin" translate stamp --all )
+          ( cd translated && WIKVEN_WORKDIR=. "$bin" translate stamp index/ko.wikitext )
           grep -qE '<!--T:1 @[0-9a-f]{8}-->' translated/src/index/ko.wikitext
 
       # A subcommand the binary does not have is a usage error, not a boot: the check comes before
