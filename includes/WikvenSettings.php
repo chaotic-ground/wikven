@@ -211,6 +211,14 @@ $wgWikvenSourceDirectory = $wikvenPaths['source'];
 $wgWikvenHtmlDirectory = $wikvenPaths['dist'];
 $wgWikvenSourceHistoryFile = $wikvenPaths['history'];
 
+// Say which setting core cannot accept, while the site's file is still the obvious suspect. Without
+// this a wrong-typed value is carried until something reads it, and what the site sees is a stack
+// trace from a part of MediaWiki it never named. This cannot catch a misspelled key: validate()
+// walks the schema's keys rather than the file's, so a name core does not define is never visited.
+foreach (MediaWiki\Extension\Wikven\SiteConfig::schemaErrors($wgSettings->validate()) as $wikvenBadSetting) {
+	error_log("Wikven: WARNING in configuration: $wikvenBadSetting");
+}
+
 // Dedupe so each extension/skin loads at most once.
 $config['extensions'] = array_values(array_unique(array_filter($config['extensions'], 'is_string'), SORT_STRING));
 $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_string'), SORT_STRING));

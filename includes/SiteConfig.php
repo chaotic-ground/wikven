@@ -2,6 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven;
 
+use StatusValue;
+
 /** Helpers for a site's configuration file (accepted .wikven.* names; see CONFIG_FILENAMES). */
 class SiteConfig {
 	/** Top-level keys the settings format recognises. */
@@ -100,6 +102,40 @@ class SiteConfig {
 			}
 		}
 		return $warnings;
+	}
+
+	/**
+	 * Config-schema failures, as lines naming the setting that is wrong.
+	 *
+	 * SettingsBuilder::validate() checks the settings core defines against their schema, which is
+	 * how a site hears that it wrote a list where a number belongs instead of meeting a stack trace
+	 * further into the boot with nothing in it about its own file. Core renders a StatusValue as a
+	 * debug table wrapped at twenty-five characters; the name and the reason are what a person
+	 * needs, so they are pulled out here.
+	 *
+	 * Only errors are read. The validator also warns that it declined to check a map with integer
+	 * keys, which is not something a site can act on and would be printed by every build.
+	 *
+	 * @param StatusValue $status What SettingsBuilder::validate() returned.
+	 * @return string[] One line per failed setting, empty when the config conforms.
+	 */
+	public static function schemaErrors(StatusValue $status): array {
+		$errors = [];
+		foreach ($status->getMessages('error') as $failure) {
+			$parts = [];
+			foreach ($failure->getParams() as $param) {
+				// A parameter reaches here either as the scalar it was raised with or wrapped in a
+				// MessageParam, depending on the version; both carry the same thing to say.
+				if (is_object($param) && method_exists($param, 'getValue')) {
+					$param = $param->getValue();
+				}
+				$parts[] = is_scalar($param) ? (string)$param : get_debug_type($param);
+			}
+			// The message key names the kind of failure, not the setting, so it stands in only when
+			// there is nothing better to show.
+			$errors[] = $parts === [] ? $failure->getKey() : implode(': ', $parts);
+		}
+		return $errors;
 	}
 
 	/**
