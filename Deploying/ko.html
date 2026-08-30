@@ -563,7 +563,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>dist/
 ├── index.html               the main page, served at the site root
-├── Getting Started.html     one file per page
+├── Getting_Started.html     one file per page
 ├── Guide/
 │   └── Setup.html           a page whose title has a slash becomes a directory
 ├── File:Logo.png.html       file description pages
@@ -606,8 +606,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">      </span><span class="c1"># No version has been released yet, so there is no version tag to pin --</span>
 <span class="w">      </span><span class="c1"># and the action&#39;s default image is that unreleased version. Pin a nightly</span>
 <span class="w">      </span><span class="c1"># instead, and name the image from the same one: the tag is a commit of</span>
-<span class="w">      </span><span class="c1"># main, and that image was built from it. Both become @1.2.3 once a version</span>
-<span class="w">      </span><span class="c1"># exists. Pick the newest nightly from the releases page.</span>
+<span class="w">      </span><span class="c1"># main, and that image was built from it. Once a version exists these</span>
+<span class="w">      </span><span class="c1"># become @v1.2.3 and :1.2.3 -- the git tag carries the v, the image tag</span>
+<span class="w">      </span><span class="c1"># does not -- or drop the image line and take the action&#39;s default. Pick</span>
+<span class="w">      </span><span class="c1"># the newest nightly from the releases page.</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>

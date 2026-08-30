@@ -432,7 +432,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 </section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="From_file_name_to_page">From file name to page</h2></div>
 <p>A file ending in <code>.wikitext</code> becomes a wiki page whose title is the path with <code>.wikitext</code> removed, so <code>src/Help.wikitext</code> is the page "Help", served at <code>Help.html</code>.
-</p><p>Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
+</p><p>Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. The title is where a space survives; the file it builds to is <code>Getting_Started.html</code>, because MediaWiki writes a space in a title as an underscore in a path. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
 </p><p>If a file name does not map cleanly to a title (MediaWiki would normalise it differently), the build warns, because the page's edit and history links are derived from the file name and would otherwise not resolve. Rename the file to a title that is already normalised.
 </p>
 </section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Linking_between_pages">Linking between pages</h2></div>
@@ -511,7 +511,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages.wikitext" title="This page was last edited on 30 August 2026, at 14:08." data-timestamp="1788098922"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages.wikitext" title="This page was last edited on 30 August 2026, at 15:31." data-timestamp="1788103886"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -672,7 +672,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 14:08.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 15:31.</div>
 		    </section>
 		</div>
 </footer>		</div>

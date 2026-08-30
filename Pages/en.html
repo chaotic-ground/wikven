@@ -587,7 +587,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading2"><h2 id="From_file_name_to_page">From file name to page</h2></div>
 <p>A file ending in <code>.wikitext</code> becomes a wiki page whose title is the path with <code>.wikitext</code> removed, so <code>src/Help.wikitext</code> is the page "Help", served at <code>Help.html</code>.
-</p><p>Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
+</p><p>Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. The title is where a space survives; the file it builds to is <code>Getting_Started.html</code>, because MediaWiki writes a space in a title as an underscore in a path. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
 </p><p>If a file name does not map cleanly to a title (MediaWiki would normalise it differently), the build warns, because the page's edit and history links are derived from the file name and would otherwise not resolve. Rename the file to a title that is already normalised.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Linking_between_pages">Linking between pages</h2></div>
@@ -659,7 +659,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 14:08.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 15:31.</li>
 </ul>
 
 	<ul id="footer-places">

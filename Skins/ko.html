@@ -644,7 +644,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>스킨을 둘 이상 나열하면 사이트가 그 모두로 빌드되고, 독자가 고릅니다. 이 문서 사이트가 세 스킨 모두로 그렇게 합니다. 설정은 한 줄이지만 그 결과는 한 줄이 아니므로, 알아 둘 만합니다.
 </p>
 <ul><li><b>사이트가 스킨마다 한 번씩 렌더링됩니다.</b> 스킨이 셋이면 전체 렌더링을 세 번 하므로 파일 수는 대략 세 배가 됩니다. 다만 렌더링은 빌드가 쓸 수 있는 프로세서 하나당 하나씩 나란히 돌아가므로, 늘어나는 시간은 프로세서가 모자라는 만큼뿐입니다. 셋이면 세 스킨 빌드가 한 스킨 빌드와 비슷하게 걸리고, 하나뿐이거나 <a href="../Commands/ko.html#environment-variables" title="Special:MyLanguage/Commands"><code>WIKVEN_BUILD_JOBS</code>를 <code>1</code>로 설정</a>하면 대략 세 배가 걸립니다.</li>
-<li><b>스킨마다 모든 문서의 사본을 갖습니다.</b> 사이트를 읽는 스킨은 단일 스킨 사이트처럼 출력 루트에 렌더링되고, 나머지는 각자의 이름을 딴 디렉터리에 렌더링됩니다. <code>dist/Getting Started.html</code> 옆에 <code>dist/citizen/Getting Started.html</code>이 놓이는 식입니다. 사본은 자체 <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색 색인</a>까지 갖춘 완전한 것이어서, 스킨을 고른 독자는 문서를 옮겨 다닐 때도 검색할 때도 그 스킨 안에 머무릅니다.</li>
+<li><b>스킨마다 모든 문서의 사본을 갖습니다.</b> 사이트를 읽는 스킨은 단일 스킨 사이트처럼 출력 루트에 렌더링되고, 나머지는 각자의 이름을 딴 디렉터리에 렌더링됩니다. <code>dist/Getting_Started.html</code> 옆에 <code>dist/citizen/Getting_Started.html</code>이 놓이는 식입니다. 사본은 자체 <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색 색인</a>까지 갖춘 완전한 것이어서, 스킨을 고른 독자는 문서를 옮겨 다닐 때도 검색할 때도 그 스킨 안에 머무릅니다.</li>
 <li><b>사본은 검색 엔진에 노출되지 않습니다.</b> 색인되는 것은 주 스킨의 문서뿐이고 나머지는 <code>noindex</code>로 렌더링되므로, 검색 엔진에 같은 문서가 세 번 제시되지 않습니다.</li>
 <li><b>모든 문서에 스킨 전환기가 생깁니다.</b> 어디에 나타날지는 스킨에 달렸습니다. Vector는 모양새 메뉴에, Citizen은 환경 설정 패널에 두고, 그 밖의 스킨은 도구 상자에 둡니다. 자바스크립트가 없는 독자에게도 평범한 링크 목록이 그대로 남습니다. MinervaNeue만은 예외입니다. 도구 상자에 해당하는 것이 문서 동작 메뉴인데, 어떤 스킨으로 읽을지는 문서에 가하는 동작이 아니므로, 문서에는 전환기가 없고 목록은 <a href="#설정_문서">설정 문서</a>에 놓입니다. 주 메뉴에는 사이트 자체의 둘러보기 링크와 그 문서로 가는 링크가 들어갑니다.</li></ul>
 <p>스킨이 하나뿐이면 전환기도 사본도 없습니다. 출력은 예전과 똑같습니다.
@@ -729,7 +729,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 12:48에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 15:31에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
