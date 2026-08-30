@@ -458,8 +458,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><span id="translation-not-subpage"></span>
 </p>
 </section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="A_translation_is_not_a_subpage">A translation is not a subpage</h3></div>
-<p>A <a href="./Translating.html" title="Special:MyLanguage/Translating">translatable</a> page -- one whose source wraps content in <code>&lt;translate></code> -- claims every subpage of itself named for a language. Beside a translatable <code>Guide.wikitext</code>, the file <code>Guide/ko.wikitext</code> is the Korean translation of "Guide" and not a page "Guide/ko", and nothing warns about it, because that naming is what the feature is built on.
-</p><p>All three have to hold at once, so any one of them is the way out: a subpage of a page carrying no <code>&lt;translate></code> is a subpage as written, and so is any name that is not a language code. Where you need a translatable page and that subpage both, the subpage is the one to rename.
+<p>A <a href="./Translating.html" title="Special:MyLanguage/Translating">translatable</a> page -- one whose source wraps content in <code>&lt;translate></code> -- claims a subpage of itself named for a language <em>when that subpage carries the source's <code>&lt;!--T:n--></code> markers</em>. Beside a translatable <code>Guide.wikitext</code>, a marked <code>Guide/ko.wikitext</code> is the Korean translation of "Guide" and not a page "Guide/ko", and nothing warns about it, because that naming is what the feature is built on. Without the markers it is a page as written, since language codes are ordinary words too -- <code>id</code>, <code>no</code>, <code>it</code> -- and a page about identifiers should not become an Indonesian translation.
+</p><p>All three have to hold at once, so any one of them is the way out: a subpage of a page carrying no <code>&lt;translate></code> is a subpage as written, so is any name that is not a language code, and so is any file without the markers. See <a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a> for how a translation gets them.
 </p>
 </section></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Namespaces">Namespaces</h2></div>
 <p>Prefix the file name with a namespace to place the page there:
@@ -511,7 +511,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages.wikitext" title="This page was last edited on 30 August 2026, at 13:46." data-timestamp="1788097600"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages.wikitext" title="This page was last edited on 30 August 2026, at 14:08." data-timestamp="1788098922"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -672,7 +672,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 13:46.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 14:08.</div>
 		    </section>
 		</div>
 </footer>		</div>

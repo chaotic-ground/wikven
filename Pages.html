@@ -614,8 +614,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><span id="translation-not-subpage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="A_translation_is_not_a_subpage">A translation is not a subpage</h3></div>
-<p>A <a href="./Translating.html" title="Special:MyLanguage/Translating">translatable</a> page -- one whose source wraps content in <code>&lt;translate&gt;</code> -- claims every subpage of itself named for a language. Beside a translatable <code>Guide.wikitext</code>, the file <code>Guide/ko.wikitext</code> is the Korean translation of "Guide" and not a page "Guide/ko", and nothing warns about it, because that naming is what the feature is built on.
-</p><p>All three have to hold at once, so any one of them is the way out: a subpage of a page carrying no <code>&lt;translate&gt;</code> is a subpage as written, and so is any name that is not a language code. Where you need a translatable page and that subpage both, the subpage is the one to rename.
+<p>A <a href="./Translating.html" title="Special:MyLanguage/Translating">translatable</a> page -- one whose source wraps content in <code>&lt;translate&gt;</code> -- claims a subpage of itself named for a language <em>when that subpage carries the source's <code>&lt;!--T:n--&gt;</code> markers</em>. Beside a translatable <code>Guide.wikitext</code>, a marked <code>Guide/ko.wikitext</code> is the Korean translation of "Guide" and not a page "Guide/ko", and nothing warns about it, because that naming is what the feature is built on. Without the markers it is a page as written, since language codes are ordinary words too -- <code>id</code>, <code>no</code>, <code>it</code> -- and a page about identifiers should not become an Indonesian translation.
+</p><p>All three have to hold at once, so any one of them is the way out: a subpage of a page carrying no <code>&lt;translate&gt;</code> is a subpage as written, so is any name that is not a language code, and so is any file without the markers. See <a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a> for how a translation gets them.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Namespaces">Namespaces</h2></div>
 <p>Prefix the file name with a namespace to place the page there:
@@ -660,7 +660,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 13:46.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 14:08.</li>
 </ul>
 
 	<ul id="footer-places">

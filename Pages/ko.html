@@ -616,8 +616,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><span id="translation-not-subpage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="번역은_하위_문서가_아닙니다"><span id=".EB.B2.88.EC.97.AD.EC.9D.80_.ED.95.98.EC.9C.84_.EB.AC.B8.EC.84.9C.EA.B0.80_.EC.95.84.EB.8B.99.EB.8B.88.EB.8B.A4"></span>번역은 하위 문서가 아닙니다</h3></div>
-<p><a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역 가능한</a> 문서 — 내용을 <code>&lt;translate&gt;</code>로 감싼 문서 — 는 자기 하위 문서 중 언어 이름을 단 것을 모두 가져갑니다. 번역 가능한 <code>Guide.wikitext</code> 옆의 <code>Guide/ko.wikitext</code> 파일은 "Guide"의 한국어 번역이지 "Guide/ko" 문서가 아니며, 아무 경고도 나오지 않습니다. 그 이름 규칙 위에 이 기능이 세워져 있기 때문입니다.
-</p><p>세 조건이 동시에 성립해야 하므로, 그중 하나만 깨면 됩니다. <code>&lt;translate&gt;</code>를 지니지 않은 문서의 하위 문서는 쓰인 그대로 하위 문서이고, 언어 코드가 아닌 이름도 마찬가지입니다. 번역 가능한 문서와 그 하위 문서가 둘 다 필요하다면, 이름을 바꿀 쪽은 하위 문서입니다.
+<p><a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역 가능한</a> 문서 — 내용을 <code>&lt;translate&gt;</code>로 감싼 문서 — 는 자기 하위 문서 중 언어 이름을 단 것을, <em>그 하위 문서가 원본의 <code>&lt;!--T:n--&gt;</code> 마커를 지니고 있을 때</em> 가져갑니다. 번역 가능한 <code>Guide.wikitext</code> 옆의 마커가 있는 <code>Guide/ko.wikitext</code> 파일은 "Guide"의 한국어 번역이지 "Guide/ko" 문서가 아니며, 아무 경고도 나오지 않습니다. 그 이름 규칙 위에 이 기능이 세워져 있기 때문입니다. 마커가 없으면 쓰인 그대로 문서입니다. 언어 코드는 평범한 낱말이기도 해서 — <code>id</code>, <code>no</code>, <code>it</code> — 식별자를 다루는 문서가 인도네시아어 번역이 되어서는 안 되기 때문입니다.
+</p><p>세 조건이 동시에 성립해야 하므로, 그중 하나만 깨면 됩니다. <code>&lt;translate&gt;</code>를 지니지 않은 문서의 하위 문서는 쓰인 그대로 하위 문서이고, 언어 코드가 아닌 이름도, 마커가 없는 파일도 마찬가지입니다. 번역이 마커를 어떻게 얻는지는 <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역하기</a>를 참고하십시오.
 </p><p><span id="Namespaces"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="이름공간"><span id=".EC.9D.B4.EB.A6.84.EA.B3.B5.EA.B0.84"></span>이름공간</h2></div>
@@ -663,7 +663,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 13:46에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 14:08에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
