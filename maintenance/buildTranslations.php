@@ -65,9 +65,9 @@ class BuildTranslations extends Maintenance {
 				continue;
 			}
 			$sourceText = (string)file_get_contents($baseFile);
-			$languages = TranslationSource::translationLanguages($baseFile, $isKnownLanguage);
+			$translations = TranslationSource::translationFiles($baseFile, $isKnownLanguage);
 			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
-			if ($this->prepare($title, $sourceText, $languages, $pageTitle, $user)) {
+			if ($this->prepare($title, $sourceText, $translations, $pageTitle, $user)) {
 				$prepared[] = $title;
 			}
 		}
@@ -104,7 +104,7 @@ class BuildTranslations extends Maintenance {
 	 *
 	 * @param Title $title
 	 * @param string $sourceText
-	 * @param string[] $languages
+	 * @param array<string,string> $translations Translation file paths, keyed by language code.
 	 * @param ?string $pageTitle Source text of the page's title unit, or null if its title is fixed.
 	 * @param User $user
 	 * @return bool Whether the page was marked (false if it could not be loaded, parsed or validated).
@@ -112,7 +112,7 @@ class BuildTranslations extends Maintenance {
 	private function prepare(
 		Title $title,
 		string $sourceText,
-		array $languages,
+		array $translations,
 		?string $pageTitle,
 		User $user
 	): bool {
@@ -155,7 +155,7 @@ class BuildTranslations extends Maintenance {
 		// before we fill in translations.
 		$this->drainJobs();
 
-		$this->loadTranslations($title, $sourceText, $languages, $pageTitle, $user);
+		$this->loadTranslations($title, $sourceText, $translations, $pageTitle, $user);
 		return true;
 	}
 
@@ -177,14 +177,14 @@ class BuildTranslations extends Maintenance {
 	 *
 	 * @param Title $title
 	 * @param string $sourceText
-	 * @param string[] $languages
+	 * @param array<string,string> $translations Translation file paths, keyed by language code.
 	 * @param ?string $pageTitle Source text of the page's title unit, or null if its title is fixed.
 	 * @param User $user
 	 */
 	private function loadTranslations(
 		Title $title,
 		string $sourceText,
-		array $languages,
+		array $translations,
 		?string $pageTitle,
 		User $user
 	): void {
@@ -192,12 +192,12 @@ class BuildTranslations extends Maintenance {
 		$sourceUnits = StalenessComputer::sourceUnits($sourceText, $pageTitle);
 		$prefixed = $title->getPrefixedText();
 
-		foreach ($languages as $lang) {
-			$translationFile = TranslationSource::translationPath(
-				rtrim($GLOBALS['wgWikvenSourceDirectory'], '/') . '/' . SourceFile::titleToFilename($prefixed),
-				$lang
-			);
+		foreach ($translations as $lang => $translationFile) {
 			if (!is_file($translationFile)) {
+				// The file is the one the language was discovered at, so it is only missing if the
+				// source tree changed under the build. Say so: the page would otherwise be exported
+				// in that language with nothing translated and nothing to explain why.
+				$this->output("Wikven: $prefixed has no readable $lang translation at $translationFile\n");
 				continue;
 			}
 			$translationText = (string)file_get_contents($translationFile);
