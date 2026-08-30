@@ -8,7 +8,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.citizenSearchShortcuts","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface","skins.citizen.toc"]);</script>
+<script src="./assets/startup-static.js"></script><script src="./assets/modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.citizenSearchShortcuts","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface","skins.citizen.toc"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -17,19 +17,19 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0d0e12">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="././ext.translate.tag.languages.css">
-<link rel="stylesheet" href="././ext.pygments.css">
-<link rel="stylesheet" href="././skins.citizen.styles.css">
-<link rel="stylesheet" href="././skins.citizen.codex.styles.css">
-<link rel="stylesheet" href="././skins.citizen.icons.css">
-<link rel="stylesheet" href="././ext.translate.edit.documentation.styles.css">
-<link rel="stylesheet" href="././ext.translate.css">
-<link rel="stylesheet" href="././ext.Wikven.styles.css">
-<link rel="stylesheet" href="././skins.citizen.tokens.css">
-<link rel="stylesheet" href="././ext.uls.pt.css">
+<link rel="stylesheet" href="./assets/ext.translate.tag.languages.css">
+<link rel="stylesheet" href="./assets/ext.pygments.css">
+<link rel="stylesheet" href="./assets/skins.citizen.styles.css">
+<link rel="stylesheet" href="./assets/skins.citizen.codex.styles.css">
+<link rel="stylesheet" href="./assets/skins.citizen.icons.css">
+<link rel="stylesheet" href="./assets/ext.translate.edit.documentation.styles.css">
+<link rel="stylesheet" href="./assets/ext.translate.css">
+<link rel="stylesheet" href="./assets/ext.Wikven.styles.css">
+<link rel="stylesheet" href="./assets/skins.citizen.tokens.css">
+<link rel="stylesheet" href="./assets/ext.uls.pt.css">
 <link rel="canonical" href="../Pages.html">
 <script>window.clientPrefs=()=>{let className=document.documentElement.className;let storage;try{storage=localStorage.getItem('mwclientpreferences');}catch(e){}if(storage){storage.split(',').forEach((pref)=>{const pattern=new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)');if(pattern.test(className)){className=className.replace(pattern,'$1'+pref+'$2');}else{className+=' '+pref;}});document.documentElement.className=className;}};(()=>{window.clientPrefs();})();</script>
-<link rel="stylesheet" href="./webfonts.css"><link rel="stylesheet" href="./site.styles.css"></head>
+<link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Pages rootpage-Pages skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
 <a class="mw-jump-link citizen-jump-link" href="#bodyContent">Jump to content</a>
@@ -443,10 +443,14 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="reserved-names"></span>
 </p>
 <section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="Names_a_subpage_cannot_take">Names a subpage cannot take</h3></div>
-<p>A subpage is a directory in the output, and three directories there are the build's own. A page that lands on one is not refused; the file is written where something else already goes, and what the reader gets is whichever finished last. Only subpages are affected, because only a subpage makes a directory: a page named <code>citizen</code> builds to <code>citizen.html</code> and sits beside everything else quite happily.
+<p>A subpage is a directory in the output, and some directories there are the build's own. A page that lands on one is not refused; the file is written where something else already goes, and what the reader gets is whichever finished last. Only subpages are affected, because only a subpage makes a directory: a page named <code>citizen</code> builds to <code>citizen.html</code> and sits beside everything else quite happily.
 </p>
 <dl><dt>Any skin after the first</dt>
 <dd>Each one renders the whole site into a directory of its own, so a site building Citizen has a <code>citizen/</code> holding a second copy of every page. A page "citizen/Setup" is written into that directory, where the Citizen copy of a page "Setup" also goes. The name to avoid is the skin's own, which is lower-case and not always what you listed it by: <code>vector-2022</code>, <code>citizen</code>, <code>minerva</code>. See <a href="./Skins.html" title="Special:MyLanguage/Skins">Skins</a>.</dd>
+<dt><code>assets</code></dt>
+<dd>Everything the build generates — the stylesheets, the script bundles, and the images their CSS names — unless <a href="./Configuration.html#WikvenAssetDirectory" title="Special:MyLanguage/Configuration"><code>WikvenAssetDirectory</code></a> names another directory, or <code>.</code> to scatter them through the output root instead.</dd>
+<dt><code>fonts</code></dt>
+<dd>The webfont files themselves, with <code>WikvenBundleWebfonts</code> set. They sit at the output root rather than in the asset directory, and the stylesheet that names them steps up out of it to reach them.</dd>
 <dt><code>pagefind</code></dt>
 <dd>Where <a href="./Searching.html" title="Special:MyLanguage/Searching">search</a> writes its index, unless <code>SifterSearchOutputDir</code> puts it elsewhere.</dd>
 <dt><code>history</code></dt>
@@ -507,7 +511,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages.wikitext" title="This page was last edited on 28 August 2026, at 11:44." data-timestamp="1787917464"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>28 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Pages.wikitext" title="This page was last edited on 30 August 2026, at 08:59." data-timestamp="1788080342"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -668,7 +672,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 28 August 2026, at 11:44.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 08:59.</div>
 		    </section>
 		</div>
 </footer>		</div>

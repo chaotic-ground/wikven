@@ -8,7 +8,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src="././startup-static.js"></script><script src="././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.interface"]);</script>
+<script src="./assets/startup-static.js"></script><script src="./assets/modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.interface"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -16,16 +16,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="././ext.translate.tag.languages.css">
-<link rel="stylesheet" href="././ext.pygments.css">
-<link rel="stylesheet" href="././skins.vector.search.codex.styles.css">
-<link rel="stylesheet" href="././skins.vector.styles.css">
-<link rel="stylesheet" href="././skins.vector.icons.css">
-<link rel="stylesheet" href="././ext.translate.edit.documentation.styles.css">
-<link rel="stylesheet" href="././ext.translate.css">
-<link rel="stylesheet" href="././ext.Wikven.styles.css">
-<link rel="stylesheet" href="././ext.uls.pt.css">
-<link rel="stylesheet" href="./webfonts.css"><link rel="stylesheet" href="./site.styles.css"></head>
+<link rel="stylesheet" href="./assets/ext.translate.tag.languages.css">
+<link rel="stylesheet" href="./assets/ext.pygments.css">
+<link rel="stylesheet" href="./assets/skins.vector.search.codex.styles.css">
+<link rel="stylesheet" href="./assets/skins.vector.styles.css">
+<link rel="stylesheet" href="./assets/skins.vector.icons.css">
+<link rel="stylesheet" href="./assets/ext.translate.edit.documentation.styles.css">
+<link rel="stylesheet" href="./assets/ext.translate.css">
+<link rel="stylesheet" href="./assets/ext.Wikven.styles.css">
+<link rel="stylesheet" href="./assets/ext.uls.pt.css">
+<link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration rootpage-Configuration skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
 <div class="vector-header-container">
@@ -409,16 +409,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-WikvenBuildFor-sublist" class="vector-toc-list">
 			</ul>
 		</li>
-		<li id="toc-WikvenStyleDirectory_and_WikvenScriptDirectory"
+		<li id="toc-WikvenAssetDirectory"
 			class="vector-toc-list-item vector-toc-level-2">
-			<a class="vector-toc-link" href="#WikvenStyleDirectory_and_WikvenScriptDirectory">
+			<a class="vector-toc-link" href="#WikvenAssetDirectory">
 				<div class="vector-toc-text">
 					<span class="vector-toc-numb">3.9</span>
-					<span>WikvenStyleDirectory and WikvenScriptDirectory</span>
+					<span>WikvenAssetDirectory</span>
 				</div>
 			</a>
 			
-			<ul id="toc-WikvenStyleDirectory_and_WikvenScriptDirectory-sublist" class="vector-toc-list">
+			<ul id="toc-WikvenAssetDirectory-sublist" class="vector-toc-list">
 			</ul>
 		</li>
 		<li id="toc-WikvenRepositories"
@@ -740,14 +740,15 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>Leave it off for a site anyone reads. A published export that offers a login, a watchlist and a talk tab with nothing behind any of them is worse than one that offers none.
 </p><p>There is a source tree to bake with it: <code>examples/skin-preview</code> in the Wikven repository, one page carrying every element a skin has to style. Add your skin to its <code>.wikven.yaml</code> and build that directory.
 </p><p><span id="WikvenStyleDirectory"></span>
+<span id="WikvenAssetDirectory"></span>
 </p>
-<div class="mw-heading mw-heading3"><h3 id="WikvenStyleDirectory_and_WikvenScriptDirectory"><code>WikvenStyleDirectory</code> and <code>WikvenScriptDirectory</code></h3></div>
-<p><b>Default:</b> <code>.</code>
-</p><p>Where under the output directory the build writes the CSS and JavaScript it dumps out of MediaWiki. <code>.</code> is the output root. Set them to keep the generated assets out of the way of your pages; the paths are relative to the output directory and the build writes the links to match, so nothing else needs telling.
+<div class="mw-heading mw-heading3"><h3 id="WikvenAssetDirectory"><code>WikvenAssetDirectory</code></h3></div>
+<p><b>Default:</b> <code>assets</code>
+</p><p>Where under the output directory the build writes everything it generates: the stylesheets and script bundles it dumps out of MediaWiki, and the images and webfont files their CSS names. The path is relative to the output directory and the build writes the links to match, so nothing else needs telling.
+</p><p>One directory rather than one per kind, because a stylesheet reaches its images by a path relative to itself — they cannot be parted. Set it to <code>.</code> to put them all in the output root among your pages instead.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">WikvenStyleDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
-<span class="w">  </span><span class="nt">WikvenScriptDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets</span>
+<span class="w">  </span><span class="nt">WikvenAssetDirectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
 </pre></div>
 <p><span id="WikvenRepositories"></span>
 </p>
@@ -782,6 +783,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
 </div>
 <p>Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See <a href="./Deploying.html#keeping-pins-current" title="Special:MyLanguage/Deploying">Deploying</a> for keeping one current.
+</p><p>Moving wikven moves the core underneath these pins. A wikven major accompanies every bump of the bundled MediaWiki, which is about twice a year, and a site that declares <code>WikvenRepositories</code> is carrying code wikven does not test, released on a calendar that is not wikven's. Crossing a major hands that code a MediaWiki it has never run on.
+</p><p>Two things can happen then, and only one of them is caught. A component that declares a core range excluding the new core stops the build: MediaWiki's <code>VersionChecker</code> raises <code>incompatible-core</code>, naming the component and the range it asked for. A component that declares only a lower bound and breaks anyway is not detected at all. The second is the normal case rather than the exception — Citizen v3.21.0 and TabberNeue v4.0.2, both pinned by this site, require <code>MediaWiki: &gt;= 1.43.0</code> with nothing above it. That is the honest thing for them to declare: the requirement is written at release, before the core it would have to exclude exists, and the ecosystem has nowhere to record the incompatibility once someone finds it. No check can be written for what nobody can write down.
+</p><p>Re-check your pinned components yourself, then, whenever you move wikven across a major: build the site and read the pages they render. A green build says the pins resolved and the ranges they declared were satisfied; it is not evidence that anything still works.
 </p><p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 </p><p><span id="ContentNamespaces"></span>
 </p>
@@ -811,7 +815,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 07:46.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 08:59.</li>
 </ul>
 
 	<ul id="footer-places">
