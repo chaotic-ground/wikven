@@ -11,7 +11,7 @@ use StatusValue;
  * @covers \MediaWiki\Extension\Wikven\SiteConfig
  */
 class SiteConfigTest extends MediaWikiUnitTestCase {
-	private const KNOWN = ['WikvenFooterUrl', 'WikvenEditUrl', 'WikvenMainPage'];
+	private const KNOWN = ['WikvenFooterUrl', 'WikvenEditUrl', 'WikvenMainPage', 'WikvenBuildFor'];
 
 	public function testSoundFileHasNoWarnings() {
 		$data = [

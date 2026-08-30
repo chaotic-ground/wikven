@@ -115,8 +115,9 @@ class SiteConfig {
 			// Quote what was written when it is something a person wrote; name the type when it is
 			// not, so a stray "true" reads as the wrong kind of value rather than as the string 1.
 			$named = is_string($buildFor) ? "'$buildFor'" : get_debug_type($buildFor);
-			$warnings[] = "'WikvenBuildFor' is $named; expected one of "
-				. implode(', ', BuildFor::all()) . ". Building for '" . BuildFor::SITE . "'.";
+			$expected = implode(', ', BuildFor::all());
+			$fallback = BuildFor::SITE;
+			$warnings[] = "'WikvenBuildFor' is $named; expected one of $expected. Building for '$fallback'.";
 		}
 		return $warnings;
 	}
