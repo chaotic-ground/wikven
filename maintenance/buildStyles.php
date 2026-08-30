@@ -56,9 +56,9 @@ class BuildStyles extends Maintenance {
 
 			$text = ModuleRenderer::render($resourceLoader, $context);
 
-			if (file_put_contents($filename, $text, LOCK_EX) === false) {
-				wfDebug(__METHOD__ . '() failed saving ' . $filename);
-				continue;
+			$problem = Stylesheet::write($filename, $text);
+			if ($problem !== null) {
+				$this->fatalError($problem);
 			}
 		}
 
@@ -81,7 +81,10 @@ class BuildStyles extends Maintenance {
 		$context = new Context($resourceLoader, new FauxRequest($query));
 		$siteStyles = ModuleRenderer::render($resourceLoader, $context);
 		if (trim($siteStyles) !== '') {
-			file_put_contents("$cssDir/site.styles.css", $siteStyles, LOCK_EX);
+			$problem = Stylesheet::write("$cssDir/site.styles.css", $siteStyles);
+			if ($problem !== null) {
+				$this->fatalError($problem);
+			}
 		}
 
 		// Dumped CSS points icons at load.php images that 404 on static hosts; localize them.
