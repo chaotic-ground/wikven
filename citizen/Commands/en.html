@@ -520,7 +520,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <dd>The Unix time the build should claim its content was written, as in the <a rel="nofollow" class="external text" href="https://reproducible-builds.org/docs/source-date-epoch/">reproducible-builds convention</a>. The build runs with the clock frozen at it, so every timestamp in the output is stable. Unset, a fixed date is used — a wrong but unmoving one being easier to live with than one that moves each bake. The <a href="../Commands/en.html#bake" title="Special:MyLanguage/Commands">bake action</a> sets it to the commit being built.</dd>
 <dt><code>WIKVEN_BUILD_JOBS</code></dt>
 <dd>How many skin render passes may run beside each other. Unset, the build uses one per processor it is allowed — the container's allowance, not the host's. Only a site built with <a href="../Skins/en.html#building-more-than-one-skin" title="Special:MyLanguage/Skins">more than one skin</a> has passes to run in parallel; set it to <code>1</code> to make a bake sequential, for a machine short of memory or a log you want in order.</dd></dl>
-<p>There is one more, <code>WIKVEN_BUILD_SKIN</code>, which the build sets on itself to run one skin's render pass. Setting it by hand is not useful.
+<p>There are two more, and the build sets both on itself to run one skin's render pass: <code>WIKVEN_BUILD_SKIN</code> names the skin, and <code>WIKVEN_BUILD_DB_DIR</code> names the copy of the database that pass writes to, since the passes run beside each other and SQLite takes one writer at a time. Neither is useful to set by hand. <code>WIKVEN_BUILD_DB_DIR</code> is read only when <code>WIKVEN_BUILD_SKIN</code> is set, and setting that one turns the build into a render pass over a wiki nothing has filled, so it writes a site of nothing.
 </p><p><span id="bake"></span>
 </p>
 </section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="The_bake_action">The <code>bake</code> action</h2></div>
@@ -645,7 +645,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/en.wikitext" title="This page was last edited on 30 August 2026, at 08:36." data-timestamp="1788078973"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/en.wikitext" title="This page was last edited on 30 August 2026, at 09:21." data-timestamp="1788081700"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -786,7 +786,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 08:36.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 09:21.</div>
 		    </section>
 		</div>
 </footer>		</div>
