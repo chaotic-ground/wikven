@@ -1,5 +1,8 @@
 [files]
-extend-exclude = ["package-lock.json"]
+# CHANGELOG.md is generated from a year of commit subjects, and every entry carries the commit's
+# short hash: "b5d3ba3" reads as a misspelling of "by". The subjects are in history and cannot be
+# corrected now, so nothing here is actionable.
+extend-exclude = ["package-lock.json", "CHANGELOG.md"]
 
 [default]
 extend-ignore-re = [

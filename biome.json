@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["**", "!package-lock.json"]
+		"includes": ["**", "!package-lock.json", "!extension.json"]
 	},
 	"formatter": {
 		"enabled": true
