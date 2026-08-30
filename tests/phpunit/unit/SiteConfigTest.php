@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
 use MediaWiki\Extension\Wikven\SiteConfig;
 use MediaWikiUnitTestCase;
+use StatusValue;
 
 /**
  * @covers \MediaWiki\Extension\Wikven\SiteConfig
@@ -38,6 +39,29 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		$warnings = SiteConfig::lint(['config' => ['WikvenSourceDirectory' => '/elsewhere']], self::KNOWN);
 		$this->assertCount(1, $warnings);
 		$this->assertStringNotContainsString('typo', $warnings[0]);
+	}
+
+	public function testAConformingConfigHasNoSchemaErrors() {
+		$this->assertSame([], SiteConfig::schemaErrors(StatusValue::newGood()));
+	}
+
+	public function testASchemaErrorNamesTheSettingAndTheReason() {
+		$status = StatusValue::newGood();
+		$status->fatal('config-invalid-value', 'Sitename', 'expected string, got array');
+		$errors = SiteConfig::schemaErrors($status);
+		$this->assertCount(1, $errors);
+		$this->assertStringContainsString('Sitename', $errors[0]);
+		$this->assertStringContainsString('expected string, got array', $errors[0]);
+	}
+
+	/**
+	 * The validator warns that it skipped a map with integer keys, which no site can act on. Every
+	 * build sets such a map, so reporting warnings would put a line in every build log.
+	 */
+	public function testAValidatorWarningIsNotReportedAsAnError() {
+		$status = StatusValue::newGood();
+		$status->warning('config-invalid-key', 'WikvenLogos', 'Skipping validation of object with integer keys');
+		$this->assertSame([], SiteConfig::schemaErrors($status));
 	}
 
 	public function testUrlTemplateMissingPlaceholderWarns() {
