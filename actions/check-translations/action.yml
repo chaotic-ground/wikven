@@ -29,8 +29,9 @@ inputs:
       default: annotations are enough for a maintainer, and a comment is for a
       contributor meeting the workflow for the first time. Needs
       "pull-requests: write" on the job, and does nothing outside a pull
-      request. One comment per pull request, edited on each run, and replaced
-      with an all-clear once the findings are answered. The comment is about
+      request. One comment per pull request, edited on each run, and removed
+      once the findings are answered: a comment reporting that nothing is wrong
+      is one nobody needs, and the annotations hold the record either way. The comment is about
       the files the pull request touches -- and the translations of any source
       page it touches -- rather than about the whole tree, so a page that fell
       behind long before this change is left to the annotations. Takes "true"
@@ -167,13 +168,19 @@ runs:
               --jq 'map(select(.body | startswith("<!-- wikven-check-translations -->")))
                     | first | .id // empty' 2>/dev/null || true)
             posted=true
-            if [ -n "$existing" ]; then
+            if grep -q '^<!-- wikven-check-translations:clear -->$' "$body"; then
+              # Nothing to say, so say nothing. A pull request that never had a complaint has no use
+              # for a comment reporting there is none, and one whose complaint has been answered has
+              # no more use for it than that: the finding is gone, so the comment goes with it rather
+              # than turning into an all-clear nobody asked to be told. What was found, and when, is
+              # in the run's annotations either way.
+              if [ -n "$existing" ]; then
+                gh api -X DELETE "repos/$REPOSITORY/issues/comments/$existing" \
+                  >/dev/null || posted=false
+              fi
+            elif [ -n "$existing" ]; then
               gh api -X PATCH "repos/$REPOSITORY/issues/comments/$existing" -F body=@"$body" \
                 >/dev/null || posted=false
-            elif grep -q '^<!-- wikven-check-translations:clear -->$' "$body"; then
-              # Nothing found and nothing said before: a pull request that never had a complaint has
-              # no use for a comment saying there is none.
-              posted=true
             else
               gh api -X POST "repos/$REPOSITORY/issues/$PULL_REQUEST/comments" -F body=@"$body" \
                 >/dev/null || posted=false
