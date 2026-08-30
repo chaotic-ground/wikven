@@ -450,7 +450,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="A_setting_in_.wikven.yaml_does_nothing"></span>
 </p>
 </section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id=".wikven.yaml의_설정이_아무_일도_하지_않습니다"><span id=".wikven.yaml.EC.9D.98_.EC.84.A4.EC.A0.95.EC.9D.B4_.EC.95.84.EB.AC.B4_.EC.9D.BC.EB.8F.84_.ED.95.98.EC.A7.80_.EC.95.8A.EC.8A.B5.EB.8B.88.EB.8B.A4"></span><code>.wikven.yaml</code>의 설정이 아무 일도 하지 않습니다</h2></div>
-<p>먼저 빌드 로그를 읽으십시오. 눈에 보이는 실수는 로그가 경고합니다. <code>unknown config 'Wikven...'</code>은 Wikven의 변수가 아니라는 뜻이고, 대개 오타입니다. 알아보지 못한 이름도 그냥 적용된 뒤 무시되기 때문입니다. <code>unknown top-level key</code>는 <code>config</code>, <code>extensions</code>, <code>skins</code> 바깥에 있는 설정을 뜻합니다. URL 템플릿 경고는 <code>WikvenEditUrl</code>과 그 짝들에 <code>$1</code>이 빠졌다는 뜻입니다.
+<p>먼저 빌드 로그를 읽으십시오. 눈에 보이는 실수는 로그가 경고합니다. <code>unknown config</code>는 여기에 불러온 것 중 어느 것도 정의하지 않는 이름이라는 뜻이고, 대개 오타입니다. 임자가 없는 이름도 그냥 적용된 뒤 무시되기 때문입니다. 경고는 알고 있는 설정 가운데 가장 가까운 이름을 함께 알려줍니다. 이 검사는 사이트가 나열한 확장 기능과 스킨이 모두 설치된 뒤에야 이루어집니다. 설정이 그중 어느 것에 속할 수도 있기 때문입니다. <code>unknown top-level key</code>는 <code>config</code>, <code>extensions</code>, <code>skins</code> 바깥에 있는 설정을 뜻합니다. URL 템플릿 경고는 <code>WikvenEditUrl</code>과 그 짝들에 <code>$1</code>이 빠졌다는 뜻입니다.
 </p><p>로그에 나오지 않아 직접 확인해야 하는 것이 하나 있습니다. <code>config</code> 값은 기본값과 합쳐지지 않고 <b>대체</b>하므로, 목록이나 맵을 설정할 때는 그대로 두고 싶었던 항목까지 모두 적어야 합니다. <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">설정</a>을 참고하십시오.
 </p><p><span id="An_extension_or_skin_was_not_loaded"></span>
 </p>
@@ -493,7 +493,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Troubleshooting/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 09:00에 마지막으로 편집되었습니다." data-timestamp="1787475636"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Troubleshooting/ko.wikitext" title="이 문서는 2026년 8월 30일 (일) 07:45에 마지막으로 편집되었습니다." data-timestamp="1788075951"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 30일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -694,7 +694,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 09:00에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 30일 (일) 07:45에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

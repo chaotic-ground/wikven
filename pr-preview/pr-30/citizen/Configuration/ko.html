@@ -492,9 +492,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><b>기본값:</b> <code>false</code>
 </p><p>이 값을 설정하고 UniversalLanguageSelector를 켜면, 빌드가 문서에서 쓰는 언어들의 웹폰트를 내보내기가 스스로 제공하는 스타일시트로 구워 넣습니다. 어떤 문자의 글꼴이 시스템에 없는 독자도 빈 네모 대신 의도한 글꼴을 보게 됩니다. 따로 요청하지 않으면 꺼져 있는데, 글꼴은 그것이 필요하지 않을 수도 있는 독자에게까지 추가로 전송되는 용량이기 때문입니다. UniversalLanguageSelector가 없으면 아무 일도 하지 않습니다. <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역하기</a>를 참고하십시오.
 </p>
-</section><section id="citizen-section-11" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenSkinPreview"><code>WikvenSkinPreview</code></h3></div>
-<p><b>기본값:</b> <code>false</code>
-</p><p>사이트를 게시하기 위해서가 아니라 스킨을 보기 위한 설정입니다. Wikven은 보통 문서 주위의 크롬을 정적 호스트가 책임질 수 있는 만큼으로 다듬습니다. 개인 메뉴와 도구 상자, 토론 탭과 주시 별표를 비우고, 문서 탭을 소스 파일 링크로 바꾸고, 바닥글에 리포지터리 링크를 넣고, 나머지는 자체 스타일시트로 감춥니다. 이들 하나하나가 독자를 두고 내린 판단인데, 스킨이 어떻게 렌더링되는지 보려고 문서 몇 개에 빌드를 돌린 스킨 개발자에게는 어느 것도 반갑지 않습니다. 그렇게 손대는 메뉴들이야말로 그가 보러 온 대상이기 때문입니다. 이 값을 설정하면 그 전부가 스킨이 그린 그대로 남습니다.
+</section><section id="citizen-section-11" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenBuildFor"><code>WikvenBuildFor</code></h3></div>
+<p><b>기본값:</b> <code>site</code>
+</p><p>사이트를 게시하기 위해서가 아니라 스킨을 보기 위한 설정입니다. Wikven은 보통 문서 주위의 크롬을 정적 호스트가 책임질 수 있는 만큼으로 다듬습니다. 개인 메뉴와 도구 상자, 토론 탭과 주시 별표를 비우고, 문서 탭을 소스 파일 링크로 바꾸고, 바닥글에 리포지터리 링크를 넣고, 나머지는 자체 스타일시트로 감춥니다. 이들 하나하나가 독자를 두고 내린 판단인데, 스킨이 어떻게 렌더링되는지 보려고 문서 몇 개에 빌드를 돌린 스킨 개발자에게는 어느 것도 반갑지 않습니다. 그렇게 손대는 메뉴들이야말로 그가 보러 온 대상이기 때문입니다. <code>skin-preview</code>로 설정하면 그 전부가 스킨이 그린 그대로 남습니다.
 </p><p>그래도 빌드는 출력을 동작하는 파일 묶음으로 만드는 일은 전부 그대로 합니다. 링크는 <code>./Page.html</code>로 다시 쓰이고, 스타일과 스크립트는 로컬 사본으로 구워지며, 내보내기에 없는 것을 문서가 요청하지 않게 막는 두 가지 수정 — Citizen의 서비스 워커와 검색 단축키 — 도 그대로 켜져 있습니다. 프리뷰라고 해서 <code>load.php</code>가 뒤에 있는 것은 아니기 때문입니다. 생성되는 <a href="../Configuration/ko.html#WikvenLicensesPage" title="Special:MyLanguage/Configuration">라이선스</a> 문서와 <a href="../Configuration/ko.html#WikvenSettingsPage" title="Special:MyLanguage/Configuration">설정</a> 문서는 크롬이 아니라 내용이므로 그대로 쓰입니다. 그것들까지 빼려면 해당 설정을 비워두십시오. 라이선스 문서로 가는 바닥글 링크는 크롬이므로 넣지 않으며, 빌드가 지나가면서 그렇다고 알립니다.
 </p><p>누군가 읽는 사이트에서는 꺼두십시오. 로그인과 주시문서 목록과 토론 탭을 내밀면서 그 뒤에 아무것도 없는 내보내기는, 아예 내밀지 않는 것보다 나쁩니다.
 </p><p>함께 빌드할 소스 트리가 있습니다. Wikven 리포지터리의 <code>examples/skin-preview</code>로, 스킨이 스타일을 입혀야 하는 요소를 모두 담은 문서 하나가 들어 있습니다. 그 안의 <code>.wikven.yaml</code>에 자기 스킨을 적고 그 디렉터리를 빌드하십시오.
@@ -534,6 +534,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">      </span><span class="nt">package</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mediawiki/semantic-media-wiki:~4.1</span>
 </pre></div>
 <p>이미 wikven에 번들된 <code>WikvenRepositories</code> 속 이름은 건드리지 않습니다. <code>extensions</code>나 <code>skins</code>에도 나열되지 않은 이름은 오류입니다.
+</p><p><code>package</code>에서는 그 이름을 여러분이 아니라 Composer가 정합니다. <code>mediawiki-extension</code> 패키지는 뒤에 붙은 <code>-extension</code>을 떼고 CamelCase로 바꾼 디렉터리에 설치되고(<code>mediawiki/tabber-neue-extension</code>은 <code>extensions/TabberNeue</code>가 됩니다), <code>mediawiki-skin</code> 패키지는 CamelCase로 바뀌지 않습니다(<code>mediawiki/chameleon-skin</code>은 <code>skins/chameleon</code>이 됩니다). 빌드가 불러오는 것은 그 디렉터리이므로, 나열하는 이름도 그것이어야 합니다. 설치가 끝난 뒤에 검사해서 맞지 않으면 이름을 알려 주므로, 구성 요소 없이 사이트가 게시되는 대신 빌드가 멈춥니다.
+</p><p>정확한 버전이 아닌 <code>package</code> 제약 — <code>~4.1</code>, <code>^4</code>, <code>*</code> — 은 아래 알림이 말하는 이유로 빌드 로그에 경고가 남습니다. 오류는 아닙니다. 레지스트리가 주는 대로 받는 것은 여러분이 택할 수 있는 거래이고, 움직이는 <code>reference</code>가 하는 것과 같은 거래이며, 빌드는 그 거래를 했다는 사실만 말해 줄 뿐입니다.
 </p><p>각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>curl</code>과 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a>를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>에서는 이들이 <code>PATH</code>에 있어야 합니다.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>여기서 이름을 대는 코드를 빌드가 네트워크 접근과 함께 내려받아 <b>실행</b>합니다. 복제된 확장 기능의 PHP와 모든 Composer 스크립트가 빌드 중에 실행됩니다. 신뢰하는 소스만 선언하십시오. 변조를 알아챌 수 있고 재현 가능한 빌드를 위해서는 타르볼을 <code>sha256</code>으로, 리포지터리를 <code>commit</code>(정확한 SHA)으로 고정하십시오. 가변적인 <code>reference</code> 태그/브랜치나 유동적인 <code>package</code> 제약은 여러분 모르게 바뀔 수 있습니다.</p></div>
@@ -576,7 +578,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/ko.wikitext" title="이 문서는 2026년 8월 29일 (토) 15:41에 마지막으로 편집되었습니다." data-timestamp="1788018104"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 29일 (토)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/ko.wikitext" title="이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다." data-timestamp="1788075999"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 30일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -755,19 +757,19 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-WikvenBundleWebfonts-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
-		<li id="toc-WikvenSkinPreview"
+		<li id="toc-WikvenBuildFor"
 			class="citizen-toc-list-item citizen-toc-level-2">
-			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenSkinPreview" role="button">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenBuildFor" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
 						<span class="citizen-toc-numb">3.8</span>
-						<span class="citizen-toc-heading">WikvenSkinPreview</span>
+						<span class="citizen-toc-heading">WikvenBuildFor</span>
 					</div>
 					
 				</div>
 			</a>
 			
-			<ul id="toc-WikvenSkinPreview-sublist" class="citizen-toc-list">
+			<ul id="toc-WikvenBuildFor-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
 		<li id="toc-WikvenStyleDirectory와_WikvenScriptDirectory"
@@ -842,7 +844,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 29일 (토) 15:41에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

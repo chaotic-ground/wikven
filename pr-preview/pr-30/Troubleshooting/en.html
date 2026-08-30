@@ -631,7 +631,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>The standalone binary is Linux-only (x86_64 and arm64). On macOS or Windows, use the Docker image instead. See <a href="../Installation/en.html" title="Special:MyLanguage/Installation">Installation</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="A_setting_in_.wikven.yaml_does_nothing">A setting in <code>.wikven.yaml</code> does nothing</h2></div>
-<p>Read the build log first: it warns about the mistakes it can see. <code>unknown config 'Wikven...'</code> means a variable that is not one of Wikven's — a typo, most often, since a name it does not recognise is otherwise applied and ignored. <code>unknown top-level key</code> means a setting outside <code>config</code>, <code>extensions</code> or <code>skins</code>. A URL template warning means <code>WikvenEditUrl</code> and friends are missing their <code>$1</code>.
+<p>Read the build log first: it warns about the mistakes it can see. <code>unknown config</code> means a name nothing loaded here defines — a typo, most often, since a name nobody owns is otherwise applied and ignored; the warning names the closest setting it does know of. It waits until every extension and skin your site lists is installed, because a setting can belong to any of them. <code>unknown top-level key</code> means a setting outside <code>config</code>, <code>extensions</code> or <code>skins</code>. A URL template warning means <code>WikvenEditUrl</code> and friends are missing their <code>$1</code>.
 </p><p>A silent one to check by eye: a <code>config</code> value <b>replaces</b> the default rather than merging with it, so a list or map you set has to carry every entry you want, including the ones you were happy with. See <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">Configuration</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="An_extension_or_skin_was_not_loaded">An extension or skin was not loaded</h2></div>
@@ -662,7 +662,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 09:00.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 07:45.</li>
 </ul>
 
 	<ul id="footer-places">

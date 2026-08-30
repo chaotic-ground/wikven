@@ -468,6 +468,7 @@ It runs a real MediaWiki at build time.
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>scaffold<span class="w"> </span>ko<span class="w"> </span>Intro.wikitext
 </pre></div>
 <p>파일 대신 <code>--all</code>을 전달하면 번역할 수 있는 모든 문서의 골격을 생성합니다. 다시 실행해도 안전합니다. 번역해 둔 것은 유지하고 새 단위에 대한 표시자만 덧붙입니다.
+</p><p>그 표시자는 이 파일이 하위 문서가 아니라 번역이라는 것을 정하는 것이기도 합니다. 언어 코드 수백 개는 평범한 영어 낱말이기도 해서 — <code>id</code>, <code>no</code>, <code>is</code>, <code>it</code>, <code>as</code>, <code>be</code> — 번역 가능한 <code>API</code> 아래의 <code>API/id</code>는 인도네시아어 번역보다 식별자에 관한 문서일 때가 훨씬 많습니다. Wikven은 원본의 <code>&lt;!--T:n--></code> 표시자를 지니고 있을 때에만 그것을 번역으로 읽고, 그렇지 않으면 독립된 문서로 빌드합니다. <code>translate scaffold</code>로 번역을 만들면 이 문제가 생길 일이 없고, 손으로 만들었다면 <code>translate check</code>가 그 파일을 문서로 읽었다고 알려 줍니다.
 </p><p>그런 다음 각 단위의 번역을 그 표시자 아래에 채웁니다:
 </p>
 <pre>&lt;!--T:1-->
@@ -533,7 +534,7 @@ It runs a real MediaWiki at build time.
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/ko.wikitext" title="이 문서는 2026년 8월 30일 (일) 02:39에 마지막으로 편집되었습니다." data-timestamp="1788057548"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 30일 (일)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/ko.wikitext" title="이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다." data-timestamp="1788075983"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 30일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -659,7 +660,7 @@ It runs a real MediaWiki at build time.
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 30일 (일) 02:39에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

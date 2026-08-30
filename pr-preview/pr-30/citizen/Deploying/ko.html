@@ -530,7 +530,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>그 상황에서 어느 쪽을 택할지는 여러분의 몫이며, 둘은 같은 거래가 아닙니다.
 </p>
 <ul><li><b>핀을 정확하게 두고 의도적으로 옮기기.</b> <code>commit</code>이나 <code>sha256</code>을 붙인 <code>tarball</code>은 오늘과 내일이 같은 사이트를 빌드하며, 배포하는 것이 달라질 때마다 누군가 승인한 diff가 남습니다. 대신 치르는 값은 대응 시간입니다. 보안 릴리스는 누군가 핀을 옮겨 줄 때까지 상류에 머무릅니다.</li>
-<li><b>움직이는 것을 가리키기.</b> <code>REL1_43</code> 같은 릴리스 브랜치를 가리키는 <code>reference</code>는 빌드가 돌 때 그 브랜치에 있는 것을 그대로 가져오므로, 수정이 다음 베이크에 아무것도 병합하지 않고 도착합니다. 대신 치르는 값은 재현성입니다. 같은 소스 트리를 두 번 구워도 결과가 다를 수 있고, 무엇이 달라졌는지는 트리 어디에도 남지 않습니다.</li></ul>
+<li><b>움직이는 것을 가리키기.</b> <code>REL1_46</code> 같은 릴리스 브랜치를 가리키는 <code>reference</code>는 빌드가 돌 때 그 브랜치에 있는 것을 그대로 가져오므로, 수정이 다음 베이크에 아무것도 병합하지 않고 도착합니다. 대신 치르는 값은 재현성입니다. 같은 소스 트리를 두 번 구워도 결과가 다를 수 있고, 무엇이 달라졌는지는 트리 어디에도 남지 않습니다.</li></ul>
 <p>나머지 절에서 다루는 것은 첫 번째 쪽을 택할 만큼 값싸게 만드는 방법입니다.
 </p><p><a rel="nofollow" class="external text" href="https://www.updatecli.io/">updatecli</a>가 바로 그 빈틈을 메우며, 여러분의 파일을 알아볼 필요가 아예 없다는 것이 그 방법입니다. 핀이 어디 있는지는 여러분이 알려 주면 됩니다. 매니페스트는 <b>source</b>(현재 버전이 게시되는 곳)와 <b>target</b>(어느 파일의 어느 키가 핀을 담고 있는지)을 지정하며, 이를 적용하면 source의 값을 target에 써 넣고 그래서 바뀐 것이 있으면 풀 리퀘스트를 엽니다. 지속적 통합에서 일정에 걸어 두면 뒤처진 핀이 검토할 수 있는 풀 리퀘스트로 찾아옵니다. 아래는 핀 하나를 위한 매니페스트 전체로, 릴리스 태그를 따라가는 리포지터리입니다:
 </p>
@@ -591,7 +591,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying/ko.wikitext" title="이 문서는 2026년 8월 29일 (토) 12:00에 마지막으로 편집되었습니다." data-timestamp="1788004853"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 29일 (토)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying/ko.wikitext" title="이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다." data-timestamp="1788075968"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 30일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -717,7 +717,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 29일 (토) 12:00에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

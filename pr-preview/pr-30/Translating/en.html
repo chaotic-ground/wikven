@@ -592,6 +592,7 @@ It runs a real MediaWiki at build time.
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>scaffold<span class="w"> </span>ko<span class="w"> </span>Intro.wikitext
 </pre></div>
 <p>Pass <code>--all</code> in place of a file to scaffold every translatable page. Re-running is safe: it keeps what you have translated and only appends markers for new units.
+</p><p>Those markers are also what makes the file a translation rather than a subpage. Hundreds of language codes are ordinary English words too — <code>id</code>, <code>no</code>, <code>is</code>, <code>it</code>, <code>as</code>, <code>be</code> — so <code>API/id</code> under a translatable <code>API</code> is far more often a page about identifiers than an Indonesian translation. Wikven reads it as a translation only when it carries the source's <code>&lt;!--T:n--&gt;</code> markers, and builds it as a page of its own otherwise. Write a translation with <code>translate scaffold</code> and this never comes up; write one by hand and <code>translate check</code> will tell you the file was read as a page.
 </p><p>Then fill each unit's translation under its marker:
 </p>
 <pre>&lt;!--T:1--&gt;
@@ -647,7 +648,7 @@ It runs a real MediaWiki at build time.
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 02:39.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 07:46.</li>
 </ul>
 
 	<ul id="footer-places">
