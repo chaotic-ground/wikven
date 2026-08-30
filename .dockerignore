@@ -1,4 +1,15 @@
+# What COPY ./ must not put in the image -- and, through binary.Dockerfile's COPY --from=app, in
+# the standalone binary either. Everything here is a thing that builds or checks wikven rather than
+# a thing wikven runs, and a site built with the image reads none of it.
 .git
+.github
+.claude
+.tf
+.venv
+.rumdl_cache
+docs
+examples
+tests
 node_modules
 vendor
 dist

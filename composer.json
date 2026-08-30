@@ -1,6 +1,8 @@
 {
 	"name": "chaotic-ground/wikven",
+	"description": "Builds a static site from a directory of wiki source files.",
 	"type": "mediawiki-extension",
+	"homepage": "https://github.com/chaotic-ground/wikven",
 	"license": "GPL-3.0-or-later",
 	"scripts": {
 		"test": "minus-x check .",
