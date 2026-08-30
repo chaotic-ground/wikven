@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven;
 
+use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
 use MediaWiki\Title\Title;
 
 /**
@@ -59,5 +60,34 @@ class LicensesPage {
 			return null;
 		}
 		return $language;
+	}
+
+	/**
+	 * The copies the build wrote, keyed by the language each one is in.
+	 *
+	 * The languages are the ones the source tree carries translations in, because those are the
+	 * ones build.php writes a copy for. Which of those copies are the build's own is the question
+	 * above, asked once per language: a site that provides its own page, or its own copy in one
+	 * language, keeps it, and a caller that re-rendered it would be dressing someone else's page in
+	 * a language nobody asked for.
+	 *
+	 * @param string $sourceDir
+	 * @param callable(string):bool $isKnownLanguage
+	 * @return array<string,Title> Language code => the copy written in it.
+	 */
+	public static function generatedCopies(string $sourceDir, callable $isKnownLanguage): array {
+		$page = self::title();
+		if ($page === null) {
+			return [];
+		}
+
+		$copies = [];
+		foreach (TranslationSource::languages($sourceDir, $isKnownLanguage) as $language) {
+			$title = Title::newFromText(self::inLanguage($page, $language));
+			if ($title && self::generatedLanguage($title, $isKnownLanguage) !== null) {
+				$copies[$language] = $title;
+			}
+		}
+		return $copies;
 	}
 }
