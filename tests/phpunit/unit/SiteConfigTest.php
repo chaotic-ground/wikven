@@ -59,6 +59,26 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	public function testAPlainDirectoryNameIsAComponentName() {
+		$this->assertTrue(SiteConfig::isComponentName('TabberNeue'));
+		$this->assertTrue(SiteConfig::isComponentName('citizen'));
+	}
+
+	public function testANameThatEscapesTheImageIsNotAComponentName() {
+		// The one that matters: the loader would resolve this under the mounted source tree and run
+		// whatever extension.json it found there, with nothing declaring where the code came from.
+		$this->assertFalse(SiteConfig::isComponentName('../../../workspace/src/payload'));
+		$this->assertFalse(SiteConfig::isComponentName('vendor/payload'));
+		$this->assertFalse(SiteConfig::isComponentName('vendor\\payload'));
+	}
+
+	public function testADotLeadingOrEmptyNameIsNotAComponentName() {
+		$this->assertFalse(SiteConfig::isComponentName('.'));
+		$this->assertFalse(SiteConfig::isComponentName('..'));
+		$this->assertFalse(SiteConfig::isComponentName('.hidden'));
+		$this->assertFalse(SiteConfig::isComponentName(''));
+	}
+
 	public function testLocateFindsNothingInEmptyDir() {
 		$dir = $this->makeTempDir();
 		$this->assertSame(['path' => null, 'ignored' => []], SiteConfig::locate($dir));

@@ -5,6 +5,12 @@ fixes:
 
 comment: false
 
+ignore:
+  # A settings script, not library code: LocalSettings.php require_once's it and its first line calls
+  # wfLoadExtension(), so PHPUnit cannot include it and nothing it holds is ever covered. The same
+  # reason maintenance/ is left out of the patch target below.
+  - "includes/WikvenSettings.php"
+
 coverage:
   status:
     # maintenance/ is half the tree's lines with no unit tests; its diffs can never meet a patch target.
