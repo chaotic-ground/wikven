@@ -49,3 +49,56 @@ jobs:
         with:
           header: pr-title-lint-error
           delete: true
+
+  # A change to the documentation alone is not a feature or a fix of wikven, but naming it one
+  # says it is: the title becomes the squash commit's subject, release-please reads that, and the
+  # change lands in the changelog and moves the version. So refuse the two types that do, and
+  # leave every other type alone -- this is not an opinion about what a docs-only change should
+  # be called, only about the two things it cannot be.
+  docs-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pull-requests: read
+    steps:
+      - shell: bash
+        env:
+          # Through the environment rather than into the script: a title is whatever the author
+          # typed, and interpolating it would be running it.
+          TITLE: ${{ github.event.pull_request.title }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
+        run: |
+          # The type is everything before the first "(", "!" or ":" -- covering "feat:",
+          # "fix(build):" and "feat!:" alike. A title too malformed to have one is the sibling
+          # job's to complain about, not this one's.
+          type=${TITLE%%[(:!]*}
+          type=$(printf '%s' "$type" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
+          case "$type" in
+            feat | fix) ;;
+            *) echo "wikven: '$type' neither bumps the version nor reaches the changelog; nothing to check."; exit 0 ;;
+          esac
+
+          files=$(mktemp)
+          gh api "repos/$REPOSITORY/pulls/$PULL_REQUEST/files" --paginate --jq '.[].filename' > "$files"
+          if [ ! -s "$files" ]; then
+            echo "wikven: this pull request touches no files; nothing to check."
+            exit 0
+          fi
+
+          # Everything the documentation is made of: the wiki source the site is built from, every
+          # Markdown file (the readmes), and the licence text. A pull request touching one file
+          # outside this is a change to wikven and may call itself what it likes.
+          while IFS= read -r file; do
+            case "$file" in
+              docs/* | *.md | LICENSE) ;;
+              *) echo "wikven: '$file' is not documentation; '$type' is fine here."; exit 0 ;;
+            esac
+          done < "$files"
+
+          echo "::error::wikven: this pull request changes documentation only, so it cannot be" \
+               "'$type'. A '$type' title becomes the squash commit's subject, which release-please" \
+               "reads: the change would be listed in the changelog and would move wikven's version," \
+               "and neither is true of it. Use 'docs:' instead."
+          exit 1
