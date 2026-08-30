@@ -105,6 +105,15 @@ jobs:
           # The main page must land at the dist root (a failed import already aborted the build).
           test -s dist/index.html
 
+          # A bake with something to say about the site's own configuration says it and carries on,
+          # so a warning is only ever seen by whoever reads the log. docs/.wikven.yaml is the
+          # configuration wikven recommends; a warning about it is a mistake either in that file or
+          # in the code that reports on it, and both are worth stopping for.
+          if grep -h 'Wikven: WARNING' bake.log bake-again.log; then
+            echo "::error::the bake warned about docs/.wikven.yaml"
+            exit 1
+          fi
+
           # Dumped CSS must not reference load.php (a live-only endpoint); a leftover is an AssetLocalizer regression.
           if grep -rIl --include='*.css' 'load\.php' dist; then
             echo "::error::dumped CSS still references load.php (AssetLocalizer regression)"
