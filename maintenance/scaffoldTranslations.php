@@ -14,6 +14,9 @@ require_once "$IP/maintenance/Maintenance.php";
 
 /** Create or extend a translation skeleton: a <!--T:n--> marker with an empty body per source unit. */
 class ScaffoldTranslations extends Maintenance {
+	/** Pages sitting where a translation would go that are not translations; see scaffoldFile(). */
+	private array $refused = [];
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Write empty <!--T:n--> translation skeletons for a language.');
@@ -42,6 +45,7 @@ class ScaffoldTranslations extends Maintenance {
 			foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
 				$this->scaffoldFile($baseFile, $language, $source);
 			}
+			$this->reportRefusals();
 			return;
 		}
 
@@ -56,6 +60,30 @@ class ScaffoldTranslations extends Maintenance {
 			$this->fatalError("Wikven: '$file' does not exist.");
 		}
 		$this->scaffoldFile($file, $language, $source);
+		$this->reportRefusals();
+	}
+
+	/**
+	 * Stop on the pages that were left alone, having written the ones that were fine.
+	 *
+	 * Said at the end rather than where each is found, because --all walks the whole tree: a first
+	 * refusal that ended the run would leave the rest of the language unscaffolded and hide however
+	 * many more there are.
+	 */
+	private function reportRefusals(): void {
+		if ($this->refused === []) {
+			return;
+		}
+		foreach ($this->refused as $path) {
+			$this->error("not a translation, left alone: $path");
+		}
+		$this->fatalError(
+			'Wikven: '
+			. count($this->refused)
+			. ' page(s) sit where a translation would go and are'
+			. ' pages of their own. Rename each to a name that is not a language code, or delete it if'
+			. ' the translation is what you wanted; nothing was written for them.'
+		);
 	}
 
 	/** Scaffold one base page's translation for the language, then list its source units as a guide. */
@@ -69,6 +97,14 @@ class ScaffoldTranslations extends Maintenance {
 
 		$translationFile = TranslationSource::translationPath($baseFile, $language);
 		$existing = is_file($translationFile) ? (string)file_get_contents($translationFile) : null;
+
+		// A page of its own that happens to be named for a language is left where it is, rather than
+		// turned into a translation of its parent behind its author's back; see isScaffoldable().
+		if (!StalenessComputer::isScaffoldable($existing)) {
+			$this->refused[] = $translationFile;
+			return;
+		}
+
 		$scaffolded = StalenessComputer::scaffold($sourceText, $existing, $pageTitle);
 		if ($existing !== null && $scaffolded === $existing) {
 			$this->output("unchanged: $translationFile\n");

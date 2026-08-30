@@ -430,4 +430,28 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		$text = "<!--T:1-->\n하나.\n<!-- reviewer: do not wrap this in <nowiki> -->\n<!--T:2-->\n둘.";
 		$this->assertSame([1, 2], array_keys(StalenessComputer::translationUnits($text)));
 	}
+
+	/**
+	 * The defect: "translate scaffold ko --all" appended markers to whatever sat at the translation's
+	 * path, so a page of its own named for a language became a translation of its parent and went
+	 * missing from the next build with nothing said.
+	 *
+	 * @dataProvider provideIsScaffoldable
+	 */
+	public function testIsScaffoldable(?string $existing, bool $expected) {
+		$this->assertSame($expected, StalenessComputer::isScaffoldable($existing));
+	}
+
+	public static function provideIsScaffoldable(): array {
+		return [
+			'nothing there yet' => [null, true],
+			'an empty file' => ['', true],
+			'a file holding only whitespace' => ["\n\n  \n", true],
+			'a scaffolded translation' => ["<!--T:1-->\n\n", true],
+			'a translation being written' => ["<!--T:1 @a1b2c3d4-->\n안녕.\n", true],
+			// The case this exists for: a page about identifiers, sitting at "API/id".
+			'a page of its own' => ['An id names one thing.', false],
+			'a page of its own with an ordinary comment' => ["<!-- draft -->\nAn id names one.", false]
+		];
+	}
 }

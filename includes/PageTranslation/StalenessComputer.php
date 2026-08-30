@@ -159,6 +159,23 @@ class StalenessComputer {
 	}
 
 	/**
+	 * Whether scaffold() may write over what is already at a translation's path.
+	 *
+	 * A file named for a language that carries no unit marker is a page of its own -- "API/id" is
+	 * about identifiers, not Indonesian -- and that is what every other reader here takes it for.
+	 * Appending markers to one would answer that question the other way behind its author's back:
+	 * the page would become a translation of its parent and go missing from the site with nothing
+	 * said. So it is left alone and reported, rather than scaffolded into.
+	 *
+	 * Nothing there at all, or a file holding only whitespace, is nobody's page and is written to.
+	 *
+	 * @param ?string $existing What is at the translation's path, or null when nothing is.
+	 */
+	public static function isScaffoldable(?string $existing): bool {
+		return $existing === null || trim($existing) === '' || self::hasUnitMarkers($existing);
+	}
+
+	/**
 	 * Split a translation file into units keyed by their <!--T:n--> marker id.
 	 *
 	 * @return array<string,array{hash:?string,text:string}> id => [synced-source hash, unit text]
