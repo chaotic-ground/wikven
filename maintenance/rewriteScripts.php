@@ -29,13 +29,15 @@ class RewriteScripts extends Maintenance {
 
 		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
 		$prefix = './' . rtrim($wgWikvenScriptDirectory, '/');
-		$siteStylesHref = './' . rtrim($wgWikvenStyleDirectory, '/') . '/site.styles.css';
-		$hasSiteStyles = is_file("$htmlDir/site.styles.css") && filesize("$htmlDir/site.styles.css") > 0;
+		$siteStyles = StyleFile::locate($htmlDir, $wgWikvenStyleDirectory, 'site.styles.css');
+		$siteStylesHref = $siteStyles['href'];
+		$hasSiteStyles = is_file($siteStyles['path']) && filesize($siteStyles['path']) > 0;
 
 		// Bundled webfonts (opt-in; bakeWebfonts wrote it): link ahead of site styles so a site can
 		// still override the font-family, and let rename's reparenting fix the href on subpages.
-		$webfontsHref = './' . rtrim($wgWikvenStyleDirectory, '/') . '/webfonts.css';
-		$hasWebfonts = is_file("$htmlDir/webfonts.css") && filesize("$htmlDir/webfonts.css") > 0;
+		$webfonts = StyleFile::locate($htmlDir, $wgWikvenStyleDirectory, 'webfonts.css');
+		$webfontsHref = $webfonts['href'];
+		$hasWebfonts = is_file($webfonts['path']) && filesize($webfonts['path']) > 0;
 
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();
 
