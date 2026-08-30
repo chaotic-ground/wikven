@@ -494,11 +494,11 @@ It runs a real MediaWiki at build time.
 </p><p><span id="Stamping"></span>
 </p>
 </section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="스탬프_찍기"><span id=".EC.8A.A4.ED.83.AC.ED.94.84_.EC.B0.8D.EA.B8.B0"></span>스탬프 찍기</h2></div>
-<p>번역을 마친 뒤 <code>translate stamp</code>를 실행하면, 최신 상태인 모든 단위가 자신이 일치하는 원본 버전을 기록합니다. 소스 디렉터리를 쓰기 가능하게 마운트합니다:
+<p>한 문서를 번역했으면 자신이 쓴 그 번역에 <code>translate stamp</code>를 실행하세요. 그러면 그 단위들이 어느 원본 버전을 보고 쓰였는지 기록합니다. 소스 디렉터리를 쓰기 가능하게 마운트합니다:
 </p>
-<div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>stamp<span class="w"> </span>--all
+<div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>stamp<span class="w"> </span>Intro/ko.wikitext
 </pre></div>
-<p><code>--all</code> 대신 파일 하나를 전달하면 그 번역만 스탬프를 찍습니다.
+<p>한 번에 한 번역이며, 트리 전체를 대상으로 하는 플래그는 없습니다. 스탬프는 도구가 알아낼 수 있는 것이 아니라, 그 단위를 지금 가리키는 원본과 견주어 읽었다는 당신의 말입니다. 열어 보지 않은 문서에 스탬프를 찍는 것은 아무도 들여다보지 않은 번역에 대해 그 말을 하는 셈이고, 그러면 뒤처진 번역이 최신으로 읽힙니다. 스탬프가 잡으려던 것이 바로 그것입니다.
 </p><p><span id="Keeping_translations_up_to_date"></span>
 </p>
 </section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="번역을_최신으로_유지하기"><span id=".EB.B2.88.EC.97.AD.EC.9D.84_.EC.B5.9C.EC.8B.A0.EC.9C.BC.EB.A1.9C_.EC.9C.A0.EC.A7.80.ED.95.98.EA.B8.B0"></span>번역을 최신으로 유지하기</h2></div>
@@ -533,7 +533,7 @@ It runs a real MediaWiki at build time.
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/ko.wikitext" title="이 문서는 2026년 8월 23일 (일) 11:28에 마지막으로 편집되었습니다." data-timestamp="1787484482"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 23일 (일)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/ko.wikitext" title="이 문서는 2026년 8월 30일 (일) 02:39에 마지막으로 편집되었습니다." data-timestamp="1788057548"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 30일 (일)</span></a></li>
 			
 		</ul>
 		
@@ -659,7 +659,7 @@ It runs a real MediaWiki at build time.
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 23일 (일) 11:28에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 30일 (일) 02:39에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>

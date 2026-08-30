@@ -617,11 +617,11 @@ It runs a real MediaWiki at build time.
 </p><p>A page that sets its own title with the <code>DISPLAYTITLE</code> magic word is the exception. That magic word sits outside <code>&lt;translate&gt;</code>, so it is copied into every translation of the page and fixes the same title in every language; such a page has no title unit to translate.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Stamping">Stamping</h2></div>
-<p>After translating, run <code>translate stamp</code> so every up-to-date unit records the source version it matches. Mount your source directory writable:
+<p>When you have translated a page, run <code>translate stamp</code> on the translation you wrote, so its units record the source version you wrote them against. Mount your source directory writable:
 </p>
-<div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>stamp<span class="w"> </span>--all
+<div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src&quot;</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>stamp<span class="w"> </span>Intro/ko.wikitext
 </pre></div>
-<p>Pass a single file instead of <code>--all</code> to stamp just that translation.
+<p>One translation at a time, and there is no flag for the whole tree. A stamp is not something the tool can work out: it is your word that you read the unit against the source it now claims to match. Stamping a page you did not open would say that about translations nobody has looked at, and a translation left behind would then read as current -- which is exactly what the stamp exists to catch.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Keeping_translations_up_to_date">Keeping translations up to date</h2></div>
 <p>When you change a source unit, its translations no longer match their stamp and are <b>out of date</b>. Wikven does not hide this:
@@ -648,7 +648,7 @@ It runs a real MediaWiki at build time.
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 11:28.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 02:39.</li>
 </ul>
 
 	<ul id="footer-places">

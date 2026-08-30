@@ -270,10 +270,10 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 <dt><code>translate scaffold &lt;language&gt;</code></dt>
 <dd>Writes an empty marker per source unit into <code>&lt;Page&gt;/&lt;language&gt;.wikitext</code>, as a skeleton to translate into. Keeps what is already translated.</dd>
 <dt><code>translate stamp</code></dt>
-<dd>Records the source version each translated unit matches, marking it up to date.</dd>
+<dd>Records, for one translation you have read, the source version its units were written against.</dd>
 <dt><code>translate check</code></dt>
 <dd>Reports broken source pages, and translations that are out of date or missing. Writes nothing.</dd></dl>
-<p>Each takes a single file, or <code>--all</code> for every page under the source directory. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source: mount it writable under Docker, where the binary edits it in place. <code>check</code> only reads.
+<p><code>mark</code> and <code>scaffold</code> take a single file, or <code>--all</code> for every page under the source directory: what they write is worked out from the source, so sweeping the tree says nothing that naming a file would not. <code>stamp</code> takes one file and has no <code>--all</code>, because what it writes is your reading rather than anything the tool can derive, and nobody reads a whole tree at once. <code>check</code> takes neither; it always reads every page it can find. <code>mark</code>, <code>scaffold</code> and <code>stamp</code> write into your source: mount it writable under Docker, where the binary edits it in place. <code>check</code> only reads.
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_3-label" href="#tabber-Binary_3" aria-controls="tabber-Binary_3">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_3-label" href="#tabber-Docker_3" aria-controls="tabber-Docker_3">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_3" aria-labelledby="tabber-Binary_3-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
@@ -424,8 +424,8 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788004853">
-  				<span>Last edited on 29 August 2026, at 12:00</span>
+  				data-timestamp="1788057548">
+  				<span>Last edited on 30 August 2026, at 02:39</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -448,7 +448,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 12:00.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 02:39.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

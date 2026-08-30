@@ -622,10 +622,10 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 <dt><code>translate scaffold &lt;언어&gt;</code></dt>
 <dd>번역해 넣을 골격으로, 모든 원본 단위에 대해 빈 표시자를 <code>&lt;Page&gt;/&lt;언어&gt;.wikitext</code>에 씁니다. 이미 번역한 것은 유지합니다.</dd>
 <dt><code>translate stamp</code></dt>
-<dd>번역된 각 단위가 어느 원본 판에 맞춰졌는지 기록하여 최신임을 표시합니다.</dd>
+<dd>당신이 읽은 번역 하나에 대해, 그 단위들이 어느 원본 판을 보고 쓰였는지 기록합니다.</dd>
 <dt><code>translate check</code></dt>
 <dd>망가진 원본 문서와, 오래되었거나 빠진 번역을 보고합니다. 아무것도 쓰지 않습니다.</dd></dl>
-<p>각각 파일 하나를 받거나, 소스 디렉터리 아래 모든 문서를 대상으로 하는 <code>--all</code>을 받습니다. <code>mark</code>, <code>scaffold</code>, <code>stamp</code>는 소스에 씁니다. Docker에서는 쓰기 가능하게 마운트하고, 바이너리는 그 자리에서 바로 고칩니다. <code>check</code>는 읽기만 합니다.
+<p><code>mark</code>와 <code>scaffold</code>는 파일 하나를 받거나, 소스 디렉터리 아래 모든 문서를 대상으로 하는 <code>--all</code>을 받습니다. 이 둘이 쓰는 내용은 원본에서 유도되므로, 트리를 훑는 것이 파일을 지목하는 것보다 더 말하는 바가 없습니다. <code>stamp</code>는 파일 하나만 받고 <code>--all</code>이 없습니다. 이것이 쓰는 것은 도구가 유도할 수 있는 무엇이 아니라 당신의 읽기이고, 트리 전체를 한 번에 읽는 사람은 없기 때문입니다. <code>check</code>는 둘 다 받지 않고, 언제나 찾을 수 있는 모든 문서를 읽습니다. <code>mark</code>, <code>scaffold</code>, <code>stamp</code>는 소스에 씁니다. Docker에서는 쓰기 가능하게 마운트하고, 바이너리는 그 자리에서 바로 고칩니다. <code>check</code>는 읽기만 합니다.
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary_3-label" href="#tabber-Binary_3" aria-controls="tabber-Binary_3">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker_3-label" href="#tabber-Docker_3" aria-controls="tabber-Docker_3">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary_3" aria-labelledby="tabber-Binary_3-label"><p class="mw-empty-elt">
 </p><div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
@@ -772,7 +772,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 29일 (토) 12:00에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 02:39에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
