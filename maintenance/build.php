@@ -17,6 +17,7 @@ use MediaWiki\Title\TitleValue;
 use MediaWiki\User\User;
 use RebuildFileCache;
 use RunJobs;
+use UtfNormal\Validator;
 use Wikimedia\Rdbms\Platform\ISQLPlatform;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
@@ -933,7 +934,7 @@ class Build extends Maintenance {
 		}
 
 		// A File: title is the file's name alone, so two images sharing a name in two directories
-		// are one page, and --skip-dupes below would take the first and drop the second with a line
+		// are one page, and the importer below would take the first and skip the second with a line
 		// nobody reads. Said here, with both paths, before anything is imported.
 		$collisions = ImageImport::collisions($sources);
 		if ($collisions !== []) {
@@ -949,7 +950,13 @@ class Build extends Maintenance {
 		$child = $this->createChild(ImportImages::class, $file);
 		$child->setArg(0, $directory);
 		$child->setOption('extensions', implode(',', $extensions));
-		$child->setOption('skip-dupes', true);
+		// No --skip-dupes. It skips a file whose *content* matches one already imported, whatever
+		// the two are called, so a logo shipped twice under two names left the second name with no
+		// File: page and every page embedding it red-linking, reported as one skipped line and a
+		// successful build. Nothing is lost by dropping it: a name already taken is skipped by the
+		// importer with or without it, and two source files cannot share a name here anyway --
+		// collisions() above has already stopped the build if they do.
+		//
 		// Subdirectories, because pages are read from them; sources() above walked the same way.
 		$child->setOption('search-recursively', true);
 		// An image the wiki rejected leaves every page embedding it with a red File: link, so this
@@ -961,6 +968,42 @@ class Build extends Maintenance {
 			$count = count($sources);
 			$this->fatalError("Wikven: not all $count image(s) in $directory imported; aborting the build.");
 		}
+		$this->assertEveryImageGotItsPage($sources);
+	}
+
+	/**
+	 * Every source image now has a File: page, or the build stops naming the ones that do not.
+	 *
+	 * The importer answers "I skipped that one" with the same success it answers "I imported them
+	 * all" with, and it has more than one reason to skip: a duplicate under another name, a title
+	 * core would not make from the file's own name, a name already taken. Whichever it was, the
+	 * page embedding the image is left with a red link and the build says nothing, so the check is
+	 * on the outcome rather than on the reasons -- the pages that were supposed to be here.
+	 *
+	 * @param string[] $sources Absolute paths, as ImageImport::sources() returns them.
+	 */
+	private function assertEveryImageGotItsPage(array $sources): void {
+		$missing = [];
+		foreach ($sources as $path) {
+			// The importer's own two lines, so this asks about the page it would have made rather
+			// than about one this file names differently.
+			$title = Title::makeTitleSafe(NS_FILE, Validator::cleanUp(basename($path)));
+			if ($title === null || !$title->exists()) {
+				$missing[] = $path;
+			}
+		}
+		if ($missing === []) {
+			return;
+		}
+		foreach ($missing as $path) {
+			$this->error("Wikven: '$path' did not become a File: page");
+		}
+		$this->fatalError(
+			'Wikven: '
+			. count($missing)
+			. ' image(s) were offered to the importer and are not here,'
+			. ' so every page embedding one would publish a red link; aborting the build.'
+		);
 	}
 
 	/** Point the wiki's main page at $wgWikvenMainPage (imported later; see assertMainPageExists). */
