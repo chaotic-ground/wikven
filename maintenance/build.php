@@ -918,6 +918,19 @@ class Build extends Maintenance {
 		$extensions = $GLOBALS['wgFileExtensions'];
 		$sources = ImageImport::sources($directory, $extensions);
 
+		// is_file() follows a link, so an image that is one would have the build upload whatever it
+		// points at -- a file outside the source tree, on this machine -- and publish it.
+		$links = ImageImport::links($sources);
+		if ($links !== []) {
+			foreach ($links as $link) {
+				$this->error("Wikven: '$link' is a link rather than an image");
+			}
+			$this->fatalError(
+				'Wikven: an image has to be a file in the source tree, since what a link points at is'
+				. ' not part of what you are publishing. Replace each with the file; aborting the build.'
+			);
+		}
+
 		// A File: title is the file's name alone, so two images sharing a name in two directories
 		// are one page, and --skip-dupes below would take the first and drop the second with a line
 		// nobody reads. Said here, with both paths, before anything is imported.

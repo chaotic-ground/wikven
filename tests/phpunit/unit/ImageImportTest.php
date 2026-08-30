@@ -26,7 +26,10 @@ class ImageImportTest extends MediaWikiUnitTestCase {
 			\RecursiveIteratorIterator::CHILD_FIRST
 		);
 		foreach ($entries as $entry) {
-			$entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
+			// A link to a directory reports itself as one; it is unlinked, not descended into.
+			$entry->isDir() && !$entry->isLink()
+				? rmdir($entry->getPathname())
+				: unlink($entry->getPathname());
 		}
 		rmdir($this->directory);
 		parent::tearDown();
@@ -125,6 +128,46 @@ class ImageImportTest extends MediaWikiUnitTestCase {
 		touch($this->directory . '/Diagram.png');
 
 		$this->assertSame([], ImageImport::collisions(ImageImport::sources($this->directory, self::EXTENSIONS)));
+	}
+
+	/**
+	 * is_file() follows a link, so this one would have had the build upload whatever it points at
+	 * -- a file outside the tree, on the machine doing the building -- and publish it with the site.
+	 */
+	public function testAnImageThatIsALinkIsFoundAndRefused() {
+		mkdir($this->directory . '/Guide');
+		touch($this->directory . '/real.png');
+		symlink('/etc/passwd', $this->directory . '/Guide/picture.png');
+
+		$sources = ImageImport::sources($this->directory, self::EXTENSIONS);
+
+		$this->assertSame(['picture.png', 'real.png'], $this->basenames($sources));
+		$this->assertSame(
+			[$this->directory . '/Guide/picture.png'],
+			ImageImport::links($sources)
+		);
+	}
+
+	/** A tree of real files has none, so nothing is refused. */
+	public function testFilesThatAreFilesAreNotLinks() {
+		touch($this->directory . '/real.png');
+
+		$this->assertSame([], ImageImport::links(ImageImport::sources($this->directory, self::EXTENSIONS)));
+	}
+
+	/**
+	 * The walk does not follow a linked directory either: it would leave the source tree entirely,
+	 * and every file under it would import as though the site shipped it.
+	 */
+	public function testTheWalkDoesNotFollowALinkedDirectory() {
+		mkdir($this->directory . '/real');
+		touch($this->directory . '/real/inside.png');
+		symlink('/etc', $this->directory . '/elsewhere');
+
+		$this->assertSame(
+			['inside.png'],
+			$this->basenames(ImageImport::sources($this->directory, self::EXTENSIONS))
+		);
 	}
 
 	/** A source directory that is not there yet offers nothing, rather than warning about it. */
