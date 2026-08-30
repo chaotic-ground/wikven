@@ -43,8 +43,8 @@ at it, which does the mounting for you:
 ```
 
 Pin the action to a tag rather than a branch. Until a version of wikven is released that tag is a
-nightly — the dated pre-releases on the releases page, newest first; once one is released, `@1.2.3`
-on its own is enough.
+nightly — the dated pre-releases on the releases page, newest first; once one is released,
+`@v1.2.3` on its own is enough: the tag carries the `v`.
 
 Open `dist/index.html`, and `dist/<your-skin>/index.html` for every skin after the first.
 

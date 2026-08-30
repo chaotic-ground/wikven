@@ -10,8 +10,8 @@
 <!--T:3 @3d152259-->
 <code>.wikitext</code>로 끝나는 파일은 경로에서 <code>.wikitext</code>를 뗀 것이 제목인 위키 문서가 됩니다. 따라서 <code>src/Help.wikitext</code>는 "Help" 문서이며 <code>Help.html</code>로 제공됩니다.
 
-<!--T:4 @54c3bc83-->
-제목은 쓴 그대로 유지됩니다. 공백은 공백으로 남고(밑줄이 아니라 <code>Getting Started.wikitext</code>로 파일 이름을 지으세요), 첫 글자의 대소문자도 그대로입니다. 진입 문서는 <code>index</code>로 이름 지어 <code>index.html</code>로 빌드되게 하세요. 이 파일이 바로 정적 호스트가 사이트 루트에서 제공하는 파일입니다.
+<!--T:4 @052c0514-->
+제목은 쓴 그대로 유지됩니다. 공백은 공백으로 남고(밑줄이 아니라 <code>Getting Started.wikitext</code>로 파일 이름을 지으세요), 첫 글자의 대소문자도 그대로입니다. 공백이 남는 것은 제목이고, 그 문서가 빌드되는 파일은 <code>Getting_Started.html</code>입니다. MediaWiki가 제목의 공백을 경로에서는 밑줄로 쓰기 때문입니다. 진입 문서는 <code>index</code>로 이름 지어 <code>index.html</code>로 빌드되게 하세요. 이 파일이 바로 정적 호스트가 사이트 루트에서 제공하는 파일입니다.
 
 <!--T:5 @ad50dcea-->
 파일 이름이 제목으로 깔끔하게 대응되지 않으면(MediaWiki가 이를 다르게 정규화하는 경우), 빌드가 경고를 냅니다. 문서의 편집·역사 링크가 파일 이름에서 만들어지는데, 그렇지 않으면 링크가 제대로 연결되지 않기 때문입니다. 이미 정규화된 제목으로 파일 이름을 바꾸세요.
