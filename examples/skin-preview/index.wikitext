@@ -7,7 +7,7 @@ if a sentence reads like filler, it is filler, and it is here because running te
 way to judge a measure and a line height.
 
 Bake this directory with your own skin listed in <code>.wikven.yaml</code>. It sets
-<code>WikvenSkinPreview</code>, so wikven leaves the chrome alone and what you see is your skin's
+<code>WikvenBuildFor: skin-preview</code>, so wikven leaves the chrome alone and what you see is your skin's
 own work: its personal menu, its tabs, its toolbox. See
 [[Second page]] for what a second page and a sidebar entry look like, and
 [[Second page/A subpage with a rather long title]] for a subpage.

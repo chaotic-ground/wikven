@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
+use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\SiteConfig;
 use MediaWikiUnitTestCase;
 use StatusValue;
@@ -10,7 +11,7 @@ use StatusValue;
  * @covers \MediaWiki\Extension\Wikven\SiteConfig
  */
 class SiteConfigTest extends MediaWikiUnitTestCase {
-	private const KNOWN = ['WikvenFooterUrl', 'WikvenEditUrl', 'WikvenMainPage'];
+	private const KNOWN = ['WikvenFooterUrl', 'WikvenEditUrl', 'WikvenMainPage', 'WikvenBuildFor'];
 
 	public function testSoundFileHasNoWarnings() {
 		$data = [
@@ -62,6 +63,30 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		$status = StatusValue::newGood();
 		$status->warning('config-invalid-key', 'WikvenLogos', 'Skipping validation of object with integer keys');
 		$this->assertSame([], SiteConfig::schemaErrors($status));
+	}
+
+	public function testEveryAudienceBuildForKnowsPassesLint() {
+		foreach (BuildFor::all() as $audience) {
+			$this->assertSame([], SiteConfig::lint(['config' => ['WikvenBuildFor' => $audience]], self::KNOWN));
+		}
+	}
+
+	/**
+	 * BuildFor reads a value it does not know as a site, which is the safe reading but a silent
+	 * one. A near miss is exactly what a person wants told back to them.
+	 */
+	public function testAnAudienceBuildForDoesNotKnowIsNamed() {
+		$warnings = SiteConfig::lint(['config' => ['WikvenBuildFor' => 'sit']], self::KNOWN);
+		$this->assertCount(1, $warnings);
+		$this->assertStringContainsString("'WikvenBuildFor' is 'sit'", $warnings[0]);
+		$this->assertStringContainsString('skin-preview', $warnings[0]);
+	}
+
+	/** A value of the wrong kind is named by its type, so "true" does not read as the string 1. */
+	public function testAnAudienceOfTheWrongTypeIsNamedByItsType() {
+		$warnings = SiteConfig::lint(['config' => ['WikvenBuildFor' => true]], self::KNOWN);
+		$this->assertCount(1, $warnings);
+		$this->assertStringContainsString('is bool;', $warnings[0]);
 	}
 
 	public function testUrlTemplateMissingPlaceholderWarns() {

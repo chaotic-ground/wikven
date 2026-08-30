@@ -19,7 +19,7 @@ config:
   # can stand behind -- emptying the personal menu and the toolbox, replacing the article tabs,
   # adding a footer link and a stylesheet of its own. Every one of those edits the thing a skin
   # author came to look at, so here they are all off and the skin draws its own.
-  WikvenSkinPreview: true
+  WikvenBuildFor: skin-preview
 
   # The specimen page puts itself in a category and links to the category page, so that page has
   # to be exported too. The default is [0, 6]; this adds the Category namespace rather than

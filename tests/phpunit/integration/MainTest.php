@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
+use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\Hooks\Main;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\Title\Title;
@@ -182,7 +183,7 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		file_put_contents("$dir/Real.wikitext", '');
 		$this->overrideConfigValue('WikvenSourceDirectory', $dir);
 		$this->overrideConfigValue('WikvenViewSourceUrl', 'https://repo/blob/$1');
-		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);
 
 		$this->assertSame([], $this->viewsFor('Real', 'citizen'));
 

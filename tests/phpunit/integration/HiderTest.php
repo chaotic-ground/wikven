@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
+use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\Hooks\Hider;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Skin\SkinTemplate;
@@ -110,7 +111,7 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 	 * thing being looked at.
 	 */
 	public function testASkinPreviewIsLeftTheChromeTheSkinDrew() {
-		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);
 		$hider = new Hider();
 
 		$text = '';
