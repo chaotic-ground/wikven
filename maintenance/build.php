@@ -918,12 +918,13 @@ class Build extends Maintenance {
 		$extensions = $GLOBALS['wgFileExtensions'];
 		$sources = ImageImport::sources($directory, $extensions);
 
-		// is_file() follows a link, so an image that is one would have the build upload whatever it
-		// points at -- a file outside the source tree, on this machine -- and publish it.
-		$links = ImageImport::links($sources);
-		if ($links !== []) {
-			foreach ($links as $link) {
-				$this->error("Wikven: '$link' is a link rather than an image");
+		// The walk follows links, as core's does, so an image that is one -- or one under a linked
+		// directory -- would have the build upload whatever is on the other side: a file outside the
+		// source tree, on this machine, published with the site.
+		$outside = ImageImport::outside($directory, $sources);
+		if ($outside !== []) {
+			foreach ($outside as $one) {
+				$this->error("Wikven: '$one' is not a file in $directory");
 			}
 			$this->fatalError(
 				'Wikven: an image has to be a file in the source tree, since what a link points at is'
@@ -937,7 +938,7 @@ class Build extends Maintenance {
 		$collisions = ImageImport::collisions($sources);
 		if ($collisions !== []) {
 			foreach ($collisions as $name => $paths) {
-				$this->error("Wikven: '$name' is the name of more than one image: " . implode(', ', $paths));
+				$this->error("Wikven: more than one image would import as '$name': " . implode(', ', $paths));
 			}
 			$this->fatalError(
 				'Wikven: an image is named by its file name alone, so each of those would be the same'
@@ -949,7 +950,7 @@ class Build extends Maintenance {
 		$child->setArg(0, $directory);
 		$child->setOption('extensions', implode(',', $extensions));
 		$child->setOption('skip-dupes', true);
-		// Subdirectories, because pages are read from them: sources() above counts the same files.
+		// Subdirectories, because pages are read from them; sources() above walked the same way.
 		$child->setOption('search-recursively', true);
 		// An image the wiki rejected leaves every page embedding it with a red File: link, so this
 		// step aborts the build the way step() aborts it for a page that did not import. A source
