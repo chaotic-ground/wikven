@@ -21,6 +21,7 @@ require_once "$IP/maintenance/Maintenance.php";
 // what this script is for, so it runs before that. Loaded directly for the same reason loadConfig()
 // loads SiteConfig directly below, and both classes are dependency-free so that is all it takes.
 require_once __DIR__ . '/../includes/Attempts.php';
+require_once __DIR__ . '/../includes/ComposerInstall.php';
 require_once __DIR__ . '/../includes/FetchPin.php';
 require_once __DIR__ . '/../includes/UserAgent.php';
 
@@ -57,7 +58,10 @@ class FetchExtensions extends Maintenance {
 		// Composer's superuser warning would otherwise abort under set -e.
 		putenv('COMPOSER_ALLOW_SUPERUSER=1');
 
+		// Which component each package was asked for, so the directory composer chose can be held
+		// against the name the site listed once the install is done.
 		$packages = [];
+		$asked = [];
 		foreach ($repos as $name => $spec) {
 			if (!is_string($name) || !is_array($spec)) {
 				$this->fatalError('Wikven: each WikvenRepositories entry must be a name mapped to a source.');
@@ -69,13 +73,23 @@ class FetchExtensions extends Maintenance {
 			[$baseDir, $kind] = $this->target($name, $extensionNames, $skinNames);
 
 			if (isset($spec['package'])) {
-				// Composer picks the install dir from the package; just collect the requirement.
+				// Composer picks the install dir from the package, not from the name here, so where it
+				// went is checked afterwards rather than chosen now.
 				if (!is_string($spec['package']) || $spec['package'] === '') {
 					$this->fatalError("Wikven: $kind '$name' has an empty 'package'.");
 				}
 				[$pkgName, $constraint] = $this->splitPackage($spec['package']);
 				$packages[$pkgName] = $constraint;
+				$asked[$pkgName] = ['name' => $name, 'kind' => $kind, 'dest' => "$baseDir/$name"];
 				$this->output("Wikven: will install $kind '$name' as composer package $pkgName ($constraint)\n");
+				// A tarball is pinned by sha256 and a repository by commit; for a package the pin is
+				// an exact version, and anything else takes whatever the registry serves that day.
+				if (!ComposerInstall::isExactVersion($constraint)) {
+					$this->output(
+						"Wikven: WARNING: $kind '$name' asks for $pkgName '$constraint', which is not an exact"
+						. " version; two builds of this source tree can install different code\n"
+					);
+				}
 				continue;
 			}
 
@@ -109,7 +123,7 @@ class FetchExtensions extends Maintenance {
 		}
 
 		if ($packages !== []) {
-			$this->installPackages($IP, $packages);
+			$this->installPackages($IP, $packages, $asked);
 		}
 	}
 
@@ -337,7 +351,18 @@ class FetchExtensions extends Maintenance {
 		}
 	}
 
-	private function installPackages(string $IP, array $packages): void {
+	/**
+	 * Install the composer packages a site asked for, and check each one landed where it is loaded.
+	 *
+	 * Where a package goes is composer's answer, not this file's, so it is asked afterwards rather
+	 * than assumed; ComposerInstall says why the two can differ.
+	 *
+	 * @param string $IP MediaWiki's install directory.
+	 * @param array<string,string> $packages Package name to version constraint.
+	 * @param array<string,array{name:string,kind:string,dest:string}> $asked Which component each
+	 *   package was asked for, and the directory this build will look for that component in.
+	 */
+	private function installPackages(string $IP, array $packages, array $asked): void {
 		// Core merges composer.local.json via composer-merge-plugin; require there, then update.
 		$localFile = "$IP/composer.local.json";
 		$local = is_file($localFile)
@@ -353,6 +378,18 @@ class FetchExtensions extends Maintenance {
 			['composer', 'update', '--no-dev', '--no-interaction', '--working-dir=' . $IP],
 			'composer update'
 		);
+
+		$installed = ComposerInstall::locations($IP);
+		foreach ($asked as $pkgName => $want) {
+			$problem = ComposerInstall::misplaced($IP, ['package' => $pkgName] + $want, $installed);
+			if ($problem !== null) {
+				$this->fatalError("Wikven: $problem");
+			}
+			$this->output(
+				"Wikven: installed {$want['kind']} '{$want['name']}' from $pkgName"
+				. " {$installed[$pkgName]['version']}\n"
+			);
+		}
 	}
 
 	/** Download $url to $dest, streaming the body to disk instead of buffering it in memory. */

@@ -133,6 +133,12 @@ $1
 <!--T:23 @cae25472-->
 이미 wikven에 번들된 <code>WikvenRepositories</code> 속 이름은 건드리지 않습니다. <code>extensions</code>나 <code>skins</code>에도 나열되지 않은 이름은 오류입니다.
 
+<!--T:63 @fffd8549-->
+<code>package</code>에서는 그 이름을 여러분이 아니라 Composer가 정합니다. <code>mediawiki-extension</code> 패키지는 뒤에 붙은 <code>-extension</code>을 떼고 CamelCase로 바꾼 디렉터리에 설치되고(<code>mediawiki/tabber-neue-extension</code>은 <code>extensions/TabberNeue</code>가 됩니다), <code>mediawiki-skin</code> 패키지는 CamelCase로 바뀌지 않습니다(<code>mediawiki/chameleon-skin</code>은 <code>skins/chameleon</code>이 됩니다). 빌드가 불러오는 것은 그 디렉터리이므로, 나열하는 이름도 그것이어야 합니다. 설치가 끝난 뒤에 검사해서 맞지 않으면 이름을 알려 주므로, 구성 요소 없이 사이트가 게시되는 대신 빌드가 멈춥니다.
+
+<!--T:64 @14923229-->
+정확한 버전이 아닌 <code>package</code> 제약 — <code>~4.1</code>, <code>^4</code>, <code>*</code> — 은 아래 알림이 말하는 이유로 빌드 로그에 경고가 남습니다. 오류는 아닙니다. 레지스트리가 주는 대로 받는 것은 여러분이 택할 수 있는 거래이고, 움직이는 <code>reference</code>가 하는 것과 같은 거래이며, 빌드는 그 거래를 했다는 사실만 말해 줄 뿐입니다.
+
 <!--T:24 @07beb890-->
 각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>curl</code>과 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 [$2 Composer]를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 [[$1|바이너리]]에서는 이들이 <code>PATH</code>에 있어야 합니다.
 
