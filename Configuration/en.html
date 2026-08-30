@@ -753,7 +753,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
 <p><b>Default:</b> empty
-</p><p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. A name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here is skipped with a warning.
+</p><p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. A name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here fails the build, since a site published without what its author asked for is worse than one that did not build.
 </p><p>Each entry chooses one of three methods by the key it carries:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
@@ -814,7 +814,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 12:48.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 13:16.</li>
 </ul>
 
 	<ul id="footer-places">

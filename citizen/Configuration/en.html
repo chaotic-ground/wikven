@@ -513,7 +513,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 </section><section id="citizen-section-13" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
 <p><b>Default:</b> empty
-</p><p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. A name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here is skipped with a warning.
+</p><p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. A name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here fails the build, since a site published without what its author asked for is worse than one that did not build.
 </p><p>Each entry chooses one of three methods by the key it carries:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
@@ -581,7 +581,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 30 August 2026, at 12:48." data-timestamp="1788094091"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 30 August 2026, at 13:16." data-timestamp="1788095809"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -847,7 +847,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 12:48.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 13:16.</div>
 		    </section>
 		</div>
 </footer>		</div>
