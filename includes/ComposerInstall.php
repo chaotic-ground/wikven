@@ -35,11 +35,11 @@ class ComposerInstall {
 			return [];
 		}
 		$decoded = json_decode((string)file_get_contents($record), true);
-		// Composer 2 wraps the list in "packages"; older records are the list itself.
-		$entries = is_array($decoded['packages'] ?? null) ? $decoded['packages'] : $decoded;
-		if (!is_array($entries)) {
+		if (!is_array($decoded)) {
 			return [];
 		}
+		// Composer 2 wraps the list in "packages"; older records are the list itself.
+		$entries = is_array($decoded['packages'] ?? null) ? $decoded['packages'] : $decoded;
 		$locations = [];
 		foreach ($entries as $entry) {
 			if (!is_array($entry) || !is_string($entry['name'] ?? null)) {
