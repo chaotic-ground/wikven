@@ -30,7 +30,7 @@ A list of extension names to load. An extension that ships inside {{SITENAME}} w
 
 <!--T:5-->
 == <code>skins</code> ==
-A list of skin names to enable. The first one is used as the default skin. As with extensions, a non-bundled name is fetched from the [[#WikvenRepositories|<code>WikvenRepositories</code> map]]. See [[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]].
+A list of skin names to enable; Vector is built whatever else is listed. Which one the site is read in is set with <code>DefaultSkin</code> under <code>config</code>, and without it the first skin built. As with extensions, a non-bundled name is fetched from the [[#WikvenRepositories|<code>WikvenRepositories</code> map]]. See [[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]].
 </translate>
 
 == <code>config</code> ==

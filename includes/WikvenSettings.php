@@ -258,8 +258,30 @@ foreach ($config['skins'] ?? [] as $skin) {
 }
 $wgWikvenSkins = array_values(array_unique($wgWikvenSkins));
 
-// First listed skin is the site default.
-$wgWikvenMainSkin = $wgWikvenSkins[0] ?? $wgDefaultSkin;
+// Which skin the site is read in. A site names it the way MediaWiki does, with DefaultSkin, and the
+// skins list says which to build -- so the two questions are asked separately, and neither answer is
+// the other's by accident. Without one, the first built skin, which is the only answer a one-skin
+// site needs. The name has to be one that was built: a default nothing renders leaves the output
+// root with no pages in it at all, which is worse than reading the site in a skin you did not name.
+$wikvenNamedSkin = $wikvenSiteData['config']['DefaultSkin'] ?? '';
+if (!is_string($wikvenNamedSkin)) {
+	$wikvenNamedSkin = '';
+}
+$wikvenFirstSkin = $wgWikvenSkins[0] ?? $wgDefaultSkin;
+if ($wikvenNamedSkin !== '' && !in_array($wikvenNamedSkin, $wgWikvenSkins, true)) {
+	// Named by its canonical name, which is what MediaWiki calls a skin and is not always what you
+	// listed it by: "minerva" for MinervaNeue, "vector-2022" for Vector.
+	error_log(
+		'Wikven: WARNING in '
+		. basename((string)$wikvenSiteFile)
+		. ': DefaultSkin is'
+		. " '$wikvenNamedSkin', which is not one of the skins this site builds ("
+		. implode(', ', $wgWikvenSkins)
+		. "); reading the site in '$wikvenFirstSkin' instead."
+	);
+	$wikvenNamedSkin = '';
+}
+$wgWikvenMainSkin = $wikvenNamedSkin !== '' ? $wikvenNamedSkin : $wikvenFirstSkin;
 $wgDefaultSkin = $wgWikvenMainSkin;
 
 // Per-skin build pass: WIKVEN_BUILD_SKIN renders main skin to dist root, others to dist/<skin>/.
