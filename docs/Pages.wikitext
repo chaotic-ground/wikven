@@ -34,11 +34,15 @@ Put a file in a subdirectory to create a [<tvar name="1">https://www.mediawiki.o
 === Names a subpage cannot take ===
 
 <!--T:25-->
-A subpage is a directory in the output, and three directories there are the build's own. A page that lands on one is not refused; the file is written where something else already goes, and what the reader gets is whichever finished last. Only subpages are affected, because only a subpage makes a directory: a page named <code>citizen</code> builds to <code>citizen.html</code> and sits beside everything else quite happily.
+A subpage is a directory in the output, and some directories there are the build's own. A page that lands on one is not refused; the file is written where something else already goes, and what the reader gets is whichever finished last. Only subpages are affected, because only a subpage makes a directory: a page named <code>citizen</code> builds to <code>citizen.html</code> and sits beside everything else quite happily.
 
 <!--T:26-->
 ; Any skin after the first
 : Each one renders the whole site into a directory of its own, so a site building Citizen has a <code>citizen/</code> holding a second copy of every page. A page "citizen/Setup" is written into that directory, where the Citizen copy of a page "Setup" also goes. The name to avoid is the skin's own, which is lower-case and not always what you listed it by: <code>vector-2022</code>, <code>citizen</code>, <code>minerva</code>. See [[<tvar name="1">Special:MyLanguage/Skins</tvar>|Skins]].
+; <code>assets</code>
+: Everything the build generates — the stylesheets, the script bundles, and the images their CSS names — unless [[<tvar name="3">Special:MyLanguage/Configuration#WikvenAssetDirectory</tvar>|<code>WikvenAssetDirectory</code>]] names another directory, or <code>.</code> to scatter them through the output root instead.
+; <code>fonts</code>
+: The webfont files themselves, with <code>WikvenBundleWebfonts</code> set. They sit at the output root rather than in the asset directory, and the stylesheet that names them steps up out of it to reach them.
 ; <code>pagefind</code>
 : Where [[<tvar name="2">Special:MyLanguage/Searching</tvar>|search]] writes its index, unless <code>SifterSearchOutputDir</code> puts it elsewhere.
 ; <code>history</code>

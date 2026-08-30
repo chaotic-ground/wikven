@@ -17,24 +17,19 @@ require_once "$IP/maintenance/Maintenance.php";
 class BuildStyles extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->addDescription('Build styles based on the CSS files on $wgWikvenStyleDirectory.');
+		$this->addDescription('Build styles based on the CSS files in $wgWikvenAssetDirectory.');
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenStyleDirectory, $wgLanguageCode, $wgDefaultSkin;
+		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgLanguageCode, $wgDefaultSkin;
 
-		if (str_ends_with($wgWikvenHtmlDirectory, '/')) {
-			$wgWikvenHtmlDirectory = rtrim($wgWikvenHtmlDirectory, '/');
-		}
-		if (str_ends_with($wgWikvenStyleDirectory, '/')) {
-			$wgWikvenStyleDirectory = rtrim($wgWikvenStyleDirectory, '/');
-		}
+		$cssDir = AssetFile::path($wgWikvenHtmlDirectory, $wgWikvenAssetDirectory);
 
 		MediaWikiServices::getInstance()->getDBLoadBalancerFactory()->disableChronologyProtection();
 
 		$resourceLoader = MediaWikiServices::getInstance()->getResourceLoader();
 
-		foreach (glob("$wgWikvenHtmlDirectory/$wgWikvenStyleDirectory/*.css") as $filename) {
+		foreach (glob("$cssDir/*.css") as $filename) {
 			$query = ResourceLoader::makeLoaderQuery(
 				[basename($filename, '.css')],
 				$wgLanguageCode,
@@ -61,8 +56,6 @@ class BuildStyles extends Maintenance {
 				$this->fatalError($problem);
 			}
 		}
-
-		$cssDir = "$wgWikvenHtmlDirectory/$wgWikvenStyleDirectory";
 
 		// Render site.styles to its own file so rewriteScripts can link it; skip if empty.
 		$query = ResourceLoader::makeLoaderQuery(

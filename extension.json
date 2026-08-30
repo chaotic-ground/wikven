@@ -105,13 +105,9 @@
 			"value": "",
 			"description": "Absolute path to the directory the build writes the static site to. Set by WikvenSettings.php from WIKVEN_WORKDIR (per-skin passes point it at a subdirectory); empty means nothing is written, which is what a wiki running the extension outside a build has."
 		},
-		"WikvenStyleDirectory": {
-			"value": ".",
-			"description": "Relative path to the dist directory of CSS files, under the WIKVEN_WORKDIR output directory."
-		},
-		"WikvenScriptDirectory": {
-			"value": ".",
-			"description": "Relative path to the dist directory of JS files, under the WIKVEN_WORKDIR output directory."
+		"WikvenAssetDirectory": {
+			"value": "assets",
+			"description": "Directory the build writes everything it generates into, under the output directory: the stylesheets, the script bundles, and the images and webfont files their CSS names. Left at the output root with \".\", where they sit among the pages. One directory rather than one per kind because a stylesheet reaches its images by a path relative to itself, so they cannot be parted."
 		},
 		"WikvenFooterUrl": {
 			"value": "",

@@ -156,19 +156,22 @@ There is a source tree to bake with it: <code>examples/skin-preview</code> in th
 
 <!--T:42-->
 <span id="WikvenStyleDirectory"></span>
-=== <code>WikvenStyleDirectory</code> and <code>WikvenScriptDirectory</code> ===
+<span id="WikvenAssetDirectory"></span>
+=== <code>WikvenAssetDirectory</code> ===
 
 <!--T:52-->
-'''Default:''' <code>.</code>
+'''Default:''' <code>assets</code>
 
 <!--T:43-->
-Where under the output directory the build writes the CSS and JavaScript it dumps out of MediaWiki. <code>.</code> is the output root. Set them to keep the generated assets out of the way of your pages; the paths are relative to the output directory and the build writes the links to match, so nothing else needs telling.
+Where under the output directory the build writes everything it generates: the stylesheets and script bundles it dumps out of MediaWiki, and the images and webfont files their CSS names. The path is relative to the output directory and the build writes the links to match, so nothing else needs telling.
+
+<!--T:68-->
+One directory rather than one per kind, because a stylesheet reaches its images by a path relative to itself — they cannot be parted. Set it to <code>.</code> to put them all in the output root among your pages instead.
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
 config:
-  WikvenStyleDirectory: assets
-  WikvenScriptDirectory: assets
+  WikvenAssetDirectory: .
 </syntaxhighlight>
 
 <span id="WikvenRepositories"></span>

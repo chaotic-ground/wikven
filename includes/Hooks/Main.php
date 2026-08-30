@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\Wikven\AssetFile;
 use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SourceFile;
@@ -26,13 +27,13 @@ class Main implements
 	/** The directory the HTML files are written to. */
 	private string $htmlDirectory;
 
-	/** The directory the style files are written to, relative to the HTML one. */
-	private string $styleDirectory;
+	/** The directory everything the build generates is written to, relative to the HTML one. */
+	private string $assetDirectory;
 
 	public function __construct(Config $config) {
 		$this->config = $config;
 		$this->htmlDirectory = $config->get('WikvenHtmlDirectory');
-		$this->styleDirectory = $config->get('WikvenStyleDirectory');
+		$this->assetDirectory = $config->get('WikvenAssetDirectory');
 	}
 
 	/** @inheritDoc */
@@ -311,8 +312,8 @@ class Main implements
 			$group = $module->getGroup();
 			if (!$module->shouldEmbedModule($context)) {
 				if ($group !== 'user' || !$module->isKnownEmpty($context)) {
-					$path = './' . $this->styleDirectory . "/$name.css";
-					$tags[$name] = Html::linkedStyle($path);
+					$href = AssetFile::locate($this->htmlDirectory, $this->assetDirectory, "$name.css")['href'];
+					$tags[$name] = Html::linkedStyle($href);
 					$this->addStyleToList($name);
 				}
 			}
@@ -341,11 +342,7 @@ class Main implements
 			return;
 		}
 
-		$path = $this->htmlDirectory;
-		if (str_ends_with($path, '/')) {
-			$path = rtrim($path, '/');
-		}
-		$path .= '/' . $this->styleDirectory;
+		$path = AssetFile::path($this->htmlDirectory, $this->assetDirectory);
 		// Honours $wgDirectoryMode, tolerates a concurrent create (build.php renders one process per
 		// skin) and logs a real failure instead of printing a warning into the page.
 		if (!wfMkdirParents($path, null, __METHOD__)) {

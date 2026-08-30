@@ -36,7 +36,7 @@ class BakeWebfonts extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenStyleDirectory, $wgLanguageCode;
+		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgLanguageCode;
 
 		if (!$this->getConfig()->get('WikvenBundleWebfonts')) {
 			return;
@@ -58,16 +58,13 @@ class BakeWebfonts extends Maintenance {
 		}
 
 		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
-		$styleDir = trim(rtrim($wgWikvenStyleDirectory, '/'), '/');
-		$atRoot = $styleDir === '' || $styleDir === '.';
-		$cssDir = $atRoot ? $htmlDir : "$htmlDir/$styleDir";
+		$cssDir = AssetFile::path($htmlDir, $wgWikvenAssetDirectory);
 
 		$languages = $this->discoverLanguages($htmlDir, $wgLanguageCode);
 
 		// The woff2 live at <htmlDir>/fonts/uls/...; the stylesheet sits in $cssDir, so its url()s
-		// step up out of any style subdirectory to reach them.
-		$depth = $atRoot ? 0 : substr_count($styleDir, '/') + 1;
-		$basePath = str_repeat('../', $depth) . self::FONTS_SUBDIR . '/';
+		// step up out of any asset subdirectory to reach them.
+		$basePath = str_repeat('../', AssetFile::depth($wgWikvenAssetDirectory)) . self::FONTS_SUBDIR . '/';
 
 		$built = ( new FontRepository($repository) )->build($languages, $basePath);
 		if (trim($built['css']) === '' || $built['files'] === []) {
@@ -85,7 +82,7 @@ class BakeWebfonts extends Maintenance {
 		}
 
 		if (!is_dir($cssDir) && !wfMkdirParents($cssDir)) {
-			$this->fatalError("Wikven: could not create style directory $cssDir");
+			$this->fatalError("Wikven: could not create asset directory $cssDir");
 		}
 		file_put_contents("$cssDir/webfonts.css", $built['css'], LOCK_EX);
 		$this->output('Wrote webfonts.css (' . count($built['files']) . " font file(s))\n");
