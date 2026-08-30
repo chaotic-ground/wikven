@@ -178,6 +178,53 @@ jobs:
           done
           exit "$status"
 
+      # The MediaWiki this is built on is named in half a dozen places -- the two CI matrices,
+      # updatecli's extension branches, the branch-protection ruleset, extension.json's floor, and
+      # the pages that tell an author what they are writing against -- and a bump that reaches only
+      # some of them is silent: the image carries a release CI never tests, or the promise and the
+      # docs describe a version nobody ships. The Dockerfile's tag decides what a site actually
+      # runs, so it is what the rest is checked against.
+      - name: Check every file agrees on which MediaWiki this is
+        run: |
+          set -euo pipefail
+          version=$(sed -n 's/^FROM mediawiki:\([0-9][0-9]*\.[0-9][0-9]*\)\..*/\1/p' Dockerfile)
+          if [ -z "$version" ]; then
+            echo "::error file=Dockerfile::no 'FROM mediawiki:<major>.<minor>.<patch>' line to read the version from."
+            exit 1
+          fi
+          branch="REL${version/./_}"
+          status=0
+
+          # The floor a site reads, against the release it is actually handed.
+          declared=$(jq -r '.requires.MediaWiki' extension.json)
+          if [ "$declared" != ">= $version.0" ]; then
+            echo "::error file=extension.json::requires.MediaWiki is \"$declared\", but the image is built on" \
+                 "MediaWiki $version. It should be \">= $version.0\"."
+            status=1
+          fi
+
+          # Anything still naming another release branch is a file the last bump did not reach.
+          # docs/ is left out: a page naming a branch is illustrating what a pin looks like, not
+          # holding one, and an example is free to name whichever branch reads best.
+          stray=$(grep -rn --exclude-dir=.git --exclude-dir=vendor --exclude-dir=node_modules \
+                    --exclude-dir=docs -oE 'REL1_[0-9]+' . | grep -v ":$branch$" || true)
+          if [ -n "$stray" ]; then
+            echo "$stray"
+            echo "::error::the lines above name a MediaWiki release branch other than $branch," \
+                 "which is what the Dockerfile is built on."
+            status=1
+          fi
+
+          # The pages that tell a site author and an extension author what they are writing against.
+          for page in docs/Installation.wikitext "docs/Writing an extension.wikitext"; do
+            if ! grep -qF "$version" "$page"; then
+              echo "::error file=$page::this page says which MediaWiki {{SITENAME}} runs on and no" \
+                   "longer names $version."
+              status=1
+            fi
+          done
+          exit "$status"
+
       # Every maintenance script is a build step, and the pipeline is described in
       # docs/Development.wikitext. The four translation helpers are documented by the command that
       # runs them (translate mark/scaffold/stamp/check) rather than by file name, so they are named

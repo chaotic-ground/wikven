@@ -147,7 +147,7 @@ The pins that make those builds reproducible are the ones nothing moves for you.
 <!--T:25-->
 Which way out of that you take is yours to choose, and the two are not the same bargain:
 * '''Keep the pin exact and move it deliberately.''' A <code>commit</code>, or a <code>tarball</code> with its <code>sha256</code>, builds the same site tomorrow as it does today, and every change to what you ship is a diff someone approved. What it costs is time-to-fix: a security release sits upstream until the pin is moved.
-* '''Point the pin at something that moves.''' A <code>reference</code> naming a release branch — <code>REL1_43</code>, say — takes whatever that branch holds when the build runs, so a fix arrives at the next bake with nothing to merge. What it costs is reproducibility: two bakes of one source tree can differ, and nothing in the tree records what changed between them.
+* '''Point the pin at something that moves.''' A <code>reference</code> naming a release branch — <code>REL1_46</code>, say — takes whatever that branch holds when the build runs, so a fix arrives at the next bake with nothing to merge. What it costs is reproducibility: two bakes of one source tree can differ, and nothing in the tree records what changed between them.
 The rest of this section is about making the first cheap enough to prefer.
 
 <!--T:22-->

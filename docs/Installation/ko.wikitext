@@ -33,5 +33,14 @@ arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파�
 <!--T:10 @15d32350-->
 이렇게 하면 게시된 이미지와 똑같이 실행할 수 있는 로컬 <code>wikven</code> 이미지가 만들어집니다. 대신 단독 실행 바이너리를 소스에서 빌드하려면 [https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile <code>binary.Dockerfile</code>]을 참고하십시오.
 
+<!--T:13 @a0595f14-->
+== 어느 MediaWiki인가 ==
+
+<!--T:14 @8f8bec3f-->
+MediaWiki는 따로 설치하지 않습니다. {{SITENAME}}을 실행하는 모든 방법이 저마다 MediaWiki를 안고 옵니다. 이미지와 바이너리는 '''MediaWiki 1.46''' 위에서 만들어지며, 어떻게 실행하든 여러분의 문서를 렌더링하는 것은 그것입니다.
+
+<!--T:15 @5330d79f-->
+{{SITENAME}} 자체는 MediaWiki 1.46 이상을 요구하고, 모든 변경은 1.46과 MediaWiki 개발 브랜치 양쪽에서 시험됩니다. 그것이 동작이 확인된 범위이고, 직접 준비한 MediaWiki 위에 소스로 빌드한다면 맞춰야 할 대상입니다.
+
 <!--T:11 @1dfe2e22-->
 {{SITENAME}}을 갖추었다면, [[$1|시작하기]]로 이동해 첫 사이트를 만드십시오.
