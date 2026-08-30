@@ -71,7 +71,13 @@ class ImageImport {
 		foreach ($sources as $path) {
 			$byName[basename($path)][] = $path;
 		}
-		return array_filter($byName, static fn(array $paths): bool => count($paths) > 1);
+		$shared = [];
+		foreach ($byName as $name => $paths) {
+			if (count($paths) > 1) {
+				$shared[$name] = $paths;
+			}
+		}
+		return $shared;
 	}
 
 	/**
