@@ -8,7 +8,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
 }];});});</script>
 
-<script src=".././startup-static.js"></script><script src=".././modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.interface"]);</script>
+<script src="../assets/startup-static.js"></script><script src="../assets/modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.translate.pagetranslation.uls","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.vectorSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.interface"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
 <meta name="generator" content="MediaWiki 1.46.0">
@@ -16,15 +16,15 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href=".././ext.translate.tag.languages.css">
-<link rel="stylesheet" href=".././ext.pygments.css">
-<link rel="stylesheet" href=".././skins.vector.search.codex.styles.css">
-<link rel="stylesheet" href=".././skins.vector.styles.css">
-<link rel="stylesheet" href=".././skins.vector.icons.css">
-<link rel="stylesheet" href=".././ext.translate.css">
-<link rel="stylesheet" href=".././ext.Wikven.styles.css">
-<link rel="stylesheet" href=".././ext.uls.pt.css">
-<link rel="stylesheet" href="../webfonts.css"><link rel="stylesheet" href="../site.styles.css"></head>
+<link rel="stylesheet" href="../assets/ext.translate.tag.languages.css">
+<link rel="stylesheet" href="../assets/ext.pygments.css">
+<link rel="stylesheet" href="../assets/skins.vector.search.codex.styles.css">
+<link rel="stylesheet" href="../assets/skins.vector.styles.css">
+<link rel="stylesheet" href="../assets/skins.vector.icons.css">
+<link rel="stylesheet" href="../assets/ext.translate.css">
+<link rel="stylesheet" href="../assets/ext.Wikven.styles.css">
+<link rel="stylesheet" href="../assets/ext.uls.pt.css">
+<link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Pages_ko rootpage-Pages_ko skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">본문으로 이동</a>
 <div class="vector-header-container">
@@ -601,10 +601,14 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="reserved-names"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="하위_문서가_쓸_수_없는_이름"><span id=".ED.95.98.EC.9C.84_.EB.AC.B8.EC.84.9C.EA.B0.80_.EC.93.B8_.EC.88.98_.EC.97.86.EB.8A.94_.EC.9D.B4.EB.A6.84"></span>하위 문서가 쓸 수 없는 이름</h3></div>
-<p>하위 문서는 출력에서 디렉터리가 되는데, 그중 세 디렉터리는 빌드 자신의 것입니다. 거기에 놓이는 문서는 거부되지 않습니다. 이미 다른 것이 들어가는 자리에 파일이 쓰일 뿐이고, 독자가 받는 것은 나중에 끝난 쪽입니다. 영향을 받는 것은 하위 문서뿐인데, 디렉터리를 만드는 것이 하위 문서뿐이기 때문입니다. <code>citizen</code>이라는 이름의 문서는 <code>citizen.html</code>로 빌드되어 다른 것들 옆에 아무 탈 없이 놓입니다.
+<p>하위 문서는 출력에서 디렉터리가 되는데, 그중 몇몇 디렉터리는 빌드 자신의 것입니다. 거기에 놓이는 문서는 거부되지 않습니다. 이미 다른 것이 들어가는 자리에 파일이 쓰일 뿐이고, 독자가 받는 것은 나중에 끝난 쪽입니다. 영향을 받는 것은 하위 문서뿐인데, 디렉터리를 만드는 것이 하위 문서뿐이기 때문입니다. <code>citizen</code>이라는 이름의 문서는 <code>citizen.html</code>로 빌드되어 다른 것들 옆에 아무 탈 없이 놓입니다.
 </p>
 <dl><dt>첫 번째 다음의 모든 스킨</dt>
 <dd>각 스킨은 사이트 전체를 자기 디렉터리에 렌더링합니다. Citizen을 빌드하는 사이트에는 모든 문서의 두 번째 사본이 담긴 <code>citizen/</code>이 있습니다. "citizen/Setup" 문서는 그 디렉터리에 쓰이는데, "Setup" 문서의 Citizen 사본도 같은 자리로 갑니다. 피해야 할 이름은 스킨 자신의 이름이며, 소문자이고 당신이 나열한 이름과 늘 같지도 않습니다. <code>vector-2022</code>, <code>citizen</code>, <code>minerva</code>처럼요. <a href="../Skins/ko.html" title="Special:MyLanguage/Skins">스킨</a>을 보세요.</dd>
+<dt><code>assets</code></dt>
+<dd>빌드가 만들어 내는 것 전부 — 스타일시트, 스크립트 번들, 그리고 그 CSS가 이름을 부르는 이미지 — 가 놓이는 자리입니다. <a href="../Configuration/ko.html#WikvenAssetDirectory" title="Special:MyLanguage/Configuration"><code>WikvenAssetDirectory</code></a>로 다른 디렉터리를 지정하거나, <code>.</code>로 두어 출력 루트에 흩어 놓을 수 있습니다.</dd>
+<dt><code>fonts</code></dt>
+<dd><code>WikvenBundleWebfonts</code>를 켰을 때 웹폰트 파일 자체가 놓이는 자리입니다. 자산 디렉터리가 아니라 출력 루트에 놓이며, 그것들의 이름을 부르는 스타일시트가 자산 디렉터리 밖으로 거슬러 올라가 닿습니다.</dd>
 <dt><code>pagefind</code></dt>
 <dd><code>SifterSearchOutputDir</code>로 다른 곳을 지정하지 않는 한, <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색</a>이 색인을 쓰는 자리입니다.</dd>
 <dt><code>history</code></dt>
@@ -659,7 +663,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 28일 (금) 11:44에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 08:59에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
