@@ -397,16 +397,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-WikvenBundleWebfonts-sublist" class="vector-toc-list">
 			</ul>
 		</li>
-		<li id="toc-WikvenSkinPreview"
+		<li id="toc-WikvenBuildFor"
 			class="vector-toc-list-item vector-toc-level-2">
-			<a class="vector-toc-link" href="#WikvenSkinPreview">
+			<a class="vector-toc-link" href="#WikvenBuildFor">
 				<div class="vector-toc-text">
 					<span class="vector-toc-numb">3.8</span>
-					<span>WikvenSkinPreview</span>
+					<span>WikvenBuildFor</span>
 				</div>
 			</a>
 			
-			<ul id="toc-WikvenSkinPreview-sublist" class="vector-toc-list">
+			<ul id="toc-WikvenBuildFor-sublist" class="vector-toc-list">
 			</ul>
 		</li>
 		<li id="toc-WikvenStyleDirectory_and_WikvenScriptDirectory"
@@ -733,9 +733,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><b>Default:</b> <code>false</code>
 </p><p>When set, and UniversalLanguageSelector is enabled, the build bakes that extension's webfonts for the languages your pages use into a stylesheet the export serves itself, so a reader whose system has no font for a script sees the intended typeface instead of empty boxes. It is off unless asked for, because the fonts are extra payload for a site whose readers may not need them. It does nothing without UniversalLanguageSelector; see <a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a>.
 </p>
-<div class="mw-heading mw-heading3"><h3 id="WikvenSkinPreview"><code>WikvenSkinPreview</code></h3></div>
-<p><b>Default:</b> <code>false</code>
-</p><p>For looking at a skin rather than publishing a site. Wikven normally trims the chrome around a page to what a static host can stand behind: the personal menu, the toolbox, the talk tab and the watch star are emptied, the article tabs are replaced with links to your source files, a link to the repository goes in the footer, and a stylesheet of its own hides the rest. Every one of those is a judgement about a reader, and none of them is wanted by a skin author who has pointed the build at a few pages to see how their skin renders: the menus being edited are the thing they came to look at. Set this and they are all left as the skin drew them.
+<div class="mw-heading mw-heading3"><h3 id="WikvenBuildFor"><code>WikvenBuildFor</code></h3></div>
+<p><b>Default:</b> <code>site</code>
+</p><p>For looking at a skin rather than publishing a site. Wikven normally trims the chrome around a page to what a static host can stand behind: the personal menu, the toolbox, the talk tab and the watch star are emptied, the article tabs are replaced with links to your source files, a link to the repository goes in the footer, and a stylesheet of its own hides the rest. Every one of those is a judgement about a reader, and none of them is wanted by a skin author who has pointed the build at a few pages to see how their skin renders: the menus being edited are the thing they came to look at. Set it to <code>skin-preview</code> and they are all left as the skin drew them.
 </p><p>What the build still does is everything that makes the output a working set of files. Links are rewritten to <code>./Page.html</code>, styles and scripts are baked into local copies, and the two fixes that stop a page asking for something no export has -- Citizen's service worker and its search shortcuts -- stay on, because a preview has no <code>load.php</code> behind it either. The generated <a href="./Configuration.html#WikvenLicensesPage" title="Special:MyLanguage/Configuration">Licenses</a> and <a href="./Configuration.html#WikvenSettingsPage" title="Special:MyLanguage/Configuration">Settings</a> pages are content rather than chrome and are still written; set those empty to leave them out too. The footer link to the Licenses page is chrome, so it is not added, and the build says so as it passes.
 </p><p>Leave it off for a site anyone reads. A published export that offers a login, a watchlist and a talk tab with nothing behind any of them is worse than one that offers none.
 </p><p>There is a source tree to bake with it: <code>examples/skin-preview</code> in the Wikven repository, one page carrying every element a skin has to style. Add your skin to its <code>.wikven.yaml</code> and build that directory.
@@ -809,7 +809,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 15:41.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 06:43.</li>
 </ul>
 
 	<ul id="footer-places">
