@@ -49,8 +49,8 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:47 @18a7e6ab-->
 '''기본값:''' <code>index</code>
 
-<!--T:15 @46cc8c49-->
-사이트 루트로 쓰이는 문서의 제목으로, <code>index.html</code>로 작성되어 사이트 최상단에서 제공됩니다. 진입 파일 이름을 <code>index.wikitext</code>로 지으면 별도 설정이 전혀 필요 없습니다. 이 문서는 여러분이 가져온 문서여야 하며, 없으면 빌드가 실패합니다.
+<!--T:15 @06ef8ebd-->
+정적 호스트가 사이트 최상단에서 제공할 문서의 제목입니다. 모든 문서는 자기 제목 뒤에 <code>.html</code>을 붙인 이름으로 작성되므로, 제목이 <code>index</code>여야 하는 것은 이 문서뿐입니다. 진입 파일 이름을 <code>index.wikitext</code>로 지으면 별도 설정이 전혀 필요 없습니다. 다른 이름의 문서를 지정하면 <code>&lt;그 제목&gt;.html</code>로 작성되고, 호스트가 제공할 <code>index.html</code>이 사이트에 없게 됩니다. 이 문서는 여러분이 가져온 문서여야 하며, 없으면 빌드가 실패합니다.
 
 <!--T:48 @c2701b2b-->
 '''기본값:''' <code>Licenses</code>
@@ -143,8 +143,8 @@ $1
 <!--T:64 @14923229-->
 정확한 버전이 아닌 <code>package</code> 제약 — <code>~4.1</code>, <code>^4</code>, <code>*</code> — 은 아래 알림이 말하는 이유로 빌드 로그에 경고가 남습니다. 오류는 아닙니다. 레지스트리가 주는 대로 받는 것은 여러분이 택할 수 있는 거래이고, 움직이는 <code>reference</code>가 하는 것과 같은 거래이며, 빌드는 그 거래를 했다는 사실만 말해 줄 뿐입니다.
 
-<!--T:24 @07beb890-->
-각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>curl</code>과 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 [$2 Composer]를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 [[$1|바이너리]]에서는 이들이 <code>PATH</code>에 있어야 합니다.
+<!--T:24 @20eb2613-->
+각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 [$2 Composer]를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 [[$1|바이너리]]에서는 이들이 <code>PATH</code>에 있어야 합니다.
 
 <!--T:25 @ea4d8427-->
 {{note|여기서 이름을 대는 코드를 빌드가 네트워크 접근과 함께 내려받아 '''실행'''합니다. 복제된 확장 기능의 PHP와 모든 Composer 스크립트가 빌드 중에 실행됩니다. 신뢰하는 소스만 선언하십시오. 변조를 알아챌 수 있고 재현 가능한 빌드를 위해서는 타르볼을 <code>sha256</code>으로, 리포지터리를 <code>commit</code>(정확한 SHA)으로 고정하십시오. 가변적인 <code>reference</code> 태그/브랜치나 유동적인 <code>package</code> 제약은 여러분 모르게 바뀔 수 있습니다.}}

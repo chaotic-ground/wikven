@@ -127,7 +127,7 @@
 		},
 		"WikvenLogos": {
 			"value": [],
-			"description": "Header logos, mirroring $wgLogos but keyed to image file names in the source directory (each inlined as a data URI)."
+			"description": "Header logos, mirroring $wgLogos but keyed to image file names in the source directory. Each named file is uploaded like any other source image and the export copies it into the asset directory, so it is not embedded into every page."
 		},
 		"WikvenRepositories": {
 			"value": [],
