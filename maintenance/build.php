@@ -1087,11 +1087,11 @@ class Build extends Maintenance {
 			}
 		}
 
-		// The footer entry is chrome, and a skin preview has none of wikven's -- see SkinPreview.
+		// The footer entry is chrome, and a skin preview has none of wikven's -- see BuildFor.
 		// The page is still written, so nothing is lost; what is missing is the link to it, and a
 		// preview that quietly dropped the one link saying what the site carries would be teaching
 		// the wrong lesson about the mode.
-		if (SkinPreview::isOn()) {
+		if (BuildFor::skinPreview()) {
 			$this->output(
 				"Wikven: skin preview -- the footer does not link {$title->getPrefixedText()};"
 				. " a published site links it from every page.\n"

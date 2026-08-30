@@ -141,9 +141,9 @@
 			"value": false,
 			"description": "When true and UniversalLanguageSelector is installed, bake its webfonts for the export's languages into a static stylesheet, so readers of a script their system lacks a font for see the intended typeface instead of tofu. Off by default because it adds font payload to the output."
 		},
-		"WikvenSkinPreview": {
-			"value": false,
-			"description": "When true, leave the skin's own chrome as the skin renders it: the personal menu, toolbox, talk and watch affordances, section edit links and the article tabs are all left alone, no skin list or repository link is added, and wikven's own stylesheet is not loaded. For a skin author baking a few pages to look at their skin, where wikven's reader-facing edits to the chrome are edits to the thing being looked at. Everything that makes the output work as files is unaffected: links are still rewritten to ./X.html, styles and scripts are still baked to local copies. Off by default; a published site wants the chrome trimmed to what a static host can answer for."
+		"WikvenBuildFor": {
+			"value": "site",
+			"description": "Who the build is for. \"site\", the default, publishes: the chrome is trimmed to what a static host can stand behind, so the personal menu, toolbox, talk and watch affordances and section edit links are emptied, the article tabs become links to your source files, and a repository link goes in the footer. \"skin-preview\" is for a skin author baking a few pages to look at their skin, where every one of those edits is an edit to the thing being looked at: the chrome is left as the skin drew it, and no skin list or repository link is added. Everything that makes the output work as files is the same either way -- links are still rewritten to ./X.html, styles and scripts are still baked to local copies. An unrecognised value is reported and read as \"site\"."
 		}
 	},
 	"MessagesDirs": {

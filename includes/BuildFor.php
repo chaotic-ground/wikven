@@ -3,7 +3,7 @@
 namespace MediaWiki\Extension\Wikven;
 
 /**
- * Whether this build is a skin being looked at, rather than a site being published.
+ * Who this build is for: a site being published, or a skin being looked at.
  *
  * Wikven has opinions about the chrome around a page, and they are a reader's opinions: a static
  * export has no account to log into, no watchlist to add to, no talk page to post on and no server
@@ -28,14 +28,42 @@ namespace MediaWiki\Extension\Wikven;
  * reach for modules the export does not ship. Both exist to stop the page asking for something
  * that is not there, which is as true of a preview as of a site.
  */
-class SkinPreview {
+class BuildFor {
+	/** A site to publish: the chrome is trimmed to what a static host can stand behind. */
+	public const SITE = 'site';
+
+	/** A skin to look at: the chrome is left as the skin drew it. */
+	public const SKIN_PREVIEW = 'skin-preview';
+
 	/**
-	 * Whether the chrome wikven would otherwise impose is to be left alone.
+	 * Every audience a build can be for, in the spelling a site writes.
 	 *
-	 * Read from the global rather than injected config, because the hooks that ask are the ones
-	 * that already read $wgWikvenEditUrl and its neighbours that way.
+	 * Two of them, and the pair is why this is not a flag. They are not independent switches a
+	 * site turns on together; they are answers to one question, and the setting asks that question
+	 * once. A third would be a third value rather than a second boolean nobody knows how to
+	 * combine with the first.
+	 *
+	 * @return string[]
 	 */
-	public static function isOn(): bool {
-		return (bool)( $GLOBALS['wgWikvenSkinPreview'] ?? false );
+	public static function all(): array {
+		return [self::SITE, self::SKIN_PREVIEW];
+	}
+
+	/**
+	 * The audience this build is for, falling back to a site.
+	 *
+	 * An unrecognised value reads as a site, which is the reading that publishes something a
+	 * static host can answer for; SiteConfig::lint() has already named it by then. Read from the
+	 * global rather than injected config, because the hooks that ask are the ones that already
+	 * read $wgWikvenEditUrl and its neighbours that way.
+	 */
+	public static function current(): string {
+		$configured = $GLOBALS['wgWikvenBuildFor'] ?? self::SITE;
+		return in_array($configured, self::all(), true) ? (string)$configured : self::SITE;
+	}
+
+	/** Whether the chrome wikven would otherwise impose is to be left alone. */
+	public static function skinPreview(): bool {
+		return self::current() === self::SKIN_PREVIEW;
 	}
 }

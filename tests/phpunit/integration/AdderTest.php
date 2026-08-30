@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
+use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\Hooks\Adder;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Request\FauxRequest;
@@ -311,7 +312,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 * styles or appearance modules: what the skin renders is what a skin author is looking at.
 	 */
 	public function testASkinPreviewIsAddedNoChromeOfOurOwn() {
-		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);
 		$this->overrideConfigValue('WikvenFooterUrl', 'https://github.com/owner/repo');
 		$this->overrideConfigValue('WikvenSkins', ['vector-2022', 'minerva']);
 
@@ -345,7 +346,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 * look, so neither is a preview's to drop.
 	 */
 	public function testASkinPreviewStillStopsTheExportAskingForWhatIsNotThere() {
-		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);
 		$this->overrideConfigValue('WikvenSkins', ['citizen']);
 
 		$vars = [];
@@ -438,7 +439,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 * nothing to it here. build.php says so on the way past, so the omission is not silent.
 	 */
 	public function testASkinPreviewIsNotGivenTheLicensesLinkEither() {
-		$this->overrideConfigValue('WikvenSkinPreview', true);
+		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);
 		$this->overrideConfigValue('WikvenLicensesPage', 'Licenses');
 		$this->overrideConfigValue('WikvenSkins', ['vector']);
 

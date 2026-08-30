@@ -53,8 +53,8 @@ class FillMinervaMenu extends Maintenance {
 		}
 		// The site's own navigation written into the skin's menu is the largest edit wikven makes
 		// to any skin's chrome, so it is the first thing a skin preview does without: what Minerva
-		// builds from its own definitions is what a skin author came to look at. See SkinPreview.
-		if (SkinPreview::isOn()) {
+		// builds from its own definitions is what a skin author came to look at. See BuildFor.
+		if (BuildFor::skinPreview()) {
 			$this->output("Skin preview: leaving Minerva's main menu as the skin builds it\n");
 			return;
 		}

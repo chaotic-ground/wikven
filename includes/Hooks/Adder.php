@@ -2,9 +2,9 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
+use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SkinList;
-use MediaWiki\Extension\Wikven\SkinPreview;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Output\OutputPage;
@@ -45,8 +45,8 @@ class Adder implements
 	 */
 	public function onSidebarBeforeOutput($skin, &$sidebar): void {
 		// A list of skins to read the site in is wikven's, not the skin's, and a preview is of one
-		// skin. See SkinPreview.
-		if (SkinPreview::isOn()) {
+		// skin. See BuildFor.
+		if (BuildFor::skinPreview()) {
 			return;
 		}
 		$current = $skin->getSkinName();
@@ -91,7 +91,7 @@ class Adder implements
 			$out->addModules('ext.Wikven.citizenSearchShortcuts');
 		}
 
-		if (SkinPreview::isOn()) {
+		if (BuildFor::skinPreview()) {
 			return;
 		}
 
@@ -202,8 +202,8 @@ class Adder implements
 
 	/** @inheritDoc */
 	public function onSkinAddFooterLinks(Skin $skin, string $key, array &$footerItems) {
-		// A row in the footer that the skin did not put there. See SkinPreview.
-		if (SkinPreview::isOn()) {
+		// A row in the footer that the skin did not put there. See BuildFor.
+		if (BuildFor::skinPreview()) {
 			return;
 		}
 
