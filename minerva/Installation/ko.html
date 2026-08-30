@@ -205,6 +205,7 @@ Wikven
 <li class="toclevel-1 tocsection-1"><a href="#바이너리"><span class="tocnumber">1</span> <span class="toctext">바이너리</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Docker"><span class="tocnumber">2</span> <span class="toctext">Docker</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#소스에서_빌드"><span class="tocnumber">3</span> <span class="toctext">소스에서 빌드</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#어느_MediaWiki인가"><span class="tocnumber">4</span> <span class="toctext">어느 MediaWiki인가</span></a></li>
 </ul>
 </div>
 
@@ -239,6 +240,11 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>wikven<span class="w"> </span>.
 </pre></div>
 <p>이렇게 하면 게시된 이미지와 똑같이 실행할 수 있는 로컬 <code>wikven</code> 이미지가 만들어집니다. 대신 단독 실행 바이너리를 소스에서 빌드하려면 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile"><code>binary.Dockerfile</code></a>을 참고하십시오.
+</p><p><span id="Which&#95;MediaWiki"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="어느_MediaWiki인가"><span id=".EC.96.B4.EB.8A.90_MediaWiki.EC.9D.B8.EA.B0.80"></span>어느 MediaWiki인가</h2></div>
+<p>MediaWiki는 따로 설치하지 않습니다. Wikven을 실행하는 모든 방법이 저마다 MediaWiki를 안고 옵니다. 이미지와 바이너리는 <b>MediaWiki 1.46</b> 위에서 만들어지며, 어떻게 실행하든 여러분의 문서를 렌더링하는 것은 그것입니다.
+</p><p>Wikven 자체는 MediaWiki 1.46 이상을 요구하고, 모든 변경은 1.46과 MediaWiki 개발 브랜치 양쪽에서 시험됩니다. 그것이 동작이 확인된 범위이고, 직접 준비한 MediaWiki 위에 소스로 빌드한다면 맞춰야 할 대상입니다.
 </p>
 <hr />
 <p>Wikven을 갖추었다면, <a href="../Getting_Started/ko.html" title="Special:MyLanguage/Getting Started">시작하기</a>로 이동해 첫 사이트를 만드십시오.
@@ -260,8 +266,8 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788004853">
-  				<span>2026년 8월 29일 (토) 12:00에 마지막으로 편집됨</span>
+  				data-timestamp="1788075968">
+  				<span>2026년 8월 30일 (일) 07:46에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -284,7 +290,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 29일 (토) 12:00에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

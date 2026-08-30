@@ -320,6 +320,8 @@ Wikven
 <span class="w">      </span><span class="nt">package</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mediawiki/semantic-media-wiki:~4.1</span>
 </pre></div>
 <p>A name in <code>WikvenRepositories</code> that is already bundled with wikven is left untouched. A name that is not also listed in <code>extensions</code> or <code>skins</code> is an error.
+</p><p>With <code>package</code>, the name is Composer's to choose rather than yours: a <code>mediawiki-extension</code> package is installed into a CamelCased directory with any trailing <code>-extension</code> cut off (<code>mediawiki/tabber-neue-extension</code> becomes <code>extensions/TabberNeue</code>), while a <code>mediawiki-skin</code> package is not CamelCased at all (<code>mediawiki/chameleon-skin</code> becomes <code>skins/chameleon</code>). The name you list has to be that directory, because that is what the build loads. It is checked after the install and named if it does not match, so this is a build that stops rather than a site published without the component.
+</p><p>A <code>package</code> constraint that is not an exact version — <code>~4.1</code>, <code>^4</code>, <code>*</code> — is warned about in the build log for the reason the note below gives. It is not an error: taking whatever the registry serves is a bargain you are entitled to make, the same one a moving <code>reference</code> makes, and the build only says you have made it.
 </p><p>Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">binary</a> they must be on your <code>PATH</code>.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
@@ -358,8 +360,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788072201">
-  				<span>Last edited on 30 August 2026, at 06:43</span>
+  				data-timestamp="1788075999">
+  				<span>Last edited on 30 August 2026, at 07:46</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -382,7 +384,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 06:43.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 07:46.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

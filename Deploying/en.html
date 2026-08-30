@@ -653,7 +653,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>Which way out of that you take is yours to choose, and the two are not the same bargain:
 </p>
 <ul><li><b>Keep the pin exact and move it deliberately.</b> A <code>commit</code>, or a <code>tarball</code> with its <code>sha256</code>, builds the same site tomorrow as it does today, and every change to what you ship is a diff someone approved. What it costs is time-to-fix: a security release sits upstream until the pin is moved.</li>
-<li><b>Point the pin at something that moves.</b> A <code>reference</code> naming a release branch — <code>REL1_43</code>, say — takes whatever that branch holds when the build runs, so a fix arrives at the next bake with nothing to merge. What it costs is reproducibility: two bakes of one source tree can differ, and nothing in the tree records what changed between them.</li></ul>
+<li><b>Point the pin at something that moves.</b> A <code>reference</code> naming a release branch — <code>REL1_46</code>, say — takes whatever that branch holds when the build runs, so a fix arrives at the next bake with nothing to merge. What it costs is reproducibility: two bakes of one source tree can differ, and nothing in the tree records what changed between them.</li></ul>
 <p>The rest of this section is about making the first cheap enough to prefer.
 </p><p><a rel="nofollow" class="external text" href="https://www.updatecli.io/">updatecli</a> fills that hole, and it fills it by never having to recognise your file: you tell it where the pin is. A manifest names a <b>source</b> (where the current version is published) and a <b>target</b> (which key of which file holds the pin); applying it writes the source's value into the target and opens a pull request if that changed anything. Run it on a schedule in continuous integration and a pin that has fallen behind becomes a pull request you can review. Here is a whole manifest for one pin, a repository following a release tag:
 </p>
@@ -707,7 +707,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 12:00.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 07:46.</li>
 </ul>
 
 	<ul id="footer-places">

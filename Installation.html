@@ -310,6 +310,18 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<ul id="toc-Build_from_source-sublist" class="vector-toc-list">
 		</ul>
 	</li>
+	<li id="toc-Which_MediaWiki"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Which_MediaWiki">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">4</span>
+				<span>Which MediaWiki</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Which_MediaWiki-sublist" class="vector-toc-list">
+		</ul>
+	</li>
 </ul>
 </div>
 
@@ -549,6 +561,10 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 </pre></div>
 <p>This produces a local <code>wikven</code> image you run exactly like the published one. To build the standalone binary from source instead, see <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile"><code>binary.Dockerfile</code></a>.
 </p>
+<div class="mw-heading mw-heading2"><h2 id="Which_MediaWiki">Which MediaWiki</h2></div>
+<p>You do not install MediaWiki: every way of running Wikven brings its own. The image and the binary are built on <b>MediaWiki 1.46</b>, and that is what renders your pages however you run them.
+</p><p>Wikven itself requires MediaWiki 1.46 or later, and every change to it is tested against both 1.46 and MediaWiki's development branch. That is the range it is known to work in, and it is what to build against if you are building from source onto a MediaWiki of your own.
+</p>
 <hr />
 <p>Once you have Wikven, head to <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> to build your first site.
 </p>
@@ -565,7 +581,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 12:00.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 07:46.</li>
 </ul>
 
 	<ul id="footer-places">

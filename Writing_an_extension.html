@@ -595,6 +595,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading2"><h2 id="What_a_build_is">What a build is</h2></div>
 <p>A Wikven build boots MediaWiki once, on the command line, renders every page to a file, and exits. The reader is then served plain files by a host that runs no PHP.
+</p><p>That MediaWiki is <b>1.46</b>, the release the image and the binary are built on, so it is the one your extension has to work with. Wikven itself supports 1.46 and later; if you write against a newer one, a site running the released image will not have it.
 </p><p>Two consequences run through everything below:
 </p>
 <ul><li><b>Your code runs at build time, not at view time.</b> There is no <code>load.php</code>, no action API and no database once the site is deployed. Anything your extension would normally do in response to a request has to happen during the build, or ship as static JavaScript that needs no server.</li>
@@ -681,7 +682,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 13:08.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 07:46.</li>
 </ul>
 
 	<ul id="footer-places">

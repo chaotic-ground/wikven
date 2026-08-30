@@ -206,6 +206,7 @@ Wikven
 <li class="toclevel-1 tocsection-1"><a href="#Binary"><span class="tocnumber">1</span> <span class="toctext">Binary</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Docker"><span class="tocnumber">2</span> <span class="toctext">Docker</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Build_from_source"><span class="tocnumber">3</span> <span class="toctext">Build from source</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Which_MediaWiki"><span class="tocnumber">4</span> <span class="toctext">Which MediaWiki</span></a></li>
 </ul>
 </div>
 
@@ -241,6 +242,10 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 </pre></div>
 <p>This produces a local <code>wikven</code> image you run exactly like the published one. To build the standalone binary from source instead, see <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile"><code>binary.Dockerfile</code></a>.
 </p>
+<div class="mw-heading mw-heading2"><h2 id="Which_MediaWiki">Which MediaWiki</h2></div>
+<p>You do not install MediaWiki: every way of running Wikven brings its own. The image and the binary are built on <b>MediaWiki 1.46</b>, and that is what renders your pages however you run them.
+</p><p>Wikven itself requires MediaWiki 1.46 or later, and every change to it is tested against both 1.46 and MediaWiki's development branch. That is the range it is known to work in, and it is what to build against if you are building from source onto a MediaWiki of your own.
+</p>
 <hr />
 <p>Once you have Wikven, head to <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> to build your first site.
 </p>
@@ -261,8 +266,8 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788004853">
-  				<span>Last edited on 29 August 2026, at 12:00</span>
+  				data-timestamp="1788075968">
+  				<span>Last edited on 30 August 2026, at 07:46</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -285,7 +290,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 12:00.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 07:46.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
