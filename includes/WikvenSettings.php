@@ -362,8 +362,11 @@ if ($wikvenSiteFile !== null && $wikvenAllPresent) {
 			array_keys($wikvenUnaccounted),
 			array_keys($wikvenDefined)
 		);
+		// Named again rather than carried down from the read above: the name is only ever set
+		// alongside a file, and the guard on this block is the file.
+		$wikvenReportedFile = basename($wikvenSiteFile);
 		foreach ($wikvenUndefined as $wikvenWarning) {
-			error_log("Wikven: WARNING in $wikvenSiteName: $wikvenWarning");
+			error_log("Wikven: WARNING in $wikvenReportedFile: $wikvenWarning");
 		}
 	}
 }
