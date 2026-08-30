@@ -155,10 +155,6 @@ if ($wikvenConvert === null || $wikvenRsvg === null) {
 // Load config: default.yml then the site file via $wgSettings; ext/skin lists loaded leniently.
 global $wgSettings;
 
-// Known config names from extension.json, used to flag misspelled keys.
-$wikvenManifest = json_decode(file_get_contents("$IP/extensions/Wikven/extension.json"), true);
-$wikvenKnownConfig = array_keys($wikvenManifest['config'] ?? []);
-
 // Autoloader not active yet at LocalSettings time; load the helper directly.
 require_once "$IP/extensions/Wikven/includes/SiteConfig.php";
 
@@ -183,7 +179,7 @@ if ($wikvenSiteFile !== null) {
 		: new MediaWiki\Settings\Source\Format\YamlFormat();
 	$wikvenSiteData = $wikvenSiteFormat->decode(file_get_contents($wikvenSiteFile));
 	$wikvenSiteName = basename($wikvenSiteFile);
-	foreach (MediaWiki\Extension\Wikven\SiteConfig::lint($wikvenSiteData, $wikvenKnownConfig) as $wikvenWarning) {
+	foreach (MediaWiki\Extension\Wikven\SiteConfig::lint($wikvenSiteData) as $wikvenWarning) {
 		error_log("Wikven: WARNING in $wikvenSiteName: $wikvenWarning");
 	}
 }
@@ -232,6 +228,10 @@ $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_
 // error_log() is where this file reports the names it passes over, so a refused one lands beside
 // them.
 
+// Anything named below that is not on disk is a name whose settings nobody here can account for;
+// the report at the end of this file says why that silences it.
+$wikvenAllPresent = true;
+
 // Register each bundled skin; canonical name (may differ from dir) read from skin.json.
 $wgWikvenSkins = [];
 foreach ($config['skins'] ?? [] as $skin) {
@@ -240,10 +240,12 @@ foreach ($config['skins'] ?? [] as $skin) {
 	}
 	if (!MediaWiki\Extension\Wikven\SiteConfig::isComponentName($skin)) {
 		error_log("Wikven: refusing skin '$skin' (a name here is a directory in this image, not a path)");
+		$wikvenAllPresent = false;
 		continue;
 	}
 	if (!is_file("$IP/skins/$skin/skin.json")) {
 		error_log("Wikven: skipping skin '$skin' (not bundled in this image)");
+		$wikvenAllPresent = false;
 		continue;
 	}
 	wfLoadSkin($skin);
@@ -292,12 +294,14 @@ foreach ($config['extensions'] ?? [] as $extension) {
 	// The same directory-name check the skins above make; see there for why it is made here.
 	if (!MediaWiki\Extension\Wikven\SiteConfig::isComponentName($extension)) {
 		error_log("Wikven: refusing extension '$extension' (a name here is a directory in this image, not a path)");
+		$wikvenAllPresent = false;
 		continue;
 	}
 	if (is_file("$IP/extensions/$extension/extension.json")) {
 		wfLoadExtension($extension);
 	} else {
 		error_log("Wikven: skipping extension '$extension' (not bundled in this image)");
+		$wikvenAllPresent = false;
 	}
 }
 
@@ -330,6 +334,41 @@ if (
 	&& !array_key_exists('SifterSearchOutputDir', $wikvenSiteConfig)
 ) {
 	$GLOBALS['wgSifterSearchOutputDir'] = "$wikvenDist/pagefind";
+}
+
+// Say which config names nothing defines, now that everything that could define one is queued.
+// This is the quietest way a line in a site's file is lost: $wgSettings writes the name into a
+// global, no code ever reads that global, and the build succeeds having ignored the line. Core is
+// not in a position to report it -- validate() walks the schema's keys rather than the file's, and
+// an extension's settings never reach that schema at all, ExtensionRegistry writing them straight
+// to globals -- so the queued manifests are read here instead. getQueue() is the installer's, and
+// used here because at this point in the boot it is the only complete answer to what is about to
+// load; a wrong answer costs a warning either way and never a build.
+//
+// Silent while a name in this site's lists is missing from the image, because the extensions that
+// would account for its settings are exactly the ones that are not there. fetchExtensions.php
+// boots this file to install them, and so boots it before they exist.
+if ($wikvenSiteFile !== null && $wikvenAllPresent) {
+	// Core's names are already in hand, and most of a config file is core settings. Only what they
+	// leave over is worth opening two dozen manifests for, which is usually nothing at all -- and
+	// this runs in every process a build starts.
+	$wikvenDefined = array_fill_keys($wgSettings->getDefinedConfigKeys(), true);
+	$wikvenUnaccounted = array_diff_key($wikvenSiteConfig, $wikvenDefined);
+	if ($wikvenUnaccounted !== []) {
+		$wikvenDefined += MediaWiki\Extension\Wikven\SiteConfig::manifestConfigNames(
+			array_keys(MediaWiki\Registration\ExtensionRegistry::getInstance()->getQueue())
+		);
+		$wikvenUndefined = MediaWiki\Extension\Wikven\SiteConfig::undefinedConfig(
+			array_keys($wikvenUnaccounted),
+			array_keys($wikvenDefined)
+		);
+		// Named again rather than carried down from the read above: the name is only ever set
+		// alongside a file, and the guard on this block is the file.
+		$wikvenReportedFile = basename($wikvenSiteFile);
+		foreach ($wikvenUndefined as $wikvenWarning) {
+			error_log("Wikven: WARNING in $wikvenReportedFile: $wikvenWarning");
+		}
+	}
 }
 
 // WikvenLogos ($wgWikvenLogos) mirrors $wgLogos but each src is a source-dir file name, resolved

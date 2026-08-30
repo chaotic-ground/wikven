@@ -39,7 +39,7 @@ The standalone binary is Linux-only (x86_64 and arm64). On macOS or Windows, use
 == A setting in <code>.wikven.yaml</code> does nothing ==
 
 <!--T:13-->
-Read the build log first: it warns about the mistakes it can see. <code>unknown config 'Wikven...'</code> means a variable that is not one of {{SITENAME}}'s — a typo, most often, since a name it does not recognise is otherwise applied and ignored. <code>unknown top-level key</code> means a setting outside <code>config</code>, <code>extensions</code> or <code>skins</code>. A URL template warning means <code>WikvenEditUrl</code> and friends are missing their <code>$1</code>.
+Read the build log first: it warns about the mistakes it can see. <code>unknown config</code> means a name nothing loaded here defines — a typo, most often, since a name nobody owns is otherwise applied and ignored; the warning names the closest setting it does know of. It waits until every extension and skin your site lists is installed, because a setting can belong to any of them. <code>unknown top-level key</code> means a setting outside <code>config</code>, <code>extensions</code> or <code>skins</code>. A URL template warning means <code>WikvenEditUrl</code> and friends are missing their <code>$1</code>.
 
 <!--T:14-->
 A silent one to check by eye: a <code>config</code> value '''replaces''' the default rather than merging with it, so a list or map you set has to carry every entry you want, including the ones you were happy with. See [[<tvar name="1">Special:MyLanguage/Configuration</tvar>|Configuration]].

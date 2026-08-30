@@ -37,8 +37,8 @@
 <!--T:12 @acfea82d-->
 == <code>.wikven.yaml</code>의 설정이 아무 일도 하지 않습니다 ==
 
-<!--T:13 @6b5fbe0e-->
-먼저 빌드 로그를 읽으십시오. 눈에 보이는 실수는 로그가 경고합니다. <code>unknown config 'Wikven...'</code>은 {{SITENAME}}의 변수가 아니라는 뜻이고, 대개 오타입니다. 알아보지 못한 이름도 그냥 적용된 뒤 무시되기 때문입니다. <code>unknown top-level key</code>는 <code>config</code>, <code>extensions</code>, <code>skins</code> 바깥에 있는 설정을 뜻합니다. URL 템플릿 경고는 <code>WikvenEditUrl</code>과 그 짝들에 <code>$1</code>이 빠졌다는 뜻입니다.
+<!--T:13 @551dd5c4-->
+먼저 빌드 로그를 읽으십시오. 눈에 보이는 실수는 로그가 경고합니다. <code>unknown config</code>는 여기에 불러온 것 중 어느 것도 정의하지 않는 이름이라는 뜻이고, 대개 오타입니다. 임자가 없는 이름도 그냥 적용된 뒤 무시되기 때문입니다. 경고는 알고 있는 설정 가운데 가장 가까운 이름을 함께 알려줍니다. 이 검사는 사이트가 나열한 확장 기능과 스킨이 모두 설치된 뒤에야 이루어집니다. 설정이 그중 어느 것에 속할 수도 있기 때문입니다. <code>unknown top-level key</code>는 <code>config</code>, <code>extensions</code>, <code>skins</code> 바깥에 있는 설정을 뜻합니다. URL 템플릿 경고는 <code>WikvenEditUrl</code>과 그 짝들에 <code>$1</code>이 빠졌다는 뜻입니다.
 
 <!--T:14 @e5404df9-->
 로그에 나오지 않아 직접 확인해야 하는 것이 하나 있습니다. <code>config</code> 값은 기본값과 합쳐지지 않고 '''대체'''하므로, 목록이나 맵을 설정할 때는 그대로 두고 싶었던 항목까지 모두 적어야 합니다. [[$1|설정]]을 참고하십시오.
