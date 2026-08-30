@@ -159,6 +159,26 @@ class TranslationSource {
 	}
 
 	/**
+	 * The translation files a base page has, keyed by the language each is written in.
+	 *
+	 * A caller that has the base file gets its translations by the paths they were found at, rather
+	 * than by rebuilding them from the page title: a title has been through MediaWiki's
+	 * normalization and no longer spells the file it came from ("Getting_Started.wikitext" imports
+	 * as "Getting Started"), so a rebuilt path can miss a translation that is sitting right there.
+	 *
+	 * @param string $baseFile
+	 * @param callable(string):bool $isKnownLanguage
+	 * @return array<string,string> Absolute paths, keyed by language code, sorted by code.
+	 */
+	public static function translationFiles(string $baseFile, callable $isKnownLanguage): array {
+		$files = [];
+		foreach (self::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
+			$files[$lang] = self::translationPath($baseFile, $lang);
+		}
+		return $files;
+	}
+
+	/**
 	 * Every language the source tree carries a translation in.
 	 *
 	 * The languages a site is built in are the ones its pages have translations for. Read from the

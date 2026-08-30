@@ -3,6 +3,8 @@
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
+use MediaWiki\Extension\Wikven\SourceFile;
+use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
 /**
@@ -85,6 +87,30 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 		rmdir($dir);
 
 		$this->assertSame(["$dir/Intro.wikitext", "$dir/Intro/Details.wikitext"], $found);
+	}
+
+	/**
+	 * A page reaches its translations by the paths they were found at, because a page title cannot
+	 * be turned back into one: "Getting_Started.wikitext" imports as "Getting Started", and a path
+	 * rebuilt from that title points at a directory the source tree does not have, so the build
+	 * would find no Korean to load and say nothing about it.
+	 */
+	public function testATranslationIsFoundAtThePathItsLanguageWasDiscoveredAt() {
+		$dir = $this->getNewTempDirectory();
+		mkdir("$dir/Getting_Started");
+		file_put_contents("$dir/Getting_Started.wikitext", "<languages/>\n<translate>\n<!--T:1-->\nHi.\n</translate>");
+		file_put_contents("$dir/Getting_Started/ko.wikitext", "<!--T:1-->\n안녕하세요.");
+
+		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
+		$files = TranslationSource::translationFiles("$dir/Getting_Started.wikitext", $isKnownLanguage);
+
+		$this->assertSame(['ko' => "$dir/Getting_Started/ko.wikitext"], $files);
+		$this->assertFileExists($files['ko'], 'the translation is where the language was discovered');
+		$this->assertSame(
+			'Getting Started',
+			Title::newFromText(SourceFile::filenameToTitle('Getting_Started.wikitext'))?->getPrefixedText(),
+			'the file name does not survive title normalization'
+		);
 	}
 
 	/** @dataProvider provideTranslatableTitle */
