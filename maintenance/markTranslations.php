@@ -24,14 +24,14 @@ class MarkTranslations extends Maintenance {
 
 	public function execute() {
 		$source = rtrim((string)$this->getOption('source', $GLOBALS['wgWikvenSourceDirectory'] ?? ''), '/');
+		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
 		if ($this->hasOption('all')) {
 			if ($source === '' || !is_dir($source)) {
 				$this->fatalError("Wikven: source directory '$source' does not exist.");
 			}
-			$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 			foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
-				$this->markFile($baseFile);
+				$this->markFile($baseFile, $isKnownLanguage);
 			}
 			return;
 		}
@@ -47,19 +47,42 @@ class MarkTranslations extends Maintenance {
 		if (!is_file($file)) {
 			$this->fatalError("Wikven: '$file' does not exist.");
 		}
-		$this->markFile($file);
+		$this->markFile($file, $isKnownLanguage);
 	}
 
-	/** Mark one file in place, reporting whether it changed. */
-	private function markFile(string $file): void {
+	/**
+	 * Mark one file in place, reporting whether it changed.
+	 *
+	 * @param string $file
+	 * @param callable(string):bool $isKnownLanguage
+	 */
+	private function markFile(string $file, callable $isKnownLanguage): void {
 		$before = (string)file_get_contents($file);
-		$after = StalenessComputer::mark($before);
+		$after = StalenessComputer::mark($before, $this->translationsOf($file, $isKnownLanguage));
 		if ($after === $before) {
 			$this->output("unchanged: $file\n");
 			return;
 		}
 		file_put_contents($file, $after);
 		$this->output("marked:    $file\n");
+	}
+
+	/**
+	 * The text of every translation a page already has.
+	 *
+	 * Numbering reads them because a number one of them still carries stays taken even after the unit
+	 * it was written for is deleted; a file that is not a base page simply has none.
+	 *
+	 * @param string $baseFile
+	 * @param callable(string):bool $isKnownLanguage
+	 * @return string[]
+	 */
+	private function translationsOf(string $baseFile, callable $isKnownLanguage): array {
+		$translations = [];
+		foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
+			$translations[] = (string)file_get_contents(TranslationSource::translationPath($baseFile, $lang));
+		}
+		return $translations;
 	}
 }
 

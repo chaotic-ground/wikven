@@ -39,6 +39,19 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	public function testMarkDoesNotHandOutANumberATranslationStillCarries() {
+		// The highest-numbered unit has been deleted and a new one written where it stood. Its number
+		// is not free while a translation still answers to it: giving it to the new unit would hand
+		// that unit the deleted one's translations, which then read as merely stale.
+		$this->assertSame(
+			"<translate>\n<!--T:1-->\nAlpha.\n\n<!--T:3-->\nGamma.\n</translate>",
+			StalenessComputer::mark(
+				"<translate>\n<!--T:1-->\nAlpha.\n\nGamma.\n</translate>",
+				["<!--T:1 @00000000-->\n알파\n\n<!--T:2 @00000000-->\n베타\n"]
+			)
+		);
+	}
+
 	public function testMarkNumbersContinueAcrossBlocks() {
 		$this->assertSame(
 			"<translate>\n<!--T:1-->\nA.\n</translate>\nx\n<translate>\n<!--T:2-->\nB.\n</translate>",

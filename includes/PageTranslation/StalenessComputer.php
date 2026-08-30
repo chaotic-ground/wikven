@@ -82,8 +82,13 @@ class StalenessComputer {
 	 * Units are the blank-line-separated blocks Translate segments on; an already-marked unit keeps
 	 * its number and new ones continue from the highest on the page. The marker goes on its own line
 	 * before the unit, which both the unit scan and Translate's own re-parse honour. Idempotent.
+	 *
+	 * @param string $text
+	 * @param string[] $translations The page's existing translations, whose own markers say which
+	 *   numbers a deleted unit left behind are still spoken for. A caller with no source directory to
+	 *   look in, or a page with no translations yet, passes none.
 	 */
-	public static function mark(string $text): string {
+	public static function mark(string $text, array $translations = []): string {
 		$blocks = self::blockRanges($text);
 
 		// Only a marker inside a block is a unit, so only those numbers are taken; one shown elsewhere
@@ -93,6 +98,18 @@ class StalenessComputer {
 		foreach ($existing[0] as $i => $marker) {
 			if (self::containingRange($marker[1], $blocks) !== null) {
 				$numbers[] = (int)$existing[1][$i][0];
+			}
+		}
+		// Deleting the highest-numbered unit does not free its number while a translation still answers
+		// to it: the next unmarked block would inherit that unit's translations and read as merely
+		// stale, hiding both the orphan and the new unit nobody has translated. A number no
+		// translation ever carried is free, which is why this asks the translations and not a tally.
+		foreach ($translations as $translation) {
+			foreach (array_keys(self::translationUnits($translation)) as $id) {
+				// The reserved title unit is not a number and never stands in the way of one.
+				if (ctype_digit((string)$id)) {
+					$numbers[] = (int)$id;
+				}
 			}
 		}
 		$next = $numbers === [] ? 1 : max($numbers) + 1;
