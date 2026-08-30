@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\Extension\Wikven\Webfonts\FontCopier;
 use MediaWiki\Extension\Wikven\Webfonts\FontRepository;
 use MediaWiki\Registration\ExtensionRegistry;
 
@@ -74,17 +75,20 @@ class BakeWebfonts extends Maintenance {
 			return;
 		}
 
-		$copied = $this->copyFonts($ulsDir, "$htmlDir/" . self::FONTS_SUBDIR, $built['files']);
-		if ($copied === 0) {
-			$this->error('Wikven: none of the required webfont files could be copied.');
-			return;
+		$missing = FontCopier::copy("$ulsDir/data/fontrepo/fonts", "$htmlDir/" . self::FONTS_SUBDIR, $built['files']);
+		// The stylesheet names every one of these files, so shipping it without them gives the
+		// reader the tofu the site opted into bundled fonts to spare them. The site asked for these
+		// fonts; a build that cannot deliver them has not done what it was asked, and says so.
+		if ($missing !== []) {
+			$counts = count($missing) . ' of ' . count($built['files']);
+			$this->fatalError("Wikven: $counts webfont file(s) could not be copied: " . implode(', ', $missing));
 		}
 
 		if (!is_dir($cssDir) && !wfMkdirParents($cssDir)) {
 			$this->fatalError("Wikven: could not create style directory $cssDir");
 		}
 		file_put_contents("$cssDir/webfonts.css", $built['css'], LOCK_EX);
-		$this->output("Wrote webfonts.css ($copied font file(s))\n");
+		$this->output('Wrote webfonts.css (' . count($built['files']) . " font file(s))\n");
 	}
 
 	/**
@@ -142,36 +146,6 @@ class BakeWebfonts extends Maintenance {
 			}
 		}
 		return $languages;
-	}
-
-	/**
-	 * Copy each base-relative woff2 path from ULS's font repo into the output.
-	 *
-	 * @param string $ulsDir
-	 * @param string $destBase Output directory the woff2 tree is copied under.
-	 * @param string[] $files Base-relative woff2 paths (e.g. "AbyssinicaSIL/AbyssinicaSIL-R.woff2").
-	 * @return int The number of files copied.
-	 */
-	private function copyFonts(string $ulsDir, string $destBase, array $files): int {
-		$srcBase = "$ulsDir/data/fontrepo/fonts";
-		$copied = 0;
-		foreach ($files as $relative) {
-			$src = "$srcBase/$relative";
-			if (!is_file($src)) {
-				$this->output("  missing font: $relative\n");
-				continue;
-			}
-			$dest = "$destBase/$relative";
-			$dir = dirname($dest);
-			if (!is_dir($dir) && !wfMkdirParents($dir)) {
-				$this->error("Wikven: could not create font directory $dir");
-				continue;
-			}
-			if (copy($src, $dest)) {
-				$copied++;
-			}
-		}
-		return $copied;
 	}
 }
 
