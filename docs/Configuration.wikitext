@@ -227,6 +227,15 @@ Each method needs a host tool present at build time: <code>tarball</code> uses <
 <!--T:44-->
 Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See [[<tvar name="1">Special:MyLanguage/Deploying#keeping-pins-current</tvar>|Deploying]] for keeping one current.
 
+<!--T:65-->
+Moving wikven moves the core underneath these pins. A wikven major accompanies every bump of the bundled MediaWiki, which is about twice a year, and a site that declares <code>WikvenRepositories</code> is carrying code wikven does not test, released on a calendar that is not wikven's. Crossing a major hands that code a MediaWiki it has never run on.
+
+<!--T:66-->
+Two things can happen then, and only one of them is caught. A component that declares a core range excluding the new core stops the build: MediaWiki's <code>VersionChecker</code> raises <code>incompatible-core</code>, naming the component and the range it asked for. A component that declares only a lower bound and breaks anyway is not detected at all. The second is the normal case rather than the exception — Citizen v3.21.0 and TabberNeue v4.0.2, both pinned by this site, require <code>MediaWiki: >= 1.43.0</code> with nothing above it. That is the honest thing for them to declare: the requirement is written at release, before the core it would have to exclude exists, and the ecosystem has nowhere to record the incompatibility once someone finds it. No check can be written for what nobody can write down.
+
+<!--T:67-->
+Re-check your pinned components yourself, then, whenever you move wikven across a major: build the site and read the pages they render. A green build says the pins resolved and the ranges they declared were satisfied; it is not evidence that anything still works.
+
 <!--T:26-->
 This very site fetches [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue</tvar> TabberNeue] this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 </translate>
