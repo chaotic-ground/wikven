@@ -23,6 +23,7 @@ require_once "$IP/maintenance/Maintenance.php";
 require_once __DIR__ . '/../includes/Attempts.php';
 require_once __DIR__ . '/../includes/ComposerInstall.php';
 require_once __DIR__ . '/../includes/FetchPin.php';
+require_once __DIR__ . '/../includes/TarballChecksum.php';
 require_once __DIR__ . '/../includes/UserAgent.php';
 
 /** Fetch third-party extensions/skins declared in .wikven.yaml before MediaWiki loads them. */
@@ -265,11 +266,11 @@ class FetchExtensions extends Maintenance {
 
 	/** The lowercased, validated `sha256:` of a tarball spec, or null if absent. */
 	private function validatedSha256(array $spec, string $name, string $kind): ?string {
-		if (!isset($spec['sha256'])) {
+		$sha = TarballChecksum::wanted($spec);
+		if ($sha === null) {
 			return null;
 		}
-		$sha = strtolower(trim((string)$spec['sha256']));
-		if (!preg_match('/^[0-9a-f]{64}$/', $sha)) {
+		if (!TarballChecksum::isValid($sha)) {
 			$this->fatalError("Wikven: $kind '$name' has an invalid sha256 (expected 64 hex characters).");
 		}
 		return $sha;
@@ -295,8 +296,8 @@ class FetchExtensions extends Maintenance {
 		$tmp = tempnam(sys_get_temp_dir(), 'wikven');
 		$this->download($url, $tmp, "download $kind '$name'");
 		if ($sha256 !== null) {
-			$actual = hash_file('sha256', $tmp);
-			if (!hash_equals($sha256, (string)$actual)) {
+			if (!TarballChecksum::matches($sha256, $tmp)) {
+				$actual = is_file($tmp) ? hash_file('sha256', $tmp) : 'nothing';
 				unlink($tmp);
 				$this->fatalError(
 					"Wikven: $kind '$name' tarball sha256 mismatch (expected $sha256, got $actual)."
