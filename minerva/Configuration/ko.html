@@ -257,7 +257,7 @@ Wikven
 <span class="w">  </span><span class="nt">WikvenLogos</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logo.svg</span>
 </pre></div>
-<p>파일의 주소는 여러분이 아니라 빌드가 정하기 때문에 값이 URL이 아니라 파일 이름입니다. 이름이 지정된 각 파일은 다른 소스 이미지와 마찬가지로 <code>File:</code> 이름공간에 업로드되고, Wikven이 여러분을 대신해 <code>$wgLogos</code>를 그 업로드로 가리키므로 여러분은 파일 이름만 대면 됩니다. 그런 다음 내보내기는 다른 이미지와 똑같이 로고를 HTML 옆의 단일 공유 파일로 복사하고 그것을 가리키도록 레퍼런스를 다시 씁니다. 그래서 로고가 모든 문서에 삽입되지는 않습니다. 아무 파일도 대지 않으면 MediaWiki 자체가 보여 주는 로고가 그대로 쓰입니다.
+<p>파일의 주소는 여러분이 아니라 빌드가 정하기 때문에 값이 URL이 아니라 파일 이름입니다. 이름이 지정된 각 파일은 다른 소스 이미지와 마찬가지로 <code>File:</code> 이름공간에 업로드되고, Wikven이 여러분을 대신해 <code>$wgLogos</code>를 그 업로드로 가리키므로 여러분은 파일 이름만 대면 됩니다. 그런 다음 내보내기는 다른 이미지와 똑같이 로고를 <a href="#WikvenAssetDirectory">자산 디렉터리</a>의 단일 공유 파일로 복사하고 그것을 가리키도록 레퍼런스를 다시 씁니다. 그래서 로고가 모든 문서에 삽입되지는 않습니다. 아무 파일도 대지 않으면 MediaWiki 자체가 보여 주는 로고가 그대로 쓰입니다.
 </p><p>Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 않도록 작은 기본 파비콘도 함께 제공합니다. <code>config.Favicon</code>(URL이나 데이터 URI)으로 이를 재정의하십시오.
 </p><p><span id="WikvenEditUrl"></span>
 </p>
@@ -337,7 +337,7 @@ Wikven
 </p><p>정확한 버전이 아닌 <code>package</code> 제약 — <code>~4.1</code>, <code>^4</code>, <code>*</code> — 은 아래 알림이 말하는 이유로 빌드 로그에 경고가 남습니다. 오류는 아닙니다. 레지스트리가 주는 대로 받는 것은 여러분이 택할 수 있는 거래이고, 움직이는 <code>reference</code>가 하는 것과 같은 거래이며, 빌드는 그 거래를 했다는 사실만 말해 줄 뿐입니다.
 </p><p>각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>curl</code>과 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a>를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>에서는 이들이 <code>PATH</code>에 있어야 합니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>여기서 이름을 대는 코드를 빌드가 네트워크 접근과 함께 내려받아 <b>실행</b>합니다. 복제된 확장 기능의 PHP와 모든 Composer 스크립트가 빌드 중에 실행됩니다. 신뢰하는 소스만 선언하십시오. 변조를 알아챌 수 있고 재현 가능한 빌드를 위해서는 타르볼을 <code>sha256</code>으로, 리포지터리를 <code>commit</code>(정확한 SHA)으로 고정하십시오. 가변적인 <code>reference</code> 태그/브랜치나 유동적인 <code>package</code> 제약은 여러분 모르게 바뀔 수 있습니다.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>여기서 이름을 대는 코드를 빌드가 네트워크 접근과 함께 내려받아 <b>실행</b>합니다. 복제된 확장 기능의 PHP와 모든 Composer 스크립트가 빌드 중에 실행됩니다. 신뢰하는 소스만 선언하십시오. 변조를 알아챌 수 있고 재현 가능한 빌드를 위해서는 타르볼을 <code>sha256</code>으로, 리포지터리를 <code>commit</code>(정확한 SHA)으로 고정하십시오. 가변적인 <code>reference</code> 태그/브랜치나 유동적인 <code>package</code> 제약은 여러분 모르게 바뀔 수 있습니다.</p></div>
 </div>
 <p>다만 정확한 핀을 여러분 대신 옮겨 주는 것은 없습니다. 이 파일은 의존성 봇이 읽는 어떤 생태계에도 속하지 않으므로, 그대로 둔 핀은 뒤처진 핀이 됩니다. 핀을 최신으로 유지하는 방법은 <a href="../Deploying/ko.html#keeping-pins-current" title="Special:MyLanguage/Deploying">배포하기</a>를 참고하십시오.
 </p><p>wikven을 옮기면 이 핀들 밑에 깔린 코어도 함께 옮겨집니다. wikven의 메이저 버전은 번들된 MediaWiki가 올라갈 때마다 함께 올라가고, 그것은 대략 1년에 두 번입니다. <code>WikvenRepositories</code>를 선언한 사이트는 wikven이 시험하지 않는 코드를, wikven의 것이 아닌 릴리스 일정 위에서 안고 있는 셈입니다. 메이저를 건너간다는 것은 그 코드에 한 번도 돌아 본 적 없는 MediaWiki를 쥐여 주는 일입니다.
@@ -377,8 +377,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788095809">
-  				<span>2026년 8월 30일 (일) 13:16에 마지막으로 편집됨</span>
+  				data-timestamp="1788098187">
+  				<span>2026년 8월 30일 (일) 13:56에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -401,7 +401,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 13:16에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 13:56에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

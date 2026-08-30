@@ -35,7 +35,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
 		<a href="../index/en.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="Visit the main page">
-			<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+			<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="32" width="32">
 			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
 		</a>
@@ -88,7 +88,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<div class="citizen-menu__card-content">
 				<div class="citizen-drawer__header">
 					<a href="../index/en.html" class="mw-logo citizen-drawer__logo" title="Visit the main page">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="80" width="80" loading="lazy">
 				</a>
 				<div class="citizen-drawer__siteinfo">
@@ -459,7 +459,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="nt">WikvenLogos</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logo.svg</span>
 </pre></div>
-<p>The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file next to the HTML and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page. Name none and the skin keeps whatever logo MediaWiki itself would show.
+<p>The values are file names rather than URLs because the file's address is decided by the build, not by you. Each named file is uploaded into the <code>File:</code> namespace like any other source image, and Wikven points <code>$wgLogos</code> at the upload for you, so you only name the file. The export then copies the logo to a single shared file in the <a href="#WikvenAssetDirectory">asset directory</a> and rewrites the reference to it, the same as for any other image, so the logo is not embedded into every page. Name none and the skin keeps whatever logo MediaWiki itself would show.
 </p><p>Wikven also ships a small default favicon so browsers do not 404 on <code>/favicon.ico</code>; override it with <code>config.Favicon</code> (a URL or a data URI).
 </p><p><span id="WikvenEditUrl"></span>
 </p>
@@ -539,7 +539,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>A <code>package</code> constraint that is not an exact version — <code>~4.1</code>, <code>^4</code>, <code>*</code> — is warned about in the build log for the reason the note below gives. It is not an error: taking whatever the registry serves is a bargain you are entitled to make, the same one a moving <code>reference</code> makes, and the build only says you have made it.
 </p><p>Each method needs a host tool present at build time: <code>tarball</code> uses <code>curl</code> and <code>tar</code>, <code>repository</code> uses <code>git</code> (and <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">binary</a> they must be on your <code>PATH</code>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
 </div>
 <p>Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See <a href="../Deploying/en.html#keeping-pins-current" title="Special:MyLanguage/Deploying">Deploying</a> for keeping one current.
 </p><p>Moving wikven moves the core underneath these pins. A wikven major accompanies every bump of the bundled MediaWiki, which is about twice a year, and a site that declares <code>WikvenRepositories</code> is carrying code wikven does not test, released on a calendar that is not wikven's. Crossing a major hands that code a MediaWiki it has never run on.
@@ -581,7 +581,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 30 August 2026, at 13:16." data-timestamp="1788095809"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 30 August 2026, at 13:56." data-timestamp="1788098187"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -847,7 +847,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 13:16.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 13:56.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -861,7 +861,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<section class="citizen-footer__content">
 			<div class="citizen-footer__siteinfo">
 				<div id="footer-sitetitle" class="citizen-footer__sitetitle mw-wiki-title">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" loading="lazy" height="48" width="48">
 					<div class="mw-logo-wordmark">Wikven</div>
 									</div>

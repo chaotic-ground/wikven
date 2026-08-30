@@ -36,7 +36,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
 		<a href="../index/en.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="Visit the main page">
-			<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+			<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="32" width="32">
 			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
 		</a>
@@ -89,7 +89,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<div class="citizen-menu__card-content">
 				<div class="citizen-drawer__header">
 					<a href="../index/en.html" class="mw-logo citizen-drawer__logo" title="Visit the main page">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="80" width="80" loading="lazy">
 				</a>
 				<div class="citizen-drawer__siteinfo">
@@ -443,7 +443,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 │   ├── site.styles.css      MediaWiki:Common.css and the skin's own CSS
 │   ├── startup-static.js    the module loader, with its network fetch removed
 │   ├── modules-static.js    every module the pages need, bundled
-│   ├── img-1a2b3c4d5e6f.png every image the pages use, named by content
+│   ├── img-1a2b3c4d5e6f.png every image, from a page or from CSS
 │   └── webfonts.css         only with WikvenBundleWebfonts set
 ├── fonts/                   the webfont files themselves, likewise
 ├── pagefind/                the search index
@@ -493,7 +493,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>Enable Pages for the repository under <b>Settings → Pages → Build and deployment → Source: GitHub Actions</b>. This documentation site is published this way.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>A GitHub <b>project</b> page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because Wikven writes them relative, but anything that needs an absolute path must include that base path: set <a href="../Searching/en.html" title="Special:MyLanguage/Searching">search</a>'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A <b>user/organization</b> page (served at the domain root) needs no such setting.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>A GitHub <b>project</b> page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because Wikven writes them relative, but anything that needs an absolute path must include that base path: set <a href="../Searching/en.html" title="Special:MyLanguage/Searching">search</a>'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A <b>user/organization</b> page (served at the domain root) needs no such setting.</p></div>
 </div>
 </section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Any_static_host">Any static host</h2></div>
 <p>Because <code>dist/</code> is just files, you can serve it from any static host (<a rel="nofollow" class="external text" href="https://www.netlify.com/">Netlify</a>, <a rel="nofollow" class="external text" href="https://pages.cloudflare.com/">Cloudflare Pages</a>, an object store like <a rel="nofollow" class="external text" href="https://aws.amazon.com/s3/">S3</a>, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
@@ -589,7 +589,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying/en.wikitext" title="This page was last edited on 30 August 2026, at 08:59." data-timestamp="1788080342"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying/en.wikitext" title="This page was last edited on 30 August 2026, at 13:56." data-timestamp="1788098187"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -715,7 +715,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 08:59.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 13:56.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -729,7 +729,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<section class="citizen-footer__content">
 			<div class="citizen-footer__siteinfo">
 				<div id="footer-sitetitle" class="citizen-footer__sitetitle mw-wiki-title">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" loading="lazy" height="48" width="48">
 					<div class="mw-logo-wordmark">Wikven</div>
 									</div>

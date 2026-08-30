@@ -36,7 +36,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
 		<a href="../index/ko.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="대문으로 가기">
-			<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+			<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="32" width="32">
 			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
 		</a>
@@ -89,7 +89,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<div class="citizen-menu__card-content">
 				<div class="citizen-drawer__header">
 					<a href="../index/ko.html" class="mw-logo citizen-drawer__logo" title="대문으로 가기">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="80" width="80" loading="lazy">
 				</a>
 				<div class="citizen-drawer__siteinfo">
@@ -444,7 +444,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 │   ├── site.styles.css      MediaWiki:Common.css and the skin's own CSS
 │   ├── startup-static.js    the module loader, with its network fetch removed
 │   ├── modules-static.js    every module the pages need, bundled
-│   ├── img-1a2b3c4d5e6f.png every image the pages use, named by content
+│   ├── img-1a2b3c4d5e6f.png every image, from a page or from CSS
 │   └── webfonts.css         only with WikvenBundleWebfonts set
 ├── fonts/                   the webfont files themselves, likewise
 ├── pagefind/                the search index
@@ -494,7 +494,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>저장소의 <b>Settings → Pages → Build and deployment → Source: GitHub Actions</b>에서 Pages를 활성화하세요. 이 문서 사이트도 이렇게 게시됩니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>GitHub <b>프로젝트</b> 페이지는 하위 디렉터리(<code>username.github.io/repo/</code>)에서 제공됩니다. Wikven은 문서 간 링크를 상대 경로로 작성하므로 페이지 사이의 링크는 계속 동작하지만, 절대 경로가 필요한 것은 그 기본 경로를 포함해야 합니다. <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색</a>의 <code>SifterSearchBundlePath</code>를 <code>/repo/pagefind/</code>로 설정하세요 (이 사이트는 <code>/wikven/pagefind/</code>를 사용합니다). <b>사용자/조직</b> 페이지(도메인 루트에서 제공)에는 그런 설정이 필요 없습니다.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>GitHub <b>프로젝트</b> 페이지는 하위 디렉터리(<code>username.github.io/repo/</code>)에서 제공됩니다. Wikven은 문서 간 링크를 상대 경로로 작성하므로 페이지 사이의 링크는 계속 동작하지만, 절대 경로가 필요한 것은 그 기본 경로를 포함해야 합니다. <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색</a>의 <code>SifterSearchBundlePath</code>를 <code>/repo/pagefind/</code>로 설정하세요 (이 사이트는 <code>/wikven/pagefind/</code>를 사용합니다). <b>사용자/조직</b> 페이지(도메인 루트에서 제공)에는 그런 설정이 필요 없습니다.</p></div>
 </div>
 <p><span id="Any_static_host"></span>
 </p>
@@ -733,7 +733,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<section class="citizen-footer__content">
 			<div class="citizen-footer__siteinfo">
 				<div id="footer-sitetitle" class="citizen-footer__sitetitle mw-wiki-title">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" loading="lazy" height="48" width="48">
 					<div class="mw-logo-wordmark">Wikven</div>
 									</div>
