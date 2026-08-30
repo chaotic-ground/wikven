@@ -56,7 +56,14 @@ class StoreImages extends Maintenance {
 					// Key by storage path (no ?query) so sizes/timestamps of one file dedupe.
 					$path = $m[1];
 					if (!array_key_exists($path, $map)) {
-						$map[$path] = $this->storeLocal($uploadDir . $path, $path, $dir);
+						// The path came out of a page's rendered HTML, so it is whatever someone
+						// wrote there rather than something MediaWiki stored. Bound it to the
+						// upload directory before reading a file at it.
+						$src = ContainedPath::under($uploadDir, $path);
+						if ($src === null) {
+							$this->output("  refusing: $path (reaches outside the upload directory)\n");
+						}
+						$map[$path] = $src === null ? null : $this->storeLocal($src, $path, $dir);
 					}
 					return $map[$path] ?? $m[0];
 				},

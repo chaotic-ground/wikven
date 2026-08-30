@@ -159,8 +159,10 @@ class AssetLocalizer {
 	 * @return string|null Relative url() target, or null if the file is missing.
 	 */
 	private static function copyAsset(string $mwRoot, string $path, string $dir, bool $inline = false): ?string {
-		$src = $mwRoot . $path;
-		if (!is_readable($src)) {
+		// $path is whatever a url() in the dumped CSS said, and one of those files is the site's own
+		// MediaWiki:Common.css, so bound it to the install root before reading a file at it.
+		$src = ContainedPath::under($mwRoot, $path);
+		if ($src === null || !is_readable($src)) {
 			return null;
 		}
 		$bytes = file_get_contents($src);

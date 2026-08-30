@@ -126,8 +126,11 @@ runs:
           echo "wikven: no per-file history for '$SOURCE'; every page will be dated at the commit" \
                "being built. Check the repository out with fetch-depth: 0 for per-page dates."
         fi
+        # Source read-only. A bake runs the third-party code WikvenRepositories names, and a
+        # writable mount would let that code edit the checkout this job goes on to use. Only the
+        # translate subcommands write into src/, and this action never runs one.
         docker run --rm \
-          -v "$PWD/$SOURCE:/workspace/src" \
+          -v "$PWD/$SOURCE:/workspace/src:ro" \
           -v "$PWD/$OUTPUT:/workspace/dist" \
           "${epoch[@]}" \
           "${jobs[@]}" \
