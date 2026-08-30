@@ -126,10 +126,13 @@ class TranslationAdvice {
 	}
 
 	/**
-	 * The comment a run leaves once everything it complained about is fixed.
+	 * The body of a run that found nothing, which is how a consumer tells that from a finding.
 	 *
-	 * Edited over the old body rather than deleted, so the thread keeps its place in the
-	 * conversation and a reader who followed a notification finds the answer rather than a gap.
+	 * CLEAR_MARKER on its own line is what says so; what to do about it is the consumer's to
+	 * decide. wikven's own action deletes the comment it left before, because a comment saying
+	 * there is nothing wrong is one nobody needs and the run's annotations hold the record either
+	 * way. The prose below is for a consumer that keeps its comment and wants something to put
+	 * where the complaint stood.
 	 *
 	 * @param list<string> $languages
 	 */
