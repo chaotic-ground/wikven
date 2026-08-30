@@ -113,8 +113,8 @@ class ImageImportTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * What reading subdirectories makes reachable: core names a File: page after the file alone
-	 * (wfBaseName), so two directories holding one name are one page, and --skip-dupes would take
-	 * the first and drop the second with a line among thousands.
+	 * (wfBaseName), so two directories holding one name are one page, and the importer would take
+	 * the first and skip the second with a line among thousands.
 	 */
 	public function testTwoDirectoriesCannotShareAnImageName() {
 		mkdir($this->directory . '/Guide');

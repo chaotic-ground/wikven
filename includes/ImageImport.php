@@ -59,10 +59,10 @@ class ImageImport {
 	 * Files that would import as the same page, keyed by the name they would share.
 	 *
 	 * A File: title is the file's name and nothing else -- core takes wfBaseName($file) and makes
-	 * the title from that -- so two images with one name in two directories are one page. The build
-	 * passes --skip-dupes, so the second is skipped with a line among thousands and whichever page
-	 * embedded it shows the other one's picture. Reading subdirectories is what makes this
-	 * reachable, so it is answered where it becomes reachable.
+	 * the title from that -- so two images with one name in two directories are one page. The
+	 * importer takes the first and skips the second, the name being taken, with a line among
+	 * thousands; whichever page embedded the second then shows the other one's picture. Reading
+	 * subdirectories is what makes this reachable, so it is answered where it becomes reachable.
 	 *
 	 * The name a file claims is the name after core normalises it, not the name on disk: a title
 	 * collapses every run of space, underscore and the other whitespace it knows to one underscore
