@@ -168,8 +168,9 @@ class CheckTranslations extends Maintenance {
 	/**
 	 * Write the comment body for --comment-file, or nothing when the option is not given.
 	 *
-	 * A clean run still writes one, saying so: the action edits its own earlier comment with it, so
-	 * a complaint that has been answered stops standing on the change.
+	 * A clean run still writes one, carrying TranslationAdvice::CLEAR_MARKER: a consumer that only
+	 * ever heard from a run with findings could not tell a complaint that has been answered from a
+	 * run that never happened, and would leave the answered one standing on the change.
 	 */
 	private function writeComment(): void {
 		$path = (string)$this->getOption('comment-file', '');

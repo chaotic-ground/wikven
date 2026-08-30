@@ -189,8 +189,8 @@ runs:
               # A fork's token is read-only, and a job without pull-requests: write has no rights
               # either. Neither is a reason to fail a check that has already reported everything it
               # found as annotations.
-              echo "::warning::wikven: could not post the translations comment (needs" \
-                   "pull-requests: write, which a pull request from a fork does not get)."
+              echo "::warning::wikven: could not leave the translations comment as it should be" \
+                   "(needs pull-requests: write, which a pull request from a fork does not get)."
             fi
           fi
         fi
