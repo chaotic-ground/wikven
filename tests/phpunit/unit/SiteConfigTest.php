@@ -20,6 +20,26 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame([], SiteConfig::lint($data, self::KNOWN));
 	}
 
+	/**
+	 * The three paths the build derives from WIKVEN_WORKDIR. Setting one used to survive
+	 * $wgSettings->apply() and silently move where pages were read from, while the config file
+	 * itself was still looked for beside the workdir.
+	 */
+	public function testAPathTheBuildDerivesForItselfWarns() {
+		foreach (SiteConfig::DERIVED_CONFIG as $derived) {
+			$warnings = SiteConfig::lint(['config' => [$derived => '/elsewhere']], self::KNOWN);
+			$this->assertCount(1, $warnings, "expected one warning for '$derived'");
+			$this->assertStringContainsString("'$derived' is worked out from WIKVEN_WORKDIR", $warnings[0]);
+		}
+	}
+
+	/** A derived key is a real Wikven variable, so it must not also be reported as a typo. */
+	public function testADerivedPathIsNotReportedAsAnUnknownVariable() {
+		$warnings = SiteConfig::lint(['config' => ['WikvenSourceDirectory' => '/elsewhere']], self::KNOWN);
+		$this->assertCount(1, $warnings);
+		$this->assertStringNotContainsString('typo', $warnings[0]);
+	}
+
 	public function testUrlTemplateMissingPlaceholderWarns() {
 		$warnings = SiteConfig::lint(['config' => ['WikvenEditUrl' => 'https://example.org/edit']], self::KNOWN);
 		$this->assertCount(1, $warnings);

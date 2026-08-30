@@ -198,6 +198,15 @@ foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {
 // Push merged config into globals so the logo handling below reads final values.
 $wgSettings->apply();
 
+// And take back the three the build works out for itself, which apply() has just handed to
+// whatever a site's file said. A site that set WikvenSourceDirectory would move where its pages are
+// read from without moving where its own config file was looked for -- SiteConfig::locate() ran
+// against the workdir long before this line -- so it would be configured from one tree and built
+// from another. SiteConfig::lint() warns about the key; this is what makes the warning true.
+$wgWikvenSourceDirectory = $wikvenSrc;
+$wgWikvenHtmlDirectory = $wikvenDist;
+$wgWikvenSourceHistoryFile = is_file($wikvenHistoryFile) ? $wikvenHistoryFile : '';
+
 // Dedupe so each extension/skin loads at most once.
 $config['extensions'] = array_values(array_unique(array_filter($config['extensions'], 'is_string'), SORT_STRING));
 $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_string'), SORT_STRING));

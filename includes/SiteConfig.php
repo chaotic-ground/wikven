@@ -38,6 +38,21 @@ class SiteConfig {
 	}
 
 	/**
+	 * Config the build works out for itself, which a site's file cannot set.
+	 *
+	 * These name where the build reads from and writes to, and it derives all three from
+	 * WIKVEN_WORKDIR: the source directory it was pointed at, the output directory beside it, and
+	 * the git log the bake action dumps there. A site that set one would move where its pages come
+	 * from without moving where its own config file is looked for, so WikvenSettings.php puts them
+	 * back after a site's config is applied and lint says here that it will.
+	 */
+	public const DERIVED_CONFIG = [
+		'WikvenSourceDirectory',
+		'WikvenHtmlDirectory',
+		'WikvenSourceHistoryFile'
+	];
+
+	/**
 	 * Lint decoded site-config contents, returning a warning per silently-dropped mistake.
 	 *
 	 * @param mixed $data Decoded .wikven.yaml/.json contents.
@@ -65,7 +80,9 @@ class SiteConfig {
 		}
 		$config = $data['config'] ?? [];
 		foreach (array_keys($config) as $cfgKey) {
-			if (str_starts_with($cfgKey, 'Wikven') && !in_array($cfgKey, $knownConfig, true)) {
+			if (in_array($cfgKey, self::DERIVED_CONFIG, true)) {
+				$warnings[] = "'$cfgKey' is worked out from WIKVEN_WORKDIR by the build; the value here is ignored.";
+			} elseif (str_starts_with($cfgKey, 'Wikven') && !in_array($cfgKey, $knownConfig, true)) {
 				$warnings[] = "unknown config '$cfgKey' (not a Wikven variable; typo?).";
 			}
 		}
