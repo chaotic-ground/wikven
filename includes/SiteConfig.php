@@ -101,4 +101,19 @@ class SiteConfig {
 		}
 		return $warnings;
 	}
+
+	/**
+	 * Is $name usable as the directory name of a bundled extension or skin?
+	 *
+	 * The names in a site's extensions and skins lists become paths under $IP, so a name carrying a
+	 * path separator names a directory somewhere else entirely -- one in the mounted source tree,
+	 * say -- and would be loaded as if the image had shipped it. maintenance/fetchExtensions.php
+	 * asks the same of every WikvenRepositories key.
+	 *
+	 * @param string $name A name from a config file's 'extensions' or 'skins' list.
+	 * @return bool Whether the name is a plain directory name.
+	 */
+	public static function isComponentName(string $name): bool {
+		return $name !== '' && strpbrk($name, "/\\") === false && !str_starts_with($name, '.');
+	}
 }

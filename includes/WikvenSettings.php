@@ -215,10 +215,23 @@ $wgWikvenSourceHistoryFile = $wikvenPaths['history'];
 $config['extensions'] = array_values(array_unique(array_filter($config['extensions'], 'is_string'), SORT_STRING));
 $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_string'), SORT_STRING));
 
+// A name in these two lists is a directory in this image, and both loops below turn it straight
+// into a path: a name carrying a path separator resolves outside the image -- into the mounted
+// source tree, say -- and is then loaded as if the image had shipped it. fetchExtensions.php
+// already refuses such a name as a WikvenRepositories key, so refuse it where the loading actually
+// happens too. SiteConfig::lint() is the other channel available and is the wrong one here: it only
+// warns, and only about the site file, while these lists are that file merged with default.yml.
+// error_log() is where this file reports the names it passes over, so a refused one lands beside
+// them.
+
 // Register each bundled skin; canonical name (may differ from dir) read from skin.json.
 $wgWikvenSkins = [];
 foreach ($config['skins'] ?? [] as $skin) {
 	if (!is_string($skin)) {
+		continue;
+	}
+	if (!MediaWiki\Extension\Wikven\SiteConfig::isComponentName($skin)) {
+		error_log("Wikven: refusing skin '$skin' (a name here is a directory in this image, not a path)");
 		continue;
 	}
 	if (!is_file("$IP/skins/$skin/skin.json")) {
@@ -266,6 +279,11 @@ if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, tru
 // Load each bundled extension; an unknown name is skipped with a warning.
 foreach ($config['extensions'] ?? [] as $extension) {
 	if (!is_string($extension)) {
+		continue;
+	}
+	// The same directory-name check the skins above make; see there for why it is made here.
+	if (!MediaWiki\Extension\Wikven\SiteConfig::isComponentName($extension)) {
+		error_log("Wikven: refusing extension '$extension' (a name here is a directory in this image, not a path)");
 		continue;
 	}
 	if (is_file("$IP/extensions/$extension/extension.json")) {
