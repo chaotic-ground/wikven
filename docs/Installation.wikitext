@@ -59,6 +59,15 @@ docker build -t wikven .
 <translate>
 <!--T:10-->
 This produces a local <code>wikven</code> image you run exactly like the published one. To build the standalone binary from source instead, see [https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile <code>binary.Dockerfile</code>].
+
+<!--T:13-->
+== Which MediaWiki ==
+
+<!--T:14-->
+You do not install MediaWiki: every way of running {{SITENAME}} brings its own. The image and the binary are built on '''MediaWiki 1.46''', and that is what renders your pages however you run them.
+
+<!--T:15-->
+{{SITENAME}} itself requires MediaWiki 1.46 or later, and every change to it is tested against both 1.46 and MediaWiki's development branch. That is the range it is known to work in, and it is what to build against if you are building from source onto a MediaWiki of your own.
 </translate>
 
 ----

@@ -11,6 +11,9 @@ This page is for people writing a MediaWiki extension or skin that has to work i
 <!--T:3-->
 A {{SITENAME}} build boots MediaWiki once, on the command line, renders every page to a file, and exits. The reader is then served plain files by a host that runs no PHP.
 
+<!--T:38-->
+That MediaWiki is '''1.46''', the release the image and the binary are built on, so it is the one your extension has to work with. {{SITENAME}} itself supports 1.46 and later; if you write against a newer one, a site running the released image will not have it.
+
 <!--T:4-->
 Two consequences run through everything below:
 
