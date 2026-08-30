@@ -35,7 +35,7 @@ class ImageImport {
 				continue;
 			}
 			$path = $directory . '/' . $entry;
-			if (is_dir($path)) {
+			if (is_dir($path) && !is_link($path)) {
 				$sources = array_merge($sources, self::sources($path, $extensions));
 				continue;
 			}
@@ -78,6 +78,32 @@ class ImageImport {
 			}
 		}
 		return $shared;
+	}
+
+	/**
+	 * Files among $sources that are symlinks, which is not a thing to import.
+	 *
+	 * is_file() follows a link, so a source tree can offer one named picture.png and have the build
+	 * upload whatever it points at -- a file outside the tree, on the machine doing the building,
+	 * published with the site. A tree of wiki content has no use for one, so rather than resolve
+	 * them they are refused, by name, where the tree is read.
+	 *
+	 * This is where wikven answers symlinks at all. ContainedPath, which bounds the paths that come
+	 * back out of rendered pages, does not: the directories it bounds hold nothing an author put
+	 * there, and a check in it would silently refuse the symlinked skins/ of a MediaWiki checkout
+	 * somebody develops against.
+	 *
+	 * @param string[] $sources Absolute paths, as sources() returns them.
+	 * @return string[] Those of them that are links.
+	 */
+	public static function links(array $sources): array {
+		$links = [];
+		foreach ($sources as $path) {
+			if (is_link($path)) {
+				$links[] = $path;
+			}
+		}
+		return $links;
 	}
 
 	/**

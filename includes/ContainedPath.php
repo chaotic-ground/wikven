@@ -13,6 +13,14 @@ namespace MediaWiki\Extension\Wikven;
  * is published with the site.
  *
  * The answer is not to trust the path but to bound where it can reach, which is what this does.
+ *
+ * The path is judged, not where the filesystem would take it. A symlink under the root pointing out
+ * of it escapes this, and is left to: neither root holds anything the author of a path put there.
+ * MediaWiki writes a file's contents into the upload directory rather than a link to them, and the
+ * install root is the build's own. What a source tree can bring is refused where the source tree is
+ * read, by ImageImport, which can name the file it refused -- while a check here would have refused
+ * the symlinked skins/ and extensions/ of a MediaWiki someone develops against, silently, which is
+ * the kind of failure this class exists against.
  */
 class ContainedPath {
 	/**
@@ -31,20 +39,17 @@ class ContainedPath {
 		if ($root === '' || $path === '' || $path[0] !== '/') {
 			return null;
 		}
-		// Lexical first, and on segments rather than a substring: "/..%2Fx" is one segment and no
-		// climb, while "/a/../../x" is two of them and reaches above $root however deep $root is.
-		if (in_array('..', explode('/', $path), true)) {
-			return null;
+		// On segments rather than as a substring: "/..%2Fx" is one segment and no climb, while
+		// "/a/../../x" is two of them and reaches above $root however deep $root is. The leading
+		// empty one is the leading slash; an empty one after that is a path naming a directory
+		// ("/images/") or a doubled slash, and names no file either way.
+		$segments = explode('/', $path);
+		array_shift($segments);
+		foreach ($segments as $segment) {
+			if ($segment === '..' || $segment === '') {
+				return null;
+			}
 		}
-		$joined = $root . $path;
-		// A symlink under $root can point anywhere, and only the filesystem knows where. Judged
-		// only where both ends resolve; a path that resolves to nothing has nothing to escape with,
-		// and is left to the caller to find missing.
-		$realRoot = realpath($root);
-		$real = realpath($joined);
-		if ($realRoot !== false && $real !== false && !str_starts_with($real, rtrim($realRoot, '/') . '/')) {
-			return null;
-		}
-		return $joined;
+		return $root . $path;
 	}
 }
