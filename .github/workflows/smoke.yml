@@ -185,7 +185,7 @@ jobs:
             echo "::error::dist/Licenses.html no longer has a sortable table for this to be about"
             exit 1
           fi
-          if ! grep -q 'jquery.tablesorter' dist/modules-static.js; then
+          if ! grep -q 'jquery.tablesorter' dist/assets/modules-static.js; then
             echo "::error::a page has a sortable table and jquery.tablesorter is not in the bundle"
             echo "::error::the table will publish with headers that do nothing"
             exit 1
@@ -231,15 +231,19 @@ jobs:
 
           # Bundled webfonts. The Khmer translation is the fixture: without a page in a script ULS
           # has a font for, every assertion below passes vacuously on an empty stylesheet.
-          test -s dist/webfonts.css
-          grep -q ':lang(km)' dist/webfonts.css
+          test -s dist/assets/webfonts.css
+          grep -q ':lang(km)' dist/assets/webfonts.css
+          # The font files themselves are copied to a fixed directory at the output root, not into
+          # the asset directory, so the stylesheet steps up out of it to reach them.
           ls dist/fonts/uls/KhmerOSbattambang/*.woff2 >/dev/null
 
           # Every url() must resolve from the stylesheet's own directory, which is what lets the
-          # fonts load from a page at any depth.
-          grep -o "url('[^']*')" dist/webfonts.css | sed "s/^url('//;s/')$//" | sort -u \
+          # fonts load from a page at any depth. Resolved against that directory and not against
+          # dist/, which is the whole point when the two are not the same.
+          grep -o "url('[^']*')" dist/assets/webfonts.css | sed "s/^url('//;s/')$//" | sort -u \
             | while read -r ref; do
-                test -f "dist/$ref" || { echo "::error::webfonts.css references missing $ref"; exit 1; }
+                test -f "dist/assets/$ref" \
+                  || { echo "::error::webfonts.css references missing $ref"; exit 1; }
               done
 
           # Every <languages/> bar lists every language the source has (#333 baked them short).

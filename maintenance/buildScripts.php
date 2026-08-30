@@ -36,12 +36,12 @@ class BuildScripts extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenScriptDirectory, $wgLanguageCode, $wgDefaultSkin;
+		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgLanguageCode, $wgDefaultSkin;
 
 		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
-		$outDir = $htmlDir . '/' . rtrim($wgWikvenScriptDirectory, '/');
+		$outDir = AssetFile::path($htmlDir, $wgWikvenAssetDirectory);
 		if (!wfMkdirParents($outDir, null, __METHOD__)) {
-			$this->fatalError("Could not create script directory $outDir");
+			$this->fatalError("Could not create asset directory $outDir");
 		}
 
 		$rl = MediaWikiServices::getInstance()->getResourceLoader();

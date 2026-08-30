@@ -19,11 +19,13 @@ dist/
 ├── Guide/
 │   └── Setup.html           a page whose title has a slash becomes a directory
 ├── File:Logo.png.html       file description pages
-├── img-1a2b3c4d5e6f.png     every image the pages use, named by content
-├── site.styles.css          MediaWiki:Common.css and the skin's own CSS
-├── startup-static.js        the module loader, with its network fetch removed
-├── modules-static.js        every module the pages need, bundled
-├── webfonts.css + fonts/    only with WikvenBundleWebfonts set
+├── assets/                  everything the build generates, together
+│   ├── site.styles.css      MediaWiki:Common.css and the skin's own CSS
+│   ├── startup-static.js    the module loader, with its network fetch removed
+│   ├── modules-static.js    every module the pages need, bundled
+│   ├── img-1a2b3c4d5e6f.png every image the pages use, named by content
+│   └── webfonts.css         only with WikvenBundleWebfonts set
+├── fonts/                   the webfont files themselves, likewise
 ├── pagefind/                the search index
 └── citizen/                 a complete copy of the site, per extra skin
 </syntaxhighlight>

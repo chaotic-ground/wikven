@@ -25,17 +25,18 @@ class RewriteScripts extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenScriptDirectory, $wgWikvenStyleDirectory, $wgDefaultSkin;
+		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgDefaultSkin;
 
 		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
-		$prefix = './' . rtrim($wgWikvenScriptDirectory, '/');
-		$siteStyles = StyleFile::locate($htmlDir, $wgWikvenStyleDirectory, 'site.styles.css');
+		$startup = AssetFile::locate($htmlDir, $wgWikvenAssetDirectory, 'startup-static.js');
+		$modules = AssetFile::locate($htmlDir, $wgWikvenAssetDirectory, 'modules-static.js');
+		$siteStyles = AssetFile::locate($htmlDir, $wgWikvenAssetDirectory, 'site.styles.css');
 		$siteStylesHref = $siteStyles['href'];
 		$hasSiteStyles = is_file($siteStyles['path']) && filesize($siteStyles['path']) > 0;
 
 		// Bundled webfonts (opt-in; bakeWebfonts wrote it): link ahead of site styles so a site can
 		// still override the font-family, and let rename's reparenting fix the href on subpages.
-		$webfonts = StyleFile::locate($htmlDir, $wgWikvenStyleDirectory, 'webfonts.css');
+		$webfonts = AssetFile::locate($htmlDir, $wgWikvenAssetDirectory, 'webfonts.css');
 		$webfontsHref = $webfonts['href'];
 		$hasWebfonts = is_file($webfonts['path']) && filesize($webfonts['path']) > 0;
 
@@ -80,11 +81,11 @@ class RewriteScripts extends Maintenance {
 			// Swap the async load.php startup tag for the local bundle + trigger.
 			$tags =
 				'<script src="'
-				. $prefix
-				. '/startup-static.js"></script>'
+				. $startup['href']
+				. '"></script>'
 				. '<script src="'
-				. $prefix
-				. '/modules-static.js"></script>'
+				. $modules['href']
+				. '"></script>'
 				. '<script>mw.loader.load('
 				. json_encode($trigger)
 				. ');</script>';
