@@ -4,7 +4,7 @@
 [[File:<tvar name="1">The Earth seen from Apollo 17.jpg</tvar>|thumb|The Earth, seen from Apollo 17 (1972).]]
 
 <!--T:2-->
-You can embed images from [[commons:Main Page|Wikimedia Commons]]. Referenced files are downloaded and stored next to the HTML at build time, so the static site does not depend on Commons when viewed. See [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/InstantCommons</tvar> InstantCommons] for details.
+You can embed images from [[commons:Main Page|Wikimedia Commons]]. Referenced files are downloaded at build time and stored in the [[<tvar name="2">Special:MyLanguage/Configuration#WikvenAssetDirectory</tvar>|asset directory]] with the rest of what the build generates, so the static site does not depend on Commons when viewed. See [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/InstantCommons</tvar> InstantCommons] for details.
 
 <!--T:3-->
 == Local images ==
