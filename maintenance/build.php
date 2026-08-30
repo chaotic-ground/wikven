@@ -870,11 +870,23 @@ class Build extends Maintenance {
 
 	/** Import source-dir images into the File: namespace so pages render with local thumbnails. */
 	private function importImages(string $file): void {
+		$directory = rtrim($GLOBALS['wgWikvenSourceDirectory'], '/');
+		$extensions = $GLOBALS['wgFileExtensions'];
+		$sources = ImageImport::sources($directory, $extensions);
+
 		$child = $this->createChild(ImportImages::class, $file);
-		$child->setArg(0, rtrim($GLOBALS['wgWikvenSourceDirectory'], '/'));
-		$child->setOption('extensions', implode(',', $GLOBALS['wgFileExtensions']));
+		$child->setArg(0, $directory);
+		$child->setOption('extensions', implode(',', $extensions));
 		$child->setOption('skip-dupes', true);
-		$child->execute();
+		// An image the wiki rejected leaves every page embedding it with a red File: link, so this
+		// step aborts the build the way step() aborts it for a page that did not import. A source
+		// holding no image at all is answered with the same false and is not a failure.
+		if (ImageImport::failed($child->execute(), $sources)) {
+			// The count is of the images offered, not of the ones that failed: the importer's own
+			// summary above holds that number, and it named each file as it choked on it.
+			$count = count($sources);
+			$this->fatalError("Wikven: not all $count image(s) in $directory imported; aborting the build.");
+		}
 	}
 
 	/** Point the wiki's main page at $wgWikvenMainPage (imported later; see assertMainPageExists). */
