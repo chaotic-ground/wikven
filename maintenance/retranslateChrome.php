@@ -73,27 +73,21 @@ class RetranslateChrome extends Maintenance {
 	 * language all the same -- the Declarer hook answers for them -- so the chrome around them has
 	 * to follow, or a Korean page keeps an English menu and footer.
 	 *
-	 * Skipped where the site wrote its own licenses page, because then the build wrote no copies
-	 * and whatever sits under that title is the site's, or Translate's, and is handled above.
+	 * Only the copies the build wrote: a page the source tree provided, under that title or under
+	 * one of its language subpages, is the site's or Translate's, and is handled above. LicensesPage
+	 * is asked which those are, the same as the Declarer hook asks it, so the chrome a copy wears
+	 * and the language it declares cannot end up disagreeing.
 	 *
 	 * @param string $source
 	 * @param string $contentLang
 	 * @param callable(string):bool $isKnownLanguage
 	 */
 	private function recacheGeneratedLicenses(string $source, string $contentLang, callable $isKnownLanguage): void {
-		$page = LicensesPage::title();
-		if ($page === null || SourceFile::exists($page->getPrefixedText())) {
-			return;
-		}
-
-		foreach (TranslationSource::languages($source, $isKnownLanguage) as $lang) {
-			if ($lang === $contentLang) {
+		foreach (LicensesPage::generatedCopies($source, $isKnownLanguage) as $lang => $title) {
+			if ($lang === $contentLang || !$title->exists()) {
 				continue;
 			}
-			$title = Title::newFromText(LicensesPage::inLanguage($page, $lang));
-			if ($title && $title->exists()) {
-				$this->recache($title, $lang);
-			}
+			$this->recache($title, $lang);
 		}
 	}
 
