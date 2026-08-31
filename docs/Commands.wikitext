@@ -154,7 +154,7 @@ There are two more, and the build sets both on itself to run one skin's render p
 Bakes a source tree with the Docker image, on a GitHub Actions runner. See [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|Deploying]] for a complete workflow.
 
 <!--T:29-->
-{{note|Both actions are pinned by tag, and until a version of {{SITENAME}} is released that tag is a nightly — the dated pre-releases, <code>nightly-YYYY-MM-DD</code>, newest on the [<tvar name="2">https://github.com/chaotic-ground/wikven/releases</tvar> releases page]. Name the image from the same nightly while you are there: an action left to its default runs the image of the release it was cut from, and no release exists yet. Once one does, <code>@v1.2.3</code> on its own is enough — the tag carries the <code>v</code>, and the image the action then defaults to is the matching <code>:1.2.3</code>.}}
+{{note|Both actions are pinned by tag, and until a version of {{SITENAME}} is released that tag is a nightly — the dated pre-releases, <code>nightly-YYYY-MM-DD</code>, newest on the [<tvar name="2">https://github.com/chaotic-ground/wikven/releases</tvar> releases page]. Name the image from the same nightly while you are there: an action left to its default runs the image of the release it was cut from, and no release exists yet. Once one does, <code>@v<tvar name="3">{{WIKVENVERSION}}</tvar></code> on its own is enough — the tag carries the <code>v</code>, and the image the action then defaults to is the matching <code>:<tvar name="4">{{WIKVENVERSION}}</tvar></code>, which does not.}}
 </translate>
 
 <syntaxhighlight lang="yaml" copy>

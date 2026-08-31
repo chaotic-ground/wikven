@@ -56,7 +56,9 @@
 		"OutputPageAfterGetHeadLinksArray": "main",
 		"SetupAfterCache": ["retrier", "main"],
 		"SifterSearchIndexPage": "indexer",
-		"PageContentLanguage": "declarer"
+		"PageContentLanguage": "declarer",
+		"GetMagicVariableIDs": "versioner",
+		"ParserGetVariableValueSwitch": "versioner"
 	},
 	"HookHandlers": {
 		"main": {
@@ -78,6 +80,9 @@
 		"declarer": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Declarer",
 			"services": ["LanguageFactory", "LanguageNameUtils"]
+		},
+		"versioner": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Versioner"
 		}
 	},
 	"config": {
@@ -144,6 +149,9 @@
 	},
 	"MessagesDirs": {
 		"Wikven": ["i18n"]
+	},
+	"ExtensionMessagesFiles": {
+		"WikvenMagic": "Wikven.i18n.magic.php"
 	},
 	"TestAutoloadNamespaces": {
 		"MediaWiki\\Extension\\Wikven\\Tests\\Integration\\": "tests/phpunit/integration/",

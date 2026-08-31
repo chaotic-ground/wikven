@@ -122,6 +122,17 @@ saved as <code>Template:Note.wikitext</code> and used on a page as:
 <translate>
 <!--T:21-->
 renders as "'''Note:''' Rebuild the site after every edit." Templates take positional (<code><nowiki>{{{1}}}</nowiki></code>) and named parameters and run [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions</tvar> parser functions] exactly as in MediaWiki. The syntax itself is standard MediaWiki; see [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates</tvar> Help:Templates].
+
+<!--T:30-->
+<span id="variables"></span>
+== Variables ==
+
+<!--T:31-->
+MediaWiki's own [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words</tvar> magic words] work as they do anywhere — <code><nowiki>{{PAGENAME}}</nowiki></code>, <code><nowiki>{{SITENAME}}</nowiki></code>, <code><nowiki>{{CURRENTVERSION}}</nowiki></code> for the MediaWiki the build ran on. {{SITENAME}} adds one of its own:
+
+<!--T:32-->
+; <code><nowiki>{{WIKVENVERSION}}</nowiki></code>
+: The version of {{SITENAME}} that built the page — <code><tvar name="1">{{WIKVENVERSION}}</tvar></code> on this site. Use it where a page has to name the version rather than have someone remember to change a number: a footer saying what made the site, or a documentation page telling readers which tag to pin. It is the number in {{SITENAME}}'s own <code>extension.json</code>, which is the same number the released tag carries.
 </translate>
 
 {{prevnext}}

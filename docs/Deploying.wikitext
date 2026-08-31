@@ -64,13 +64,7 @@ jobs:
           # its source file. A shallow checkout knows only the latest commit.
           fetch-depth: 0
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
-      # No version has been released yet, so there is no version tag to pin --
-      # and the action's default image is that unreleased version. Pin a nightly
-      # instead, and name the image from the same one: the tag is a commit of
-      # main, and that image was built from it. Once a version exists these
-      # become @v1.2.3 and :1.2.3 -- the git tag carries the v, the image tag
-      # does not -- or drop the image line and take the action's default. Pick
-      # the newest nightly from the releases page.
+      # Both dated pre-releases; see the note below for which to name here.
       - uses: chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD
         with:
           source: src
@@ -84,6 +78,9 @@ jobs:
 </syntaxhighlight>
 
 <translate>
+<!--T:26-->
+{{note|The two <code>nightly-YYYY-MM-DD</code> above are placeholders; take the newest from the [<tvar name="1">https://github.com/chaotic-ground/wikven/releases</tvar> releases page]. No version of {{SITENAME}} has been released yet, so there is no version tag to pin, and an action left to its default runs the image of the release it was cut from. A nightly tag names a commit of <code>main</code> and its image was built from that same commit, so naming both from one nightly keeps them in step. Once a version exists the two become <code>@v<tvar name="2">{{WIKVENVERSION}}</tvar></code> and <code>:<tvar name="3">{{WIKVENVERSION}}</tvar></code> — the git tag carries the <code>v</code>, the image tag does not — or you drop the <code>image</code> line and take the action's default.}}
+
 <!--T:4-->
 Enable Pages for the repository under '''Settings → Pages → Build and deployment → Source: GitHub Actions'''. This documentation site is published this way.
 
