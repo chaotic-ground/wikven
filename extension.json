@@ -14,27 +14,46 @@
 	},
 	"ResourceModules": {
 		"ext.Wikven.styles": {
-			"styles": ["ext.Wikven.styles.less"]
+			"styles": [
+				"ext.Wikven.styles.less"
+			]
 		},
 		"ext.Wikven.emptyToolbox": {
-			"styles": ["empty-toolbox.less"]
+			"styles": [
+				"empty-toolbox.less"
+			]
 		},
 		"ext.Wikven.pinnableState": {
-			"scripts": ["pinnable-state.js"],
-			"dependencies": ["mediawiki.storage"]
+			"scripts": [
+				"pinnable-state.js"
+			],
+			"dependencies": [
+				"mediawiki.storage"
+			]
 		},
 		"ext.Wikven.citizenSkins": {
-			"scripts": ["citizen-skins.js"],
-			"messages": ["wikven-skin", "wikven-skin-description"]
+			"scripts": [
+				"citizen-skins.js"
+			],
+			"messages": [
+				"wikven-skin",
+				"wikven-skin-description"
+			]
 		},
 		"ext.Wikven.citizenSearchShortcuts": {
-			"scripts": ["citizen-search-shortcuts.js"]
+			"scripts": [
+				"citizen-search-shortcuts.js"
+			]
 		},
 		"ext.Wikven.vectorSkins": {
-			"scripts": ["vector-skins.js"]
+			"scripts": [
+				"vector-skins.js"
+			]
 		},
 		"ext.Wikven.appearance": {
-			"scripts": ["appearance.js"]
+			"scripts": [
+				"appearance.js"
+			]
 		}
 	},
 	"ResourceModuleSkinStyles": {
@@ -48,13 +67,22 @@
 	},
 	"Hooks": {
 		"ParserOutputPostCacheTransform": "hider",
-		"SkinTemplateNavigation::Universal": ["hider", "main"],
-		"SidebarBeforeOutput": ["hider", "adder"],
+		"SkinTemplateNavigation::Universal": [
+			"hider",
+			"main"
+		],
+		"SidebarBeforeOutput": [
+			"hider",
+			"adder"
+		],
 		"SkinAddFooterLinks": "adder",
 		"BeforePageDisplay": "adder",
 		"GetLocalURL": "main",
 		"OutputPageAfterGetHeadLinksArray": "main",
-		"SetupAfterCache": ["retrier", "main"],
+		"SetupAfterCache": [
+			"retrier",
+			"main"
+		],
 		"SifterSearchIndexPage": "indexer",
 		"PageContentLanguage": "declarer",
 		"GetMagicVariableIDs": "versioner",
@@ -63,7 +91,9 @@
 	"HookHandlers": {
 		"main": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Main",
-			"services": ["MainConfig"]
+			"services": [
+				"MainConfig"
+			]
 		},
 		"adder": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Adder"
@@ -79,7 +109,10 @@
 		},
 		"declarer": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Declarer",
-			"services": ["LanguageFactory", "LanguageNameUtils"]
+			"services": [
+				"LanguageFactory",
+				"LanguageNameUtils"
+			]
 		},
 		"versioner": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Versioner"
@@ -152,7 +185,9 @@
 		}
 	},
 	"MessagesDirs": {
-		"Wikven": ["i18n"]
+		"Wikven": [
+			"i18n"
+		]
 	},
 	"ExtensionMessagesFiles": {
 		"WikvenMagic": "Wikven.i18n.magic.php"
