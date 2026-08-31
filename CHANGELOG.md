@@ -2,10 +2,86 @@
 
 ## 1.0.0 (2026-08-31)
 
-The first release. There is no earlier version to compare against or upgrade from, so
-what follows is not a list of changes to one but the work this release is made of, as
-the commits recorded it.
+The first release. There is no earlier version to upgrade from, so what follows is not a list of
+changes to one: it says what wikven is, what 1.0 settles, and where the project came from. The
+commits are at the end.
 
+### What it is
+
+Wikven bakes a directory of wikitext into a static website. MediaWiki renders every page at build
+time and wikven writes out plain HTML, so nothing runs behind the published site — no PHP, no
+database, no server to keep patched. `index.wikitext` becomes `index.html`, and what you are left
+with is a directory to hand to GitHub Pages, or to any web server.
+
+### What 1.0 settles
+
+Three surfaces are what a site actually depends on, and this is the release they stop moving
+without warning:
+
+* the configuration file — `.wikven.yaml`, or any of the five other accepted names, layered over
+  wikven's own defaults;
+* the commands — `build`, `serve`, and `translate mark|scaffold|check|stamp`;
+* the output — one directory holding the pages, images, styles and search index.
+
+Versions are read off the commits: a change that breaks one of these carries `!` and takes the
+major number with it. The months before this release moved all three — everything a build
+generates into one directory, the images a page carries in beside the rest of that output, and a
+configuration key rewritten to ask who a build is for rather than flag one of the answers. 1.0 is
+the line drawn under that.
+
+### What it does
+
+* **Three ways to run it.** A standalone Linux binary for x86_64 and arm64 — one file with
+  MediaWiki inside and no Docker anywhere; the image, published to both
+  `ghcr.io/chaotic-ground/wikven` and `quay.io/chaotic-ground/wikven`; and a GitHub Action,
+  `chaotic-ground/wikven/actions/bake@v1.0.0`.
+* **Search with nothing behind it.** SifterSearch and Pagefind are in the box, and each language
+  is indexed on its own, so the search box works on a site that is only files.
+* **Translation as part of the build.** Translate and UniversalLanguageSelector are bundled:
+  `translate scaffold` writes the skeletons, `mark` numbers the units, `stamp` records that
+  someone read one, and `check` can stop a build — with an Action that reports what it found on
+  the pull request.
+* **Skins a reader can switch.** Vector, Vector 2022 and MinervaNeue, each rendered into the
+  export, with a switcher in the footer.
+* **Builds that repeat.** Last-modified dates come from `SOURCE_DATE_EPOCH`, so the same source at
+  the same commit gives the same site.
+* **Licensing it writes down.** Every build emits a Licenses page naming the extensions and skins
+  that site actually shipped, and under what terms.
+
+### Requirements
+
+MediaWiki 1.46 or later — though you do not install it. The image and the binary each carry their
+own 1.46, and that is what renders the pages however you run them. Wikven is tested against 1.46
+and against MediaWiki's development branch. The binary is Linux only; on macOS and Windows, use
+the image.
+
+### Getting started
+
+```shell
+mkdir src
+echo 'Hello, World!' > src/index.wikitext
+wikven build
+wikven serve
+```
+
+Then open <http://localhost:8080>. The guide is at <https://chaotic-ground.github.io/wikven/>.
+
+### Where this came from
+
+The project began in December 2021 as **This Is Not A Wiki**, at `lens0021/this-is-not-a-wiki`: 78
+commits over three weeks, a MediaWiki extension and a fixed shell script that installed a wiki,
+imported the wikitext, and kept what the file cache left behind. Then it sat untouched for four
+and a half years. It was renamed to wikven on 1 June 2026, and the 611 commits since are what this
+release is made of.
+
+Little of that first pass survives. Configuration moved from six `$wg` globals to a
+`.wikven.yaml`; the fixed script became the `build`, `serve` and `translate` commands; and the
+search, the translation workflow, the standalone binary and the Actions are all things it never
+had. GitHub still redirects the old address here, so old links keep working — but there is no
+upgrade path to describe, because a site built with the old thing predates every interface this
+release settles.
+
+The rest of this entry is that work, as the commits recorded it.
 
 ### Features
 
