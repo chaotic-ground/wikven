@@ -10,7 +10,7 @@ use MediaWikiUnitTestCase;
  */
 class OutputNameTest extends MediaWikiUnitTestCase {
 	/** Namespace numbers as the wiki this file describes has them. */
-	private const NAMESPACES = ['' => 0, 'File' => 6, 'Help' => 12];
+	private const NAMESPACES = ['' => 0, 'File' => 6, 'Help' => 12, '도움말' => 12];
 
 	protected function tearDown(): void {
 		unset($GLOBALS['wgWikvenFileNames']);
@@ -38,6 +38,7 @@ class OutputNameTest extends MediaWikiUnitTestCase {
 			'a plus stands' => ['', 'C++', 'C++.html'],
 			'a percent stands' => ['', '50%_done', '50%_done.html'],
 			'a Korean title stands' => ['', '설치', '설치.html'],
+			'a Korean namespace stands too' => ['도움말', '설치', '도움말:설치.html'],
 			// The four a Windows path cannot hold, other than the colon and the slash.
 			'a question mark stays escaped' => ['', 'What?', 'What%3F.html'],
 			'a quote stays escaped' => ['', 'A"B', 'A%22B.html'],
@@ -64,7 +65,14 @@ class OutputNameTest extends MediaWikiUnitTestCase {
 			// A subpage is a real directory under both, or nothing could count a page's depth.
 			'a subpage is still a directory' => ['', 'Manual/Config', 'Manual/Config.html'],
 			// As is the extension: the cache escapes every dot, and a name with none cannot end .html.
-			'the dot in a name comes back' => ['', 'File.svg', 'File.svg.html']
+			'the dot in a name comes back' => ['', 'File.svg', 'File.svg.html'],
+			// The namespace is escaped as the body is, or the name comes out half one and half the
+			// other -- and the two directions below stop agreeing on what the file is called.
+			'a Korean namespace is escaped too' => [
+				'도움말',
+				'설치',
+				'%EB%8F%84%EC%9B%80%EB%A7%90%3A%EC%84%A4%EC%B9%98.html'
+			]
 		];
 	}
 
@@ -116,6 +124,28 @@ class OutputNameTest extends MediaWikiUnitTestCase {
 
 	public static function provideBothSchemes(): array {
 		return ['readable' => [OutputName::READABLE], 'encoded' => [OutputName::ENCODED]];
+	}
+
+	/**
+	 * A prefixed name handed in whole names the file its namespace and dbkey name apart.
+	 *
+	 * The Special:MyLanguage marker is built that way: the target's prefixed name rides inside the
+	 * marker's own dbkey (Hooks\Adder::licensesHref, and any link through GetLocalURL), and
+	 * resolveTranslationLinks.php then looks for the file that name spells. So the two ways of
+	 * spelling one title have to land on one file, which is only true while the namespace is
+	 * escaped exactly as the rest of the name is.
+	 *
+	 * @dataProvider provideBothSchemes
+	 */
+	public function testAPrefixedNameSpellsTheFileItsPartsDo(string $scheme) {
+		foreach ([['File', 'Logo.png'], ['Help', '설치'], ['도움말', '설치'], ['도움말', 'Licenses']] as $title) {
+			[$namespace, $dbkey] = $title;
+			$this->assertSame(
+				OutputName::of($namespace, $dbkey, $scheme),
+				OutputName::of('', "$namespace:$dbkey", $scheme),
+				"$namespace:$dbkey, $scheme"
+			);
+		}
 	}
 
 	/** Nothing the file cache wrote, so nothing to rename: left exactly as it is. */

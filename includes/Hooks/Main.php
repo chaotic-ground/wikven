@@ -87,7 +87,7 @@ class Main implements
 
 		// The file this title is written to, url-encoded so a static server asking for it finds it;
 		// see OutputName, which rename.php asks the same question of from the file's side.
-		$href = OutputName::href(OutputName::of((string)$title->getNsText(), $title->getDBkey()));
+		$href = OutputName::href(OutputName::of(...$this->nameFor($title)));
 		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
 		$params = wfCgiToArray($query);
 		$action = $params['action'] ?? null;
@@ -107,6 +107,38 @@ class Main implements
 	}
 
 	/**
+	 * The namespace and title a link is written from.
+	 *
+	 * A page is named as this wiki names it, which is the answer rename.php gets from the content
+	 * language when it names the file, so link and file agree. A special page is named canonically
+	 * instead, because it has no file: no export contains one, so where such a link survives it is
+	 * a marker for a later pass -- Special:MyLanguage, which resolveTranslationLinks.php rewrites
+	 * to the reader's own copy of the target, and which Hooks\Adder writes by that spelling too.
+	 *
+	 * A marker has to be one string, and this wiki's own spelling is several: the namespace is
+	 * that language's word for it ("특수" on a Korean wiki), the special page answers to aliases of
+	 * its own ("내언어"), and an alias is matched however it was capitalised, so even an English wiki
+	 * writes "Special:Mylanguage/X" for a link typed that way. Written canonically, all of those
+	 * arrive as the marker that pass matches on; the special pages that are not markers name a file
+	 * no export has in either spelling, and stay the dead links they already were.
+	 *
+	 * @return array{string,string} Namespace text and dbkey, as OutputName::of() takes them.
+	 */
+	private function nameFor(Title $title): array {
+		if ($title->getNamespace() !== NS_SPECIAL) {
+			return [(string)$title->getNsText(), $title->getDBkey()];
+		}
+		$services = MediaWikiServices::getInstance();
+		$canonical = (string)$services->getNamespaceInfo()->getCanonicalName(NS_SPECIAL);
+		[$name, $subpage] = $services->getSpecialPageFactory()->resolveAlias($title->getDBkey());
+		// A name no special page answers to has no canonical form to be written in; leave it as typed.
+		if ($name === null) {
+			return [$canonical, $title->getDBkey()];
+		}
+		return [$canonical, $subpage === null ? $name : "$name/$subpage"];
+	}
+
+	/**
 	 * Where a search goes in the export: the results page, carrying the term the link asks for
 	 * (SifterSearch's widget reads it from "?search="), or nowhere.
 	 *
@@ -120,7 +152,7 @@ class Main implements
 		if (!$results) {
 			return '#';
 		}
-		$url = './' . OutputName::href(OutputName::of((string)$results->getNsText(), $results->getDBkey()));
+		$url = './' . OutputName::href(OutputName::of(...$this->nameFor($results)));
 		$term = wfCgiToArray($query)['search'] ?? '';
 		return $term === '' ? $url : $url . '?' . wfArrayToCgi(['search' => $term]);
 	}
@@ -331,7 +363,7 @@ class Main implements
 			&& $title
 			&& $out->getSkin()->getSkinName() !== $mainSkin
 		) {
-			$href = OutputName::href(OutputName::of((string)$title->getNsText(), $title->getDBkey()));
+			$href = OutputName::href(OutputName::of(...$this->nameFor($title)));
 			$tags['link-canonical'] = Html::element('link', [
 				'rel' => 'canonical',
 				'href' => "../$href"

@@ -273,10 +273,14 @@ class RelativeUrl {
 	 * source "Target.html". The link's existing relative prefix (already depth-correct after reparent)
 	 * and any "#fragment" are kept, so the target stays reachable from any page depth.
 	 *
-	 * The colon after "Special" is matched in both spellings OutputName writes, because the marker
-	 * is built as a link like any other: under encoded file names it arrives as "Special%253A". What
-	 * follows it is the target's own link, so appending "/<lang>.html" to it names the translation's
-	 * link, and $hasTranslation is handed that link to turn back into a file name.
+	 * "Special:MyLanguage" is matched as the canonical spelling alone, which is the only one that
+	 * reaches here: both sides that write this marker -- Hooks\Main::nameFor() for a link on a page,
+	 * Hooks\Adder::licensesHref() for the footer's -- write it canonically however this wiki spells
+	 * that namespace and that special page itself. The colon is matched in both spellings OutputName
+	 * writes, because the marker is built as a link like any other: under encoded file names it
+	 * arrives as "Special%253A". What follows it is the target's own link, so appending
+	 * "/<lang>.html" to it names the translation's link, and $hasTranslation is handed that link to
+	 * turn back into a file name.
 	 *
 	 * @param string $html
 	 * @param string|null $lang The page's language, or null for a source page (always the source target).

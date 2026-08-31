@@ -145,18 +145,33 @@ class OutputName {
 	/**
 	 * A namespace and an already-escaped body, in the site's spelling.
 	 *
+	 * The namespace is escaped here rather than handed in escaped, because it arrives as the
+	 * content language spells it and the body arrives as the file cache left it. Both then go
+	 * through one spelling, which is what keeps a name in a namespace whose own text is not plain
+	 * letters -- "도움말", "MediaWiki・トーク" -- from coming out half escaped and half not under
+	 * ENCODED, where the body's own bytes are escaped and the namespace's were not.
+	 */
+	private static function assemble(string $namespaceText, string $body, string $scheme): string {
+		$body = self::spell($body, $scheme);
+		if ($namespaceText === '') {
+			return $body;
+		}
+		$separator = $scheme === self::ENCODED ? '%3A' : ':';
+		return self::spell(urlencode($namespaceText), $scheme) . $separator . $body;
+	}
+
+	/**
+	 * One escaped string, written as the site spells it.
+	 *
 	 * Two escapes are undone in both spellings. "%2E" is the file cache's own doing -- it escapes
 	 * every dot to keep an extension from being mistaken for the file's -- and a name with no dot in
 	 * it cannot end in ".html". "%2F" is the subpage separator, and a subpage is exported into a
-	 * real directory, so it has to be a real slash before anything counts the depth.
+	 * real directory, so it has to be a real slash before anything counts the depth. A readable name
+	 * then gives up the rest of its escaping too, but for KEPT.
 	 */
-	private static function assemble(string $namespaceText, string $body, string $scheme): string {
-		$body = str_replace(['%2E', '%2F'], ['.', '/'], $body);
-		if ($scheme !== self::ENCODED) {
-			$body = self::readable($body);
-		}
-		$separator = $scheme === self::ENCODED ? '%3A' : ':';
-		return $namespaceText === '' ? $body : $namespaceText . $separator . $body;
+	private static function spell(string $escaped, string $scheme): string {
+		$escaped = str_replace(['%2E', '%2F'], ['.', '/'], $escaped);
+		return $scheme === self::ENCODED ? $escaped : self::readable($escaped);
 	}
 
 	/** Every escape undone but the ones a Windows path could not hold; see KEPT. */

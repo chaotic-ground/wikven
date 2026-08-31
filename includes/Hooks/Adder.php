@@ -263,7 +263,9 @@ class Adder implements
 		}
 		// Built as the title it stands for, rather than spelt out, so this marker and the one
 		// GetLocalURL writes for a real Special:MyLanguage link are the same string in either
-		// spelling of the file names -- which is what resolveMyLanguage() below matches on.
+		// spelling of the file names -- which is what resolveMyLanguage() matches on. "Special" is
+		// the canonical namespace name, the one Hooks\Main::nameFor() writes whatever this wiki
+		// calls that namespace itself, so the two markers agree in the content language too.
 		$page = Title::makeName($licenses->getNamespace(), $licenses->getDBkey());
 		return './' . OutputName::href(OutputName::of('Special', "MyLanguage/$page"));
 	}
