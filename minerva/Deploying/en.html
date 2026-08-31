@@ -249,13 +249,7 @@ Wikven
 <span class="w">          </span><span class="c1"># its source file. A shallow checkout knows only the latest commit.</span>
 <span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d</span><span class="w">  </span><span class="c1"># v6.0.0</span>
-<span class="w">      </span><span class="c1"># No version has been released yet, so there is no version tag to pin --</span>
-<span class="w">      </span><span class="c1"># and the action&#39;s default image is that unreleased version. Pin a nightly</span>
-<span class="w">      </span><span class="c1"># instead, and name the image from the same one: the tag is a commit of</span>
-<span class="w">      </span><span class="c1"># main, and that image was built from it. Once a version exists these</span>
-<span class="w">      </span><span class="c1"># become @v1.2.3 and :1.2.3 -- the git tag carries the v, the image tag</span>
-<span class="w">      </span><span class="c1"># does not -- or drop the image line and take the action&#39;s default. Pick</span>
-<span class="w">      </span><span class="c1"># the newest nightly from the releases page.</span>
+<span class="w">      </span><span class="c1"># Both dated pre-releases; see the note below for which to name here.</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
@@ -267,9 +261,11 @@ Wikven
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
 <span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128</span><span class="w">  </span><span class="c1"># v5.0.0</span>
 </pre></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>The two <code>nightly-YYYY-MM-DD</code> above are placeholders; take the newest from the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">releases page</a>. No version of Wikven has been released yet, so there is no version tag to pin, and an action left to its default runs the image of the release it was cut from. A nightly tag names a commit of <code>main</code> and its image was built from that same commit, so naming both from one nightly keeps them in step. Once a version exists the two become <code>@v0.1.0</code> and <code>:0.1.0</code> — the git tag carries the <code>v</code>, the image tag does not — or you drop the <code>image</code> line and take the action's default.</p></div>
+</div>
 <p>Enable Pages for the repository under <b>Settings → Pages → Build and deployment → Source: GitHub Actions</b>. This documentation site is published this way.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>A GitHub <b>project</b> page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because Wikven writes them relative, but anything that needs an absolute path must include that base path: set <a href="../Searching/en.html" title="Special:MyLanguage/Searching">search</a>'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A <b>user/organization</b> page (served at the domain root) needs no such setting.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>A GitHub <b>project</b> page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because Wikven writes them relative, but anything that needs an absolute path must include that base path: set <a href="../Searching/en.html" title="Special:MyLanguage/Searching">search</a>'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A <b>user/organization</b> page (served at the domain root) needs no such setting.</p></div>
 </div>
 <div class="mw-heading mw-heading2"><h2 id="Any_static_host">Any static host</h2></div>
 <p>Because <code>dist/</code> is just files, you can serve it from any static host (<a rel="nofollow" class="external text" href="https://www.netlify.com/">Netlify</a>, <a rel="nofollow" class="external text" href="https://pages.cloudflare.com/">Cloudflare Pages</a>, an object store like <a rel="nofollow" class="external text" href="https://aws.amazon.com/s3/">S3</a>, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
@@ -362,8 +358,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788103886">
-  				<span>Last edited on 30 August 2026, at 15:31</span>
+  				data-timestamp="1788137568">
+  				<span>Last edited on 31 August 2026, at 00:52</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -386,7 +382,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 15:31.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 31 August 2026, at 00:52.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

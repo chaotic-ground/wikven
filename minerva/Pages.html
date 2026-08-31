@@ -214,6 +214,7 @@ Wikven
 <li class="toclevel-1 tocsection-6"><a href="#Namespaces"><span class="tocnumber">4</span> <span class="toctext">Namespaces</span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#Categories"><span class="tocnumber">5</span> <span class="toctext">Categories</span></a></li>
 <li class="toclevel-1 tocsection-8"><a href="#Templates"><span class="tocnumber">6</span> <span class="toctext">Templates</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Variables"><span class="tocnumber">7</span> <span class="toctext">Variables</span></a></li>
 </ul>
 </div>
 
@@ -281,7 +282,13 @@ Wikven
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nt">Note</span><span class="p">|</span>Rebuild the site after every edit.<span class="p">}}</span>
 </pre></div>
 <p>renders as "<b>Note:</b> Rebuild the site after every edit." Templates take positional (<code>{{{1}}}</code>) and named parameters and run <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions">parser functions</a> exactly as in MediaWiki. The syntax itself is standard MediaWiki; see <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates">Help:Templates</a>.
+</p><p><span id="variables"></span>
 </p>
+<div class="mw-heading mw-heading2"><h2 id="Variables">Variables</h2></div>
+<p>MediaWiki's own <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words">magic words</a> work as they do anywhere — <code>{{PAGENAME}}</code>, <code>{{SITENAME}}</code>, <code>{{CURRENTVERSION}}</code> for the MediaWiki the build ran on. Wikven adds one of its own:
+</p>
+<dl><dt><code>{{WIKVENVERSION}}</code></dt>
+<dd>The version of Wikven that built the page — <code>0.1.0</code> on this site. Use it where a page has to name the version rather than have someone remember to change a number: a footer saying what made the site, or a documentation page telling readers which tag to pin. It is the number in Wikven's own <code>extension.json</code>, which is the same number the released tag carries.</dd></dl>
 <style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a></div><div class="wikven-prevnext-next"><a href="./Images.html" title="Special:MyLanguage/Images">Images</a>&#160;&#8594;</div></div>
 
 </div>
@@ -299,8 +306,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788103886">
-  				<span>Last edited on 30 August 2026, at 15:31</span>
+  				data-timestamp="1788137568">
+  				<span>Last edited on 31 August 2026, at 00:52</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -323,7 +330,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 15:31.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 31 August 2026, at 00:52.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

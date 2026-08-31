@@ -374,6 +374,18 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<ul id="toc-틀-sublist" class="vector-toc-list">
 		</ul>
 	</li>
+	<li id="toc-변수"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#변수">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">7</span>
+				<span>변수</span>
+			</div>
+		</a>
+		
+		<ul id="toc-변수-sublist" class="vector-toc-list">
+		</ul>
+	</li>
 </ul>
 </div>
 
@@ -649,7 +661,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nt">Note</span><span class="p">|</span>편집할 때마다 사이트를 다시 빌드하세요.<span class="p">}}</span>
 </pre></div>
 <p>"<b>참고:</b> 편집할 때마다 사이트를 다시 빌드하세요."로 렌더링됩니다. 틀은 위치 매개변수(<code>{{{1}}}</code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions">파서 함수</a>를 실행합니다. 문법 자체는 표준 MediaWiki입니다. <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates">Help:Templates</a> 참고.
+</p><p><span id="variables"></span>
 </p>
+<div class="mw-heading mw-heading2"><h2 id="변수"><span id=".EB.B3.80.EC.88.98"></span>변수</h2></div>
+<p>MediaWiki 자체의 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words">매직 워드</a>는 다른 곳에서와 똑같이 동작합니다. <code>{{PAGENAME}}</code>, <code>{{SITENAME}}</code>, 빌드가 돌아간 MediaWiki를 가리키는 <code>{{CURRENTVERSION}}</code> 같은 것들입니다. Wikven은 여기에 자기 것 하나를 더합니다:
+</p>
+<dl><dt><code>{{WIKVENVERSION}}</code></dt>
+<dd>그 문서를 빌드한 Wikven의 버전입니다. 이 사이트에서는 <code>0.1.0</code>입니다. 숫자를 고치는 것을 누군가 기억해야 하는 대신 문서가 스스로 버전을 말해야 할 때 쓰세요. 무엇이 이 사이트를 만들었는지 밝히는 꼬리말이나, 어느 태그를 고정해야 하는지 알려 주는 문서 같은 곳입니다. 이 값은 Wikven 자신의 <code>extension.json</code>에 있는 숫자이고, 릴리스된 태그가 지니는 숫자와 같습니다.</dd></dl>
 <style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Getting_Started/ko.html" title="Special:MyLanguage/Getting Started">시작하기</a></div><div class="wikven-prevnext-next"><a href="../Images/ko.html" title="Special:MyLanguage/Images">이미지</a>&#160;&#8594;</div></div>
 
 </div>
@@ -663,7 +681,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 15:31에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 31일 (월) 00:52에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
