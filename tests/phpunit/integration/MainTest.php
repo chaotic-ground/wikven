@@ -130,6 +130,49 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * A Special:MyLanguage link is written canonically, not in this wiki's own words for it.
+	 *
+	 * The link is not a link to a file -- no export holds that special page -- but the marker
+	 * resolveTranslationLinks.php reads to send a reader to their own copy of the target, and a
+	 * marker matched by one spelling has to be written in one. On a wiki whose content language is
+	 * not English the namespace is that language's word for it, so the marker written from the
+	 * wiki's own naming would be "특수:MyLanguage/..." and that pass would walk past it, leaving
+	 * every translated page pointing at a file the site does not have.
+	 */
+	public function testSpecialMyLanguageIsMarkedCanonicallyInAnotherContentLanguage() {
+		$this->setContentLang('ko');
+		$url = '/x';
+		$this->main()->onGetLocalURL(Title::newFromText('Special:MyLanguage/Getting Started'), $url, '');
+		$this->assertSame('./Special:MyLanguage/Getting_Started.html', $url);
+	}
+
+	/** That language's own name for the special page resolves to the same marker. */
+	public function testSpecialMyLanguageIsMarkedCanonicallyFromALocalisedAlias() {
+		$this->setContentLang('ko');
+		$url = '/x';
+		$this->main()->onGetLocalURL(Title::newFromText('특수:내언어/Getting Started'), $url, '');
+		$this->assertSame('./Special:MyLanguage/Getting_Started.html', $url);
+	}
+
+	/**
+	 * So does one capitalised differently, which is the same fault on an English wiki: MediaWiki
+	 * matches a special page's name however it was typed, so "Special:Mylanguage/X" is that page as
+	 * surely as "Special:MyLanguage/X" and has to reach the pass as the same marker.
+	 */
+	public function testSpecialMyLanguageIsMarkedCanonicallyFromAnotherCapitalisation() {
+		$url = '/x';
+		$this->main()->onGetLocalURL(Title::newFromText('Special:Mylanguage/Getting Started'), $url, '');
+		$this->assertSame('./Special:MyLanguage/Getting_Started.html', $url);
+	}
+
+	/** A name no special page answers to has no canonical form; it keeps the one it was given. */
+	public function testAnUnknownSpecialPageKeepsItsName() {
+		$url = '/x';
+		$this->main()->onGetLocalURL(Title::newFromText('Special:NoSuchPage'), $url, '');
+		$this->assertSame('./Special:NoSuchPage.html', $url);
+	}
+
+	/**
 	 * The "View source" tab points at the page's source file in the repository, and in Citizen it
 	 * brings an icon: the skin renders the page actions as icon buttons and stops rendering their
 	 * labels below desktop width, so a tab it has no icon for is a blank box there. It maps icons
