@@ -106,3 +106,14 @@ $1편집할 때마다 사이트를 다시 빌드하세요.$2
 
 <!--T:21 @88bcbed2-->
 "'''참고:''' 편집할 때마다 사이트를 다시 빌드하세요."로 렌더링됩니다. 틀은 위치 매개변수(<code><nowiki>{{{1}}}</nowiki></code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 [$1 파서 함수]를 실행합니다. 문법 자체는 표준 MediaWiki입니다. [$2 Help:Templates] 참고.
+
+<!--T:30 @303845ce-->
+<span id="variables"></span>
+== 변수 ==
+
+<!--T:31 @86de95d6-->
+MediaWiki 자체의 [$1 매직 워드]는 다른 곳에서와 똑같이 동작합니다. <code><nowiki>{{PAGENAME}}</nowiki></code>, <code><nowiki>{{SITENAME}}</nowiki></code>, 빌드가 돌아간 MediaWiki를 가리키는 <code><nowiki>{{CURRENTVERSION}}</nowiki></code> 같은 것들입니다. {{SITENAME}}은 여기에 자기 것 하나를 더합니다:
+
+<!--T:32 @2f929543-->
+; <code><nowiki>{{WIKVENVERSION}}</nowiki></code>
+: 그 문서를 빌드한 {{SITENAME}}의 버전입니다. 이 사이트에서는 <code>$1</code>입니다. 숫자를 고치는 것을 누군가 기억해야 하는 대신 문서가 스스로 버전을 말해야 할 때 쓰세요. 무엇이 이 사이트를 만들었는지 밝히는 꼬리말이나, 어느 태그를 고정해야 하는지 알려 주는 문서 같은 곳입니다. 이 값은 {{SITENAME}} 자신의 <code>extension.json</code>에 있는 숫자이고, 릴리스된 태그가 지니는 숫자와 같습니다.
