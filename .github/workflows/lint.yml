@@ -248,26 +248,21 @@ jobs:
           done
           exit "$status"
 
-      # The prose names the current version with {{WIKVENVERSION}}, which cannot go stale. A
-      # <syntaxhighlight> block cannot use it: a template or a variable is not expanded inside one,
-      # so the two action examples pin a literal instead, and a release that bumped extension.json
-      # without them would publish a page telling readers to pin the version before the one it
-      # announces. There is nothing else in docs/ naming a version by hand.
-      - name: Check the action examples pin the version being released
+      # No page under docs/ spells out which version to pin. The prose reads it from
+      # {{WIKVENVERSION}}, and the action examples reach it too: a variable is not expanded inside
+      # a plain <syntaxhighlight>, but a parser function's arguments are expanded before the tag
+      # ever sees them, so the examples are written as {{#tag:syntaxhighlight|...|lang=yaml}}.
+      # A literal written back in would be right on the day and wrong at the next release.
+      - name: Check no page pins a wikven action to a literal version
         run: |
           set -euo pipefail
-          version=$(jq -r '.version' extension.json)
-          status=0
-          while IFS= read -r hit; do
-            case "$hit" in *"@v$version"*) continue ;; esac
-            echo "::error::$hit"
-            status=1
-          done < <(grep -rn -oE 'chaotic-ground/wikven/actions/[a-z-]+@[^ ]+' docs/ || true)
-          if [ "$status" -ne 0 ]; then
-            echo "::error::the lines above pin an action version other than $version, which is what" \
-                 "extension.json declares. Bump them with the release."
+          stray=$(grep -rn -oE 'chaotic-ground/wikven/actions/[a-z-]+@v[0-9]' docs/ || true)
+          if [ -n "$stray" ]; then
+            echo "$stray"
+            echo "::error::the lines above name a version by hand. Write @v{{WIKVENVERSION}}" \
+                 "instead, in a {{#tag:syntaxhighlight|...|lang=yaml}} block so it is expanded."
+            exit 1
           fi
-          exit "$status"
 
   # "composer test" is minus-x, which checks file modes and shebangs and needs no wiki around it.
   # It ran as a quibble stage, which spent 100 seconds booting MediaWiki to reach a check that
