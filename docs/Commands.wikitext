@@ -154,15 +154,14 @@ There are two more, and the build sets both on itself to run one skin's render p
 Bakes a source tree with the Docker image, on a GitHub Actions runner. See [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|Deploying]] for a complete workflow.
 
 <!--T:29-->
-{{note|Both actions are pinned by tag, and until a version of {{SITENAME}} is released that tag is a nightly — the dated pre-releases, <code>nightly-YYYY-MM-DD</code>, newest on the [<tvar name="2">https://github.com/chaotic-ground/wikven/releases</tvar> releases page]. Name the image from the same nightly while you are there: an action left to its default runs the image of the release it was cut from, and no release exists yet. Once one does, <code>@v<tvar name="3">{{WIKVENVERSION}}</tvar></code> on its own is enough — the tag carries the <code>v</code>, and the image the action then defaults to is the matching <code>:<tvar name="4">{{WIKVENVERSION}}</tvar></code>, which does not.}}
+{{note|Both actions are pinned by tag, and <code>@v<tvar name="3">{{WIKVENVERSION}}</tvar></code> is the current release. Naming no <code>image</code> is enough on its own: the action then runs the image of the release it was cut from, the matching <code>:<tvar name="4">{{WIKVENVERSION}}</tvar></code> — the git tag carries the <code>v</code> and the image tag does not — so the two cannot fall out of step. To try a change before it is released, name a dated <code>nightly-YYYY-MM-DD</code> pre-release from the [<tvar name="2">https://github.com/chaotic-ground/wikven/releases</tvar> releases page], and name the image from the same nightly while you are there.}}
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
-- uses: chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD
+- uses: chaotic-ground/wikven/actions/bake@v1.0.0
   with:
     source: src
     output: dist
-    image: ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD
 </syntaxhighlight>
 
 <translate>
@@ -201,10 +200,9 @@ Runs <code>translate check</code> over a source tree and reports each finding as
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
-- uses: chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD
+- uses: chaotic-ground/wikven/actions/check-translations@v1.0.0
   with:
     source: src
-    image: ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD
 </syntaxhighlight>
 
 <translate>

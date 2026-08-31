@@ -40,7 +40,7 @@ docker pull ghcr.io/chaotic-ground/wikven
 The same image is published to Quay as well, at <code>quay.io/chaotic-ground/wikven</code>. One build pushes both addresses, so pull from whichever one answers.
 
 <!--T:7-->
-The untagged image is the most recent nightly, built from the main branch on any day it gained a feature or a fix; once a version is released, that is what the untagged image will be instead. None has been released yet, so there is no <code>:1.2.3</code> tag to pin; to hold a build still, pin a dated <code>:nightly-YYYY-MM-DD</code> tag or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
+The untagged image is the newest released version. To hold a build still, pin the version tag <code>:<tvar name="1">{{WIKVENVERSION}}</tvar></code> or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>); shorter tags for the major and the minor version are published too, and move as that line gains releases. A dated <code>nightly-YYYY-MM-DD</code> tag is the main branch as it stood that day, for trying a change before it is released.
 
 <!--T:8-->
 <span id="build-from-source"></span>
