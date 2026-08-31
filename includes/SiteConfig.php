@@ -5,9 +5,10 @@ namespace MediaWiki\Extension\Wikven;
 use StatusValue;
 
 // LocalSettings.php loads this class by hand, before wfLoadExtension has given the extension an
-// autoloader, and lint() below asks BuildFor which values it knows. Fetch its neighbour the same
-// way rather than leave that answer to an autoloader that is not there yet.
+// autoloader, and lint() below asks BuildFor and OutputName which values they know. Fetch those
+// neighbours the same way rather than leave that answer to an autoloader that is not there yet.
 require_once __DIR__ . '/BuildFor.php';
+require_once __DIR__ . '/OutputName.php';
 
 /** Helpers for a site's configuration file (accepted .wikven.* names; see CONFIG_FILENAMES). */
 class SiteConfig {
@@ -108,17 +109,23 @@ class SiteConfig {
 			}
 		}
 
-		// The one setting whose value is chosen from a list rather than written freely, so the one
-		// where a near miss is worth naming: BuildFor reads anything it does not know as a site,
-		// which is the safe reading but a silent one.
-		$buildFor = $config['WikvenBuildFor'] ?? BuildFor::SITE;
-		if (!in_array($buildFor, BuildFor::all(), true)) {
+		// The settings whose value is chosen from a list rather than written freely, so the ones
+		// where a near miss is worth naming: each reads anything it does not know as its own
+		// default, which is the safe reading but a silent one.
+		$chosen = [
+			'WikvenBuildFor' => [BuildFor::all(), BuildFor::SITE],
+			'WikvenFileNames' => [OutputName::all(), OutputName::READABLE]
+		];
+		foreach ($chosen as $key => [$allowed, $fallback]) {
+			$written = $config[$key] ?? $fallback;
+			if (in_array($written, $allowed, true)) {
+				continue;
+			}
 			// Quote what was written when it is something a person wrote; name the type when it is
 			// not, so a stray "true" reads as the wrong kind of value rather than as the string 1.
-			$named = is_string($buildFor) ? "'$buildFor'" : get_debug_type($buildFor);
-			$expected = implode(', ', BuildFor::all());
-			$fallback = BuildFor::SITE;
-			$warnings[] = "'WikvenBuildFor' is $named; expected one of $expected. Building for '$fallback'.";
+			$named = is_string($written) ? "'$written'" : get_debug_type($written);
+			$expected = implode(', ', $allowed);
+			$warnings[] = "'$key' is $named; expected one of $expected. Using '$fallback'.";
 		}
 		return $warnings;
 	}

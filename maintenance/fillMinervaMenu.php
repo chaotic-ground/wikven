@@ -64,6 +64,7 @@ class FillMinervaMenu extends Maintenance {
 		$navigation = $this->list('p-wikven-navigation', $this->navigationMarkup());
 		$settings = $this->settingsMarkup();
 		$language = $this->getServiceContainer()->getContentLanguage();
+		$namespaceText = $language->getNsText(...);
 
 		$changed = 0;
 		foreach (new FilesystemIterator($dir, FilesystemIterator::SKIP_DOTS) as $file) {
@@ -71,9 +72,10 @@ class FillMinervaMenu extends Maintenance {
 				continue;
 			}
 			// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
-			// The file is still under its cache name here; a link has to name its destination as
-			// rename.php will leave it, since that pass runs after this one.
-			$page = CacheName::toOutputPath($file->getFilename(), $language);
+			// The file is still under its cache name here, and what goes in is a link rather than a
+			// name: rename.php runs after this pass, so ask OutputName what it will leave behind and
+			// then what reaches it.
+			$page = OutputName::href(OutputName::fromCache($file->getFilename(), $namespaceText));
 			$html = (string)file_get_contents($file->getPathname());
 			$filled = HtmlListInserter::after(
 				$html,

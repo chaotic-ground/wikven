@@ -136,6 +136,25 @@ Write a source page of that name and it takes precedence, exactly as for the Lic
 When set, and UniversalLanguageSelector is enabled, the build bakes that extension's webfonts for the languages your pages use into a stylesheet the export serves itself, so a reader whose system has no font for a script sees the intended typeface instead of empty boxes. It is off unless asked for, because the fonts are extra payload for a site whose readers may not need them. It does nothing without UniversalLanguageSelector; see [[<tvar name="1">Special:MyLanguage/Translating</tvar>|Translating]].
 </translate>
 
+=== <code>WikvenFileNames</code> ===
+
+<translate>
+<!--T:69-->
+'''Default:''' <code>readable</code>
+
+<!--T:70-->
+How a page is named in the output, and so what every link to it says. The default names each page as its title is written — <code>Vector_(skin).html</code>, <code>File:Bakery_oven.jpg.html</code> — which makes the plainest URLs, and is what this documentation site is published under. What a link carries is that name URL-encoded, since a static server decodes the path it is asked for before looking for the file.
+
+<!--T:71-->
+Set it to <code>encoded</code> where the output directory is a Windows filesystem. Windows cannot hold a file whose name has a colon in it, so a bind mount from Docker Desktop cannot take a page outside the main namespace under the default; <code>encoded</code> leaves every escape the page cache made in place — <code>File%3ABakery_oven.jpg.html</code> — which any filesystem can hold. The cost is in the URLs, which carry that percent sign doubled: the link to that page reads <code>./File%253ABakery_oven.jpg.html</code>, because a link is the name URL-encoded and the name itself has a percent in it.
+
+<!--T:72-->
+Four characters a Windows path cannot hold either — a quote, an asterisk, a question mark and a backslash — stay escaped under both, so a page called <code>What?</code> is written as <code>What%3F.html</code> either way. They are rare in a title and keeping them escaped costs nothing legible, which saves the sites that never have one from needing <code>encoded</code> at all.
+
+<!--T:73-->
+{{note|Changing this changes every URL the site serves. A link somebody else made to a page keeps pointing at the old name, which is no longer there. Pick one before publishing rather than after.}}
+</translate>
+
 === <code>WikvenBuildFor</code> ===
 
 <translate>

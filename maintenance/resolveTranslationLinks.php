@@ -54,7 +54,8 @@ class ResolveTranslationLinks extends Maintenance {
 				$html,
 				$lang,
 				static function (string $target) use ($htmlDir, $lang): bool {
-					return is_file("$htmlDir/$target/$lang.html");
+					// The link the marker carries, turned back into the file it names.
+					return is_file($htmlDir . '/' . OutputName::file($target) . "/$lang.html");
 				}
 			);
 			if ($resolved !== $html) {

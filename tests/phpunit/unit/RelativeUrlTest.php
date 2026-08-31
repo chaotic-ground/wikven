@@ -263,6 +263,39 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	/**
+	 * The marker is a link like any other, so under encoded file names it arrives with the colon
+	 * escaped and the target escaped with it. What follows the marker is the target's own link, so
+	 * appending "/<lang>.html" to it still names the translation's link.
+	 */
+	public function testMyLanguageIsFoundUnderEncodedFileNames() {
+		$this->assertSame(
+			'href="./Vector_%2528skin%2529/ko.html"',
+			RelativeUrl::resolveMyLanguage(
+				'href="./Special%253AMyLanguage/Vector_%2528skin%2529.html"',
+				'ko',
+				static function (): bool {
+					return true;
+				}
+			)
+		);
+	}
+
+	/** And the target it hands the caller is that link, for the caller to turn back into a file. */
+	public function testMyLanguageAsksAboutTheTargetTheLinkNames() {
+		$asked = [];
+		RelativeUrl::resolveMyLanguage(
+			'href="./Special:MyLanguage/What%253F.html"',
+			'ko',
+			static function (string $target) use (&$asked): bool {
+				$asked[] = $target;
+				return false;
+			}
+		);
+
+		$this->assertSame(['What%253F'], $asked);
+	}
+
 	public function testResolveMyLanguageLeavesOrdinaryLinksAlone() {
 		$html = 'href="./B.html" href="https://example.org/Special:MyLanguage/Y"';
 		$this->assertSame($html, RelativeUrl::resolveMyLanguage($html, 'ko', static function () {
