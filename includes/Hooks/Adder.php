@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Extension\Wikven\BuildFor;
+use MediaWiki\Extension\Wikven\OutputName;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SkinList;
 use MediaWiki\Html\Html;
@@ -256,8 +257,15 @@ class Adder implements
 	 * special page, which no export contains, would be left standing in the href.
 	 */
 	public static function licensesHref(Title $licenses, bool $translated): string {
+		$namespace = (string)$licenses->getNsText();
+		if (!$translated) {
+			return './' . OutputName::href(OutputName::of($namespace, $licenses->getDBkey()));
+		}
+		// Built as the title it stands for, rather than spelt out, so this marker and the one
+		// GetLocalURL writes for a real Special:MyLanguage link are the same string in either
+		// spelling of the file names -- which is what resolveMyLanguage() below matches on.
 		$page = Title::makeName($licenses->getNamespace(), $licenses->getDBkey());
-		return './' . ( $translated ? 'Special:MyLanguage/' : '' ) . $page . '.html';
+		return './' . OutputName::href(OutputName::of('Special', "MyLanguage/$page"));
 	}
 
 	/** The page listing what the site redistributes, or null where the site asked for none. */

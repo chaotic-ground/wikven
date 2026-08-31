@@ -11,63 +11,64 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
+/**
+ * Move each cached page to the file the site is served from; see OutputName.
+ *
+ * The file cache names a page "ns<N>%3A<escaped dbkey>.html". OutputName says what that becomes --
+ * a readable namespace, the dots and subpage slashes restored, and the rest of the escaping either
+ * undone or left standing depending on the site's setting -- and every link the build wrote names
+ * the same destination, because it asked the same class from the other side.
+ */
 class Rename extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->addDescription('Replace the "ns:" prefix with readable text');
+		$this->addDescription('Move each cached page to the file the site is served from');
 	}
 
 	public function execute() {
 		global $wgWikvenHtmlDirectory;
-		$path = $wgWikvenHtmlDirectory;
-		if (str_ends_with($path, '/')) {
-			$path = rtrim($path, '/');
-		}
+		$path = rtrim($wgWikvenHtmlDirectory, '/');
 
-		foreach (glob("$path/ns*") as $filename) {
-			$basename = basename($filename);
-			if (!preg_match('/^ns(\d+)%3A/', $basename, $matches)) {
-				$this->output("$basename is not matched\n");
+		$namespaceText = MediaWikiServices::getInstance()->getContentLanguage()->getNsText(...);
+
+		$moved = 0;
+		foreach (glob("$path/*") ?: [] as $filename) {
+			if (!is_file($filename)) {
 				continue;
 			}
-
-			$ns = $matches[1];
-			if (!ctype_digit($ns)) {
-				$this->output("$ns is a number\n");
+			$basename = basename($filename);
+			$name = OutputName::fromCache($basename, $namespaceText);
+			// Anything the file cache did not write comes back as it went in and stays where it is.
+			if ($name === $basename) {
 				continue;
 			}
-
-			$nsText = MediaWikiServices::getInstance()
-				->getContentLanguage()
-				->getNsText((int)$ns);
-			$newName = preg_replace("/^ns$ns%3A/", "$nsText:", $basename);
-			$newName = ltrim($newName, ':');
-			rename("$path/$basename", "$path/$newName");
+			$this->place($path, $filename, $name);
+			$moved++;
 		}
+		$this->output("Wikven: named $moved cached page(s) as the site serves them\n");
+	}
 
-		foreach (glob("$path/*") as $filename) {
-			$basename = basename($filename);
-			if (!str_contains($basename, '.')) {
-				continue;
-			}
-			$newName = preg_replace('/%2E/', '.', $basename);
-			rename("$path/$basename", "$path/$newName");
+	/**
+	 * Put one page where its name says it goes.
+	 *
+	 * A subpage title such as "Manual/Config" caches to a flat file and is exported into a real
+	 * "Manual/" directory, so its root-relative references need a "../" per level to keep pointing
+	 * at the same files; a page at the root is a plain move.
+	 */
+	private function place(string $path, string $filename, string $name): void {
+		$destination = "$path/$name";
+		$depth = substr_count($name, '/');
+		if ($depth === 0) {
+			rename($filename, $destination);
+			return;
 		}
-
-		// Subpage titles (e.g. "Manual/Config") cache to a flat "Manual%2FConfig.html", but links to
-		// them keep the slash. Move each into a real subdirectory and rebase its root-relative
-		// references by that depth, so links and files agree when served from a static host.
-		foreach (glob("$path/*%2F*") as $filename) {
-			$basename = basename($filename);
-			$depth = substr_count($basename, '%2F');
-			$destination = "$path/" . str_replace('%2F', '/', $basename);
-			$directory = dirname($destination);
-			if (!wfMkdirParents($directory)) {
-				$this->fatalError("Wikven: could not create directory $directory");
-			}
-			file_put_contents($destination, RelativeUrl::reparent(file_get_contents($filename), $depth), LOCK_EX);
-			unlink($filename);
+		$directory = dirname($destination);
+		if (!is_dir($directory) && !wfMkdirParents($directory)) {
+			$this->fatalError("Wikven: could not create directory $directory");
 		}
+		$html = (string)file_get_contents($filename);
+		file_put_contents($destination, RelativeUrl::reparent($html, $depth), LOCK_EX);
+		unlink($filename);
 	}
 }
 

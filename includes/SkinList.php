@@ -4,7 +4,6 @@ namespace MediaWiki\Extension\Wikven;
 
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Skin\Skin;
-use MediaWiki\Title\Title;
 
 /** Each enabled skin's copy of the current page: the switcher, wherever a skin can show it. */
 class SkinList {
@@ -21,7 +20,7 @@ class SkinList {
 		if (!$title || !$title->canExist()) {
 			return [];
 		}
-		$page = Title::makeName($title->getNamespace(), $title->getDBkey()) . '.html';
+		$page = OutputName::href(OutputName::of((string)$title->getNsText(), $title->getDBkey()));
 		return self::forPage($skin, $page, $skin->getSkinName());
 	}
 
@@ -31,7 +30,7 @@ class SkinList {
 	 * have to be that page's.
 	 *
 	 * @param Skin $skin Any skin, read for the labels alone.
-	 * @param string $page An output file name, e.g. "Getting_Started.html".
+	 * @param string $page A page's link, as OutputName::href() writes it, e.g. "Getting_Started.html".
 	 * @param string $current The skin the page being written is rendered in.
 	 * @return list<array{id:string,text:string,href:?string,active:bool}>
 	 */

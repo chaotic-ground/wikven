@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\Wikven\AssetFile;
 use MediaWiki\Extension\Wikven\BuildFor;
+use MediaWiki\Extension\Wikven\OutputName;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SourceFile;
 use MediaWiki\Html\Html;
@@ -84,7 +85,9 @@ class Main implements
 			return;
 		}
 
-		$name = Title::makeName($title->getNamespace(), $title->getDBkey());
+		// The file this title is written to, url-encoded so a static server asking for it finds it;
+		// see OutputName, which rename.php asks the same question of from the file's side.
+		$href = OutputName::href(OutputName::of((string)$title->getNsText(), $title->getDBkey()));
 		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
 		$params = wfCgiToArray($query);
 		$action = $params['action'] ?? null;
@@ -99,7 +102,7 @@ class Main implements
 		} elseif ($wantsHistory && $wgWikvenHistoryUrl) {
 			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenHistoryUrl);
 		} else {
-			$url = "./$name.html";
+			$url = "./$href";
 		}
 	}
 
@@ -117,7 +120,7 @@ class Main implements
 		if (!$results) {
 			return '#';
 		}
-		$url = './' . Title::makeName($results->getNamespace(), $results->getDBkey()) . '.html';
+		$url = './' . OutputName::href(OutputName::of((string)$results->getNsText(), $results->getDBkey()));
 		$term = wfCgiToArray($query)['search'] ?? '';
 		return $term === '' ? $url : $url . '?' . wfArrayToCgi(['search' => $term]);
 	}
@@ -328,10 +331,10 @@ class Main implements
 			&& $title
 			&& $out->getSkin()->getSkinName() !== $mainSkin
 		) {
-			$name = Title::makeName($title->getNamespace(), $title->getDBkey());
+			$href = OutputName::href(OutputName::of((string)$title->getNsText(), $title->getDBkey()));
 			$tags['link-canonical'] = Html::element('link', [
 				'rel' => 'canonical',
-				'href' => "../$name.html"
+				'href' => "../$href"
 			]);
 		}
 	}

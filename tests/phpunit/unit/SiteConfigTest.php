@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
 use MediaWiki\Extension\Wikven\BuildFor;
+use MediaWiki\Extension\Wikven\OutputName;
 use MediaWiki\Extension\Wikven\SiteConfig;
 use MediaWikiUnitTestCase;
 use StatusValue;
@@ -85,6 +86,28 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		$warnings = SiteConfig::lint(['config' => ['WikvenBuildFor' => true]]);
 		$this->assertCount(1, $warnings);
 		$this->assertStringContainsString('is bool;', $warnings[0]);
+	}
+
+	public function testEverySpellingOutputNameKnowsPassesLint() {
+		foreach (OutputName::all() as $spelling) {
+			$this->assertSame([], SiteConfig::lint(['config' => ['WikvenFileNames' => $spelling]]));
+		}
+	}
+
+	/** The same near miss, on the second setting whose value is chosen from a list. */
+	public function testASpellingOutputNameDoesNotKnowIsNamed() {
+		$warnings = SiteConfig::lint(['config' => ['WikvenFileNames' => 'raw']]);
+		$this->assertCount(1, $warnings);
+		$this->assertStringContainsString("'WikvenFileNames' is 'raw'", $warnings[0]);
+		$this->assertStringContainsString('encoded', $warnings[0]);
+	}
+
+	/** Both are reported, rather than the first one found ending the pass. */
+	public function testTwoChosenSettingsAreBothReported() {
+		$warnings = SiteConfig::lint([
+			'config' => ['WikvenBuildFor' => 'sit', 'WikvenFileNames' => 'raw']
+		]);
+		$this->assertCount(2, $warnings);
 	}
 
 	public function testUrlTemplateMissingPlaceholderWarns() {
