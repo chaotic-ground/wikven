@@ -9,7 +9,11 @@ use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
 /**
+ * A parse needs a database whatever it is parsing: expanding any variable at all makes core ask
+ * the page for its language, and a page's language comes from its content model, which is a row.
+ *
  * @covers \MediaWiki\Extension\Wikven\Hooks\Versioner
+ * @group Database
  */
 class VersionerTest extends MediaWikiIntegrationTestCase {
 	/**
