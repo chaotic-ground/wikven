@@ -157,12 +157,12 @@ Bakes a source tree with the Docker image, on a GitHub Actions runner. See [[<tv
 {{note|Both actions are pinned by tag, and <code>@v<tvar name="3">{{WIKVENVERSION}}</tvar></code> is the current release. Naming no <code>image</code> is enough on its own: the action then runs the image of the release it was cut from, the matching <code>:<tvar name="4">{{WIKVENVERSION}}</tvar></code> — the git tag carries the <code>v</code> and the image tag does not — so the two cannot fall out of step. To try a change before it is released, name a dated <code>nightly-YYYY-MM-DD</code> pre-release from the [<tvar name="2">https://github.com/chaotic-ground/wikven/releases</tvar> releases page], and name the image from the same nightly while you are there.}}
 </translate>
 
-<syntaxhighlight lang="yaml" copy>
-- uses: chaotic-ground/wikven/actions/bake@v1.0.0
+{{#tag:syntaxhighlight|
+- uses: chaotic-ground/wikven/actions/bake@v{{WIKVENVERSION}}
   with:
     source: src
     output: dist
-</syntaxhighlight>
+|lang=yaml|copy=}}
 
 <translate>
 <!--T:24-->
@@ -199,11 +199,11 @@ Runs <code>translate check</code> over a source tree and reports each finding as
 {{note|Annotations are for whoever is reading the diff. A contributor sending their first translation is better served by being told what to run, which <code>comment: true</code> does: one comment on the pull request, the findings grouped by what went wrong, each group naming the command that answers it. It is edited on each run rather than added to, and taken down once nothing is left to report -- a comment saying nothing is wrong is one nobody needs, and the annotations hold the record either way. That contributor is by definition working in another language, so the comment can speak it: <code>comment-languages: auto</code> writes it in English and in the language of the translation it is about, from wikven's own interface messages. The job needs <code>pull-requests: write</code>; a pull request from a fork carries a read-only token, and the comment is then skipped with a line in the log.}}
 </translate>
 
-<syntaxhighlight lang="yaml" copy>
-- uses: chaotic-ground/wikven/actions/check-translations@v1.0.0
+{{#tag:syntaxhighlight|
+- uses: chaotic-ground/wikven/actions/check-translations@v{{WIKVENVERSION}}
   with:
     source: src
-</syntaxhighlight>
+|lang=yaml|copy=}}
 
 <translate>
 <!--T:28-->
