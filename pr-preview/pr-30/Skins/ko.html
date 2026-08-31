@@ -96,7 +96,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		</nav>
 			
 <a href="../index/ko.html" class="mw-logo">
-	<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
+	<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
 	<span class="mw-logo-container skin-invert">
 		<strong class="mw-logo-wordmark">Wikven</strong>
 	</span>
@@ -604,8 +604,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div id="contentSub" lang="ko" dir="ltr"><div id="mw-content-subtitle" lang="ko" dir="ltr"></div></div>
 					
 					
-					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Skins.html" title="Skins">Skins</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Skins/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Skins.html" class="mw-pt-progress mw-pt-progress--complete" title="Skins (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Skins.html" title="Skins">Skins</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Skins/ko.wikitext">번역한 것</a></span>이며 번역은 94% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Skins.html" class="mw-pt-progress mw-pt-progress--complete" title="Skins (100% 번역함)" lang="en" dir="ltr">English</a></li>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins">번들된 스킨</a>은 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>에서 고를 수 있습니다.
 </p><p><span id="Supported&#95;skins"></span>
 </p>
@@ -621,18 +621,30 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><span id="Configuring&#95;the&#95;skin"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="스킨_설정"><span id=".EC.8A.A4.ED.82.A8_.EC.84.A4.EC.A0.95"></span>스킨 설정</h2></div>
-<p><code>skins</code>를 설정하여 스킨을 바꿀 수 있습니다. 목록의 첫 번째 스킨이 기본값으로 사용됩니다.
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p><code>skins</code> says which skins to build. Wikven builds Vector whatever else you list, so naming another one adds it rather than replaces it:
 </p>
+</div>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
 </pre></div>
-<p><span id="building-more-than-one-skin"></span>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p>Which of them the site is read in is a separate question, and MediaWiki already has the setting for it. Name the skin in <code>config</code> under <code>DefaultSkin</code>, by its canonical name -- which is what MediaWiki calls a skin, and is not always what you listed it by: <code>minerva</code> for MinervaNeue, <code>vector-2022</code> for Vector.
+</p>
+</div>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinervaNeue</span>
+<span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">DefaultSkin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minerva</span>
+</pre></div>
+<p>설정하지 않으면 빌드된 첫 스킨으로 읽습니다. 스킨이 하나뿐인 사이트에는 그것이 유일하게 필요한 답입니다. 사이트가 빌드하지 않는 스킨을 <code>DefaultSkin</code>에 적으면 그 사실을 알리고 무시합니다. 아무것도 렌더링하지 않는 기본 스킨은 출력 루트에 문서를 하나도 남기지 않기 때문입니다.
+</p><p><span id="building-more-than-one-skin"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="스킨을_둘_이상으로_빌드하기"><span id=".EC.8A.A4.ED.82.A8.EC.9D.84_.EB.91.98_.EC.9D.B4.EC.83.81.EC.9C.BC.EB.A1.9C_.EB.B9.8C.EB.93.9C.ED.95.98.EA.B8.B0"></span>스킨을 둘 이상으로 빌드하기</h2></div>
 <p>스킨을 둘 이상 나열하면 사이트가 그 모두로 빌드되고, 독자가 고릅니다. 이 문서 사이트가 세 스킨 모두로 그렇게 합니다. 설정은 한 줄이지만 그 결과는 한 줄이 아니므로, 알아 둘 만합니다.
 </p>
 <ul><li><b>사이트가 스킨마다 한 번씩 렌더링됩니다.</b> 스킨이 셋이면 전체 렌더링을 세 번 하므로 파일 수는 대략 세 배가 됩니다. 다만 렌더링은 빌드가 쓸 수 있는 프로세서 하나당 하나씩 나란히 돌아가므로, 늘어나는 시간은 프로세서가 모자라는 만큼뿐입니다. 셋이면 세 스킨 빌드가 한 스킨 빌드와 비슷하게 걸리고, 하나뿐이거나 <a href="../Commands/ko.html#environment-variables" title="Special:MyLanguage/Commands"><code>WIKVEN_BUILD_JOBS</code>를 <code>1</code>로 설정</a>하면 대략 세 배가 걸립니다.</li>
-<li><b>스킨마다 모든 문서의 사본을 갖습니다.</b> 목록의 첫 스킨은 단일 스킨 사이트처럼 출력 루트에 렌더링되고, 나머지는 각자의 이름을 딴 디렉터리에 렌더링됩니다. <code>dist/Getting Started.html</code> 옆에 <code>dist/citizen/Getting Started.html</code>이 놓이는 식입니다. 사본은 자체 <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색 색인</a>까지 갖춘 완전한 것이어서, 스킨을 고른 독자는 문서를 옮겨 다닐 때도 검색할 때도 그 스킨 안에 머무릅니다.</li>
+<li><b>스킨마다 모든 문서의 사본을 갖습니다.</b> 사이트를 읽는 스킨은 단일 스킨 사이트처럼 출력 루트에 렌더링되고, 나머지는 각자의 이름을 딴 디렉터리에 렌더링됩니다. <code>dist/Getting_Started.html</code> 옆에 <code>dist/citizen/Getting_Started.html</code>이 놓이는 식입니다. 사본은 자체 <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색 색인</a>까지 갖춘 완전한 것이어서, 스킨을 고른 독자는 문서를 옮겨 다닐 때도 검색할 때도 그 스킨 안에 머무릅니다.</li>
 <li><b>사본은 검색 엔진에 노출되지 않습니다.</b> 색인되는 것은 주 스킨의 문서뿐이고 나머지는 <code>noindex</code>로 렌더링되므로, 검색 엔진에 같은 문서가 세 번 제시되지 않습니다.</li>
 <li><b>모든 문서에 스킨 전환기가 생깁니다.</b> 어디에 나타날지는 스킨에 달렸습니다. Vector는 모양새 메뉴에, Citizen은 환경 설정 패널에 두고, 그 밖의 스킨은 도구 상자에 둡니다. 자바스크립트가 없는 독자에게도 평범한 링크 목록이 그대로 남습니다. MinervaNeue만은 예외입니다. 도구 상자에 해당하는 것이 문서 동작 메뉴인데, 어떤 스킨으로 읽을지는 문서에 가하는 동작이 아니므로, 문서에는 전환기가 없고 목록은 <a href="#설정_문서">설정 문서</a>에 놓입니다. 주 메뉴에는 사이트 자체의 둘러보기 링크와 그 문서로 가는 링크가 들어갑니다.</li></ul>
 <p>스킨이 하나뿐이면 전환기도 사본도 없습니다. 출력은 예전과 똑같습니다.
@@ -717,7 +729,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 28일 (금) 11:44에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 15:31에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">

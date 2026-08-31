@@ -36,7 +36,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
 		<a href="../index/ko.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="대문으로 가기">
-			<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+			<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="32" width="32">
 			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
 		</a>
@@ -89,7 +89,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<div class="citizen-menu__card-content">
 				<div class="citizen-drawer__header">
 					<a href="../index/ko.html" class="mw-logo citizen-drawer__logo" title="대문으로 가기">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="80" width="80" loading="lazy">
 				</a>
 				<div class="citizen-drawer__siteinfo">
@@ -112,7 +112,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</li>
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--edits" role="listitem">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit" title="편집"></span>
-		<span>1.1K</span>
+		<span>1.2K</span>
 		<span class="citizen-siteStats__label">편집</span>
 	</li>
 </ul>
@@ -436,7 +436,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>dist/
 ├── index.html               the main page, served at the site root
-├── Getting Started.html     one file per page
+├── Getting_Started.html     one file per page
 ├── Guide/
 │   └── Setup.html           a page whose title has a slash becomes a directory
 ├── File:Logo.png.html       file description pages
@@ -444,7 +444,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 │   ├── site.styles.css      MediaWiki:Common.css and the skin's own CSS
 │   ├── startup-static.js    the module loader, with its network fetch removed
 │   ├── modules-static.js    every module the pages need, bundled
-│   ├── img-1a2b3c4d5e6f.png every image the pages use, named by content
+│   ├── img-1a2b3c4d5e6f.png every image, from a page or from CSS
 │   └── webfonts.css         only with WikvenBundleWebfonts set
 ├── fonts/                   the webfont files themselves, likewise
 ├── pagefind/                the search index
@@ -476,25 +476,21 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">          </span><span class="c1"># its source file. A shallow checkout knows only the latest commit.</span>
 <span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d</span><span class="w">  </span><span class="c1"># v6.0.0</span>
-<span class="w">      </span><span class="c1"># No version has been released yet, so there is no version tag to pin --</span>
-<span class="w">      </span><span class="c1"># and the action's default image is that unreleased version. Pin a nightly</span>
-<span class="w">      </span><span class="c1"># instead, and name the image from the same one: the tag is a commit of</span>
-<span class="w">      </span><span class="c1"># main, and that image was built from it. Both become @1.2.3 once a version</span>
-<span class="w">      </span><span class="c1"># exists. Pick the newest nightly from the releases page.</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@v1.0.0</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
 <span class="w">          </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
-<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9</span><span class="w">  </span><span class="c1"># v5.0.0</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
 <span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128</span><span class="w">  </span><span class="c1"># v5.0.0</span>
 </pre></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>액션은 릴리스된 버전으로 고정되어 있고, <code>@v1.0.0</code>가 현재 릴리스입니다. <code>image</code>는 일부러 지정하지 않았습니다. 기본값에 맡긴 액션은 자신이 잘려 나온 릴리스의 이미지를 실행하므로, 둘이 어긋날 수가 없습니다. 이미지까지 직접 고정하려면 <code>image: ghcr.io/chaotic-ground/wikven:1.0.0</code>을 덧붙이십시오. 깃 태그에는 <code>v</code>가 붙고 이미지 태그에는 붙지 않습니다. 릴리스 전의 변경을 미리 써 보려면 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">릴리스 페이지</a>에서 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 사전 릴리스를 골라 두 곳 모두에 지정하십시오. 나이틀리 태그는 <code>main</code>의 어느 커밋을 가리키고 그 이미지도 같은 커밋에서 만들어지므로, 둘을 같은 나이틀리로 지정하면 서로 붙어 있습니다.</p></div>
+</div>
 <p>저장소의 <b>Settings → Pages → Build and deployment → Source: GitHub Actions</b>에서 Pages를 활성화하세요. 이 문서 사이트도 이렇게 게시됩니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>GitHub <b>프로젝트</b> 페이지는 하위 디렉터리(<code>username.github.io/repo/</code>)에서 제공됩니다. Wikven은 문서 간 링크를 상대 경로로 작성하므로 페이지 사이의 링크는 계속 동작하지만, 절대 경로가 필요한 것은 그 기본 경로를 포함해야 합니다. <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색</a>의 <code>SifterSearchBundlePath</code>를 <code>/repo/pagefind/</code>로 설정하세요 (이 사이트는 <code>/wikven/pagefind/</code>를 사용합니다). <b>사용자/조직</b> 페이지(도메인 루트에서 제공)에는 그런 설정이 필요 없습니다.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91"/><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>GitHub <b>프로젝트</b> 페이지는 하위 디렉터리(<code>username.github.io/repo/</code>)에서 제공됩니다. Wikven은 문서 간 링크를 상대 경로로 작성하므로 페이지 사이의 링크는 계속 동작하지만, 절대 경로가 필요한 것은 그 기본 경로를 포함해야 합니다. <a href="../Searching/ko.html" title="Special:MyLanguage/Searching">검색</a>의 <code>SifterSearchBundlePath</code>를 <code>/repo/pagefind/</code>로 설정하세요 (이 사이트는 <code>/wikven/pagefind/</code>를 사용합니다). <b>사용자/조직</b> 페이지(도메인 루트에서 제공)에는 그런 설정이 필요 없습니다.</p></div>
 </div>
 <p><span id="Any_static_host"></span>
 </p>
@@ -593,7 +589,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying/ko.wikitext" title="이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다." data-timestamp="1788075968"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 30일 (일)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying/ko.wikitext" title="이 문서는 2026년 8월 31일 (월) 12:29에 마지막으로 편집되었습니다." data-timestamp="1788179387"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 8월 31일 (월)</span></a></li>
 			
 		</ul>
 		
@@ -719,7 +715,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 8월 30일 (일) 07:46에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 8월 31일 (월) 12:29에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -733,7 +729,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<section class="citizen-footer__content">
 			<div class="citizen-footer__siteinfo">
 				<div id="footer-sitetitle" class="citizen-footer__sitetitle mw-wiki-title">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" loading="lazy" height="48" width="48">
 					<div class="mw-logo-wordmark">Wikven</div>
 									</div>

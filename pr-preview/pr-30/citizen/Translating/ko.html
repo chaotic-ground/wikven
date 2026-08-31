@@ -35,7 +35,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
 		<a href="../index/ko.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="대문으로 가기">
-			<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+			<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="32" width="32">
 			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
 		</a>
@@ -88,7 +88,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<div class="citizen-menu__card-content">
 				<div class="citizen-drawer__header">
 					<a href="../index/ko.html" class="mw-logo citizen-drawer__logo" title="대문으로 가기">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="80" width="80" loading="lazy">
 				</a>
 				<div class="citizen-drawer__siteinfo">
@@ -111,7 +111,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</li>
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--edits" role="listitem">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit" title="편집"></span>
-		<span>1.1K</span>
+		<span>1.2K</span>
 		<span class="citizen-siteStats__label">편집</span>
 	</li>
 </ul>
@@ -455,7 +455,7 @@ It runs a real MediaWiki at build time.
 </pre>
 <p>단위 번호를 손으로 매기지 않습니다. 내용을 <code>&lt;translate></code>로 감싸고 <code>&lt;languages/></code>를 추가한 다음, <code>translate mark</code>를 실행하여 <code>&lt;!--T:n--></code> 표시자를 삽입합니다. 이때 소스 디렉터리를 쓰기 가능하게 마운트합니다:
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>네 가지 <code>translate</code> 도우미는 두 제품 모두에 들어 있습니다. 이 문서의 명령은 Docker 형태이며, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>는 같은 넷을 자기 작업 디렉터리를 대상으로 <code>wikven translate mark --all</code>처럼 실행합니다. 마운트를 마련할 일도 없습니다. <a href="../Commands/ko.html#translate" title="Special:MyLanguage/Commands">명령어</a>를 참고하십시오.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>네 가지 <code>translate</code> 도우미는 두 제품 모두에 들어 있습니다. 이 문서의 명령은 Docker 형태이며, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>는 같은 넷을 자기 작업 디렉터리를 대상으로 <code>wikven translate mark --all</code>처럼 실행합니다. 마운트를 마련할 일도 없습니다. <a href="../Commands/ko.html#translate" title="Special:MyLanguage/Commands">명령어</a>를 참고하십시오.</p></div>
 </div>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 </pre></div>
@@ -674,7 +674,7 @@ It runs a real MediaWiki at build time.
 		<section class="citizen-footer__content">
 			<div class="citizen-footer__siteinfo">
 				<div id="footer-sitetitle" class="citizen-footer__sitetitle mw-wiki-title">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" loading="lazy" height="48" width="48">
 					<div class="mw-logo-wordmark">Wikven</div>
 									</div>

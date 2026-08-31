@@ -97,7 +97,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		</nav>
 			
 <a href="./index.html" class="mw-logo">
-	<img class="mw-logo-icon" src="./img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
+	<img class="mw-logo-icon" src="./assets/img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
 	<span class="mw-logo-container skin-invert">
 		<strong class="mw-logo-wordmark">Wikven</strong>
 	</span>
@@ -540,7 +540,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ParserFunctions</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SyntaxHighlight_GeSHi</span>
 </pre></div>
-<p>A name Wikven cannot find on disk is skipped with a warning in the build log rather than failing the build, so a typo shows up as an extension that quietly did nothing. Anything not shipped has to say where it comes from, under the <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a>.
+<p>A name Wikven cannot find on disk fails the build, naming it. A typo would otherwise show up as an extension that quietly did nothing, on a site already published. Anything not shipped has to say where it comes from, under the <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="What_is_already_there">What is already there</h2></div>
 <p>The Wikven image carries everything <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions">bundled with MediaWiki</a> — ParserFunctions, Cite, Gadgets, SyntaxHighlight_GeSHi, TemplateStyles and the rest — plus three Wikven adds for what a static site needs:
@@ -592,7 +592,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 23 August 2026, at 07:13.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 13:16.</li>
 </ul>
 
 	<ul id="footer-places">

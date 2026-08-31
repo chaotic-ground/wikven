@@ -35,7 +35,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
 		<a href="../index/en.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="Visit the main page">
-			<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+			<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="32" width="32">
 			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
 		</a>
@@ -88,7 +88,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<div class="citizen-menu__card-content">
 				<div class="citizen-drawer__header">
 					<a href="../index/en.html" class="mw-logo citizen-drawer__logo" title="Visit the main page">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="80" width="80" loading="lazy">
 				</a>
 				<div class="citizen-drawer__siteinfo">
@@ -111,7 +111,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</li>
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--edits" role="listitem">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit" title="edits"></span>
-		<span>1.1K</span>
+		<span>1.2K</span>
 		<span class="citizen-siteStats__label">edits</span>
 	</li>
 </ul>
@@ -445,7 +445,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
 <p>The same image is published to Quay as well, at <code>quay.io/chaotic-ground/wikven</code>. One build pushes both addresses, so pull from whichever one answers.
-</p><p>The untagged image is the most recent nightly, built from the main branch on any day it gained a feature or a fix; once a version is released, that is what the untagged image will be instead. None has been released yet, so there is no <code>:1.2.3</code> tag to pin; to hold a build still, pin a dated <code>:nightly-YYYY-MM-DD</code> tag or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>).
+</p><p>The untagged image is the newest released version. To hold a build still, pin the version tag <code>:1.0.0</code> or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>); shorter tags for the major and the minor version are published too, and move as that line gains releases. A dated <code>nightly-YYYY-MM-DD</code> tag is the main branch as it stood that day, for trying a change before it is released.
 </p><p><span id="build-from-source"></span>
 </p>
 </section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Build_from_source">Build from source</h2></div>
@@ -484,7 +484,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Installation/en.wikitext" title="This page was last edited on 30 August 2026, at 07:46." data-timestamp="1788075968"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Installation/en.wikitext" title="This page was last edited on 31 August 2026, at 12:29." data-timestamp="1788179387"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>31 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -580,7 +580,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 07:46.</div>
+		        <div class="page-info__text"> This page was last edited on 31 August 2026, at 12:29.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -594,7 +594,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 		<section class="citizen-footer__content">
 			<div class="citizen-footer__siteinfo">
 				<div id="footer-sitetitle" class="citizen-footer__sitetitle mw-wiki-title">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" loading="lazy" height="48" width="48">
 					<div class="mw-logo-wordmark">Wikven</div>
 									</div>

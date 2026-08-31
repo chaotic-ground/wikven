@@ -96,7 +96,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		</nav>
 			
 <a href="../index/ko.html" class="mw-logo">
-	<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
+	<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
 	<span class="mw-logo-container skin-invert">
 		<strong class="mw-logo-wordmark">Wikven</strong>
 	</span>
@@ -396,11 +396,23 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-WikvenBundleWebfonts-sublist" class="vector-toc-list">
 			</ul>
 		</li>
+		<li id="toc-WikvenFileNames"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#WikvenFileNames">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.8</span>
+					<span>WikvenFileNames</span>
+				</div>
+			</a>
+			
+			<ul id="toc-WikvenFileNames-sublist" class="vector-toc-list">
+			</ul>
+		</li>
 		<li id="toc-WikvenBuildFor"
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenBuildFor">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.8</span>
+					<span class="vector-toc-numb">3.9</span>
 					<span>WikvenBuildFor</span>
 				</div>
 			</a>
@@ -412,7 +424,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenAssetDirectory">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.9</span>
+					<span class="vector-toc-numb">3.10</span>
 					<span>WikvenAssetDirectory</span>
 				</div>
 			</a>
@@ -424,7 +436,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenRepositories">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.10</span>
+					<span class="vector-toc-numb">3.11</span>
 					<span>WikvenRepositories</span>
 				</div>
 			</a>
@@ -436,7 +448,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#ContentNamespaces">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.11</span>
+					<span class="vector-toc-numb">3.12</span>
 					<span>ContentNamespaces</span>
 				</div>
 			</a>
@@ -685,7 +697,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>불러올 확장 기능 이름의 목록입니다. Wikven 안에 함께 들어 있는 확장 기능은 이름만으로 작동하며, 그 밖의 이름은 서드파티로 취급되어 <a href="#WikvenRepositories"><code>WikvenRepositories</code> 맵</a>에 선언한 소스에서 가져옵니다. 무엇이 들어 있고 무엇이 들어 있지 않은지는 <a href="../Extensions/ko.html" title="Special:MyLanguage/Extensions">확장 기능</a>을 참고하십시오.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="skins"><code>skins</code></h2></div>
-<p>활성화할 스킨 이름의 목록입니다. 첫 번째가 기본 스킨으로 쓰입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 <a href="#WikvenRepositories"><code>WikvenRepositories</code> 맵</a>에서 가져옵니다. <a href="../Skins/ko.html" title="Special:MyLanguage/Skins">스킨</a>을 참고하십시오.
+<p>활성화할 스킨 이름의 목록입니다. 무엇을 나열하든 Vector는 빌드됩니다. 어느 스킨으로 사이트를 읽을지는 <code>config</code> 아래 <code>DefaultSkin</code>으로 정하며, 설정하지 않으면 빌드된 첫 스킨입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 <a href="#WikvenRepositories"><code>WikvenRepositories</code> 맵</a>에서 가져옵니다. <a href="../Skins/ko.html" title="Special:MyLanguage/Skins">스킨</a>을 참고하십시오.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="config"><code>config</code></h2></div>
 <p>각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">설정 값</a>이든 여기에 정의할 수 있으며, Wikven 자체 변수도 정의할 수 있는데, 아래 절들이 그것을 하나씩 설명합니다.
@@ -699,7 +711,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="nt">WikvenLogos</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logo.svg</span>
 </pre></div>
-<p>파일의 주소는 여러분이 아니라 빌드가 정하기 때문에 값이 URL이 아니라 파일 이름입니다. 이름이 지정된 각 파일은 다른 소스 이미지와 마찬가지로 <code>File:</code> 이름공간에 업로드되고, Wikven이 여러분을 대신해 <code>$wgLogos</code>를 그 업로드로 가리키므로 여러분은 파일 이름만 대면 됩니다. 그런 다음 내보내기는 다른 이미지와 똑같이 로고를 HTML 옆의 단일 공유 파일로 복사하고 그것을 가리키도록 레퍼런스를 다시 씁니다. 그래서 로고가 모든 문서에 삽입되지는 않습니다. 아무 파일도 대지 않으면 MediaWiki 자체가 보여 주는 로고가 그대로 쓰입니다.
+<p>파일의 주소는 여러분이 아니라 빌드가 정하기 때문에 값이 URL이 아니라 파일 이름입니다. 이름이 지정된 각 파일은 다른 소스 이미지와 마찬가지로 <code>File:</code> 이름공간에 업로드되고, Wikven이 여러분을 대신해 <code>$wgLogos</code>를 그 업로드로 가리키므로 여러분은 파일 이름만 대면 됩니다. 그런 다음 내보내기는 다른 이미지와 똑같이 로고를 <a href="#WikvenAssetDirectory">자산 디렉터리</a>의 단일 공유 파일로 복사하고 그것을 가리키도록 레퍼런스를 다시 씁니다. 그래서 로고가 모든 문서에 삽입되지는 않습니다. 아무 파일도 대지 않으면 MediaWiki 자체가 보여 주는 로고가 그대로 쓰입니다.
 </p><p>Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 않도록 작은 기본 파비콘도 함께 제공합니다. <code>config.Favicon</code>(URL이나 데이터 URI)으로 이를 재정의하십시오.
 </p><p><span id="WikvenEditUrl"></span>
 </p>
@@ -709,7 +721,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenMainPage"><code>WikvenMainPage</code></h3></div>
 <p><b>기본값:</b> <code>index</code>
-</p><p>사이트 루트로 쓰이는 문서의 제목으로, <code>index.html</code>로 작성되어 사이트 최상단에서 제공됩니다. 진입 파일 이름을 <code>index.wikitext</code>로 지으면 별도 설정이 전혀 필요 없습니다. 이 문서는 여러분이 가져온 문서여야 하며, 없으면 빌드가 실패합니다.
+</p><p>정적 호스트가 사이트 최상단에서 제공할 문서의 제목입니다. 모든 문서는 자기 제목 뒤에 <code>.html</code>을 붙인 이름으로 작성되므로, 제목이 <code>index</code>여야 하는 것은 이 문서뿐입니다. 진입 파일 이름을 <code>index.wikitext</code>로 지으면 별도 설정이 전혀 필요 없습니다. 다른 이름의 문서를 지정하면 <code>&lt;그 제목&gt;.html</code>로 작성되고, 호스트가 제공할 <code>index.html</code>이 사이트에 없게 됩니다. 이 문서는 여러분이 가져온 문서여야 하며, 없으면 빌드가 실패합니다.
 </p><p><span id="WikvenLicensesPage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenLicensesPage"><code>WikvenLicensesPage</code></h3></div>
@@ -732,6 +744,14 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><b>기본값:</b> <code>false</code>
 </p><p>이 값을 설정하고 UniversalLanguageSelector를 켜면, 빌드가 문서에서 쓰는 언어들의 웹폰트를 내보내기가 스스로 제공하는 스타일시트로 구워 넣습니다. 어떤 문자의 글꼴이 시스템에 없는 독자도 빈 네모 대신 의도한 글꼴을 보게 됩니다. 따로 요청하지 않으면 꺼져 있는데, 글꼴은 그것이 필요하지 않을 수도 있는 독자에게까지 추가로 전송되는 용량이기 때문입니다. UniversalLanguageSelector가 없으면 아무 일도 하지 않습니다. <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역하기</a>를 참고하십시오.
 </p>
+<div class="mw-heading mw-heading3"><h3 id="WikvenFileNames"><code>WikvenFileNames</code></h3></div>
+<p><b>기본값:</b> <code>readable</code>
+</p><p>문서가 출력에서 어떤 이름으로 놓이는지, 따라서 그 문서를 가리키는 모든 링크가 무엇이라고 쓰는지를 정합니다. 기본값은 제목을 쓴 그대로 이름 짓습니다. <code>Vector_(skin).html</code>, <code>File:Bakery_oven.jpg.html</code> 같은 식이고, 가장 깔끔한 URL이 되며 이 문서 사이트도 이 값으로 게시됩니다. 링크가 지니는 것은 그 이름을 URL 인코딩한 것입니다. 정적 서버는 요청받은 경로를 디코드한 뒤에 파일을 찾기 때문입니다.
+</p><p>출력 디렉터리가 윈도우 파일 시스템이라면 <code>encoded</code>로 설정하십시오. 윈도우는 이름에 콜론이 든 파일을 담지 못하므로, Docker Desktop의 바인드 마운트는 기본값으로는 주 이름공간 밖의 문서를 받을 수 없습니다. <code>encoded</code>는 문서 캐시가 만든 이스케이프를 그대로 둡니다. <code>File%3ABakery_oven.jpg.html</code>처럼 되고, 어떤 파일 시스템이든 담을 수 있습니다. 대가는 URL에 그 퍼센트가 한 번 더 붙는 것입니다. 그 문서로 가는 링크는 <code>./File%253ABakery_oven.jpg.html</code>이 됩니다. 링크는 이름을 URL 인코딩한 것이고, 그 이름 자체에 퍼센트가 들어 있기 때문입니다.
+</p><p>윈도우가 담지 못하는 문자가 넷 더 있습니다. 큰따옴표, 별표, 물음표, 역슬래시입니다. 이들은 두 값 모두에서 이스케이프된 채로 남으므로, <code>What?</code>이라는 문서는 어느 쪽에서도 <code>What%3F.html</code>로 놓입니다. 제목에 드물게 쓰이는 문자이고 이스케이프된 채로 두어도 읽기에 잃는 것이 없으니, 그런 문자를 쓸 일이 없는 사이트는 <code>encoded</code>가 아예 필요하지 않게 됩니다.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>이 값을 바꾸면 사이트가 제공하는 모든 URL이 바뀝니다. 다른 사람이 어떤 문서로 걸어 둔 링크는 예전 이름을 계속 가리키는데, 그 이름은 이제 없습니다. 게시한 뒤가 아니라 게시하기 전에 정하십시오.</p></div>
+</div>
 <div class="mw-heading mw-heading3"><h3 id="WikvenBuildFor"><code>WikvenBuildFor</code></h3></div>
 <p><b>기본값:</b> <code>site</code>
 </p><p>사이트를 게시하기 위해서가 아니라 스킨을 보기 위한 설정입니다. Wikven은 보통 문서 주위의 크롬을 정적 호스트가 책임질 수 있는 만큼으로 다듬습니다. 개인 메뉴와 도구 상자, 토론 탭과 주시 별표를 비우고, 문서 탭을 소스 파일 링크로 바꾸고, 바닥글에 리포지터리 링크를 넣고, 나머지는 자체 스타일시트로 감춥니다. 이들 하나하나가 독자를 두고 내린 판단인데, 스킨이 어떻게 렌더링되는지 보려고 문서 몇 개에 빌드를 돌린 스킨 개발자에게는 어느 것도 반갑지 않습니다. 그렇게 손대는 메뉴들이야말로 그가 보러 온 대상이기 때문입니다. <code>skin-preview</code>로 설정하면 그 전부가 스킨이 그린 그대로 남습니다.
@@ -753,7 +773,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
 <p><b>기본값:</b> 비어 있음
-</p><p><code>extensions</code>와 <code>skins</code>에 나열한 서드파티 확장 기능과 스킨의 소스입니다. 목록은 평범한 이름 그대로 유지되고(MediaWiki 자체가 쓰는 형태), 이 맵은 wikven에 번들되지 않은 것들을 어디서 가져올지 지정합니다. 이들은 MediaWiki가 불러오기 전에 빌드 시점에 가져옵니다. 항목이 확장 기능인지 스킨인지는 그 이름이 어느 목록에 나타나는지에 따라 정해지므로 이름을 두 번 쓸 일이 없습니다. <code>extensions</code>나 <code>skins</code>에 적힌 이름이 번들되지도, 여기에 선언되지도 않았다면 경고와 함께 건너뜁니다.
+</p><p><code>extensions</code>와 <code>skins</code>에 나열한 서드파티 확장 기능과 스킨의 소스입니다. 목록은 평범한 이름 그대로 유지되고(MediaWiki 자체가 쓰는 형태), 이 맵은 wikven에 번들되지 않은 것들을 어디서 가져올지 지정합니다. 이들은 MediaWiki가 불러오기 전에 빌드 시점에 가져옵니다. 항목이 확장 기능인지 스킨인지는 그 이름이 어느 목록에 나타나는지에 따라 정해지므로 이름을 두 번 쓸 일이 없습니다. <code>extensions</code>나 <code>skins</code>에 적힌 이름이 번들되지도, 여기에 선언되지도 않았다면 빌드가 실패합니다. 작성자가 요청한 것 없이 발행된 사이트가 아예 빌드되지 않은 사이트보다 나쁘기 때문입니다.
 </p><p>각 항목은 지닌 키에 따라 세 가지 방법 중 하나를 고릅니다:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
@@ -777,9 +797,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>이미 wikven에 번들된 <code>WikvenRepositories</code> 속 이름은 건드리지 않습니다. <code>extensions</code>나 <code>skins</code>에도 나열되지 않은 이름은 오류입니다.
 </p><p><code>package</code>에서는 그 이름을 여러분이 아니라 Composer가 정합니다. <code>mediawiki-extension</code> 패키지는 뒤에 붙은 <code>-extension</code>을 떼고 CamelCase로 바꾼 디렉터리에 설치되고(<code>mediawiki/tabber-neue-extension</code>은 <code>extensions/TabberNeue</code>가 됩니다), <code>mediawiki-skin</code> 패키지는 CamelCase로 바뀌지 않습니다(<code>mediawiki/chameleon-skin</code>은 <code>skins/chameleon</code>이 됩니다). 빌드가 불러오는 것은 그 디렉터리이므로, 나열하는 이름도 그것이어야 합니다. 설치가 끝난 뒤에 검사해서 맞지 않으면 이름을 알려 주므로, 구성 요소 없이 사이트가 게시되는 대신 빌드가 멈춥니다.
 </p><p>정확한 버전이 아닌 <code>package</code> 제약 — <code>~4.1</code>, <code>^4</code>, <code>*</code> — 은 아래 알림이 말하는 이유로 빌드 로그에 경고가 남습니다. 오류는 아닙니다. 레지스트리가 주는 대로 받는 것은 여러분이 택할 수 있는 거래이고, 움직이는 <code>reference</code>가 하는 것과 같은 거래이며, 빌드는 그 거래를 했다는 사실만 말해 줄 뿐입니다.
-</p><p>각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>curl</code>과 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a>를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>에서는 이들이 <code>PATH</code>에 있어야 합니다.
+</p><p>각 방법은 빌드 시점에 존재하는 호스트 도구가 필요합니다. <code>tarball</code>은 <code>tar</code>를, <code>repository</code>는 <code>git</code>을(그리고 <code>composer: true</code>일 때 <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a>를), <code>package</code>는 Composer를 씁니다. Docker 이미지는 이 모두를 번들하지만, 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>에서는 이들이 <code>PATH</code>에 있어야 합니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>여기서 이름을 대는 코드를 빌드가 네트워크 접근과 함께 내려받아 <b>실행</b>합니다. 복제된 확장 기능의 PHP와 모든 Composer 스크립트가 빌드 중에 실행됩니다. 신뢰하는 소스만 선언하십시오. 변조를 알아챌 수 있고 재현 가능한 빌드를 위해서는 타르볼을 <code>sha256</code>으로, 리포지터리를 <code>commit</code>(정확한 SHA)으로 고정하십시오. 가변적인 <code>reference</code> 태그/브랜치나 유동적인 <code>package</code> 제약은 여러분 모르게 바뀔 수 있습니다.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>여기서 이름을 대는 코드를 빌드가 네트워크 접근과 함께 내려받아 <b>실행</b>합니다. 복제된 확장 기능의 PHP와 모든 Composer 스크립트가 빌드 중에 실행됩니다. 신뢰하는 소스만 선언하십시오. 변조를 알아챌 수 있고 재현 가능한 빌드를 위해서는 타르볼을 <code>sha256</code>으로, 리포지터리를 <code>commit</code>(정확한 SHA)으로 고정하십시오. 가변적인 <code>reference</code> 태그/브랜치나 유동적인 <code>package</code> 제약은 여러분 모르게 바뀔 수 있습니다.</p></div>
 </div>
 <p>다만 정확한 핀을 여러분 대신 옮겨 주는 것은 없습니다. 이 파일은 의존성 봇이 읽는 어떤 생태계에도 속하지 않으므로, 그대로 둔 핀은 뒤처진 핀이 됩니다. 핀을 최신으로 유지하는 방법은 <a href="../Deploying/ko.html#keeping-pins-current" title="Special:MyLanguage/Deploying">배포하기</a>를 참고하십시오.
 </p><p>wikven을 옮기면 이 핀들 밑에 깔린 코어도 함께 옮겨집니다. wikven의 메이저 버전은 번들된 MediaWiki가 올라갈 때마다 함께 올라가고, 그것은 대략 1년에 두 번입니다. <code>WikvenRepositories</code>를 선언한 사이트는 wikven이 시험하지 않는 코드를, wikven의 것이 아닌 릴리스 일정 위에서 안고 있는 셈입니다. 메이저를 건너간다는 것은 그 코드에 한 번도 돌아 본 적 없는 MediaWiki를 쥐여 주는 일입니다.
@@ -815,7 +835,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 30일 (일) 08:59에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 31일 (월) 00:48에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">

@@ -97,7 +97,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		</nav>
 			
 <a href="./index.html" class="mw-logo">
-	<img class="mw-logo-icon" src="./img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
+	<img class="mw-logo-icon" src="./assets/img-e90bfaeac7a3.svg" alt="" aria-hidden="true" height="50" width="50">
 	<span class="mw-logo-container skin-invert">
 		<strong class="mw-logo-wordmark">Wikven</strong>
 	</span>
@@ -375,6 +375,18 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<ul id="toc-Templates-sublist" class="vector-toc-list">
 		</ul>
 	</li>
+	<li id="toc-Variables"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Variables">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">7</span>
+				<span>Variables</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Variables-sublist" class="vector-toc-list">
+		</ul>
+	</li>
 </ul>
 </div>
 
@@ -588,14 +600,14 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading2"><h2 id="From_file_name_to_page">From file name to page</h2></div>
 <p>A file ending in <code>.wikitext</code> becomes a wiki page whose title is the path with <code>.wikitext</code> removed, so <code>src/Help.wikitext</code> is the page "Help", served at <code>Help.html</code>.
-</p><p>Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
+</p><p>Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. The title is where a space survives; the file it builds to is <code>Getting_Started.html</code>, because MediaWiki writes a space in a title as an underscore in a path. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
 </p><p>If a file name does not map cleanly to a title (MediaWiki would normalise it differently), the build warns, because the page's edit and history links are derived from the file name and would otherwise not resolve. Rename the file to a title that is already normalised.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Linking_between_pages">Linking between pages</h2></div>
 <p>Link with <code>[[Title]]</code>, or <code>[[Title|label]]</code>, the standard <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Links">wikitext link</a>. Wikven rewrites these to the matching <code>.html</code> paths in the static output, so internal links work with no server.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Subpages">Subpages</h2></div>
-<p>Put a file in a subdirectory to create a <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages">subpage</a>: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup".
+<p>Put a file in a subdirectory to create a <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages">subpage</a>: <code>src/Guide/Setup.wikitext</code> becomes the page "Guide/Setup". Images in a subdirectory are imported too, but a picture is named by its file name alone -- <code>src/Guide/diagram.png</code> is <code><span class="mw-default-size" typeof="mw:File"><a href="https://commons.wikimedia.org/wiki/File:Diagram.png" class="mw-file-description"><img src="./assets/img-c0863e09a6ae.png" decoding="async" width="540" height="405" class="mw-file-element" /></a></span></code>, not "Guide/diagram.png" -- so two directories cannot both hold a <code>diagram.png</code>. The build stops and names both rather than publish one page showing the other's picture. An image has to be a file rather than a link to one, for the same reason: what a link points at is not part of what you are publishing, and the build refuses it by name instead of uploading it.
 </p><p><span id="reserved-names"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="Names_a_subpage_cannot_take">Names a subpage cannot take</h3></div>
@@ -614,8 +626,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><span id="translation-not-subpage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="A_translation_is_not_a_subpage">A translation is not a subpage</h3></div>
-<p>A <a href="./Translating.html" title="Special:MyLanguage/Translating">translatable</a> page -- one whose source wraps content in <code>&lt;translate&gt;</code> -- claims every subpage of itself named for a language. Beside a translatable <code>Guide.wikitext</code>, the file <code>Guide/ko.wikitext</code> is the Korean translation of "Guide" and not a page "Guide/ko", and nothing warns about it, because that naming is what the feature is built on.
-</p><p>All three have to hold at once, so any one of them is the way out: a subpage of a page carrying no <code>&lt;translate&gt;</code> is a subpage as written, and so is any name that is not a language code. Where you need a translatable page and that subpage both, the subpage is the one to rename.
+<p>A <a href="./Translating.html" title="Special:MyLanguage/Translating">translatable</a> page -- one whose source wraps content in <code>&lt;translate&gt;</code> -- claims a subpage of itself named for a language <em>when that subpage carries the source's <code>&lt;!--T:n--&gt;</code> markers</em>. Beside a translatable <code>Guide.wikitext</code>, a marked <code>Guide/ko.wikitext</code> is the Korean translation of "Guide" and not a page "Guide/ko", and nothing warns about it, because that naming is what the feature is built on. Without the markers it is a page as written, since language codes are ordinary words too -- <code>id</code>, <code>no</code>, <code>it</code> -- and a page about identifiers should not become an Indonesian translation.
+</p><p>All three have to hold at once, so any one of them is the way out: a subpage of a page carrying no <code>&lt;translate&gt;</code> is a subpage as written, so is any name that is not a language code, and so is any file without the markers. See <a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a> for how a translation gets them.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Namespaces">Namespaces</h2></div>
 <p>Prefix the file name with a namespace to place the page there:
@@ -646,7 +658,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nt">Note</span><span class="p">|</span>Rebuild the site after every edit.<span class="p">}}</span>
 </pre></div>
 <p>renders as "<b>Note:</b> Rebuild the site after every edit." Templates take positional (<code>{{{1}}}</code>) and named parameters and run <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions">parser functions</a> exactly as in MediaWiki. The syntax itself is standard MediaWiki; see <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates">Help:Templates</a>.
+</p><p><span id="variables"></span>
 </p>
+<div class="mw-heading mw-heading2"><h2 id="Variables">Variables</h2></div>
+<p>MediaWiki's own <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words">magic words</a> work as they do anywhere — <code>{{PAGENAME}}</code>, <code>{{SITENAME}}</code>, <code>{{CURRENTVERSION}}</code> for the MediaWiki the build ran on. Wikven adds one of its own:
+</p>
+<dl><dt><code>{{WIKVENVERSION}}</code></dt>
+<dd>The version of Wikven that built the page — <code>1.0.0</code> on this site. Use it where a page has to name the version rather than have someone remember to change a number: a footer saying what made the site, or a documentation page telling readers which tag to pin. It is the number in Wikven's own <code>extension.json</code>, which is the same number the released tag carries.</dd></dl>
 <style data-mw-deduplicate="TemplateStyles:r95">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a></div><div class="wikven-prevnext-next"><a href="./Images.html" title="Special:MyLanguage/Images">Images</a>&#160;&#8594;</div></div>
 
 </div>
@@ -660,7 +678,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 30 August 2026, at 08:59.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 31 August 2026, at 00:52.</li>
 </ul>
 
 	<ul id="footer-places">

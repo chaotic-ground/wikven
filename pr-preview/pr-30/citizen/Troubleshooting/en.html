@@ -34,7 +34,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <header class="mw-header citizen-header">
 	<div class="citizen-header__logo">
 		<a href="../index/en.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="Visit the main page">
-			<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+			<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="32" width="32">
 			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
 		</a>
@@ -87,7 +87,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<div class="citizen-menu__card-content">
 				<div class="citizen-drawer__header">
 					<a href="../index/en.html" class="mw-logo citizen-drawer__logo" title="Visit the main page">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" height="80" width="80" loading="lazy">
 				</a>
 				<div class="citizen-drawer__siteinfo">
@@ -110,7 +110,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	</li>
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--edits" role="listitem">
 		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit" title="edits"></span>
-		<span>1.1K</span>
+		<span>1.2K</span>
 		<span class="citizen-siteStats__label">edits</span>
 	</li>
 </ul>
@@ -448,7 +448,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>A silent one to check by eye: a <code>config</code> value <b>replaces</b> the default rather than merging with it, so a list or map you set has to carry every entry you want, including the ones you were happy with. See <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">Configuration</a>.
 </p>
 </section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="An_extension_or_skin_was_not_loaded">An extension or skin was not loaded</h2></div>
-<p><code>skipping extension 'X' (not bundled in this image)</code>, or the same for a skin, means the name in your <code>extensions</code> or <code>skins</code> list was not found on disk. Either it is misspelled, or it is not one of the components Wikven ships and needs a source under the <a href="../Configuration/en.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a>. The build carries on without it rather than failing, so this shows up as a feature that quietly did nothing. See <a href="../Extensions/en.html" title="Special:MyLanguage/Extensions">Extensions</a>.
+<p><code>nothing provides extension 'X'</code>, or the same for a skin, means the name in your <code>extensions</code> or <code>skins</code> list was not found on disk, and the build stopped rather than publish a site without it. Either it is misspelled, or it is not one of the components Wikven ships and needs a source under the <a href="../Configuration/en.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a>. See <a href="../Extensions/en.html" title="Special:MyLanguage/Extensions">Extensions</a>.
 </p>
 </section><section id="citizen-section-8" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Two_configuration_files,_one_of_them_ignored"><span id="Two_configuration_files.2C_one_of_them_ignored"></span>Two configuration files, one of them ignored</h2></div>
 <p><code>multiple site config files present</code> means your source directory holds more than one of the accepted names. The first in precedence order wins and the rest are ignored; delete the ones you do not want, rather than editing a file the build is not reading.
@@ -482,7 +482,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Troubleshooting/en.wikitext" title="This page was last edited on 30 August 2026, at 07:45." data-timestamp="1788075951"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Troubleshooting/en.wikitext" title="This page was last edited on 30 August 2026, at 13:16." data-timestamp="1788095809"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>30 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -683,7 +683,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 07:45.</div>
+		        <div class="page-info__text"> This page was last edited on 30 August 2026, at 13:16.</div>
 		    </section>
 		</div>
 </footer>		</div>
@@ -697,7 +697,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<section class="citizen-footer__content">
 			<div class="citizen-footer__siteinfo">
 				<div id="footer-sitetitle" class="citizen-footer__sitetitle mw-wiki-title">
-					<img class="mw-logo-icon" src="../img-e90bfaeac7a3.svg 
+					<img class="mw-logo-icon" src="../assets/img-e90bfaeac7a3.svg 
 " alt="" aria-hidden="true" loading="lazy" height="48" width="48">
 					<div class="mw-logo-wordmark">Wikven</div>
 									</div>
