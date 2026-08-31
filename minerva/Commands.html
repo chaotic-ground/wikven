@@ -314,13 +314,12 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <div class="mw-heading mw-heading2"><h2 id="The_bake_action">The <code>bake</code> action</h2></div>
 <p>Bakes a source tree with the Docker image, on a GitHub Actions runner. See <a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a> for a complete workflow.
 </p>
-<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91" /><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Both actions are pinned by tag, and until a version of Wikven is released that tag is a nightly — the dated pre-releases, <code>nightly-YYYY-MM-DD</code>, newest on the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">releases page</a>. Name the image from the same nightly while you are there: an action left to its default runs the image of the release it was cut from, and no release exists yet. Once one does, <code>@v0.1.0</code> on its own is enough — the tag carries the <code>v</code>, and the image the action then defaults to is the matching <code>:0.1.0</code>, which does not.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91" /><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Both actions are pinned by tag, and <code>@v1.0.0</code> is the current release. Naming no <code>image</code> is enough on its own: the action then runs the image of the release it was cut from, the matching <code>:1.0.0</code> — the git tag carries the <code>v</code> and the image tag does not — so the two cannot fall out of step. To try a change before it is released, name a dated <code>nightly-YYYY-MM-DD</code> pre-release from the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">releases page</a>, and name the image from the same nightly while you are there.</p></div>
 </div>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@v1.0.0</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
 <span class="w">    </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 </pre></div>
 <table class="wikitable">
 <tbody><tr>
@@ -367,10 +366,9 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </p>
 <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91" /><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Annotations are for whoever is reading the diff. A contributor sending their first translation is better served by being told what to run, which <code>comment: true</code> does: one comment on the pull request, the findings grouped by what went wrong, each group naming the command that answers it. It is edited on each run rather than added to, and taken down once nothing is left to report -- a comment saying nothing is wrong is one nobody needs, and the annotations hold the record either way. That contributor is by definition working in another language, so the comment can speak it: <code>comment-languages: auto</code> writes it in English and in the language of the translation it is about, from wikven's own interface messages. The job needs <code>pull-requests: write</code>; a pull request from a fork carries a read-only token, and the comment is then skipped with a line in the log.</p></div>
 </div>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@v1.0.0</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 </pre></div>
 <table class="wikitable">
 <tbody><tr>
@@ -428,10 +426,10 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
   		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
  
   		<span class="last-modified-bar__text modified-enhancement"
-  				data-user-name="Lens0021"
-  				data-user-gender="unknown"
-  				data-timestamp="1788137568">
-  				<span>Last edited on 31 August 2026, at 00:52</span>
+  				data-user-name=""
+  				data-user-gender=""
+  				data-timestamp="1788180335">
+  				<span>Last edited on 31 August 2026, at 12:45</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -454,7 +452,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 31 August 2026, at 00:52.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 31 August 2026, at 12:45.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

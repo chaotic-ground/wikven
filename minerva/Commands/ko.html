@@ -314,13 +314,12 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <div class="mw-heading mw-heading2"><h2 id="bake_액션"><span id="bake_.EC.95.A1.EC.85.98"></span><code>bake</code> 액션</h2></div>
 <p>GitHub Actions 러너에서 Docker 이미지로 소스 트리를 굽습니다. 완전한 워크플로는 <a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a>를 참고하십시오.
 </p>
-<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>두 액션 모두 태그로 고정합니다. Wikven의 버전이 릴리스되기 전까지 그 태그는 나이틀리, 곧 날짜가 붙은 사전 릴리스 <code>nightly-YYYY-MM-DD</code>이며, 가장 최근 것은 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">릴리스 페이지</a>에서 고를 수 있습니다. 이미지도 같은 나이틀리로 함께 지정하십시오. 기본값에 맡기면 액션이 잘려 나온 릴리스의 이미지를 실행하는데, 아직 릴리스된 버전이 없습니다. 릴리스가 나온 뒤에는 <code>@v0.1.0</code>만으로 충분합니다. 태그에는 <code>v</code>가 붙고, 그때 액션이 기본으로 쓰는 이미지는 <code>v</code> 없는 <code>:0.1.0</code>입니다.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>두 액션 모두 태그로 고정하며, <code>@v1.0.0</code>이 현재 릴리스입니다. <code>image</code>를 지정하지 않는 것만으로 충분합니다. 그러면 액션은 자신이 잘려 나온 릴리스의 이미지, 곧 짝이 되는 <code>:1.0.0</code>를 실행합니다. 깃 태그에는 <code>v</code>가 붙고 이미지 태그에는 붙지 않으며, 그래서 둘이 어긋날 수가 없습니다. 릴리스 전의 변경을 미리 써 보려면 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">릴리스 페이지</a>에서 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 사전 릴리스를 고르고, 이미지도 같은 나이틀리로 함께 지정하십시오.</p></div>
 </div>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@v1.0.0</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
 <span class="w">    </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 </pre></div>
 <table class="wikitable">
 <tbody><tr>
@@ -367,10 +366,9 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </p>
 <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>주석(annotation)은 변경사항을 읽는 사람을 위한 것입니다. 처음으로 번역을 보내는 기여자에게는 무엇을 실행해야 하는지 알려 주는 편이 낫고, <code>comment: true</code>가 그 일을 합니다. 풀 리퀘스트에 코멘트 하나를 남기고, 발견한 것을 문제 종류별로 묶어 각각 어떤 <code>translate</code> 명령으로 해결하는지 적어 줍니다. 실행할 때마다 새로 달지 않고 기존 코멘트를 고치며, 보고할 것이 없어지면 코멘트를 내립니다. 아무 문제 없다고 알리는 코멘트는 아무도 필요로 하지 않고, 기록은 어차피 주석에 남습니다. 그 기여자는 본디 다른 언어로 일하는 사람이므로 코멘트가 그 언어로 말할 수 있습니다. <code>comment-languages: auto</code>를 주면 영어와, 그 코멘트가 다루는 번역의 언어로 함께 쓰이며, 문구는 wikven 자신의 인터페이스 메시지에서 옵니다. 잡에 <code>pull-requests: write</code> 권한이 필요하고, 포크에서 온 풀 리퀘스트는 읽기 전용 토큰이라 코멘트를 건너뛰며 로그에 그 사실을 남깁니다.</p></div>
 </div>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@nightly-YYYY-MM-DD</span>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@v1.0.0</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 </pre></div>
 <table class="wikitable">
 <tbody><tr>
@@ -428,10 +426,10 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
   		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
  
   		<span class="last-modified-bar__text modified-enhancement"
-  				data-user-name="Lens0021"
-  				data-user-gender="unknown"
-  				data-timestamp="1788137568">
-  				<span>2026년 8월 31일 (월) 00:52에 마지막으로 편집됨</span>
+  				data-user-name=""
+  				data-user-gender=""
+  				data-timestamp="1788180335">
+  				<span>2026년 8월 31일 (월) 12:45에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -454,7 +452,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 31일 (월) 00:52에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 31일 (월) 12:45에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

@@ -475,19 +475,17 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">          </span><span class="c1"># its source file. A shallow checkout knows only the latest commit.</span>
 <span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d</span><span class="w">  </span><span class="c1"># v6.0.0</span>
-<span class="w">      </span><span class="c1"># Both dated pre-releases; see the note below for which to name here.</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@nightly-YYYY-MM-DD</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@v1.0.0</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
 <span class="w">          </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
-<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/chaotic-ground/wikven:nightly-YYYY-MM-DD</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9</span><span class="w">  </span><span class="c1"># v5.0.0</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
 <span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128</span><span class="w">  </span><span class="c1"># v5.0.0</span>
 </pre></div>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The two <code>nightly-YYYY-MM-DD</code> above are placeholders; take the newest from the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">releases page</a>. No version of Wikven has been released yet, so there is no version tag to pin, and an action left to its default runs the image of the release it was cut from. A nightly tag names a commit of <code>main</code> and its image was built from that same commit, so naming both from one nightly keeps them in step. Once a version exists the two become <code>@v0.1.0</code> and <code>:0.1.0</code> — the git tag carries the <code>v</code>, the image tag does not — or you drop the <code>image</code> line and take the action's default.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The action is pinned to a released version — <code>@v1.0.0</code> is the current one — and no <code>image</code> is named on purpose: an action left to its default runs the image of the release it was cut from, so the two cannot fall out of step. To pin the image by hand as well, add <code>image: ghcr.io/chaotic-ground/wikven:1.0.0</code>; the git tag carries the <code>v</code> and the image tag does not. To try a change before it is released, name a dated <code>nightly-YYYY-MM-DD</code> pre-release from the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">releases page</a> in both places: a nightly tag names a commit of <code>main</code> and its image was built from that same commit, so naming both from one keeps them together.</p></div>
 </div>
 <p>Enable Pages for the repository under <b>Settings → Pages → Build and deployment → Source: GitHub Actions</b>. This documentation site is published this way.
 </p>
@@ -587,7 +585,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying/en.wikitext" title="This page was last edited on 31 August 2026, at 00:52." data-timestamp="1788137568"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>31 August 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Deploying/en.wikitext" title="This page was last edited on 31 August 2026, at 12:45." data-timestamp="1788180335"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>31 August 2026</span></a></li>
 			
 		</ul>
 		
@@ -713,7 +711,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 31 August 2026, at 00:52.</div>
+		        <div class="page-info__text"> This page was last edited on 31 August 2026, at 12:45.</div>
 		    </section>
 		</div>
 </footer>		</div>
