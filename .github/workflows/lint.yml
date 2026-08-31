@@ -248,6 +248,27 @@ jobs:
           done
           exit "$status"
 
+      # The prose names the current version with {{WIKVENVERSION}}, which cannot go stale. A
+      # <syntaxhighlight> block cannot use it: a template or a variable is not expanded inside one,
+      # so the two action examples pin a literal instead, and a release that bumped extension.json
+      # without them would publish a page telling readers to pin the version before the one it
+      # announces. There is nothing else in docs/ naming a version by hand.
+      - name: Check the action examples pin the version being released
+        run: |
+          set -euo pipefail
+          version=$(jq -r '.version' extension.json)
+          status=0
+          while IFS= read -r hit; do
+            case "$hit" in *"@v$version"*) continue ;; esac
+            echo "::error::$hit"
+            status=1
+          done < <(grep -rn -oE 'chaotic-ground/wikven/actions/[a-z-]+@[^ ]+' docs/ || true)
+          if [ "$status" -ne 0 ]; then
+            echo "::error::the lines above pin an action version other than $version, which is what" \
+                 "extension.json declares. Bump them with the release."
+          fi
+          exit "$status"
+
   # "composer test" is minus-x, which checks file modes and shebangs and needs no wiki around it.
   # It ran as a quibble stage, which spent 100 seconds booting MediaWiki to reach a check that
   # reads the working tree. Keeping the job name keeps the required check.

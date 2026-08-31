@@ -20,8 +20,8 @@ arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파�
 <!--T:12 @72e7649a-->
 같은 이미지는 Quay에도 <code>quay.io/chaotic-ground/wikven</code>으로 게시됩니다. 한 번의 빌드가 두 주소에 모두 푸시하므로, 응답하는 쪽에서 받으면 됩니다.
 
-<!--T:7 @9fc132fd-->
-태그가 없는 이미지는 가장 최근의 나이틀리로, main 브랜치에 기능이나 수정이 들어온 날마다 그 브랜치에서 빌드됩니다. 버전이 릴리스되면 그때부터는 태그 없는 이미지가 그 릴리스를 가리킵니다. 아직 릴리스된 버전이 없어 고정할 <code>:1.2.3</code> 태그가 없으므로, 빌드를 고정하려면 날짜가 붙은 <code>:nightly-YYYY-MM-DD</code> 태그나 다이제스트(<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>)를 쓰십시오.
+<!--T:7 @9283fb88-->
+태그가 없는 이미지는 가장 최근에 릴리스된 버전입니다. 빌드를 고정하려면 버전 태그 <code>:$1</code>이나 다이제스트(<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>)를 쓰십시오. 메이저와 마이너 버전 태그도 함께 게시되며, 그 계열에 릴리스가 쌓이면 따라 움직입니다. 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 태그는 그날의 main 브랜치로, 릴리스 전의 변경을 미리 써 볼 때 쓰십시오.
 
 <!--T:8 @02225fca-->
 <span id="build-from-source"></span>
