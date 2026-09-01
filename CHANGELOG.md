@@ -37,8 +37,6 @@ without warning:
   export, with a switcher in the footer.
 * **Builds that repeat.** Last-modified dates come from `SOURCE_DATE_EPOCH`, so the same source at
   the same commit gives the same site.
-* **Licensing it writes down.** Every build emits a Licenses page naming the extensions and skins
-  that site actually shipped, and under what terms.
 
 ### Requirements
 
