@@ -33,10 +33,22 @@ WORKDIR /go/src/app
 COPY --from=app /var/www/html ./dist/app
 # A small Caddy module registers the `build`, `serve` and `translate` subcommands,
 # so the binary can be run as `./wikven build` instead of `./wikven php-cli
-# build.php`. It is linked into the FrankenPHP binary alongside FrankenPHP's own
-# default Caddy modules.
+# build.php`.
+#
+# Setting this replaces FrankenPHP's default module list rather than adding to it, so the line is
+# also the list of what the binary does not carry. Vulcain, a REST push gateway, is left out of it:
+# nothing in a bake or in `wikven serve` reaches one, and it is AGPL-3.0, so linking it meant
+# redistributing AGPL code for a capability nobody using this binary can call. binary.yml asserts
+# it is gone from the build, because a list like this is easy to restore by copying FrankenPHP's
+# defaults back over it.
+#
+# Mercure, the other AGPL-3.0 default, is not attempted and cannot be dropped this way: frankenphp's
+# own Caddy package imports it (`go mod why` gives frankenphp/caddy -> mercure), so it is linked
+# whatever this list says and every FrankenPHP binary carries it. The licenses page names it.
+#
+# cbrotli stays: it is what `wikven serve` compresses with.
 COPY caddy /go/wikven-caddy
-ENV SPC_CMD_VAR_FRANKENPHP_XCADDY_MODULES="--with github.com/dunglas/mercure/caddy --with github.com/dunglas/vulcain/caddy --with github.com/dunglas/caddy-cbrotli --with github.com/chaotic-ground/wikven/caddy=/go/wikven-caddy"
+ENV SPC_CMD_VAR_FRANKENPHP_XCADDY_MODULES="--with github.com/dunglas/caddy-cbrotli --with github.com/chaotic-ground/wikven/caddy=/go/wikven-caddy"
 ENV PHP_VERSION=8.3
 ENV PHP_EXTENSIONS="gd,intl,pdo_sqlite,sqlite3,mbstring,dom,xml,simplexml,xmlreader,xmlwriter,fileinfo,iconv,ctype,filter,tokenizer,phar,session,calendar,opcache,openssl,sodium,zlib,bcmath,exif"
 ENV PHP_EXTENSION_LIBS="libpng,libjpeg,freetype,libwebp"
