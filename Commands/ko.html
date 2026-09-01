@@ -660,7 +660,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <dd>빌드가 자기 내용이 쓰였다고 밝힐 유닉스 시각으로, <a rel="nofollow" class="external text" href="https://reproducible-builds.org/docs/source-date-epoch/">reproducible-builds 관례</a>를 따릅니다. 빌드는 시계를 그 값에 얼린 채 실행되므로 출력의 모든 시각이 일정합니다. 설정하지 않으면 고정된 날짜를 씁니다. 매번 움직이는 날짜보다 틀렸더라도 움직이지 않는 쪽이 감당하기 쉽기 때문입니다. <a href="../Commands/ko.html#bake" title="Special:MyLanguage/Commands">bake 액션</a>은 빌드 중인 커밋의 시각으로 설정합니다.</dd>
 <dt><code>WIKVEN_BUILD_JOBS</code></dt>
 <dd>스킨 렌더링을 몇 개까지 나란히 돌릴지. 설정하지 않으면 쓸 수 있는 프로세서 하나당 하나씩 쓰는데, 호스트가 아니라 컨테이너에 허용된 몫을 따릅니다. 나란히 돌릴 렌더링이 있는 것은 <a href="../Skins/ko.html#building-more-than-one-skin" title="Special:MyLanguage/Skins">스킨을 둘 이상으로 빌드한</a> 사이트뿐입니다. 메모리가 부족한 기계이거나 로그를 순서대로 보고 싶다면 <code>1</code>로 두어 빌드를 차례대로 진행시키십시오.</dd></dl>
-<p>둘이 더 있는데, 빌드가 스킨 하나의 렌더링을 실행하려고 스스로에게 설정하는 것들입니다. <code>WIKVEN_BUILD_SKIN</code>은 그 스킨의 이름이고, <code>WIKVEN_BUILD_DB_DIR</code>은 그 렌더링이 쓸 데이터베이스 사본의 위치입니다. 렌더링들이 나란히 돌아가는데 SQLite는 한 번에 하나만 쓸 수 있기 때문입니다. 둘 다 손으로 설정해서 쓸 일은 없습니다. <code>WIKVEN_BUILD_DB_DIR</code>은 <code>WIKVEN_BUILD_SKIN</code>이 설정되어 있을 때만 읽히고, 그 <code>WIKVEN_BUILD_SKIN</code>을 손으로 설정하면 빌드가 아무것도 채워지지 않은 위키를 렌더링하는 과정이 되어 빈 사이트를 씁니다.
+<p>셋이 더 있는데, 모두 손으로 설정해서 쓸 일은 없습니다. 그중 둘은 빌드가 스킨 하나의 렌더링을 실행하려고 스스로에게 설정하는 것들입니다. <code>WIKVEN_BUILD_SKIN</code>은 그 스킨의 이름이고, <code>WIKVEN_BUILD_DB_DIR</code>은 그 렌더링이 쓸 데이터베이스 사본의 위치입니다. 렌더링들이 나란히 돌아가는데 SQLite는 한 번에 하나만 쓸 수 있기 때문입니다. <code>WIKVEN_BUILD_DB_DIR</code>은 <code>WIKVEN_BUILD_SKIN</code>이 설정되어 있을 때만 읽히고, 그 <code>WIKVEN_BUILD_SKIN</code>을 손으로 설정하면 빌드가 아무것도 채워지지 않은 위키를 렌더링하는 과정이 되어 빈 사이트를 씁니다. 나머지 하나는 <code>WIKVEN_RUNTIME</code>으로, 독립 실행 바이너리가 자신이 실행하는 모든 명령에 설정합니다. 바이너리가 무엇으로 컴파일되었는지를 담으며, 빌드는 그것을 자신이 쓰는 라이선스 문서에 올립니다.
 </p><p><span id="bake"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="bake_액션"><span id="bake_.EC.95.A1.EC.85.98"></span><code>bake</code> 액션</h2></div>
@@ -776,7 +776,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 31일 (월) 12:45에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 9월 1일 (화) 23:39에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
