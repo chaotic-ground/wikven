@@ -25,8 +25,8 @@ without warning:
 
 * **Three ways to run it.** A standalone Linux binary for x86_64 and arm64 — one file with
   MediaWiki inside and no Docker anywhere; the image, published to both
-  `ghcr.io/chaotic-ground/wikven` and `quay.io/chaotic-ground/wikven`; and a GitHub Action,
-  `chaotic-ground/wikven/actions/bake@v1.0.0`.
+  `ghcr.io/chaotic-ground/wikven` and `quay.io/chaotic-ground/wikven`, which is what macOS and
+  Windows use; and a GitHub Action, `chaotic-ground/wikven/actions/bake@v1.0.0`.
 * **Search with nothing behind it.** SifterSearch and Pagefind are in the box, and each language
   is indexed on its own, so the search box works on a site that is only files.
 * **Translation as part of the build.** Translate and UniversalLanguageSelector are bundled:
@@ -37,13 +37,6 @@ without warning:
   export, with a switcher in the footer.
 * **Builds that repeat.** Last-modified dates come from `SOURCE_DATE_EPOCH`, so the same source at
   the same commit gives the same site.
-
-### Requirements
-
-MediaWiki 1.46 or later — though you do not install it. The image and the binary each carry their
-own 1.46, and that is what renders the pages however you run them. Wikven is tested against 1.46
-and against MediaWiki's development branch. The binary is Linux only; on macOS and Windows, use
-the image.
 
 ### Getting started
 
