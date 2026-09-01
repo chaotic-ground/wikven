@@ -21,12 +21,6 @@ without warning:
 * the commands — `build`, `serve`, and `translate mark|scaffold|check|stamp`;
 * the output — one directory holding the pages, images, styles and search index.
 
-Versions are read off the commits: a change that breaks one of these carries `!` and takes the
-major number with it. The months before this release moved all three — everything a build
-generates into one directory, the images a page carries in beside the rest of that output, and a
-configuration key rewritten to ask who a build is for rather than flag one of the answers. 1.0 is
-the line drawn under that.
-
 ### What it does
 
 * **Three ways to run it.** A standalone Linux binary for x86_64 and arm64 — one file with
