@@ -266,6 +266,27 @@ jobs:
             exit 1
           fi
 
+      # The licenses page a build writes names what it ran on, and under the binary that includes
+      # the server the binary is. caddy/wikven.go reads FrankenPHP and Caddy out of the Go build
+      # info and hands them to the build in WIKVEN_RUNTIME, so nothing writes those versions down.
+      #
+      # Asserted here because this is the only place a binary bakes anything, and because the
+      # mechanism fails quietly: should a static build ever stop carrying the build info, or the
+      # modules be renamed again, the rows simply do not appear and the page still looks fine. This
+      # is what notices. A license is asserted too, because naming one is the whole point: the
+      # image's own environment rows deliberately leave that column empty. Caddy's is the one
+      # checked -- FrankenPHP's "MIT" is three letters that a page of prose can produce by
+      # accident, and an assertion that can pass for the wrong reason is not one.
+      - name: The licenses page names the server the binary is
+        run: |
+          set -euo pipefail
+          for expected in FrankenPHP Caddy Apache-2.0; do
+            if ! grep -rqF "$expected" work/dist; then
+              echo "::error::the binary baked a site whose licenses page never mentions $expected"
+              exit 1
+            fi
+          done
+
       # The translation helpers, which the binary had none of until now: the four are maintenance
       # scripts behind a booted MediaWiki, and the image was the only product that could boot one.
       # Asserted end to end on a tree that is translated, out of date and then not: `mark` numbers

@@ -1255,15 +1255,17 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * What the build ran on: MediaWiki, PHP and the database, with their versions.
+	 * What the build ran on: MediaWiki, PHP and the database, with their versions, and the server
+	 * besides where a standalone binary is what ran it.
 	 *
-	 * Only one of the three is redistributed, and it is the one that carries the most: every page
-	 * of the export loads modules-static.js, which is MediaWiki's module closure, so core goes out
-	 * with every site whatever else it installs -- and it is the component the registry below
-	 * cannot answer for, since it is not an entry in it. So only MediaWiki's license is named. PHP
-	 * and the database ran the build and stayed behind; a license beside them would read as a claim
-	 * that the site ships them, and it ships neither. The lead-in says so, because an empty cell on
-	 * its own would read as a component that declared nothing.
+	 * Of the three fixed rows only one is redistributed, and it is the one that carries the most:
+	 * every page of the export loads modules-static.js, which is MediaWiki's module closure, so
+	 * core goes out with every site whatever else it installs -- and it is the component the
+	 * registry below cannot answer for, since it is not an entry in it. So MediaWiki's license is
+	 * named. PHP and the database ran the build and stayed behind; a license beside them would read
+	 * as a claim that the site ships them, and it ships neither. The lead-in says so, because an
+	 * empty cell on its own would read as a component that declared nothing. runtimeSoftware()
+	 * says why the rows it adds are named with theirs.
 	 *
 	 * They are here at all because "what built this" is worth knowing and an export has no
 	 * Special:Version to ask.
@@ -1275,11 +1277,14 @@ class Build extends Maintenance {
 	 */
 	private function coreTable(?string $lang): string {
 		$db = $this->getServiceContainer()->getConnectionProvider()->getReplicaDatabase();
-		$software = [
-			['[https://www.mediawiki.org/ MediaWiki]', MW_VERSION, self::coreLicense()],
-			['[https://www.php.net/ PHP]', PHP_VERSION . ' (' . PHP_SAPI . ')', ''],
-			[ucfirst($db->getType()), $db->getServerVersion(), '']
-		];
+		$software = array_merge(
+			[
+				['[https://www.mediawiki.org/ MediaWiki]', MW_VERSION, self::coreLicense()],
+				['[https://www.php.net/ PHP]', PHP_VERSION . ' (' . PHP_SAPI . ')', ''],
+				[ucfirst($db->getType()), $db->getServerVersion(), '']
+			],
+			self::runtimeSoftware()
+		);
 
 		$text = '== ' . $this->contentMsg('version-software', $lang) . " ==\n";
 		$text .= $this->contentMsg('wikven-licenses-software', $lang) . "\n\n";
@@ -1295,6 +1300,50 @@ class Build extends Maintenance {
 			$text .= "|-\n| $product\n| $version\n| $license\n";
 		}
 		return $text . "|}\n\n";
+	}
+
+	/**
+	 * The server a standalone-binary build ran on, as further rows for the table above, or none
+	 * where it ran on something else: the Docker image, or a wiki of your own with the extension
+	 * installed.
+	 *
+	 * Named with their licenses where PHP and the database are not, and the difference is who
+	 * handed them to you. PHP came inside the base image you pulled and stayed behind; FrankenPHP
+	 * and Caddy are the executable you downloaded, compiled in and redistributed by wikven, so
+	 * their terms are yours to know. What the site publishes is unchanged either way -- it carries
+	 * neither -- which is what the lead-in above says.
+	 *
+	 * The names and versions come from the binary itself: caddy/wikven.go reads them out of the Go
+	 * build that assembled it and passes them in, so they cannot claim a version other than the one
+	 * linked. The licenses are written here because a Go build records none, which makes this their
+	 * one place rather than their second.
+	 *
+	 * @return list<array{string, string, string}>
+	 */
+	private static function runtimeSoftware(): array {
+		$declared = (string)getenv('WIKVEN_RUNTIME');
+		if ($declared === '') {
+			return [];
+		}
+
+		$known = [
+			'FrankenPHP' => ['https://frankenphp.dev/', 'MIT'],
+			'Caddy' => ['https://caddyserver.com/', 'Apache-2.0']
+		];
+
+		$rows = [];
+		foreach (explode(';', $declared) as $entry) {
+			[$name, $version] = array_pad(explode(' ', trim($entry), 2), 2, '');
+			// An entry this version has no license for is dropped rather than shown bare: a
+			// licenses page is the wrong place to learn that wikven has stopped keeping up with
+			// what it ships, and the binary and this file are released together anyway.
+			if (!isset($known[$name])) {
+				continue;
+			}
+			[$url, $license] = $known[$name];
+			$rows[] = ["[$url $name]", $version, $license];
+		}
+		return $rows;
 	}
 
 	/** The license MediaWiki declares for itself, or '' where its manifest cannot be read. */
