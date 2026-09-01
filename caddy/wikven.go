@@ -8,6 +8,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime/debug"
+	"strings"
 
 	caddycmd "github.com/caddyserver/caddy/v2/cmd"
 )
@@ -97,7 +99,7 @@ func reexec(args ...string) (int, error) {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Env = os.Environ()
+	cmd.Env = append(os.Environ(), runtimeEnv()...)
 	if err := cmd.Run(); err != nil {
 		// Propagate the child's own exit code, so a caller scripting on `wikven build` -- a
 		// Makefile, a CI job, a deploy script -- can tell a refusal from a success.
@@ -126,4 +128,58 @@ func reexec(args ...string) (int, error) {
 		return 1, err
 	}
 	return 0, nil
+}
+
+// The name of the environment variable naming the server this binary is, and the separator between
+// its entries. build.php reads it to name FrankenPHP and Caddy on the licenses page it writes,
+// beside MediaWiki and PHP: a site baked with the binary was baked by these, and an export has no
+// Special:Version to ask.
+const (
+	runtimeVar = "WIKVEN_RUNTIME"
+	runtimeSep = ";"
+)
+
+// The server this binary is, as "<name> <version>" entries, or nothing where the build did not
+// link one.
+//
+// Read out of the build rather than written down, the same way the licenses page reads MediaWiki's
+// license from core's own composer.json: xcaddy settles these versions when it assembles the
+// binary, and a copy here would be a second place for them to drift from what was actually linked.
+//
+// FrankenPHP is matched by the last element of its module path, because that path has moved
+// between organisations (dunglas, then php) while the module stayed the one thing being asked
+// about. Caddy is matched whole: "caddy" alone would also match the several Caddy modules the
+// build links, and the row is about the server, not its plugins.
+//
+// Mercure and Vulcain are here because they are AGPL-3.0 and they ship. Nothing wikven does
+// reaches either -- one is a real-time pub/sub hub, the other a REST push gateway, in a program
+// that renders wikitext to files -- but a page that named the permissive two and left the strict
+// ones out would be worse than no page. Their /caddy submodules end in "caddy" and are not matched
+// a second time.
+//
+// This asks the build what is in it rather than what was asked for, so a module that leaves the
+// build stops being named with nothing here to update.
+func runtimeEnv() []string {
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return nil
+	}
+
+	var entries []string
+	for _, dep := range info.Deps {
+		switch {
+		case strings.HasSuffix(dep.Path, "/frankenphp"):
+			entries = append(entries, "FrankenPHP "+dep.Version)
+		case strings.HasSuffix(dep.Path, "/mercure"):
+			entries = append(entries, "Mercure "+dep.Version)
+		case strings.HasSuffix(dep.Path, "/vulcain"):
+			entries = append(entries, "Vulcain "+dep.Version)
+		case dep.Path == "github.com/caddyserver/caddy/v2":
+			entries = append(entries, "Caddy "+dep.Version)
+		}
+	}
+	if len(entries) == 0 {
+		return nil
+	}
+	return []string{runtimeVar + "=" + strings.Join(entries, runtimeSep)}
 }

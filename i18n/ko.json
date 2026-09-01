@@ -39,6 +39,6 @@
 	"wikven-translations-all-clear": "`translate check`가 보고할 것을 찾지 못했습니다. 모든 원본 문서가 깨끗하게 읽히고, 그 번역은 모두 최신으로 스탬프되어 있습니다.",
 	"wikven-translations-all-clear-scoped": "`translate check`가 이 변경에 대해 보고할 것을 찾지 못했습니다. 이 변경이 건드린 문서는 깨끗하게 읽히고, 그 번역은 최신으로 스탬프되어 있습니다.",
 	"wikven-licenses-intro": "이 사이트의 모든 문서에는 이 사이트의 것이 아닌 소프트웨어가 실려 있습니다. MediaWiki의 스크립트, 그리고 아래에 적힌 각 스킨과 확장 기능의 스타일과 스크립트입니다. 그것들이 어떤 라이선스로 공개되어 있는지를 여기에 적어 둡니다.",
-	"wikven-licenses-software": "MediaWiki와 PHP, 데이터베이스는 이 빌드가 돌아간 환경입니다. 사이트와 함께 게시되는 것은 MediaWiki 자신의 스크립트뿐이므로 아래에서 라이선스를 적는 것도 그것 하나이며, 나머지는 참고용으로 적어 둔 것이고 사이트가 재배포하지 않습니다.",
+	"wikven-licenses-software": "이 빌드가 돌아간 환경이며, 참고용으로 적어 둔 것입니다. 사이트와 함께 게시되는 것은 MediaWiki 자신의 스크립트뿐입니다. 라이선스는 wikven이 직접 건네준 구성요소에만 적습니다. MediaWiki, 그리고 독립 실행 바이너리가 품고 있는 서버입니다.",
 	"wikven-footer-licenses": "라이선스"
 }
