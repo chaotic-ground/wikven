@@ -2,9 +2,7 @@
 
 ## 1.0.0 (2026-08-31)
 
-The first release. There is no earlier version to upgrade from, so what follows is not a list of
-changes to one: it says what wikven is, what 1.0 settles, and where the project came from. The
-commits are at the end.
+The first release.
 
 ### What it is
 
