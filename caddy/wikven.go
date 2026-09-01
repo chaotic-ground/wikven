@@ -150,6 +150,15 @@ const (
 // between organisations (dunglas, then php) while the module stayed the one thing being asked
 // about. Caddy is matched whole: "caddy" alone would also match the several Caddy modules the
 // build links, and the row is about the server, not its plugins.
+//
+// Mercure and Vulcain are here because they are AGPL-3.0 and they ship. Nothing wikven does
+// reaches either -- one is a real-time pub/sub hub, the other a REST push gateway, in a program
+// that renders wikitext to files -- but a page that named the permissive two and left the strict
+// ones out would be worse than no page. Their /caddy submodules end in "caddy" and are not matched
+// a second time.
+//
+// This asks the build what is in it rather than what was asked for, so a module that leaves the
+// build stops being named with nothing here to update.
 func runtimeEnv() []string {
 	info, ok := debug.ReadBuildInfo()
 	if !ok {
@@ -161,6 +170,10 @@ func runtimeEnv() []string {
 		switch {
 		case strings.HasSuffix(dep.Path, "/frankenphp"):
 			entries = append(entries, "FrankenPHP "+dep.Version)
+		case strings.HasSuffix(dep.Path, "/mercure"):
+			entries = append(entries, "Mercure "+dep.Version)
+		case strings.HasSuffix(dep.Path, "/vulcain"):
+			entries = append(entries, "Vulcain "+dep.Version)
 		case dep.Path == "github.com/caddyserver/caddy/v2":
 			entries = append(entries, "Caddy "+dep.Version)
 		}

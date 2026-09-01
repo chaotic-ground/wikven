@@ -280,7 +280,7 @@ jobs:
       - name: The licenses page names the server the binary is
         run: |
           set -euo pipefail
-          for expected in FrankenPHP Caddy Apache-2.0; do
+          for expected in FrankenPHP Caddy Mercure Apache-2.0 AGPL-3.0; do
             if ! grep -rqF "$expected" work/dist; then
               echo "::error::the binary baked a site whose licenses page never mentions $expected"
               exit 1

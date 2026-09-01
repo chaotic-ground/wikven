@@ -1328,7 +1328,9 @@ class Build extends Maintenance {
 
 		$known = [
 			'FrankenPHP' => ['https://frankenphp.dev/', 'MIT'],
-			'Caddy' => ['https://caddyserver.com/', 'Apache-2.0']
+			'Caddy' => ['https://caddyserver.com/', 'Apache-2.0'],
+			'Mercure' => ['https://mercure.rocks/', 'AGPL-3.0'],
+			'Vulcain' => ['https://vulcain.rocks/', 'AGPL-3.0']
 		];
 
 		$rows = [];
