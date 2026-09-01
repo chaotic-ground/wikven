@@ -60,9 +60,7 @@ release is made of.
 Little of that first pass survives. Configuration moved from six `$wg` globals to a
 `.wikven.yaml`; the fixed script became the `build`, `serve` and `translate` commands; and the
 search, the translation workflow, the standalone binary and the Actions are all things it never
-had. GitHub still redirects the old address here, so old links keep working — but there is no
-upgrade path to describe, because a site built with the old thing predates every interface this
-release settles.
+had. GitHub still redirects the old address here, so old links keep working.
 
 The rest of this entry is that work, as the commits recorded it.
 
