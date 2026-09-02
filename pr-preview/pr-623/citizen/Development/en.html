@@ -509,7 +509,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dt><code>resolveTranslationLinks</code></dt>
 <dd>Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.</dd>
 <dt><code>buildSitemap</code></dt>
-<dd>With <a href="../Configuration/en.html#WikvenSiteUrl" title="Special:MyLanguage/Configuration"><code>WikvenSiteUrl</code></a> set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. Only the pass rendering into the output root writes one: the other passes are previews their pages ask not to be indexed.</dd></dl>
+<dd>With <a href="../Configuration/en.html#WikvenSiteUrl" title="Special:MyLanguage/Configuration"><code>WikvenSiteUrl</code></a> set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. A page that asks not to be indexed is left out, since a sitemap is an invitation to index and naming such a page would contradict the page itself; where no page is left, no file is written. Only the pass rendering into the output root writes one, for the same reason: the other passes are previews whose pages carry that refusal.</dd></dl>
 <p>A pass that renders a non-default skin also copies the search index into its own directory, so a search from that copy answers inside it.
 </p>
 </section></section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Configuration">Configuration</h2></div>
@@ -576,7 +576,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/en.wikitext" title="This page was last edited on 2 September 2026, at 18:26." data-timestamp="1788373581"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2 September 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/en.wikitext" title="This page was last edited on 2 September 2026, at 18:43." data-timestamp="1788374605"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2 September 2026</span></a></li>
 			
 		</ul>
 		
@@ -797,7 +797,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 2 September 2026, at 18:26.</div>
+		        <div class="page-info__text"> This page was last edited on 2 September 2026, at 18:43.</div>
 		    </section>
 		</div>
 </footer>		</div>

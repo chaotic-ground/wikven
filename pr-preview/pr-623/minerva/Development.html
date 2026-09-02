@@ -305,7 +305,7 @@ Wikven
 <dt><code>resolveTranslationLinks</code></dt>
 <dd>Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.</dd>
 <dt><code>buildSitemap</code></dt>
-<dd>With <a href="./Configuration.html#WikvenSiteUrl" title="Special:MyLanguage/Configuration"><code>WikvenSiteUrl</code></a> set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. Only the pass rendering into the output root writes one: the other passes are previews their pages ask not to be indexed.</dd></dl>
+<dd>With <a href="./Configuration.html#WikvenSiteUrl" title="Special:MyLanguage/Configuration"><code>WikvenSiteUrl</code></a> set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. A page that asks not to be indexed is left out, since a sitemap is an invitation to index and naming such a page would contradict the page itself; where no page is left, no file is written. Only the pass rendering into the output root writes one, for the same reason: the other passes are previews whose pages carry that refusal.</dd></dl>
 <p>A pass that renders a non-default skin also copies the search index into its own directory, so a search from that copy answers inside it.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Configuration">Configuration</h2></div>
@@ -369,8 +369,8 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1788373581">
-  				<span>Last edited on 2 September 2026, at 18:26</span>
+  				data-timestamp="1788374605">
+  				<span>Last edited on 2 September 2026, at 18:43</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -393,7 +393,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 2 September 2026, at 18:26.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 2 September 2026, at 18:43.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
