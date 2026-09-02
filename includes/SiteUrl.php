@@ -41,12 +41,14 @@ use InvalidArgumentException;
  * copied into every URL built from it.
  */
 final class SiteUrl {
-	/**
-	 * @param string $base The published base, ending in a slash, or '' where the site has not said.
-	 */
-	private function __construct(
-		private readonly string $base
-	) {}
+	/** The published base, ending in a slash, or '' where the site has not said. */
+	private readonly string $base;
+
+	// Written out rather than promoted: a promoted property leaves the constructor body empty, and
+	// mago writes an empty body as "{}" where phpcs wants the closing brace on a line of its own.
+	private function __construct(string $base) {
+		$this->base = $base;
+	}
 
 	/**
 	 * A written value read as a base, usable or not.
