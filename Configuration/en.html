@@ -372,11 +372,23 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-WikvenFooterUrl-sublist" class="vector-toc-list">
 			</ul>
 		</li>
+		<li id="toc-WikvenSiteUrl"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#WikvenSiteUrl">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.6</span>
+					<span>WikvenSiteUrl</span>
+				</div>
+			</a>
+			
+			<ul id="toc-WikvenSiteUrl-sublist" class="vector-toc-list">
+			</ul>
+		</li>
 		<li id="toc-WikvenSettingsPage"
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenSettingsPage">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.6</span>
+					<span class="vector-toc-numb">3.7</span>
 					<span>WikvenSettingsPage</span>
 				</div>
 			</a>
@@ -388,7 +400,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenBundleWebfonts">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.7</span>
+					<span class="vector-toc-numb">3.8</span>
 					<span>WikvenBundleWebfonts</span>
 				</div>
 			</a>
@@ -400,7 +412,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenFileNames">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.8</span>
+					<span class="vector-toc-numb">3.9</span>
 					<span>WikvenFileNames</span>
 				</div>
 			</a>
@@ -412,7 +424,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenBuildFor">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.9</span>
+					<span class="vector-toc-numb">3.10</span>
 					<span>WikvenBuildFor</span>
 				</div>
 			</a>
@@ -424,7 +436,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenAssetDirectory">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.10</span>
+					<span class="vector-toc-numb">3.11</span>
 					<span>WikvenAssetDirectory</span>
 				</div>
 			</a>
@@ -436,7 +448,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#WikvenRepositories">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.11</span>
+					<span class="vector-toc-numb">3.12</span>
 					<span>WikvenRepositories</span>
 				</div>
 			</a>
@@ -448,7 +460,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			class="vector-toc-list-item vector-toc-level-2">
 			<a class="vector-toc-link" href="#ContentNamespaces">
 				<div class="vector-toc-text">
-					<span class="vector-toc-numb">3.12</span>
+					<span class="vector-toc-numb">3.13</span>
 					<span>ContentNamespaces</span>
 				</div>
 			</a>
@@ -732,6 +744,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading3"><h3 id="WikvenFooterUrl"><code>WikvenFooterUrl</code></h3></div>
 <p><b>Default:</b> empty
 </p><p>A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...). With no URL there is no such link.
+</p><p><span id="WikvenSiteUrl"></span>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="WikvenSiteUrl"><code>WikvenSiteUrl</code></h3></div>
+<p><b>Default:</b> empty
+</p><p>The address this site will be published at, path and all, ending in a slash — <code><a rel="nofollow" class="external free" href="https://example.org/wiki/">https://example.org/wiki/</a></code>. The build cannot work this out for itself: it installs against a local server, and it writes every page link as a file beside the one asking, which is exactly what lets an export work from any directory and any host. Anything that has to name a page from outside the site is built from this, and where it is empty — the default — those things are not written at all, because a URL a reader cannot resolve is worse than none. Nothing about the pages changes either way: their links stay relative and the export still moves anywhere. The scheme and host also become <code>$wgCanonicalServer</code>, so an absolute URL that MediaWiki or an extension builds names the right host. A value that is not an http or https URL is reported and read as empty.
 </p><p><span id="WikvenSettingsPage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenSettingsPage"><code>WikvenSettingsPage</code></h3></div>
@@ -832,7 +849,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 2 September 2026, at 12:44.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 2 September 2026, at 17:34.</li>
 </ul>
 
 	<ul id="footer-places">
