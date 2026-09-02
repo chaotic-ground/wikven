@@ -111,6 +111,17 @@ MediaWiki's own "About" footer link is a separate thing, and not one the build f
 A link added to the site footer, pointing at your project (typically its repository). The footer shows the host name for known forges (GitHub, GitLab, Codeberg, ...). With no URL there is no such link.
 </translate>
 
+<span id="WikvenSiteUrl"></span>
+=== <code>WikvenSiteUrl</code> ===
+
+<translate>
+<!--T:201-->
+'''Default:''' empty
+
+<!--T:202-->
+The address this site will be published at, path and all, ending in a slash — <code>https://example.org/wiki/</code>. The build cannot work this out for itself: it installs against a local server, and it writes every page link as a file beside the one asking, which is exactly what lets an export work from any directory and any host. Anything that has to name a page from outside the site is built from this, and where it is empty — the default — those things are not written at all, because a URL a reader cannot resolve is worse than none. Nothing about the pages changes either way: their links stay relative and the export still moves anywhere. The scheme and host also become <code>$wgCanonicalServer</code>, so an absolute URL that MediaWiki or an extension builds names the right host. A value that is not an http or https URL is reported and read as empty.
+</translate>
+
 <span id="WikvenSettingsPage"></span>
 === <code>WikvenSettingsPage</code> ===
 

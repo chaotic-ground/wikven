@@ -103,6 +103,16 @@ class SiteConfig {
 				$warnings[] = "'$urlKey' should be a URL template containing \$1 (replaced by the source file name).";
 			}
 		}
+		// The base every absolute URL is built on, which is either one a crawler can fetch or
+		// nothing at all. An unusable one is not ignorable the way a wrong logo is: it would be
+		// written into a sitemap and an hreflang, where a URL nothing resolves is worse than the
+		// feature being off.
+		$siteUrl = $config['WikvenSiteUrl'] ?? '';
+		if ($siteUrl !== '' && ( !is_string($siteUrl) || SiteUrl::normalize($siteUrl) === '' )) {
+			$named = is_string($siteUrl) ? "'$siteUrl'" : get_debug_type($siteUrl);
+			$warnings[] = "'WikvenSiteUrl' is $named; expected an http or https URL. Ignoring it.";
+		}
+
 		foreach (['WikvenLogos', 'WikvenRepositories'] as $mapKey) {
 			if (isset($config[$mapKey]) && !is_array($config[$mapKey])) {
 				$warnings[] = "'$mapKey' must be a map.";
