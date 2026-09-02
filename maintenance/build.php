@@ -111,7 +111,8 @@ class Build extends Maintenance {
 		}
 		$this->output(
 			'Wikven: skin preview is experimental. It renders on the MediaWiki this build carries ('
-			. MW_VERSION . "), and says nothing about how the skin renders on any other.\n"
+			. MW_VERSION
+			. "), and says nothing about how the skin renders on any other.\n"
 		);
 	}
 
