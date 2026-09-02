@@ -60,13 +60,23 @@ class BuildSitemap extends Maintenance {
 		}
 
 		$urls = [];
+		$refused = 0;
 		$pages = SkinOutput::pages($htmlDir, $GLOBALS['wgWikvenSkins'] ?? [], $mainSkin, $mainSkin);
 		foreach ($pages as $path) {
+			if (!self::invitesIndexing($path)) {
+				$refused++;
+				continue;
+			}
 			// The file's own name, turned into the link the site serves it at -- the same crossing
 			// rename.php made in the other direction -- and then made absolute against the base.
 			$urls[] = $siteUrl->forFile(OutputName::href(substr($path, strlen($htmlDir) + 1)));
 		}
 		if ($urls === []) {
+			if ($refused > 0) {
+				$this->output(
+					'Wikven: no sitemap; all ' . $refused . " exported page(s) ask not to be indexed\n"
+				);
+			}
 			return;
 		}
 
@@ -92,6 +102,26 @@ class BuildSitemap extends Maintenance {
 			$this->fatalError("Wikven: could not write $file");
 		}
 		$this->output('Wikven: wrote ' . self::FILE . ' naming ' . count($urls) . " page(s)\n");
+	}
+
+	/**
+	 * Whether a rendered page is one a crawler may index, read from the page itself.
+	 *
+	 * A sitemap is an invitation to index, so naming a page that answers "noindex" asks a crawler
+	 * to do what the page refuses -- the same contradiction the skin-preview copies are kept out
+	 * of, and the reason a site that sets DefaultRobotPolicy to noindex gets no sitemap rather
+	 * than one listing everything it just told crawlers to skip.
+	 *
+	 * The page is asked rather than the configuration, because the configuration is only one of
+	 * the things that decides: __NOINDEX__ settles it a page at a time, and what MediaWiki wrote
+	 * into the file is the answer both of them end at.
+	 */
+	private static function invitesIndexing(string $path): bool {
+		$html = (string)file_get_contents($path);
+		if (preg_match('/<meta\s+name="robots"\s+content="([^"]*)"/i', $html, $found) !== 1) {
+			return true;
+		}
+		return !str_contains(strtolower($found[1]), 'noindex');
 	}
 
 	/**
