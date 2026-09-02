@@ -53,7 +53,7 @@ class SiteUrl {
 			return '';
 		}
 		$parts = parse_url($base);
-		if (!isset($parts['scheme'], $parts['host'])) {
+		if (!isset($parts['scheme']) || !isset($parts['host'])) {
 			return '';
 		}
 		$port = isset($parts['port']) ? ':' . $parts['port'] : '';
@@ -84,7 +84,7 @@ class SiteUrl {
 			return '';
 		}
 		$parts = parse_url($trimmed);
-		if (!is_array($parts) || !isset($parts['scheme'], $parts['host'])) {
+		if (!is_array($parts) || !isset($parts['scheme']) || !isset($parts['host'])) {
 			return '';
 		}
 		if (!in_array(strtolower($parts['scheme']), ['http', 'https'], true)) {

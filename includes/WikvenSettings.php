@@ -198,6 +198,9 @@ foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {
 // Push merged config into globals so the logo handling below reads final values.
 $wgSettings->apply();
 
+// Autoloader not active yet at LocalSettings time; load the helper directly.
+require_once "$IP/extensions/Wikven/includes/SiteUrl.php";
+
 // Core keeps a site's address in two halves -- $wgCanonicalServer is scheme and host, a path lives
 // elsewhere -- and a site should not have to write it twice. It writes WikvenSiteUrl once and this
 // hands core the half core understands, so an absolute URL core or any extension builds names the
