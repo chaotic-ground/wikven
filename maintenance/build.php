@@ -52,6 +52,8 @@ class Build extends Maintenance {
 			return;
 		}
 
+		$this->announceSkinPreview();
+
 		$ip = $GLOBALS['IP'];
 		$own = __DIR__;
 
@@ -88,6 +90,29 @@ class Build extends Maintenance {
 			$skins = [$GLOBALS['wgDefaultSkin']];
 		}
 		$this->renderSkinPasses(array_values($skins));
+	}
+
+	/**
+	 * Say that a skin preview is experimental, once, before the work starts.
+	 *
+	 * Not experimental as in unfinished. A skin is written against several MediaWiki releases and
+	 * this renders on the one the build carries, so what it shows is that skin on that version and
+	 * nothing about the others -- which is less than a skin author needs, and more than this
+	 * project can widen. Documenting the mode at length in Configuration would promise the rest of
+	 * it, so the limit is said here, where somebody is running the mode and can weigh it, and again
+	 * in examples/skin-preview.
+	 *
+	 * From the orchestrating pass rather than from renderSkin(), which has returned above: a line
+	 * per skin would say it once per pass and be noise by the third.
+	 */
+	private function announceSkinPreview(): void {
+		if (!BuildFor::skinPreview()) {
+			return;
+		}
+		$this->output(
+			'Wikven: skin preview is experimental. It renders on the MediaWiki this build carries ('
+			. MW_VERSION . "), and says nothing about how the skin renders on any other.\n"
+		);
 	}
 
 	/**

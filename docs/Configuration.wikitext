@@ -162,16 +162,10 @@ Four characters a Windows path cannot hold either — a quote, an asterisk, a qu
 '''Default:''' <code>site</code>
 
 <!--T:58-->
-For looking at a skin rather than publishing a site. {{SITENAME}} normally trims the chrome around a page to what a static host can stand behind: the personal menu, the toolbox, the talk tab and the watch star are emptied, the article tabs are replaced with links to your source files, a link to the repository goes in the footer, and a stylesheet of its own hides the rest. Every one of those is a judgement about a reader, and none of them is wanted by a skin author who has pointed the build at a few pages to see how their skin renders: the menus being edited are the thing they came to look at. Set it to <code>skin-preview</code> and they are all left as the skin drew them.
+Set it to <code>skin-preview</code> and the chrome is left as the skin drew it: the personal menu, the toolbox, the tabs and the footer are the skin's own work rather than {{SITENAME}}'s reading of them, which is what a skin author baking a few pages wants to look at. Everything that makes the output a working set of files is unchanged.
 
-<!--T:59-->
-What the build still does is everything that makes the output a working set of files. Links are rewritten to <code>./Page.html</code>, styles and scripts are baked into local copies, and the two fixes that stop a page asking for something no export has -- Citizen's service worker and its search shortcuts -- stay on, because a preview has no <code>load.php</code> behind it either. The generated [[<tvar name="1">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses]] and [[<tvar name="2">Special:MyLanguage/Configuration#WikvenSettingsPage</tvar>|Settings]] pages are content rather than chrome and are still written; set those empty to leave them out too. The footer link to the Licenses page is chrome, so it is not added, and the build says so as it passes.
-
-<!--T:60-->
-Leave it off for a site anyone reads. A published export that offers a login, a watchlist and a talk tab with nothing behind any of them is worse than one that offers none.
-
-<!--T:61-->
-There is a source tree to bake with it: <code>examples/skin-preview</code> in the {{SITENAME}} repository, one page carrying every element a skin has to style. Add your skin to its <code>.wikven.yaml</code> and build that directory.
+<!--T:200-->
+'''This mode is experimental, and will stay so.''' A skin is written against several MediaWiki releases; a bake renders on the one {{SITENAME}} carries. What you get is your skin on that version and no evidence about any other, which is less than a skin author needs and more than this project can widen. <code>examples/skin-preview</code> in the {{SITENAME}} repository is a source tree to bake with it, and its README is where the mode is described.
 
 <!--T:42-->
 <span id="WikvenStyleDirectory"></span>

@@ -2,6 +2,12 @@
 
 A source tree for looking at a skin rather than publishing a site.
 
+> **This mode is experimental, and stays so.** A skin is written against several MediaWiki
+> releases; a bake renders on the one wikven carries. What you get is your skin on that version,
+> and no evidence about any other — less than a skin author needs, and more than this project can
+> widen. Useful for seeing the surface of your own work; not a substitute for testing on the
+> versions you support.
+
 One page carries every element a skin has to style — the whole heading ladder, running prose long
 enough to judge a measure by, nested and mixed lists, a definition list, a plain table and a
 floating one, thumbnails on both sides, a frameless image, a gallery, a block quotation, indents,
