@@ -208,9 +208,13 @@ require_once "$IP/extensions/Wikven/includes/SiteUrl.php";
 //
 // Only where the site said. Left alone, $wgCanonicalServer keeps the install's localhost, which is
 // wrong but is what everything downstream already expects of a build that has not been told.
-$wikvenCanonicalServer = MediaWiki\Extension\Wikven\SiteUrl::canonicalServer();
-if ($wikvenCanonicalServer !== '') {
-	$wgCanonicalServer = $wikvenCanonicalServer;
+//
+// This is where the setting is read. SiteUrl is handed the written value rather than fetching it,
+// so the same class serves this file, a maintenance script holding configuration, and a test
+// holding neither.
+$wikvenSiteUrl = MediaWiki\Extension\Wikven\SiteUrl::fromWritten((string)( $wgWikvenSiteUrl ?? '' ));
+if ($wikvenSiteUrl->isKnown()) {
+	$wgCanonicalServer = $wikvenSiteUrl->canonicalServer();
 }
 
 // And take back the three the build works out for itself, which apply() has just handed to

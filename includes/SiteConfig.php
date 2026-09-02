@@ -108,7 +108,7 @@ class SiteConfig {
 		// written into a sitemap and an hreflang, where a URL nothing resolves is worse than the
 		// feature being off.
 		$siteUrl = $config['WikvenSiteUrl'] ?? '';
-		if ($siteUrl !== '' && ( !is_string($siteUrl) || SiteUrl::normalize($siteUrl) === '' )) {
+		if ($siteUrl !== '' && ( !is_string($siteUrl) || !SiteUrl::fromWritten($siteUrl)->isKnown() )) {
 			$named = is_string($siteUrl) ? "'$siteUrl'" : get_debug_type($siteUrl);
 			$warnings[] = "'WikvenSiteUrl' is $named; expected an http or https URL. Ignoring it.";
 		}
