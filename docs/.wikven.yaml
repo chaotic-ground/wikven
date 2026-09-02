@@ -16,6 +16,11 @@ skins:
   - Citizen
   - MinervaNeue
 config:
+  # Where this site is served from. Nothing in a build can work this out for itself: it renders
+  # against a local server and links every page relatively, which is what lets an export run from
+  # any directory and any host. Anything that has to name a page from outside the site is built
+  # from this.
+  WikvenSiteUrl: https://chaotic-ground.github.io/wikven/
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1

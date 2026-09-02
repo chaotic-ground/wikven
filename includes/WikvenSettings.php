@@ -155,8 +155,11 @@ if ($wikvenConvert === null || $wikvenRsvg === null) {
 // Load config: default.yml then the site file via $wgSettings; ext/skin lists loaded leniently.
 global $wgSettings;
 
-// Autoloader not active yet at LocalSettings time; load the helper directly.
+// Autoloader not active yet at LocalSettings time; load the helpers directly. SiteUrl belongs here
+// rather than beside its other use below: lint() reads a site's WikvenSiteUrl through it, and that
+// runs a few lines down from here.
 require_once "$IP/extensions/Wikven/includes/SiteConfig.php";
+require_once "$IP/extensions/Wikven/includes/SiteUrl.php";
 
 // Pick the highest-precedence config name present; warn about any others.
 $wikvenLocated = MediaWiki\Extension\Wikven\SiteConfig::locate($wikvenSrc);
@@ -197,9 +200,6 @@ foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {
 
 // Push merged config into globals so the logo handling below reads final values.
 $wgSettings->apply();
-
-// Autoloader not active yet at LocalSettings time; load the helper directly.
-require_once "$IP/extensions/Wikven/includes/SiteUrl.php";
 
 // Core keeps a site's address in two halves -- $wgCanonicalServer is scheme and host, a path lives
 // elsewhere -- and a site should not have to write it twice. It writes WikvenSiteUrl once and this
