@@ -117,3 +117,4 @@ class BuildSitemap extends Maintenance {
 }
 
 $maintClass = BuildSitemap::class;
+require_once RUN_MAINTENANCE_IF_MAIN;
