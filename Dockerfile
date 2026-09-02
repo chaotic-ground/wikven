@@ -91,6 +91,12 @@ RUN composer config --global policy.advisories.block false \
       --with "mustangostang/spyc:$SPYC_VERSION" \
       --with "composer/installers:$COMPOSER_INSTALLERS_VERSION"
 
+# SiteUrl builds every absolute URL a published site writes about itself on Guzzle's PSR-7 Uri,
+# which arrives here as core's dependency rather than wikven's: MediaWiki requires
+# guzzlehttp/guzzle, and that requires guzzlehttp/psr7. Nothing declares it on wikven's behalf, so
+# a release that drops guzzle would otherwise be found by a site whose sitemap had gone missing.
+RUN php -r 'require "/var/www/html/vendor/autoload.php"; if (!class_exists("GuzzleHttp\\Psr7\\Uri") || !class_exists("GuzzleHttp\\Psr7\\UriResolver")) { fwrite(STDERR, "MediaWiki no longer vendors guzzlehttp/psr7; SiteUrl needs it\n"); exit(1); }'
+
 COPY ./ /var/www/html/extensions/Wikven
 COPY includes/WikvenSettings.php /var/www/html/
 COPY bin/entrypoint /usr/local/bin/entrypoint
