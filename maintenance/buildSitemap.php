@@ -42,7 +42,11 @@ class BuildSitemap extends Maintenance {
 	}
 
 	public function execute() {
-		$siteUrl = SiteUrl::fromWritten((string)( $GLOBALS['wgWikvenSiteUrl'] ?? '' ));
+		// Read through the config service rather than $GLOBALS: at build time MediaWiki is fully up,
+		// so the settings file's excuse for reaching into globals does not apply here.
+		$config = $this->getConfig();
+
+		$siteUrl = SiteUrl::fromWritten((string)$config->get('WikvenSiteUrl'));
 		if (!$siteUrl->isKnown()) {
 			return;
 		}
@@ -50,18 +54,18 @@ class BuildSitemap extends Maintenance {
 		// other pass renders the same pages again under dist/<skin>/ for preview, and those carry
 		// noindex; a second sitemap naming them would ask a crawler to index what the pages
 		// themselves tell it to skip.
-		$mainSkin = (string)( $GLOBALS['wgWikvenMainSkin'] ?? $GLOBALS['wgDefaultSkin'] );
-		if ((string)$GLOBALS['wgDefaultSkin'] !== $mainSkin) {
+		$mainSkin = (string)$config->get('WikvenMainSkin');
+		if ((string)$config->get('DefaultSkin') !== $mainSkin) {
 			return;
 		}
-		$htmlDir = rtrim((string)$GLOBALS['wgWikvenHtmlDirectory'], '/');
+		$htmlDir = rtrim((string)$config->get('WikvenHtmlDirectory'), '/');
 		if ($htmlDir === '' || !is_dir($htmlDir)) {
 			return;
 		}
 
 		$urls = [];
 		$refused = 0;
-		$pages = SkinOutput::pages($htmlDir, $GLOBALS['wgWikvenSkins'] ?? [], $mainSkin, $mainSkin);
+		$pages = SkinOutput::pages($htmlDir, (array)$config->get('WikvenSkins'), $mainSkin, $mainSkin);
 		foreach ($pages as $path) {
 			if (!self::invitesIndexing($path)) {
 				$refused++;
