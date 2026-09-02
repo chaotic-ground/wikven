@@ -99,6 +99,24 @@ jobs:
             printf '| PHP | `%s` |\n' "$php"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      # Vulcain, which binary.Dockerfile leaves out of the xcaddy module list. Asserted on the built
+      # artefact rather than on that list, because the list is a request and this is the answer: a
+      # module reachable through another module's imports is linked whatever the flags said, which
+      # is exactly the case of Mercure, and why Mercure is not asserted here.
+      #
+      # Grepped rather than read with `go version -m`, which would need a toolchain agreeing with
+      # the one that built this. A Go binary carries its module paths as plain strings, so their
+      # absence from the bytes is the whole claim.
+      - name: Vulcain is not linked in
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          if grep -aqF github.com/dunglas/vulcain "wikven-linux-$ARCH"; then
+            echo "::error::vulcain is linked in; see the module list in binary.Dockerfile"
+            exit 1
+          fi
+
       # Handed to the bake job below, which is a separate job because it needs a runner without a
       # Docker build on it -- the point is to exercise the binary the way somebody who downloaded it
       # would, on a machine that has nothing of wikven's installed.
