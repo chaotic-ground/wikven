@@ -30,7 +30,7 @@ require_once "$IP/maintenance/Maintenance.php";
  * a crawler treats them as hints; an honest omission beats a field that lies every bake.
  */
 class BuildSitemap extends Maintenance {
-	/** The name a crawler is given, and the one Search Console is pointed at. */
+	/** The conventional name: what a crawler looks for, and what a webmaster tool is pointed at. */
 	private const FILE = 'sitemap.xml';
 
 	/** What the protocol allows in one sitemap before it has to be split across several. */

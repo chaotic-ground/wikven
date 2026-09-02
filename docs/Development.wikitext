@@ -121,7 +121,7 @@ Each pass renders the whole site in its own skin, into its own directory: the fi
 ; <code>resolveTranslationLinks</code>
 : Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.
 ; <code>buildSitemap</code>
-: With [[<tvar name="3">Special:MyLanguage/Configuration#WikvenSiteUrl</tvar>|<code>WikvenSiteUrl</code>]] set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. Only the pass rendering into the output root writes one: the other passes are previews their pages ask not to be indexed.
+: With [[<tvar name="3">Special:MyLanguage/Configuration#WikvenSiteUrl</tvar>|<code>WikvenSiteUrl</code>]] set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. A page that asks not to be indexed is left out, since a sitemap is an invitation to index and naming such a page would contradict the page itself; where no page is left, no file is written. Only the pass rendering into the output root writes one, for the same reason: the other passes are previews whose pages carry that refusal.
 
 <!--T:33-->
 A pass that renders a non-default skin also copies the search index into its own directory, so a search from that copy answers inside it.
