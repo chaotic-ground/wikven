@@ -198,6 +198,25 @@ foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {
 // Push merged config into globals so the logo handling below reads final values.
 $wgSettings->apply();
 
+// Autoloader not active yet at LocalSettings time; load the helper directly.
+require_once "$IP/extensions/Wikven/includes/SiteUrl.php";
+
+// Core keeps a site's address in two halves -- $wgCanonicalServer is scheme and host, a path lives
+// elsewhere -- and a site should not have to write it twice. It writes WikvenSiteUrl once and this
+// hands core the half core understands, so an absolute URL core or any extension builds names the
+// right host. The path half is wikven's to add; see SiteUrl.
+//
+// Only where the site said. Left alone, $wgCanonicalServer keeps the install's localhost, which is
+// wrong but is what everything downstream already expects of a build that has not been told.
+//
+// This is where the setting is read. SiteUrl is handed the written value rather than fetching it,
+// so the same class serves this file, a maintenance script holding configuration, and a test
+// holding neither.
+$wikvenSiteUrl = MediaWiki\Extension\Wikven\SiteUrl::fromWritten((string)( $wgWikvenSiteUrl ?? '' ));
+if ($wikvenSiteUrl->isKnown()) {
+	$wgCanonicalServer = $wikvenSiteUrl->canonicalServer();
+}
+
 // And take back the three the build works out for itself, which apply() has just handed to
 // whatever a site's file said. A site that set WikvenSourceDirectory would move where its pages are
 // read from without moving where its own config file was looked for -- SiteConfig::locate() ran

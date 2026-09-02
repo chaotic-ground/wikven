@@ -159,6 +159,10 @@
 			"value": "",
 			"description": "URL template for the per-page \"View history\" link. $1 is replaced with the page's percent-encoded source file name, as for WikvenEditUrl. Empty disables the link."
 		},
+		"WikvenSiteUrl": {
+			"value": "",
+			"description": "Absolute URL the built site will be published at, including any path it is served under and ending in a slash -- \"https://example.org/wiki/\". Empty, the default, means the site has not said, and the features that need an absolute URL are then not written at all: a sitemap naming pages a crawler cannot resolve is worse than no sitemap. Nothing about the pages changes either way -- their links stay relative, so an export still works from any directory -- and only what is written about the site does. The build cannot work this out for itself: it installs against http://localhost:4000 and rewrites every page link to a file beside the one asking. Its scheme and host also fill $wgCanonicalServer, so what core and any extension build from that is right about the host. A value that is not an http or https URL is reported and read as empty."
+		},
 		"WikvenViewSourceUrl": {
 			"value": "",
 			"description": "URL template for the per-page \"View source\" tab, linking to the page's source file in the repository. $1 is replaced with the page's percent-encoded source file name, as for WikvenEditUrl. Empty disables the tab."
