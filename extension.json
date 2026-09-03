@@ -78,6 +78,8 @@
 		"SkinAddFooterLinks": "adder",
 		"BeforePageDisplay": "adder",
 		"GetLocalURL": "main",
+		"GetFullURL": "main",
+		"GetCanonicalURL": "main",
 		"OutputPageAfterGetHeadLinksArray": "main",
 		"SetupAfterCache": [
 			"retrier",

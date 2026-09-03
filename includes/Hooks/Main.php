@@ -7,6 +7,7 @@ use MediaWiki\Extension\Wikven\AssetFile;
 use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\OutputName;
 use MediaWiki\Extension\Wikven\Search;
+use MediaWiki\Extension\Wikven\SiteUrl;
 use MediaWiki\Extension\Wikven\SourceFile;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
@@ -17,6 +18,8 @@ use MediaWiki\ResourceLoader\ResourceLoader;
 use MediaWiki\Title\Title;
 
 class Main implements
+	\MediaWiki\Hook\GetCanonicalURLHook,
+	\MediaWiki\Hook\GetFullURLHook,
 	\MediaWiki\Hook\GetLocalURLHook,
 	\MediaWiki\Hook\OutputPageAfterGetHeadLinksArrayHook,
 	\MediaWiki\Hook\SetupAfterCacheHook,
@@ -31,27 +34,120 @@ class Main implements
 	/** The directory everything the build generates is written to, relative to the HTML one. */
 	private string $assetDirectory;
 
+	/** Where the site says it will be published, unknown where it has not said. */
+	private SiteUrl $siteUrl;
+
 	public function __construct(Config $config) {
 		$this->config = $config;
 		$this->htmlDirectory = $config->get('WikvenHtmlDirectory');
 		$this->assetDirectory = $config->get('WikvenAssetDirectory');
+		// Read once: onGetLocalURL answers every link on every page, and parsing a URL per link
+		// would be paid thousands of times a render for a value that cannot change mid-build.
+		$this->siteUrl = SiteUrl::fromWritten((string)$config->get('WikvenSiteUrl'));
 	}
 
 	/** @inheritDoc */
 	public function onGetLocalURL($title, &$url, $query) {
+		$target = $this->exportTarget($title, (string)$query);
+		if ($target !== null) {
+			$url = $target['local'];
+		}
+	}
+
+	/**
+	 * The whole URL of the page, for a caller that asked for one.
+	 *
+	 * getFullURL() and getCanonicalURL() each run their own hook after calling getLocalURL() and
+	 * expanding the result, and each is handed the same Title this build already knows how to name.
+	 * So the answer is recomputed from that title rather than recovered from the string: which of
+	 * the three hooks ran is the only honest signal that a caller wanted an absolute URL, and core
+	 * delivers it.
+	 *
+	 * Without it they get what expand() makes of a relative link, which is not a URL at all --
+	 * "./index.html" comes back as "index.html", and a caller that prepends a scheme publishes
+	 * "http:index.html". That is what WikiSEO put in og:url on every page.
+	 *
+	 * Where the site has not said where it is published there is no address to give, so the value
+	 * is left as it was: a wrong absolute URL would be worse than an obviously relative one.
+	 *
+	 * @inheritDoc
+	 */
+	public function onGetFullURL($title, &$url, $query) {
+		$target = $this->exportTarget($title, (string)$query);
+		if ($target !== null && $target['whole'] !== null) {
+			$url = $target['whole'];
+		}
+	}
+
+	/**
+	 * As onGetFullURL, plus the fragment getCanonicalURL() carries and getFullURL() does not.
+	 *
+	 * @inheritDoc
+	 */
+	public function onGetCanonicalURL($title, &$url, $query) {
+		$target = $this->exportTarget($title, (string)$query);
+		if ($target !== null && $target['whole'] !== null) {
+			$url = $target['whole'] . $title->getFragmentForURL();
+		}
+	}
+
+	/**
+	 * A target outside the export: one whole URL, and the same URL whichever hook asked.
+	 *
+	 * @return array{local:string,whole:string}
+	 */
+	private static function leavingTheExport(string $url): array {
+		return ['local' => $url, 'whole' => $url];
+	}
+
+	/**
+	 * A file this build wrote, named relative to the output root.
+	 *
+	 * A page links to it from beside itself, which is what makes an export work from any
+	 * directory. Its whole URL needs the address the site is published at, and where the site
+	 * has not said there is none to give: a wrong absolute URL is worse than an obviously
+	 * relative one, so a caller that asked for one is left with what it had.
+	 *
+	 * @return array{local:string,whole:?string}
+	 */
+	private function inTheExport(string $href): array {
+		return [
+			'local' => './' . $href,
+			'whole' => $this->siteUrl->isKnown() ? $this->siteUrl->forFile($href) : null
+		];
+	}
+
+	/**
+	 * Where a title points in this export, or null where the build leaves the URL alone.
+	 *
+	 * One decision for all three URL hooks, so a Commons file, a Special:Translate link and an
+	 * edit link are answered the same whether the caller wanted a relative URL or a whole one.
+	 * Both answers are worked out here rather than one derived from the other: 'local' is what a
+	 * page links to, and 'whole' the address the export is served at, null where the site has not
+	 * said where that is.
+	 *
+	 * @param Title $title
+	 * @param string $query
+	 * @return array{local:string,whole:?string}|null
+	 */
+	private function exportTarget($title, string $query): ?array {
 		if (MW_ENTRY_POINT !== 'cli') {
-			return;
+			return null;
 		}
 		if ($title->getInterwiki()) {
-			return;
+			return null;
 		}
 
 		// Foreign-repo files (Commons via InstantCommons) have no local File: page; link to Commons.
+		// A repo that names no description page answers false, and there is nothing to link to
+		// then: say nothing rather than write an empty href, which is what came out before.
 		if ($title->getNamespace() === NS_FILE) {
 			$file = MediaWikiServices::getInstance()->getRepoGroup()->findFile($title);
 			if ($file && !$file->isLocal()) {
-				$url = $file->getDescriptionUrl();
-				return;
+				$description = $file->getDescriptionUrl();
+				return is_string($description) && $description !== ''
+					? self::leavingTheExport($description)
+					: null;
 			}
 		}
 
@@ -65,12 +161,11 @@ class Main implements
 			if (isset($params['language']) && str_starts_with($params['group'] ?? '', 'page-')) {
 				$translation = Title::newFromText(substr($params['group'], 5) . '/' . $params['language']);
 				if ($translation) {
-					$url = str_replace(
+					return self::leavingTheExport(str_replace(
 						'$1',
 						SourceFile::titleToParam($translation->getPrefixedText()),
 						$wgWikvenEditUrl
-					);
-					return;
+					));
 				}
 			}
 		}
@@ -81,8 +176,10 @@ class Main implements
 		// it there instead of at a 404. SifterSearch retargets the link itself once its script
 		// runs; writing the link out right is what makes the exported page correct on its own.
 		if ($title->isSpecial('Search')) {
-			$url = $this->searchUrl($query);
-			return;
+			$search = $this->searchHref($query);
+			// Nowhere to land: the toggle stays the button its own script treats it as, and there
+			// is no page for a caller wanting a whole URL to be told about.
+			return $search === null ? ['local' => '#', 'whole' => null] : $this->inTheExport($search);
 		}
 
 		// The file this title is written to, url-encoded so a static server asking for it finds it;
@@ -98,12 +195,20 @@ class Main implements
 		$wantsHistory = $action === 'history' || array_key_exists('diff', $params);
 		// For edit/history, $1 is the source filename so the link targets the editable file.
 		if ($action === 'edit' && $wgWikvenEditUrl) {
-			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenEditUrl);
-		} elseif ($wantsHistory && $wgWikvenHistoryUrl) {
-			$url = str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenHistoryUrl);
-		} else {
-			$url = "./$href";
+			return self::leavingTheExport(str_replace(
+				'$1',
+				SourceFile::titleToParam($title->getPrefixedText()),
+				$wgWikvenEditUrl
+			));
 		}
+		if ($wantsHistory && $wgWikvenHistoryUrl) {
+			return self::leavingTheExport(str_replace(
+				'$1',
+				SourceFile::titleToParam($title->getPrefixedText()),
+				$wgWikvenHistoryUrl
+			));
+		}
+		return $this->inTheExport($href);
 	}
 
 	/**
@@ -147,12 +252,12 @@ class Main implements
 	 * is the whole of what it is for, and a reader without scripts has no search here either way --
 	 * Pagefind answers in the browser. That beats a link to a page that answers 404.
 	 */
-	private function searchUrl(string $query): string {
+	private function searchHref(string $query): ?string {
 		$results = Search::resultsPage();
 		if (!$results) {
-			return '#';
+			return null;
 		}
-		$url = './' . OutputName::href(OutputName::of(...$this->nameFor($results)));
+		$url = OutputName::href(OutputName::of(...$this->nameFor($results)));
 		$term = wfCgiToArray($query)['search'] ?? '';
 		return $term === '' ? $url : $url . '?' . wfArrayToCgi(['search' => $term]);
 	}

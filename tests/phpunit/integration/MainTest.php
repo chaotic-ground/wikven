@@ -40,6 +40,52 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * A caller that asked for a whole URL gets one. getFullURL() runs its own hook after
+	 * expanding what getLocalURL() returned, so the answer is recomputed from the same title
+	 * rather than recovered from "./Getting_Started.html", which expand() reads as a bare path
+	 * and hands back without a host.
+	 */
+	public function testAWholeUrlIsWhole() {
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
+		$title = Title::newFromText('Getting Started');
+		$url = 'http:Getting_Started.html';
+		$this->main()->onGetFullURL($title, $url, '');
+		$this->assertSame('https://example.org/docs/Getting_Started.html', $url);
+	}
+
+	/** getCanonicalURL() carries the fragment getFullURL() drops, so the canonical hook adds it. */
+	public function testACanonicalUrlCarriesTheFragment() {
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
+		$title = Title::newFromText('Getting Started#Oven');
+		$url = 'http:Getting_Started.html';
+		$this->main()->onGetCanonicalURL($title, $url, '');
+		$this->assertSame('https://example.org/docs/Getting_Started.html#Oven', $url);
+	}
+
+	/**
+	 * Where the site has not said where it is published there is no address to write, so the
+	 * value is left as it was: a wrong absolute URL is worse than an obviously relative one.
+	 */
+	public function testAWholeUrlIsLeftAloneWithoutASiteUrl() {
+		$title = Title::newFromText('Getting Started');
+		$url = 'http:Getting_Started.html';
+		$this->main()->onGetFullURL($title, $url, '');
+		$this->assertSame('http:Getting_Started.html', $url);
+	}
+
+	/**
+	 * A target that is already a whole URL is one whichever hook asked: an edit link goes to the
+	 * repository whether the caller wanted a relative URL or an absolute one.
+	 */
+	public function testAWholeUrlToAnExternalTargetNeedsNoSiteUrl() {
+		$this->overrideConfigValue('WikvenEditUrl', 'https://repo/edit/$1');
+		$title = Title::newFromText('Getting Started');
+		$url = '/x';
+		$this->main()->onGetFullURL($title, $url, 'action=edit');
+		$this->assertSame('https://repo/edit/Getting%20Started.wikitext', $url);
+	}
+
+	/**
 	 * The edit and history actions are rewritten to the configured repository
 	 * URLs, with $1 replaced by the page's percent-encoded source file name, so a
 	 * reader can jump from the rendered page to its source.
