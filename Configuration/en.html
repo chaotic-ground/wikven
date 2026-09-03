@@ -748,7 +748,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenSiteUrl"><code>WikvenSiteUrl</code></h3></div>
 <p><b>Default:</b> empty
-</p><p>The address this site will be published at, path and all, ending in a slash — <code><a rel="nofollow" class="external free" href="https://example.org/wiki/">https://example.org/wiki/</a></code>. The build cannot work this out for itself: it installs against a local server, and it writes every page link as a file beside the one asking, which is exactly what lets an export work from any directory and any host. Anything that has to name a page from outside the site is built from this, and where it is empty — the default — those things are not written at all, because a URL a reader cannot resolve is worse than none. Nothing about the pages changes either way: their links stay relative and the export still moves anywhere. The scheme and host also become <code>$wgCanonicalServer</code>, so an absolute URL that MediaWiki or an extension builds names the right host. A value that is not an http or https URL is reported and read as empty.
+</p><p>The address this site will be published at, path and all, ending in a slash — <code><a rel="nofollow" class="external free" href="https://example.org/wiki/">https://example.org/wiki/</a></code>. The build cannot work this out for itself: it installs against a local server, and it writes every page link as a file beside the one asking, which is exactly what lets an export work from any directory and any host. Anything that has to name a page from outside the site is built from this: given an address the bake writes <code>sitemap.xml</code>, naming every page it exported, and where it is empty — the default — no sitemap is written, because a URL a reader cannot resolve is worse than none. Nothing about the pages changes either way: their links stay relative and the export still moves anywhere. The scheme and host also become <code>$wgCanonicalServer</code>, so an absolute URL that MediaWiki or an extension builds names the right host. A value that is not an http or https URL is reported and read as empty.
 </p><p><span id="WikvenSettingsPage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenSettingsPage"><code>WikvenSettingsPage</code></h3></div>
@@ -849,7 +849,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 2 September 2026, at 17:34.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 3 September 2026, at 00:46.</li>
 </ul>
 
 	<ul id="footer-places">

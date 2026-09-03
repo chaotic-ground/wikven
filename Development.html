@@ -712,7 +712,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dt><code>rename</code></dt>
 <dd>Gives the namespace-prefixed cache files readable names (for example <code>ns6%3A...</code> becomes <code>File:...</code>), and reparents each page's relative links by its own depth.</dd>
 <dt><code>resolveTranslationLinks</code></dt>
-<dd>Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.</dd></dl>
+<dd>Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.</dd>
+<dt><code>buildSitemap</code></dt>
+<dd>With <a href="./Configuration.html#WikvenSiteUrl" title="Special:MyLanguage/Configuration"><code>WikvenSiteUrl</code></a> set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. A page that asks not to be indexed is left out, since a sitemap is an invitation to index and naming such a page would contradict the page itself; where no page is left, no file is written. Only the pass rendering into the output root writes one, for the same reason: the other passes are previews whose pages carry that refusal.</dd></dl>
 <p>A pass that renders a non-default skin also copies the search index into its own directory, so a search from that copy answers inside it.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Configuration">Configuration</h2></div>
@@ -772,7 +774,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 16:03.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 3 September 2026, at 00:46.</li>
 </ul>
 
 	<ul id="footer-places">
