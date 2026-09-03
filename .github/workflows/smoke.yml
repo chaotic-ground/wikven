@@ -157,6 +157,59 @@ jobs:
           print('og:url is absolute on every page that carries one')
           PY
 
+          # Nothing a reader is handed may name the machine that built it. The build installs
+          # against http://localhost:4000 and every step is a maintenance script, so any address
+          # that reaches the output through $wgServer is the container's, not the site's. Two
+          # places had one, green across every other check: WikiSEO named it as the site's author
+          # and publisher in the JSON-LD of every page, and mw.config shipped it as wgServer in
+          # the module bundle, disagreeing with the wgServerName beside it.
+          #
+          # Scoped to the head, because "http://localhost:8080" is also a correct sentence:
+          # docs/Deploying.wikitext tells a reader to open the preview there, and wikitext
+          # autolinks it, so the body legitimately holds an anchor to a local address. The head is
+          # machine-read metadata about the site and can hold no such sentence. The generated
+          # bundles are searched whole; they hold no prose either.
+          python3 - <<'PY'
+          import glob, json, re, sys
+          from urllib.parse import urlparse
+          LOCAL = {'localhost', '127.0.0.1', '0.0.0.0', '::1', '[::1]'}
+          def html_urls(text):
+              yield from re.findall(r'(?:href|src|content)="([^"]*)"', text)
+              for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', text, re.S):
+                  try:
+                      parsed = json.loads(block)
+                  except ValueError:
+                      continue
+                  stack = [parsed]
+                  while stack:
+                      node = stack.pop()
+                      if isinstance(node, dict):
+                          stack.extend(node.values())
+                      elif isinstance(node, list):
+                          stack.extend(node)
+                      elif isinstance(node, str):
+                          yield node
+          bad = []
+          for path in glob.glob('dist/**/*', recursive=True):
+              if not path.endswith(('.html', '.js', '.css', '.json', '.xml')):
+                  continue
+              with open(path, encoding='utf-8', errors='replace') as handle:
+                  text = handle.read()
+              if path.endswith('.html'):
+                  text = text.split('</head>', 1)[0]
+              if not any(host in text for host in LOCAL):
+                  continue
+              if path.endswith('.html'):
+                  found = [v for v in html_urls(text) if urlparse(v).hostname in LOCAL]
+              else:
+                  found = [m for m in re.findall(r'https?://[^\s"\'<>,)]+', text)
+                           if urlparse(m).hostname in LOCAL]
+              bad.extend((path, v) for v in found)
+          if bad:
+              sys.exit(f'the build host reached the output in {len(bad)} place(s): {bad[:3]}')
+          print('no exported URL names the build host')
+          PY
+
           # Two bakes of one source must agree on the sitemap too; the walk behind it is a directory
           # iterator, whose order is the filesystem's rather than anything reproducible (#411).
           diff dist/sitemap.xml dist-again/sitemap.xml
