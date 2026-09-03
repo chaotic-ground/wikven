@@ -139,6 +139,24 @@ jobs:
           print(f'sitemap.xml: {len(locs)} absolute URLs')
           PY
 
+          # og:url has to be a whole URL: it is read off the page by something that never saw the
+          # page's address. Title::getFullURL() answers the GetFullURL hook, so this is the tag that
+          # proves that hook fired -- before it existed WikiSEO published "http:index.html" here,
+          # green across every other check.
+          python3 - <<'PY'
+          import glob, re, sys
+          from urllib.parse import urlparse
+          bad = []
+          for path in glob.glob('dist/**/*.html', recursive=True):
+              with open(path, encoding='utf-8') as handle:
+                  found = re.search(r'<meta property="og:url" content="([^"]*)"', handle.read())
+              if found and urlparse(found.group(1)).scheme not in ('http', 'https'):
+                  bad.append((path, found.group(1)))
+          if bad:
+              sys.exit(f'og:url is not an absolute URL on {len(bad)} page(s): {bad[:3]}')
+          print('og:url is absolute on every page that carries one')
+          PY
+
           # Two bakes of one source must agree on the sitemap too; the walk behind it is a directory
           # iterator, whose order is the filesystem's rather than anything reproducible (#411).
           diff dist/sitemap.xml dist-again/sitemap.xml

@@ -10,6 +10,7 @@ extensions:
   - TabberNeue
   - TemplateStyles
   - Translate
+  - WikiSEO
   - UniversalLanguageSelector
 # With Vector from default.yml, this is the whole supported set.
 skins:
@@ -21,6 +22,10 @@ config:
   # any directory and any host. Anything that has to name a page from outside the site is built
   # from this.
   WikvenSiteUrl: https://chaotic-ground.github.io/wikven/
+  # Proves to Google that whoever registered this site in Search Console controls it. WikiSEO turns
+  # it into a meta tag on every page; the value is a public token, not a credential -- it grants
+  # nothing but the claim, and Google publishes it back to anyone who asks for the site's tag.
+  GoogleSiteVerificationKey: 2rzhjoB0M6oJLKFCyvqcW6_SGAkxpf7o4RIWOGfpfPY
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1
@@ -71,3 +76,13 @@ config:
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
       commit: f0212f7fc0dc3403b8da334250af2188b07143ec
+    # WikiSEO writes the head tags a static export cannot get any other way: the site
+    # verification token above, and later the canonical and hreflang links. Not bundled in the
+    # image, so it is fetched here.
+    #
+    # Pinned to REL1_46's head, like MobileFrontend and for the same reason, rather than to the
+    # v2.7.0 tag: that tag carries a manifest reading 2.6.6 and MediaWiki >= 1.39, while the branch
+    # reads 2.7.0 and >= 1.42. The tag is mis-stamped, so its name promises code it does not hold.
+    WikiSEO:
+      repository: https://github.com/wikimedia/mediawiki-extensions-WikiSEO.git
+      commit: 3f8aeb66f322d6687a3623e377cd8f0488f39f71
