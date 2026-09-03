@@ -206,8 +206,15 @@ $wgSettings->apply();
 // hands core the half core understands, so an absolute URL core or any extension builds names the
 // right host. The path half is wikven's to add; see SiteUrl.
 //
-// Only where the site said. Left alone, $wgCanonicalServer keeps the install's localhost, which is
-// wrong but is what everything downstream already expects of a build that has not been told.
+// $wgServer gets it too. Core means it as the address requests arrive on, and for a live wiki the
+// two are the same; a build is the case where they are not, and the entrypoint installs against
+// http://localhost:4000 because the installer demands a value, not because anything is served
+// there. Nothing in a build fetches from it -- every step is a maintenance script -- so what it
+// reaches is what is written into pages, and a reader was being handed the build container's
+// address. WikiSEO named it as the site's publisher on every page.
+//
+// Only where the site said. Left alone, both keep the install's localhost, which is wrong but is
+// what everything downstream already expects of a build that has not been told.
 //
 // This is where the setting is read. SiteUrl is handed the written value rather than fetching it,
 // so the same class serves this file, a maintenance script holding configuration, and a test
@@ -215,6 +222,7 @@ $wgSettings->apply();
 $wikvenSiteUrl = MediaWiki\Extension\Wikven\SiteUrl::fromWritten((string)( $wgWikvenSiteUrl ?? '' ));
 if ($wikvenSiteUrl->isKnown()) {
 	$wgCanonicalServer = $wikvenSiteUrl->canonicalServer();
+	$wgServer = $wgCanonicalServer;
 }
 
 // And take back the three the build works out for itself, which apply() has just handed to
