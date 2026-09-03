@@ -114,6 +114,35 @@ jobs:
             exit 1
           fi
 
+          # docs/.wikven.yaml says where this site is published, so the bake owes it a sitemap. The
+          # bug this guards against fataled the whole build and shipped anyway, because the code
+          # path only runs for a site that sets WikvenSiteUrl and no test site did.
+          test -s dist/sitemap.xml
+          python3 - <<'PY'
+          import sys, xml.etree.ElementTree as ET
+          from urllib.parse import urlparse
+          ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+          locs = [e.text or '' for e in ET.parse('dist/sitemap.xml').getroot().findall('s:url/s:loc', ns)]
+          if not locs:
+              sys.exit('sitemap.xml names no pages')
+          # The protocol requires absolute URLs, and getting a relative one is the failure that
+          # looks fine in a diff: core's own generateSitemap.php emits "index.html" under wikven.
+          bad = [u for u in locs if urlparse(u).scheme not in ('http', 'https')]
+          if bad:
+              sys.exit(f'sitemap.xml has non-absolute URLs: {bad[:5]}')
+          if any(not u.startswith('https://chaotic-ground.github.io/wikven/') for u in locs):
+              sys.exit('sitemap.xml names URLs outside the published base')
+          # A skin copy is noindex, so naming one would ask a crawler to index what the page denies.
+          inside = [u for u in locs if u.split('/wikven/', 1)[1].split('/')[0] in ('citizen', 'minerva')]
+          if inside:
+              sys.exit(f'sitemap.xml names skin-preview copies: {inside[:5]}')
+          print(f'sitemap.xml: {len(locs)} absolute URLs')
+          PY
+
+          # Two bakes of one source must agree on the sitemap too; the walk behind it is a directory
+          # iterator, whose order is the filesystem's rather than anything reproducible (#411).
+          diff dist/sitemap.xml dist-again/sitemap.xml
+
           # Dumped CSS must not reference load.php (a live-only endpoint); a leftover is an AssetLocalizer regression.
           if grep -rIl --include='*.css' 'load\.php' dist; then
             echo "::error::dumped CSS still references load.php (AssetLocalizer regression)"

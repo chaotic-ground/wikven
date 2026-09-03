@@ -743,6 +743,9 @@ class Build extends Maintenance {
 		$this->step(Rename::class, "$own/rename.php");
 		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
 		$this->step(ResolveTranslationLinks::class, "$own/resolveTranslationLinks.php");
+		// After the pages have their final names and links, so what the sitemap names is what the
+		// site serves. Writes nothing unless the site said where it will be published.
+		$this->step(BuildSitemap::class, "$own/buildSitemap.php");
 
 		// SkippedHistoryAction leaves RebuildFileCache nothing to write here, so this finds nothing
 		// on a normal bake; it stays as the guard for a pass over an output directory that already
