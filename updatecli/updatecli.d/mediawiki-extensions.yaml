@@ -46,6 +46,13 @@ sources:
       url: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend
       branch: REL1_46
       depth: 1
+  wikiseo:
+    name: Head of WikiSEO's REL1_46
+    kind: gitcommit
+    spec:
+      url: https://github.com/wikimedia/mediawiki-extensions-WikiSEO
+      branch: REL1_46
+      depth: 1
 
 targets:
   translate:
@@ -76,3 +83,11 @@ targets:
     spec:
       file: docs/.wikven.yaml
       key: $.config.WikvenRepositories.MobileFrontend.commit
+  wikiseo:
+    name: 'build(deps): bump WikiSEO to {{ source "wikiseo" }}'
+    kind: yaml
+    scmid: default
+    sourceid: wikiseo
+    spec:
+      file: docs/.wikven.yaml
+      key: $.config.WikvenRepositories.WikiSEO.commit
