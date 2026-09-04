@@ -38,9 +38,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:site_name" content="Wikven">
 <meta property="og:url" content="https://chaotic-ground.github.io/wikven/Configuration.html">
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
-<meta property="article:modified_time" content="2026-09-04T14:23:07Z">
-<meta property="article:published_time" content="2026-09-04T14:23:07Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration.html","dateModified":"2026-09-04T14:23:07Z","datePublished":"2026-09-04T14:23:07Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-04T14:50:05Z">
+<meta property="article:published_time" content="2026-09-04T14:50:05Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration.html","dateModified":"2026-09-04T14:50:05Z","datePublished":"2026-09-04T14:50:05Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration rootpage-Configuration skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -222,7 +222,7 @@ Wikven
 <li class="toclevel-2 tocsection-7"><a href="#WikvenLicensesPage"><span class="tocnumber">3.4</span> <span class="toctext">WikvenLicensesPage</span></a></li>
 <li class="toclevel-2 tocsection-8"><a href="#WikvenFooterUrl"><span class="tocnumber">3.5</span> <span class="toctext">WikvenFooterUrl</span></a></li>
 <li class="toclevel-2 tocsection-9"><a href="#WikvenSiteUrl"><span class="tocnumber">3.6</span> <span class="toctext">WikvenSiteUrl</span></a></li>
-<li class="toclevel-2 tocsection-10"><a href="#WikvenSocialImage"><span class="tocnumber">3.7</span> <span class="toctext">WikvenSocialImage</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#WikvenPublishedImages"><span class="tocnumber">3.7</span> <span class="toctext">WikvenPublishedImages</span></a></li>
 <li class="toclevel-2 tocsection-11"><a href="#WikvenSettingsPage"><span class="tocnumber">3.8</span> <span class="toctext">WikvenSettingsPage</span></a></li>
 <li class="toclevel-2 tocsection-12"><a href="#WikvenBundleWebfonts"><span class="tocnumber">3.9</span> <span class="toctext">WikvenBundleWebfonts</span></a></li>
 <li class="toclevel-2 tocsection-13"><a href="#WikvenFileNames"><span class="tocnumber">3.10</span> <span class="toctext">WikvenFileNames</span></a></li>
@@ -297,16 +297,20 @@ Wikven
 <p><b>Default:</b> empty
 </p><p>The address this site will be published at, path and all, ending in a slash — <code><a rel="nofollow" class="external free" href="https://example.org/wiki/">https://example.org/wiki/</a></code>. The build cannot work this out for itself: it installs against a local server, and it writes every page link as a file beside the one asking, which is exactly what lets an export work from any directory and any host. Anything that has to name a page from outside the site is built from this: given an address the bake writes <code>sitemap.xml</code>, naming every page it exported, and where it is empty — the default — no sitemap is written, because a URL a reader cannot resolve is worse than none. Nothing about the pages changes either way: their links stay relative and the export still moves anywhere. The scheme and host also become <code>$wgCanonicalServer</code>, so an absolute URL that MediaWiki or an extension builds names the right host. A value that is not an http or https URL is reported and read as empty.
 </p>
-<div class="mw-heading mw-heading3"><h3 id="WikvenSocialImage"><code>WikvenSocialImage</code></h3></div>
+<div class="mw-heading mw-heading3"><h3 id="WikvenPublishedImages"><code>WikvenPublishedImages</code></h3></div>
 <p><b>Default:</b> empty
-</p><p>The picture a link to this site shows when someone shares it — the image a social platform or a chat client puts beside the page title. It is the name of an image file in your source directory, like <a href="#WikvenLogos"><code>WikvenLogos</code></a>, and it is uploaded and exported the same way:
+</p><p>Configuration settings that should be handed the address a picture in your source directory is published at, as a map of setting name to file name:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">WikvenSocialImage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">card.png</span>
+<span class="w">  </span><span class="nt">WikvenPublishedImages</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">WikiSeoDefaultImage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">card.png</span>
 </pre></div>
-<p>The tag itself is written by the <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO">WikiSEO</a> extension, which is not one Wikven enables for you: list it under <code>extensions</code> or nothing writes the card. The build says so if you name one without it.
-</p><p>The address is absolute, because whatever reads it never saw the page. That needs <a href="#WikvenSiteUrl"><code>WikvenSiteUrl</code></a>: without one there is no absolute address to give, and nothing is written, since a card nobody can fetch is worse than none.
-</p><p>Make it 1200×630 or thereabouts. A picture much smaller than that is shown as a thumbnail beside the text instead of above it, which is not what a card is for. The file also gets its own <code>File:</code> page, like every image in your source directory.
+<p>That example gives the <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO">WikiSEO</a> extension a social card — the picture a link to your site shows when someone shares it. But nothing about this setting is about WikiSEO. The key is whatever setting the extension you are using reads, written without the <code>wg</code> prefix like every other setting here, and Wikven needs to know nothing about it.
+</p><p>Why this rather than a setting of our own per picture: the address is the one part of the question Wikven can answer and you cannot. A picture in your source directory is uploaded into the <code>File:</code> namespace, and the export then renames it to a content-addressed file in the <a href="#WikvenAssetDirectory">asset directory</a> — a name that is a hash of a path the build decides. You cannot write that address down, and no extension can work it out. So this hands the address over, and you say who is told.
+</p><p>The value written is always a whole URL, because a setting read from outside the page — a social card, a schema.org image, an app manifest icon — is read by something that never saw the page and has no address to resolve a relative link against. A picture rendered <b>inside</b> a page is the opposite question, wanting a link relative to the page that carries it; <a href="#WikvenLogos"><code>WikvenLogos</code></a> is what answers that one.
+</p><p>So it needs <a href="#WikvenSiteUrl"><code>WikvenSiteUrl</code></a>. Without one there is no absolute address to give, and nothing is written at all, because a URL nobody can resolve is worse than the setting being unset.
+</p><p>Each file is uploaded like any other source image, so it also gets its own <code>File:</code> page. A file you name here but have not put in your source directory is reported and skipped, as a missing logo is; so is a key that is not a setting name, which would otherwise set something nothing ever reads.
+</p><p>For a social card specifically, make the picture 1200×630 or thereabouts. A picture much smaller than that is shown as a thumbnail beside the text instead of above it, which is not what a card is for.
 </p><p><span id="WikvenSettingsPage"></span>
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenSettingsPage"><code>WikvenSettingsPage</code></h3></div>
@@ -411,8 +415,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1788531787">
-  				<span>Last edited on 4 September 2026, at 14:23</span>
+  				data-timestamp="1788533405">
+  				<span>Last edited on 4 September 2026, at 14:50</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -435,7 +439,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 4 September 2026, at 14:23.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 4 September 2026, at 14:50.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
