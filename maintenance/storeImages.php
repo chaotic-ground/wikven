@@ -110,7 +110,7 @@ class StoreImages extends Maintenance {
 		string $assetDirectory
 	): ?string {
 		$url = str_starts_with($ref, '//') ? "https:$ref" : $ref;
-		$name = 'img-' . substr(md5($ref), 0, 12) . '.' . $this->extension($url);
+		$name = AssetFile::imageName($ref, $url);
 		// The file and the link to it are worked out together; a page linking one directory while
 		// the file was written to another has no picture and nothing anywhere to say so.
 		$located = AssetFile::locate($htmlDir, $assetDirectory, $name);
@@ -169,7 +169,7 @@ class StoreImages extends Maintenance {
 			$this->output("  missing: $path\n");
 			return null;
 		}
-		$name = 'img-' . substr(md5($path), 0, 12) . '.' . $this->extension($path);
+		$name = AssetFile::imageName($path);
 		$located = AssetFile::locate($htmlDir, $assetDirectory, $name);
 		if (!file_exists($located['path'])) {
 			$this->copyWithoutTimestamps($src, $located['path']);
@@ -186,14 +186,6 @@ class StoreImages extends Maintenance {
 			return;
 		}
 		file_put_contents($dest, $stripped, LOCK_EX);
-	}
-
-	/**
-	 * @return string A safe lowercase file extension, defaulting to "img".
-	 */
-	private function extension(string $url): string {
-		$ext = strtolower((string)pathinfo((string)parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
-		return preg_match('/^[a-z0-9]+$/', $ext) ? $ext : 'img';
 	}
 }
 
