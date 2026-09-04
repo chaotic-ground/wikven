@@ -31,6 +31,29 @@ class AssetFile {
 	}
 
 	/**
+	 * What a picture the build made local is called, from the reference pages had for it.
+	 *
+	 * Content-addressed so one picture referenced twice is stored once, and so a rebuild of an
+	 * unchanged site writes the same name (#411). Kept here rather than in the step that stores
+	 * them because two things now have to agree on it: storeImages names the file, and a site's
+	 * social image has to be named in a head tag before that step has run. A rule kept twice is a
+	 * rule that drifts, and the drift here is a head tag pointing at a file nobody wrote.
+	 *
+	 * @param string $key What identifies the picture: the storage path for a local file, the whole
+	 *   URL for a remote one. Two references to one picture must give the same key.
+	 * @param string|null $from Where to read the extension from, when that is not the key itself.
+	 */
+	public static function imageName(string $key, ?string $from = null): string {
+		return 'img-' . substr(md5($key), 0, 12) . '.' . self::extension($from ?? $key);
+	}
+
+	/** A safe lowercase file extension, defaulting to "img". */
+	public static function extension(string $url): string {
+		$ext = strtolower((string)pathinfo((string)parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
+		return preg_match('/^[a-z0-9]+$/', $ext) ? $ext : 'img';
+	}
+
+	/**
 	 * The directory the assets live in, as a path under the output root, or "" for the root itself.
 	 *
 	 * Both spellings of the output directory itself -- "" and "." -- name the root, and neither is a

@@ -87,4 +87,62 @@ class AssetFileTest extends MediaWikiUnitTestCase {
 		$this->assertSame(1, AssetFile::depth('assets'));
 		$this->assertSame(2, AssetFile::depth('static/css'));
 	}
+
+	/**
+	 * Two references to one picture must name one file, and a rebuild of an unchanged site must
+	 * name the same one -- the whole point of hashing the reference rather than counting (#411).
+	 */
+	public function testOnePictureIsOneNameHoweverOftenItIsAsked() {
+		$this->assertSame(
+			AssetFile::imageName('/logo.png'),
+			AssetFile::imageName('/logo.png')
+		);
+		$this->assertNotSame(
+			AssetFile::imageName('/logo.png'),
+			AssetFile::imageName('/card.png')
+		);
+	}
+
+	/**
+	 * The name a head tag has to be able to predict before storeImages has run: this is the rule
+	 * both sides read, and the picture the documentation site publishes is the case that proves it.
+	 */
+	public function testTheNameIsTheOneStoreImagesWrites() {
+		$this->assertSame('img-5d163c4d9d29.png', AssetFile::imageName('/logo.png'));
+	}
+
+	/** A remote picture is keyed by its whole URL, and takes its extension from the same string. */
+	public function testARemotePictureKeepsItsExtension() {
+		$url = 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Diagram.png?width=250';
+		$this->assertStringEndsWith('.png', AssetFile::imageName($url, $url));
+	}
+
+	/** Where the key is not what carries the extension, the second argument is. */
+	public function testTheExtensionCanComeFromSomewhereElseThanTheKey() {
+		$this->assertStringEndsWith(
+			'.jpg',
+			AssetFile::imageName('//example.org/photo?size=large', 'https://example.org/photo.jpg')
+		);
+	}
+
+	/**
+	 * A reference with nothing extension-shaped on the end still names a file. "img" rather than
+	 * nothing, because a name ending in a bare dot is not one a static host serves.
+	 *
+	 * @dataProvider provideOddExtensions
+	 */
+	public function testAnExtensionIsAlwaysASafeOne(string $url, string $expected) {
+		$this->assertSame($expected, AssetFile::extension($url));
+	}
+
+	public static function provideOddExtensions() {
+		return [
+			'a plain name' => ['/logo.png', 'png'],
+			'shouted' => ['/LOGO.PNG', 'png'],
+			'a query after it' => ['https://example.org/a/b.svg?version=9', 'svg'],
+			'no extension at all' => ['/logo', 'img'],
+			'not alphanumeric' => ['/logo.tar.gz~', 'img'],
+			'nothing to read' => ['', 'img']
+		];
+	}
 }
