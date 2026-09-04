@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Lua modules - Wikven</title>
+<script>document.documentElement.className="client-js skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Lua_modules","wgTitle":"Lua modules","wgCurRevisionId":0,"wgRevisionId":0,"wgArticleId":0,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages using Tabber parser tag"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_modules","wgRelevantArticleId":0,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"watchlist":false,"tagline":false},"wgULSAcceptLanguageList":[],"wgTranslatePageTranslation":"source","wgTranslatePageTranslationGroup":"page-Lua modules","wgTranslatePriorityLanguages":[],"wgScriptPath":null,"wgULSPosition":"personal","wgULSisCompactLinksEnabled":true,"wgVector2022LanguageInHeader":false,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false};
+RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","ext.translate.tag.languages":"ready","ext.pygments":"ready","ext.tabberNeue.init.styles":"ready","skins.citizen.styles":"ready","skins.citizen.codex.styles":"ready","skins.citizen.icons":"ready","ext.translate.edit.documentation.styles":"ready","ext.translate":"ready","ext.Wikven.styles":"ready","skins.citizen.tokens":"ready","ext.uls.pt":"ready"};RLPAGEMODULES=[];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+
+<script src="./assets/startup-static.js"></script><script src="./assets/modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","ext.tabberNeue","site","mediawiki.page.ready","mediawiki.toc","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.citizenSearchShortcuts","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface","skins.citizen.toc"]);</script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+
+<meta name="generator" content="MediaWiki 1.46.0">
+<meta name="robots" content="noindex,follow,max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta name="google-site-verification" content="2rzhjoB0M6oJLKFCyvqcW6_SGAkxpf7o4RIWOGfpfPY">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d0e12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="./assets/ext.translate.tag.languages.css">
+<link rel="stylesheet" href="./assets/ext.pygments.css">
+<link rel="stylesheet" href="./assets/ext.tabberNeue.init.styles.css">
+<link rel="stylesheet" href="./assets/skins.citizen.styles.css">
+<link rel="stylesheet" href="./assets/skins.citizen.codex.styles.css">
+<link rel="stylesheet" href="./assets/skins.citizen.icons.css">
+<link rel="stylesheet" href="./assets/ext.translate.edit.documentation.styles.css">
+<link rel="stylesheet" href="./assets/ext.translate.css">
+<link rel="stylesheet" href="./assets/ext.Wikven.styles.css">
+<link rel="stylesheet" href="./assets/skins.citizen.tokens.css">
+<link rel="stylesheet" href="./assets/ext.uls.pt.css">
+<link rel="canonical" href="../Lua_modules.html">
+<script>window.clientPrefs=()=>{let className=document.documentElement.className;let storage;try{storage=localStorage.getItem('mwclientpreferences');}catch(e){}if(storage){storage.split(',').forEach((pref)=>{const pattern=new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)');if(pattern.test(className)){className=className.replace(pattern,'$1'+pref+'$2');}else{className+=' '+pref;}});document.documentElement.className=className;}};(()=>{window.clientPrefs();})();</script>
+<meta property="og:title" content="Lua modules">
+<meta property="og:site_name" content="Wikven">
+<meta property="og:url" content="https://chaotic-ground.github.io/wikven/Lua_modules.html">
+<meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
+<meta property="article:modified_time" content="2026-08-23T07:13:41Z">
+<meta property="article:published_time" content="2026-08-23T07:13:41Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Lua modules - Wikven","headline":"Lua modules - Wikven","mainEntityOfPage":"Lua modules","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Lua_modules.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Lua_modules.html","dateModified":"2026-08-23T07:13:41Z","datePublished":"2026-08-23T07:13:41Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
+<body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Lua_modules rootpage-Lua_modules skin-citizen action-view skin--responsive">
+<div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
+<a class="mw-jump-link citizen-jump-link" href="#bodyContent">Jump to content</a>
+<header class="mw-header citizen-header">
+	<div class="citizen-header__logo">
+		<a href="./index.html" class="mw-logo citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet" title="Visit the main page">
+			<img class="mw-logo-icon" src="./assets/img-e90bfaeac7a3.svg 
+" alt="" aria-hidden="true" height="32" width="32">
+			<span class="citizen-ui-icon mw-ui-icon-home mw-ui-icon-wikimedia-home"></span>
+		</a>
+	</div>
+	
+<div class="citizen-search citizen-header__item citizen-dropdown">
+	<details id="citizen-search-details" class="citizen-dropdown-details">
+		<summary
+			
+			class="citizen-dropdown-summary citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet"
+			title="Toggle search [/]"
+			aria-details="citizen-search__card">
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+		<circle cx="8" cy="8" r="6" fill="none" stroke="currentcolor" stroke-width="2"/>
+		<line class="citizen-icon-search__handle" x1="12.5" y1="12.5" x2="18" y2="18" stroke="currentcolor" stroke-width="2" stroke-linecap="round"/>
+		<line class="citizen-icon-search__close" x1="3.6" y1="3.6" x2="16.4" y2="16.4" stroke="currentcolor" stroke-width="2" stroke-linecap="round"/>
+		<line class="citizen-icon-search__close" x1="16.4" y1="3.6" x2="3.6" y2="16.4" stroke="currentcolor" stroke-width="2" stroke-linecap="round"/>
+	</svg>
+	<span>Toggle search</span>
+		</summary>
+	</details>
+	<div role="search" id="citizen-search__card" class="citizen-search-box citizen-search__card citizen-menu__card">
+		<div class="citizen-menu__card-content">
+			<form action="/index.php" class="citizen-search__form" id="searchform" autocomplete="off">
+				<input type="hidden" name="title" value="Special:Search">
+				<label class="citizen-search__formIcon" for="searchInput">
+					<span class="citizen-search__icon citizen-ui-icon mw-ui-icon-wikimedia-search"></span>
+					<span class="screen-reader-text">Search</span>
+				</label>
+				<input type="search" name="search" placeholder="Search Wikven" aria-label="Search Wikven" autocapitalize="none" spellcheck="false" title="Search Wikven [f]" accesskey="f" id="searchInput">
+			</form>
+		</div>
+	</div>
+</div>
+
+	<div class="citizen-drawer citizen-header__item citizen-dropdown">
+		<details class="citizen-dropdown-details">
+			<summary
+			class="citizen-dropdown-summary citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet"
+			title="Toggle menu"
+			aria-details="citizen-drawer__card">
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+		<rect x="1" y="3" width="18" height="2" fill="currentcolor" rx="1"/>
+		<rect x="1" y="9" width="18" height="2" fill="currentcolor" rx="1"/>
+		<rect x="1" y="15" width="18" height="2" fill="currentcolor" rx="1"/>
+	</svg>
+	<span>Toggle menu</span>
+		</summary>	</details>
+		<div id="citizen-drawer__card" class="citizen-drawer__card citizen-menu__card">
+			<div class="citizen-menu__card-content">
+				<div class="citizen-drawer__header">
+					<a href="./index.html" class="mw-logo citizen-drawer__logo" title="Visit the main page">
+					<img class="mw-logo-icon" src="./assets/img-e90bfaeac7a3.svg 
+" alt="" aria-hidden="true" height="80" width="80" loading="lazy">
+				</a>
+				<div class="citizen-drawer__siteinfo">
+						
+<ul class="citizen-siteStats" role="list" aria-label="Statistics">
+	<li class="citizen-siteStats__item" id="citizen-siteStats__item--articles" role="listitem">
+		<span class="citizen-ui-icon mw-ui-icon-article mw-ui-icon-wikimedia-article" title="articles"></span>
+		<span>52</span>
+		<span class="citizen-siteStats__label">articles</span>
+	</li>
+	<li class="citizen-siteStats__item" id="citizen-siteStats__item--images" role="listitem">
+		<span class="citizen-ui-icon mw-ui-icon-image mw-ui-icon-wikimedia-image" title="files"></span>
+		<span>5</span>
+		<span class="citizen-siteStats__label">files</span>
+	</li>
+	<li class="citizen-siteStats__item" id="citizen-siteStats__item--users" role="listitem">
+		<span class="citizen-ui-icon mw-ui-icon-userAvatar mw-ui-icon-wikimedia-userAvatar" title="users"></span>
+		<span>1</span>
+		<span class="citizen-siteStats__label">users</span>
+	</li>
+	<li class="citizen-siteStats__item" id="citizen-siteStats__item--edits" role="listitem">
+		<span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit" title="edits"></span>
+		<span>1.2K</span>
+		<span class="citizen-siteStats__label">edits</span>
+	</li>
+</ul>
+
+						<div class="mw-logo-wordmark">Wikven</div>
+									</div>
+				</div>
+					<section id="citizen-main-menu" class="citizen-main-menu citizen-drawer__menu">
+					<nav
+	id="p-sidebar-docs"
+	class="citizen-menu mw-portlet mw-portlet-sidebar-docs"
+	aria-label="Docs"
+	
+	
+>
+	<div class="citizen-menu__heading">
+		Docs
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			
+			<li id="n-sidebar-installation" class="mw-list-item"><a href="./Installation.html"><span>Installation</span></a></li><li id="n-sidebar-getting-started" class="mw-list-item"><a href="./Getting_Started.html"><span>Getting Started</span></a></li><li id="n-sidebar-pages" class="mw-list-item"><a href="./Pages.html"><span>Pages</span></a></li><li id="n-sidebar-images" class="mw-list-item"><a href="./Images.html"><span>Images</span></a></li><li id="n-sidebar-skins" class="mw-list-item"><a href="./Skins.html"><span>Skins</span></a></li><li id="n-sidebar-searching" class="mw-list-item"><a href="./Searching.html"><span>Searching</span></a></li><li id="n-sidebar-extensions" class="mw-list-item"><a href="./Extensions.html"><span>Extensions</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="./Lua_modules.html"><span>Lua modules</span></a></li><li id="n-sidebar-javascript" class="mw-list-item"><a href="./JavaScript.html"><span>JavaScript</span></a></li><li id="n-sidebar-translating" class="mw-list-item"><a href="./Translating.html"><span>Translating</span></a></li><li id="n-sidebar-editing-sidebar" class="mw-list-item"><a href="./Editing_sidebar.html"><span>Editing sidebar</span></a></li><li id="n-sidebar-deploying" class="mw-list-item"><a href="./Deploying.html"><span>Deploying</span></a></li><li id="n-sidebar-troubleshooting" class="mw-list-item"><a href="./Troubleshooting.html"><span>Troubleshooting</span></a></li>
+		</ul>
+		
+	</div></nav>
+
+					<nav
+	id="p-sidebar-references"
+	class="citizen-menu mw-portlet mw-portlet-sidebar-references"
+	aria-label="References"
+	
+	
+>
+	<div class="citizen-menu__heading">
+		References
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			
+			<li id="n-sidebar-limitations" class="mw-list-item"><a href="./Limitations.html"><span>Limitations</span></a></li><li id="n-sidebar-why-wikitext" class="mw-list-item"><a href="./Why_wikitext.html"><span>Why wikitext</span></a></li><li id="n-sidebar-configuration" class="mw-list-item"><a href="./Configuration.html"><span>Configuration</span></a></li><li id="n-sidebar-standalone-binary" class="mw-list-item"><a href="./Standalone_binary.html"><span>Standalone binary</span></a></li><li id="n-sidebar-commands" class="mw-list-item"><a href="./Commands.html"><span>Commands</span></a></li><li id="n-sidebar-writing-an-extension" class="mw-list-item"><a href="./Writing_an_extension.html"><span>Writing an extension</span></a></li><li id="n-sidebar-development" class="mw-list-item"><a href="./Development.html"><span>Development</span></a></li>
+		</ul>
+		
+	</div></nav>
+
+				</section>		</div>
+		</div>
+	</div>	<div class="citizen-header__inner">
+		<div class="citizen-header__start"></div>
+		<div class="citizen-header__end">
+			<div class="citizen-preferences-dropdown citizen-header__item citizen-dropdown">
+				<details id="citizen-preferences-details" class="citizen-dropdown-details">
+					<summary
+						class="citizen-dropdown-summary citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only"
+						title="Toggle preferences menu"
+						aria-details="citizen-preferences-dropdown__card">
+						<span class="citizen-ui-icon mw-ui-icon-wikimedia-configure"></span>
+						<span>Toggle preferences menu</span>
+					</summary>
+				</details>
+				<div id="citizen-preferences-dropdown__card" class="citizen-menu__card">
+					<div class="citizen-menu__card-content">
+						<div id="citizen-preferences-content" class="citizen-preferences">
+							<div class="citizen-preferences-skeleton" role="status" aria-busy="true" aria-live="polite">
+								<div class="citizen-preferences-skeleton__heading"></div>
+								<div class="citizen-preferences-skeleton__row">
+									<div class="citizen-preferences-skeleton__label"></div>
+									<div class="citizen-preferences-skeleton__description"></div>
+								</div>
+								<div class="citizen-preferences-skeleton__row">
+									<div class="citizen-preferences-skeleton__label"></div>
+									<div class="citizen-preferences-skeleton__description"></div>
+								</div>
+								<div class="citizen-preferences-skeleton__row">
+									<div class="citizen-preferences-skeleton__label"></div>
+									<div class="citizen-preferences-skeleton__description"></div>
+								</div>
+								<div class="citizen-preferences-skeleton__heading"></div>
+								<div class="citizen-preferences-skeleton__row">
+									<div class="citizen-preferences-skeleton__label"></div>
+									<div class="citizen-preferences-skeleton__description"></div>
+								</div>
+								<div class="citizen-preferences-skeleton__row">
+									<div class="citizen-preferences-skeleton__label"></div>
+									<div class="citizen-preferences-skeleton__description"></div>
+								</div>
+							</div>
+							<div class="citizen-preferences-error" role="alert" hidden>
+								<p class="citizen-preferences-error__message">Couldn&#039;t load preferences. Check your connection and try again.</p>
+								<button class="cdx-button citizen-preferences-error__retry" type="button">
+									Retry
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="citizen-userMenu citizen-header__item citizen-dropdown">
+				<details class="citizen-dropdown-details">
+					<summary
+						class="citizen-dropdown-summary citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only"
+						title="Toggle personal menu"
+						aria-details="citizen-userMenu__card">
+						<span class="citizen-ui-icon mw-ui-icon-wikimedia-userAvatar"></span>
+						<span>Toggle personal menu</span>
+					</summary>
+				</details>
+				<div id="citizen-userMenu__card" class="citizen-menu__card">
+					<div class="citizen-menu__card-content">
+						<div class="citizen-userInfo">
+	<div class="citizen-userInfo-title">
+		<div>Not logged in</div>
+		
+	</div>
+	<div class="citizen-userInfo-text">
+		<div>Your IP address will be publicly visible if you make any edits.</div>
+	</div>
+</div>
+						<nav
+	id="p-user-interface-preferences"
+	class="citizen-menu mw-portlet mw-portlet-user-interface-preferences"
+	aria-label="user-interface-preferences"
+	
+	
+>
+	<div class="citizen-menu__heading">
+		user-interface-preferences
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			
+			<li id="ca-uls" class="mw-list-item active"><a href="#" class="uls-trigger"><span class="citizen-ui-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span> <span>English</span></a></li>
+		</ul>
+		
+	</div></nav>
+
+						<nav
+	id="p-personal"
+	class="citizen-menu mw-portlet mw-portlet-personal emptyPortlet"
+	aria-label="Personal tools"
+	 title="User menu"
+	
+>
+	<div class="citizen-menu__heading">
+		Personal tools
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			
+			
+		</ul>
+		
+	</div></nav>
+
+					</div>
+				</div>
+			</div>		</div>
+	</div>
+</header>
+<div class="citizen-page-container">
+	<div class="citizen-sitenotice-container"><div id="siteNotice"></div></div>
+	<main class="mw-body" id="content">
+		<header class="mw-body-header citizen-page-header" id="citizen-page-header">
+	<div class="citizen-page-header-inner">
+		
+<div class="citizen-page-heading">
+	<div class="firstHeading-container">
+		<h1 id="firstHeading" class="firstHeading mw-first-heading"><span lang="en" dir="ltr"><span class="mw-page-title-main">Lua modules</span></span></h1>
+		
+		<div class="mw-indicators">
+		</div>	</div>
+	<div id="siteSub">From Wikven</div>
+</div>
+		
+<div class="citizen-page-actions">
+	
+<div class="citizen-share-trigger citizen-header__item">
+	<button
+		type="button"
+		id="citizen-share"
+		class="citizen-share citizen-cdx-button--size-large cdx-button cdx-button--weight-quiet cdx-button--icon-only"
+		title="Share this page"
+		aria-label="Share this page"
+		aria-haspopup="dialog"
+	>
+		<span class="citizen-ui-icon mw-ui-icon-wikimedia-share"></span>
+		<span>Share this page</span>
+	</button>
+	<dialog
+		id="citizen-share-dialog"
+		class="citizen-share-dialog"
+		aria-label="Share this page"
+	>
+		<div id="citizen-share-dialog-content" class="citizen-share-dialog__content">
+			<div class="citizen-share-skeleton" role="status" aria-busy="true" aria-live="polite">
+				<div class="citizen-share-skeleton__bar citizen-share-skeleton__bar--short"></div>
+				<div class="citizen-share-skeleton__bar citizen-share-skeleton__bar--wide"></div>
+				<div class="citizen-share-skeleton__bar citizen-share-skeleton__bar--medium"></div>
+			</div>
+		</div>
+	</dialog>
+</div>
+
+	
+		<nav
+	id="p-views"
+	class="citizen-menu mw-portlet mw-portlet-views"
+	aria-label="Views"
+	
+	
+>
+	<div class="citizen-menu__heading">
+		Views
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			
+			<li id="ca-view" class="selected mw-list-item"><a href="./Lua_modules.html" class="citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet"><span class="citizen-ui-icon mw-ui-icon-eye mw-ui-icon-wikimedia-eye"></span> <span>Read</span></a></li><li id="ca-edit" class="mw-list-item"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Lua%20modules.wikitext" class="citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-primary cdx-button--action-progressive" title="Edit this page [e]" accesskey="e"><span class="citizen-ui-icon mw-ui-icon-edit mw-ui-icon-wikimedia-edit"></span> <span>Edit</span></a></li><li id="ca-history" class="mw-list-item"><a href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules.wikitext" class="citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="Past revisions of this page [h]" accesskey="h"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span> <span>View history</span></a></li><li id="ca-wikven-viewsource" class="mw-list-item"><a href="https://github.com/chaotic-ground/wikven/blob/main/docs/Lua%20modules.wikitext" class="citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet"><span class="citizen-ui-icon mw-ui-icon-wikiText mw-ui-icon-wikimedia-wikiText"></span> <span>View source</span></a></li>
+		</ul>
+		
+	</div></nav>
+
+		<nav
+	id="p-associated-pages"
+	class="citizen-menu mw-portlet mw-portlet-associated-pages"
+	aria-label="associated-pages"
+	
+	
+>
+	<div class="citizen-menu__heading">
+		associated-pages
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			
+			<li id="ca-nstab-main" class="selected mw-list-item"><a href="./Lua_modules.html" class="citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="View the content page [c]" accesskey="c"><span class="citizen-ui-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span> <span>Page</span></a></li>
+		</ul>
+		
+	</div></nav>
+
+	<div
+	id="citizen-page-more-dropdown"
+	class="citizen-page-actions-more citizen-page-actions__item citizen-dropdown"
+>
+	<details class="citizen-dropdown-details">
+		<summary
+			class="citizen-dropdown-summary citizen-cdx-button--size-large cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only"
+			title="More actions"
+			aria-details="citizen-page-actions-more__card">
+			<span class="citizen-ui-icon mw-ui-icon-wikimedia-ellipsis"></span>
+			<span>More actions</span>
+		</summary>
+	</details>
+	<div id="citizen-page-actions-more__card" class="citizen-menu__card">
+		<div class="citizen-menu__card-content">
+					<nav
+	id="p-cactions"
+	class="citizen-menu mw-portlet mw-portlet-cactions emptyPortlet"
+	aria-label="More"
+	 title="More options"
+	
+>
+	<div class="citizen-menu__heading">
+		More
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			
+			
+		</ul>
+		
+	</div></nav>
+
+			<nav
+	id="p-tb"
+	class="citizen-menu mw-portlet mw-portlet-tb"
+	aria-label="Tools"
+	
+	
+>
+	<div class="citizen-menu__heading">
+		Tools
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			
+			<li id="t-wikven-skin-vector-2022" class="mw-list-item"><a href="../Lua_modules.html"><span>Vector (2022)</span></a></li><li id="t-wikven-skin-citizen" class="mw-list-item active"><span>Citizen</span></li><li id="t-wikven-skin-minerva" class="mw-list-item"><a href="../minerva/Lua_modules.html"><span>MinervaNeue</span></a></li>
+		</ul>
+		
+	</div></nav>
+
+		</div>
+	</div>
+</div>
+</div>
+	</div>
+</header>
+<div id="citizen-page-header-sticky-sentinel"></div>
+
+		<div class="citizen-body-container">
+			<div id="bodyContent" class="citizen-body">
+				<div id="contentSub"><div id="mw-content-subtitle"></div></div>
+				
+				
+				<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><section id="citizen-section-0" class="citizen-section"><meta property="mw:PageProp/toc"/>
+<div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
+<li><a href="./Lua_modules/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="Lua 모듈 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<p>A great many wikis keep their templates' logic in Lua, and Wikven runs a real MediaWiki at build time, so a module runs the way it always does. The page that invokes it is written out with the module's answer already in it; the module itself never becomes a page of the published site. Lua on a MediaWiki is <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Scribunto">Scribunto</a>, which MediaWiki bundles.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r92">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Both products render Lua, but only the Docker image needs nothing from you; the <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> wants an interpreter installed on arm64. The table below has the three cases. A build that cannot render Lua stops and says so, rather than publishing pages with <code>{{#invoke:}}</code> showing in them.</p></div>
+</div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Enabling_it">Enabling it</h2></div>
+<p>Name it in your <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a> and that is all. Scribunto is bundled with MediaWiki, so it needs no <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> entry</a>, and on most builds the engine needs no configuration either.
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Scribunto</span>
+</pre></div>
+</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Writing_a_module">Writing a module</h2></div>
+<p>A module is content, so it lives in your source tree beside your pages. Its file carries no <code>.wikitext</code> marker, because a <code>Module:</code> page's content model is Lua and not wikitext:
+</p>
+<div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>src/
+  Module:Example
+  Home.wikitext
+</pre></div>
+<p>A file named <code>Module:Example.wikitext</code> is imported too, but the bare name is the convention, and it is the one Wikven maps a page back to when it needs the file that page came from.
+</p><p>A name with no extension leaves your editor with nothing to go on, so it will not colour the file or offer you Lua anything. Every editor can be told once, by the name rather than the extension:
+</p>
+<div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-VS_Code-label" href="#tabber-VS_Code" aria-controls="tabber-VS_Code">VS Code</a><a class="tabber__tab" role="tab" id="tabber-Helix-label" href="#tabber-Helix" aria-controls="tabber-Helix">Helix</a><a class="tabber__tab" role="tab" id="tabber-Vim-label" href="#tabber-Vim" aria-controls="tabber-Vim">Vim</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-VS_Code" aria-labelledby="tabber-VS_Code-label"><p class="mw-empty-elt">
+</p><p>In <code>.vscode/settings.json</code>, or your user settings:
+</p>
+<div class="mw-highlight mw-highlight-lang-json mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"files.associations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"Module:*"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lua"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Helix" aria-labelledby="tabber-Helix-label"><p class="mw-empty-elt">
+</p><p>In <code>.helix/languages.toml</code> beside the source, or <code>~/.config/helix/languages.toml</code>:
+</p>
+<div class="mw-highlight mw-highlight-lang-toml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">[[language]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"lua"</span>
+<span class="n">file-types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">glob</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"Module:*"</span><span class="w"> </span><span class="p">}]</span>
+</pre></div>
+<p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Vim" aria-labelledby="tabber-Vim-label"><p class="mw-empty-elt">
+</p><p>In <code>~/.vim/filetype.vim</code>, or anywhere your <code>vimrc</code> is sourced from:
+</p>
+<div class="mw-highlight mw-highlight-lang-vim mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>autocmd <span class="nb">BufRead</span><span class="p">,</span><span class="nb">BufNewFile</span> Module:* <span class="k">setfiletype</span> <span class="k">lua</span>
+</pre></div>
+<p class="mw-empty-elt"></p></div></div></div>
+<p>The other way round works as well: a file named <code>Module:Example.lua</code> is imported, because the marker is only needed where the title would otherwise be wikitext. But the name is kept as it is, so the page becomes <code>Module:Example.lua</code> and every <code>{{#invoke:}}</code> has to spell it that way.
+</p><p>The module is ordinary Lua. This one is the module this site really has, in full:
+</p>
+<div class="mw-highlight mw-highlight-lang-lua mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">p</span><span class="p">.</span><span class="nf">thisPage</span><span class="p">(</span><span class="w"> </span><span class="nv">frame</span><span class="w"> </span><span class="p">)</span>
+<span class="w">	</span><span class="kr">return</span><span class="w"> </span><span class="s1">'&lt;code>'</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">mw</span><span class="p">.</span><span class="py">title</span><span class="p">.</span><span class="nf">getCurrentTitle</span><span class="p">().</span><span class="nv">text</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="s1">'&lt;/code>'</span>
+<span class="kr">end</span>
+
+<span class="kr">return</span><span class="w"> </span><span class="nv">p</span>
+</pre></div>
+<p>and the page invokes it the ordinary way:
+</p>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{{</span><span class="nf">#invoke</span><span class="p">:</span>Example<span class="p">|</span>thisPage<span class="p">}}</span>
+</pre></div>
+<p>Which, run on this page as you read it, answered:
+</p><p><code>Lua modules</code>
+</p><p>The invocation sits outside the <code>&lt;translate></code> tags, because a module's return value is not a translation unit. It reaches a reader of any language exactly as the module wrote it, so the words belong in the sentence around it and not in the module.
+</p>
+</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_reaches_the_published_site">What reaches the published site</h2></div>
+<p>The module's output, and nothing else. <code>Module:</code> is not a content namespace, so the module is never exported as a page and its Lua source is not published; what a reader downloads is the page with that answer already in it. Nothing runs in the reader's browser, because nothing is left to run: the module ran once, at build time.
+</p><p>That is worth knowing when you decide what to put in a module. Anything a module computes from the wiki's own content — a table assembled from other pages, a sorted list, a page's own order in a series — is computed once and frozen. Anything a module would need at read time, like the reader's clock or a query, has nowhere to run.
+</p>
+</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Which_product_renders_it">Which product renders it</h2></div>
+<p>Scribunto has two engines and picks between them itself. The first is <code>luasandbox</code>, a PHP extension; the second runs an external <code>lua</code> program, and falls back to an interpreter Scribunto carries in its own source tree. Which one you get depends on the product, and only one of the three arrangements asks anything of you.
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Product</th>
+<th>Engine</th>
+<th>What you configure
+</th></tr>
+<tr>
+<td><a href="./Installation.html" title="Special:MyLanguage/Installation">Docker image</a></td>
+<td><code>luasandbox</code>, compiled into its PHP</td>
+<td>nothing
+</td></tr>
+<tr>
+<td><a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a>, x86-64</td>
+<td>the interpreter Scribunto ships</td>
+<td>nothing
+</td></tr>
+<tr>
+<td><a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a>, arm64</td>
+<td>an interpreter you install</td>
+<td><code>luaPath</code>, below
+</td></tr></tbody></table>
+<p>The arm64 row is not a wikven limitation. Scribunto has no arm64 interpreter to offer. The five it bundles are all Intel — Linux and Windows in 32- and 64-bit, macOS in 64 — and it picks among them by operating system and integer size, so on arm64 it takes the x86-64 Linux one, which will not start. Install Lua 5.1 — <code>apt install lua5.1</code> on Debian and Ubuntu; <a rel="nofollow" class="external text" href="https://luajit.org/">LuaJIT</a> serves too, being Lua 5.1 — and name it:
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Scribunto</span>
+<span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ScribuntoEngineConf</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">luastandalone</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">luaPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/lua5.1</span>
+</pre></div>
+<p>That setting is read on every product, so a source tree carrying it builds the same everywhere.
+</p>
+</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="When_the_build_and_the_site_disagree">When the build and the site disagree</h2></div>
+<p>Two things can be out of step here, and what the site asked for decides which is which: Lua the site asked for and this build cannot give ends the build, and Lua the site never asked for is only reported, with the bake going on.
+</p><p><b>Modules with no Scribunto.</b> A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is built, and told what those files come to: a <code>{{#invoke:}}</code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read. The build says what it sees rather than deciding for you, because a <code>Module:</code> file is a guess read off a name and may be on its way in, on its way out, or kept for something else.
+</p>
+<div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: the source has 1 Lua module file(s) (Module:Example) and Scribunto is not in</span>
+<span class="go">extensions, so a {{#invoke:}} is left in the page as its own source text, and a module</span>
+<span class="go">named with the .wikitext marker is exported as a page. Add Scribunto to extensions if</span>
+<span class="go">those modules are meant to run.</span>
+</pre></div>
+<p><b>Scribunto with no engine.</b> A site that lists Scribunto is refused wherever nothing can run it — in practice, the binary on arm64 with no <code>luaPath</code> set. This one is refused rather than reported: the site asked for Lua in so many words, and this build cannot give it. The engine is not merely looked for but run, because the interpreter Scribunto would have chosen on arm64 exists and is marked executable and still cannot start; nothing short of running it tells the difference.
+</p>
+<div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="go">Wikven: this site lists Scribunto and no Lua engine is available here. The Docker image</span>
+<span class="go">compiles luasandbox into its PHP. The standalone binary carries no engine of its own and</span>
+<span class="go">falls back to the lua interpreter Scribunto ships, which is built for 64-bit x86 Linux and</span>
+<span class="go">did not run here. Install a Lua 5.1 interpreter and name it under</span>
+<span class="go">ScribuntoEngineConf.luastandalone.luaPath, bake this site with the Docker image, or drop</span>
+<span class="go">Scribunto from extensions and the Module: pages with it.</span>
+</pre></div>
+<p>That refusal is in the exit status as well as in words, so a script that bakes and then deploys stops rather than shipping nothing. The report above stays a report: a bake that prints it exits zero like any other, and writes the site it described.
+</p><p>This documentation site uses a module itself, and the page you are reading is baked with the image on every change, with the module's answer asserted to be in it. The binary is held to the same rule on a source tree of its own, x86-64 on every change and arm64 on every nightly, so each row of the table above is something a machine checks rather than something this page claims.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r96">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Extensions.html" title="Special:MyLanguage/Extensions">Extensions</a></div><div class="wikven-prevnext-next"><a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a> →</div></div>
+
+</section></div>
+<div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Lua_modules.html">https://chaotic-ground.github.io/wikven/Lua_modules.html</a>"</div></div>
+			</div>
+			
+<div class="citizen-page-sidebar">
+		<nav
+	id="citizen-sidebar-lastmod"
+	class="citizen-menu"
+	aria-label="Last modified"
+	
+	
+>
+	<div class="citizen-menu__heading">
+		Last modified
+	</div>
+	<div class="citizen-menu__content">
+		
+		<ul class="citizen-menu__content-list">
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Lua%20modules.wikitext" title="This page was last edited on 23 August 2026, at 07:13." data-timestamp="1787469221"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>23 August 2026</span></a></li>
+			
+		</ul>
+		
+	</div></nav>
+
+	<div id="citizen-toc" class="citizen-toc citizen-dropdown">
+		<details class="citizen-dropdown-details">
+			<summary
+				class="citizen-dropdown-summary" 
+				title="Contents"
+				aria-details="mw-panel-toc">
+				<span class="citizen-ui-icon mw-ui-icon-wikimedia-listBullet"></span>
+				<span>Contents</span>
+			</summary>
+		</details>
+		<nav id="mw-panel-toc" class="citizen-toc-card citizen-menu__card" aria-labelledby="mw-panel-toc-label">
+			<div class="citizen-menu__card-content">
+				<a class="citizen-toc-top citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="Back to top" href="#top" role="button">
+					<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
+					<div class="citizen-toc-text">Back to top</div>
+				</a>
+				<div id="mw-panel-toc-label" class="citizen-menu__heading">Contents</div>
+				<div class="citizen-toc-contents" id="mw-panel-toc-list">
+				<div class="citizen-toc-indicator"></div>
+				<ul class="citizen-toc-list">
+					<li id="toc-Enabling_it"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Enabling_it" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">1</span>
+						<span class="citizen-toc-heading">Enabling it</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Enabling_it-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Writing_a_module"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Writing_a_module" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">2</span>
+						<span class="citizen-toc-heading">Writing a module</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Writing_a_module-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+		<li id="toc-What_reaches_the_published_site"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#What_reaches_the_published_site" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">3</span>
+						<span class="citizen-toc-heading">What reaches the published site</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-What_reaches_the_published_site-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Which_product_renders_it"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#Which_product_renders_it" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">4</span>
+						<span class="citizen-toc-heading">Which product renders it</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-Which_product_renders_it-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+		<li id="toc-When_the_build_and_the_site_disagree"
+			class="citizen-toc-list-item citizen-toc-level-1">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#When_the_build_and_the_site_disagree" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">5</span>
+						<span class="citizen-toc-heading">When the build and the site disagree</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-When_the_build_and_the_site_disagree-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
+	</ul>
+			</div>		</div>
+		</nav>
+	</div>
+	</div>
+			<footer class="citizen-page-footer">
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw-interface=""><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden category: <ul><li><a href="./Category:Pages_using_Tabber_parser_tag.html" title="Category:Pages using Tabber parser tag">Pages using Tabber parser tag</a></li></ul></div></div>
+					<div class="page-info">
+		    <section id="footer-info-lastmod" class="page-info__item">
+		        <div class="page-info__label">Last modified</div>
+		        <div class="page-info__text"> This page was last edited on 23 August 2026, at 07:13.</div>
+		    </section>
+		</div>
+</footer>		</div>
+		
+	</main>
+	
+	 
+
+<footer class="mw-footer citizen-footer" >
+	<div class="citizen-footer__container">
+		<section class="citizen-footer__content">
+			<div class="citizen-footer__siteinfo">
+				<div id="footer-sitetitle" class="citizen-footer__sitetitle mw-wiki-title">
+					<img class="mw-logo-icon" src="./assets/img-e90bfaeac7a3.svg 
+" alt="" aria-hidden="true" loading="lazy" height="48" width="48">
+					<div class="mw-logo-wordmark">Wikven</div>
+									</div>
+				<p id="footer-desc" class="citizen-footer__desc">Wikven turns a directory of wikitext into a static site, with no server or database to run.</p>
+			</div>
+			<nav id="footer-places" >
+	<ul>
+		<li id="footer-places-source"><a href="https://github.com/chaotic-ground/wikven">View project on GitHub</a></li>
+		<li id="footer-places-wikven-licenses"><a href="./Licenses.html">Licenses</a></li>
+		<li id="footer-places-mobileview"><a href="https://chaotic-ground.github.io/wikven/Lua_modules.html" class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+	</ul>
+</nav>
+		</section>
+		<section class="citizen-footer__bottom">
+			<div id="footer-tagline">Wikven and this documentation are available under the <a rel="nofollow" class="external text" href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License v3.0 or later</a>.</div>
+			
+		</section>
+	</div>
+</footer>
+
+</div>
+<div class="citizen-sticky-header-container">
+	<div id="citizen-sticky-header" class="citizen-sticky-header">
+		<div class="citizen-sticky-header-background"></div>
+		<div class="citizen-sticky-header-inner">
+			<div class="citizen-sticky-header-start">
+				<a
+					href="#top"
+					title="Back to top"
+					class="citizen-sticky-header-backtotop cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--size-large cdx-button--weight-quiet"
+					tabindex="-1"
+					aria-hidden="true"
+				>
+					<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
+					<div class="citizen-sticky-header-page-info">
+						<div class="citizen-sticky-header-page-title"><span lang="en" dir="ltr"><span class="mw-page-title-main">Lua modules</span></span></div>
+						<div class="citizen-sticky-header-page-tagline">From Wikven</div>
+					</div>
+				</a>
+			</div>
+			<div class="citizen-sticky-header-end" aria-hidden="true">
+					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="citizen-share-sticky-header" tabindex="-1" data-mw-citizen-click-target="#citizen-share"><span class="citizen-ui-icon mw-ui-icon-wikimedia-share mw-ui-icon-wikimedia-wikimedia-share"></span><span></span>
+					</button>					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="ca-view-sticky-header" tabindex="-1" data-mw-citizen-click-target="#ca-view &gt; a"><span class="citizen-ui-icon mw-ui-icon-eye mw-ui-icon-wikimedia-eye"></span><span></span>
+					</button>					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="ca-subject-sticky-header" tabindex="-1" data-mw-citizen-click-target="[id^=&#039;ca-nstab-&#039;]:not(.selected) &gt; a"><span class="citizen-ui-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span><span></span>
+					</button>					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="ca-history-sticky-header" tabindex="-1" data-mw-citizen-click-target="#ca-history &gt; a"><span class="citizen-ui-icon mw-ui-icon-wikimedia-history mw-ui-icon-wikimedia-wikimedia-history"></span><span></span>
+					</button>					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="ca-edit-sticky-header" tabindex="-1" data-mw-citizen-click-target="#ca-edit &gt; a"><span class="citizen-ui-icon mw-ui-icon-wikimedia-wikiText mw-ui-icon-wikimedia-wikimedia-wikiText"></span><span></span>
+					</button>					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="ca-ve-edit-sticky-header" tabindex="-1" data-mw-citizen-click-target="#ca-ve-edit &gt; a"><span class="citizen-ui-icon mw-ui-icon-wikimedia-edit mw-ui-icon-wikimedia-wikimedia-edit"></span><span></span>
+					</button>					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="ca-viewsource-sticky-header" tabindex="-1" data-mw-citizen-click-target="#ca-viewsource &gt; a"><span class="citizen-ui-icon mw-ui-icon-wikimedia-editLock mw-ui-icon-wikimedia-wikimedia-editLock"></span><span></span>
+					</button>					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="ca-addsection-sticky-header" tabindex="-1" data-mw-citizen-click-target="#ca-addsection &gt; a"><span class="citizen-ui-icon mw-ui-icon-speechBubbleAdd mw-ui-icon-wikimedia-speechBubbleAdd"></span><span></span>
+					</button>					<button class="cdx-button cdx-button--weight-quiet cdx-button--action-default cdx-button--size-large cdx-button--icon-only" id="ca-talk-sticky-header" tabindex="-1" data-mw-citizen-click-target="#ca-talk &gt; a"><span class="citizen-ui-icon mw-ui-icon-speechBubbles mw-ui-icon-wikimedia-speechBubbles"></span><span></span>
+					</button>				<div id="citizen-sticky-header-languages" class="citizen-sticky-header-dropdown-container"></div>
+				<div id="citizen-sticky-header-more" class="citizen-sticky-header-dropdown-container"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":0});});</script>
+</body>
+</html>
