@@ -34,9 +34,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:site_name" content="Wikven">
 <meta property="og:url" content="https://chaotic-ground.github.io/wikven/Configuration/ko.html">
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
-<meta property="article:modified_time" content="2026-09-04T14:50:05Z">
-<meta property="article:published_time" content="2026-09-04T14:50:05Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\uc124\uc815 - Wikven","headline":"\uc124\uc815 - Wikven","mainEntityOfPage":"\uc124\uc815","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","dateModified":"2026-09-04T14:50:05Z","datePublished":"2026-09-04T14:50:05Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-04T15:09:07Z">
+<meta property="article:published_time" content="2026-09-04T15:09:07Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\uc124\uc815 - Wikven","headline":"\uc124\uc815 - Wikven","mainEntityOfPage":"\uc124\uc815","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","dateModified":"2026-09-04T15:09:07Z","datePublished":"2026-09-04T15:09:07Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration_ko rootpage-Configuration_ko skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
@@ -505,8 +505,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>위 예시는 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO">WikiSEO</a> 확장기능에 소셜 카드 — 누군가 이 사이트의 링크를 공유했을 때 함께 보이는 그림 — 를 건넵니다. 하지만 이 설정에서 WikiSEO에 관한 것은 아무것도 없습니다. 키는 사용하는 확장기능이 읽는 설정 이름이고, 여기의 다른 설정들처럼 <code>wg</code> 접두사 없이 적으며, Wikven은 그것에 대해 아무것도 알 필요가 없습니다.
 </p><p>그림마다 저희 설정을 하나씩 두지 않고 이렇게 한 이유는, 주소가 이 질문에서 Wikven만 답할 수 있고 사용자는 답할 수 없는 유일한 부분이기 때문입니다. 소스 디렉터리의 그림은 <code>File:</code> 이름공간에 업로드되고, 내보내기가 그것을 <a href="#WikvenAssetDirectory">자산 디렉터리</a> 안의 내용 주소 파일로 이름을 바꿉니다. 그 이름은 빌드가 정하는 경로의 해시입니다. 사용자는 그 주소를 적어둘 수 없고, 어떤 확장기능도 알아낼 수 없습니다. 그래서 이 설정이 주소를 건네고, 누구에게 알릴지는 사용자가 정합니다.
-</p><p>적히는 값은 언제나 온전한 URL입니다. 페이지 바깥에서 읽히는 설정 — 소셜 카드, schema.org 이미지, 앱 매니페스트 아이콘 — 은 그 페이지를 본 적 없는 쪽이 읽으므로, 상대 링크를 풀 기준 주소가 없기 때문입니다. 페이지 <b>안에</b> 렌더되는 그림은 정반대의 질문이라 그 그림을 담은 페이지 기준의 상대 링크를 원하고, 그건 <a href="#WikvenLogos"><code>WikvenLogos</code></a>가 답합니다.
-</p><p>그래서 <a href="#WikvenSiteUrl"><code>WikvenSiteUrl</code></a>이 필요합니다. 그것이 없으면 줄 수 있는 절대 주소가 없으므로 아무것도 적지 않습니다. 아무도 풀 수 없는 URL은 설정이 비어 있는 것만 못하기 때문입니다.
+</p><p>적히는 값은 언제나 온전한 URL입니다. 페이지 바깥에서 읽히는 설정 — 소셜 카드, schema.org 이미지, 앱 매니페스트 아이콘 — 은 그 페이지를 본 적 없는 쪽이 읽으므로, 상대 링크를 풀 기준 주소가 없기 때문입니다.
+</p>
+<style data-mw-deduplicate="TemplateStyles:r92">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>페이지 <b>안에</b> 렌더되는 그림은 정반대의 질문입니다. 그 그림을 담은 페이지 기준의 상대 링크를 원하고, 그 덕분에 내보낸 결과물이 어느 디렉터리에서도 열립니다. 그건 <a href="#WikvenLogos"><code>WikvenLogos</code></a>가 답하며, 그래서 둘은 한 맵이 아니라 별개의 설정입니다. 주소의 모양은 그것을 읽는 쪽이 정하는 것이지 어떤 그림이냐가 정하는 것이 아니기 때문입니다.</p></div>
+</div>
+<p>그래서 <a href="#WikvenSiteUrl"><code>WikvenSiteUrl</code></a>이 필요합니다. 그것이 없으면 줄 수 있는 절대 주소가 없으므로 아무것도 적지 않습니다. 아무도 풀 수 없는 URL은 설정이 비어 있는 것만 못하기 때문입니다.
 </p><p>각 파일은 다른 소스 이미지와 똑같이 업로드되므로 자기 <code>File:</code> 문서도 갖습니다. 여기 이름은 적었는데 소스 디렉터리에 두지 않은 파일은 없는 로고와 마찬가지로 보고되고 건너뜁니다. 설정 이름이 아닌 키도 마찬가지인데, 그러지 않으면 아무도 읽지 않는 것을 설정하게 됩니다.
 </p><p>소셜 카드라면 1200×630 정도로 만드세요. 그보다 많이 작은 그림은 글 위가 아니라 글 옆에 섬네일로 표시되는데, 카드는 그러라고 있는 것이 아닙니다.
 </p><p><span id="WikvenSettingsPage"></span>
@@ -527,7 +530,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>출력 디렉터리가 윈도우 파일 시스템이라면 <code>encoded</code>로 설정하십시오. 윈도우는 이름에 콜론이 든 파일을 담지 못하므로, Docker Desktop의 바인드 마운트는 기본값으로는 주 이름공간 밖의 문서를 받을 수 없습니다. <code>encoded</code>는 문서 캐시가 만든 이스케이프를 그대로 둡니다. <code>File%3ABakery_oven.jpg.html</code>처럼 되고, 어떤 파일 시스템이든 담을 수 있습니다. 대가는 URL에 그 퍼센트가 한 번 더 붙는 것입니다. 그 문서로 가는 링크는 <code>./File%253ABakery_oven.jpg.html</code>이 됩니다. 링크는 이름을 URL 인코딩한 것이고, 그 이름 자체에 퍼센트가 들어 있기 때문입니다.
 </p><p>윈도우가 담지 못하는 문자가 넷 더 있습니다. 큰따옴표, 별표, 물음표, 역슬래시입니다. 이들은 두 값 모두에서 이스케이프된 채로 남으므로, <code>What?</code>이라는 문서는 어느 쪽에서도 <code>What%3F.html</code>로 놓입니다. 제목에 드물게 쓰이는 문자이고 이스케이프된 채로 두어도 읽기에 잃는 것이 없으니, 그런 문자를 쓸 일이 없는 사이트는 <code>encoded</code>가 아예 필요하지 않게 됩니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r92">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>이 값을 바꾸면 사이트가 제공하는 모든 URL이 바뀝니다. 다른 사람이 어떤 문서로 걸어 둔 링크는 예전 이름을 계속 가리키는데, 그 이름은 이제 없습니다. 게시한 뒤가 아니라 게시하기 전에 정하십시오.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r92"/><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>이 값을 바꾸면 사이트가 제공하는 모든 URL이 바뀝니다. 다른 사람이 어떤 문서로 걸어 둔 링크는 예전 이름을 계속 가리키는데, 그 이름은 이제 없습니다. 게시한 뒤가 아니라 게시하기 전에 정하십시오.</p></div>
 </div>
 </section><section id="citizen-section-14" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenBuildFor"><code>WikvenBuildFor</code></h3></div>
 <p><b>기본값:</b> <code>site</code>
@@ -617,7 +620,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/ko.wikitext" title="이 문서는 2026년 9월 4일 (금) 14:50에 마지막으로 편집되었습니다." data-timestamp="1788533405"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 9월 4일 (금)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/ko.wikitext" title="이 문서는 2026년 9월 4일 (금) 15:09에 마지막으로 편집되었습니다." data-timestamp="1788534547"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 9월 4일 (금)</span></a></li>
 			
 		</ul>
 		
@@ -928,7 +931,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 9월 4일 (금) 14:50에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 9월 4일 (금) 15:09에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
