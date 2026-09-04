@@ -33,9 +33,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:title" content="Configuration/en">
 <meta property="og:site_name" content="Wikven">
 <meta property="og:url" content="https://chaotic-ground.github.io/wikven/Configuration/en.html">
-<meta property="article:modified_time" content="2026-09-04T15:28:55Z">
-<meta property="article:published_time" content="2026-09-04T15:28:55Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","dateModified":"2026-09-04T15:28:55Z","datePublished":"2026-09-04T15:28:55Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-04T15:37:22Z">
+<meta property="article:published_time" content="2026-09-04T15:37:22Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","dateModified":"2026-09-04T15:37:22Z","datePublished":"2026-09-04T15:37:22Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration_en rootpage-Configuration_en skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
@@ -504,7 +504,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>That example gives the <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO">WikiSEO</a> extension a social card — the picture a link to your site shows when someone shares it. But nothing about this setting is about WikiSEO. The key is whatever variable the extension you are using reads, and Wikven needs to know nothing about it.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The key is the variable as PHP spells it, <b>prefix and all</b> — <code>wgWikiSeoDefaultImage</code>, not <code>WikiSeoDefaultImage</code>. Everywhere else in this file a setting is named without one, because MediaWiki's settings schema knows what each extension prefixes with; this writes a variable directly and has no schema to ask. <code>wg</code> is a convention rather than a rule, and extensions ship <code>eg</code> and <code>smwg</code> names too.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The key carries its <b>prefix</b> — <code>wgWikiSeoDefaultImage</code>, not <code>WikiSeoDefaultImage</code> — unlike a setting you write under <code>config</code> itself, which you name without one. <code>wg</code> is the usual prefix but not the only one: some extensions use <code>eg</code> or <code>smwg</code>. Take the name from the extension's own documentation.</p></div>
 </div>
 <p>You name a file rather than an address because the address is not yours to know: the picture is uploaded into the <code>File:</code> namespace, and the export then renames it to a content-addressed file in the <a href="#WikvenAssetDirectory">asset directory</a> — a name that is a hash of a path the build decides.
 </p><p>The value written is always a whole URL, because a setting read from outside the page — a social card, a schema.org image, an app manifest icon — is read by something that never saw the page and has no address to resolve a relative link against.
@@ -621,7 +621,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 4 September 2026, at 15:28." data-timestamp="1788535735"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>4 September 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/en.wikitext" title="This page was last edited on 4 September 2026, at 15:37." data-timestamp="1788536242"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>4 September 2026</span></a></li>
 			
 		</ul>
 		
@@ -932,7 +932,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 4 September 2026, at 15:28.</div>
+		        <div class="page-info__text"> This page was last edited on 4 September 2026, at 15:37.</div>
 		    </section>
 		</div>
 </footer>		</div>
