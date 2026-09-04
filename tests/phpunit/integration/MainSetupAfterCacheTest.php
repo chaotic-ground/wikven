@@ -134,4 +134,111 @@ class MainSetupAfterCacheTest extends MediaWikiIntegrationTestCase {
 		$this->main()->onSetupAfterCache();
 		$this->assertArrayNotHasKey('wgULSImeSelectors', $GLOBALS);
 	}
+
+	/** A directory holding one image file, named as the site would name it in its config. */
+	private function sourceDirectoryHolding(string $name): string {
+		$directory = $this->getNewTempDirectory();
+		file_put_contents("$directory/$name", 'not really a picture');
+		return $directory;
+	}
+
+	/**
+	 * The address of the file the export will write, handed to whichever setting the site named.
+	 *
+	 * Nothing here knows what reads $wgWikiSeoDefaultImage, which is the point: a setting per
+	 * extension that wants a picture is a list with no end, and the address is the only part of
+	 * the question that is the build's to answer.
+	 */
+	public function testAPublishedImageIsAWholeUrlNamingAWrittenFile() {
+		$this->overrideConfigValue('WikvenSourceDirectory', $this->sourceDirectoryHolding('card.png'));
+		$this->overrideConfigValue('WikvenPublishedImages', ['wgWikiSeoDefaultImage' => 'card.png']);
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/wiki/');
+		$this->overrideConfigValue('WikvenAssetDirectory', 'assets');
+		$this->setMwGlobals('wgWikiSeoDefaultImage', null);
+
+		$this->main()->onSetupAfterCache();
+
+		$written = $GLOBALS['wgWikiSeoDefaultImage'];
+		$this->assertStringStartsWith('https://example.org/wiki/assets/img-', $written);
+		$this->assertStringEndsWith('.png', $written);
+	}
+
+	/** Every variable named gets its own picture, whatever each extension prefixes with. */
+	public function testEachNamedSettingGetsItsOwnPicture() {
+		$directory = $this->sourceDirectoryHolding('card.png');
+		file_put_contents("$directory/badge.png", 'not really a picture either');
+		$this->overrideConfigValue('WikvenSourceDirectory', $directory);
+		$this->overrideConfigValue('WikvenPublishedImages', [
+			'wgWikiSeoDefaultImage' => 'card.png',
+			'egSomeOtherExtensionImage' => 'badge.png'
+		]);
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/wiki/');
+		$this->setMwGlobals('wgWikiSeoDefaultImage', null);
+		$this->setMwGlobals('egSomeOtherExtensionImage', null);
+
+		$this->main()->onSetupAfterCache();
+
+		$this->assertNotNull($GLOBALS['wgWikiSeoDefaultImage']);
+		$this->assertNotNull($GLOBALS['egSomeOtherExtensionImage']);
+		$this->assertNotSame(
+			$GLOBALS['wgWikiSeoDefaultImage'],
+			$GLOBALS['egSomeOtherExtensionImage']
+		);
+	}
+
+	/** The asset directory decides where the file goes, so it decides what the setting names too. */
+	public function testAPublishedImageFollowsTheAssetDirectory() {
+		$this->overrideConfigValue('WikvenSourceDirectory', $this->sourceDirectoryHolding('card.png'));
+		$this->overrideConfigValue('WikvenPublishedImages', ['wgWikiSeoDefaultImage' => 'card.png']);
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/wiki/');
+		$this->overrideConfigValue('WikvenAssetDirectory', 'static/img');
+		$this->setMwGlobals('wgWikiSeoDefaultImage', null);
+
+		$this->main()->onSetupAfterCache();
+
+		$this->assertStringStartsWith(
+			'https://example.org/wiki/static/img/img-',
+			$GLOBALS['wgWikiSeoDefaultImage']
+		);
+	}
+
+	/**
+	 * Without an address to publish at there is no absolute URL to give, and a URL nobody can
+	 * resolve is worse than the setting being unset -- so nothing is written.
+	 */
+	public function testNoSiteUrlPublishesNoImage() {
+		$this->overrideConfigValue('WikvenSourceDirectory', $this->sourceDirectoryHolding('card.png'));
+		$this->overrideConfigValue('WikvenPublishedImages', ['wgWikiSeoDefaultImage' => 'card.png']);
+		$this->overrideConfigValue('WikvenSiteUrl', '');
+		$this->setMwGlobals('wgWikiSeoDefaultImage', null);
+
+		$this->main()->onSetupAfterCache();
+
+		$this->assertNull($GLOBALS['wgWikiSeoDefaultImage']);
+	}
+
+	/** A picture named but not present is reported and skipped, as a missing logo is. */
+	public function testAMissingPublishedImageWritesNothing() {
+		$this->overrideConfigValue('WikvenSourceDirectory', $this->getNewTempDirectory());
+		$this->overrideConfigValue('WikvenPublishedImages', ['wgWikiSeoDefaultImage' => 'card.png']);
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/wiki/');
+		$this->setMwGlobals('wgWikiSeoDefaultImage', null);
+
+		$this->main()->onSetupAfterCache();
+
+		$this->assertNull($GLOBALS['wgWikiSeoDefaultImage']);
+	}
+
+	/**
+	 * A key that is not a variable name would otherwise set a global nothing ever reads, silently.
+	 */
+	public function testAKeyThatIsNotAVariableNameIsRefused() {
+		$this->overrideConfigValue('WikvenSourceDirectory', $this->sourceDirectoryHolding('card.png'));
+		$this->overrideConfigValue('WikvenPublishedImages', ['not a variable' => 'card.png']);
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/wiki/');
+
+		$this->main()->onSetupAfterCache();
+
+		$this->assertArrayNotHasKey('not a variable', $GLOBALS);
+	}
 }
