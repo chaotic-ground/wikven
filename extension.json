@@ -173,6 +173,10 @@
 			"value": [],
 			"description": "Header logos, mirroring $wgLogos but keyed to image file names in the source directory. Each named file is uploaded like any other source image and the export copies it into the asset directory, so it is not embedded into every page."
 		},
+		"WikvenPublishedImages": {
+			"value": {},
+			"description": "Configuration settings that should be handed the published address of a picture in the source directory, as a map of configuration variable name to image file name. The key carries its prefix (\"wgWikiSeoDefaultImage\", not \"WikiSeoDefaultImage\"), unlike a setting written under config itself; \"wg\" is the usual prefix but some extensions use \"eg\" or \"smwg\". Only the build knows that address: a source picture becomes a File:, the export renames it to a content-addressed file in the asset directory, and a reader fetches that under WikvenSiteUrl. The value written is always a whole URL, which is what a setting read from outside the page is for -- a social card, a schema.org image, an app manifest icon; a picture rendered inside a page wants a link relative to that page instead, and WikvenLogos is what answers that. Which variable to name is the reading extension's business, so wikven needs no knowledge of it. Nothing is written without WikvenSiteUrl: there is no absolute address to give, and a URL nobody can resolve is worse than the setting being unset."
+		},
 		"WikvenRepositories": {
 			"value": [],
 			"description": "Sources for third-party extensions and skins listed in extensions/skins. A map of component name to a tarball/repository/package source, fetched by maintenance/fetchExtensions.php before MediaWiki loads them."

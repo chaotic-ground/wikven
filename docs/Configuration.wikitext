@@ -122,6 +122,63 @@ A link added to the site footer, pointing at your project (typically its reposit
 The address this site will be published at, path and all, ending in a slash — <code>https://example.org/wiki/</code>. The build cannot work this out for itself: it installs against a local server, and it writes every page link as a file beside the one asking, which is exactly what lets an export work from any directory and any host. Anything that has to name a page from outside the site is built from this: given an address the bake writes <code>sitemap.xml</code>, naming every page it exported, and where it is empty — the default — no sitemap is written, because a URL a reader cannot resolve is worse than none. Nothing about the pages changes either way: their links stay relative and the export still moves anywhere. The scheme and host also become <code>$wgCanonicalServer</code>, so an absolute URL that MediaWiki or an extension builds names the right host. A value that is not an http or https URL is reported and read as empty.
 </translate>
 
+=== <code>WikvenPublishedImages</code> ===
+
+<translate>
+<!--T:203-->
+'''Default:''' empty
+
+<!--T:204-->
+Configuration variables that should be handed the address a picture in your source directory is published at, as a map of variable name to file name.
+
+<!--T:213-->
+Say you want a social card — the picture a link to your site shows when someone shares it — which the [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO</tvar> WikiSEO] extension puts in the page head. On a wiki you would name the file in <code>LocalSettings.php</code>:
+</translate>
+
+<syntaxhighlight lang="php">
+$wgWikiSeoDefaultImage = 'card.png';
+</syntaxhighlight>
+
+<translate>
+<!--T:214-->
+Here you name it through this setting instead:
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+config:
+  WikvenPublishedImages:
+    wgWikiSeoDefaultImage: card.png
+</syntaxhighlight>
+
+<translate>
+<!--T:215-->
+{{note|Writing <code>WikiSeoDefaultImage</code> under <code>config</code> directly does not fail — it publishes a card nothing can use. The extension builds an address under MediaWiki's upload path, which no export serves, and the export then rewrites that tag to a link relative to the page. Whatever reads a card never saw the page, so a relative link is no use to it.}}
+
+<!--T:205-->
+Nothing about this setting is about WikiSEO, though. The key is whatever variable the extension you are using reads, and {{SITENAME}} needs to know nothing about it.
+
+<!--T:212-->
+{{note|The key carries its '''prefix''' — <code>wgWikiSeoDefaultImage</code>, not <code>WikiSeoDefaultImage</code> — unlike a setting you write under <code>config</code> itself, which you name without one. <code>wg</code> is the usual prefix but not the only one: some extensions use <code>eg</code> or <code>smwg</code>. Take the name from the extension's own documentation.}}
+
+<!--T:206-->
+You name a file rather than an address because the address is not yours to know: the picture is uploaded into the <code>File:</code> namespace, and the export then renames it to a content-addressed file in the [[#WikvenAssetDirectory|asset directory]] — a name that is a hash of a path the build decides.
+
+<!--T:207-->
+The value written is always a whole URL, because a setting read from outside the page — a social card, a schema.org image, an app manifest icon — is read by something that never saw the page and has no address to resolve a relative link against.
+
+<!--T:211-->
+{{note|A picture rendered '''inside''' a page is the opposite question: it wants a link relative to the page carrying it, which is what lets an export work from any directory. [[#WikvenLogos|<code>WikvenLogos</code>]] answers that one, and that is why the two are separate settings rather than one map — the shape of the address is decided by what reads it, not by which picture it is.}}
+
+<!--T:208-->
+So it needs [[#WikvenSiteUrl|<code>WikvenSiteUrl</code>]]. Without one there is no absolute address to give, and nothing is written at all, because a URL nobody can resolve is worse than the setting being unset.
+
+<!--T:209-->
+Each file is uploaded like any other source image, so it also gets its own <code>File:</code> page. A file you name here but have not put in your source directory is reported and skipped, as a missing logo is; so is a key that is not a setting name, which would otherwise set something nothing ever reads.
+
+<!--T:210-->
+For a social card specifically, make the picture 1200×630 or thereabouts. A picture much smaller than that is shown as a thumbnail beside the text instead of above it, which is not what a card is for.
+</translate>
+
 <span id="WikvenSettingsPage"></span>
 === <code>WikvenSettingsPage</code> ===
 

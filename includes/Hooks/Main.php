@@ -275,11 +275,13 @@ class Main implements
 		$this->restoreCitizenSearchWiring();
 		$this->unbindUlsInputMethods();
 
+		$sourceDirectory = (string)$this->config->get('WikvenSourceDirectory');
+		$this->publishImageUrls($sourceDirectory);
+
 		$wikvenLogos = $this->config->get('WikvenLogos');
 		if (!is_array($wikvenLogos) || $wikvenLogos === []) {
 			return;
 		}
-		$sourceDirectory = $this->config->get('WikvenSourceDirectory');
 
 		$logos = is_array($GLOBALS['wgLogos'] ?? null) ? $GLOBALS['wgLogos'] : [];
 		foreach ($wikvenLogos as $key => $value) {
@@ -288,14 +290,14 @@ class Main implements
 					$logos[$key] = $value;
 					continue;
 				}
-				$src = $this->resolveLogoUrl($sourceDirectory, (string)$value['src']);
+				$src = $this->resolveSourceImageUrl($sourceDirectory, (string)$value['src'], 'logo');
 				if ($src === null) {
 					continue;
 				}
 				$value['src'] = $src;
 				$logos[$key] = $value;
 			} else {
-				$url = $this->resolveLogoUrl($sourceDirectory, (string)$value);
+				$url = $this->resolveSourceImageUrl($sourceDirectory, (string)$value, 'logo');
 				if ($url !== null) {
 					$logos[$key] = $url;
 				}
@@ -363,17 +365,70 @@ class Main implements
 	/**
 	 * The upload URL a source-dir file name $name will have, or null if it does not exist there.
 	 */
-	private function resolveLogoUrl(string $sourceDirectory, string $name): ?string {
+	private function resolveSourceImageUrl(string $sourceDirectory, string $name, string $what): ?string {
 		if ($sourceDirectory === '' || !is_file("$sourceDirectory/$name")) {
-			error_log("Wikven: logo file '$name' not found in the source directory");
+			error_log("Wikven: $what file '$name' not found in the source directory");
 			return null;
 		}
 		$title = Title::makeTitleSafe(NS_FILE, $name);
 		if ($title === null) {
-			error_log("Wikven: logo file '$name' is not a valid file title");
+			error_log("Wikven: $what file '$name' is not a valid file title");
 			return null;
 		}
+		// newFile rather than findFile: this answers where the picture will be, and every process
+		// asks it -- including the one that has not imported the pictures yet.
 		return MediaWikiServices::getInstance()->getRepoGroup()->getLocalRepo()->newFile($title)->getUrl();
+	}
+
+	/**
+	 * Hand named settings the published address of a picture in the source tree.
+	 *
+	 * Only the build can work this out. A picture in the source tree becomes a File:, storeImages
+	 * renames it to a content-addressed file in the asset directory, and what a reader fetches is
+	 * that name under the address the site is published at. No extension can compute it, and a
+	 * site cannot write it down: the name is a hash of a path the build decides.
+	 *
+	 * So this answers the question and lets the site say who is told, rather than wikven growing a
+	 * setting of its own for each extension that wants a picture. Which variable an extension reads
+	 * is that extension's business, and there are as many of them as there are extensions.
+	 *
+	 * The value is always a whole URL, which is what a setting read from outside the page is for --
+	 * a social card, a schema.org image, an app manifest icon. A picture rendered inside a page is
+	 * the opposite question, wanting a link relative to the page that carries it, and WikvenLogos
+	 * is what answers that one.
+	 *
+	 * Nothing is written where the site has not said where it is published: there is no absolute
+	 * address to give, and a URL nobody can resolve is worse than the setting being unset.
+	 */
+	private function publishImageUrls(string $sourceDirectory): void {
+		$wanted = $this->config->get('WikvenPublishedImages');
+		if (!is_array($wanted) || $wanted === [] || !$this->siteUrl->isKnown()) {
+			return;
+		}
+		// storeImages keys a local picture by what follows the upload path in the page's HTML.
+		$uploadPath = (string)( $GLOBALS['wgUploadPath'] ?? '' );
+		if ($uploadPath === '') {
+			return;
+		}
+		foreach ($wanted as $global => $name) {
+			// The variable as PHP spells it, prefix and all. Elsewhere in a site's file a setting is
+			// named without one, because MediaWiki's settings schema knows what each extension
+			// prefixes with; this writes a global directly and has no schema to ask, and "wg" is a
+			// convention rather than a rule -- extensions ship "eg" and "smwg" names too. A key
+			// that is not a variable name would otherwise set one nothing ever reads, silently.
+			if (!is_string($global) || !preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $global)) {
+				$shown = is_string($global) ? "'$global'" : get_debug_type($global);
+				error_log("Wikven: $shown is not a configuration variable name; ignoring it.");
+				continue;
+			}
+			$url = $this->resolveSourceImageUrl($sourceDirectory, (string)$name, "image for \$$global");
+			if ($url === null || !str_starts_with($url, $uploadPath)) {
+				continue;
+			}
+			$asset = AssetFile::imageName(substr($url, strlen($uploadPath)));
+			$href = AssetFile::locate($this->htmlDirectory, $this->assetDirectory, $asset)['href'];
+			$GLOBALS[$global] = $this->siteUrl->forFile(ltrim($href, './'));
+		}
 	}
 
 	/**
