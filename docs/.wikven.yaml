@@ -26,6 +26,11 @@ config:
   # it into a meta tag on every page; the value is a public token, not a credential -- it grants
   # nothing but the claim, and Google publishes it back to anyone who asks for the site's tag.
   GoogleSiteVerificationKey: 2rzhjoB0M6oJLKFCyvqcW6_SGAkxpf7o4RIWOGfpfPY
+  # The picture a link to this site shows when it is shared. WikiSEO reads it, resolves the name in
+  # the File: namespace, and writes the address into og:image and the schema.org block; the export
+  # moves the file into the asset directory and takes those addresses with it. Drawn from the logo,
+  # at the 1200x630 a social platform lays out above the title rather than beside it.
+  WikiSeoDefaultImage: card.png
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1
