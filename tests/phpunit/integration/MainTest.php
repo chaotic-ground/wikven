@@ -332,17 +332,15 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$this->licensedSiteTranslatedIntoKorean();
 		$this->getExistingTestPage(Title::newFromText('Licenses/ko'));
 
-		$tags = $this->addressTags(Title::newFromText('Licenses'));
-
-		$this->assertSame([
-			'link-canonical' => '<link rel="canonical" href="https://example.org/docs/Licenses.html">',
-			'link-alternate-language-en' =>
-				'<link rel="alternate" hreflang="en" href="https://example.org/docs/Licenses.html">',
-			'link-alternate-language-ko' =>
-				'<link rel="alternate" hreflang="ko" href="https://example.org/docs/Licenses/ko.html">',
-			'link-alternate-language-x-default' =>
-				'<link rel="alternate" hreflang="x-default" href="https://example.org/docs/Licenses.html">'
-		], $tags);
+		$this->assertSame(
+			[
+				'canonical' => 'Licenses.html',
+				'en' => 'Licenses.html',
+				'ko' => 'Licenses/ko.html',
+				'x-default' => 'Licenses.html'
+			],
+			$this->addressed(Title::newFromText('Licenses'))
+		);
 	}
 
 	/**
@@ -354,15 +352,12 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$this->licensedSiteTranslatedIntoKorean();
 		$this->getExistingTestPage(Title::newFromText('Licenses/ko'));
 
-		$page = $this->addressTags(Title::newFromText('Licenses'));
-		$copy = $this->addressTags(Title::newFromText('Licenses/ko'));
+		$page = $this->addressed(Title::newFromText('Licenses'));
+		$copy = $this->addressed(Title::newFromText('Licenses/ko'));
 
-		unset($page['link-canonical'], $copy['link-canonical']);
+		$this->assertSame('Licenses/ko.html', $copy['canonical']);
+		unset($page['canonical'], $copy['canonical']);
 		$this->assertSame($page, $copy);
-		$this->assertSame(
-			'<link rel="canonical" href="https://example.org/docs/Licenses/ko.html">',
-			$this->addressTags(Title::newFromText('Licenses/ko'))['link-canonical']
-		);
 	}
 
 	/**
@@ -393,6 +388,27 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		return TestingAccessWrapper::newFromObject($this->main())->addressTags($title);
 	}
 
+	/**
+	 * The same links read as what each one says: the language it claims, or "canonical", against
+	 * the page it names with the site's own address taken off the front. The markup itself is
+	 * pinned by testAPageNamesTheWholeAddressItIsPublishedAt; what a set has to get right is which
+	 * page answers for which language, and that is what this shows.
+	 *
+	 * @return array<string,string>
+	 */
+	private function addressed(Title $title): array {
+		$said = [];
+		foreach ($this->addressTags($title) as $tag) {
+			preg_match('/rel="([^"]*)"(?: hreflang="([^"]*)")? href="([^"]*)"/', $tag, $matched);
+			$said[$matched[2] === '' ? $matched[1] : $matched[2]] = str_replace(
+				'https://example.org/docs/',
+				'',
+				$matched[3]
+			);
+		}
+		return $said;
+	}
+
 	/** A site with a licenses page, published, and one page translated into Korean. */
 	private function licensedSiteTranslatedIntoKorean(): void {
 		$source = $this->getNewTempDirectory();
@@ -403,5 +419,4 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSourceDirectory', $source);
 		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
 	}
-
 }

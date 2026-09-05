@@ -526,8 +526,7 @@ class Main implements
 		}
 		// The address a reader reaches who is not any of these languages. That is the source page:
 		// it is the one every link in the export names, and the one a language bar starts from.
-		$tags[self::alternateKey('x-default')] =
-			self::alternate('x-default', $cluster['source']->getFullURL());
+		$tags[self::alternateKey('x-default')] = self::alternate('x-default', $cluster['source']->getFullURL());
 		return $tags;
 	}
 
