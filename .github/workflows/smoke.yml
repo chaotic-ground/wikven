@@ -465,6 +465,47 @@ jobs:
       # noticed the output moving between bakes, so the next regression was going to be found the
       # same way (#411).
       #
+      # A preview is a claim that what you see is what you will publish, so what it answers is
+      # worth an assertion of its own. The addresses below are what a static host answers, measured
+      # against GitHub Pages serving this same site: the extension-less form of a page is the page,
+      # its trailing-slash form is not, a directory with an index redirects to its slash, and an
+      # address the site does not have is 404 rather than the front page (#640).
+      - name: Assert the preview answers what a static host answers
+        run: |
+          set -euo pipefail
+          docker run --rm -d --name wikven-preview -p 8090:8080 \
+            -v "$(pwd)/dist:/workspace/dist:ro" wikven serve > /dev/null
+          trap 'docker rm -f wikven-preview > /dev/null 2>&1 || true' EXIT
+          for _ in $(seq 1 30); do
+            curl -fsS -o /dev/null http://127.0.0.1:8090/index.html && break
+            sleep 1
+          done
+          status() { curl -sS -o /dev/null -w '%{http_code}' "http://127.0.0.1:8090$1"; }
+          expect() {
+            got=$(status "$1")
+            if [ "$got" != "$2" ]; then
+              echo "::error::preview answered $got for $1, expected $2"
+              exit 1
+            fi
+          }
+          expect /Development.html 200
+          expect /Development 200
+          expect /Development/ 404
+          expect /Configuration 200
+          expect / 200
+          expect /citizen 301
+          expect /citizen/ 200
+          expect /assets/ 404
+          expect /nothing-is-here 404
+          # The two forms of a page are the page, not two pages.
+          plain=$(curl -sS http://127.0.0.1:8090/Development | sha256sum)
+          named=$(curl -sS http://127.0.0.1:8090/Development.html | sha256sum)
+          if [ "$plain" != "$named" ]; then
+            echo "::error::/Development and /Development.html are not the same bytes"
+            exit 1
+          fi
+          echo 'the preview answers a page by the address a host serves it at'
+
       # Same checkout, same image, same runner, so the bake itself is the only thing that can
       # differ. Baking from two separate clones is the stronger check and is not this one: it fails
       # today because importWikitext.php stamps revisions with filemtime(), which a second clone

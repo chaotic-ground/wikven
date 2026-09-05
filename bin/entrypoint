@@ -11,8 +11,11 @@ command="${1:-build}"
 shift || true
 
 if [ "$command" = "serve" ]; then
-  # Serve the built site for local preview; the container listens on 8080.
-  exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist"
+  # Serve the built site for local preview; the container listens on 8080. Through a router, so the
+  # preview answers the addresses a static host answers rather than only the file names: see
+  # bin/router.php, which is what stands between this and a preview no link can be checked against.
+  exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist" \
+    /var/www/html/extensions/Wikven/bin/router.php
 elif [ "$command" = "translate" ]; then
   # Translation helpers: `translate mark|check|stamp`. Validate before the slow boot below.
   subcommand="${1:-}"

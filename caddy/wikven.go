@@ -5,6 +5,9 @@ package wikvencaddy
 import (
 	"errors"
 	"flag"
+	"fmt"
+	"io"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -40,9 +43,11 @@ func init() {
 			if workdir == "" {
 				workdir = "."
 			}
-			return reexec("file-server",
-				"--root", filepath.Join(workdir, "dist"),
-				"--listen", fl.String("listen"))
+			// Through a generated Caddyfile rather than `file-server`, which serves file names and
+			// nothing else. See previewConfig() for what a static host answers that it does not.
+			return reexecStdin(
+				strings.NewReader(previewConfig(filepath.Join(workdir, "dist"), fl.String("listen"))),
+				"run", "--config", "-", "--adapter", "caddyfile")
 		},
 	})
 
@@ -90,13 +95,67 @@ func commandTail(name string) []string {
 }
 
 // reexec runs this same binary with the given args, wiring stdio and the current environment.
+// The Caddyfile the preview runs. The one line in it that is not "serve this directory" is
+// try_files, which is what makes a preview answer the addresses a published site answers.
+//
+// Measured against GitHub Pages serving this project's own documentation:
+//
+//	/Development      200, the same bytes as /Development.html (same ETag)
+//	/Development/     404 -- the trailing-slash form of a page is not served
+//	/Configuration    200, Configuration.html, though a Configuration/ directory sits beside it
+//	/citizen          a redirect to /citizen/, because that directory has an index.html
+//	/assets/          404 -- a directory without an index is not listed
+//	/Nope             404
+//
+// The candidate order says the first three: ".html first" is what answers /Configuration with the
+// page rather than with the directory beside it. file_server answers the rest on its own, and its
+// redirect is a 308 where the host sends a 301 -- the same instruction to a reader, and the one
+// place this deliberately does not chase a host's exact answer.
+//
+// Netlify and Cloudflare Pages answer the extension-less form the same way, so this aims at what
+// static hosts have in common rather than at one host's full rule set.
+func previewConfig(root, listen string) string {
+	// The site address is the port alone, so the preview answers whatever Host a reader's browser
+	// sends -- localhost, 127.0.0.1, a container's name. An address naming an interface keeps it,
+	// as the flag's own documentation promises, through bind rather than through host matching.
+	host, port, err := net.SplitHostPort(listen)
+	if err != nil {
+		host, port = "", strings.TrimPrefix(listen, ":")
+	}
+	bind := ""
+	if host != "" {
+		bind = "\n\tbind " + caddyToken(host)
+	}
+	return fmt.Sprintf(`{
+	admin off
+	auto_https off
+}
+
+:%s {%s
+	root * %s
+	try_files {path}.html {path}
+	encode zstd gzip
+	file_server
+}
+`, port, bind, caddyToken(root))
+}
+
+// A value written where a Caddyfile expects one token: quoted, since a path may hold a space.
+func caddyToken(value string) string {
+	return `"` + strings.NewReplacer(`\`, `\\`, `"`, `\"`).Replace(value) + `"`
+}
+
 func reexec(args ...string) (int, error) {
+	return reexecStdin(os.Stdin, args...)
+}
+
+func reexecStdin(stdin io.Reader, args ...string) (int, error) {
 	self, err := os.Executable()
 	if err != nil {
 		return 1, err
 	}
 	cmd := exec.Command(self, args...)
-	cmd.Stdin = os.Stdin
+	cmd.Stdin = stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(), runtimeEnv()...)

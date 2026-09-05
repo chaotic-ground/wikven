@@ -30,6 +30,8 @@ jobs:
         working-directory: caddy
       - run: go vet ./...
         working-directory: caddy
+      - run: go test ./...
+        working-directory: caddy
 
   # Run the extension's PHPUnit tests against a real MediaWiki: the 1.46 base the build ships on, and master.
   phpunit:
