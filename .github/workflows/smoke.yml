@@ -465,6 +465,41 @@ jobs:
       # noticed the output moving between bakes, so the next regression was going to be found the
       # same way (#411).
       #
+      # A preview is a claim that what you see is what you will publish, so what it answers is
+      # worth an assertion of its own. It serves the files the export contains and nothing else: an
+      # address the site does not have is a 404 rather than the front page, and a directory is
+      # redirected onto its trailing slash, without which the page's own relative links resolve one
+      # level too high and load another skin's copy of a stylesheet (#640).
+      - name: Assert the preview serves the export and nothing else
+        run: |
+          set -euo pipefail
+          docker run --rm -d --name wikven-preview -p 8090:8080 \
+            -v "$(pwd)/dist:/workspace/dist:ro" wikven serve > /dev/null
+          trap 'docker rm -f wikven-preview > /dev/null 2>&1 || true' EXIT
+          for _ in $(seq 1 30); do
+            curl -fsS -o /dev/null http://127.0.0.1:8090/index.html && break
+            sleep 1
+          done
+          status() { curl -sS -o /dev/null -w '%{http_code}' "http://127.0.0.1:8090$1"; }
+          expect() {
+            got=$(status "$1")
+            if [ "$got" != "$2" ]; then
+              echo "::error::preview answered $got for $1, expected $2"
+              exit 1
+            fi
+          }
+          expect / 200
+          expect /Development.html 200
+          expect /citizen/ 200
+          # A directory has to be redirected, not served where it was asked for.
+          expect /citizen 301
+          # Not the export's, so not the preview's to invent or to answer.
+          expect /Development 404
+          expect /assets/ 404
+          expect /nothing-is-here 404
+          expect /nothing-is-here/deeper 404
+          echo 'the preview serves the export and answers 404 for the rest'
+
       # Same checkout, same image, same runner, so the bake itself is the only thing that can
       # differ. Baking from two separate clones is the stronger check and is not this one: it fails
       # today because importWikitext.php stamps revisions with filemtime(), which a second clone
