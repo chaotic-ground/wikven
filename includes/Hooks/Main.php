@@ -8,6 +8,7 @@ use MediaWiki\Extension\Wikven\AssetFile;
 use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\LicensesPage;
 use MediaWiki\Extension\Wikven\OutputName;
+use MediaWiki\Extension\Wikven\PageTranslation\TranslationFamily;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SiteUrl;
 use MediaWiki\Extension\Wikven\SourceFile;
@@ -467,25 +468,8 @@ class Main implements
 		}
 
 		$title = $out->getTitle();
-		if (MW_ENTRY_POINT !== 'cli' || !$title) {
-			return;
-		}
-		$addresses = $this->addressTags($title);
-		if ($addresses !== []) {
-			$tags = array_merge($tags, $addresses);
-			return;
-		}
-
-		// No site url, so no whole address to name. A skin copy can still say which page it
-		// duplicates, because that one is in the export beside it: point canonical at the main
-		// skin's copy one directory up.
-		$mainSkin = $GLOBALS['wgWikvenMainSkin'] ?? null;
-		if ($mainSkin && $out->getSkin()->getSkinName() !== $mainSkin) {
-			$href = OutputName::href(OutputName::of(...$this->nameFor($title)));
-			$tags['link-canonical'] = Html::element('link', [
-				'rel' => 'canonical',
-				'href' => "../$href"
-			]);
+		if (MW_ENTRY_POINT === 'cli' && $title) {
+			$tags = array_merge($tags, $this->addressTags($title, $out->getSkin()->getSkinName()));
 		}
 	}
 
@@ -499,13 +483,15 @@ class Main implements
 	 * the one address rather than ruling the others out one at a time.
 	 *
 	 * Both a canonical url and an hreflang value have to be whole, so where the site has not said
-	 * where it is published there is nothing here to write; the caller keeps what it did before.
+	 * where it is published there is no set to write and only the skin copies have anything left
+	 * to say; see duplicatedByThisSkin().
 	 *
-	 * @return array<string,string> Empty where there is no whole address to give.
+	 * @param string $skin The skin rendering this copy of the page.
+	 * @return array<string,string>
 	 */
-	private function addressTags(Title $title): array {
+	private function addressTags(Title $title, string $skin): array {
 		if (!$this->siteUrl->isKnown()) {
-			return [];
+			return $this->duplicatedByThisSkin($title, $skin);
 		}
 		$cluster = $this->cluster($title);
 		$tags = [
@@ -528,6 +514,30 @@ class Main implements
 		// it is the one every link in the export names, and the one a language bar starts from.
 		$tags[self::alternateKey('x-default')] = self::alternate('x-default', $cluster['source']->getFullURL());
 		return $tags;
+	}
+
+	/**
+	 * What a page can still say about its address with no whole one to give.
+	 *
+	 * A skin copy duplicates the main skin's copy of the same page, and that one is in the export
+	 * beside it, so it can be pointed at from one directory up without knowing where the site is
+	 * published. The main skin's own copy has nothing to say here: the addresses it would be
+	 * distinguishing itself from are a host's invention, and naming one needs the site's address.
+	 *
+	 * @return array<string,string>
+	 */
+	private function duplicatedByThisSkin(Title $title, string $skin): array {
+		$mainSkin = (string)( $GLOBALS['wgWikvenMainSkin'] ?? '' );
+		if ($mainSkin === '' || $skin === $mainSkin) {
+			return [];
+		}
+		$href = OutputName::href(OutputName::of(...$this->nameFor($title)));
+		return [
+			'link-canonical' => Html::element('link', [
+				'rel' => 'canonical',
+				'href' => "../$href"
+			])
+		];
 	}
 
 	/** Core's own key for one of these, so a variant link and this cannot both claim a language. */
@@ -578,25 +588,19 @@ class Main implements
 			return $alone;
 		}
 		$source = $page->getTitle();
+		$sourceKey = $source->getDBkey();
 		$sourceLanguage = $page->getSourceLanguageCode();
-		$languages = [$sourceLanguage => $source];
+		$pages = [$sourceKey => $source];
 		foreach ($page->getTranslationPages() as $translationPage) {
-			$code = self::languageOf($translationPage, $source);
-			if ($code !== '' && $code !== $sourceLanguage) {
-				$languages[$code] = $translationPage;
-			}
+			$pages[$translationPage->getDBkey()] = $translationPage;
 		}
-		$duplicate = $translation !== false && self::languageOf($title, $source) === $sourceLanguage;
+		$languages = TranslationFamily::byLanguage($sourceKey, $sourceLanguage, array_keys($pages));
+		$owner = TranslationFamily::owner($title->getDBkey(), $sourceKey, $sourceLanguage);
 		return [
-			'owner' => $duplicate ? $source : $title,
+			'owner' => $pages[$owner] ?? $title,
 			'source' => $source,
-			'languages' => $languages
+			'languages' => array_map(static fn(string $key): Title => $pages[$key], $languages)
 		];
-	}
-
-	/** The language a translation page is in: what its name carries past the source page's own. */
-	private static function languageOf(Title $translationPage, Title $source): string {
-		return substr($translationPage->getDBkey(), strlen($source->getDBkey()) + 1);
 	}
 
 	/**

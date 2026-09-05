@@ -41,12 +41,43 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * Both a canonical url and an hreflang value have to be whole, and a site that has not said
-	 * where it is published has no whole address to give. Naming the build container's own would
-	 * be worse than saying nothing.
+	 * An hreflang value has to be a whole url, and a site that has not said where it is published
+	 * has none to give. Naming the build container's own address would be worse than saying
+	 * nothing, so a page that would carry a set carries none.
 	 */
-	public function testWithoutASiteUrlThereIsNoWholeAddressToName() {
+	public function testWithoutASiteUrlThereIsNoSetToWrite() {
+		$this->licensedSiteTranslatedIntoKorean();
+		$this->getExistingTestPage(Title::newFromText('Licenses/ko'));
 		$this->overrideConfigValue('WikvenSiteUrl', '');
+		$this->setMwGlobals('wgWikvenMainSkin', 'vector-2022');
+
+		$this->assertSame([], $this->addressTags(Title::newFromText('Licenses')));
+	}
+
+	/**
+	 * With no whole address to give, a skin copy can still say which page it duplicates: that page
+	 * is in the export one directory up, so pointing at it needs no notion of where the site is
+	 * published. This is what the export said before it said anything else.
+	 */
+	public function testWithoutASiteUrlASkinCopyStillNamesThePageItDuplicates() {
+		$this->overrideConfigValue('WikvenSiteUrl', '');
+		$this->setMwGlobals('wgWikvenMainSkin', 'vector-2022');
+
+		$tags = $this->addressTags(Title::newFromText('Getting Started'), 'citizen');
+
+		$this->assertSame(
+			['link-canonical' => '<link rel="canonical" href="../Getting_Started.html">'],
+			$tags
+		);
+	}
+
+	/**
+	 * The main skin's own copy has nothing to say there. The addresses it would be distinguishing
+	 * itself from are a host's invention, and naming one of them needs the site's own address.
+	 */
+	public function testWithoutASiteUrlTheMainSkinsCopySaysNothing() {
+		$this->overrideConfigValue('WikvenSiteUrl', '');
+		$this->setMwGlobals('wgWikvenMainSkin', 'vector-2022');
 
 		$this->assertSame([], $this->addressTags(Title::newFromText('Getting Started')));
 	}
@@ -111,9 +142,12 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame(['link-canonical'], array_keys($tags));
 	}
 
-	/** @return array<string,string> */
-	private function addressTags(Title $title): array {
-		return TestingAccessWrapper::newFromObject($this->main())->addressTags($title);
+	/**
+	 * @param string $skin The skin rendering the page; the main one unless a test says otherwise.
+	 * @return array<string,string>
+	 */
+	private function addressTags(Title $title, string $skin = 'vector-2022'): array {
+		return TestingAccessWrapper::newFromObject($this->main())->addressTags($title, $skin);
 	}
 
 	/**
