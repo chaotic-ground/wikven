@@ -37,6 +37,12 @@ config:
   WikvenViewSourceUrl: https://github.com/chaotic-ground/wikven/blob/main/docs/$1
   WikvenLogos:
     icon: logo.svg
+    # The same mark as a raster, and only the schema.org block reads it. WikiSEO names the site's
+    # logo by walking these values for the first jpg/jpeg/png/gif/webp, and takes an SVG as no logo
+    # at all; with the icon alone every page carried "logo": [], which asserts the site has no logo
+    # rather than saying nothing about one. No skin is affected: a skin with an icon renders that,
+    # and 1x is the fallback for one without.
+    1x: logo.png
   # Translated pages may be in a script the reader's system has no font for.
   WikvenBundleWebfonts: true
   # Search results have no thumbnails, so drop the empty thumbnail column from
