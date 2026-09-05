@@ -14,8 +14,8 @@ class RelativeUrl {
 	 * non-main-skin canonical does). A subpage title such as "Manual/Config" caches to a flat file but
 	 * is exported into a real "Manual/" directory; its references then need a "../" per level so links
 	 * and files agree on a static host. Absolute, protocol-relative and data: URLs carry no leading
-	 * "./" and are left alone. Covers href/src/srcset attributes, CSS url(), and the page's own
-	 * JavaScript config (see reparentConfigVars()).
+	 * "./" and are left alone. Covers href/src/srcset attributes, CSS url(), the page's own
+	 * JavaScript config (see reparentConfigVars()) and its schema.org block (reparentJsonLd()).
 	 *
 	 * Each candidate is required to sit inside a real "<tag ...>" span (or, for url(), inside a
 	 * <style> block too): MediaWiki escapes preformatted text with htmlspecialchars(..., ENT_NOQUOTES),
@@ -92,6 +92,7 @@ class RelativeUrl {
 		);
 
 		$html = self::reparentConfigVars($html, $rebase);
+		$html = self::reparentJsonLd($html, $rebase);
 
 		return self::rebasePrintFooter($html, $up);
 	}
@@ -141,6 +142,40 @@ class RelativeUrl {
 			$offset = $open + strlen($rebased);
 		}
 		return $html;
+	}
+
+	/**
+	 * Rebase the root-relative URLs a page carries in its schema.org block.
+	 *
+	 * The claim reparentConfigVars() answers, one escaping further along. Where a site has said
+	 * where it is published, a picture named in machine-read metadata gets a whole URL and no depth
+	 * can apply to it. Where it has not, storeImages can only name the file from the output root,
+	 * and a "./assets/..." written into a JSON document is spelled ".\/assets\/...": json_encode()
+	 * escapes a slash unless told not to. The passes above look for an attribute value or a bare
+	 * "./", so none of them sees that, and a subpage's schema.org image resolves inside the
+	 * subpage's own directory.
+	 *
+	 * Scoped to the block for the reason reparentConfigVars() is scoped to RLCONF: a bare string
+	 * carries no marker telling a URL of ours from a path a page merely shows. A ld+json script is
+	 * a span an extension wrote, and everything in it is data about the page rather than prose.
+	 *
+	 * @param string $html A rendered page.
+	 * @param callable(string):string $rebase Takes the matched "." or "..", returns its replacement.
+	 */
+	private static function reparentJsonLd(string $html, callable $rebase): string {
+		return preg_replace_callback(
+			'~<script type="application/ld\+json">.*?</script>~s',
+			static function (array $block) use ($rebase): string {
+				return preg_replace_callback(
+					'~"(\.\.?)\\\\/~',
+					static function (array $m) use ($rebase): string {
+						return '"' . str_replace('/', '\\/', $rebase($m[1]));
+					},
+					$block[0]
+				);
+			},
+			$html
+		);
 	}
 
 	/**
