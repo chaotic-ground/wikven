@@ -7,12 +7,24 @@
 // skins carry theirs in the chrome, so it is taken from there rather than worked out again here.
 //
 // The static bundle runs every module on every page, so this leaves where there is no list to fill.
-const container = document.querySelector("#wikven-appearance-skins");
+(() => {
+	// Both queries below need body content. The bundle is a plain <script src> in <head> -- on the
+	// generated settings page it is around 3300 bytes in, where the head ends past 6000 and the
+	// entries this reads are past 21000 -- so a module running as it is implemented can be looking
+	// at a document whose body has not been parsed. Running once with no wait meant that when it
+	// lost, container was null, the fill was skipped, and nothing ever tried again: a reader got a
+	// heading, a description and nothing under them, with no console error to say so.
+	const fill = () => {
+		const container = document.querySelector("#wikven-appearance-skins");
+		if (!container || container.children.length) {
+			return;
+		}
 
-if (container && !container.children.length) {
-	const entries = document.querySelectorAll('[id^="t-wikven-skin-"]');
+		const entries = document.querySelectorAll('[id^="t-wikven-skin-"]');
+		if (!entries.length) {
+			return;
+		}
 
-	if (entries.length) {
 		const list = document.createElement("ul");
 		list.className = "wikven-skin-list";
 
@@ -34,5 +46,14 @@ if (container && !container.children.length) {
 		}
 
 		container.append(list);
+	};
+
+	// The same wait the other modules in this bundle make, and for the same reason. It also keeps
+	// this ahead of citizen-skins.js, which reads the same entries and then removes the toolbox they
+	// live in: both defer the same way, so the bundle's order still decides, as it does today.
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", fill);
+	} else {
+		fill();
 	}
-}
+})();

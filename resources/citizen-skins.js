@@ -104,7 +104,13 @@
 			}
 		});
 
-		removeToolbox();
+		// The generated settings page reads these same entries for its own copy of the list
+		// (appearance.js), so they cannot go while anything still has a turn at them. Which module
+		// the bundle runs first is not ours to decide: appearance.js used to read the page as it was
+		// implemented, ahead of everything here, and now waits for the document as the rest of the
+		// bundle does. A task of its own puts this after every DOMContentLoaded listener, in
+		// whatever order the bundle registered them, and the wait is imperceptible.
+		setTimeout(removeToolbox, 0);
 	};
 
 	if (document.readyState === "loading") {
