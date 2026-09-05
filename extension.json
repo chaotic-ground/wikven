@@ -177,6 +177,10 @@
 			"value": [],
 			"description": "Sources for third-party extensions and skins listed in extensions/skins. A map of component name to a tarball/repository/package source, fetched by maintenance/fetchExtensions.php before MediaWiki loads them."
 		},
+		"WikvenFailOnCategories": {
+			"value": [],
+			"description": "Categories no page may be in when the build finishes, named without the namespace prefix. A build that puts a page in one of them stops and says which pages did. A tracking category is how MediaWiki reports something it cannot refuse -- a template used without a required argument, a Lua error, a page whose template expansion ran past its limit -- and a static export publishes all of it without a word. Naming one here is what turns it into something the build refuses. Nothing is listed by default: which categories a site treats as a fault is the site's own judgement."
+		},
 		"WikvenBundleWebfonts": {
 			"value": false,
 			"description": "When true and UniversalLanguageSelector is installed, bake its webfonts for the export's languages into a static stylesheet, so readers of a script their system lacks a font for see the intended typeface instead of tofu. Off by default because it adds font payload to the output."

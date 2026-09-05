@@ -1,7 +1,9 @@
 /* Colours read from the skin's Codex tokens rather than written here. The box used to
  * pin background-color: #f8f9fa and set no colour at all, so night mode put the
  * inherited --color-base (#eaecf0) on a near-white box: 1.12:1, which is text you
- * cannot see. Seven pages use {{note}}.
+ * cannot see. Seven pages use the note template. Named rather than written as a call:
+ * TemplateStyles preprocesses this page, so a call in a comment is a transclusion, and
+ * this one put the page in the note template's own tracking category.
  *
  * The literal in each var() is the light value, a fallback for a skin that defines no
  * tokens. Defining a token here is not an option -- TemplateStyles drops a custom
