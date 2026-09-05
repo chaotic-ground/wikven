@@ -33,9 +33,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:title" content="Configuration/ko">
 <meta property="og:site_name" content="Wikven">
 <meta property="og:url" content="https://chaotic-ground.github.io/wikven/Configuration/ko.html">
-<meta property="article:modified_time" content="2026-09-05T00:29:06Z">
-<meta property="article:published_time" content="2026-09-05T00:29:06Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\uc124\uc815 - Wikven","headline":"\uc124\uc815 - Wikven","mainEntityOfPage":"\uc124\uc815","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","dateModified":"2026-09-05T00:29:06Z","datePublished":"2026-09-05T00:29:06Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-05T00:40:50Z">
+<meta property="article:published_time" content="2026-09-05T00:40:50Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\uc124\uc815 - Wikven","headline":"\uc124\uc815 - Wikven","mainEntityOfPage":"\uc124\uc815","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","dateModified":"2026-09-05T00:40:50Z","datePublished":"2026-09-05T00:40:50Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration_ko rootpage-Configuration_ko skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
@@ -507,9 +507,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">  </span><span class="nt">WikvenPublishedImages</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">wgWikiSeoDefaultImage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">card.png</span>
 </pre></div>
+<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p><code>WikiSeoDefaultImage</code>를 <code>config</code> 아래에 그냥 적으면 실패하지 않습니다. 대신 아무도 쓸 수 없는 카드를 발행합니다. 확장기능은 MediaWiki 업로드 경로로 주소를 만드는데 그 경로는 어느 내보내기도 제공하지 않고, 그 뒤 내보내기가 그 태그를 페이지 기준 상대 링크로 바꿉니다. 카드를 읽는 쪽은 그 페이지를 본 적이 없으므로 상대 링크는 쓸모가 없습니다.</p></div>
+</div>
 <p>다만 이 설정에서 WikiSEO에 관한 것은 아무것도 없습니다. 키는 사용하는 확장기능이 읽는 변수이고, Wikven은 그것에 대해 아무것도 알 필요가 없습니다.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r91">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>키는 <b>접두사까지</b> 적습니다 — <code>WikiSeoDefaultImage</code>가 아니라 <code>wgWikiSeoDefaultImage</code>입니다. <code>config</code> 아래에 직접 쓰는 설정은 접두사 없이 적으니, 그것과는 다릅니다. <code>wg</code>가 흔하지만 전부는 아니어서 <code>eg</code>나 <code>smwg</code>를 쓰는 확장기능도 있습니다. 이름은 해당 확장기능의 문서에서 확인하세요.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r91"/><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>키는 <b>접두사까지</b> 적습니다 — <code>WikiSeoDefaultImage</code>가 아니라 <code>wgWikiSeoDefaultImage</code>입니다. <code>config</code> 아래에 직접 쓰는 설정은 접두사 없이 적으니, 그것과는 다릅니다. <code>wg</code>가 흔하지만 전부는 아니어서 <code>eg</code>나 <code>smwg</code>를 쓰는 확장기능도 있습니다. 이름은 해당 확장기능의 문서에서 확인하세요.</p></div>
 </div>
 <p>주소가 아니라 파일 이름을 적는 것은, 그 주소가 사용자가 알 수 있는 것이 아니기 때문입니다. 그림은 <code>File:</code> 이름공간에 업로드되고, 내보내기가 그것을 <a href="#WikvenAssetDirectory">자산 디렉터리</a> 안의 내용 주소 파일로 이름을 바꿉니다. 그 이름은 빌드가 정하는 경로의 해시입니다.
 </p><p>적히는 값은 언제나 온전한 URL입니다. 페이지 바깥에서 읽히는 설정 — 소셜 카드, schema.org 이미지, 앱 매니페스트 아이콘 — 은 그 페이지를 본 적 없는 쪽이 읽으므로, 상대 링크를 풀 기준 주소가 없기 때문입니다.
@@ -627,7 +629,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/ko.wikitext" title="이 문서는 2026년 9월 5일 (토) 00:29에 마지막으로 편집되었습니다." data-timestamp="1788568146"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 9월 5일 (토)</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration/ko.wikitext" title="이 문서는 2026년 9월 5일 (토) 00:40에 마지막으로 편집되었습니다." data-timestamp="1788568850"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>2026년 9월 5일 (토)</span></a></li>
 			
 		</ul>
 		
@@ -938,7 +940,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">마지막 수정</div>
-		        <div class="page-info__text"> 이 문서는 2026년 9월 5일 (토) 00:29에 마지막으로 편집되었습니다.</div>
+		        <div class="page-info__text"> 이 문서는 2026년 9월 5일 (토) 00:40에 마지막으로 편집되었습니다.</div>
 		    </section>
 		</div>
 </footer>		</div>
