@@ -486,7 +486,8 @@ class Main implements
 	 * where it is published there is no set to write and only the skin copies have anything left
 	 * to say; see duplicatedByThisSkin().
 	 *
-	 * @param string $skin The skin rendering this copy of the page.
+	 * @param Title $title The page being rendered.
+	 * @param string $skin The skin rendering this copy of it.
 	 * @return array<string,string>
 	 */
 	private function addressTags(Title $title, string $skin): array {
@@ -594,12 +595,15 @@ class Main implements
 		foreach ($page->getTranslationPages() as $translationPage) {
 			$pages[$translationPage->getDBkey()] = $translationPage;
 		}
-		$languages = TranslationFamily::byLanguage($sourceKey, $sourceLanguage, array_keys($pages));
 		$owner = TranslationFamily::owner($title->getDBkey(), $sourceKey, $sourceLanguage);
+		$languages = [];
+		foreach (TranslationFamily::byLanguage($sourceKey, $sourceLanguage, array_keys($pages)) as $code => $key) {
+			$languages[$code] = $pages[$key];
+		}
 		return [
 			'owner' => $pages[$owner] ?? $title,
 			'source' => $source,
-			'languages' => array_map(static fn(string $key): Title => $pages[$key], $languages)
+			'languages' => $languages
 		];
 	}
 

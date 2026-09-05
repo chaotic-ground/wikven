@@ -143,7 +143,8 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @param string $skin The skin rendering the page; the main one unless a test says otherwise.
+	 * @param Title $title The page being rendered.
+	 * @param string $skin The skin rendering it; the main one unless a test says otherwise.
 	 * @return array<string,string>
 	 */
 	private function addressTags(Title $title, string $skin = 'vector-2022'): array {
