@@ -327,6 +327,8 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	 * The licenses page is the one page on a site that is genuinely several languages without
 	 * Translate knowing it: the build writes the page and a copy per language the source tree is
 	 * translated into. Without this it would be the one page saying nothing about them.
+	 *
+	 * @group Database
 	 */
 	public function testTheLicensesPageNamesItsTranslations() {
 		$this->licensedSiteTranslatedIntoKorean();
@@ -347,6 +349,8 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	 * Every page of a set names the whole set, itself included, because a search engine reads them
 	 * as a group only where the group agrees on its own membership. What differs between them is
 	 * the canonical url, which is each page's own.
+	 *
+	 * @group Database
 	 */
 	public function testALicensesCopyNamesTheSameSetAsThePageItself() {
 		$this->licensedSiteTranslatedIntoKorean();
@@ -365,6 +369,8 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	 * language. build.php writes a copy only for a language it can translate the page's own
 	 * messages into, and an alternate naming a page the export does not have is a link to a 404 --
 	 * in the head of every other page in the set, which is a set a search engine throws away whole.
+	 *
+	 * @group Database
 	 */
 	public function testALicensesCopyTheBuildDidNotWriteIsNotNamed() {
 		$this->licensedSiteTranslatedIntoKorean();
