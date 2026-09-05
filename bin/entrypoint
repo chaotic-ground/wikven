@@ -11,8 +11,11 @@ command="${1:-build}"
 shift || true
 
 if [ "$command" = "serve" ]; then
-  # Serve the built site for local preview; the container listens on 8080.
-  exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist"
+  # Serve the built site for local preview; the container listens on 8080. Through a router, because
+  # the built-in server answers an address the site does not have with the site's own front page and
+  # a 200, which leaves no way to find a broken link. See bin/router.php.
+  exec php -S "0.0.0.0:8080" -t "$WIKVEN_WORKDIR/dist" \
+    /var/www/html/extensions/Wikven/bin/router.php
 elif [ "$command" = "translate" ]; then
   # Translation helpers: `translate mark|check|stamp`. Validate before the slow boot below.
   subcommand="${1:-}"
