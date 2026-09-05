@@ -361,6 +361,39 @@ jobs:
             fi
           done
 
+          # Every address a page names for itself has to be one the export actually has (#394
+          # again, one layer out). A canonical url and an hreflang alternate are whole urls, so
+          # nothing in the export resolves them and nothing else would notice one naming a page
+          # that was never written -- and a single alternate pointing at a 404 is enough for a
+          # search engine to throw away the whole set it belongs to.
+          base=$(sed -n 's/^ *WikvenSiteUrl: *//p' docs/.wikven.yaml)
+          base="${base%/}/"
+          grep -rhoE '<link rel="(canonical|alternate)"[^>]*>' dist --include='*.html' \
+            | sed 's/.*href="\([^"]*\)".*/\1/' | sort -u > "$RUNNER_TEMP/head-links.txt"
+          test -s "$RUNNER_TEMP/head-links.txt"
+          while IFS= read -r href; do
+            case "$href" in
+              "$base"*) ;;
+              *)
+                echo "::error::head link '$href' is not an address under $base"
+                exit 1
+                ;;
+            esac
+            if [ ! -f "dist/${href#"$base"}" ]; then
+              echo "::error::head link '$href' names a page the export does not have"
+              exit 1
+            fi
+          done < "$RUNNER_TEMP/head-links.txt"
+
+          # And every page carries one, which is what settles the extension-less address a host
+          # serves beside the .html one, and the skin copies, in a single tag.
+          pages=$(find dist -name '*.html' | wc -l)
+          canonical=$(grep -rl 'rel="canonical"' dist --include='*.html' | wc -l)
+          if [ "$pages" -ne "$canonical" ]; then
+            echo "::error::$canonical of $pages exported pages say which address is theirs"
+            exit 1
+          fi
+
           # Bundled webfonts. The Khmer translation is the fixture: without a page in a script ULS
           # has a font for, every assertion below passes vacuously on an empty stylesheet.
           test -s dist/assets/webfonts.css

@@ -7,6 +7,7 @@ use MediaWiki\Extension\Wikven\Hooks\Main;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \MediaWiki\Extension\Wikven\Hooks\Main
@@ -293,4 +294,114 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$this->main()->onSkinTemplateNavigation__Universal($sktemplate, $links);
 		return $links['views'];
 	}
+
+	/**
+	 * A page says which of its addresses is the real one, whole.
+	 *
+	 * A host that answers /Getting_Started for Getting_Started.html gives the same document two
+	 * addresses, and a skin copy gives it a third. Naming the one settles all of them at once.
+	 */
+	public function testAPageNamesTheWholeAddressItIsPublishedAt() {
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
+
+		$tags = $this->addressTags(Title::newFromText('Getting Started'));
+
+		$this->assertSame(
+			['link-canonical' => '<link rel="canonical" href="https://example.org/docs/Getting_Started.html">'],
+			$tags
+		);
+	}
+
+	/**
+	 * Both a canonical url and an hreflang value have to be whole, and a site that has not said
+	 * where it is published has no whole address to give. Naming the build container's own would
+	 * be worse than saying nothing.
+	 */
+	public function testWithoutASiteUrlThereIsNoWholeAddressToName() {
+		$this->overrideConfigValue('WikvenSiteUrl', '');
+
+		$this->assertSame([], $this->addressTags(Title::newFromText('Getting Started')));
+	}
+
+	/**
+	 * The licenses page is the one page on a site that is genuinely several languages without
+	 * Translate knowing it: the build writes the page and a copy per language the source tree is
+	 * translated into. Without this it would be the one page saying nothing about them.
+	 */
+	public function testTheLicensesPageNamesItsTranslations() {
+		$this->licensedSiteTranslatedIntoKorean();
+		$this->getExistingTestPage(Title::newFromText('Licenses/ko'));
+
+		$tags = $this->addressTags(Title::newFromText('Licenses'));
+
+		$this->assertSame([
+			'link-canonical' => '<link rel="canonical" href="https://example.org/docs/Licenses.html">',
+			'link-alternate-language-en' =>
+				'<link rel="alternate" hreflang="en" href="https://example.org/docs/Licenses.html">',
+			'link-alternate-language-ko' =>
+				'<link rel="alternate" hreflang="ko" href="https://example.org/docs/Licenses/ko.html">',
+			'link-alternate-language-x-default' =>
+				'<link rel="alternate" hreflang="x-default" href="https://example.org/docs/Licenses.html">'
+		], $tags);
+	}
+
+	/**
+	 * Every page of a set names the whole set, itself included, because a search engine reads them
+	 * as a group only where the group agrees on its own membership. What differs between them is
+	 * the canonical url, which is each page's own.
+	 */
+	public function testALicensesCopyNamesTheSameSetAsThePageItself() {
+		$this->licensedSiteTranslatedIntoKorean();
+		$this->getExistingTestPage(Title::newFromText('Licenses/ko'));
+
+		$page = $this->addressTags(Title::newFromText('Licenses'));
+		$copy = $this->addressTags(Title::newFromText('Licenses/ko'));
+
+		unset($page['link-canonical'], $copy['link-canonical']);
+		$this->assertSame($page, $copy);
+		$this->assertSame(
+			'<link rel="canonical" href="https://example.org/docs/Licenses/ko.html">',
+			$this->addressTags(Title::newFromText('Licenses/ko'))['link-canonical']
+		);
+	}
+
+	/**
+	 * A language the source tree is translated into is not by itself a licenses page in that
+	 * language. build.php writes a copy only for a language it can translate the page's own
+	 * messages into, and an alternate naming a page the export does not have is a link to a 404 --
+	 * in the head of every other page in the set, which is a set a search engine throws away whole.
+	 */
+	public function testALicensesCopyTheBuildDidNotWriteIsNotNamed() {
+		$this->licensedSiteTranslatedIntoKorean();
+
+		$tags = $this->addressTags(Title::newFromText('Licenses'));
+
+		$this->assertSame(['link-canonical'], array_keys($tags));
+	}
+
+	/** A subpage of the licenses page in no language of the site is a page of its own. */
+	public function testAPageUnderTheLicensesPageInNoLanguageIsNotACopy() {
+		$this->licensedSiteTranslatedIntoKorean();
+
+		$tags = $this->addressTags(Title::newFromText('Licenses/Notes'));
+
+		$this->assertSame(['link-canonical'], array_keys($tags));
+	}
+
+	/** @return array<string,string> */
+	private function addressTags(Title $title): array {
+		return TestingAccessWrapper::newFromObject($this->main())->addressTags($title);
+	}
+
+	/** A site with a licenses page, published, and one page translated into Korean. */
+	private function licensedSiteTranslatedIntoKorean(): void {
+		$source = $this->getNewTempDirectory();
+		mkdir("$source/Intro");
+		file_put_contents("$source/Intro.wikitext", "<translate>\n<!--T:1-->\nHi.\n</translate>\n");
+		file_put_contents("$source/Intro/ko.wikitext", "<!--T:1-->\n안녕.\n");
+		$this->overrideConfigValue('WikvenLicensesPage', 'Licenses');
+		$this->overrideConfigValue('WikvenSourceDirectory', $source);
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
+	}
+
 }
