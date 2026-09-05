@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.1.0](https://github.com/chaotic-ground/wikven/compare/v1.0.0...v1.1.0) (2026-09-05)
+
+
+### Features
+
+* let a site say where it will be published ([#621](https://github.com/chaotic-ground/wikven/issues/621)) ([6e458fd](https://github.com/chaotic-ground/wikven/commit/6e458fd43b3c24de7c0049eb59116711591bb6ec))
+* name the server a binary build ran on, on the licenses page ([#617](https://github.com/chaotic-ground/wikven/issues/617)) ([d68b969](https://github.com/chaotic-ground/wikven/commit/d68b9690c55ba2346143ebfd986179c20a55011b))
+* say which address a page is published at, and where its translations are ([#658](https://github.com/chaotic-ground/wikven/issues/658)) ([002260c](https://github.com/chaotic-ground/wikven/commit/002260cf123be835e0491a408f802d8b32ff6891))
+* write a sitemap for a site that says where it is published ([#623](https://github.com/chaotic-ground/wikven/issues/623)) ([b0ad0a1](https://github.com/chaotic-ground/wikven/commit/b0ad0a1fd0d456d9e55b09843c275ecca9d22da2))
+
+
+### Bugfixes
+
+* answer a caller that asked for a whole URL with one ([#630](https://github.com/chaotic-ground/wikven/issues/630)) ([effaada](https://github.com/chaotic-ground/wikven/commit/effaada091a7db3665886f7e58d6d485908fa72d))
+* give a picture named in a page's metadata an address that resolves ([#648](https://github.com/chaotic-ground/wikven/issues/648)) ([a2c3b32](https://github.com/chaotic-ground/wikven/commit/a2c3b321a0db7b784bb743e92286b6502fa234f9))
+* stop handing a reader the address of the machine that built the site ([#638](https://github.com/chaotic-ground/wikven/issues/638)) ([eac411d](https://github.com/chaotic-ground/wikven/commit/eac411d0297b6254c6224be5356f0c5ed03d06a6))
+* stop shipping a Caddy module wikven cannot use ([#619](https://github.com/chaotic-ground/wikven/issues/619)) ([e186a3d](https://github.com/chaotic-ground/wikven/commit/e186a3d0556172a668579f4e6fd867dafca3067b))
+* stop the preview answering for an address the site does not have ([#650](https://github.com/chaotic-ground/wikven/issues/650)) ([18e6b01](https://github.com/chaotic-ground/wikven/commit/18e6b01731f35eb415468eea2162cebea099bc56))
+* wait for the page before filling in the skins section ([#649](https://github.com/chaotic-ground/wikven/issues/649)) ([d615e2a](https://github.com/chaotic-ground/wikven/commit/d615e2a65b4ec675e3d99d89855c7a1b487f6ae9))
+
 ## 1.0.0 (2026-08-31)
 
 The first release.
