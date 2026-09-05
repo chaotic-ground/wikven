@@ -42,8 +42,13 @@ class StoreImages extends Maintenance {
 		// HTML reference => local "./img-*.ext" (or null on failure), deduping each reference.
 		$map = [];
 
-		// Match $wgUploadPath URLs; group 1 is the storage path, trailing ?query stripped from it.
-		$localPattern = '~(?:(?:https?:)?//[^/\s"]+)?' . preg_quote($wgUploadPath, '~') . '(/[^\s"?]+)(?:\?[^\s"]*)?~';
+		// Where the site is published, read through the config service: this step runs with
+		// MediaWiki fully up, so the settings file's excuse for reaching into globals is not one
+		// here. It decides nothing about which files are copied, only how a page names them.
+		$references = new UploadReference(
+			$wgUploadPath,
+			SiteUrl::fromWritten((string)$this->getConfig()->get('WikvenSiteUrl'))
+		);
 
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);
@@ -61,11 +66,9 @@ class StoreImages extends Maintenance {
 				$html
 			);
 
-			$html = preg_replace_callback(
-				$localPattern,
-				function ($m) use (&$map, $uploadDir, $htmlDir, $assetDirectory) {
-					// Key by storage path (no ?query) so sizes/timestamps of one file dedupe.
-					$path = $m[1];
+			$html = $references->rewrite(
+				$html,
+				function (string $path) use (&$map, $uploadDir, $htmlDir, $assetDirectory): ?string {
 					if (!array_key_exists($path, $map)) {
 						// The path came out of a page's rendered HTML, so it is whatever someone
 						// wrote there rather than something MediaWiki stored. Bound it to the
@@ -78,9 +81,8 @@ class StoreImages extends Maintenance {
 							? null
 							: $this->storeLocal($src, $path, $htmlDir, $assetDirectory);
 					}
-					return $map[$path] ?? $m[0];
-				},
-				$html
+					return $map[$path];
+				}
 			);
 
 			file_put_contents($file, $html, LOCK_EX);

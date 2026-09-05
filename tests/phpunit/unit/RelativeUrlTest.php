@@ -202,6 +202,46 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	/**
+	 * A schema.org block names a picture with the URL storeImages left there. Where the site has
+	 * said where it is published that is a whole URL and no depth applies to it; where it has not,
+	 * it is a path from the output root spelled the way json_encode() spells one, which the
+	 * attribute and bare "./" passes both walk straight past.
+	 */
+	public function testAJsonLdUrlFromTheOutputRootIsRebased() {
+		$this->assertSame(
+			'<script type="application/ld+json">{"url":"..\\/assets\\/img-abc.png"}</script>',
+			RelativeUrl::reparent(
+				'<script type="application/ld+json">{"url":".\\/assets\\/img-abc.png"}</script>',
+				1
+			)
+		);
+	}
+
+	public function testAJsonLdUrlGainsOneLevelPerDepth() {
+		$this->assertSame(
+			'<script type="application/ld+json">{"url":"..\\/..\\/assets\\/img-abc.png"}</script>',
+			RelativeUrl::reparent(
+				'<script type="application/ld+json">{"url":".\\/assets\\/img-abc.png"}</script>',
+				2
+			)
+		);
+	}
+
+	public function testAWholeJsonLdUrlIsLeftAlone() {
+		$html = '<script type="application/ld+json">{"url":"https:\\/\\/example.org\\/a.png"}</script>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
+	/**
+	 * The reason reparentConfigVars() is scoped to RLCONF, one escaping along: a bare string
+	 * carries no marker telling a URL of ours from a path a page merely shows.
+	 */
+	public function testAnEscapedPathOutsideAJsonLdBlockIsLeftAlone() {
+		$html = '<code>{"url":".\\/assets\\/img-abc.png"}</code>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
 	/** A page documenting the export's link shape writes the same string as prose. */
 	public function testAQuotedRootRelativePathInTheBodyIsLeftAlone() {
 		$html = '<pre>Title::getLocalURL() answers "./Page.html"</pre>';
