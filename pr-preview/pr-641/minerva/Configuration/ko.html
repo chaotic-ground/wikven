@@ -37,9 +37,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:site_name" content="Wikven">
 <meta property="og:url" content="https://chaotic-ground.github.io/wikven/Configuration/ko.html">
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
-<meta property="article:modified_time" content="2026-09-04T15:37:22Z">
-<meta property="article:published_time" content="2026-09-04T15:37:22Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\uc124\uc815 - Wikven","headline":"\uc124\uc815 - Wikven","mainEntityOfPage":"\uc124\uc815","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","dateModified":"2026-09-04T15:37:22Z","datePublished":"2026-09-04T15:37:22Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-05T00:29:06Z">
+<meta property="article:published_time" content="2026-09-05T00:29:06Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\uc124\uc815 - Wikven","headline":"\uc124\uc815 - Wikven","mainEntityOfPage":"\uc124\uc815","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/ko.html","dateModified":"2026-09-05T00:29:06Z","datePublished":"2026-09-05T00:29:06Z","image":[],"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration_ko rootpage-Configuration_ko skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -298,13 +298,18 @@ Wikven
 </p>
 <div class="mw-heading mw-heading3"><h3 id="WikvenPublishedImages"><code>WikvenPublishedImages</code></h3></div>
 <p><b>기본값:</b> 비어 있음
-</p><p>소스 디렉터리의 그림이 발행되는 주소를 건네받아야 할 설정 변수들입니다. 변수 이름과 파일 이름의 맵입니다:
+</p><p>소스 디렉터리의 그림이 발행되는 주소를 건네받아야 할 설정 변수들입니다. 변수 이름과 파일 이름의 맵입니다.
+</p><p>소셜 카드 — 누군가 이 사이트의 링크를 공유했을 때 함께 보이는 그림 — 를 넣고 싶다고 해봅시다. 그 태그는 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO">WikiSEO</a> 확장기능이 문서 head에 넣습니다. 위키에서라면 <code>LocalSettings.php</code>에 파일 이름을 적을 것입니다:
+</p>
+<div class="mw-highlight mw-highlight-lang-php mw-content-ltr" dir="ltr"><pre><span></span><span class="nv">$wgWikiSeoDefaultImage</span> <span class="o">=</span> <span class="s1">&#39;card.png&#39;</span><span class="p">;</span>
+</pre></div>
+<p>여기서는 대신 이 설정을 통해 적습니다:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">WikvenPublishedImages</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">wgWikiSeoDefaultImage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">card.png</span>
 </pre></div>
-<p>위 예시는 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO">WikiSEO</a> 확장기능에 소셜 카드 — 누군가 이 사이트의 링크를 공유했을 때 함께 보이는 그림 — 를 건넵니다. 하지만 이 설정에서 WikiSEO에 관한 것은 아무것도 없습니다. 키는 사용하는 확장기능이 읽는 변수이고, Wikven은 그것에 대해 아무것도 알 필요가 없습니다.
+<p>다만 이 설정에서 WikiSEO에 관한 것은 아무것도 없습니다. 키는 사용하는 확장기능이 읽는 변수이고, Wikven은 그것에 대해 아무것도 알 필요가 없습니다.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r92">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>키는 <b>접두사까지</b> 적습니다 — <code>WikiSeoDefaultImage</code>가 아니라 <code>wgWikiSeoDefaultImage</code>입니다. <code>config</code> 아래에 직접 쓰는 설정은 접두사 없이 적으니, 그것과는 다릅니다. <code>wg</code>가 흔하지만 전부는 아니어서 <code>eg</code>나 <code>smwg</code>를 쓰는 확장기능도 있습니다. 이름은 해당 확장기능의 문서에서 확인하세요.</p></div>
 </div>
@@ -421,8 +426,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1788536242">
-  				<span>2026년 9월 4일 (금) 15:37에 마지막으로 편집됨</span>
+  				data-timestamp="1788568146">
+  				<span>2026년 9월 5일 (토) 00:29에 마지막으로 편집됨</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -445,7 +450,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 9월 4일 (금) 15:37에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 9월 5일 (토) 00:29에 마지막으로 편집되었습니다.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
