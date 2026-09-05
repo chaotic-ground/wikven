@@ -9,7 +9,6 @@ extensions:
   - SyntaxHighlight_GeSHi
   - TabberNeue
   - TemplateStyles
-  # Where WikiSEO gets a page's description from; see WikiSeoEnableAutoDescription below.
   - TextExtracts
   - Translate
   - WikiSEO
