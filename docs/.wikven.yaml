@@ -9,6 +9,7 @@ extensions:
   - SyntaxHighlight_GeSHi
   - TabberNeue
   - TemplateStyles
+  - TextExtracts
   - Translate
   - WikiSEO
   - UniversalLanguageSelector
@@ -31,6 +32,17 @@ config:
   # moves the file into the asset directory and takes those addresses with it. Drawn from the logo,
   # at the 1200x630 a social platform lays out above the title rather than beside it.
   WikiSeoDefaultImage: card.png
+  # The sentence a search engine shows under the result. Without it the snippet is assembled from
+  # whatever text the crawler picks, which on a documentation page is often a navigation fragment.
+  # WikiSEO asks TextExtracts for the page's lead and stores that, so no page has to write its own;
+  # a page whose lead is not prose gets no description rather than a bad one, and can still say what
+  # it wants with {{#seo:|description=}}.
+  #
+  # WikiSeoTryCleanAutoDescription is deliberately not set with it. It is meant to cut a truncated
+  # sentence back to the last full stop, but it only runs when the text does not already end in one
+  # -- and TextExtracts ends a truncated extract with "...", so it never runs. What it does do is
+  # turn an empty extract into a description of ".", which is worse than the tag being absent.
+  WikiSeoEnableAutoDescription: true
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1

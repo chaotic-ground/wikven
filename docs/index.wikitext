@@ -1,6 +1,11 @@
 __NOTOC__
 {{home}}
 
+<translate>
+<!--T:38-->
+{{#seo:|description={{SITENAME}} renders your wikitext through MediaWiki at build time and writes out plain HTML. Nothing runs behind the published site.}}
+</translate>
+
 <div class="wikven-home-hero">
 <div class="wikven-home-tagline">
 <translate>
