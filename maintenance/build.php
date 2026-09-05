@@ -471,8 +471,7 @@ class Build extends Maintenance {
 
 		$queued = $skins;
 		$running = [];
-		$failed = [];
-		$written = [];
+		$finished = [];
 		while ($queued || $running) {
 			while ($queued && count($running) < $limit) {
 				$skin = array_shift($queued);
@@ -490,34 +489,16 @@ class Build extends Maintenance {
 				// process's own stdout as they go would interleave into something no one could
 				// attribute a failure from, and the log is how a bake is debugged.
 				$this->reportPass($skin, $running[$skin], $exit);
-				$wrote = SkinPass::pagesWritten($running[$skin]['output'][1]);
-				if ($exit !== 0) {
-					$failed[] = "$skin (exit $exit)";
-				} elseif ($wrote === null) {
-					// It returned success and did not finish; SkinPass says how both.
-					$failed[] = "$skin (stopped before the end of its work)";
-				} else {
-					$written[$skin] = $wrote;
-				}
+				$finished[$skin] = ['exit' => $exit, 'output' => $running[$skin]['output'][1]];
 				unset($running[$skin]);
 			}
 		}
 
 		$this->removeDatabaseCopies($databases);
-		if ($failed) {
-			$this->fatalError('Wikven: build failed for skin ' . implode(', ', $failed));
-		}
-		// Every pass renders the same wiki, which nothing has written to since it was frozen, so a
-		// pass that produced a different number of pages from its siblings did not render all of
-		// it -- and it said so only because it was asked.
-		if (count(array_unique($written)) > 1) {
-			$parts = [];
-			foreach ($written as $skin => $count) {
-				$parts[] = "$skin wrote $count";
-			}
-			$this->fatalError(
-				'Wikven: the skin passes disagree on how much of the site there is: ' . implode(', ', $parts)
-			);
+		// What the passes returned is not enough to tell a finished one from a dead one; SkinPass
+		// weighs that with what they said, and answers in the words to stop on.
+		foreach (SkinPass::failures($finished) as $failure) {
+			$this->fatalError($failure);
 		}
 	}
 

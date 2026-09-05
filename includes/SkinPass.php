@@ -31,4 +31,42 @@ class SkinPass {
 		$pattern = '/^' . preg_quote(self::WROTE, '/') . ' (\d+) page\(s\)$/m';
 		return preg_match($pattern, $output, $matched) === 1 ? (int)$matched[1] : null;
 	}
+
+	/**
+	 * What is wrong with a set of finished passes, said in the words a build stops on.
+	 *
+	 * Three questions, and the second is the one this class exists for: did the pass return
+	 * success, did it say it finished, and do the passes agree on how much of the site there is.
+	 * The third is nearly free -- every pass renders the same wiki, which nothing has written to
+	 * since it was frozen, so passes that report different numbers have not all rendered it.
+	 *
+	 * @param array<string,array{exit:int,output:string}> $passes Skin name to what it returned and said.
+	 * @return string[] Empty where every pass finished and they agree.
+	 */
+	public static function failures(array $passes): array {
+		$failed = [];
+		$written = [];
+		foreach ($passes as $skin => $pass) {
+			$wrote = self::pagesWritten($pass['output']);
+			if ($pass['exit'] !== 0) {
+				$failed[] = "$skin (exit {$pass['exit']})";
+			} elseif ($wrote === null) {
+				// It returned success and did not finish; the class comment says how both.
+				$failed[] = "$skin (stopped before the end of its work)";
+			} else {
+				$written[$skin] = $wrote;
+			}
+		}
+		if ($failed) {
+			return ['Wikven: build failed for skin ' . implode(', ', $failed)];
+		}
+		if (count(array_unique($written)) < 2) {
+			return [];
+		}
+		$parts = [];
+		foreach ($written as $skin => $count) {
+			$parts[] = "$skin wrote $count";
+		}
+		return ['Wikven: the skin passes disagree on how much of the site there is: ' . implode(', ', $parts)];
+	}
 }

@@ -53,4 +53,94 @@ class SkinPassTest extends MediaWikiUnitTestCase {
 	public function testTheLineIsNotMatchedInsideAnotherOne() {
 		$this->assertNull(SkinPass::pagesWritten('see where Wikven: this pass wrote 74 page(s) is'));
 	}
+
+	/** A run where every pass finished and they saw the same site has nothing to say. */
+	public function testPassesThatAgreeAreNoFailure() {
+		$this->assertSame(
+			[],
+			SkinPass::failures([
+				'vector-2022' => ['exit' => 0, 'output' => SkinPass::wrote(74)],
+				'citizen' => ['exit' => 0, 'output' => SkinPass::wrote(74)],
+				'minerva' => ['exit' => 0, 'output' => SkinPass::wrote(74)]
+			])
+		);
+	}
+
+	/** One pass is a run too, and has nobody to disagree with. */
+	public function testOnePassThatFinishedIsEnough() {
+		$this->assertSame(
+			[],
+			SkinPass::failures([
+				'vector-2022' => ['exit' => 0, 'output' => SkinPass::wrote(7)]
+			])
+		);
+	}
+
+	/**
+	 * The failure this class exists for: the pass returned success and never reached the end, and
+	 * the exit code is the one thing that cannot tell you so.
+	 */
+	public function testAPassThatReturnedSuccessWithoutFinishingIsAFailure() {
+		$this->assertSame(
+			['Wikven: build failed for skin citizen (stopped before the end of its work)'],
+			SkinPass::failures([
+				'vector-2022' => ['exit' => 0, 'output' => SkinPass::wrote(74)],
+				'citizen' => ['exit' => 0, 'output' => "Cached page 'index' (id 1)...\n"]
+			])
+		);
+	}
+
+	/** An exit code that does say so is still read, and named for what it is. */
+	public function testAPassThatReturnedFailureIsNamedByItsCode() {
+		$this->assertSame(
+			['Wikven: build failed for skin minerva (exit 137)'],
+			SkinPass::failures([
+				'minerva' => ['exit' => 137, 'output' => ''],
+				'vector-2022' => ['exit' => 0, 'output' => SkinPass::wrote(74)]
+			])
+		);
+	}
+
+	/** Every pass that went wrong is named, because a reader fixing one wants to see the rest. */
+	public function testAllTheFailedPassesAreNamedAtOnce() {
+		$this->assertSame(
+			[
+				'Wikven: build failed for skin vector-2022 (stopped before the end of its work), '
+					. 'citizen (stopped before the end of its work)'
+			],
+			SkinPass::failures([
+				'vector-2022' => ['exit' => 0, 'output' => ''],
+				'citizen' => ['exit' => 0, 'output' => '']
+			])
+		);
+	}
+
+	/**
+	 * Every pass renders the same wiki, frozen before any of them started, so passes that report
+	 * different numbers have not all rendered it -- even though each one finished and said so.
+	 */
+	public function testPassesThatDisagreeOnHowMuchOfTheSiteThereIsAreAFailure() {
+		$this->assertSame(
+			[
+				'Wikven: the skin passes disagree on how much of the site there is: '
+					. 'vector-2022 wrote 74, citizen wrote 15'
+			],
+			SkinPass::failures([
+				'vector-2022' => ['exit' => 0, 'output' => SkinPass::wrote(74)],
+				'citizen' => ['exit' => 0, 'output' => SkinPass::wrote(15)]
+			])
+		);
+	}
+
+	/** A pass that did not finish is the better complaint, so it is the one made. */
+	public function testAPassThatStoppedIsReportedRatherThanTheDisagreementItCauses() {
+		$this->assertSame(
+			['Wikven: build failed for skin citizen (stopped before the end of its work)'],
+			SkinPass::failures([
+				'vector-2022' => ['exit' => 0, 'output' => SkinPass::wrote(74)],
+				'citizen' => ['exit' => 0, 'output' => 'nothing'],
+				'minerva' => ['exit' => 0, 'output' => SkinPass::wrote(15)]
+			])
+		);
+	}
 }
