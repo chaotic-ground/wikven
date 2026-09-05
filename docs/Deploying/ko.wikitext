@@ -31,6 +31,24 @@
 <!--T:7 @4b653cc4-->
 <code>dist/</code>는 그저 파일 모음이므로, 어떤 정적 호스트([$1 Netlify], [$2 Cloudflare Pages], [$3 S3] 같은 객체 저장소, 또는 평범한 웹 서버)에서도 제공할 수 있습니다. CI나 로컬에서 사이트를 빌드한 뒤, 호스트가 <code>dist/</code> 디렉터리를 가리키게 하거나 그 내용을 서버의 문서 루트에 업로드하세요.
 
+<!--T:27 @cf7f4a52-->
+=== 호스트마다 주소를 어떻게 다루는가 ===
+
+<!--T:28 @f5ae4cac-->
+문서는 곧 파일입니다. {{SITENAME}}은 <code>Getting_Started/index.html</code>이 아니라 <code>Getting_Started.html</code>을 쓰고, 문서가 지니는 링크는 모두 그 파일이 놓인 자리를 기준으로 한 상대 주소입니다. 그래서 파일을 제공하는 호스트라면 어디서든 설정할 것 없이 사이트가 동작합니다.
+
+<!--T:29 @10e9c4db-->
+어떤 호스트는 확장자 없는 주소에도 답해서, <code>/Getting_Started</code>가 <code>/Getting_Started.html</code>과 같은 문서에 닿습니다. GitHub Pages, [$1 GitLab Pages], Cloudflare Pages는 그렇게 하고, [$2 Codeberg Pages]와 객체 저장소, 평범한 웹 서버는 그렇게 하지 않습니다. {{SITENAME}}이 쓰는 링크에는 확장자가 붙어 있으므로 어느 쪽이든 사이트는 동작합니다. 이 차이는 누군가 손으로 적거나 공유한 주소에서만 드러납니다.
+
+<!--T:30 @810e8299-->
+'''Netlify'''는 무언가를 꺼야 하는 유일한 곳입니다. 기본으로 켜져 있는 [$3 Pretty URLs]가 <code>/Getting_Started</code>를 <code>/Getting_Started/</code>로 넘기고, <code>/Getting_Started.html</code>도 같은 주소로 다시 씁니다. {{SITENAME}}은 <code>Getting_Started/</code> 디렉터리를 만들지 않으므로, 그 주소에서 제공되는 문서는 자기 링크가 기대하는 것보다 한 단계 깊은 곳에 놓이고 스타일시트와 그림이 아무 데도 닿지 않습니다. Project configuration → Build & deploy → Post processing에 있습니다.
+
+<!--T:31 @e79851d9-->
+'''Cloudflare Pages'''는 끊어진 링크를 감춥니다. 사이트에 <code>404.html</code>이 없으면, 사이트에 없는 주소에 대해 그 사이트를 단일 페이지 애플리케이션으로 보고 대문을 200으로 돌려줍니다. 그러면 낡았거나 잘못 적힌 링크가 멀쩡한 링크처럼 보입니다.
+
+<!--T:32 @5019cd96-->
+그러니 오류 문서가 필요한지는 호스트에 달렸습니다. 자기 오류 문서를 보여 주는 곳도 있고, Cloudflare Pages는 당신의 오류 문서 아니면 당신의 대문을 보여 줍니다. 소스 트리에 <code>404</code>라는 이름의 문서를 두면 빌드가 <code>dist/404.html</code>을 쓰고, GitHub Pages와 GitLab Pages, Codeberg Pages가 없는 주소에 대해 그 파일을 제공합니다. 그 문서에는 <code><nowiki>__NOINDEX__</nowiki></code>를 넣으십시오. 사이트맵은 색인해 달라는 초대이고, 오류 문서는 누구도 초대할 문서가 아닙니다.
+
 <!--T:8 @4a3c7f11-->
 <span id="preview-locally"></span>
 == 로컬에서 미리 보기 ==
