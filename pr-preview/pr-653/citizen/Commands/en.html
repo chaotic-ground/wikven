@@ -37,9 +37,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-05T08:51:43Z">
-<meta property="article:published_time" content="2026-09-05T08:51:43Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Commands - Wikven","headline":"Commands - Wikven","mainEntityOfPage":"Commands","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/en.html","dateModified":"2026-09-05T08:51:43Z","datePublished":"2026-09-05T08:51:43Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-05T09:02:04Z">
+<meta property="article:published_time" content="2026-09-05T09:02:04Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Commands - Wikven","headline":"Commands - Wikven","mainEntityOfPage":"Commands","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/en.html","dateModified":"2026-09-05T09:02:04Z","datePublished":"2026-09-05T09:02:04Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Commands_en rootpage-Commands_en skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
@@ -481,7 +481,7 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 </pre></div>
 <p class="mw-empty-elt"></p></div></div></div>
 <p>Only the binary takes <code>--listen</code>; the container always listens on 8080 inside, and you choose the outside port with Docker's own <code>-p</code>.
-</p><p>One word, two servers. Neither product chose one: each serves with what it already is. The image is a PHP runtime with no HTTP server in it — that is the choice that makes it 873MB rather than 1.5GB — so it serves with the one PHP itself carries. The binary is <a rel="nofollow" class="external text" href="https://frankenphp.dev/">FrankenPHP</a>, which is a web server with PHP inside, so it serves with the server it is built out of. Putting a static server in the image would undo the first; running PHP's server from the binary would ignore the second.
+</p><p>Each product serves with the server it already has, and those are not the same server. The image is a PHP runtime with no HTTP server in it, which is the choice that makes it 873MB rather than 1.5GB, so it serves with the one PHP itself carries. The binary is <a rel="nofollow" class="external text" href="https://frankenphp.dev/">FrankenPHP</a>, a web server with PHP inside, so it serves with the server it is built out of. Putting a static server in the image would undo the first of those; running PHP's own server from the binary would ignore the second.
 </p><p>Both answer the same addresses, and both serve the files the export contains and nothing else. Where they differ is in how a header is spelled — a stylesheet is <code>text/css; charset=UTF-8</code> from one and <code>text/css; charset=utf-8</code> from the other, which name the same thing — so a preview from either shows you the site you are about to publish.
 </p><p><span id="translate"></span>
 </p>
@@ -656,7 +656,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/en.wikitext" title="This page was last edited on 5 September 2026, at 08:51." data-timestamp="1788598303"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>5 September 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Commands/en.wikitext" title="This page was last edited on 5 September 2026, at 09:02." data-timestamp="1788598924"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>5 September 2026</span></a></li>
 			
 		</ul>
 		
@@ -797,7 +797,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 5 September 2026, at 08:51.</div>
+		        <div class="page-info__text"> This page was last edited on 5 September 2026, at 09:02.</div>
 		    </section>
 		</div>
 </footer>		</div>
