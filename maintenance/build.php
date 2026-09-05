@@ -472,6 +472,7 @@ class Build extends Maintenance {
 		$queued = $skins;
 		$running = [];
 		$failed = [];
+		$written = [];
 		while ($queued || $running) {
 			while ($queued && count($running) < $limit) {
 				$skin = array_shift($queued);
@@ -489,8 +490,14 @@ class Build extends Maintenance {
 				// process's own stdout as they go would interleave into something no one could
 				// attribute a failure from, and the log is how a bake is debugged.
 				$this->reportPass($skin, $running[$skin], $exit);
+				$wrote = SkinPass::pagesWritten($running[$skin]['output'][1]);
 				if ($exit !== 0) {
 					$failed[] = "$skin (exit $exit)";
+				} elseif ($wrote === null) {
+					// It returned success and did not finish; SkinPass says how both.
+					$failed[] = "$skin (stopped before the end of its work)";
+				} else {
+					$written[$skin] = $wrote;
 				}
 				unset($running[$skin]);
 			}
@@ -499,6 +506,18 @@ class Build extends Maintenance {
 		$this->removeDatabaseCopies($databases);
 		if ($failed) {
 			$this->fatalError('Wikven: build failed for skin ' . implode(', ', $failed));
+		}
+		// Every pass renders the same wiki, which nothing has written to since it was frozen, so a
+		// pass that produced a different number of pages from its siblings did not render all of
+		// it -- and it said so only because it was asked.
+		if (count(array_unique($written)) > 1) {
+			$parts = [];
+			foreach ($written as $skin => $count) {
+				$parts[] = "$skin wrote $count";
+			}
+			$this->fatalError(
+				'Wikven: the skin passes disagree on how much of the site there is: ' . implode(', ', $parts)
+			);
 		}
 	}
 
@@ -740,7 +759,7 @@ class Build extends Maintenance {
 		// Minerva takes no navigation from the sidebar, so its menu is filled in the rendered pages.
 		$this->step(FillMinervaMenu::class, "$own/fillMinervaMenu.php");
 		$this->step(StoreImages::class, "$own/storeImages.php");
-		$this->step(Rename::class, "$own/rename.php");
+		$named = $this->nameCachedPages("$own/rename.php");
 		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
 		$this->step(ResolveTranslationLinks::class, "$own/resolveTranslationLinks.php");
 		// After the pages have their final names and links, so what the sitemap names is what the
@@ -763,6 +782,9 @@ class Build extends Maintenance {
 		if ($searchBundle !== null) {
 			$this->copySearchBundle($searchBundle);
 		}
+
+		// After everything, because that is the whole of what it says; see SkinPass.
+		$this->output(SkinPass::wrote($named) . "\n");
 	}
 
 	/**
@@ -905,8 +927,25 @@ class Build extends Maintenance {
 		rmdir($dir);
 	}
 
-	/** Run one build step as a child maintenance script, applying $options first. */
-	private function step(string $class, string $file, array $options = []): void {
+	/**
+	 * Name the cached pages, and say how many there were.
+	 *
+	 * The number is this pass's own account of what it produced, and the pass above has no other
+	 * way to come by it; see SkinPass.
+	 */
+	private function nameCachedPages(string $file): int {
+		$rename = $this->step(Rename::class, $file);
+		// createChild() is typed to Maintenance, and this is the one step whose answer is read.
+		return $rename instanceof Rename ? $rename->named : 0;
+	}
+
+	/**
+	 * Run one build step as a child maintenance script, applying $options first.
+	 *
+	 * The child is handed back for the one caller that wants a number out of it; every other one
+	 * runs the step for its effect and drops it.
+	 */
+	private function step(string $class, string $file, array $options = []): Maintenance {
 		$child = $this->createChild($class, $file);
 		foreach ($options as $name => $value) {
 			$child->setOption($name, $value);
@@ -915,6 +954,7 @@ class Build extends Maintenance {
 		if ($child->execute() === false) {
 			$this->fatalError("Wikven: $class reported failures; aborting the build.");
 		}
+		return $child;
 	}
 
 	/**

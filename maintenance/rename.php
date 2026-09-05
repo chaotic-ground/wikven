@@ -20,6 +20,14 @@ require_once "$IP/maintenance/Maintenance.php";
  * the same destination, because it asked the same class from the other side.
  */
 class Rename extends Maintenance {
+	/**
+	 * How many pages this pass named, for the caller that has to say what the pass produced.
+	 *
+	 * The build reads it back out of the object it ran; see Build::renderSkin(), which is what
+	 * turns a number nobody was checking into the pass's proof that it finished.
+	 */
+	public int $named = 0;
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Move each cached page to the file the site is served from');
@@ -45,6 +53,7 @@ class Rename extends Maintenance {
 			$this->place($path, $filename, $name);
 			$moved++;
 		}
+		$this->named = $moved;
 		$this->output("Wikven: named $moved cached page(s) as the site serves them\n");
 	}
 
