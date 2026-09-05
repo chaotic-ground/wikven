@@ -3,15 +3,20 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
 use MediaWiki\Extension\Wikven\AssetFile;
 use MediaWiki\Extension\Wikven\BuildFor;
+use MediaWiki\Extension\Wikven\LicensesPage;
 use MediaWiki\Extension\Wikven\OutputName;
+use MediaWiki\Extension\Wikven\PageTranslation\TranslationFamily;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SiteUrl;
 use MediaWiki\Extension\Wikven\SourceFile;
 use MediaWiki\Html\Html;
+use MediaWiki\Language\LanguageCode;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\ResourceLoader;
@@ -36,6 +41,9 @@ class Main implements
 
 	/** Where the site says it will be published, unknown where it has not said. */
 	private SiteUrl $siteUrl;
+
+	/** The licenses page's per-language copies, read from the source tree once; see licensesCluster(). */
+	private ?array $licensesCopies = null;
 
 	public function __construct(Config $config) {
 		$this->config = $config;
@@ -459,21 +467,187 @@ class Main implements
 			}
 		}
 
-		// Non-main skins duplicate every page; point canonical at the main skin's copy one dir up.
-		$mainSkin = $GLOBALS['wgWikvenMainSkin'] ?? null;
 		$title = $out->getTitle();
-		if (
-			MW_ENTRY_POINT === 'cli'
-			&& $mainSkin
-			&& $title
-			&& $out->getSkin()->getSkinName() !== $mainSkin
-		) {
-			$href = OutputName::href(OutputName::of(...$this->nameFor($title)));
-			$tags['link-canonical'] = Html::element('link', [
+		if (MW_ENTRY_POINT === 'cli' && $title) {
+			$tags = array_merge($tags, $this->addressTags($title, $out->getSkin()->getSkinName()));
+		}
+	}
+
+	/**
+	 * What the head says about this document's own address, and about its translations.
+	 *
+	 * Every page is written once per skin and served at more than one address besides: a host that
+	 * answers /Development for Development.html gives the same document two of them, and nothing in
+	 * the page said which one it is. A whole canonical url settles all of it at once -- the skin
+	 * copies, the extension-less form, and any other spelling a host invents -- because it names
+	 * the one address rather than ruling the others out one at a time.
+	 *
+	 * Both a canonical url and an hreflang value have to be whole, so where the site has not said
+	 * where it is published there is no set to write and only the skin copies have anything left
+	 * to say; see duplicatedByThisSkin().
+	 *
+	 * @param Title $title The page being rendered.
+	 * @param string $skin The skin rendering this copy of it.
+	 * @return array<string,string>
+	 */
+	private function addressTags(Title $title, string $skin): array {
+		if (!$this->siteUrl->isKnown()) {
+			return $this->duplicatedByThisSkin($title, $skin);
+		}
+		$cluster = $this->cluster($title);
+		$tags = [
+			'link-canonical' => Html::element('link', [
+				'rel' => 'canonical',
+				'href' => $cluster['owner']->getFullURL()
+			])
+		];
+		// A set of one is the page saying it is the only language it has, which is what a page
+		// with no translations already says by carrying no set at all.
+		if (count($cluster['languages']) < 2) {
+			return $tags;
+		}
+		// Every page in the set names the whole set, itself included, or a search engine ignores
+		// the set: it reads them as a group only where the group agrees on its own membership.
+		foreach ($cluster['languages'] as $code => $page) {
+			$tags[self::alternateKey($code)] = self::alternate($code, $page->getFullURL());
+		}
+		// The address a reader reaches who is not any of these languages. That is the source page:
+		// it is the one every link in the export names, and the one a language bar starts from.
+		$tags[self::alternateKey('x-default')] = self::alternate('x-default', $cluster['source']->getFullURL());
+		return $tags;
+	}
+
+	/**
+	 * What a page can still say about its address with no whole one to give.
+	 *
+	 * A skin copy duplicates the main skin's copy of the same page, and that one is in the export
+	 * beside it, so it can be pointed at from one directory up without knowing where the site is
+	 * published. The main skin's own copy has nothing to say here: the addresses it would be
+	 * distinguishing itself from are a host's invention, and naming one needs the site's address.
+	 *
+	 * @return array<string,string>
+	 */
+	private function duplicatedByThisSkin(Title $title, string $skin): array {
+		$mainSkin = (string)( $GLOBALS['wgWikvenMainSkin'] ?? '' );
+		if ($mainSkin === '' || $skin === $mainSkin) {
+			return [];
+		}
+		$href = OutputName::href(OutputName::of(...$this->nameFor($title)));
+		return [
+			'link-canonical' => Html::element('link', [
 				'rel' => 'canonical',
 				'href' => "../$href"
-			]);
+			])
+		];
+	}
+
+	/** Core's own key for one of these, so a variant link and this cannot both claim a language. */
+	private static function alternateKey(string $hreflang): string {
+		return 'link-alternate-language-' . strtolower($hreflang);
+	}
+
+	private static function alternate(string $hreflang, string $href): string {
+		return Html::element('link', [
+			'rel' => 'alternate',
+			'hreflang' => $hreflang === 'x-default' ? $hreflang : LanguageCode::bcp47($hreflang),
+			'href' => $href
+		]);
+	}
+
+	/**
+	 * The pages this document shares its content with: which one owns it, and one page per language.
+	 *
+	 * A translatable page is three or more pages. "Development" is the source, written in whatever
+	 * language its author wrote it in, and "Development/ko" is the Korean one. Translate also makes
+	 * a translation page for the source's own language -- "Development/en" -- and that page is the
+	 * source page's article again, word for word, at a second address.
+	 *
+	 * hreflang has no way to say that a language is at two addresses, so one of them has to own the
+	 * language, and it is the source page: every link in the export names it, and "/en" is reached
+	 * only from a language bar. So the source page is what "en" points at, and "/en" says the
+	 * source page is where its content really lives.
+	 *
+	 * @return array{owner:Title,source:Title,languages:array<string,Title>}
+	 */
+	private function cluster(Title $title): array {
+		// Before the question below, because this family is the build's own doing: the copies are
+		// there whether or not Translate is, and asking Translate about them would answer no.
+		$licensed = $this->licensesCluster($title);
+		if ($licensed !== null) {
+			return $licensed;
 		}
+		$alone = ['owner' => $title, 'source' => $title, 'languages' => []];
+		if (!ExtensionRegistry::getInstance()->isLoaded('Translate')) {
+			return $alone;
+		}
+		$translation = TranslatablePage::isTranslationPage($title);
+		if ($translation !== false) {
+			$page = $translation;
+		} elseif (TranslatablePage::isSourcePage($title)) {
+			$page = TranslatablePage::newFromTitle($title);
+		} else {
+			return $alone;
+		}
+		$source = $page->getTitle();
+		$sourceKey = $source->getDBkey();
+		$sourceLanguage = $page->getSourceLanguageCode();
+		$pages = [$sourceKey => $source];
+		foreach ($page->getTranslationPages() as $translationPage) {
+			$pages[$translationPage->getDBkey()] = $translationPage;
+		}
+		$owner = TranslationFamily::owner($title->getDBkey(), $sourceKey, $sourceLanguage);
+		$languages = [];
+		foreach (TranslationFamily::byLanguage($sourceKey, $sourceLanguage, array_keys($pages)) as $code => $key) {
+			$languages[$code] = $pages[$key];
+		}
+		return [
+			'owner' => $pages[$owner] ?? $title,
+			'source' => $source,
+			'languages' => $languages
+		];
+	}
+
+	/**
+	 * The licenses page's family, which is not Translate's.
+	 *
+	 * The build writes that page and a copy per language the source tree translates into, so they
+	 * are ordinary pages that Translate has never heard of -- and without this the one page on the
+	 * site that is genuinely three languages would be the one page saying nothing about them.
+	 *
+	 * LicensesPage answers which titles those are; the set of copies is read from the source tree,
+	 * so it is asked once and kept. Every page of every skin pass comes through here.
+	 *
+	 * @return ?array{owner:Title,source:Title,languages:array<string,Title>} Null where the title
+	 *   is not part of that family.
+	 */
+	private function licensesCluster(Title $title): ?array {
+		$page = LicensesPage::title();
+		if ($page === null) {
+			return null;
+		}
+		$services = MediaWikiServices::getInstance();
+		$isKnownLanguage = [$services->getLanguageNameUtils(), 'isKnownLanguageTag'];
+		if (LicensesPage::generatedLanguage($title, $isKnownLanguage) === null && !$title->equals($page)) {
+			return null;
+		}
+		// Only the copies that are really there. LicensesPage reads the source tree, which says
+		// which languages the site is translated into; build.php writes a copy per language it
+		// could translate the page's messages into, and without Translate that is none of them.
+		// An alternate naming a page the export does not have is a link to a 404 in every other
+		// page's head, and a set with one of those in it is a set a search engine throws away.
+		$this->licensesCopies ??= array_filter(
+			LicensesPage::generatedCopies(
+				(string)$this->config->get('WikvenSourceDirectory'),
+				$isKnownLanguage
+			),
+			static function (Title $copy): bool {
+				return $copy->exists();
+			}
+		);
+		// The page itself is the content language's copy: the build writes it from this wiki's own
+		// messages, and asks for a translation of them only for the copies.
+		$languages = [$services->getContentLanguage()->getCode() => $page] + $this->licensesCopies;
+		return ['owner' => $title, 'source' => $page, 'languages' => $languages];
 	}
 
 	private function addStyleToList(string $name): void {
