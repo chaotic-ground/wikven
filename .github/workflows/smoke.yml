@@ -157,6 +157,38 @@ jobs:
           print('og:url is absolute on every page that carries one')
           PY
 
+          # The card a shared link shows has to be an absolute URL -- read by something that never
+          # saw the page -- AND has to name a file this build actually wrote. Both halves are
+          # asserted, because either alone passes while the card is broken: WikiSEO builds the URL
+          # under MediaWiki's upload path, which the export does not serve, and storeImages moves it
+          # to the published file. Get one half of that wrong and the tag is either a relative URL
+          # no crawler can resolve or an absolute one pointing at nothing.
+          python3 - <<'PY'
+          import glob, os, re, sys
+          from urllib.parse import urlparse
+          site = 'https://chaotic-ground.github.io/wikven/'
+          missing, relative, seen = [], [], 0
+          for path in glob.glob('dist/**/*.html', recursive=True):
+              with open(path, encoding='utf-8') as handle:
+                  head = handle.read().split('</head>', 1)[0]
+              found = re.search(r'<meta property="og:image" content="([^"]*)"', head)
+              if not found:
+                  continue
+              seen += 1
+              url = found.group(1)
+              if urlparse(url).scheme not in ('http', 'https'):
+                  relative.append((path, url))
+              elif url.startswith(site) and not os.path.isfile('dist/' + url[len(site):]):
+                  missing.append((path, url))
+          if relative:
+              sys.exit(f'og:image is not an absolute URL on {len(relative)} page(s): {relative[:3]}')
+          if missing:
+              sys.exit(f'og:image names a file the build did not write, on {len(missing)} page(s): {missing[:3]}')
+          if not seen:
+              sys.exit('no page carries an og:image; the site names a social image, so one is expected')
+          print(f'og:image is absolute and points at a written file on {seen} page(s)')
+          PY
+
           # Nothing a reader is handed may name the machine that built it. The build installs
           # against http://localhost:4000 and every step is a maintenance script, so any address
           # that reaches the output through $wgServer is the container's, not the site's. Two
