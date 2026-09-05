@@ -91,6 +91,24 @@ Enable Pages for the repository under '''Settings → Pages → Build and deploy
 <!--T:7-->
 Because <code>dist/</code> is just files, you can serve it from any static host ([<tvar name="1">https://www.netlify.com/</tvar> Netlify], [<tvar name="2">https://pages.cloudflare.com/</tvar> Cloudflare Pages], an object store like [<tvar name="3">https://aws.amazon.com/s3/</tvar> S3], or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
 
+<!--T:27-->
+=== What each host does with the addresses ===
+
+<!--T:28-->
+A page is a file. {{SITENAME}} writes <code>Getting_Started.html</code> rather than <code>Getting_Started/index.html</code>, and every link a page carries is relative to where that file sits. So any host that serves files serves the site, with nothing to configure.
+
+<!--T:29-->
+Some hosts also answer the address without the extension, so that <code>/Getting_Started</code> reaches the same page as <code>/Getting_Started.html</code>. GitHub Pages, [<tvar name="1">https://docs.gitlab.com/user/project/pages/</tvar> GitLab Pages] and Cloudflare Pages do; [<tvar name="2">https://codeberg.page/</tvar> Codeberg Pages], an object store and a plain web server do not. The site works either way, because the links {{SITENAME}} writes carry the extension; it matters only for an address somebody types or shares by hand.
+
+<!--T:30-->
+'''Netlify''' is the one to turn something off on. Its [<tvar name="3">https://docs.netlify.com/manage/routing/redirects/redirect-options/</tvar> Pretty URLs], on by default, forward <code>/Getting_Started</code> to <code>/Getting_Started/</code> and rewrite <code>/Getting_Started.html</code> to the same address. {{SITENAME}} writes no <code>Getting_Started/</code> directory, so a page served there sits one directory deeper than its own links expect, and its stylesheets and pictures resolve to nothing. It is under Project configuration → Build & deploy → Post processing.
+
+<!--T:31-->
+'''Cloudflare Pages''' hides a broken link. Where a site has no <code>404.html</code>, it answers an address the site does not have by serving the front page with a 200, taking the site for a single-page application. A stale or mistyped link then looks like a working one.
+
+<!--T:32-->
+Whether you need an error page depends on the host, then: some show their own, and Cloudflare Pages shows yours or your front page. Name a page <code>404</code> in the source tree and the build writes <code>dist/404.html</code>, which GitHub Pages, GitLab Pages and Codeberg Pages serve for an address that is not there. Put <code><nowiki>__NOINDEX__</nowiki></code> on it — a sitemap is an invitation to index, and an error page is not a page to invite anyone to.
+
 <!--T:8-->
 <span id="preview-locally"></span>
 == Preview locally ==
