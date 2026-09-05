@@ -1,4 +1,12 @@
 <onlyinclude><templatestyles src="note/styles.css" /><div class="wikven-note"><!--
   --><div>[[File:Note icon.svg|32px]]</div><!--
   --><div class="wikven-note-text"><p>{{{1|Text here.}}}</p></div>
-</div></onlyinclude>
+</div><includeonly>{{#if:{{{1|}}}||[[Category:Notes with no text]]}}</includeonly></onlyinclude><!--
+  The category is how a note with no text says so. Without it the placeholder above draws, the
+  page builds, and nothing else says anything: an unnamed argument holding "=" or "|" is parsed
+  as a named one, so {{note|a=b}} reaches {{{1}}} with nothing. Write that one {{note|1=a=b}}.
+
+  WikvenFailOnCategories in .wikven.yaml names the category, so a build that fills it stops and
+  says which page did. includeonly keeps this page itself out of it; it is outside onlyinclude
+  so that no page carries it.
+-->

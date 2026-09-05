@@ -1,0 +1,8 @@
+__HIDDENCAT__
+A maintenance tracking category for a <code><nowiki>{{note}}</nowiki></code> that was given no text, which
+draws the template's placeholder instead. Defining it as a hidden category keeps
+it off the page footer in the static export, so it does not show readers a link
+to a category page the export does not include.
+
+WikvenFailOnCategories in .wikven.yaml names this category, so a build that puts
+a page in it stops and says which page.

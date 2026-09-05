@@ -147,6 +147,28 @@ Write a source page of that name and it takes precedence, exactly as for the Lic
 When set, and UniversalLanguageSelector is enabled, the build bakes that extension's webfonts for the languages your pages use into a stylesheet the export serves itself, so a reader whose system has no font for a script sees the intended typeface instead of empty boxes. It is off unless asked for, because the fonts are extra payload for a site whose readers may not need them. It does nothing without UniversalLanguageSelector; see [[<tvar name="1">Special:MyLanguage/Translating</tvar>|Translating]].
 </translate>
 
+=== <code>WikvenFailOnCategories</code> ===
+
+<translate>
+<!--T:203-->
+'''Default:''' none
+
+<!--T:204-->
+Categories no page may be in when the build finishes, named without the <code>Category:</code> prefix. A build that puts a page in one of them stops and says which pages did.
+
+<!--T:205-->
+MediaWiki does not refuse a page it cannot render properly; it renders what it can and files the page in a tracking category. A template used without a required argument draws its placeholder, a Lua error prints where the module's answer should be, a page whose template expansion ran past its limit is cut short — and each of those is a page that builds, publishes, and reads as something nobody wrote. The category is the only thing that says so, and a static export does not carry it.
+
+<!--T:206-->
+Name your own the same way. A template can file a page itself:
+
+<!--T:207-->
+<pre>{{#if:{{{1|}}}||[[Category:Notes with no text]]}}</pre>
+
+<!--T:208-->
+{{note|1=Give the category <code><nowiki>__HIDDENCAT__</nowiki></code>, so it stays off the page footer. The export does not include a category page, and a link to one it does not have is a link to nothing.}}
+</translate>
+
 === <code>WikvenFileNames</code> ===
 
 <translate>
