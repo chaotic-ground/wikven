@@ -33,9 +33,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-08-31T12:45:35Z">
-<meta property="article:published_time" content="2026-08-31T12:45:35Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\ubc30\ud3ec\ud558\uae30 - Wikven","headline":"\ubc30\ud3ec\ud558\uae30 - Wikven","mainEntityOfPage":"\ubc30\ud3ec\ud558\uae30","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Deploying\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Deploying\/ko.html","dateModified":"2026-08-31T12:45:35Z","datePublished":"2026-08-31T12:45:35Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-05T07:54:24Z">
+<meta property="article:published_time" content="2026-09-05T07:54:24Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\ubc30\ud3ec\ud558\uae30 - Wikven","headline":"\ubc30\ud3ec\ud558\uae30 - Wikven","mainEntityOfPage":"\ubc30\ud3ec\ud558\uae30","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Deploying\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Deploying\/ko.html","dateModified":"2026-09-05T07:54:24Z","datePublished":"2026-09-05T07:54:24Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Deploying_ko rootpage-Deploying_ko skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">본문으로 이동</a>
@@ -318,8 +318,25 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			</div>
 		</a>
 		
+			<button aria-controls="toc-임의의_정적_호스트-sublist" class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle">
+				<span class="vector-icon mw-ui-icon-wikimedia-expand"></span>
+				<span>임의의 정적 호스트 하위 문단 토글하기</span>
+			</button>
+		
 		<ul id="toc-임의의_정적_호스트-sublist" class="vector-toc-list">
-		</ul>
+			<li id="toc-호스트마다_주소를_어떻게_다루는가"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#호스트마다_주소를_어떻게_다루는가">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.1</span>
+					<span>호스트마다 주소를 어떻게 다루는가</span>
+				</div>
+			</a>
+			
+			<ul id="toc-호스트마다_주소를_어떻게_다루는가-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
 	</li>
 	<li id="toc-로컬에서_미리_보기"
 		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
@@ -634,6 +651,14 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <div class="mw-heading mw-heading2"><h2 id="임의의_정적_호스트"><span id=".EC.9E.84.EC.9D.98.EC.9D.98_.EC.A0.95.EC.A0.81_.ED.98.B8.EC.8A.A4.ED.8A.B8"></span>임의의 정적 호스트</h2></div>
 <p><code>dist/</code>는 그저 파일 모음이므로, 어떤 정적 호스트(<a rel="nofollow" class="external text" href="https://www.netlify.com/">Netlify</a>, <a rel="nofollow" class="external text" href="https://pages.cloudflare.com/">Cloudflare Pages</a>, <a rel="nofollow" class="external text" href="https://aws.amazon.com/s3/">S3</a> 같은 객체 저장소, 또는 평범한 웹 서버)에서도 제공할 수 있습니다. CI나 로컬에서 사이트를 빌드한 뒤, 호스트가 <code>dist/</code> 디렉터리를 가리키게 하거나 그 내용을 서버의 문서 루트에 업로드하세요.
+</p><p><span id="What&#95;each&#95;host&#95;does&#95;with&#95;the&#95;addresses"></span>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="호스트마다_주소를_어떻게_다루는가"><span id=".ED.98.B8.EC.8A.A4.ED.8A.B8.EB.A7.88.EB.8B.A4_.EC.A3.BC.EC.86.8C.EB.A5.BC_.EC.96.B4.EB.96.BB.EA.B2.8C_.EB.8B.A4.EB.A3.A8.EB.8A.94.EA.B0.80"></span>호스트마다 주소를 어떻게 다루는가</h3></div>
+<p>문서는 곧 파일입니다. Wikven은 <code>Getting_Started/index.html</code>이 아니라 <code>Getting_Started.html</code>을 쓰고, 문서가 지니는 링크는 모두 그 파일이 놓인 자리를 기준으로 한 상대 주소입니다. 그래서 파일을 제공하는 호스트라면 어디서든 설정할 것 없이 사이트가 동작합니다.
+</p><p>어떤 호스트는 확장자 없는 주소에도 답해서, <code>/Getting_Started</code>가 <code>/Getting_Started.html</code>과 같은 문서에 닿습니다. GitHub Pages, <a rel="nofollow" class="external text" href="https://docs.gitlab.com/user/project/pages/">GitLab Pages</a>, Cloudflare Pages는 그렇게 하고, <a rel="nofollow" class="external text" href="https://codeberg.page/">Codeberg Pages</a>와 객체 저장소, 평범한 웹 서버는 그렇게 하지 않습니다. Wikven이 쓰는 링크에는 확장자가 붙어 있으므로 어느 쪽이든 사이트는 동작합니다. 이 차이는 누군가 손으로 적거나 공유한 주소에서만 드러납니다.
+</p><p><b>Netlify</b>는 무언가를 꺼야 하는 유일한 곳입니다. 기본으로 켜져 있는 <a rel="nofollow" class="external text" href="https://docs.netlify.com/manage/routing/redirects/redirect-options/">Pretty URLs</a>가 <code>/Getting_Started</code>를 <code>/Getting_Started/</code>로 넘기고, <code>/Getting_Started.html</code>도 같은 주소로 다시 씁니다. Wikven은 <code>Getting_Started/</code> 디렉터리를 만들지 않으므로, 그 주소에서 제공되는 문서는 자기 링크가 기대하는 것보다 한 단계 깊은 곳에 놓이고 스타일시트와 그림이 아무 데도 닿지 않습니다. Project configuration → Build &amp; deploy → Post processing에 있습니다.
+</p><p><b>Cloudflare Pages</b>는 끊어진 링크를 감춥니다. 사이트에 <code>404.html</code>이 없으면, 사이트에 없는 주소에 대해 그 사이트를 단일 페이지 애플리케이션으로 보고 대문을 200으로 돌려줍니다. 그러면 낡았거나 잘못 적힌 링크가 멀쩡한 링크처럼 보입니다.
+</p><p>그러니 오류 문서가 필요한지는 호스트에 달렸습니다. 자기 오류 문서를 보여 주는 곳도 있고, Cloudflare Pages는 당신의 오류 문서 아니면 당신의 대문을 보여 줍니다. 소스 트리에 <code>404</code>라는 이름의 문서를 두면 빌드가 <code>dist/404.html</code>을 쓰고, GitHub Pages와 GitLab Pages, Codeberg Pages가 없는 주소에 대해 그 파일을 제공합니다. 그 문서에는 <code>__NOINDEX__</code>를 넣으십시오. 사이트맵은 색인해 달라는 초대이고, 오류 문서는 누구도 초대할 문서가 아닙니다.
 </p><p><span id="preview-locally"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="로컬에서_미리_보기"><span id=".EB.A1.9C.EC.BB.AC.EC.97.90.EC.84.9C_.EB.AF.B8.EB.A6.AC_.EB.B3.B4.EA.B8.B0"></span>로컬에서 미리 보기</h2></div>
@@ -720,7 +745,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 8월 31일 (월) 12:45에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 9월 5일 (토) 07:54에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">

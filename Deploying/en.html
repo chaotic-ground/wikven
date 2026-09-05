@@ -33,9 +33,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-08-31T13:05:06Z">
-<meta property="article:published_time" content="2026-08-31T13:05:06Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Deploying - Wikven","headline":"Deploying - Wikven","mainEntityOfPage":"Deploying","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Deploying\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Deploying\/en.html","dateModified":"2026-08-31T13:05:06Z","datePublished":"2026-08-31T13:05:06Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-05T07:54:24Z">
+<meta property="article:published_time" content="2026-09-05T07:54:24Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Deploying - Wikven","headline":"Deploying - Wikven","mainEntityOfPage":"Deploying","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Deploying\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Deploying\/en.html","dateModified":"2026-09-05T07:54:24Z","datePublished":"2026-09-05T07:54:24Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":[]},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Deploying_en rootpage-Deploying_en skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
@@ -318,8 +318,25 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			</div>
 		</a>
 		
+			<button aria-controls="toc-Any_static_host-sublist" class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle">
+				<span class="vector-icon mw-ui-icon-wikimedia-expand"></span>
+				<span>Toggle Any static host subsection</span>
+			</button>
+		
 		<ul id="toc-Any_static_host-sublist" class="vector-toc-list">
-		</ul>
+			<li id="toc-What_each_host_does_with_the_addresses"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#What_each_host_does_with_the_addresses">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.1</span>
+					<span>What each host does with the addresses</span>
+				</div>
+			</a>
+			
+			<ul id="toc-What_each_host_does_with_the_addresses-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
 	</li>
 	<li id="toc-Preview_locally"
 		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
@@ -631,6 +648,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </div>
 <div class="mw-heading mw-heading2"><h2 id="Any_static_host">Any static host</h2></div>
 <p>Because <code>dist/</code> is just files, you can serve it from any static host (<a rel="nofollow" class="external text" href="https://www.netlify.com/">Netlify</a>, <a rel="nofollow" class="external text" href="https://pages.cloudflare.com/">Cloudflare Pages</a>, an object store like <a rel="nofollow" class="external text" href="https://aws.amazon.com/s3/">S3</a>, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
+</p>
+<div class="mw-heading mw-heading3"><h3 id="What_each_host_does_with_the_addresses">What each host does with the addresses</h3></div>
+<p>A page is a file. Wikven writes <code>Getting_Started.html</code> rather than <code>Getting_Started/index.html</code>, and every link a page carries is relative to where that file sits. So any host that serves files serves the site, with nothing to configure.
+</p><p>Some hosts also answer the address without the extension, so that <code>/Getting_Started</code> reaches the same page as <code>/Getting_Started.html</code>. GitHub Pages, <a rel="nofollow" class="external text" href="https://docs.gitlab.com/user/project/pages/">GitLab Pages</a> and Cloudflare Pages do; <a rel="nofollow" class="external text" href="https://codeberg.page/">Codeberg Pages</a>, an object store and a plain web server do not. The site works either way, because the links Wikven writes carry the extension; it matters only for an address somebody types or shares by hand.
+</p><p><b>Netlify</b> is the one to turn something off on. Its <a rel="nofollow" class="external text" href="https://docs.netlify.com/manage/routing/redirects/redirect-options/">Pretty URLs</a>, on by default, forward <code>/Getting_Started</code> to <code>/Getting_Started/</code> and rewrite <code>/Getting_Started.html</code> to the same address. Wikven writes no <code>Getting_Started/</code> directory, so a page served there sits one directory deeper than its own links expect, and its stylesheets and pictures resolve to nothing. It is under Project configuration → Build &amp; deploy → Post processing.
+</p><p><b>Cloudflare Pages</b> hides a broken link. Where a site has no <code>404.html</code>, it answers an address the site does not have by serving the front page with a 200, taking the site for a single-page application. A stale or mistyped link then looks like a working one.
+</p><p>Whether you need an error page depends on the host, then: some show their own, and Cloudflare Pages shows yours or your front page. Name a page <code>404</code> in the source tree and the build writes <code>dist/404.html</code>, which GitHub Pages, GitLab Pages and Codeberg Pages serve for an address that is not there. Put <code>__NOINDEX__</code> on it — a sitemap is an invitation to index, and an error page is not a page to invite anyone to.
 </p><p><span id="preview-locally"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Preview_locally">Preview locally</h2></div>
@@ -716,7 +740,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 31 August 2026, at 13:05.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 5 September 2026, at 07:54.</li>
 </ul>
 
 	<ul id="footer-places">
