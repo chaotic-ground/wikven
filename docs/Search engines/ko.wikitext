@@ -18,17 +18,7 @@
 
 <!--T:6 @e4146e97-->
 콘솔마다 몇 가지 증명 방법을 제공하는데, 정적 내보내기가 언제나 할 수 있는 것은 모든 문서의 head에 메타 태그를 넣는 것입니다. 그런 태그는 문서가 아니라 사이트에 관한 것이라 문서를 그렇게 쓰는 것으로는 담을 수 없고, 따라서 확장 기능이 필요합니다. [$1 WikiSEO]는 엔진마다 설정 키 하나를 태그 하나로 바꿉니다. 이미지에 들어 있지 않으므로, 다른 서드파티 확장 기능과 마찬가지로 [[$2|<code>WikvenRepositories</code> 맵]]에 소스가 필요합니다.
-</translate>
 
-<syntaxhighlight lang="yaml" copy>
-extensions:
-  - WikiSEO
-config:
-  GoogleSiteVerificationKey: your-token-from-search-console
-  BingSiteVerificationKey: your-token-from-bing-webmaster-tools
-</syntaxhighlight>
-
-<translate>
 <!--T:7 @3504832a-->
 여섯 개가 있으며, 다른 설정 변수와 똑같이 <code>config</code> 아래에 두고, 저마다 자기 태그를 씁니다.
 
