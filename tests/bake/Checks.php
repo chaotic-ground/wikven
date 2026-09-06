@@ -149,13 +149,21 @@ class Checks {
 	 * @return string[]
 	 */
 	private static function sitemapUrls(string $path): array {
-		$xml = @simplexml_load_file($path);
+		// libxml reports a malformed file by writing to the error log unless it is told not to;
+		// a sitemap this cannot read is the sitemap check's to report, not a warning's.
+		$previous = libxml_use_internal_errors(true);
+		$xml = simplexml_load_file($path);
+		libxml_clear_errors();
+		libxml_use_internal_errors($previous);
 		if ($xml === false) {
 			return [];
 		}
 		$xml->registerXPathNamespace('s', self::SITEMAP_NS);
-		$found = $xml->xpath('//s:url/s:loc') ?: [];
-		return array_map(static fn ($element) => (string)$element, $found);
+		$urls = [];
+		foreach ($xml->xpath('//s:url/s:loc') ?: [] as $element) {
+			$urls[] = (string)$element;
+		}
+		return $urls;
 	}
 
 	private static function isAbsolute(string $url): bool {
@@ -212,7 +220,12 @@ class Checks {
 		}
 		// The protocol requires absolute URLs, and getting a relative one is the failure that looks
 		// fine in a diff: core's own generateSitemap.php emits "index.html" under wikven.
-		$bad = array_values(array_filter($locs, static fn ($url) => !self::isAbsolute($url)));
+		$bad = [];
+		foreach ($locs as $url) {
+			if (!self::isAbsolute($url)) {
+				$bad[] = $url;
+			}
+		}
 		if ($bad) {
 			return ['sitemap.xml has non-absolute URLs: ' . self::few($bad, 5)];
 		}
@@ -284,7 +297,8 @@ class Checks {
 		foreach ($site->htmlFiles() as $path) {
 			$page = $site->relative($path);
 			$tag = [];
-			$isNoindex = preg_match('~<meta name="robots" content="([^"]*)"~', $site->read($path), $tag) === 1
+			$isNoindex =
+				preg_match('~<meta name="robots" content="([^"]*)"~', $site->read($path), $tag) === 1
 				&& str_contains($tag[1], 'noindex');
 			$copy = explode('/', $page)[0];
 			if (in_array($copy, $copies, true)) {
@@ -320,8 +334,12 @@ class Checks {
 		$expectedNames = $expected;
 		sort($expectedNames, SORT_STRING);
 		if ($noindexedNames !== $expectedNames) {
-			$problems[] = 'the site noindexes [' . implode(' ', $noindexedNames) . '], expected ['
-				. implode(' ', $expectedNames) . ']';
+			$problems[] =
+				'the site noindexes ['
+				. implode(' ', $noindexedNames)
+				. '], expected ['
+				. implode(' ', $expectedNames)
+				. ']';
 		}
 		$missing = array_keys(array_diff_key($pages, $listed, array_fill_keys($expected, true)));
 		sort($missing, SORT_STRING);
@@ -373,7 +391,9 @@ class Checks {
 		}
 		if ($missing) {
 			return [
-				'og:image names a file the build did not write, on ' . count($missing) . ' page(s): '
+				'og:image names a file the build did not write, on '
+					. count($missing)
+					. ' page(s): '
 					. self::few($missing)
 			];
 		}
@@ -560,7 +580,7 @@ class Checks {
 		// skin pass; without it the copy's search answers nothing at all, and only the browser tests
 		// would notice.
 		$problems = [];
-		foreach (['', ...(array)$site->expect['skin_copies']] as $copy) {
+		foreach (['', ...( (array)$site->expect['skin_copies'] )] as $copy) {
 			$root = $copy === '' ? $site->dist : $site->path($copy);
 			$bundle = "$root/pagefind/pagefind.js";
 			if (!is_file($bundle) || filesize($bundle) === 0) {
@@ -602,8 +622,8 @@ class Checks {
 		$problems = [];
 		foreach ((array)$site->expect['search_languages'] as $language) {
 			if (!$site->glob($site->path('pagefind', "pagefind.{$language}_*.pf_meta"))) {
-				$problems[] = $site->path('pagefind')
-					. " has no $language index; pages are not indexed in their own language";
+				$problems[] =
+					$site->path('pagefind') . " has no $language index; pages are not indexed in their own language";
 			}
 		}
 		return $problems;
@@ -625,9 +645,13 @@ class Checks {
 		$pattern = '~"url":"[^"]*/' . preg_quote($language, '~') . '\.html"~';
 		foreach ($site->glob($site->path('pagefind', 'fragment', "{$language}_*")) as $fragment) {
 			$raw = $site->read($fragment);
-			$plain = @gzdecode($raw);
-			if ($plain !== false) {
-				$raw = $plain;
+			// Pagefind gzips a fragment; asked by its magic bytes rather than by trying, so a
+			// fragment that is not gzipped is read as it is rather than through a warning.
+			if (str_starts_with($raw, "\x1f\x8b")) {
+				$plain = gzdecode($raw);
+				if ($plain !== false) {
+					$raw = $plain;
+				}
 			}
 			if (preg_match($pattern, $raw)) {
 				return [
@@ -686,8 +710,12 @@ class Checks {
 			$names = array_values(array_unique($found[0]));
 			sort($names, SORT_STRING);
 			if ($names !== $expected) {
-				$problems[] = "$manifest registers skin modules for [" . implode(' ', $names)
-					. ']; this site builds [' . implode(' ', $expected) . ']';
+				$problems[] =
+					"$manifest registers skin modules for ["
+					. implode(' ', $names)
+					. ']; this site builds ['
+					. implode(' ', $expected)
+					. ']';
 			}
 		}
 		return $problems;
@@ -924,7 +952,7 @@ class Checks {
 		$at = array_search($page, $order, true);
 		// Checked before the file is read: reading a path built from an empty name would fail with
 		// an error of its own, which says nothing about the sidebar being what went wrong.
-		if ($at === false || $at + 1 >= count($order)) {
+		if ($at === false || ( $at + 1 ) >= count($order)) {
 			return ["MediaWiki:Sidebar names no page after $page, so this check has no pair to make"];
 		}
 		$following = $order[$at + 1];

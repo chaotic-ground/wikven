@@ -71,7 +71,13 @@ class Site {
 	}
 
 	public function path(string ...$parts): string {
-		return implode('/', [$this->dist, ...array_filter($parts, static fn ($part) => $part !== '')]);
+		$named = [$this->dist];
+		foreach ($parts as $part) {
+			if ($part !== '') {
+				$named[] = $part;
+			}
+		}
+		return implode('/', $named);
 	}
 
 	/**
@@ -113,8 +119,12 @@ class Site {
 		return $found;
 	}
 
+	/** The file's text, or nothing where there is no file: a check says what is missing itself. */
 	public function read(string $path): string {
-		$text = @file_get_contents($path);
+		if (!is_file($path)) {
+			return '';
+		}
+		$text = file_get_contents($path);
 		return $text === false ? '' : $text;
 	}
 
