@@ -15,6 +15,11 @@ use Wikimedia\TestingAccessWrapper;
  * @covers \MediaWiki\Extension\Wikven\Hooks\Adder
  */
 class AdderTest extends MediaWikiIntegrationTestCase {
+	/** The handler as extension.json builds it, holding the wiki's own configuration. */
+	private function adder(): Adder {
+		return new Adder($this->getServiceContainer()->getMainConfig());
+	}
+
 	/**
 	 * An OutputPage that answers getRequest(): the Minerva path asks the request which theme it is
 	 * rendering in, and a bare mock hands back null.
@@ -32,7 +37,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideRepoHosts
 	 */
 	public function testRepoHostName(string $url, ?string $expected) {
-		$adder = TestingAccessWrapper::newFromObject(new Adder());
+		$adder = TestingAccessWrapper::newFromObject($this->adder());
 		$this->assertSame($expected, $adder->repoHostName($url));
 	}
 
@@ -55,12 +60,12 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSkins', ['vector']);
 
 		$footerItems = [];
-		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+		$this->adder()->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
 		$this->assertArrayHasKey('source', $footerItems);
 		$this->assertStringContainsString('github.com/owner/repo', $footerItems['source']);
 
 		$other = ['existing' => 'kept'];
-		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'info', $other);
+		$this->adder()->onSkinAddFooterLinks($this->skin(), 'info', $other);
 		$this->assertSame(['existing' => 'kept'], $other, 'only the places category is touched');
 	}
 
@@ -77,7 +82,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skin = $this->createMock(Skin::class);
 		$skin->method('getSkinName')->willReturn('vector');
 
-		( new Adder() )->onBeforePageDisplay($out, $skin);
+		$this->adder()->onBeforePageDisplay($out, $skin);
 	}
 
 	/**
@@ -97,7 +102,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skinMock = $this->createMock(Skin::class);
 		$skinMock->method('getSkinName')->willReturn($skin);
 
-		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+		$this->adder()->onBeforePageDisplay($out, $skinMock);
 
 		$this->assertSame($expected, in_array('ext.Wikven.appearance', $modules, true));
 	}
@@ -130,7 +135,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skinMock = $this->createMock(Skin::class);
 		$skinMock->method('getSkinName')->willReturn($skin);
 
-		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+		$this->adder()->onBeforePageDisplay($out, $skinMock);
 
 		$this->assertSame($overridden, array_key_exists('wgScriptPath', $vars));
 		if ($overridden) {
@@ -161,7 +166,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skinMock = $this->createMock(Skin::class);
 		$skinMock->method('getSkinName')->willReturn($skin);
 
-		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+		$this->adder()->onBeforePageDisplay($out, $skinMock);
 
 		$this->assertSame(
 			$expected,
@@ -199,7 +204,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skinMock = $this->createMock(Skin::class);
 		$skinMock->method('getSkinName')->willReturn($skin);
 
-		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+		$this->adder()->onBeforePageDisplay($out, $skinMock);
 
 		$this->assertSame($expected, in_array('ext.Wikven.citizenSkins', $modules, true));
 	}
@@ -224,7 +229,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skinMock = $this->createMock(Skin::class);
 		$skinMock->method('getSkinName')->willReturn($skin);
 
-		( new Adder() )->onBeforePageDisplay($out, $skinMock);
+		$this->adder()->onBeforePageDisplay($out, $skinMock);
 
 		$this->assertSame($expected, in_array('ext.Wikven.vectorSkins', $modules, true));
 	}
@@ -301,7 +306,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSkins', ['vector-2022', 'citizen']);
 		$this->overrideConfigValue('WikvenMainSkin', 'vector-2022');
 		$sidebar = ['TOOLBOX' => []];
-		( new Adder() )->onSidebarBeforeOutput($this->skin($name), $sidebar);
+		$this->adder()->onSidebarBeforeOutput($this->skin($name), $sidebar);
 		return $sidebar;
 	}
 
@@ -317,11 +322,11 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSkins', ['vector-2022', 'minerva']);
 
 		$footerItems = [];
-		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+		$this->adder()->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
 		$this->assertSame([], $footerItems, 'no repository link goes into the footer');
 
 		$sidebar = ['TOOLBOX' => []];
-		( new Adder() )->onSidebarBeforeOutput($this->skin('vector-2022'), $sidebar);
+		$this->adder()->onSidebarBeforeOutput($this->skin('vector-2022'), $sidebar);
 		$this->assertSame(['TOOLBOX' => []], $sidebar, 'no skin list goes into the sidebar');
 
 		$styles = [];
@@ -333,7 +338,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skin = $this->createMock(Skin::class);
 		$skin->method('getSkinName')->willReturn('vector-2022');
 
-		( new Adder() )->onBeforePageDisplay($out, $skin);
+		$this->adder()->onBeforePageDisplay($out, $skin);
 
 		$this->assertNotContains('ext.Wikven.styles', $styles);
 	}
@@ -363,7 +368,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skin = $this->createMock(Skin::class);
 		$skin->method('getSkinName')->willReturn('citizen');
 
-		( new Adder() )->onBeforePageDisplay($out, $skin);
+		$this->adder()->onBeforePageDisplay($out, $skin);
 
 		$this->assertArrayHasKey('wgScriptPath', $vars);
 		$this->assertNull($vars['wgScriptPath']);
@@ -414,7 +419,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSkins', ['vector']);
 
 		$footerItems = [];
-		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+		$this->adder()->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
 
 		$this->assertArrayHasKey('wikven-licenses', $footerItems);
 		$this->assertMatchesRegularExpression(
@@ -429,7 +434,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSkins', ['vector']);
 
 		$footerItems = [];
-		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+		$this->adder()->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
 
 		$this->assertArrayNotHasKey('wikven-licenses', $footerItems);
 	}
@@ -444,7 +449,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenSkins', ['vector']);
 
 		$footerItems = [];
-		( new Adder() )->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
+		$this->adder()->onSkinAddFooterLinks($this->skin(), 'places', $footerItems);
 
 		$this->assertSame([], $footerItems);
 	}

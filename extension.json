@@ -99,10 +99,16 @@
 			]
 		},
 		"adder": {
-			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Adder"
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Adder",
+			"services": [
+				"MainConfig"
+			]
 		},
 		"hider": {
-			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Hider"
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Hider",
+			"services": [
+				"MainConfig"
+			]
 		},
 		"indexer": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Indexer"
@@ -111,7 +117,10 @@
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Reporter"
 		},
 		"retrier": {
-			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Retrier"
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Retrier",
+			"services": [
+				"MainConfig"
+			]
 		},
 		"declarer": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Declarer",
