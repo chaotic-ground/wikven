@@ -41,9 +41,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-03T00:46:07Z">
-<meta property="article:published_time" content="2026-09-03T00:46:07Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-03T00:46:07Z","datePublished":"2026-09-03T00:46:07Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-06T08:41:55Z">
+<meta property="article:published_time" content="2026-09-06T08:41:55Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-06T08:41:55Z","datePublished":"2026-09-06T08:41:55Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Development_en rootpage-Development_en skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
@@ -478,53 +478,53 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="Phase_1:_filling_the_wiki">Phase 1: filling the wiki</h3></div>
 <dl><dt><code>checkLuaAgainstThisBuild</code></dt>
-<dd>Says what this site's <a href="../Translating/en.html" title="Special:MyLanguage/Translating">Lua</a> and this build's Lua make of each other, before anything else happens. A site that lists Scribunto where no engine can run it ends the build, because it asked for something this build cannot do; a site with <code>Module:</code> files that never listed Scribunto is only told what those files come to, since with no engine to run them an <code>#invoke</code> is published as the text of the call. It runs first so the last bake is still in place when a site is refused.</dd>
-<dt><code>clearOutputDirectory</code></dt>
-<dd>Empties the output directory, so a bake never inherits a file from the last one.</dd>
-<dt><code>setMainPage</code></dt>
-<dd>Points <code>MediaWiki:Mainpage</code> at the imported <code>index</code> article, so the site root resolves to <code>index.html</code>.</dd>
-<dt><code>importImages</code></dt>
-<dd>Uploads the image files in the source directory into the <code>File:</code> namespace. It runs <b>before</b> the wikitext import, so pages that embed a local image render a real thumbnail instead of a broken-media placeholder.</dd>
-<dt><code>importWikitext</code></dt>
-<dd>Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.</dd>
-<dt><code>setLicensesPage</code> and <code>setSettingsPage</code></dt>
-<dd>Write the two pages a build generates: the <a href="../Translating/en.html" title="Special:MyLanguage/Translating">Licenses page</a> listing what the site publishes and under which licenses, which the footer links from every page, and the <a href="../Skins/en.html#settings" title="Special:MyLanguage/Skins">Settings page</a> carrying the reader's colour theme and skin. A source page of either name is used instead of the generated one.</dd>
-<dt><code>dropDeadPlaceLinks</code> and <code>dropDeadCategoryLink</code></dt>
-<dd>Blank the system messages behind footer and menu entries that would link pages the export does not contain (privacy policy, disclaimers, community portal).</dd>
-<dt><code>buildTranslations</code></dt>
-<dd>Materializes each <code>&lt;translate></code>-marked page's translations as real pages, so the job queue and the render passes treat them like any other page. See <a href="../Translating/en.html" title="Special:MyLanguage/Translating">Translating</a>.</dd>
-<dt><code>RunJobs</code></dt>
-<dd>Runs MediaWiki's job queue, mainly thumbnail generation and link-table updates, one job type at a time in name order. The search-index job is held back to the very end, because it is enqueued per revision and would otherwise run once per pass of the queue and throw all but the last result away.</dd>
-<dt><code>stampSourceHistory</code> and <code>hideBuildAuthors</code></dt>
-<dd>Date each page at the commit that last changed its source file, and credit that commit's author, so the footer's "last edited" line agrees with the top of the history it links to. Where the repository's history is out of reach — a shallow checkout, or a source directory that is not one — every page is dated at the commit being built and named to nobody.</dd>
-<dt><code>freezePageTouched</code></dt>
+<dd>Says what this site's <a href="../Lua_modules/en.html" title="Special:MyLanguage/Lua modules">Lua</a> and this build's Lua make of each other, before anything else happens. A site that lists Scribunto where no engine can run it ends the build, because it asked for something this build cannot do; a site with <code>Module:</code> files that never listed Scribunto is only told what those files come to, since with no engine to run them an <code>#invoke</code> is published as the text of the call. It runs first so the last bake is still in place when a site is refused.</dd></dl>
+<dl><dt><code>clearOutputDirectory</code></dt>
+<dd>Empties the output directory, so a bake never inherits a file from the last one.</dd></dl>
+<dl><dt><code>setMainPage</code></dt>
+<dd>Points <code>MediaWiki:Mainpage</code> at the imported <code>index</code> article, so the site root resolves to <code>index.html</code>.</dd></dl>
+<dl><dt><code>importImages</code></dt>
+<dd>Uploads the image files in the source directory into the <code>File:</code> namespace. It runs <b>before</b> the wikitext import, so pages that embed a local image render a real thumbnail instead of a broken-media placeholder.</dd></dl>
+<dl><dt><code>importWikitext</code></dt>
+<dd>Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.</dd></dl>
+<dl><dt><code>setLicensesPage</code> and <code>setSettingsPage</code></dt>
+<dd>Write the two pages a build generates: the <a href="../Configuration/en.html#WikvenLicensesPage" title="Special:MyLanguage/Configuration">Licenses page</a> listing what the site publishes and under which licenses, which the footer links from every page, and the <a href="../Skins/en.html#settings" title="Special:MyLanguage/Skins">Settings page</a> carrying the reader's colour theme and skin. A source page of either name is used instead of the generated one.</dd></dl>
+<dl><dt><code>dropDeadPlaceLinks</code> and <code>dropDeadCategoryLink</code></dt>
+<dd>Blank the system messages behind footer and menu entries that would link pages the export does not contain (privacy policy, disclaimers, community portal).</dd></dl>
+<dl><dt><code>buildTranslations</code></dt>
+<dd>Materializes each <code>&lt;translate></code>-marked page's translations as real pages, so the job queue and the render passes treat them like any other page. See <a href="../Translating/en.html" title="Special:MyLanguage/Translating">Translating</a>.</dd></dl>
+<dl><dt><code>RunJobs</code></dt>
+<dd>Runs MediaWiki's job queue, mainly thumbnail generation and link-table updates, one job type at a time in name order. The search-index job is held back to the very end, because it is enqueued per revision and would otherwise run once per pass of the queue and throw all but the last result away.</dd></dl>
+<dl><dt><code>stampSourceHistory</code> and <code>hideBuildAuthors</code></dt>
+<dd>Date each page at the commit that last changed its source file, and credit that commit's author, so the footer's "last edited" line agrees with the top of the history it links to. Where the repository's history is out of reach — a shallow checkout, or a source directory that is not one — every page is dated at the commit being built and named to nobody.</dd></dl>
+<dl><dt><code>freezePageTouched</code></dt>
 <dd>Pins every page's <code>page_touched</code>, which is a version input of any module carrying a version callback. This is the last write the database takes; everything after it reads.</dd></dl>
 </section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="Phase_2:_one_pass_per_skin">Phase 2: one pass per skin</h3></div>
 <p>Each pass renders the whole site in its own skin, into its own directory: the first skin in <code>skins</code> renders into the output root, and every other into <code>dist/&lt;skin>/</code>. Each gets a copy of the database to work on, because SQLite takes one writer at a time and a pass still writes to the object cache.
 </p>
 <dl><dt><code>RebuildFileCache</code></dt>
-<dd>Renders every content page to an HTML file. This is MediaWiki's own file cache; Wikven treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.</dd>
-<dt><code>retranslateChrome</code></dt>
-<dd>Re-renders each page written in a language other than the wiki's own — the translations, and the language copies of the <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">Licenses page</a> the build writes — with that language as the interface language. The file cache only caches the canonical anonymous view, which would leave every one of them wearing the content language's chrome.</dd>
-<dt><code>stripBuildStamps</code></dt>
-<dd>Removes the request ids, render ids and timestamps MediaWiki stamps into every rendered page, which differ between bakes.</dd>
-<dt><code>buildStyles</code></dt>
-<dd>Re-renders each CSS module the pages reference into a local file, and renders the <code>site.styles</code> module (<code>MediaWiki:Common.css</code> and the skin's site CSS) to its own file.</dd>
-<dt><code>bakeWebfonts</code></dt>
-<dd>With <code>WikvenBundleWebfonts</code> set, writes UniversalLanguageSelector's webfonts for the export's languages as a plain stylesheet with the font files beside it. A no-op otherwise.</dd>
-<dt><code>buildScripts</code></dt>
-<dd>Dumps the JavaScript the pages need into two files: <code>startup-static.js</code> (the loader manifest, with its network auto-load removed) and <code>modules-static.js</code> (the full dependency closure, so every module self-executes). It seeds the <code>site</code> module (<code>MediaWiki:Common.js</code> and the skin's JS) and any default <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">gadgets</a>, which a live wiki pulls in implicitly.</dd>
-<dt><code>rewriteScripts</code></dt>
-<dd>Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the search box, which needs a live API, unless <a href="../Searching/en.html" title="Special:MyLanguage/Searching">SifterSearch</a> is providing a static index.</dd>
-<dt><code>fillMinervaMenu</code></dt>
-<dd>Writes the site's own navigation into Minerva's main menu in each rendered page. Minerva builds that menu from its own definitions and never reads <code>MediaWiki:Sidebar</code>, and nothing in PHP can add an entry to it.</dd>
-<dt><code>storeImages</code></dt>
-<dd>Copies every referenced image (from Wikimedia Commons via InstantCommons, or from local uploads) to a content-hashed local file and rewrites the URLs, so nothing is fetched over the network at view time.</dd>
-<dt><code>rename</code></dt>
-<dd>Gives the namespace-prefixed cache files readable names (for example <code>ns6%3A...</code> becomes <code>File:...</code>), and reparents each page's relative links by its own depth.</dd>
-<dt><code>resolveTranslationLinks</code></dt>
-<dd>Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.</dd>
-<dt><code>buildSitemap</code></dt>
+<dd>Renders every content page to an HTML file. This is MediaWiki's own file cache; Wikven treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.</dd></dl>
+<dl><dt><code>retranslateChrome</code></dt>
+<dd>Re-renders each page written in a language other than the wiki's own — the translations, and the language copies of the <a href="../Configuration/en.html#WikvenLicensesPage" title="Special:MyLanguage/Configuration">Licenses page</a> the build writes — with that language as the interface language. The file cache only caches the canonical anonymous view, which would leave every one of them wearing the content language's chrome.</dd></dl>
+<dl><dt><code>stripBuildStamps</code></dt>
+<dd>Removes the request ids, render ids and timestamps MediaWiki stamps into every rendered page, which differ between bakes.</dd></dl>
+<dl><dt><code>buildStyles</code></dt>
+<dd>Re-renders each CSS module the pages reference into a local file, and renders the <code>site.styles</code> module (<code>MediaWiki:Common.css</code> and the skin's site CSS) to its own file.</dd></dl>
+<dl><dt><code>bakeWebfonts</code></dt>
+<dd>With <code>WikvenBundleWebfonts</code> set, writes UniversalLanguageSelector's webfonts for the export's languages as a plain stylesheet with the font files beside it. A no-op otherwise.</dd></dl>
+<dl><dt><code>buildScripts</code></dt>
+<dd>Dumps the JavaScript the pages need into two files: <code>startup-static.js</code> (the loader manifest, with its network auto-load removed) and <code>modules-static.js</code> (the full dependency closure, so every module self-executes). It seeds the <code>site</code> module (<code>MediaWiki:Common.js</code> and the skin's JS) and any default <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">gadgets</a>, which a live wiki pulls in implicitly.</dd></dl>
+<dl><dt><code>rewriteScripts</code></dt>
+<dd>Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the search box, which needs a live API, unless <a href="../Searching/en.html" title="Special:MyLanguage/Searching">SifterSearch</a> is providing a static index.</dd></dl>
+<dl><dt><code>fillMinervaMenu</code></dt>
+<dd>Writes the site's own navigation into Minerva's main menu in each rendered page. Minerva builds that menu from its own definitions and never reads <code>MediaWiki:Sidebar</code>, and nothing in PHP can add an entry to it.</dd></dl>
+<dl><dt><code>storeImages</code></dt>
+<dd>Copies every referenced image (from Wikimedia Commons via InstantCommons, or from local uploads) to a content-hashed local file and rewrites the URLs, so nothing is fetched over the network at view time.</dd></dl>
+<dl><dt><code>rename</code></dt>
+<dd>Gives the namespace-prefixed cache files readable names (for example <code>ns6%3A...</code> becomes <code>File:...</code>), and reparents each page's relative links by its own depth.</dd></dl>
+<dl><dt><code>resolveTranslationLinks</code></dt>
+<dd>Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.</dd></dl>
+<dl><dt><code>buildSitemap</code></dt>
 <dd>With <a href="../Configuration/en.html#WikvenSiteUrl" title="Special:MyLanguage/Configuration"><code>WikvenSiteUrl</code></a> set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. A page that asks not to be indexed is left out, since a sitemap is an invitation to index and naming such a page would contradict the page itself; where no page is left, no file is written. Only the pass rendering into the output root writes one, for the same reason: the other passes are previews whose pages carry that refusal.</dd></dl>
 <p>A pass that renders a non-default skin also copies the search index into its own directory, so a search from that copy answers inside it.
 </p>
@@ -592,7 +592,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/en.wikitext" title="This page was last edited on 3 September 2026, at 00:46." data-timestamp="1788396367"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>3 September 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Development/en.wikitext" title="This page was last edited on 6 September 2026, at 08:41." data-timestamp="1788684115"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>6 September 2026</span></a></li>
 			
 		</ul>
 		
@@ -813,7 +813,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 3 September 2026, at 00:46.</div>
+		        <div class="page-info__text"> This page was last edited on 6 September 2026, at 08:41.</div>
 		    </section>
 		</div>
 </footer>		</div>
