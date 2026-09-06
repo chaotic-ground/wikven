@@ -1,7 +1,8 @@
 /* Colours read from the skin's Codex tokens rather than written here. The box used to
  * pin background-color: #f8f9fa and set no colour at all, so night mode put the
  * inherited --color-base (#eaecf0) on a near-white box: 1.12:1, which is text you
- * cannot see. Seven pages use the note template.
+ * cannot see. Seven pages use the note template. Its icon had the same fault and it is fixed
+ * here too: #10707f read 2.80:1 against the dark box, and #2f889c reads 3.91:1 against both.
  *
  * The literal in each var() is the light value, a fallback for a skin that defines no
  * tokens. Defining a token here is not an option -- TemplateStyles drops a custom
@@ -20,4 +21,20 @@
 
 .wikven-note-text p {
 	margin: 0;
+}
+
+/* The warning register: the same box, in the tokens Codex keeps for the purpose, so that a note
+ * a reader has to act on does not read as one they can pass over. Border and icon are the one
+ * colour -- the icon is a File: image and cannot follow the theme, so it has to be a value that
+ * works in both, and #ab7f2a is --border-color-warning's own. Measured against the box it sits
+ * on: 3.25:1 in light and 4.30:1 in dark, either side of the 3:1 a non-text mark is asked for.
+ * The text is untouched and stays --color-base, 14.5:1 light and 13.2:1 dark on this ground.
+ *
+ * The whole border is restated rather than just its colour, because border-color is declared
+ * with the sanitizer's safeColor() and border with its color(), and only the second of those
+ * accepts var(). TemplateStyles drops the rule either way and says so only by filing the page
+ * in a tracking category, which is what caught this. */
+.wikven-note-warning {
+	border: 1px solid var(--border-color-warning, #ab7f2a);
+	background-color: var(--background-color-warning-subtle, #fdf2d5);
 }
