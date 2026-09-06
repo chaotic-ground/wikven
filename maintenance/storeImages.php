@@ -22,10 +22,10 @@ class StoreImages extends Maintenance {
 	 * @return bool Whether every referenced image was made local.
 	 */
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgUploadPath, $wgUploadDirectory;
-		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
-		$assetDirectory = (string)$wgWikvenAssetDirectory;
-		$uploadDir = rtrim((string)$wgUploadDirectory, '/');
+		$config = $this->getConfig();
+		$htmlDir = rtrim((string)$config->get('WikvenHtmlDirectory'), '/');
+		$assetDirectory = (string)$config->get('WikvenAssetDirectory');
+		$uploadDir = rtrim((string)$config->get('UploadDirectory'), '/');
 
 		// The pictures a page carries are as much the build's own output as the stylesheets are --
 		// nobody typed "img-1a2b3c4d5e6f.png" -- so they go where the rest of it goes. Made rather
@@ -46,8 +46,8 @@ class StoreImages extends Maintenance {
 		// MediaWiki fully up, so the settings file's excuse for reaching into globals is not one
 		// here. It decides nothing about which files are copied, only how a page names them.
 		$references = new UploadReference(
-			$wgUploadPath,
-			SiteUrl::fromWritten((string)$this->getConfig()->get('WikvenSiteUrl'))
+			(string)$config->get('UploadPath'),
+			SiteUrl::fromWritten((string)$config->get('WikvenSiteUrl'))
 		);
 
 		foreach (glob("$htmlDir/*.html") as $file) {

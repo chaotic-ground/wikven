@@ -61,6 +61,22 @@ class SiteConfig {
 	];
 
 	/**
+	 * Config the build works out from the site's own lists, which a site's file cannot set either.
+	 *
+	 * A site says which skins to build under `skins` and which to read the site in with
+	 * DefaultSkin, and the build turns those two answers into the skin names MediaWiki knows and
+	 * the one whose pages go to the output root. WikvenMissing is not an answer at all: it is what
+	 * the build found missing while loading those lists. Writing any of the three here would be
+	 * answering a question the file has already asked properly, and WikvenSettings.php overwrites
+	 * all three after a site's config is applied; lint says here that it will.
+	 */
+	public const DERIVED_SKIN_CONFIG = [
+		'WikvenSkins',
+		'WikvenMainSkin',
+		'WikvenMissing'
+	];
+
+	/**
 	 * Lint decoded site-config contents, returning a warning per silently-dropped mistake.
 	 *
 	 * About shape and values only. Whether a name under "config" is one anything defines is
@@ -93,6 +109,9 @@ class SiteConfig {
 		foreach (array_keys($config) as $cfgKey) {
 			if (in_array($cfgKey, self::DERIVED_CONFIG, true)) {
 				$warnings[] = "'$cfgKey' is worked out from WIKVEN_WORKDIR by the build; the value here is ignored.";
+			}
+			if (in_array($cfgKey, self::DERIVED_SKIN_CONFIG, true)) {
+				$warnings[] = "'$cfgKey' is worked out by the build from the lists above; the value here is ignored.";
 			}
 		}
 

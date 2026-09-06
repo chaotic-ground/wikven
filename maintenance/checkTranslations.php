@@ -64,7 +64,7 @@ class CheckTranslations extends Maintenance {
 			return true;
 		}
 
-		$source = rtrim((string)$this->getOption('source', $GLOBALS['wgWikvenSourceDirectory'] ?? ''), '/');
+		$source = rtrim((string)$this->getOption('source', $this->getConfig()->get('WikvenSourceDirectory')), '/');
 		if ($source === '' || !is_dir($source)) {
 			$this->fatalError("Wikven: source directory '$source' does not exist.");
 		}

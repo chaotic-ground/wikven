@@ -159,12 +159,13 @@ class Main implements
 			}
 		}
 
-		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
+		$editUrl = (string)$this->config->get('WikvenEditUrl');
+		$historyUrl = (string)$this->config->get('WikvenHistoryUrl');
 
 		// Translate's banner and "Translate" tab link to Special:Translate (the in-wiki translation UI),
 		// which is not exported. Point them at the translation's source file on the edit host: the
 		// query carries "group=page-<base>" and "language=<code>", so "<base>/<code>" is the file.
-		if ($wgWikvenEditUrl && $title->isSpecial('Translate')) {
+		if ($editUrl && $title->isSpecial('Translate')) {
 			$params = wfCgiToArray($query);
 			if (isset($params['language']) && str_starts_with($params['group'] ?? '', 'page-')) {
 				$translation = Title::newFromText(substr($params['group'], 5) . '/' . $params['language']);
@@ -172,7 +173,7 @@ class Main implements
 					return self::leavingTheExport(str_replace(
 						'$1',
 						SourceFile::titleToParam($translation->getPrefixedText()),
-						$wgWikvenEditUrl
+						$editUrl
 					));
 				}
 			}
@@ -202,18 +203,18 @@ class Main implements
 		// without this it resolves to the page it is already on.
 		$wantsHistory = $action === 'history' || array_key_exists('diff', $params);
 		// For edit/history, $1 is the source filename so the link targets the editable file.
-		if ($action === 'edit' && $wgWikvenEditUrl) {
+		if ($action === 'edit' && $editUrl) {
 			return self::leavingTheExport(str_replace(
 				'$1',
 				SourceFile::titleToParam($title->getPrefixedText()),
-				$wgWikvenEditUrl
+				$editUrl
 			));
 		}
-		if ($wantsHistory && $wgWikvenHistoryUrl) {
+		if ($wantsHistory && $historyUrl) {
 			return self::leavingTheExport(str_replace(
 				'$1',
 				SourceFile::titleToParam($title->getPrefixedText()),
-				$wgWikvenHistoryUrl
+				$historyUrl
 			));
 		}
 		return $this->inTheExport($href);
@@ -289,7 +290,9 @@ class Main implements
 		}
 		$sourceDirectory = $this->config->get('WikvenSourceDirectory');
 
-		$logos = is_array($GLOBALS['wgLogos'] ?? null) ? $GLOBALS['wgLogos'] : [];
+		// Core's default here is false rather than an array, hence the test.
+		$configured = $this->config->get('Logos');
+		$logos = is_array($configured) ? $configured : [];
 		foreach ($wikvenLogos as $key => $value) {
 			if (is_array($value)) {
 				if (!isset($value['src'])) {
@@ -347,10 +350,11 @@ class Main implements
 	 * value ExtensionRegistry does not keep: it reads as "not set", and the extension's own
 	 * default replaces it wholesale when the registry applies extension.json config.
 	 *
-	 * The global is the test for ULS: it exists because ULS's extension.json declares it.
+	 * The key is the test for ULS: it exists because ULS's extension.json declares it, which is
+	 * also why this asks has() first -- get() throws on a key nothing has defined.
 	 */
 	private function unbindUlsInputMethods(): void {
-		if (!isset($GLOBALS['wgULSImeSelectors'])) {
+		if (!$this->config->has('ULSImeSelectors')) {
 			return;
 		}
 		$GLOBALS['wgULSImeSelectors'] = [];
@@ -390,16 +394,16 @@ class Main implements
 	 * @inheritDoc
 	 */
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void {
-		global $wgWikvenViewSourceUrl;
 		// A tab of wikven's own, added to the row the skin lays out: chrome, and a preview keeps
 		// the row the skin would have drawn. See BuildFor.
 		if (BuildFor::skinPreview()) {
 			return;
 		}
+		$viewSourceUrl = (string)$this->config->get('WikvenViewSourceUrl');
 		$title = $sktemplate->getTitle();
 		// A generated page (e.g. Version) has no source file; skip rather than emit a 404 link.
 		if (
-			!$wgWikvenViewSourceUrl
+			!$viewSourceUrl
 			|| !$title
 			|| !$title->canExist()
 			|| !SourceFile::exists($title->getPrefixedText())
@@ -409,7 +413,7 @@ class Main implements
 		$links['views']['wikven-viewsource'] = [
 			// MediaWiki core's existing "View source" label, so it is translated.
 			'text' => $sktemplate->msg('viewsource')->text(),
-			'href' => str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $wgWikvenViewSourceUrl)
+			'href' => str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $viewSourceUrl)
 		];
 
 		// Citizen draws the page actions as icon buttons and stops rendering their labels below
@@ -528,7 +532,7 @@ class Main implements
 	 * @return array<string,string>
 	 */
 	private function duplicatedByThisSkin(Title $title, string $skin): array {
-		$mainSkin = (string)( $GLOBALS['wgWikvenMainSkin'] ?? '' );
+		$mainSkin = (string)$this->config->get('WikvenMainSkin');
 		if ($mainSkin === '' || $skin === $mainSkin) {
 			return [];
 		}
