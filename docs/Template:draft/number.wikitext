@@ -1,7 +1,8 @@
 <onlyinclude>{{#iferror:{{#expr: 0{{#explode:{{{1|}}}|.|0}} * 1000000 + 0{{#explode:{{{1|}}}|.|1}} * 1000 + 0{{#explode:{{{1|}}}|.|2}} }}|0}}</onlyinclude><noinclude>
 One version as one number, so that two of them compare with a single {{#ifexpr:}} rather than with
 a nesting of three. "1.10.0" is 1010000 and "1.9.0" is 1009000, which is the comparison a string
-gets wrong. Room for a thousand patches and a thousand minors before the parts run into each other.
+gets wrong. Three digits a part, so a minor or a patch of 999 is the last one that still compares;
+the major has the rest of the number and no such ceiling.
 
 Each part is written with a leading zero -- 0 and then whatever #explode returned -- so a version
 of fewer than three parts still gives a number: "1.1" has no third part, #explode answers with
