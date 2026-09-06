@@ -175,7 +175,7 @@ body:not(.skin-citizen) .mw-parser-output a.external {
  * a way to be wrong, which it was -- these rules named .rootpage-index and so painted nothing on
  * index/ko, where the class is rootpage-index_ko.
  *
- * Masks rather than images, and rather than a filter. An uploaded SVG placed with [[File:...]] is
+ * Masks rather than images, and rather than a filter. An uploaded SVG placed with a File: link is
  * a fixed-colour picture that cannot follow the theme -- the problem the arrow above solves by
  * carrying two copies of itself -- and a filter could only invert or rotate the colours the file
  * already has, which a set of five does not survive. A mask throws the source's colours away and
@@ -302,7 +302,7 @@ body:not(.skin-citizen) .mw-parser-output a.external {
  *
  * The symbols are OOUI's own, which is the point of them. A reader who has used a MediaWiki wiki
  * has met the jigsaw piece on a template and the 文A on a language menu, so the glyph is doing
- * work no drawing of ours would do. They are masks rather than [[File:]] images for the same
+ * work no drawing of ours would do. They are masks rather than uploaded images for the same
  * reason the file-type marks are: a mask throws the source's colour away and takes the accent
  * token, so one copy serves both themes.
  *

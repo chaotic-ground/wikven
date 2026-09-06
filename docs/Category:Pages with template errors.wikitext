@@ -1,0 +1,12 @@
+__HIDDENCAT__
+A maintenance tracking category for a page whose template did not get what it
+needed and drew something else instead. Every template that can tell puts a page
+here, rather than each keeping a category of its own: what a reader of the
+category wants is the list of pages to look at, not which template it was.
+
+Defining it as a hidden category keeps it off the page footer in the static
+export, so it does not show readers a link to a category page the export does
+not include.
+
+WikvenFailOnCategories in .wikven.yaml names this category, so a build that puts
+a page in it stops and says which pages did.

@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven;
 
 use ImportImages;
 use Maintenance;
+use MediaWiki\Category\Category;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
@@ -73,6 +74,11 @@ class Build extends Maintenance {
 		// Materialize content translations before RunJobs so rendered translation pages get exported.
 		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
 		$this->runJobs("$ip/maintenance/runJobs.php");
+		// Every category a page belongs to is known now, and not before: a page's categories are
+		// written by the links update its edit queues, which runJobs above is what runs. Asked
+		// here rather than after the passes, so a site with a fault in it is told before three
+		// skins render it.
+		$this->assertNamedCategoriesAreEmpty();
 		// Every page the export will hold now exists, and nothing writes another revision after
 		// this, so this is where each page can be told when it was last edited, and by whom.
 		$this->stampSourceHistory();
@@ -906,6 +912,93 @@ class Build extends Maintenance {
 			}
 		}
 		rmdir($dir);
+	}
+
+	/**
+	 * Stop on a category the site said a finished build must find empty.
+	 *
+	 * MediaWiki renders a page with a fault in it and files the page in a tracking category rather
+	 * than refusing; the export then publishes the page and drops the category, which is not in it.
+	 * FailOnCategories says what a category with anything in it is worth, and this is what asks.
+	 */
+	private function assertNamedCategoriesAreEmpty(): void {
+		$named = (array)( $GLOBALS['wgWikvenFailOnCategories'] ?? [] );
+		$members = [];
+		foreach ($named as $entry) {
+			$title = $this->categoryNamed((string)$entry);
+			if ($title) {
+				$members[$title->getText()] = $this->pagesIn($title);
+			}
+		}
+		if (!$members) {
+			return;
+		}
+		// Every one of them at once: a reader who fixes the first and bakes again to meet the
+		// second has paid for a whole build to be told something this run already knew.
+		$failures = FailOnCategories::failures($members);
+		if ($failures) {
+			$this->fatalError(implode("\n", $failures));
+		}
+	}
+
+	/**
+	 * The category one entry of WikvenFailOnCategories names, or null where it names none.
+	 *
+	 * An entry is a message key where this wiki has that message and a category title otherwise,
+	 * because a message is how MediaWiki holds a tracking category's name: nothing in core says
+	 * "Pages with template loops", it says template-loop-category, and a wiki reading in another
+	 * language answers that key with its own name. Naming the key is therefore the only way the
+	 * default list can name core's faults without deciding what language the sites using it read
+	 * in, and a site writing a category of its own still writes the name.
+	 *
+	 * The two cannot collide in practice -- a category name is a page title and a message key is
+	 * not one a wiki would title a category -- and where they somehow do, the message wins and
+	 * says so by resolving to the name it holds.
+	 *
+	 * Null is for a message a wiki has edited to "-", which is MediaWiki's own way of switching a
+	 * tracking category off: a category nothing can be filed into is not one to look in.
+	 *
+	 * A key belonging to an extension this site does not load has no message either, and falls to
+	 * the category reading, where it names a category nothing files into and is found empty. That
+	 * is what lets the default carry every bundled extension's faults while a site loads none of
+	 * them, and it costs one query each for the ones it does not have.
+	 */
+	private function categoryNamed(string $entry): ?Title {
+		$message = wfMessage($entry)->inContentLanguage();
+		if ($message->exists()) {
+			if ($message->isDisabled()) {
+				return null;
+			}
+			$entry = $message->plain();
+			// A tracking category message may name one category per namespace, through $1 and the
+			// parser functions around it. Rendering that here would ask about one namespace and
+			// call the rest empty, which is worse than not asking, so it is passed over.
+			if (str_contains($entry, '{{')) {
+				return null;
+			}
+		}
+		$title = Title::newFromText($entry, NS_CATEGORY);
+		if (!$title || $title->getNamespace() !== NS_CATEGORY) {
+			$this->fatalError("Wikven: WikvenFailOnCategories names '$entry', which is not a category");
+		}
+		return $title;
+	}
+
+	/**
+	 * The pages in one category, as this wiki names them.
+	 *
+	 * Through Category rather than a query of our own: categorylinks reaches its rows by way of
+	 * linktarget in this MediaWiki and did not in the last one, and a category that must be empty
+	 * is not worth knowing that.
+	 *
+	 * @return string[]
+	 */
+	private function pagesIn(Title $category): array {
+		$pages = [];
+		foreach (Category::newFromTitle($category)->getMembers() as $member) {
+			$pages[] = $member->getPrefixedText();
+		}
+		return $pages;
 	}
 
 	/**

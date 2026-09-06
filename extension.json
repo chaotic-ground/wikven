@@ -177,6 +177,34 @@
 			"value": [],
 			"description": "Sources for third-party extensions and skins listed in extensions/skins. A map of component name to a tarball/repository/package source, fetched by maintenance/fetchExtensions.php before MediaWiki loads them."
 		},
+		"WikvenFailOnCategories": {
+			"value": [
+				"broken-file-category",
+				"duplicate-args-category",
+				"expansion-depth-exceeded-category",
+				"expensive-parserfunction-category",
+				"node-count-exceeded-category",
+				"nonnumeric-formatnum",
+				"post-expand-template-argument-category",
+				"post-expand-template-inclusion-category",
+				"restricted-displaytitle-ignored",
+				"template-loop-category",
+				"unstrip-depth-category",
+				"unstrip-size-category",
+				"bad-language-code-category",
+				"bad-double-underscore-category",
+				"double-px-category",
+				"cite-tracking-category-cite-error",
+				"math-tracking-category-error",
+				"math-tracking-category-render-error",
+				"scribunto-common-error-category",
+				"scribunto-module-with-errors-category",
+				"syntaxhighlight-error-category",
+				"templatestyles-stylesheet-error-category",
+				"templatestyles-page-error-category"
+			],
+			"description": "Categories no page may be in when the build finishes. A build that puts a page in one of them stops and says which pages did. A tracking category is how MediaWiki reports something it cannot refuse -- a template used without a required argument, a Lua error, a reference that names no source, a page whose template expansion ran past its limit -- and a static export publishes all of it without a word. Naming one here is what turns it into something the build refuses. An entry is read as a message key first and as a category name otherwise, because that is how MediaWiki holds these: a tracking category is named by a message, so a wiki in any language names it in its own. A key belonging to an extension this site does not load names nothing and is passed over, which is why the default can carry the bundled extensions' faults without requiring any of them, and a wiki that edits the message to \"-\" has switched that category off and this honours it. The default is the faults MediaWiki and the bundled extensions already track, and a site's own list is added to it rather than replacing it. Left out of the default are the categories that record a choice rather than a fault: hidden categories, indexed and noindexed pages, magic links, and the deprecation trackers, none of which a build should refuse."
+		},
 		"WikvenBundleWebfonts": {
 			"value": false,
 			"description": "When true and UniversalLanguageSelector is installed, bake its webfonts for the export's languages into a static stylesheet, so readers of a script their system lacks a font for see the intended typeface instead of tofu. Off by default because it adds font payload to the output."
