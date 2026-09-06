@@ -110,55 +110,7 @@ Some hosts also answer the address without the extension, so that <code>/Getting
 Whether you need an error page depends on the host, then: some show their own, and Cloudflare Pages shows yours or your front page. Name a page <code>404</code> in the source tree and the build writes <code>dist/404.html</code>, which GitHub Pages, GitLab Pages and Codeberg Pages serve for an address that is not there. Put <code><nowiki>__NOINDEX__</nowiki></code> on it — a sitemap is an invitation to index, and an error page is not a page to invite anyone to.
 
 <!--T:33-->
-== Telling a search engine the site exists ==
-
-<!--T:34-->
-Publishing a site does not put it in an index. Given [[<tvar name="1">Special:MyLanguage/Configuration#WikvenSiteUrl</tvar>|<code>WikvenSiteUrl</code>]] the bake writes <code>dist/sitemap.xml</code>, naming every page it exported at an absolute address, and that file is the site's own account of what it holds: a crawler reading it needs no link to reach a page. What no build can do is tell anybody the file is there.
-
-<!--T:35-->
-Ordinarily <code>robots.txt</code> does, through the <code>Sitemap:</code> line naming it. {{SITENAME}} writes no such file, and on many sites there would be nowhere to put one. A crawler reads <code>robots.txt</code> from the '''host root''' and from nowhere else, so a site published under a subdirectory — a project page on a forge, most often — would need the file at an address belonging to whoever owns the host rather than to the site. Where the whole host is yours the file is a step of your own between the bake and the upload, and the <code>Sitemap:</code> line in it can name a sitemap sitting in a subdirectory of that host.
-
-<!--T:36-->
-Failing that, each engine has to be told by hand in its own webmaster console, and no shortcut is left: Google's sitemap ping endpoint was [<tvar name="1">https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping</tvar> withdrawn in 2023] and answers 404, most of what it received having been spam. No console takes a submission until you have proved you control the site.
-
-<!--T:37-->
-=== Proving that the site is yours ===
-
-<!--T:38-->
-Each console offers a few proofs, and the one a static export can always give is a meta tag in the head of every page. Such a tag is about the site rather than about a page, which is not something a page can be written to carry, so it takes an extension: [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO</tvar> WikiSEO] turns one configuration key per engine into one tag. It does not ship in the image, so it needs a source under the [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]] like any other third-party extension.
-</translate>
-
-<syntaxhighlight lang="yaml" copy>
-extensions:
-  - WikiSEO
-config:
-  GoogleSiteVerificationKey: your-token-from-search-console
-  BingSiteVerificationKey: your-token-from-bing-webmaster-tools
-</syntaxhighlight>
-
-<translate>
-<!--T:39-->
-There are six of them, set under <code>config</code> like any other configuration variable, and each writes its own tag:
-
-<!--T:40-->
-{| class="wikitable"
-! Setting !! Meta tag !! Engine
-|-
-| <code>GoogleSiteVerificationKey</code> || <code>google-site-verification</code> || Google
-|-
-| <code>BingSiteVerificationKey</code> || <code>msvalidate.01</code> || Bing
-|-
-| <code>NaverSiteVerificationKey</code> || <code>naver-site-verification</code> || Naver
-|-
-| <code>YandexSiteVerificationKey</code> || <code>yandex-verification</code> || Yandex
-|-
-| <code>PinterestSiteVerificationKey</code> || <code>p:domain_verify</code> || Pinterest
-|-
-| <code>NortonSiteVerificationKey</code> || <code>norton-safeweb-site-verification</code> || Norton Safe Web
-|}
-
-<!--T:41-->
-None of these is a credential, so a public repository is no worse a place for one than any other setting: the value grants nothing but the claim, and the engine publishes it back to anyone who fetches a page of the site and reads the tag. This documentation site is claimed with the first of them.
+Being in the sitemap is not the same as being in an index, and no build can put a site in one. [[<tvar name="1">Special:MyLanguage/Search engines</tvar>|Search engines]] is what to read next.
 
 <!--T:8-->
 <span id="preview-locally"></span>
