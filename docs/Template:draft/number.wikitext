@@ -1,5 +1,5 @@
 <onlyinclude>{{#iferror:{{#expr: 0{{#explode:{{{1|}}}|.|0}} * 1000000 + 0{{#explode:{{{1|}}}|.|1}} * 1000 + 0{{#explode:{{{1|}}}|.|2}} }}|0}}</onlyinclude><noinclude>
-One version as one number, so that two of them compare with a single {{#ifexpr:}} rather than with
+One version as one number, so that two of them compare with a single <code><nowiki>{{#ifexpr:}}</nowiki></code> rather than
 a nesting of three. "1.10.0" is 1010000 and "1.9.0" is 1009000, which is the comparison a string
 gets wrong. Three digits a part, so a minor or a patch of 999 is the last one that still compares;
 the major has the rest of the number and no such ceiling.
@@ -11,7 +11,7 @@ as the nine it is.
 
 Anything this cannot read as a version is 0, and that is what makes Template:draft need no guard of
 its own. A page whose title ends in something other than a version is 0 and no build is older than
-it, so no hatnote; a {{WIKVENVERSION}} that is missing or is not a version is 0 and every release is
+it, so no hatnote; a <code><nowiki>{{WIKVENVERSION}}</nowiki></code> that is missing or is not a version is 0 and every release is
 newer than it, so the hatnote shows. Both are the answer that case wants, and neither is written
 down anywhere but here.
 </noinclude>

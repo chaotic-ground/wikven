@@ -3,7 +3,7 @@ A hatnote for a page named after a release, shown only while that release is unr
 
 Takes no arguments. The version comes from the page's own title -- everything after the last slash,
 so "Release notes/1.1.0" is about 1.1.0 -- and the version that built the page comes from
-{{WIKVENVERSION}}. Both are already written down, so there is nothing to set and nothing to
+<code><nowiki>{{WIKVENVERSION}}</nowiki></code>. Both are already written down, so there is nothing to set and nothing to
 remember: the bake that publishes the release is built by that release, the comparison stops being
 true, and the notice stops rendering. Nobody edits it out.
 
@@ -14,8 +14,8 @@ of its own because it is true of a page for exactly as long as the rest of this 
 site has no other page that would ask it. Split it out when a second one does.
 
 Once the release is out and the notice is gone, the page is an ordinary page of this site and can be
-wrapped in <translate> and marked like any other. Nothing here does that; somebody has to decide the
-page is worth translating.
+wrapped in <code><nowiki><translate></nowiki></code> and marked like any other. Nothing here does
+that; somebody has to decide the page is worth translating.
 
 Template:draft/number turns each version into a number and answers 0 for anything that is not one,
 which is what leaves this template a single comparison. What that means for a page this is used on
