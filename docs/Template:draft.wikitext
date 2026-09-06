@@ -1,4 +1,4 @@
-<onlyinclude>{{#ifexpr:{{draft/number|{{WIKVENVERSION}}}} < {{draft/number|{{#explode:{{PAGENAME}}|/|-1}}}}|{{note|type=warning|text=This page is about {{#explode:{{PAGENAME}}|/|-1}}, which is not out yet. It describes what is on <code>main</code> and may still change before the release.}}}}</onlyinclude><noinclude>
+<onlyinclude>{{#ifexpr:{{draft/number|{{WIKVENVERSION}}}} < {{draft/number|{{#explode:{{PAGENAME}}|/|-1}}}}|{{note|type=warning|text=This page is about {{#explode:{{PAGENAME}}|/|-1}}, which is not out yet. It describes what is on <code>main</code> and may still change before the release, so please do not mark it for translation yet.}}}}</onlyinclude><noinclude>
 A hatnote for a page named after a release, shown only while that release is unreleased.
 
 Takes no arguments. The version comes from the page's own title -- everything after the last slash,
@@ -6,6 +6,16 @@ so "Release notes/1.1.0" is about 1.1.0 -- and the version that built the page c
 {{WIKVENVERSION}}. Both are already written down, so there is nothing to set and nothing to
 remember: the bake that publishes the release is built by that release, the comparison stops being
 true, and the notice stops rendering. Nobody edits it out.
+
+It also asks not to have the page marked for translation, which mediawiki.org says with a template
+of its own (Template:DoNotTranslate) and which is the same request for the same reason: a draft
+that is still moving costs a translator their work twice. It is said here rather than in a template
+of its own because it is true of a page for exactly as long as the rest of this notice is, and this
+site has no other page that would ask it. Split it out when a second one does.
+
+Once the release is out and the notice is gone, the page is an ordinary page of this site and can be
+wrapped in <translate> and marked like any other. Nothing here does that; somebody has to decide the
+page is worth translating.
 
 Template:draft/number turns each version into a number and answers 0 for anything that is not one,
 which is what leaves this template a single comparison. What that means for a page this is used on
