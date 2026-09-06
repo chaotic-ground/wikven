@@ -26,26 +26,10 @@ Minerva는 나머지 둘보다 설명할 것이 많습니다. 빌드가 스킨�
 
 <!--T:6 @792bb893-->
 <code>skins</code>는 어떤 스킨을 빌드할지 정합니다. Wikven은 무엇을 나열하든 Vector를 빌드하므로, 다른 스킨을 적는 것은 대체가 아니라 추가입니다:
-</translate>
 
-<syntaxhighlight lang="yaml" copy>
-skins:
-  - MinervaNeue
-</syntaxhighlight>
-
-<translate>
 <!--T:34 @bb639b95-->
 그중 어느 것으로 사이트를 읽을지는 별개의 질문이고, MediaWiki에 이미 그 설정이 있습니다. <code>config</code> 아래 <code>DefaultSkin</code>에 스킨의 표준 이름을 적으십시오. 표준 이름은 MediaWiki가 그 스킨을 부르는 이름으로, 여러분이 나열할 때 쓴 이름과 늘 같지는 않습니다. MinervaNeue는 <code>minerva</code>, Vector는 <code>vector-2022</code>입니다.
-</translate>
 
-<syntaxhighlight lang="yaml" copy>
-skins:
-  - MinervaNeue
-config:
-  DefaultSkin: minerva
-</syntaxhighlight>
-
-<translate>
 <!--T:35 @580a1f35-->
 설정하지 않으면 빌드된 첫 스킨으로 읽습니다. 스킨이 하나뿐인 사이트에는 그것이 유일하게 필요한 답입니다. 사이트가 빌드하지 않는 스킨을 <code>DefaultSkin</code>에 적으면 그 사실을 알리고 무시합니다. 아무것도 렌더링하지 않는 기본 스킨은 출력 루트에 문서를 하나도 남기지 않기 때문입니다.
 

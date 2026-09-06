@@ -22,6 +22,12 @@ class Checks {
 	 */
 	private const LOCAL_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '::1', '[::1]'];
 
+	/**
+	 * The one repository wikven turns on for a site (default.yml: UseInstantCommons), and so the
+	 * one host a page can hotlink a picture from without having been told to.
+	 */
+	private const HOTLINK_HOST = 'upload.wikimedia.org';
+
 	/** @return Check[] */
 	public static function all(): array {
 		return [
@@ -44,6 +50,11 @@ class Checks {
 				self::noindex(...)
 			),
 			new Check('og-image', 'the card a shared link shows names a file this build wrote', self::ogImage(...)),
+			new Check(
+				'hotlink-host',
+				'no picture in the export is still fetched from the repository it came from',
+				self::hotlinkHost(...)
+			),
 			new Check('build-host', 'nothing a reader is handed names the machine that built it', self::buildHost(...)),
 			new Check(
 				'sitemap-reproducible',
@@ -370,6 +381,40 @@ class Checks {
 			return ['no page carries an og:image; the site names a social image, so one is expected'];
 		}
 		$site->note("og:image is absolute and points at a written file on $seen page(s)");
+		return [];
+	}
+
+	/** @return string[] */
+	private static function hotlinkHost(Site $site): array {
+		// A picture this site borrows from a repository is downloaded and republished, and what says
+		// the export stopped depending on that repository is that nothing in it still names the
+		// host. The documentation site embeds one, so this has something to be about.
+		//
+		// A reference the rewrite does not match is the failure nobody hears about: the build
+		// reports the files it could not fetch, and a reference it never saw is not one of them. A
+		// schema.org block spells the same URL "https:\/\/upload.wikimedia.org\/...", and for a
+		// while that spelling went through untouched while the og:image beside it was rewritten.
+		// Searched as raw text for that reason -- either spelling holds the host verbatim.
+		//
+		// Every file rather than the pages alone, and skipping the ones that are not text, which is
+		// the reading `grep -rI` gave this before it was a check: a picture is named from a
+		// stylesheet and from a script bundle as readily as from a page.
+		$guilty = [];
+		foreach ($site->filesEndingIn('') as $path) {
+			$text = $site->read($path);
+			if (str_contains(substr($text, 0, 8192), "\0")) {
+				continue;
+			}
+			if (str_contains($text, self::HOTLINK_HOST)) {
+				$guilty[] = $path;
+			}
+		}
+		if ($guilty) {
+			return [
+				'the export still names ' . self::HOTLINK_HOST . '; a picture reference was not rewritten',
+				...$guilty
+			];
+		}
 		return [];
 	}
 

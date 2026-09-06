@@ -19,8 +19,7 @@ class StripBuildStamps extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory;
-		$dir = rtrim((string)$wgWikvenHtmlDirectory, '/');
+		$dir = rtrim((string)$this->getConfig()->get('WikvenHtmlDirectory'), '/');
 		if ($dir === '' || !is_dir($dir)) {
 			return;
 		}

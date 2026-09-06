@@ -35,7 +35,8 @@ class ResolveTranslationLinks extends Maintenance {
 		if (!ExtensionRegistry::getInstance()->isLoaded('Translate')) {
 			return;
 		}
-		$htmlDir = rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/');
+		$config = $this->getConfig();
+		$htmlDir = rtrim((string)$config->get('WikvenHtmlDirectory'), '/');
 		if ($htmlDir === '' || !is_dir($htmlDir)) {
 			return;
 		}
@@ -43,9 +44,9 @@ class ResolveTranslationLinks extends Maintenance {
 
 		$pages = SkinOutput::pages(
 			$htmlDir,
-			$GLOBALS['wgWikvenSkins'] ?? [],
-			(string)( $GLOBALS['wgWikvenMainSkin'] ?? $GLOBALS['wgDefaultSkin'] ),
-			(string)$GLOBALS['wgDefaultSkin']
+			(array)$config->get('WikvenSkins'),
+			(string)$config->get('WikvenMainSkin'),
+			(string)$config->get('DefaultSkin')
 		);
 		foreach ($pages as $path) {
 			$lang = $this->fileLanguage($path, $htmlDir, $languageNameUtils);

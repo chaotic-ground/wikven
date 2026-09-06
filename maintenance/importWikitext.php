@@ -29,8 +29,7 @@ class ImportWikitext extends Maintenance {
 	 * @return bool Whether every file was imported successfully.
 	 */
 	public function execute() {
-		global $wgWikvenSourceDirectory;
-		$sourceDirectory = rtrim($wgWikvenSourceDirectory, '/');
+		$sourceDirectory = rtrim((string)$this->getConfig()->get('WikvenSourceDirectory'), '/');
 
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		RequestContext::getMain()->setUser($user);

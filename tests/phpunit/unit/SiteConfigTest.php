@@ -34,6 +34,19 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		}
 	}
 
+	/**
+	 * The three the build works out from the site's own lists. Each is a declared setting, so a
+	 * site's file can write one and $wgSettings->apply() will hand it over; WikvenSettings.php
+	 * writes the derived answer afterwards, and the site is left wondering why nothing happened.
+	 */
+	public function testASkinSettingTheBuildDerivesForItselfWarns() {
+		foreach (SiteConfig::DERIVED_SKIN_CONFIG as $derived) {
+			$warnings = SiteConfig::lint(['config' => [$derived => ['whatever']]]);
+			$this->assertCount(1, $warnings, "expected one warning for '$derived'");
+			$this->assertStringContainsString("'$derived' is worked out by the build", $warnings[0]);
+		}
+	}
+
 	/** A derived key is a real Wikven variable, so it must not also be reported as a typo. */
 	public function testADerivedPathIsNotReportedAsAnUnknownVariable() {
 		$warnings = SiteConfig::lint(['config' => ['WikvenSourceDirectory' => '/elsewhere']]);

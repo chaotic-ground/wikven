@@ -21,9 +21,14 @@ class BuildStyles extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgLanguageCode, $wgDefaultSkin;
+		$config = $this->getConfig();
+		$languageCode = (string)$config->get('LanguageCode');
+		$defaultSkin = (string)$config->get('DefaultSkin');
 
-		$cssDir = AssetFile::path($wgWikvenHtmlDirectory, $wgWikvenAssetDirectory);
+		$cssDir = AssetFile::path(
+			(string)$config->get('WikvenHtmlDirectory'),
+			(string)$config->get('WikvenAssetDirectory')
+		);
 
 		MediaWikiServices::getInstance()->getDBLoadBalancerFactory()->disableChronologyProtection();
 
@@ -32,8 +37,8 @@ class BuildStyles extends Maintenance {
 		foreach (glob("$cssDir/*.css") as $filename) {
 			$query = ResourceLoader::makeLoaderQuery(
 				[basename($filename, '.css')],
-				$wgLanguageCode,
-				$wgDefaultSkin,
+				$languageCode,
+				$defaultSkin,
 				// user
 				null,
 				// version; not relevant
@@ -60,8 +65,8 @@ class BuildStyles extends Maintenance {
 		// Render site.styles to its own file so rewriteScripts can link it; skip if empty.
 		$query = ResourceLoader::makeLoaderQuery(
 			['site.styles'],
-			$wgLanguageCode,
-			$wgDefaultSkin,
+			$languageCode,
+			$defaultSkin,
 			// user
 			null,
 			// version
@@ -85,8 +90,8 @@ class BuildStyles extends Maintenance {
 			$resourceLoader,
 			$cssDir,
 			glob("$cssDir/*.css"),
-			$wgLanguageCode,
-			$wgDefaultSkin
+			$languageCode,
+			$defaultSkin
 		);
 	}
 }

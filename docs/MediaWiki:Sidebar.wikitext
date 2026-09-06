@@ -18,6 +18,7 @@
 ** Special:MyLanguage/Translating|sidebar-translating
 ** Special:MyLanguage/Editing sidebar|sidebar-editing-sidebar
 ** Special:MyLanguage/Deploying|sidebar-deploying
+** Special:MyLanguage/Search engines|sidebar-search-engines
 ** Special:MyLanguage/Troubleshooting|sidebar-troubleshooting
 * sidebar-references
 ** Special:MyLanguage/Limitations|sidebar-limitations

@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\OutputName;
 use MediaWiki\Extension\Wikven\Search;
@@ -33,6 +34,12 @@ class Adder implements
 
 	/** The sidebar section for the skin list, when it does not go in the toolbox. */
 	private const SECTION = 'wikven-skins';
+
+	private Config $config;
+
+	public function __construct(Config $config) {
+		$this->config = $config;
+	}
 
 	/**
 	 * Offer each enabled skin's copy of this page, in the toolbox Hider has just emptied or in a
@@ -117,7 +124,7 @@ class Adder implements
 		}
 
 		// One skin means no skin list, so nothing refills the toolbox and its box stays empty.
-		if (count($GLOBALS['wgWikvenSkins'] ?? []) < 2) {
+		if (count($this->skins()) < 2) {
 			$out->addModuleStyles('ext.Wikven.emptyToolbox');
 		} else {
 			// Every skin renders the settings page, so every skin has its skin list to fill in. The
@@ -132,8 +139,11 @@ class Adder implements
 		// reader without JavaScript.
 		if (
 			$skin->getSkinName() === 'citizen'
-			&& count($GLOBALS['wgWikvenSkins'] ?? []) > 1
-			&& ( $GLOBALS['wgCitizenEnablePreferences'] ?? false )
+			&& count($this->skins()) > 1
+			// Citizen's own setting, so asked for before it is read: the skin naming itself here is
+			// the skin being loaded in a bake, but it is only a mock saying so in a test.
+			&& $this->config->has('CitizenEnablePreferences')
+			&& $this->config->get('CitizenEnablePreferences')
 		) {
 			$out->addModules('ext.Wikven.citizenSkins');
 		}
@@ -144,7 +154,7 @@ class Adder implements
 		// reader without JavaScript keeps the plain list of links where it is.
 		if (
 			$skin->getSkinName() === 'vector-2022'
-			&& count($GLOBALS['wgWikvenSkins'] ?? []) > 1
+			&& count($this->skins()) > 1
 		) {
 			$out->addModules('ext.Wikven.vectorSkins');
 		}
@@ -187,7 +197,7 @@ class Adder implements
 	 * collapses a section to begin with.
 	 */
 	private function prepareSettingsPage(OutputPage $out): void {
-		$page = (string)( $GLOBALS['wgWikvenSettingsPage'] ?? '' );
+		$page = (string)$this->config->get('WikvenSettingsPage');
 		$title = $out->getTitle();
 		if ($page === '' || !$title || $title->getPrefixedText() !== $page) {
 			return;
@@ -220,16 +230,15 @@ class Adder implements
 			return;
 		}
 
-		global $wgWikvenFooterUrl;
-
 		if ($key !== 'places') {
 			return;
 		}
-		if ($wgWikvenFooterUrl) {
-			$host = $this->repoHostName($wgWikvenFooterUrl);
+		$footerUrl = (string)$this->config->get('WikvenFooterUrl');
+		if ($footerUrl) {
+			$host = $this->repoHostName($footerUrl);
 			$footerItems['source'] = Html::element(
 				'a',
-				['href' => $wgWikvenFooterUrl],
+				['href' => $footerUrl],
 				$host !== null
 					? $skin->msg('wikven-footer-source', $host)->text()
 					: $skin->msg('wikven-footer-source-plain')->text()
@@ -282,9 +291,19 @@ class Adder implements
 		return './' . OutputName::href(OutputName::of('Special', "MyLanguage/$page"));
 	}
 
+	/**
+	 * Every skin the site is rendered in, and none where the wiki is not a build -- which is the
+	 * declared default, so this is a plain read.
+	 *
+	 * @return array The skin names, in the order the site listed them.
+	 */
+	private function skins(): array {
+		return (array)$this->config->get('WikvenSkins');
+	}
+
 	/** The page listing what the site redistributes, or null where the site asked for none. */
 	private function licensesTitle(): ?Title {
-		$name = (string)( $GLOBALS['wgWikvenLicensesPage'] ?? '' );
+		$name = (string)$this->config->get('WikvenLicensesPage');
 		return $name === '' ? null : Title::newFromText($name);
 	}
 

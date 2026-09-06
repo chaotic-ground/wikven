@@ -23,7 +23,7 @@ class MarkTranslations extends Maintenance {
 	}
 
 	public function execute() {
-		$source = rtrim((string)$this->getOption('source', $GLOBALS['wgWikvenSourceDirectory'] ?? ''), '/');
+		$source = rtrim((string)$this->getOption('source', $this->getConfig()->get('WikvenSourceDirectory')), '/');
 		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
 		if ($this->hasOption('all')) {

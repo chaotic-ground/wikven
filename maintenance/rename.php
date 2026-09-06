@@ -34,8 +34,7 @@ class Rename extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory;
-		$path = rtrim($wgWikvenHtmlDirectory, '/');
+		$path = rtrim((string)$this->getConfig()->get('WikvenHtmlDirectory'), '/');
 
 		$namespaceText = MediaWikiServices::getInstance()->getContentLanguage()->getNsText(...);
 

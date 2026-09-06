@@ -35,7 +35,7 @@ class RetranslateChrome extends Maintenance {
 		if (!ExtensionRegistry::getInstance()->isLoaded('Translate')) {
 			return true;
 		}
-		$source = rtrim((string)( $GLOBALS['wgWikvenSourceDirectory'] ?? '' ), '/');
+		$source = rtrim((string)$this->getConfig()->get('WikvenSourceDirectory'), '/');
 		if ($source === '' || !is_dir($source)) {
 			return true;
 		}
