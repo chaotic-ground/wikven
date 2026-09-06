@@ -47,7 +47,7 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 		// it installs.
 		set_exception_handler(self::handler(
 			MWExceptionHandler::handleUncaughtException(...),
-			static function (int $status): void {
+			static function (int $status): never {
 				exit($status);
 			}
 		));
