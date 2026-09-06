@@ -33,9 +33,6 @@ class BuildSitemap extends Maintenance {
 	/** The conventional name: what a crawler looks for, and what a webmaster tool is pointed at. */
 	private const FILE = 'sitemap.xml';
 
-	/** What the protocol allows in one sitemap before it has to be split across several. */
-	private const URL_LIMIT = 50_000;
-
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Write sitemap.xml naming the pages this build exported.');
@@ -89,20 +86,16 @@ class BuildSitemap extends Maintenance {
 		// index needed the same treatment for the same reason (#460).
 		sort($urls, SORT_STRING);
 
-		if (count($urls) > self::URL_LIMIT) {
-			$this->error(
-				'Wikven: this site has '
-				. count($urls)
-				. ' pages, over the '
-				. self::URL_LIMIT
-				. ' a single sitemap may name. '
-				. self::FILE
-				. ' is written anyway and a crawler will reject it; splitting it is not built yet.'
-			);
+		// Built before it is weighed, because one of the two caps is a fact about the bytes rather
+		// than about the pages, and the bytes are not known until the document is.
+		$document = $this->document($urls);
+		$past = SitemapLimits::exceeded(self::FILE, count($urls), strlen($document));
+		if ($past !== null) {
+			$this->error($past);
 		}
 
 		$file = "$htmlDir/" . self::FILE;
-		if (file_put_contents($file, $this->document($urls)) === false) {
+		if (file_put_contents($file, $document) === false) {
 			$this->fatalError("Wikven: could not write $file");
 		}
 		$this->output('Wikven: wrote ' . self::FILE . ' naming ' . count($urls) . " page(s)\n");
