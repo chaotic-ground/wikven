@@ -34,11 +34,18 @@ fi
 
 cd /var/www/html
 
+# --skins= names none, and it has to be said: the option defaults to every skin the installer
+# finds on disk, and it writes a wfLoadSkin for each into LocalSettings.php. That is how MonoBook
+# and Timeless were loaded into every build ever made -- listed on the licenses page as skins the
+# site publishes, and carrying four module entries into the script bundle every reader downloads.
+# Nothing here wants the installer's answer: WikvenSettings.php loads the site's own skins itself,
+# below, once fetchExtensions.php has put the third-party ones on disk.
 php maintenance/run.php install \
   --server=http://localhost:4000 \
   --dbtype sqlite \
   --dbpath cache/ \
   --scriptpath '' \
+  --skins= \
   --pass adminpassword \
   MediaWiki \
   Admin

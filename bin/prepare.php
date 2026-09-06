@@ -95,6 +95,13 @@ $run = static function (array $args) use ($self, $ip) {
 };
 
 // Install MediaWiki: creates the SQLite schema and LocalSettings.php in $ip.
+//
+// --skins= names none, and it has to be said: the option defaults to every skin the installer
+// finds on disk, and it writes a wfLoadSkin for each into LocalSettings.php. That is how MonoBook
+// and Timeless were loaded into every build ever made -- listed on the licenses page as skins the
+// site publishes, and carrying four module entries into the script bundle every reader downloads.
+// It matters more here than it does in the image: this embed root persists between runs, so a
+// skin fetched for one site was still on disk to be found for the next.
 $run([
 	'install',
 	'--dbtype',
@@ -103,6 +110,7 @@ $run([
 	"$work/.cache",
 	'--scriptpath',
 	'',
+	'--skins=',
 	'--pass',
 	'adminpassword',
 	'MediaWiki',
