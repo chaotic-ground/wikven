@@ -70,24 +70,44 @@ The division is what makes the passes safe to run beside each other: the orchest
 <!--T:29-->
 ; <code>checkLuaAgainstThisBuild</code>
 : Says what this site's [[<tvar name="1">Special:MyLanguage/Lua modules</tvar>|Lua]] and this build's Lua make of each other, before anything else happens. A site that lists Scribunto where no engine can run it ends the build, because it asked for something this build cannot do; a site with <code>Module:</code> files that never listed Scribunto is only told what those files come to, since with no engine to run them an <code>#invoke</code> is published as the text of the call. It runs first so the last bake is still in place when a site is refused.
+
+<!--T:38-->
 ; <code>clearOutputDirectory</code>
 : Empties the output directory, so a bake never inherits a file from the last one.
+
+<!--T:39-->
 ; <code>setMainPage</code>
 : Points <code>MediaWiki:Mainpage</code> at the imported <code>index</code> article, so the site root resolves to <code>index.html</code>.
+
+<!--T:40-->
 ; <code>importImages</code>
 : Uploads the image files in the source directory into the <code>File:</code> namespace. It runs '''before''' the wikitext import, so pages that embed a local image render a real thumbnail instead of a broken-media placeholder.
+
+<!--T:41-->
 ; <code>importWikitext</code>
 : Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.
+
+<!--T:42-->
 ; <code>setLicensesPage</code> and <code>setSettingsPage</code>
 : Write the two pages a build generates: the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses page]] listing what the site publishes and under which licenses, which the footer links from every page, and the [[<tvar name="2">Special:MyLanguage/Skins#settings</tvar>|Settings page]] carrying the reader's colour theme and skin. A source page of either name is used instead of the generated one.
+
+<!--T:43-->
 ; <code>dropDeadPlaceLinks</code> and <code>dropDeadCategoryLink</code>
 : Blank the system messages behind footer and menu entries that would link pages the export does not contain (privacy policy, disclaimers, community portal).
+
+<!--T:44-->
 ; <code>buildTranslations</code>
 : Materializes each <code><nowiki><translate></nowiki></code>-marked page's translations as real pages, so the job queue and the render passes treat them like any other page. See [[<tvar name="1">Special:MyLanguage/Translating</tvar>|Translating]].
+
+<!--T:45-->
 ; <code>RunJobs</code>
 : Runs MediaWiki's job queue, mainly thumbnail generation and link-table updates, one job type at a time in name order. The search-index job is held back to the very end, because it is enqueued per revision and would otherwise run once per pass of the queue and throw all but the last result away.
+
+<!--T:46-->
 ; <code>stampSourceHistory</code> and <code>hideBuildAuthors</code>
 : Date each page at the commit that last changed its source file, and credit that commit's author, so the footer's "last edited" line agrees with the top of the history it links to. Where the repository's history is out of reach — a shallow checkout, or a source directory that is not one — every page is dated at the commit being built and named to nobody.
+
+<!--T:47-->
 ; <code>freezePageTouched</code>
 : Pins every page's <code>page_touched</code>, which is a version input of any module carrying a version callback. This is the last write the database takes; everything after it reads.
 
@@ -100,28 +120,50 @@ Each pass renders the whole site in its own skin, into its own directory: the fi
 <!--T:32-->
 ; <code>RebuildFileCache</code>
 : Renders every content page to an HTML file. This is MediaWiki's own file cache; {{SITENAME}} treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.
+
+<!--T:48-->
 ; <code>retranslateChrome</code>
 : Re-renders each page written in a language other than the wiki's own — the translations, and the language copies of the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses page]] the build writes — with that language as the interface language. The file cache only caches the canonical anonymous view, which would leave every one of them wearing the content language's chrome.
+
+<!--T:49-->
 ; <code>stripBuildStamps</code>
 : Removes the request ids, render ids and timestamps MediaWiki stamps into every rendered page, which differ between bakes.
+
+<!--T:50-->
 ; <code>buildStyles</code>
 : Re-renders each CSS module the pages reference into a local file, and renders the <code>site.styles</code> module (<code>MediaWiki:Common.css</code> and the skin's site CSS) to its own file.
+
+<!--T:51-->
 ; <code>bakeWebfonts</code>
 : With <code>WikvenBundleWebfonts</code> set, writes UniversalLanguageSelector's webfonts for the export's languages as a plain stylesheet with the font files beside it. A no-op otherwise.
+
+<!--T:52-->
 ; <code>buildScripts</code>
 : Dumps the JavaScript the pages need into two files: <code>startup-static.js</code> (the loader manifest, with its network auto-load removed) and <code>modules-static.js</code> (the full dependency closure, so every module self-executes). It seeds the <code>site</code> module (<code>MediaWiki:Common.js</code> and the skin's JS) and any default [[<tvar name="1">Special:MyLanguage/JavaScript</tvar>|gadgets]], which a live wiki pulls in implicitly.
+
+<!--T:53-->
 ; <code>rewriteScripts</code>
-: Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the search box, which needs a live API, unless [[<tvar name="2">Special:MyLanguage/Searching</tvar>|SifterSearch]] is providing a static index.
+: Rewrites the cached HTML to load the local bundle instead of <code>load.php</code>: it swaps the async startup tag for the static files plus an explicit <code>mw.loader.load()</code>, links the site styles last so they win the cascade, and removes the search box, which needs a live API, unless [[<tvar name="1">Special:MyLanguage/Searching</tvar>|SifterSearch]] is providing a static index.
+
+<!--T:54-->
 ; <code>fillMinervaMenu</code>
 : Writes the site's own navigation into Minerva's main menu in each rendered page. Minerva builds that menu from its own definitions and never reads <code>MediaWiki:Sidebar</code>, and nothing in PHP can add an entry to it.
+
+<!--T:55-->
 ; <code>storeImages</code>
 : Copies every referenced image (from Wikimedia Commons via InstantCommons, or from local uploads) to a content-hashed local file and rewrites the URLs, so nothing is fetched over the network at view time.
+
+<!--T:56-->
 ; <code>rename</code>
 : Gives the namespace-prefixed cache files readable names (for example <code>ns6%3A...</code> becomes <code>File:...</code>), and reparents each page's relative links by its own depth.
+
+<!--T:57-->
 ; <code>resolveTranslationLinks</code>
 : Rewrites <code>Special:MyLanguage/</code> links over the finished tree, now that each translation is at a known path, so a link leads to the language of the page it sits on.
+
+<!--T:58-->
 ; <code>buildSitemap</code>
-: With [[<tvar name="3">Special:MyLanguage/Configuration#WikvenSiteUrl</tvar>|<code>WikvenSiteUrl</code>]] set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. A page that asks not to be indexed is left out, since a sitemap is an invitation to index and naming such a page would contradict the page itself; where no page is left, no file is written. Only the pass rendering into the output root writes one, for the same reason: the other passes are previews whose pages carry that refusal.
+: With [[<tvar name="1">Special:MyLanguage/Configuration#WikvenSiteUrl</tvar>|<code>WikvenSiteUrl</code>]] set, writes <code>sitemap.xml</code> naming every page the pass exported, at absolute URLs. A crawler needs absolute URLs, and a build has none to give until a site says where it will be published, so this writes nothing otherwise. A page that asks not to be indexed is left out, since a sitemap is an invitation to index and naming such a page would contradict the page itself; where no page is left, no file is written. Only the pass rendering into the output root writes one, for the same reason: the other passes are previews whose pages carry that refusal.
 
 <!--T:33-->
 A pass that renders a non-default skin also copies the search index into its own directory, so a search from that copy answers inside it.
