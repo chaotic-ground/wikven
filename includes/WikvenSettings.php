@@ -298,7 +298,11 @@ $wikvenNamedSkin = $wikvenSiteData['config']['DefaultSkin'] ?? '';
 if (!is_string($wikvenNamedSkin)) {
 	$wikvenNamedSkin = '';
 }
-$wikvenFirstSkin = $wgWikvenSkins[0] ?? $wgDefaultSkin;
+// Through $GLOBALS because this is the one place the file reads core's default before it
+// sets it below, and nothing else in the tree declares that global any more: the
+// maintenance scripts that used to say `global $wgDefaultSkin;` ask the config service now,
+// so a bare read here is a name static analysis can no longer account for.
+$wikvenFirstSkin = $wgWikvenSkins[0] ?? $GLOBALS['wgDefaultSkin'];
 if ($wikvenNamedSkin !== '' && !in_array($wikvenNamedSkin, $wgWikvenSkins, true)) {
 	// Named by its canonical name, which is what MediaWiki calls a skin and is not always what you
 	// listed it by: "minerva" for MinervaNeue, "vector-2022" for Vector.
