@@ -1,0 +1,83 @@
+{{DISPLAYTITLE:What's new in 1.1.0}}
+{{draft}}
+Most of this release is about a site knowing its own address, and about a build refusing to publish
+a page it rendered wrong.
+
+== A site that says where it is ==
+
+A static export has no server to ask, so until now nothing a wikven site wrote about itself could
+name an address. Tell it where the site will be published and that changes:
+
+<syntaxhighlight lang="yaml" copy>
+config:
+  WikvenSiteUrl: https://example.org/wiki/
+</syntaxhighlight>
+
+That one line is what the rest of this section stands on. Given it, a bake writes
+<code>dist/sitemap.xml</code> naming every page it exported at a whole address, which is the file a
+search engine reads to find pages nothing links to. Every page gains a <code>canonical</code> link
+saying which address is its own, so the extensionless address a host also answers on and the
+skin-preview copies stop competing with it, and a translated page gains <code>hreflang</code>
+alternates naming its siblings, so a reader is offered the language they read in.
+
+The picture a shared link shows works too. It has to be a whole address, because whatever renders
+the card never saw the page it came from, and it has to name a file the build actually wrote rather
+than a path only a live wiki serves. Both halves are now true, and a picture named in a page's head
+is told apart from one in its body, so the card and the article no longer have to agree about which
+file is meant.
+
+None of it names the machine that built the site any more. A bake installs against a local address,
+and two places used to carry it into the output — the site's own author and publisher in the
+structured data of every page, and <code>wgServer</code> in the script bundle. A reader who received
+either got the build container's address rather than the site's.
+
+[[Special:MyLanguage/Search engines|Search engines]] is the new page on what to do with all of it:
+what a sitemap is for, why <code>robots.txt</code> usually has nowhere to live on a project page,
+and how each engine is told by hand.
+
+== A build that stops when a page came out wrong ==
+
+MediaWiki reports what it will not refuse to render. A template used without a required argument
+draws its placeholder, a Lua error prints where the module's answer should be, a page whose template
+expansion ran past its limit is silently cut short — the page still builds, and a static export
+publishes all of it without a word. What MediaWiki does instead is put the page in a tracking
+category, which an export does not carry and nobody reads.
+
+<code>WikvenFailOnCategories</code> is the list of categories no page may be in when the build
+finishes, and it arrives with the twenty-three that mean something went wrong already in it. So a
+build now stops where it used to publish:
+
+<syntaxhighlight lang="console">
+Wikven: Category:Pages with script errors holds 1 page(s), and WikvenFailOnCategories says it
+must hold none: Guide
+</syntaxhighlight>
+
+A site that wants a category of its own gated adds it to the list; a site that wants one of the
+defaults back sets that category's message to <code>-</code>, which is how MediaWiki turns a
+tracking category off.
+
+== The licenses page names the server ==
+
+A site built by the standalone binary is served by the web server inside that binary, and the
+licenses page now says which one and under what licence — the same way it already named MediaWiki
+and the extensions. A build from the Docker image is unchanged: there is no server in the export to
+name.
+
+== Also fixed ==
+
+* Skins the site never asked for stopped riding into every reader's script bundle, and onto the
+  licenses page as skins the site publishes. The installer used to enable every skin it found on
+  disk.
+* The settings page's skin list fills in reliably; it used to depend on the page being ready first.
+* The preview server stopped answering for addresses the published site does not have, which made a
+  broken link look like a working one.
+* The image stopped shipping a Caddy module wikven cannot use.
+* A build step that died halfway stopped reporting success. The standalone binary still cannot
+  report every such death — [https://github.com/chaotic-ground/wikven/issues/666 #666] is the
+  record of what is left, and it is FrankenPHP's to fix.
+* A sitemap past the fifty thousand pages or fifty megabytes the protocol allows is now reported
+  rather than written silently.
+* <code>translate check</code> refuses a translation that carries a <code><nowiki><translate></nowiki></code>
+  tag. Such a tag is swallowed by the unit above it, and the unit is then shown in the source
+  language rather than the translated one — this site had two paragraphs like that in its own
+  Korean, published and unnoticed.
