@@ -27,7 +27,7 @@ class ScaffoldTranslations extends Maintenance {
 	}
 
 	public function execute() {
-		$source = rtrim((string)$this->getOption('source', $GLOBALS['wgWikvenSourceDirectory'] ?? ''), '/');
+		$source = rtrim((string)$this->getOption('source', $this->getConfig()->get('WikvenSourceDirectory')), '/');
 
 		$language = $this->getArg(0);
 		if ($language === null) {

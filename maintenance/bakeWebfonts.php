@@ -36,9 +36,10 @@ class BakeWebfonts extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgLanguageCode;
+		$config = $this->getConfig();
+		$assetDirectory = (string)$config->get('WikvenAssetDirectory');
 
-		if (!$this->getConfig()->get('WikvenBundleWebfonts')) {
+		if (!$config->get('WikvenBundleWebfonts')) {
 			return;
 		}
 		if (!ExtensionRegistry::getInstance()->isLoaded('UniversalLanguageSelector')) {
@@ -57,14 +58,14 @@ class BakeWebfonts extends Maintenance {
 			return;
 		}
 
-		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
-		$cssDir = AssetFile::path($htmlDir, $wgWikvenAssetDirectory);
+		$htmlDir = rtrim((string)$config->get('WikvenHtmlDirectory'), '/');
+		$cssDir = AssetFile::path($htmlDir, $assetDirectory);
 
-		$languages = $this->discoverLanguages($htmlDir, $wgLanguageCode);
+		$languages = $this->discoverLanguages($htmlDir, (string)$config->get('LanguageCode'));
 
 		// The woff2 live at <htmlDir>/fonts/uls/...; the stylesheet sits in $cssDir, so its url()s
 		// step up out of any asset subdirectory to reach them.
-		$basePath = str_repeat('../', AssetFile::depth($wgWikvenAssetDirectory)) . self::FONTS_SUBDIR . '/';
+		$basePath = str_repeat('../', AssetFile::depth($assetDirectory)) . self::FONTS_SUBDIR . '/';
 
 		$built = ( new FontRepository($repository) )->build($languages, $basePath);
 		if (trim($built['css']) === '' || $built['files'] === []) {

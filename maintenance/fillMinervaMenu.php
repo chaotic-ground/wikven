@@ -45,10 +45,10 @@ class FillMinervaMenu extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgDefaultSkin;
+		$config = $this->getConfig();
 
-		$dir = rtrim((string)$wgWikvenHtmlDirectory, '/');
-		if ($wgDefaultSkin !== 'minerva' || $dir === '' || !is_dir($dir)) {
+		$dir = rtrim((string)$config->get('WikvenHtmlDirectory'), '/');
+		if ($config->get('DefaultSkin') !== 'minerva' || $dir === '' || !is_dir($dir)) {
 			return;
 		}
 		// The site's own navigation written into the skin's menu is the largest edit wikven makes
@@ -104,7 +104,7 @@ class FillMinervaMenu extends Maintenance {
 	 * generates in its place. Empty when the site has turned that page off.
 	 */
 	private function settingsMarkup(): string {
-		$name = (string)( $GLOBALS['wgWikvenSettingsPage'] ?? '' );
+		$name = (string)$this->getConfig()->get('WikvenSettingsPage');
 		$title = $name === '' ? null : Title::newFromText($name);
 		if (!$title) {
 			return '';
@@ -168,11 +168,9 @@ class FillMinervaMenu extends Maintenance {
 	 * action on a page.
 	 */
 	private function skinMarkup(string $page): string {
-		global $wgDefaultSkin;
-
 		$items = '';
 		$skin = RequestContext::getMain()->getSkin();
-		foreach (SkinList::forPage($skin, $page, $wgDefaultSkin) as $entry) {
+		foreach (SkinList::forPage($skin, $page, (string)$this->getConfig()->get('DefaultSkin')) as $entry) {
 			$classes = ['wikven-skin-item'];
 			if ($entry['active']) {
 				$classes[] = 'active';
