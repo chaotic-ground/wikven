@@ -13,6 +13,9 @@ examples/*/dist/
 # uv
 /.venv/
 
+# Python bytecode, from running tests/bake/ against a site.
+__pycache__/
+
 # OpenTofu / Terraform
 /.tf/.terraform/
 /.tf/terraform.tfstate
