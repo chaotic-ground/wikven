@@ -109,6 +109,9 @@ Some hosts also answer the address without the extension, so that <code>/Getting
 <!--T:32-->
 Whether you need an error page depends on the host, then: some show their own, and Cloudflare Pages shows yours or your front page. Name a page <code>404</code> in the source tree and the build writes <code>dist/404.html</code>, which GitHub Pages, GitLab Pages and Codeberg Pages serve for an address that is not there. Put <code><nowiki>__NOINDEX__</nowiki></code> on it — a sitemap is an invitation to index, and an error page is not a page to invite anyone to.
 
+<!--T:33-->
+Being in the sitemap is not the same as being in an index, and no build can put a site in one. [[<tvar name="1">Special:MyLanguage/Search engines</tvar>|Search engines]] is what to read next.
+
 <!--T:8-->
 <span id="preview-locally"></span>
 == Preview locally ==
