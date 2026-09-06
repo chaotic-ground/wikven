@@ -29,10 +29,9 @@ class LicensesPage {
 	/**
 	 * The language a title is a generated copy in, or null where it is not one.
 	 *
-	 * Generated is the whole of it. The build writes copies only where it wrote the page itself --
-	 * a site that provides its own is left alone, subpages and all -- so a subpage under a page the
-	 * source tree provides belongs to the site, or to Translate, and this must not answer for it.
-	 * The source tree is what says which, and it is the same answer in every pass.
+	 * Generated is the whole of it. The build writes copies only where it wrote the page itself, so
+	 * a subpage under a page the source tree provides belongs to the site, or to Translate, and
+	 * this must not answer for it.
 	 *
 	 * @param Title $title
 	 * @param callable(string):bool $isKnownLanguage
@@ -67,9 +66,7 @@ class LicensesPage {
 	 *
 	 * The languages are the ones the source tree carries translations in, because those are the
 	 * ones build.php writes a copy for. Which of those copies are the build's own is the question
-	 * above, asked once per language: a site that provides its own page, or its own copy in one
-	 * language, keeps it, and a caller that re-rendered it would be dressing someone else's page in
-	 * a language nobody asked for.
+	 * above, asked once per language.
 	 *
 	 * @param string $sourceDir
 	 * @param callable(string):bool $isKnownLanguage

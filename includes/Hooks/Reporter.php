@@ -14,31 +14,10 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 	 *
 	 * Make a run that died of an Error say so in its exit status.
 	 *
-	 * A PHP Error -- a missing class, a TypeError, an argument count -- is a Throwable and not an
-	 * Exception, so it goes past MaintenanceRunner's catch and reaches MWExceptionHandler, whose
-	 * guard against a script claiming success is a register_shutdown_function() that exits 255.
-	 * That one route is the one the standalone binary loses, and only that: embedded FrankenPHP
-	 * reads the status out of the engine and runs the shutdown functions after, so a status set
-	 * from one is set too late to be read rather than refused. Three lines of PHP measure it,
-	 * exit(7) at the top of a file giving 7 under the binary and the same exit(7) from a shutdown
-	 * function giving 0.
-	 *
-	 * So this closes the gap where it opens, with the same 255 said from the exception handler
-	 * itself, which is early enough. It costs nothing under a real PHP binary, where both routes
-	 * already answer 255.
-	 *
-	 * It matters because the binary re-invokes itself for every step of a build through that path
-	 * -- embedded FrankenPHP leaves PHP_BINARY empty, so a step runs as `<self> php-cli` -- and a
-	 * step that died of an Error hands back 0. Measured on a bake with an Error thrown right after
-	 * runJobs: the binary printed the backtrace, wrote no page at all, and finished with
-	 * "wikven: done" and exit 0. SkinPass covers a skin pass that dies halfway through rendering;
-	 * every other step of a build is this.
-	 *
-	 * Installed here rather than in WikvenSettings.php because installHandler() runs in Setup.php
-	 * after LocalSettings.php and would replace anything put there. This hook is the first thing
-	 * wikven runs after it, and the window it leaves is not one to worry about: with no handler
-	 * installed yet, an Error before this point ends the run through PHP's own fatal path, which
-	 * says 255 under either runtime.
+	 * An Error goes past MaintenanceRunner's catch to MWExceptionHandler, whose guard is a shutdown
+	 * function exiting 255 -- which the standalone binary reads the status too early to see, so a
+	 * build step that died handed back 0. Installed from a hook because core's installHandler()
+	 * runs after LocalSettings.php.
 	 */
 	public function onSetupAfterCache(): void {
 		self::install(MW_ENTRY_POINT, defined('MW_PHPUNIT_TEST'), 'set_exception_handler');
@@ -47,10 +26,8 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 	/**
 	 * Put the handler in front of core's, where this is a run whose status is worth correcting.
 	 *
-	 * What is handed to $set is the one thing here no test reaches: a test can watch that a
-	 * handler was installed and can drive handler() directly, but calling the installed one means
-	 * calling core's reporter and then a real exit. A bake with an Error thrown into it is what
-	 * covers this line.
+	 * What is handed to $set is the one thing here no test reaches: calling the installed handler
+	 * means calling core's reporter and then a real exit.
 	 *
 	 * @param string $entryPoint MW_ENTRY_POINT, naming what kind of run this is.
 	 * @param bool $underTest Whether PHPUnit is running, which owns the handler while it is.

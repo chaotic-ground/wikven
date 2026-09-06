@@ -5,30 +5,10 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * Where in a rendered page a reference is read by something that never saw the page.
  *
- * A picture in the body and the same picture named in the head are one file and two references. The
- * body's is read by a browser that already has the page, so the copy beside it resolves, and the
- * export stays a directory anyone can move or open from disk. The head's -- an og:image, the image
- * of a schema.org block -- is read by a crawler that was handed the tag and nothing else, and a
- * path beside a page it never fetched resolves against whatever that crawler happens to be doing.
- *
- * Which of the two a reference is cannot always be read off the reference. Where this wiki stored
- * the file, the shape says it: MediaWiki hands the body File::getUrl() and metadata
- * File::getFullUrl(), so a scheme and a host arriving here is MediaWiki having already answered
- * (see UploadReference). A file a foreign repository serves is a whole URL to both, because the
- * repository is somewhere else whoever is asking -- the distinction is gone before the page is
- * written, and the only thing that still knows is where in the page the reference sits. That is
- * this.
- *
- * Two spans count. A <meta> element: everything a crawler is told about a page arrives as one, and
- * nothing rendering the page fetches its content=. A schema.org <script type="application/ld+json">
- * block: the same claims, in JSON. What is deliberately not here is the rest of the head -- a
- * stylesheet, a favicon, a preload -- which the browser fetches while rendering this page, exactly
- * as it fetches the body's pictures, and which a whole URL would pin to one host for nothing.
- *
- * Only the head is searched. A <meta> has no business outside it, and a page that talks about HTML
- * is full of text that looks like tags: MediaWiki writes that through htmlspecialchars(), so
- * "&lt;meta" could not be mistaken for a tag here anyway, but a rule that holds only because of
- * someone else's escaping is one worth not depending on.
+ * The body's pictures are read by a browser that already has the page, so a copy beside it resolves
+ * and the export stays a directory anyone can open from disk. An og:image is read by a crawler
+ * handed the tag alone. Where the shape no longer says which is which -- a foreign repository
+ * answers both whole -- where the reference sits is all that still knows.
  */
 final class HeadMetadata {
 	/** @var list<array{int, int}> Start and end offset of each span, in the page it was read from. */

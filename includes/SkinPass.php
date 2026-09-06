@@ -5,18 +5,10 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * What a skin pass says when it has finished, and how the build reads that back.
  *
- * The build renders each skin in a process of its own and asks it the usual question -- what did
- * you exit with. That answer cannot be trusted here. An uncaught PHP Error goes past
- * MaintenanceRunner's catch, which takes Exception rather than Throwable, and reaches MediaWiki's
- * handler; its guard against claiming success on the way out is a shutdown function calling
- * exit(255), and the standalone binary drops an exit code set from a shutdown function. So a pass
- * that died halfway through rendering returned 0, and a build reported success over an export
- * holding 15 of its 222 pages -- every page in it perfectly good, which is why nothing downstream
- * had anything to say.
- *
- * A line a pass can only write by reaching the end of its own work does not have that problem,
- * whatever killed the pass and whatever it managed to return. Both sides of it are here, so the
- * sentence a pass writes and the sentence the build looks for cannot drift apart.
+ * What a pass exits with cannot be trusted here: an uncaught PHP Error reaches MediaWiki's handler,
+ * whose guard is a shutdown function calling exit(255), and the standalone binary drops a code set
+ * from one. So a pass that died halfway through returned 0, and a build reported success over an
+ * export of 15 pages out of 222. A line a pass can only write at the end of its own work cannot.
  */
 class SkinPass {
 	private const WROTE = 'Wikven: this pass wrote';
@@ -37,8 +29,6 @@ class SkinPass {
 	 *
 	 * Three questions, and the second is the one this class exists for: did the pass return
 	 * success, did it say it finished, and do the passes agree on how much of the site there is.
-	 * The third is nearly free -- every pass renders the same wiki, which nothing has written to
-	 * since it was frozen, so passes that report different numbers have not all rendered it.
 	 *
 	 * @param array<string,array{exit:int,output:string}> $passes Skin name to what it returned and said.
 	 * @return string[] Empty where every pass finished and they agree.

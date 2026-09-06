@@ -77,14 +77,9 @@ class BuildTranslations extends Maintenance {
 		// the shared message index caught up, silently producing no <Page>/<lang> page for it.
 		$this->drainJobs();
 		// Deferring the renders is not enough on its own, because the drains above have already done
-		// some: saving a unit page queues a RenderTranslationPageJob for its page, and the drain
-		// inside the next page's prepare() runs it. Those renders asked #ifexist whether units that
-		// did not exist yet existed -- a prevnext label finds its target's translated title that way
-		// -- and Title::newFromText() keeps the instance it answered with, whose "no such page" is
-		// memoized for the life of the process. Creating the page afterwards does not undo it: the
-		// units are made with Title::makeTitle(), which never touches that cache. So every later
-		// render in this process, including the search index's, would go on being told the title is
-		// untranslated and fall back to the English page name (#460, #464).
+		// some: saving a unit page queues a RenderTranslationPageJob, which the next prepare() runs.
+		// Those renders asked #ifexist whether units that did not exist yet existed, and
+		// Title::newFromText() memoizes "no such page" for the life of the process (#460, #464).
 		Title::clearCaches();
 		foreach ($prepared as $title) {
 			$this->render($title);

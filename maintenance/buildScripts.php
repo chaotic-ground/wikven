@@ -199,9 +199,8 @@ class BuildScripts extends Maintenance {
 	 * The lazy modules any rendered page needs, from the same pass over the same HTML.
 	 *
 	 * Top-level pages only, as collectPageModules() reads them: a translation is rendered from the
-	 * source page's wikitext, so a collapsible on one is a collapsible on the other, and the source
-	 * page is not in a subdirectory. Scanning deeper would also reach the per-skin copies, which
-	 * this skin's bundle has no business reading.
+	 * source page's wikitext, so a collapsible on one is a collapsible on the other. Scanning
+	 * deeper would also reach the per-skin copies.
 	 *
 	 * @return string[]
 	 */

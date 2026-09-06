@@ -48,11 +48,9 @@ class SiteConfig {
 	/**
 	 * Config the build works out for itself, which a site's file cannot set.
 	 *
-	 * These name where the build reads from and writes to, and it derives all three from
-	 * WIKVEN_WORKDIR: the source directory it was pointed at, the output directory beside it, and
+	 * All three come from WIKVEN_WORKDIR: the source directory, the output directory beside it, and
 	 * the git log the bake action dumps there. A site that set one would move where its pages come
-	 * from without moving where its own config file is looked for, so WikvenSettings.php puts them
-	 * back after a site's config is applied and lint says here that it will.
+	 * from without moving where its own config file is looked for.
 	 */
 	public const DERIVED_CONFIG = [
 		'WikvenSourceDirectory',
@@ -63,12 +61,9 @@ class SiteConfig {
 	/**
 	 * Config the build works out from the site's own lists, which a site's file cannot set either.
 	 *
-	 * A site says which skins to build under `skins` and which to read the site in with
-	 * DefaultSkin, and the build turns those two answers into the skin names MediaWiki knows and
-	 * the one whose pages go to the output root. WikvenMissing is not an answer at all: it is what
-	 * the build found missing while loading those lists. Writing any of the three here would be
-	 * answering a question the file has already asked properly, and WikvenSettings.php overwrites
-	 * all three after a site's config is applied; lint says here that it will.
+	 * A site says which skins to build and which to read it in with DefaultSkin; the build turns
+	 * those into the names MediaWiki knows and the one whose pages go to the output root.
+	 * WikvenMissing is what it found missing while loading them.
 	 */
 	public const DERIVED_SKIN_CONFIG = [
 		'WikvenSkins',
@@ -163,13 +158,9 @@ class SiteConfig {
 	 * Config-schema failures, as lines naming the setting that is wrong.
 	 *
 	 * SettingsBuilder::validate() checks the settings core defines against their schema, which is
-	 * how a site hears that it wrote a list where a number belongs instead of meeting a stack trace
-	 * further into the boot with nothing in it about its own file. Core renders a StatusValue as a
-	 * debug table wrapped at twenty-five characters; the name and the reason are what a person
-	 * needs, so they are pulled out here.
-	 *
-	 * Only errors are read. The validator also warns that it declined to check a map with integer
-	 * keys, which is not something a site can act on and would be printed by every build.
+	 * how a site hears that it wrote a list where a number belongs. Core renders a StatusValue as a
+	 * debug table wrapped at twenty-five characters, so the name and the reason are pulled out
+	 * here. Only errors are read.
 	 *
 	 * @param StatusValue $status What SettingsBuilder::validate() returned.
 	 * @return string[] One line per failed setting, empty when the config conforms.
@@ -196,14 +187,9 @@ class SiteConfig {
 	/**
 	 * Config names declared by a set of extension and skin manifests, as a lookup set.
 	 *
-	 * A manifest declares its settings in a "config" map, and ExtensionRegistry turns each name in
-	 * it straight into a global. Nothing on that path reaches the schema SettingsBuilder validates
-	 * against, so core is never in a position to say that a name a site wrote belongs to no one.
-	 * Reading the manifests is what is left.
-	 *
-	 * A manifest declaring a prefix other than "wg" is skipped whole. A site's file reaches globals
-	 * through $wgSettings, which writes that prefix and no other, so those settings cannot be
-	 * written from a config file at all, and counting them as known would say they can.
+	 * ExtensionRegistry turns each name under a manifest's "config" map straight into a global, and
+	 * nothing on that path reaches the schema SettingsBuilder validates against. A manifest
+	 * declaring a prefix other than "wg" is skipped whole: $wgSettings writes no other.
 	 *
 	 * @param string[] $manifestPaths Absolute paths to extension.json/skin.json files.
 	 * @return array<string,true> Config names, as keys.
@@ -235,8 +221,7 @@ class SiteConfig {
 	 * Config names a site wrote that nothing defines, each with a near miss where there is one.
 	 *
 	 * This is the quietest mistake a config file can make: the name is written into a global, no
-	 * code ever reads that global, and the build succeeds having ignored the line. Every other
-	 * report in this class is about a value; this one is about a name.
+	 * code ever reads that global, and the build succeeds having ignored the line.
 	 *
 	 * @param string[] $configKeys The names under "config" in the site's file.
 	 * @param string[] $defined Every config name something here defines.
@@ -261,10 +246,9 @@ class SiteConfig {
 	/**
 	 * The defined name closest to $name, or null when none of them is close enough to suggest.
 	 *
-	 * A misspelling is a character or two out. Past that a suggestion is a guess, and offering one
-	 * costs more than the warning gains: a site told it meant something else goes and reads about
-	 * a setting it never wanted. The allowance grows with the name, because a short name reaches an
-	 * unrelated one in fewer edits than a long one does.
+	 * A misspelling is a character or two out. Past that a suggestion is a guess that costs more
+	 * than the warning gains. The allowance grows with the name: a short one reaches an unrelated
+	 * name in fewer edits.
 	 *
 	 * @param string $name A config name nothing defines.
 	 * @param string[] $defined Every config name something here defines.
@@ -292,9 +276,8 @@ class SiteConfig {
 	 * Is $name usable as the directory name of a bundled extension or skin?
 	 *
 	 * The names in a site's extensions and skins lists become paths under $IP, so a name carrying a
-	 * path separator names a directory somewhere else entirely -- one in the mounted source tree,
-	 * say -- and would be loaded as if the image had shipped it. maintenance/fetchExtensions.php
-	 * asks the same of every WikvenRepositories key.
+	 * path separator names a directory somewhere else entirely and would be loaded as if the image
+	 * had shipped it. fetchExtensions.php asks the same of every WikvenRepositories key.
 	 *
 	 * @param string $name A name from a config file's 'extensions' or 'skins' list.
 	 * @return bool Whether the name is a plain directory name.

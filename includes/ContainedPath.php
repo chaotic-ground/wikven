@@ -5,22 +5,12 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * Joins a web path onto the directory it is supposed to name, or refuses it for climbing out.
  *
- * Two steps take a path out of content and look for a file at it: storeImages reads the rendered
- * HTML for $wgUploadPath references, and AssetLocalizer reads dumped CSS for url()s under /skins,
- * /resources and /extensions. Both paths come from something a site author wrote -- a page's body,
- * or MediaWiki:Common.css -- so neither is the build's own, and concatenating one onto a directory
- * hands whoever wrote it every file the build can read: the copy lands in the output directory and
- * is published with the site.
+ * Two steps take a path out of content and look for a file at it: storeImages reads rendered HTML
+ * for $wgUploadPath references, and AssetLocalizer reads dumped CSS for url()s. Both come from
+ * something a site author wrote, so concatenating one onto a directory hands them the filesystem.
  *
- * The answer is not to trust the path but to bound where it can reach, which is what this does.
- *
- * The path is judged, not where the filesystem would take it. A symlink under the root pointing out
- * of it escapes this, and is left to: neither root holds anything the author of a path put there.
- * MediaWiki writes a file's contents into the upload directory rather than a link to them, and the
- * install root is the build's own. What a source tree can bring is refused where the source tree is
- * read, by ImageImport, which can name the file it refused -- while a check here would have refused
- * the symlinked skins/ and extensions/ of a MediaWiki someone develops against, silently, which is
- * the kind of failure this class exists against.
+ * The path is judged, not where the filesystem would take it: judging the latter would refuse the
+ * symlinked skins/ of a MediaWiki someone develops against.
  */
 class ContainedPath {
 	/**

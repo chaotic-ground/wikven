@@ -10,14 +10,11 @@ use MediaWiki\Registration\ExtensionRegistry;
 /**
  * Serves {{WIKVENVERSION}}: the version of the Wikven that is building this page.
  *
- * A site saying which Wikven built it had to write the number by hand and remember to change it,
- * and the documentation had the same problem in a worse place -- it tells readers which tag to pin
- * an action to, so a stale number there is a workflow that does not resolve. A variable is read at
- * build time and is right by construction; release-please already keeps extension.json's version
- * in step with the tag it cuts.
+ * A site saying which Wikven built it had to write the number by hand, and the documentation had
+ * the same problem in a worse place -- it tells readers which tag to pin an action to, so a stale
+ * number there is a workflow that does not resolve. A variable is right by construction.
  *
- * MediaWiki's own {{CURRENTVERSION}} answers for MediaWiki. This answers for what wrote the site,
- * which is the other half of the question and the half a wikven site is likelier to be asked.
+ * MediaWiki's own {{CURRENTVERSION}} answers for MediaWiki; this answers for what wrote the site.
  */
 class Versioner implements GetMagicVariableIDsHook, ParserGetVariableValueSwitchHook {
 	private const VARIABLE = 'wikvenversion';

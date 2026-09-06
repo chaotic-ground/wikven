@@ -44,14 +44,9 @@ class TranslationSource {
 	/**
 	 * The source text of a page's title translation unit, or null when its title is not translatable.
 	 *
-	 * The unit's source text is the page's own title, exactly as Translate synthesizes its
-	 * "Page display title" unit from the page name: nothing is added to the source wikitext, so an
-	 * English page renders as it did before and a rename is what makes the translated title stale.
-	 *
-	 * A page that sets {{DISPLAYTITLE:}} itself is excluded. That magic word sits outside
-	 * <translate>, so it is copied verbatim into every translation page and runs there too, fixing
-	 * the same title in every language; asking for a translation Translate could not apply would
-	 * only invite one that silently does nothing.
+	 * The unit's source text is the page's own title, as Translate synthesizes its "Page display
+	 * title" unit. A page setting {{DISPLAYTITLE:}} itself is excluded: that word sits outside
+	 * <translate>, so it is copied into every translation and fixes one title for every language.
 	 *
 	 * @param string $baseFile Absolute path of the base page's source file.
 	 * @param string $sourceDir Source directory the file lives under; the title is relative to it.
@@ -115,16 +110,9 @@ class TranslationSource {
 	/**
 	 * Whether an absolute path is a translation file.
 	 *
-	 * True when it is named "<lang>.wikitext" for a known language, its sibling base page
-	 * "<dir>.wikitext" is translatable, and it carries <!--T:n--> unit markers. Used to keep
-	 * translation files out of the plain import.
-	 *
-	 * The markers are what settle it. Hundreds of language codes are also ordinary English words --
-	 * "id", "no", "is", "it", "as", "be" -- so the name alone had a translatable page's "API/id"
-	 * subpage read as an Indonesian translation, and the page then went missing from the site with
-	 * nothing said. A page written to stand on its own has no reason to carry a source page's unit
-	 * numbers, and a translation cannot be written without them: they are how a unit is translated
-	 * at all, and scaffold() puts them in a new translation before anyone types into it.
+	 * True when it is named "<lang>.wikitext" for a known language, its sibling base page is
+	 * translatable, and it carries <!--T:n--> unit markers. The markers settle it: hundreds of
+	 * language codes are also English words, so the name alone had "API/id" read as Indonesian.
 	 *
 	 * @param string $absolutePath
 	 * @param callable(string):bool $isKnownLanguage
@@ -164,11 +152,9 @@ class TranslationSource {
 	/**
 	 * Subpages that a language code names but that are read as pages of their own, keyed by code.
 	 *
-	 * The other half of what filesNamedForALanguage() finds: named for a language, sitting under a
-	 * translatable page, and carrying no unit marker, so nothing here reads them as translations.
-	 * That is usually right -- "API/id" is about identifiers, not Indonesian -- and when it is not,
-	 * this is what lets checkTranslations say so instead of leaving a translation quietly imported
-	 * as an ordinary subpage.
+	 * Named for a language, sitting under a translatable page, and carrying no unit marker. That
+	 * reading is usually right -- "API/id" is about identifiers, not Indonesian -- and when it is
+	 * not, this is what lets checkTranslations say so.
 	 *
 	 * @param string $baseFile
 	 * @param callable(string):bool $isKnownLanguage
@@ -216,10 +202,9 @@ class TranslationSource {
 	/**
 	 * The translation files a base page has, keyed by the language each is written in.
 	 *
-	 * A caller that has the base file gets its translations by the paths they were found at, rather
-	 * than by rebuilding them from the page title: a title has been through MediaWiki's
-	 * normalization and no longer spells the file it came from ("Getting_Started.wikitext" imports
-	 * as "Getting Started"), so a rebuilt path can miss a translation that is sitting right there.
+	 * By the paths they were found at rather than rebuilt from the page title: a title has been
+	 * through MediaWiki's normalization and no longer spells the file it came from
+	 * ("Getting_Started.wikitext" imports as "Getting Started").
 	 *
 	 * @param string $baseFile
 	 * @param callable(string):bool $isKnownLanguage
@@ -237,9 +222,7 @@ class TranslationSource {
 	 * Every language the source tree carries a translation in.
 	 *
 	 * The languages a site is built in are the ones its pages have translations for. Read from the
-	 * files rather than from a setting, because there is no setting: nothing declares a site's
-	 * languages, so a second list to keep in step with this one would be a list to fall out of step
-	 * with it.
+	 * files because there is no setting to read: a second list would be one to fall out of step.
 	 *
 	 * @param string $sourceDir
 	 * @param callable(string):bool $isKnownLanguage

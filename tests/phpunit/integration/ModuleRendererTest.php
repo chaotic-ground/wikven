@@ -143,9 +143,8 @@ class ModuleRendererTest extends MediaWikiIntegrationTestCase {
 	 * The one place the two paths are meant to differ, pinned on purpose.
 	 *
 	 * A module that throws is caught by makeModuleResponse(), which logs it and leaves an "error"
-	 * load state. respond() then writes the exception text and its backtrace into the response --
-	 * so the build used to dump a CSS or JS asset with a stack trace inside it and carry on.
-	 * render() stops instead.
+	 * load state. respond() writes the exception text and its backtrace into the response, so the
+	 * build used to dump an asset with a stack trace inside it. render() stops instead.
 	 */
 	public function testRenderThrowsOnAModuleThatCannotBeBuilt() {
 		$rl = $this->getServiceContainer()->getResourceLoader();

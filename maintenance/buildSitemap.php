@@ -13,21 +13,12 @@ require_once "$IP/maintenance/Maintenance.php";
 /**
  * Write sitemap.xml, naming every page this build exported.
  *
- * A sitemap is how a crawler is told a page exists without a link to it, which for a freshly
- * published site is most of them. The protocol wants absolute URLs -- "must begin with the
- * protocol" -- so this writes nothing at all until the site has said where it will be published;
- * see SiteUrl. A sitemap naming pages a crawler cannot resolve is worse than no sitemap.
+ * A sitemap is how a crawler is told a page exists without a link to it. The protocol wants
+ * absolute URLs, so this writes nothing until the site has said where it will be published.
  *
- * The pages come from the output directory rather than from the database, because those are two
- * different sets. Core's own maintenance/generateSitemap.php reads the database, and run against a
- * wikven build it names MediaWiki:Mainpage, Help:Setup and the rest -- pages that exist as rows and
- * were never exported, so every one of them is a 404 offered to a crawler as a page. What the site
- * serves is what is on disk.
- *
- * There is no <lastmod>. Everything a build could put there is either wrong or harmful: the wiki's
- * own timestamps are frozen by freezePageTouched, and the wall clock would make two bakes of one
- * source differ, which is the promise #411 checks. Both <lastmod> and <changefreq> are optional and
- * a crawler treats them as hints; an honest omission beats a field that lies every bake.
+ * The pages come from the output directory rather than the database, those being two different
+ * sets: core's generateSitemap.php names MediaWiki:Mainpage and the rest, rows that were never
+ * exported. There is no <lastmod> either -- the wall clock would make two bakes differ (#411).
  */
 class BuildSitemap extends Maintenance {
 	/** The conventional name: what a crawler looks for, and what a webmaster tool is pointed at. */
@@ -104,14 +95,9 @@ class BuildSitemap extends Maintenance {
 	/**
 	 * Whether a rendered page is one a crawler may index, read from the page itself.
 	 *
-	 * A sitemap is an invitation to index, so naming a page that answers "noindex" asks a crawler
-	 * to do what the page refuses -- the same contradiction the skin-preview copies are kept out
-	 * of, and the reason a site that sets DefaultRobotPolicy to noindex gets no sitemap rather
-	 * than one listing everything it just told crawlers to skip.
-	 *
-	 * The page is asked rather than the configuration, because the configuration is only one of
-	 * the things that decides: __NOINDEX__ settles it a page at a time, and what MediaWiki wrote
-	 * into the file is the answer both of them end at.
+	 * A sitemap is an invitation to index, so naming a page that answers "noindex" asks a crawler to
+	 * do what the page refuses. The page is asked rather than the configuration, __NOINDEX__
+	 * settling it a page at a time.
 	 */
 	private static function invitesIndexing(string $path): bool {
 		$html = (string)file_get_contents($path);

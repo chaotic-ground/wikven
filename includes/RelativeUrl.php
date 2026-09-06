@@ -10,21 +10,9 @@ class RelativeUrl {
 	/**
 	 * Add a "../" per level to every root-relative reference in a page moved $depth subdirectories down.
 	 *
-	 * Wikven links everything relative to the output root ("./x", or "../x" one level above it, as the
-	 * non-main-skin canonical does). A subpage title such as "Manual/Config" caches to a flat file but
-	 * is exported into a real "Manual/" directory; its references then need a "../" per level so links
-	 * and files agree on a static host. Absolute, protocol-relative and data: URLs carry no leading
-	 * "./" and are left alone. Covers href/src/srcset attributes, CSS url(), the page's own
-	 * JavaScript config (see reparentConfigVars()) and its schema.org block (reparentJsonLd()).
-	 *
-	 * Each candidate is required to sit inside a real "<tag ...>" span (or, for url(), inside a
-	 * <style> block too): MediaWiki escapes preformatted text with htmlspecialchars(..., ENT_NOQUOTES),
-	 * which turns a documentation example's own "<a href=\"./intro\">" into "&lt;a href=\"./intro\"&gt;"
-	 * -- the quotes survive, but neither escaped angle bracket is a real "<" or ">", so nothing there
-	 * reads as a tag span and the example's href is correctly left alone.
-	 *
-	 * The printfooter's link arrives without the "./" it was written with, so it is rebased on its
-	 * own; see rebasePrintFooter() below.
+	 * A subpage title such as "Manual/Config" caches to a flat file but is exported into a real
+	 * "Manual/" directory, so its references need a "../" per level. Covers href/src/srcset, CSS
+	 * url(), the page's own JavaScript config and its schema.org block.
 	 */
 	public static function reparent(string $html, int $depth): string {
 		if ($depth < 1) {
@@ -100,21 +88,9 @@ class RelativeUrl {
 	/**
 	 * Rebase the root-relative URLs a page carries in its JavaScript config.
 	 *
-	 * Title::getLocalURL() answers "./Page.html" here (Hooks\Main::onGetLocalURL), and a URL that
-	 * shape means "from the output root" -- a claim only true of a page sitting at the root. In an
-	 * attribute the passes above correct it; the same string handed to the client through
-	 * mw.config rides in the page's RLCONF object, where nothing was correcting it. Core writes one
-	 * itself for a redirect (wgInternalRedirectTargetUrl), and any extension that asks a Title for
-	 * its URL and exports it as a config var writes another.
-	 *
-	 * Only that object is rewritten, and in it only strings that begin with "./" or "../". The rest
-	 * of the page cannot be treated this way, since a bare string carries no marker telling a URL
-	 * of ours from a path a page merely shows -- these very docs write "./Page.html" as text.
-	 * RLCONF is a span MediaWiki wrote, not the wikitext, and everything in it is data for scripts.
-	 *
-	 * What this cannot reach is a local URL baked into a ResourceLoader module's bundle: one file
-	 * serves every page at every depth, so there is no depth to correct it by, and an extension
-	 * shipping one has to anchor it itself (#425).
+	 * "./Page.html" means "from the output root", a claim only true of a page at the root. In an
+	 * attribute the passes above correct it; the same string handed to the client through mw.config
+	 * rides in RLCONF, where nothing was. Only that object: a bare string carries no marker.
 	 *
 	 * @param string $html A rendered page.
 	 * @param callable(string):string $rebase Takes the matched "." or "..", returns its replacement.
@@ -147,17 +123,10 @@ class RelativeUrl {
 	/**
 	 * Rebase the root-relative URLs a page carries in its schema.org block.
 	 *
-	 * The claim reparentConfigVars() answers, one escaping further along. Where a site has said
-	 * where it is published, a picture named in machine-read metadata gets a whole URL and no depth
-	 * can apply to it. Where it has not, storeImages can only name the file from the output root,
-	 * and a "./assets/..." written into a JSON document is spelled ".\/assets\/...": json_encode()
-	 * escapes a slash unless told not to. The passes above look for an attribute value or a bare
-	 * "./", so none of them sees that, and a subpage's schema.org image resolves inside the
-	 * subpage's own directory.
-	 *
-	 * Scoped to the block for the reason reparentConfigVars() is scoped to RLCONF: a bare string
-	 * carries no marker telling a URL of ours from a path a page merely shows. A ld+json script is
-	 * a span an extension wrote, and everything in it is data about the page rather than prose.
+	 * The claim reparentConfigVars() answers, one escaping further along: json_encode() spells
+	 * "./assets/..." as ".\/assets\/...", which none of the passes above sees, so a subpage's
+	 * schema.org image resolved inside the subpage's own directory. Scoped to the block for the
+	 * reason reparentConfigVars() is scoped to RLCONF.
 	 *
 	 * @param string $html A rendered page.
 	 * @param callable(string):string $rebase Takes the matched "." or "..", returns its replacement.
@@ -182,10 +151,8 @@ class RelativeUrl {
 	 * The offset just past the "}" closing the object literal that opens at $open, or null if the
 	 * text runs out first.
 	 *
-	 * Braces inside a string are not counted, so a config value holding one -- a message with a
-	 * "{{PLURAL:}}" left in it, a regular expression -- does not end the object early, and the
-	 * object's own end is found however many nested objects it holds. The alternative, a non-greedy
-	 * match up to the next "};", stops at the first config value that contains that pair.
+	 * Braces inside a string are not counted, so a config value holding one does not end the object
+	 * early. A non-greedy match up to the next "};" stops at the first value that contains it.
 	 */
 	private static function objectEnd(string $text, int $open): ?int {
 		$depth = 0;
@@ -219,16 +186,9 @@ class RelativeUrl {
 	 * Rebase the printfooter's "Retrieved from" link, the one reference that reaches a page having
 	 * lost the "./" the rest of this class goes by.
 	 *
-	 * Skin::printSource() builds it from Title::getCanonicalURL() and expands the result a second
-	 * time; each expansion runs UrlUtils' dot-segment removal over the URL, which drops the leading
-	 * "./" that Hooks\Main::onGetLocalURL wrote. What survives is still a path from the output root
-	 * -- it just no longer says so, so the passes above walk past it, and from a page exported into
-	 * a subdirectory it resolves inside that subdirectory and answers 404. A top-level page is
-	 * unaffected, its link being right from the root by accident.
-	 *
-	 * A bare relative href is exactly the shape that carries no marker telling a link of ours from
-	 * a path a page merely shows, which is why only core's printfooter div is rebased: everything
-	 * in there is the line core has just built out of this page's own URL.
+	 * Skin::printSource() expands Title::getCanonicalURL() a second time, and UrlUtils' dot-segment
+	 * removal drops the leading "./". What survives is still a path from the output root but no
+	 * longer says so, so from a subdirectory it answers 404.
 	 */
 	private static function rebasePrintFooter(string $html, string $up): string {
 		return preg_replace_callback(
@@ -253,10 +213,8 @@ class RelativeUrl {
 	 * Whether $href is a bare path from the output root -- what the printfooter's link is left as.
 	 *
 	 * Everything else names something the depth of the page cannot move: an absolute URL, a path
-	 * from the host root, a fragment or query on the page itself, or -- for a link that kept its
-	 * marker, and so was rebased by reparent() already -- a path the "./" prefix has spoken for.
-	 * A namespaced title such as "File:Oven.jpg.html" reads like a scheme and is not one, hence
-	 * the test for "://" rather than for a colon.
+	 * from the host root, a fragment, or a link that kept its marker. A title such as
+	 * "File:Oven.jpg.html" reads like a scheme, hence the test for "://".
 	 */
 	private static function isRootRelative(string $href): bool {
 		if ($href === '') {
@@ -303,19 +261,12 @@ class RelativeUrl {
 	}
 
 	/**
-	 * Resolve Translate's "Special:MyLanguage/Target" links (that special page is not exported) to a
-	 * static target: "Target/<lang>.html" when a translation for the page's language exists, else the
-	 * source "Target.html". The link's existing relative prefix (already depth-correct after reparent)
-	 * and any "#fragment" are kept, so the target stays reachable from any page depth.
+	 * Resolve Translate's "Special:MyLanguage/Target" links, that special page not being exported,
+	 * to a static target: "Target/<lang>.html" where a translation exists, else "Target.html".
 	 *
-	 * "Special:MyLanguage" is matched as the canonical spelling alone, which is the only one that
-	 * reaches here: both sides that write this marker -- Hooks\Main::nameFor() for a link on a page,
-	 * Hooks\Adder::licensesHref() for the footer's -- write it canonically however this wiki spells
-	 * that namespace and that special page itself. The colon is matched in both spellings OutputName
-	 * writes, because the marker is built as a link like any other: under encoded file names it
-	 * arrives as "Special%253A". What follows it is the target's own link, so appending
-	 * "/<lang>.html" to it names the translation's link, and $hasTranslation is handed that link to
-	 * turn back into a file name.
+	 * Matched as the canonical spelling alone, which is the only one that reaches here: both sides
+	 * that write this marker write it canonically. The colon is matched in both spellings
+	 * OutputName writes.
 	 *
 	 * @param string $html
 	 * @param string|null $lang The page's language, or null for a source page (always the source target).

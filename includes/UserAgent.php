@@ -5,24 +5,15 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * What wikven calls itself on the servers it fetches from.
  *
- * A bake reaches other people's machines: it asks Commons for the thumbnail of every image a page
- * embeds and downloads each one, and it clones or downloads whatever third-party extensions and
- * skins the site declares. All of that arrives on somebody else's logs, and what it says there is
- * the only chance they have of telling this traffic apart from anything else -- of knowing which
- * tool made it, which version, and where to go about it. Wikimedia asks for exactly that in its
- * User-Agent policy, and it is the party wikven talks to most.
- *
- * Left alone, none of it says wikven. MediaWiki's HttpRequestFactory signs a request "MediaWiki/"
- * and its own version, which names the library doing the sending and not the thing that asked for
- * it: an operator reading that has no way to reach anyone, and every wikven build in the world
- * looks like a wiki. So requests carry this instead, and the shape is the one the policy asks for
- * -- the tool, its version, where it lives, and the library underneath:
+ * A bake reaches other people's machines -- Commons for every embedded image, git for every
+ * declared extension -- and their logs are their only chance of telling this traffic apart.
+ * Wikimedia's User-Agent policy asks for that, and MediaWiki's own "MediaWiki/1.46.0" names the
+ * library rather than the tool, so requests carry this instead:
  *
  *     Wikven/0.1.0 (+https://github.com/chaotic-ground/wikven) MediaWiki/1.46.0
  *
- * The version is read from extension.json rather than written here twice, so a release moves it
- * without anyone remembering to. The class is dependency-free on purpose: fetchExtensions runs
- * before wikven's autoloader exists and loads it by path, the same way it loads Attempts.
+ * The version is read from extension.json rather than written here twice. Dependency-free on
+ * purpose: fetchExtensions loads it by path, before wikven's autoloader exists.
  */
 class UserAgent {
 	/**
@@ -63,10 +54,9 @@ class UserAgent {
 	/**
 	 * The same, after whatever the client would have said on its own.
 	 *
-	 * For a client that is not wikven's to speak for entirely. git is the one: its own string is
-	 * "git/2.43.0", and some proxies pass HTTP git traffic only when the User-Agent still looks
-	 * like a git client's, so replacing it outright would break a fetch on networks nobody here
-	 * can see. Adding to it says who is driving without taking that away.
+	 * git is the one. Some proxies pass HTTP git traffic only when the User-Agent still looks like
+	 * a git client's, so replacing "git/2.43.0" outright would break a fetch on networks nobody
+	 * here can see.
 	 */
 	public static function after(string $client): string {
 		$client = trim($client);

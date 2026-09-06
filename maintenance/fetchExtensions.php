@@ -111,10 +111,9 @@ class FetchExtensions extends Maintenance {
 				);
 			}
 
-			// Written last: a tree stamped before its fetch finished would be taken for a good one
-			// by the next build, which is the state this is here to catch. The commit goes in with
-			// it, because a reference is not a pin: the tag or branch it names can be moved, and
-			// this is what the next build compares the remote against.
+			// Written last: a tree stamped before its fetch finished would be taken for a good one by the
+			// next build, which is the state this is here to catch. The commit goes in with it, because a
+			// reference is not a pin: the tag it names can be moved.
 			$commit = isset($spec['repository'])
 				? self::gitOutput(['-C', $dest, 'rev-parse', 'HEAD'])
 				: null;
@@ -165,11 +164,9 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * Whether an existing $dest has to go before the fetch, saying either way what it decided.
 	 *
-	 * Three answers, and the quiet one is the common one. A tree fetched from this same source
-	 * is the fetch already made. A tree with no pin in it was not fetched by wikven -- it is
-	 * bundled in the image, or somebody put it there -- and is left alone, which is what this
-	 * check has always done. A tree fetched from a different source is the one worth acting on:
-	 * a pin moved under a build that would otherwise keep the old code and say nothing.
+	 * A tree fetched from this same source is the fetch already made; one with no pin was not
+	 * fetched by wikven. One fetched from a different source is a pin that moved under a build
+	 * that would otherwise keep the old code.
 	 */
 	private function isStale(array $spec, string $dest, string $pin, string $name, string $kind): bool {
 		$stamp = FetchPin::inside($dest);
@@ -202,11 +199,8 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * The commit the declared reference points at now, where that is not the one on disk.
 	 *
-	 * Only for a spec that names a reference: a commit is already the whole answer, a tarball
-	 * has no reference to move, and a tree that recorded no commit was not fetched by git. The
-	 * ask is one `git ls-remote`, made only where the tree is already there -- a build that has
-	 * to clone anyway never makes it -- and a remote that will not answer leaves what is on disk
-	 * alone rather than failing a build over a question nobody asked.
+	 * Only for a spec that names a reference: a commit is already the whole answer, and a tarball
+	 * has none to move. One `git ls-remote`, and a remote that will not answer leaves disk alone.
 	 *
 	 * @return string|null The commit to fetch, or null where there is nothing to do.
 	 */
@@ -441,16 +435,9 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * How to call git, with the User-Agent it should send in front of the subcommand.
 	 *
-	 * A clone or a fetch over HTTPS is wikven reaching somebody else's server, and git signs it
-	 * with nothing but its own version: the operator on the other end sees a git, like every
-	 * other git, with no way to tell whose build it is or where to go about it. http.userAgent
-	 * replaces that string, so git's own goes back in front of wikven's rather than being taken
-	 * away -- there are proxies that carry git traffic only while the User-Agent still looks
-	 * like a git client's, and none of them are visible from here.
-	 *
-	 * A git that will not say what version it is keeps the string it had; naming a version this
-	 * never read would be worse than saying nothing. (composer, which some extensions need
-	 * afterwards, signs its own requests and offers no way to add to them.)
+	 * A clone over HTTPS is wikven reaching somebody else's server, and git signs it with nothing
+	 * but its own version. http.userAgent puts git's back in front of wikven's rather than
+	 * replacing it: some proxies carry git traffic only while it looks like a git client's.
 	 *
 	 * @return string[] argv up to but not including the subcommand.
 	 */
@@ -477,10 +464,8 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * What `git $arguments` printed, or null where it could not be run or did not succeed.
 	 *
-	 * Located rather than spawned by name, as SourceHistory does: proc_open() warns of its own
-	 * when the command is not there, and a host without git is an answer this can give. An array
-	 * argv never reaches a shell, so a repository URL needs no quoting; git's own complaints go
-	 * nowhere, since every caller here has something to say for itself when the answer is null.
+	 * Located rather than spawned by name, as SourceHistory does: proc_open() warns of its own when
+	 * the command is not there, and a host without git is an answer this can give.
 	 *
 	 * @param string[] $arguments
 	 */

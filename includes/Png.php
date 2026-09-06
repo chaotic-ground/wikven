@@ -11,14 +11,8 @@ class Png {
 	 * Return the PNG without the chunks whose payload is a timestamp.
 	 *
 	 * A thumbnail of unchanged source differs between bakes because ImageMagick stamps what it
-	 * writes: a tIME chunk, date:create/date:modify/date:timestamp text chunks, and, from the
-	 * -thumbnail operator, Thumb::MTime holding the source file's mtime. MediaWiki removes only
-	 * Thumb::URI (BitmapHandler, T108616) and offers no way to pass -strip, so the export strips
-	 * them on its way out instead.
-	 *
-	 * Only clocks are dropped. The comment naming the source file, the colour profile, the rest of
-	 * the Thumb::* family (size, dimensions, mimetype) and the image data are all kept, and
-	 * removing whole chunks leaves every remaining CRC valid.
+	 * writes: a tIME chunk, date:* text chunks, and Thumb::MTime. MediaWiki removes only Thumb::URI
+	 * and offers no way to pass -strip. Only clocks are dropped, and every remaining CRC stays valid.
 	 *
 	 * @param string $data Raw file contents.
 	 * @return string|null The rewritten PNG, or null if this is not a PNG whose chunks parse

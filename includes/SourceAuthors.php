@@ -9,15 +9,10 @@ use MediaWiki\User\UserRigorOptions;
 /**
  * The accounts a build writes pages under: one per author the source history names.
  *
- * A revision has to belong to someone, and the point of reading the history (see SourceHistory) is
- * that the name the footer shows is the name the "View history" link's commit list shows. These
- * accounts are as throwaway as the wiki holding them: the export carries no user pages and no
- * contributions, so nothing is claimed of a name beyond having written the page.
- *
- * A name MediaWiki will not take is retried as the other names that author has committed under.
- * Only when none of them is usable, and for a page the history says nothing about, does this fall
- * back to the account the build itself writes under, which build.php's hideBuildAuthors() then
- * hides rather than offer to the reader as an author.
+ * A revision has to belong to someone, and the point of reading the history is that the name the
+ * footer shows is the one the "View history" commit list shows. A name MediaWiki will not take is
+ * retried as the other names that author has committed under; only when none is usable does this
+ * fall back to the account the build writes under, which hideBuildAuthors() then hides.
  */
 class SourceAuthors {
 	private UserFactory $factory;

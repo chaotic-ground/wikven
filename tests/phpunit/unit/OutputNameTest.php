@@ -130,10 +130,8 @@ class OutputNameTest extends MediaWikiUnitTestCase {
 	 * A prefixed name handed in whole names the file its namespace and dbkey name apart.
 	 *
 	 * The Special:MyLanguage marker is built that way: the target's prefixed name rides inside the
-	 * marker's own dbkey (Hooks\Adder::licensesHref, and any link through GetLocalURL), and
-	 * resolveTranslationLinks.php then looks for the file that name spells. So the two ways of
-	 * spelling one title have to land on one file, which is only true while the namespace is
-	 * escaped exactly as the rest of the name is.
+	 * marker's own dbkey, and resolveTranslationLinks.php then looks for the file that name spells.
+	 * So the two spellings of one title have to land on one file.
 	 *
 	 * @dataProvider provideBothSchemes
 	 */

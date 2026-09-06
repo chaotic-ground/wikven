@@ -69,11 +69,9 @@ class ContainedPathTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * A link is followed rather than refused, deliberately. Neither directory this bounds holds
-	 * anything the author of a path put there -- MediaWiki writes a file's contents into the upload
-	 * directory rather than a link to them, and the install root is the build's own -- while
-	 * refusing links here would have silently dropped the assets of a MediaWiki whose skins/ and
-	 * extensions/ are symlinked, which is how people develop against one. What a source tree can
-	 * bring is refused by ImageImport, where the file can be named.
+	 * anything the author of a path put there, while refusing links here would have silently
+	 * dropped the assets of a MediaWiki whose skins/ and extensions/ are symlinked, which is how
+	 * people develop against one. What a source tree can bring is refused by ImageImport.
 	 */
 	public function testALinkIsThisDirectoryToAnswerFor() {
 		$this->assertSame("$this->root/link/secret.txt", ContainedPath::under($this->root, '/link/secret.txt'));

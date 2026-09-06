@@ -5,16 +5,11 @@ namespace MediaWiki\Extension\Wikven\PageTranslation;
 /**
  * Which page answers for which language in a translatable page's family.
  *
- * A translatable page is three or more pages: "Development" is the source, written in whatever
- * language its author wrote it in, and "Development/ko" is the Korean one. The rule that needs
- * saying out loud is the one about the source's own language. Translate makes a translation page
- * for it too -- "Development/en" -- and that page is the source page's article again, word for
- * word, at a second address. hreflang has no way to say a language is at two addresses, so one of
- * them has to own it, and it is the source page: that is the address every link in the export
- * names, and "/en" is reached only from a language bar.
- *
- * Names rather than titles, and no Translate here, for the reason StalenessComputer beside it
- * gives: the rule is decided in one place, and the place that decides it can be read on its own.
+ * A translatable page is three or more pages: "Development" is the source and "Development/ko" the
+ * Korean one. The rule worth saying out loud is the one about the source's own language. Translate
+ * makes "Development/en" too, which is the source page's article again at a second address, and
+ * hreflang cannot say a language is at two -- so the source page owns it, being the address every
+ * link in the export names.
  */
 class TranslationFamily {
 	/**

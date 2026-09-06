@@ -17,9 +17,8 @@ class DeclarerTest extends MediaWikiIntegrationTestCase {
 	 * The rule: a language copy the build wrote is in that language, and nothing else is touched.
 	 *
 	 * A page MediaWiki is not told about is in the content language, which is what sent a Korean
-	 * page out as English (#561). The pages that need telling are the ones build.php writes under
-	 * the licenses page, and they are the only ones this may answer for: everything below is
-	 * either one of those or something with an owner of its own.
+	 * page out as English (#561). The pages that need telling are the ones build.php writes, and
+	 * they are the only ones this may answer for.
 	 *
 	 * @dataProvider provideTitles
 	 */

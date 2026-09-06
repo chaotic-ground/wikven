@@ -143,12 +143,10 @@ class CheckTranslations extends Maintenance {
 				}
 			}
 
-			// Named for a language but carrying none of the source's unit markers, so read as a page
-			// in its own right. That is usually what it is -- "API/id" is about identifiers, not
-			// Indonesian -- and nothing here can tell the two apart, so this is said and not counted:
-			// it gates nothing and is not a translation falling behind either. The language code goes
-			// in as detail rather than as lang, because this finding is not about translating into
-			// that language and an --comment-languages=auto run should not write in it.
+			// Named for a language but carrying none of the source's unit markers, so read as a page in its
+			// own right. That is usually what it is -- "API/id" is about identifiers, not Indonesian. The
+			// language code goes in as detail rather than as lang, an --comment-languages=auto run having no
+			// reason to write in it.
 			foreach (TranslationSource::pagesNamedForALanguage($baseFile, $isKnownLanguage) as $lang => $page) {
 				$reportPage = $prefix . substr($page, strlen($source) + 1);
 				$this->findings[] = [
@@ -212,9 +210,8 @@ class CheckTranslations extends Maintenance {
 	 * The paths --comment-paths named, or null when it named none and the comment is about the
 	 * whole tree.
 	 *
-	 * The file is written by whatever knows what the change touches -- the action asks the forge
-	 * for the list -- so a run that cannot read it says so and comments about everything, which
-	 * is the behaviour this option narrows rather than a state worth failing a check over.
+	 * The file is written by whatever knows what the change touches, so a run that cannot read it
+	 * says so and comments about everything -- the behaviour this option narrows.
 	 *
 	 * @return list<string>|null
 	 */
@@ -242,8 +239,7 @@ class CheckTranslations extends Maintenance {
 	 *
 	 * English leads because it is the one language the workflow can count on a reader of the change
 	 * having in common with it. What follows is for the contributor: "auto" reads it off the
-	 * findings, so someone who sent a Korean translation is answered in Korean without the workflow
-	 * naming a language it cannot know in advance.
+	 * findings.
 	 *
 	 * @return list<string>
 	 */

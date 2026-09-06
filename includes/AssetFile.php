@@ -7,12 +7,8 @@ namespace MediaWiki\Extension\Wikven;
  *
  * $wgWikvenAssetDirectory puts every generated file anywhere under the output root, so a step that
  * links one has to answer the same question the step that wrote it answered. Deriving the link and
- * the path together is what keeps the two answers from parting: a link written for one directory
- * while the file is looked for in another leaves the page with no stylesheet at all, and nothing
- * anywhere to say so.
- *
- * The href is written relative to the output root, as everything wikven writes is; a page exported
- * into a subdirectory has RelativeUrl::reparent() add a "../" per level to it.
+ * the path together keeps the two from parting: a link written for one directory while the file is
+ * looked for in another leaves the page with no stylesheet and nothing to say so.
  */
 class AssetFile {
 	/**
@@ -33,11 +29,9 @@ class AssetFile {
 	/**
 	 * What a picture the build made local is called, from the reference pages had for it.
 	 *
-	 * Content-addressed so one picture referenced twice is stored once, and so a rebuild of an
-	 * unchanged site writes the same name (#411). Kept here rather than in the step that stores
-	 * them because two things now have to agree on it: storeImages names the file, and a site's
-	 * social image has to be named in a head tag before that step has run. A rule kept twice is a
-	 * rule that drifts, and the drift here is a head tag pointing at a file nobody wrote.
+	 * Content-addressed so one picture referenced twice is stored once, and a rebuild writes the
+	 * same name (#411). Kept here because two things have to agree on it: storeImages names the
+	 * file, and a social image is named in a head tag first.
 	 *
 	 * @param string $key What identifies the picture: the storage path for a local file, the whole
 	 *   URL for a remote one. Two references to one picture must give the same key.

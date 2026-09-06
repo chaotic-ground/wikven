@@ -18,13 +18,11 @@ require_once "$IP/maintenance/Maintenance.php";
  * Put the site's navigation in Minerva's main menu.
  *
  * Minerva builds that menu from its own Menu\Definitions and reads MediaWiki:Sidebar only to
- * override the href of its two hardcoded entries, so a site's own navigation never reaches it:
- * its Definitions class is final, its builder is constructed inside the skin, and it registers no
- * menu hook. Nothing in PHP can add an entry, so the entries are written into the rendered pages
- * instead, in the same pass that rewrites their scripts and styles.
+ * override the href of its two hardcoded entries, so a site's own navigation never reaches it: the
+ * Definitions class is final, its builder is constructed inside the skin, and it registers no menu
+ * hook. So the entries are written into the rendered pages instead.
  *
- * Runs before rename.php, so hrefs written as "./Page.html" are reparented for subpages with
- * every other link on the page.
+ * Runs before rename.php, so hrefs written as "./Page.html" are reparented with every other link.
  */
 class FillMinervaMenu extends Maintenance {
 	/** The list Minerva renders its own discovery entries into; ours follow it. */

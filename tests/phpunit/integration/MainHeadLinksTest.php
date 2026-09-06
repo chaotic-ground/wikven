@@ -122,8 +122,8 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * A language the source tree is translated into is not by itself a licenses page in that
 	 * language. build.php writes a copy only for a language it can translate the page's own
-	 * messages into, and an alternate naming a page the export does not have is a link to a 404 --
-	 * in the head of every other page in the set, which is a set a search engine throws away whole.
+	 * messages into, and an alternate naming a page the export does not have is a set a search
+	 * engine throws away whole.
 	 */
 	public function testALicensesCopyTheBuildDidNotWriteIsNotNamed() {
 		$this->licensedSiteTranslatedIntoKorean();

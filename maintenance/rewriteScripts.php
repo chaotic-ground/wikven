@@ -151,12 +151,8 @@ class RewriteScripts extends Maintenance {
 	 * Leave Citizen with the search its no-JS fallback gives it, or with none at all.
 	 *
 	 * Citizen's own search is a command palette backed by the REST API, which an export has no
-	 * server for. Underneath it the skin renders an ordinary search form, meant for readers without
-	 * JavaScript, and that one works: SifterSearch's ext.sifter.retarget points it at the static
-	 * results page. commandPalette.js deletes that form the moment it finds its trigger by id, so
-	 * dropping the id is what leaves the working search standing. Where the form leads nowhere --
-	 * no SifterSearch, or no results page for it to be retargeted at, Citizen having no typeahead
-	 * to carry the submit instead -- the whole box goes, as Vector's does above.
+	 * server for. Underneath it the skin renders an ordinary search form that works, and
+	 * commandPalette.js deletes it the moment it finds its trigger by id.
 	 */
 	private function citizenSearch(string $html, bool $searchWorks): string {
 		if ($searchWorks) {

@@ -7,24 +7,12 @@ use MediaWiki\Utils\ExecutableFinder;
 /**
  * When each source file last changed, and who changed it, as the repository's git history tells it.
  *
- * The wiki a bake fills is thrown away afterwards and has no edit history of its own: every page is
- * written in a single import pass, so whatever that pass stamps on the revision is what the reader
- * is told. The file's mtime used to be that stamp, which on a CI runner is the moment the checkout
- * was made -- the same instant for every page, and a different one for every bake of the same
- * commit, which is also the one date SOURCE_DATE_EPOCH cannot freeze (#406).
+ * The wiki a bake fills has no edit history of its own: every page is written in one import pass,
+ * so what that pass stamps is what the reader is told. The file's mtime gave the moment of the
+ * checkout -- one instant for every page, and the one date SOURCE_DATE_EPOCH cannot freeze.
  *
- * git holds the real answer, and it is the one the "View history" link already sends the reader to:
- * the top entry of that list is the commit this reads. Two ways in, since the history is not always
- * reachable from where the bake runs:
- *
- * - A dump of `git log`, named by $wgWikvenSourceHistoryFile. actions/bake mounts the source
- *   directory alone into the container, with no .git beside it, so it writes this on the runner.
- * - git itself, when the source directory is inside a checkout the build can reach: a standalone
- *   binary run from a repository, or an image run with the repository itself as the source.
- *
- * Neither being available is not an error. The build then dates every page at the commit it is
- * building (SOURCE_DATE_EPOCH) and names no author, which is true of the whole export rather than
- * of each page in it.
+ * Two ways in: a dump of `git log` named by $wgWikvenSourceHistoryFile, or git itself. Neither
+ * being available is not an error.
  */
 class SourceHistory {
 	/**
@@ -137,11 +125,8 @@ class SourceHistory {
 	 * Who last changed the file, as git records their name, and then every other name that same
 	 * author has committed under, newest first.
 	 *
-	 * A git author name is free text and MediaWiki's is not, so the name on the commit is not
-	 * always one an account can carry ("A / B" holds a slash, which usernames cannot). The rest of
-	 * the list is the way out that invents nothing: it is the same person, spelled as they have
-	 * spelled themselves elsewhere in this repository, matched on the email git records beside the
-	 * name. Empty when the history does not cover the file, or records no author for it.
+	 * A git author name is free text and MediaWiki's is not ("A / B" holds a slash). The rest of the
+	 * list invents nothing: the same person as spelled elsewhere here, matched on the email.
 	 *
 	 * @return list<string>
 	 */

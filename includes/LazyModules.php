@@ -6,26 +6,11 @@ namespace MediaWiki\Extension\Wikven;
  * The modules MediaWiki loads by looking at a rendered page, decided here instead of in a browser.
  *
  * Core queues most of a page's JavaScript while rendering it, and the build reads that queue out of
- * the HTML. Two features are not queued. mediawiki.page.ready waits until the page is in a browser,
- * searches the DOM, and asks load.php for what it finds:
+ * the HTML. Two are not: mediawiki.page.ready waits until the page is in a browser, looks for
+ * .mw-collapsible and table.sortable, and asks load.php for what it finds.
  *
- *     if ( config.collapsible ) {
- *         $collapsible = $content.find( '.mw-collapsible' );
- *         if ( $collapsible.length ) { modules.push( 'jquery.makeCollapsible' ); }
- *     }
- *     if ( config.sortable ) {
- *         $sortable = $content.find( 'table.sortable' );
- *         if ( $sortable.length ) { modules.push( 'jquery.tablesorter' ); }
- *     }
- *     if ( modules.length ) { mw.loader.using( modules ).then( ... ); }
- *
- * An export has no load.php, so that request fails and the feature is silently absent: no toggle on
- * a collapsible, no sorting on a sortable table, and content marked mw-collapsed shown rather than
- * hidden (#483). Nothing else about the page is wrong, which is what makes it easy to miss.
- *
- * The decision itself is kept: same flags, same selectors, same "only if the page has one". Only its
- * timing moves, from the browser to the build, because that is the one thing a static site cannot
- * do the way MediaWiki does. Whatever core adds to that list next is another line in MODULES.
+ * An export has no load.php, so the feature is silently absent (#483). The decision itself is kept;
+ * only its timing moves.
  */
 class LazyModules {
 	/**
@@ -59,10 +44,8 @@ class LazyModules {
 	/**
 	 * Whether the HTML carries an element with this class, optionally only on one tag.
 	 *
-	 * Read off the markup rather than parsed, because the caller has one string per page and a DOM
-	 * for each would cost more than the question is worth. The class is matched as a whole token, so
-	 * "mw-collapsible" does not answer for "mw-collapsible-content" -- the toggle and content
-	 * wrappers core generates carry names that a substring match would take for the thing itself.
+	 * Read off the markup rather than parsed, the caller having one string per page. The class is
+	 * matched as a whole token, so "mw-collapsible" does not answer for "mw-collapsible-content".
 	 *
 	 * @param string $html
 	 * @param string $class The class to look for.
