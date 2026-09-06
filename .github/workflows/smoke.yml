@@ -323,6 +323,25 @@ jobs:
             exit 1
           fi
 
+          # A skin the site never asked for has no business in the script every reader downloads.
+          # The installer used to enable every skin it found on disk, and MonoBook and Timeless
+          # rode into each bundle and onto the licenses page as skins this site publishes (#637).
+          # Read out of the startup manifest, which is the registry the bundle is built from, and
+          # so is where a skin nobody asked for shows up first. Each copy checked, not just the
+          # root: a reader of one skin downloads that copy's bundle and no other.
+          # Exact, rather than a list of names not to find: a check that only knows the two that
+          # went wrong would pass the next one.
+          expected='skins.citizen skins.minerva skins.vector'
+          for manifest in dist/assets/startup-static.js dist/*/assets/startup-static.js; do
+            [ -f "$manifest" ] || continue
+            found=$(grep -o 'skins\.[a-z0-9-]*' "$manifest" | sort -u | tr '\n' ' ')
+            if [ "${found% }" != "$expected" ]; then
+              echo "::error::$manifest registers skin modules for [${found% }];" \
+                   "this site builds [$expected]"
+              exit 1
+            fi
+          done
+
           # A Lua module runs at build time and its answer is baked into the page that invoked it
           # (#465). Module:Example answers with the title of the page it ran on, so this says both
           # that Scribunto rendered at all -- without it the invocation is left in the page as

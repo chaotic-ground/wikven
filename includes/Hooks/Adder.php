@@ -92,6 +92,18 @@ class Adder implements
 			$out->addModules('ext.Wikven.citizenSearchShortcuts');
 		}
 
+		// Minerva's own, and ahead of the guard for the same reason: most of what it hides is a
+		// Special: page an export has no server for, which a preview has no more of than a site.
+		//
+		// A sheet of wikven's own rather than the "+skins.minerva.styles" entry under
+		// ResourceModuleSkinStyles these rules used to be, for the reason ext.Wikven.styles gives
+		// for Citizen: a second declaration of a skin's key replaces the first rather than merging,
+		// so wikven's entry and MinervaNeue's own could not both survive. Which one did came down
+		// to load order, and nothing said the other had gone.
+		if ($skin->getSkinName() === 'minerva') {
+			$out->addModuleStyles('ext.Wikven.minervaStyles');
+		}
+
 		if (BuildFor::skinPreview()) {
 			return;
 		}

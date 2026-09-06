@@ -18,6 +18,11 @@
 				"ext.Wikven.styles.less"
 			]
 		},
+		"ext.Wikven.minervaStyles": {
+			"styles": [
+				"minerva-styles.less"
+			]
+		},
 		"ext.Wikven.emptyToolbox": {
 			"styles": [
 				"empty-toolbox.less"
@@ -54,11 +59,6 @@
 			"scripts": [
 				"appearance.js"
 			]
-		}
-	},
-	"ResourceModuleSkinStyles": {
-		"minerva": {
-			"+skins.minerva.styles": "skins.minerva.styles.less"
 		}
 	},
 	"ResourceFileModulePaths": {
