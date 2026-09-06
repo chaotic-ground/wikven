@@ -37,15 +37,26 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 	 * binary core does.
 	 */
 	public function onSetupAfterCache(): void {
+		self::install(MW_ENTRY_POINT, defined('MW_PHPUNIT_TEST'), 'set_exception_handler');
+	}
+
+	/**
+	 * Put the handler in front of core's, where this is a run whose status is worth correcting.
+	 *
+	 * @param string $entryPoint MW_ENTRY_POINT, naming what kind of run this is.
+	 * @param bool $underTest Whether PHPUnit is running, which owns the handler while it is.
+	 * @param callable $set Given the handler to install, as set_exception_handler is.
+	 */
+	public static function install(string $entryPoint, bool $underTest, callable $set): void {
 		// A web request has a response to write and a status of its own, and a test has PHPUnit's
 		// handler, which core is careful not to replace either.
-		if (MW_ENTRY_POINT !== 'cli' || defined('MW_PHPUNIT_TEST')) {
+		if ($entryPoint !== 'cli' || $underTest) {
 			return;
 		}
 		// Named rather than read back out of set_exception_handler(): this stands in front of the
 		// handler installHandler() installed a few lines earlier in Setup.php, and that is the one
 		// it installs.
-		set_exception_handler(self::handler(
+		$set(self::handler(
 			MWExceptionHandler::handleUncaughtException(...),
 			static function (int $status): never {
 				exit($status);

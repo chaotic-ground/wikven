@@ -45,4 +45,34 @@ class ReporterTest extends MediaWikiUnitTestCase {
 
 		$this->assertSame(['reported', 'stopped'], $order);
 	}
+
+	public function testACommandLineRunGetsTheHandler() {
+		$installed = [];
+
+		Reporter::install('cli', false, static function (callable $handler) use (&$installed): void {
+			$installed[] = $handler;
+		});
+
+		$this->assertCount(1, $installed);
+	}
+
+	public function testAWebRequestKeepsItsOwn() {
+		$installed = [];
+
+		Reporter::install('index', false, static function (callable $unused) use (&$installed): void {
+			$installed[] = $unused;
+		});
+
+		$this->assertSame([], $installed);
+	}
+
+	public function testPhpunitKeepsItsOwn() {
+		$installed = [];
+
+		Reporter::install('cli', true, static function (callable $unused) use (&$installed): void {
+			$installed[] = $unused;
+		});
+
+		$this->assertSame([], $installed);
+	}
 }
