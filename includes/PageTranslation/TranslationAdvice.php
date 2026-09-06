@@ -108,7 +108,11 @@ class TranslationAdvice {
 	/**
 	 * The comment for a run that found something, or null for one that found nothing.
 	 *
-	 * @param list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,line?:string,detail?:string}> $findings
+	 * A finding carries a kind and a file, then whichever of source, unit, lang, line and detail
+	 * its kind has to say. Written here as a plain string map rather than as the shape, which no
+	 * longer fits on a line the coding standard will take.
+	 *
+	 * @param list<array<string,string>> $findings
 	 * @param list<string> $languages Rendered once each, in this order.
 	 */
 	public function comment(array $findings, array $languages = ['en']): ?string {
@@ -269,8 +273,8 @@ class TranslationAdvice {
 	/**
 	 * The findings a scoped comment is about; all of them where nothing was scoped.
 	 *
-	 * @param list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,line?:string,detail?:string}> $findings
-	 * @return list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,line?:string,detail?:string}>
+	 * @param list<array<string,string>> $findings
+	 * @return list<array<string,string>>
 	 */
 	private function inScope(array $findings): array {
 		if ($this->paths === null) {
