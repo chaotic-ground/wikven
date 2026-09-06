@@ -82,6 +82,7 @@
 		"GetCanonicalURL": "main",
 		"OutputPageAfterGetHeadLinksArray": "main",
 		"SetupAfterCache": [
+			"reporter",
 			"retrier",
 			"main"
 		],
@@ -105,6 +106,9 @@
 		},
 		"indexer": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Indexer"
+		},
+		"reporter": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Reporter"
 		},
 		"retrier": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Retrier"
