@@ -252,6 +252,20 @@ jobs:
           print(f'og:image is absolute and points at a written file on {seen} page(s)')
           PY
 
+          # A picture this site borrows from Wikimedia Commons is downloaded and republished, and
+          # what says the export stopped depending on Commons is that nothing in it still names the
+          # repository. docs/Images.wikitext embeds one, so this has something to be about.
+          #
+          # A reference the rewrite does not match is the failure nobody hears about: the build
+          # reports the files it could not fetch, and a reference it never saw is not one of them.
+          # A schema.org block spells the same URL "https:\/\/upload.wikimedia.org\/...", and for a
+          # while that spelling went through untouched while the og:image beside it was rewritten.
+          # Searched as raw text for that reason -- either spelling holds the host verbatim.
+          if grep -rIl 'upload\.wikimedia\.org' dist; then
+            echo "::error::the export still names Wikimedia Commons; a picture reference was not rewritten"
+            exit 1
+          fi
+
           # Nothing a reader is handed may name the machine that built it. The build installs
           # against http://localhost:4000 and every step is a maintenance script, so any address
           # that reaches the output through $wgServer is the container's, not the site's. Two

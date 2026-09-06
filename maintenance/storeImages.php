@@ -42,30 +42,23 @@ class StoreImages extends Maintenance {
 		// HTML reference => local "./img-*.ext" (or null on failure), deduping each reference.
 		$map = [];
 
-		// Where the site is published, read through the config service: this step runs with
-		// MediaWiki fully up, so the settings file's excuse for reaching into globals is not one
-		// here. It decides nothing about which files are copied, only how a page names them.
-		$references = new UploadReference(
-			(string)$config->get('UploadPath'),
-			SiteUrl::fromWritten((string)$config->get('WikvenSiteUrl'))
-		);
+		// Where the site is published, which decides nothing about which files are copied, only
+		// how a page names them.
+		$siteUrl = SiteUrl::fromWritten((string)$config->get('WikvenSiteUrl'));
+		// The one repository wikven turns on for a site (default.yml: UseInstantCommons), and so
+		// the one host a page can hotlink a picture from without having been told to.
+		$hotlinks = UploadReference::hotlinked('upload.wikimedia.org', $siteUrl);
+		$references = UploadReference::stored((string)$config->get('UploadPath'), $siteUrl);
 
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);
 
-			// Match each Commons src/srcset candidate up to the next space or quote.
-			$html = preg_replace_callback(
-				'~(?:https?:)?//upload\.wikimedia\.org/[^\s"]+~',
-				function ($m) use (&$map, $http, $htmlDir, $assetDirectory) {
-					$ref = $m[0];
-					if (!array_key_exists($ref, $map)) {
-						$map[$ref] = $this->store($http, $ref, $htmlDir, $assetDirectory);
-					}
-					return $map[$ref] ?? $ref;
-				},
-				$html
-			);
-
+			// Stored first, and only then hotlinked. Each pass reads what the one before it wrote,
+			// and both can now write the published base into a page. A site published under a path
+			// holding the upload path -- "https://example.org/images/" -- would have the second
+			// pass match the first one's answers and hunt for files nobody referenced; the
+			// repository's host is not a base anyone publishes under, so this way round nothing
+			// either writes can be mistaken for a reference by the other.
 			$html = $references->rewrite(
 				$html,
 				function (string $path) use (&$map, $uploadDir, $htmlDir, $assetDirectory): ?string {
@@ -82,6 +75,16 @@ class StoreImages extends Maintenance {
 							: $this->storeLocal($src, $path, $htmlDir, $assetDirectory);
 					}
 					return $map[$path];
+				}
+			);
+
+			$html = $hotlinks->rewrite(
+				$html,
+				function (string $ref) use (&$map, $http, $htmlDir, $assetDirectory): ?string {
+					if (!array_key_exists($ref, $map)) {
+						$map[$ref] = $this->store($http, $ref, $htmlDir, $assetDirectory);
+					}
+					return $map[$ref];
 				}
 			);
 
