@@ -1,23 +1,25 @@
 <onlyinclude><templatestyles src="note/styles.css" /><div class="wikven-note {{#ifeq:{{{type|}}}|warning|wikven-note-warning|}}"><!--
   --><div>[[File:{{#ifeq:{{{type|}}}|warning|Warning icon.svg|Note icon.svg}}|32px]]</div><!--
-  --><div class="wikven-note-text"><p>{{{1|Text here.}}}</p></div>
-</div><includeonly>{{#if:{{{1|}}}||[[Category:Pages with template errors]]}}{{#switch:{{{type|}}}| = | warning = | #default = [[Category:Pages with template errors]]}}</includeonly></onlyinclude><!--
-  Two registers. Written plainly the box is an aside: here is something worth knowing on the way
-  past. Written {{note|type=warning|1=...}} it is something the reader has to act on, and it says
-  so with the warning colours and a different mark. Twelve of the fourteen uses in this
-  documentation are asides, which is exactly why the two that are not have to look different: a
-  box that looks the same either way teaches the reader to skim it, and the two that matter are
-  then the two that get skimmed.
+  --><div class="wikven-note-text"><p>{{{text|Text here.}}}</p></div>
+</div><includeonly>{{#if:{{{text|}}}||[[Category:Pages with template errors]]}}{{#switch:{{{type|}}}| = | warning = | #default = [[Category:Pages with template errors]]}}</includeonly></onlyinclude><!--
+  Two registers. {{note|text=...}} is an aside: here is something worth knowing on the way past.
+  {{note|type=warning|text=...}} is something the reader has to act on, and it says so with the
+  warning colours and a mark of its own. Fourteen of the sixteen uses in this documentation are
+  asides, which is why the two that are not have to look different: a box that reads the same
+  either way teaches the reader to skim it, and the two that matter are then the two skimmed.
 
-  The category is how a note with no text says so, and it is the one every template here files
-  into rather than each keeping its own. Without it the placeholder above draws, the page builds,
-  and nothing else says anything: an unnamed argument holding "=" or "|" is parsed as a named one,
-  so {{note|a=b}} reaches {{{1}}} with nothing. Write that one {{note|1=a=b}}.
+  The text is a named parameter, and that is what closes the trap this template used to carry.
+  An unnamed argument holding "=" is parsed as a named one, so {{note|A stylesheet arrives as
+  text/css; charset=UTF-8 ...}} reached the template with no text at all and drew the placeholder
+  below, across nine files, with every check green. Named, the first "=" is the one that splits
+  the name from the value and every "=" after it is part of the text. A "|" still splits, but a
+  link's own is safe: [[...|...]] is balanced and the parser does not read through it.
 
-  A type that is neither empty nor "warning" files into the same category, because it would
-  otherwise render as an aside and say nothing: {{note|type=warn|...}} is a warning the reader
-  never sees. Adding a register means adding it to the switch as well as to the class and the
-  icon above.
+  A call that names nothing -- {{note|Some text}} -- therefore leaves text unset, draws the
+  placeholder, and files into Category:Pages with template errors rather than looking right. So
+  does a type that is neither empty nor "warning": {{note|type=warn|text=...}} is a warning the
+  reader never sees. Adding a register means adding it to the switch as well as to the class and
+  the icon above.
 
   WikvenFailOnCategories in .wikven.yaml names the category, so a build that fills it stops and
   says which page did. includeonly keeps this page itself out of it; it is outside onlyinclude
