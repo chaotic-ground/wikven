@@ -39,9 +39,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-06T08:41:55Z">
-<meta property="article:published_time" content="2026-09-06T08:41:55Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-06T08:41:55Z","datePublished":"2026-09-06T08:41:55Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-06T11:31:51Z">
+<meta property="article:published_time" content="2026-09-06T11:31:51Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-06T11:31:51Z","datePublished":"2026-09-06T11:31:51Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Development rootpage-Development skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
@@ -757,13 +757,16 @@ php<span class="w"> </span>tests/phpunit/phpunit.php<span class="w"> </span>exte
 composer<span class="w"> </span>phpcs
 composer<span class="w"> </span><span class="nb">test</span><span class="w">          </span><span class="c1"># minus-x: file modes and shebangs</span>
 
+<span class="c1"># Assertions on a site you have already baked into dist/. Plain PHP, so no install.</span>
+composer<span class="w"> </span>test:bake
+
 <span class="c1"># Browser tests, against a site you have already baked into dist/.</span>
 npm<span class="w"> </span>ci
 npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 </pre></div>
 <ul><li><b>Unit tests</b> (<code>tests/phpunit/unit/</code>) cover the helper classes that are pure string or path work.</li>
 <li><b>Integration tests</b> (<code>tests/phpunit/integration/</code>) cover the hooks and the classes that need services around them.</li>
-<li><b>The smoke test</b> (<code>.github/workflows/smoke.yml</code>) bakes this documentation site with the real image and asserts the output is a complete, self-contained site: no <code>load.php</code> left in the CSS, a search bundle in every skin copy, every print-footer link resolving, and the whole site baked <b>twice</b> and diffed, because two bakes of one source have to be byte-identical.</li>
+<li><b>The bake assertions</b> (<code>tests/bake/</code>) read a site that has already been baked and say whether it is complete and self-contained: no <code>load.php</code> left in the CSS, a search bundle in every skin copy, every print-footer link resolving. What is this site's rather than Wikven's -- where it is published, which pages it keeps out of the index, which skins it builds -- is named in <code>tests/bake/docs.php</code>, so the same command reads any site's bake. <code>smoke.yml</code> bakes this documentation site with the real image, runs them, and diffs the whole site against a second bake, because two bakes of one source have to be byte-identical.</li>
 <li><b>Browser tests</b> (<code>tests/e2e/</code>, Playwright) drive the baked site in Chromium: the skin switcher, the settings page, search in each skin, and Minerva's menu.</li></ul>
 <p>The e2e run serves <code>dist/</code> under a <code>/wikven/</code> path prefix, the way GitHub Pages does, so the same command works locally and in CI. Point it elsewhere with <code>WIKVEN_BASE_URL</code>.
 </p>
@@ -791,7 +794,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 6 September 2026, at 08:41.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 6 September 2026, at 11:31.</li>
 </ul>
 
 	<ul id="footer-places">
