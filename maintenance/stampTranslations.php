@@ -32,7 +32,7 @@ class StampTranslations extends Maintenance {
 	}
 
 	public function execute() {
-		$source = rtrim((string)$this->getOption('source', $GLOBALS['wgWikvenSourceDirectory'] ?? ''), '/');
+		$source = rtrim((string)$this->getOption('source', $this->getConfig()->get('WikvenSourceDirectory')), '/');
 
 		$translationFile = $this->getArg(0);
 		if ($translationFile === null) {

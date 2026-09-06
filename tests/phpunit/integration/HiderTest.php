@@ -13,6 +13,11 @@ use MediaWikiIntegrationTestCase;
  * @covers \MediaWiki\Extension\Wikven\Hooks\Hider
  */
 class HiderTest extends MediaWikiIntegrationTestCase {
+	/** The handler as extension.json builds it, holding the wiki's own configuration. */
+	private function hider(): Hider {
+		return new Hider($this->getServiceContainer()->getMainConfig());
+	}
+
 	/**
 	 * The static export has no per-section edit affordance, so section edit links
 	 * are turned off.
@@ -20,7 +25,7 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 	public function testSectionEditLinksDisabled() {
 		$text = '';
 		$options = ['enableSectionEditLinks' => true];
-		( new Hider() )->onParserOutputPostCacheTransform(null, $text, $options);
+		$this->hider()->onParserOutputPostCacheTransform(null, $text, $options);
 		$this->assertFalse($options['enableSectionEditLinks']);
 	}
 
@@ -31,7 +36,7 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testSidebarToolboxAndSearchEmptied() {
 		$sidebar = ['TOOLBOX' => ['tool'], 'SEARCH' => ['box'], 'navigation' => ['keep']];
-		( new Hider() )->onSidebarBeforeOutput($this->createMock(Skin::class), $sidebar);
+		$this->hider()->onSidebarBeforeOutput($this->createMock(Skin::class), $sidebar);
 		$this->assertSame([], $sidebar['TOOLBOX']);
 		$this->assertSame([], $sidebar['SEARCH'], 'SifterSearch not loaded, so search is dropped');
 		$this->assertSame(['keep'], $sidebar['navigation']);
@@ -98,7 +103,7 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 			'associated-pages' => ['main' => ['keep'], 'talk' => ['x']],
 			'namespaces' => ['user' => ['keep'], 'user_talk' => ['x']]
 		];
-		( new Hider() )->onSkinTemplateNavigation__Universal($sktemplate, $links);
+		$this->hider()->onSkinTemplateNavigation__Universal($sktemplate, $links);
 		return $links;
 	}
 
@@ -112,7 +117,7 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testASkinPreviewIsLeftTheChromeTheSkinDrew() {
 		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);
-		$hider = new Hider();
+		$hider = $this->hider();
 
 		$text = '';
 		$options = ['enableSectionEditLinks' => true];

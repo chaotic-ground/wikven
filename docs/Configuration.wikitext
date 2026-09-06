@@ -37,10 +37,10 @@ A list of skin names to enable; Vector is built whatever else is listed. Which o
 
 <translate>
 <!--T:7-->
-A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, and so can Wikven's own variables, which the sections below describe one by one.
+A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings</tvar> configuration setting] can be defined here, and so can one an extension or skin you load declares for itself, and so can Wikven's own variables, which the sections below describe one by one.
 
 <!--T:36-->
-Three more exist and are not for you to set: <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code> and <code>WikvenSourceHistoryFile</code> are derived from <code>WIKVEN_WORKDIR</code> by the build itself (see [[<tvar name="1">Special:MyLanguage/Commands</tvar>|Commands]]). Setting them in your file does nothing useful, and the build overwrites them anyway.
+Six more exist and are not for you to set. <code>WikvenSourceDirectory</code>, <code>WikvenHtmlDirectory</code> and <code>WikvenSourceHistoryFile</code> are derived from <code>WIKVEN_WORKDIR</code> by the build itself (see [[<tvar name="1">Special:MyLanguage/Commands</tvar>|Commands]]). <code>WikvenSkins</code>, <code>WikvenMainSkin</code> and <code>WikvenMissing</code> are worked out from the lists above: which skins the site builds, which of them it is read in, and what it asked for that nothing here provides. Setting any of them in your file does nothing useful, and the build overwrites them anyway.
 </translate>
 
 === <code>WikvenLogos</code> ===

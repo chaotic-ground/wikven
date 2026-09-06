@@ -91,9 +91,10 @@ class Build extends Maintenance {
 		// skin pass below copies it. Settle it here so the one copy they all take is already stable.
 		$this->stabilizeSearchIndex();
 
-		$skins = $GLOBALS['wgWikvenSkins'] ?? [];
+		$config = $this->getConfig();
+		$skins = (array)$config->get('WikvenSkins');
 		if (!$skins) {
-			$skins = [$GLOBALS['wgDefaultSkin']];
+			$skins = [(string)$config->get('DefaultSkin')];
 		}
 		$this->renderSkinPasses(array_values($skins));
 	}
@@ -130,7 +131,7 @@ class Build extends Maintenance {
 	 * nothing can run it. The other is a remark about Module: files the site never asked to run.
 	 */
 	private function checkLuaAgainstThisBuild(): void {
-		$source = rtrim((string)( $GLOBALS['wgWikvenSourceDirectory'] ?? '' ), '/');
+		$source = rtrim((string)$this->getConfig()->get('WikvenSourceDirectory'), '/');
 		$listed = ExtensionRegistry::getInstance()->isLoaded(Scribunto::EXTENSION);
 
 		$problem = Scribunto::problem($listed, self::luaEngineAvailable());
@@ -180,6 +181,9 @@ class Build extends Maintenance {
 		if (extension_loaded('luasandbox')) {
 			return true;
 		}
+		// Scribunto's own setting, and this is a static with no getConfig() to ask. It stays on
+		// $GLOBALS for the second reason too: the key is absent wherever Scribunto is not loaded,
+		// which is the case the caller above is here to report.
 		$configured = (string)( $GLOBALS['wgScribuntoEngineConf']['luastandalone']['luaPath'] ?? '' );
 		if ($configured !== '' && is_executable($configured)) {
 			return true;
@@ -268,8 +272,9 @@ class Build extends Maintenance {
 	 * at the commit being built. That is true of the export as a whole, if not of the page.
 	 */
 	private function stampSourceHistory(): void {
-		$source = rtrim((string)( $GLOBALS['wgWikvenSourceDirectory'] ?? '' ), '/');
-		$history = SourceHistory::forSource($source, (string)( $GLOBALS['wgWikvenSourceHistoryFile'] ?? '' ));
+		$config = $this->getConfig();
+		$source = rtrim((string)$config->get('WikvenSourceDirectory'), '/');
+		$history = SourceHistory::forSource($source, (string)$config->get('WikvenSourceHistoryFile'));
 
 		$services = $this->getServiceContainer();
 		$build = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
@@ -356,7 +361,7 @@ class Build extends Maintenance {
 	private function hideBuildAuthors(): void {
 		$names = [User::MAINTENANCE_SCRIPT_USER];
 		if (ExtensionRegistry::getInstance()->isLoaded('Translate')) {
-			$names[] = (string)( $GLOBALS['wgTranslateFuzzyBotName'] ?? 'FuzzyBot' );
+			$names[] = (string)$this->getConfig()->get('TranslateFuzzyBotName');
 		}
 
 		$dbw = $this->getPrimaryDB();
@@ -674,8 +679,9 @@ class Build extends Maintenance {
 	 *   passes share the database.
 	 */
 	private function copyDatabasePerPass(array $skins): array {
-		$directory = rtrim((string)( $GLOBALS['wgSQLiteDataDir'] ?? '' ), '/');
-		if (count($skins) < 2 || ( $GLOBALS['wgDBtype'] ?? '' ) !== 'sqlite' || !is_dir($directory)) {
+		$config = $this->getConfig();
+		$directory = rtrim((string)$config->get('SQLiteDataDir'), '/');
+		if (count($skins) < 2 || $config->get('DBtype') !== 'sqlite' || !is_dir($directory)) {
 			return [];
 		}
 
@@ -724,7 +730,7 @@ class Build extends Maintenance {
 	private function renderSkin(): void {
 		$ip = $GLOBALS['IP'];
 		$own = __DIR__;
-		$dir = rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/');
+		$dir = rtrim((string)$this->getConfig()->get('WikvenHtmlDirectory'), '/');
 		if ($dir !== '' && !wfMkdirParents($dir)) {
 			$this->fatalError("Wikven: could not create output directory $dir");
 		}
@@ -788,6 +794,9 @@ class Build extends Maintenance {
 	 * explains what is safe to rewrite and why nothing reading the bundle can tell.
 	 */
 	private function stabilizeSearchIndex(): void {
+		// SifterSearch's own settings stay on $GLOBALS here and in the two methods below: they
+		// exist only where that extension is loaded, and Config::get() throws on a key nothing has
+		// defined -- which would turn this path's "search is off" case into a fatal.
 		$bundle = rtrim((string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' ), '/');
 		if ($bundle === '') {
 			return;
@@ -830,8 +839,9 @@ class Build extends Maintenance {
 	 * @return ?string The directory the bundle must be copied to, or null where nothing is to change.
 	 */
 	private function pointSearchAtThisCopy(): ?string {
-		$skin = (string)( $GLOBALS['wgDefaultSkin'] ?? '' );
-		$main = (string)( $GLOBALS['wgWikvenMainSkin'] ?? '' );
+		$config = $this->getConfig();
+		$skin = (string)$config->get('DefaultSkin');
+		$main = (string)$config->get('WikvenMainSkin');
 		if ($skin === '' || $skin === $main || !Search::isActive()) {
 			return null;
 		}
@@ -842,7 +852,7 @@ class Build extends Maintenance {
 		$GLOBALS['wgSifterSearchBundlePath'] = $path;
 		// The copy is served at the copy's own output directory, and copyBundlePath left the
 		// bundle's last segment alone, so that segment is the directory to write under it.
-		return rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/') . '/' . basename(rtrim($path, '/'));
+		return rtrim((string)$config->get('WikvenHtmlDirectory'), '/') . '/' . basename(rtrim($path, '/'));
 	}
 
 	/**
@@ -881,7 +891,7 @@ class Build extends Maintenance {
 
 	/** Empty the output dir (kept, may be a mount) so in-place edits don't leave stale output. */
 	private function clearOutputDirectory(): void {
-		$dir = rtrim($GLOBALS['wgWikvenHtmlDirectory'], '/');
+		$dir = rtrim((string)$this->getConfig()->get('WikvenHtmlDirectory'), '/');
 		if ($dir === '' || !is_dir($dir)) {
 			return;
 		}
@@ -922,7 +932,7 @@ class Build extends Maintenance {
 	 * FailOnCategories says what a category with anything in it is worth, and this is what asks.
 	 */
 	private function assertNamedCategoriesAreEmpty(): void {
-		$named = (array)( $GLOBALS['wgWikvenFailOnCategories'] ?? [] );
+		$named = (array)$this->getConfig()->get('WikvenFailOnCategories');
 		$members = [];
 		foreach ($named as $entry) {
 			$title = $this->categoryNamed((string)$entry);
@@ -1041,7 +1051,7 @@ class Build extends Maintenance {
 	 * thousands to say so. A typo in a skin name is the ordinary case.
 	 */
 	private function assertEverythingListedIsHere(): void {
-		$missing = $GLOBALS['wgWikvenMissing'] ?? [];
+		$missing = $this->getConfig()->get('WikvenMissing');
 		if (!is_array($missing) || $missing === []) {
 			return;
 		}
@@ -1058,8 +1068,9 @@ class Build extends Maintenance {
 
 	/** Import source-dir images into the File: namespace so pages render with local thumbnails. */
 	private function importImages(string $file): void {
-		$directory = rtrim($GLOBALS['wgWikvenSourceDirectory'], '/');
-		$extensions = $GLOBALS['wgFileExtensions'];
+		$config = $this->getConfig();
+		$directory = rtrim((string)$config->get('WikvenSourceDirectory'), '/');
+		$extensions = (array)$config->get('FileExtensions');
 		$sources = ImageImport::sources($directory, $extensions);
 
 		// The walk follows links, as core's does, so an image that is one -- or one under a linked
@@ -1159,7 +1170,7 @@ class Build extends Maintenance {
 		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
 
 		$updater = $page->newPageUpdater($user);
-		$content = ContentHandler::makeContent($GLOBALS['wgWikvenMainPage'], $title);
+		$content = ContentHandler::makeContent((string)$this->getConfig()->get('WikvenMainPage'), $title);
 		$updater->setContent(SlotRecord::MAIN, $content);
 		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Set the main page'));
 
@@ -1235,7 +1246,8 @@ class Build extends Maintenance {
 	 * wikitext cannot carry a radio, and the choices mean nothing without the script anyway.
 	 */
 	private function setSettingsPage(): void {
-		$name = $GLOBALS['wgWikvenSettingsPage'] ?? '';
+		$config = $this->getConfig();
+		$name = (string)$config->get('WikvenSettingsPage');
 		if ($name === '') {
 			return;
 		}
@@ -1250,7 +1262,7 @@ class Build extends Maintenance {
 		// one, so fillMinervaMenu.php puts a real form inside this. The skin list is wikven's own,
 		// and follows in a section of its own.
 		$text = "<div id=\"wikven-settings-form\"></div>\n";
-		if (count($GLOBALS['wgWikvenSkins'] ?? []) > 1) {
+		if (count((array)$config->get('WikvenSkins')) > 1) {
 			$text .= $this->settingsSection(
 				'wikven-skins',
 				'wikven-skins-description',
@@ -1382,7 +1394,7 @@ class Build extends Maintenance {
 		if (!ExtensionRegistry::getInstance()->isLoaded('Translate')) {
 			return [];
 		}
-		$source = rtrim((string)( $GLOBALS['wgWikvenSourceDirectory'] ?? '' ), '/');
+		$source = rtrim((string)$this->getConfig()->get('WikvenSourceDirectory'), '/');
 		if ($source === '' || !is_dir($source)) {
 			return [];
 		}
@@ -1586,7 +1598,7 @@ class Build extends Maintenance {
 
 	/** Fail the build if the configured main page wasn't imported (else the site root 404s). */
 	private function assertMainPageExists(): void {
-		$name = $GLOBALS['wgWikvenMainPage'];
+		$name = (string)$this->getConfig()->get('WikvenMainPage');
 		$title = Title::newFromText($name);
 		if (!$title || !$title->exists()) {
 			$this->fatalError(

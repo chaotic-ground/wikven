@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\Wikven\BuildFor;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SourceFile;
@@ -15,6 +16,12 @@ class Hider implements
 	\MediaWiki\Hook\ParserOutputPostCacheTransformHook,
 	\MediaWiki\Hook\SidebarBeforeOutputHook,
 	\MediaWiki\Hook\SkinTemplateNavigation__UniversalHook {
+	private Config $config;
+
+	public function __construct(Config $config) {
+		$this->config = $config;
+	}
+
 	/** @inheritDoc */
 	public function onParserOutputPostCacheTransform($parserOutput, &$text, &$options): void {
 		if (BuildFor::skinPreview()) {
@@ -74,13 +81,14 @@ class Hider implements
 		}
 
 		// Edit/history tabs need configured external URLs and a source file; else they 404 or self-link.
-		global $wgWikvenEditUrl, $wgWikvenHistoryUrl;
+		$editUrl = (string)$this->config->get('WikvenEditUrl');
+		$historyUrl = (string)$this->config->get('WikvenHistoryUrl');
 		$title = $sktemplate->getTitle();
 		$hasSource = $title && SourceFile::exists($title->getPrefixedText());
-		if (!$wgWikvenEditUrl || !$hasSource) {
+		if (!$editUrl || !$hasSource) {
 			unset($links['views']['edit'], $links['views']['ve-edit'], $links['views']['viewsource']);
 		}
-		if (!$wgWikvenHistoryUrl || !$hasSource) {
+		if (!$historyUrl || !$hasSource) {
 			unset($links['views']['history']);
 		}
 	}

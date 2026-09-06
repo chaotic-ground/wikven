@@ -36,10 +36,12 @@ class BuildScripts extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgLanguageCode, $wgDefaultSkin;
+		$config = $this->getConfig();
+		$languageCode = (string)$config->get('LanguageCode');
+		$defaultSkin = (string)$config->get('DefaultSkin');
 
-		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
-		$outDir = AssetFile::path($htmlDir, $wgWikvenAssetDirectory);
+		$htmlDir = rtrim((string)$config->get('WikvenHtmlDirectory'), '/');
+		$outDir = AssetFile::path($htmlDir, (string)$config->get('WikvenAssetDirectory'));
 		if (!wfMkdirParents($outDir, null, __METHOD__)) {
 			$this->fatalError("Could not create asset directory $outDir");
 		}
@@ -55,7 +57,7 @@ class BuildScripts extends Maintenance {
 		$seeds[] = 'site';
 		// Seed default-on gadgets; the Gadgets hook adds them per-request, not in static render.
 		$seeds = array_merge($seeds, $this->defaultGadgetModules());
-		$readyConfig = $this->readyConfig($rl, $wgLanguageCode, $wgDefaultSkin);
+		$readyConfig = $this->readyConfig($rl, $languageCode, $defaultSkin);
 		// Seed the lazy search module (loaded on focus, never in page queue) so its closure bundles.
 		if (Search::isActive()) {
 			$searchModule = $this->resolveSearchModule($readyConfig);
@@ -71,8 +73,8 @@ class BuildScripts extends Maintenance {
 		// reports "Couldn't load preferences". Vue and its Codex components come along with it.
 		$preferences = 'skins.citizen.preferences';
 		if (
-			$wgDefaultSkin === 'citizen'
-			&& ( $GLOBALS['wgCitizenEnablePreferences'] ?? false )
+			$defaultSkin === 'citizen'
+			&& $config->get('CitizenEnablePreferences')
 			&& $rl->isModuleRegistered($preferences)
 		) {
 			$seeds[] = $preferences;
@@ -83,15 +85,15 @@ class BuildScripts extends Maintenance {
 			}
 		}
 		// 2. Expand to the full dependency closure, plus the implicit base modules.
-		$closure = $this->resolveClosure($rl, $seeds, $wgLanguageCode, $wgDefaultSkin);
+		$closure = $this->resolveClosure($rl, $seeds, $languageCode, $defaultSkin);
 
 		// 3. Dump startup; strip its RLPAGEMODULES auto-load (would 404 fetching base from load.php).
-		$startup = $this->dump($rl, ['startup'], $wgLanguageCode, $wgDefaultSkin, 'scripts', ['raw' => '1']);
+		$startup = $this->dump($rl, ['startup'], $languageCode, $defaultSkin, 'scripts', ['raw' => '1']);
 		$startup = str_replace('mw.loader.load(window.RLPAGEMODULES||[]);', '', $startup);
 		file_put_contents("$outDir/startup-static.js", $startup, LOCK_EX);
 
 		// 4. Dump the closure in combined mode so every module self-executes.
-		$bundle = $this->dump($rl, $closure, $wgLanguageCode, $wgDefaultSkin, null, []);
+		$bundle = $this->dump($rl, $closure, $languageCode, $defaultSkin, null, []);
 		file_put_contents("$outDir/modules-static.js", $bundle, LOCK_EX);
 
 		// Combined bundle embeds icon CSS pointing at load.php images. The bundle injects its CSS
@@ -101,8 +103,8 @@ class BuildScripts extends Maintenance {
 			$rl,
 			$outDir,
 			["$outDir/modules-static.js", "$outDir/startup-static.js"],
-			$wgLanguageCode,
-			$wgDefaultSkin,
+			$languageCode,
+			$defaultSkin,
 			true
 		);
 

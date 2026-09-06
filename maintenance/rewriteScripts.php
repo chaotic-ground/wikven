@@ -25,18 +25,19 @@ class RewriteScripts extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgWikvenHtmlDirectory, $wgWikvenAssetDirectory, $wgDefaultSkin;
+		$config = $this->getConfig();
+		$assetDirectory = (string)$config->get('WikvenAssetDirectory');
 
-		$htmlDir = rtrim($wgWikvenHtmlDirectory, '/');
-		$startup = AssetFile::locate($htmlDir, $wgWikvenAssetDirectory, 'startup-static.js');
-		$modules = AssetFile::locate($htmlDir, $wgWikvenAssetDirectory, 'modules-static.js');
-		$siteStyles = AssetFile::locate($htmlDir, $wgWikvenAssetDirectory, 'site.styles.css');
+		$htmlDir = rtrim((string)$config->get('WikvenHtmlDirectory'), '/');
+		$startup = AssetFile::locate($htmlDir, $assetDirectory, 'startup-static.js');
+		$modules = AssetFile::locate($htmlDir, $assetDirectory, 'modules-static.js');
+		$siteStyles = AssetFile::locate($htmlDir, $assetDirectory, 'site.styles.css');
 		$siteStylesHref = $siteStyles['href'];
 		$hasSiteStyles = is_file($siteStyles['path']) && filesize($siteStyles['path']) > 0;
 
 		// Bundled webfonts (opt-in; bakeWebfonts wrote it): link ahead of site styles so a site can
 		// still override the font-family, and let rename's reparenting fix the href on subpages.
-		$webfonts = AssetFile::locate($htmlDir, $wgWikvenAssetDirectory, 'webfonts.css');
+		$webfonts = AssetFile::locate($htmlDir, $assetDirectory, 'webfonts.css');
 		$webfontsHref = $webfonts['href'];
 		$hasWebfonts = is_file($webfonts['path']) && filesize($webfonts['path']) > 0;
 
@@ -44,7 +45,7 @@ class RewriteScripts extends Maintenance {
 
 		// With SifterSearch the static Pagefind bundle keeps the native search box working, so keep it.
 		$sifterEnabled = Search::isActive();
-		$isCitizen = $wgDefaultSkin === 'citizen';
+		$isCitizen = $config->get('DefaultSkin') === 'citizen';
 		$citizenSearchWorks = Search::hasResultsPage();
 
 		foreach (glob("$htmlDir/*.html") as $file) {

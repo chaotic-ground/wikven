@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Hooks;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\Wikven\RetryingForeignRepo;
 use MediaWiki\FileRepo\ForeignAPIRepo;
 
@@ -13,6 +14,12 @@ class Retrier implements \MediaWiki\Hook\SetupAfterCacheHook {
 	 */
 	private const PLAIN_FOREIGN_API_REPOS = [ForeignAPIRepo::class, 'ForeignAPIRepo'];
 
+	private Config $config;
+
+	public function __construct(Config $config) {
+		$this->config = $config;
+	}
+
 	/**
 	 * @inheritDoc
 	 *
@@ -23,7 +30,9 @@ class Retrier implements \MediaWiki\Hook\SetupAfterCacheHook {
 	 * swapped here rather than the repository being declared with it in the first place.
 	 */
 	public function onSetupAfterCache(): void {
-		$GLOBALS['wgForeignFileRepos'] = self::retrying($GLOBALS['wgForeignFileRepos']);
+		// The read goes through the service and the write cannot: Config is read-only, and what
+		// core assembles the repositories from is the global.
+		$GLOBALS['wgForeignFileRepos'] = self::retrying((array)$this->config->get('ForeignFileRepos'));
 	}
 
 	/**
