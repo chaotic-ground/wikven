@@ -87,7 +87,7 @@ Then fill each unit's translation under its marker:
 
 <translate>
 <!--T:14-->
-A unit left empty counts as not yet translated: <code>translate check</code> reports it and the build renders it in the source language, so you can translate a page a few units at a time. The <code>@a1b2c3d4</code> stamp is added by <code>translate stamp</code> (see below), not by hand.
+A unit left empty counts as not yet translated: <code>translate check</code> reports it and the build renders it in the source language, so you can translate a page a few units at a time. The <code>@a1b2c3d4</code> stamp is added by <code>translate stamp</code> (see below), not by hand. Only those markers and their text belong in the file: the <code>&lt;translate&gt;</code> tags, and whatever the source page keeps outside them, stay on the source page, where the export reads them for every language. One written here is swallowed by the unit above it, and that unit is then shown in the source language rather than yours — so <code>translate check</code> refuses it.
 
 <!--T:22-->
 == Translating the page title ==

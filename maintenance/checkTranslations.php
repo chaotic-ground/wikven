@@ -51,7 +51,7 @@ class CheckTranslations extends Maintenance {
 	 * Everything reported this run, for the comment body. The annotations above are one line each,
 	 * on the file they belong to; the comment groups the same findings and says what to run.
 	 *
-	 * @var list<array{kind:string,file:string,unit?:string,lang?:string,detail?:string}>
+	 * @var list<array{kind:string,file:string,unit?:string,lang?:string,line?:string,detail?:string}>
 	 */
 	private array $findings = [];
 
@@ -72,8 +72,9 @@ class CheckTranslations extends Maintenance {
 		$prefix = $prefix === '' ? '' : rtrim($prefix, '/') . '/';
 		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
-		// Counted apart because only one of them gates: a broken source page is the author's to fix
-		// before it bakes wrong, while a translation falling behind is the translation system working.
+		// Counted apart because only one of them gates: a page that bakes wrong -- a source page
+		// Translate refuses, or a translation carrying markup that stops a unit being used -- is the
+		// author's to fix, while a translation falling behind is the translation system working.
 		$errors = 0;
 		$stale = 0;
 		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
@@ -98,6 +99,24 @@ class CheckTranslations extends Maintenance {
 				$translationFile = TranslationSource::translationPath($baseFile, $lang);
 				$translationText = (string)file_get_contents($translationFile);
 				$reportFile = $prefix . substr($translationFile, strlen($source) + 1);
+
+				// A tag the translation should not carry at all, which is not a unit falling behind
+				// but a unit that will not be used: read before the units, because a file in this
+				// state has a translation nobody sees and every unit in it reads as up to date.
+				foreach (StalenessComputer::strayTranslateTags($translationText) as $line) {
+					$errors++;
+					$this->findings[] = [
+						'kind' => 'markup',
+						'file' => $reportFile,
+						'source' => $prefix . substr($baseFile, strlen($source) + 1),
+						'line' => (string)$line,
+						'lang' => $lang
+					];
+					$this->output(
+						"::error file=$reportFile,line=$line::A <translate> tag belongs to the source"
+						. " page; here it is swallowed by the unit above it, which is then not used\n"
+					);
+				}
 
 				foreach (StalenessComputer::analyze($sourceText, $translationText, $pageTitle) as $unit) {
 					if ($unit['status'] === StalenessComputer::OK) {
@@ -153,14 +172,14 @@ class CheckTranslations extends Maintenance {
 
 		$summary = [];
 		if ($errors > 0) {
-			$summary[] = "$errors source page error(s)";
+			$summary[] = "$errors error(s)";
 		}
 		if ($stale > 0) {
 			$summary[] = "$stale translation(s) out of date or missing";
 		}
 		$this->output("\n" . implode(', ', $summary) . ".\n");
 		if ($errors > 0 && $this->hasOption('gate')) {
-			$this->fatalError('Wikven: source pages have errors (see annotations above).');
+			$this->fatalError('Wikven: the source tree has translation errors (see annotations above).');
 		}
 		return true;
 	}

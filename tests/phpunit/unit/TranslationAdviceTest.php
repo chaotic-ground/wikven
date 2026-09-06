@@ -49,6 +49,20 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString('- `docs/Pages/ko.wikitext` — T:3 (ko); T:7 (ko)', $body);
 	}
 
+	/**
+	 * A stray <translate> tag is about a place in the file rather than about a unit, so the line is
+	 * what the reader is sent to. And it gates: a unit that will not be used is not a translation
+	 * falling behind.
+	 */
+	public function testAStrayTagIsListedByItsLineAndCanFailTheCheck() {
+		$body = $this->advice()->comment([
+			['kind' => 'markup', 'file' => 'docs/Skins/ko.wikitext', 'line' => '29', 'lang' => 'ko'],
+			['kind' => 'markup', 'file' => 'docs/Skins/ko.wikitext', 'line' => '36', 'lang' => 'ko']
+		]);
+		$this->assertStringContainsString('- `docs/Skins/ko.wikitext` — line 29; line 36', $body);
+		$this->assertStringContainsString('can fail the check', $body);
+	}
+
 	/** A finding on a source page has no language to name, only the unit. */
 	public function testASourceUnitIsListedWithoutALanguage() {
 		$body = $this->advice()->comment([

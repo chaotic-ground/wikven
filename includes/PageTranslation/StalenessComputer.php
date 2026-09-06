@@ -57,6 +57,9 @@ class StalenessComputer {
 	/** What TranslatablePageParser::armourNowiki() hides: exactly this, no attributes, no other tag. */
 	private const ARMOURED_NOWIKI = '#<nowiki>.*?</nowiki>#s';
 
+	/** Either half of a <translate> block, matched on its own; see strayTranslateTags(). */
+	private const TRANSLATE_TAG = '#</?translate(?: nowrap)?>#';
+
 	/** A unit marker, with the source-unit hash a translation's marker also carries. */
 	private const MARKER = '/<!--T:(?<id>[A-Za-z0-9]+)(?:\s+@(?<hash>[0-9a-f]{' . self::HASH_LENGTH . '}))?\s*-->/';
 
@@ -156,6 +159,45 @@ class StalenessComputer {
 	 */
 	public static function hasUnitMarkers(string $text): bool {
 		return preg_match(self::MARKER, $text) === 1;
+	}
+
+	/**
+	 * Where a translation carries a <translate> tag, which belongs to the source page alone.
+	 *
+	 * A translation file is a list of units and nothing else: translationUnits() runs each unit
+	 * from its own marker to the next, so anything between two markers becomes part of the unit
+	 * before it. A </translate> written into a translation is therefore not ignored -- it is
+	 * appended to a unit's translated text, and Translate does not use a unit that arrives looking
+	 * like that. It falls back to the source language instead, which is a translation silently not
+	 * shown: nothing 404s, nothing is stale, and the paragraph is simply in English.
+	 *
+	 * That shipped. docs/Skins/ko.wikitext carried the tags around two code blocks it had copied
+	 * from its source page, and two paragraphs of the published Korean page were in English from
+	 * the day it was written until #674, with every gate green.
+	 *
+	 * Armoured nowiki is masked first, exactly as blockRanges() and Translate itself read a page: a
+	 * translation writing about the tag inside <nowiki> is documenting it rather than carrying it,
+	 * and four units of this project's own Korean do that.
+	 *
+	 * @param string $translationText A translation file's wikitext.
+	 * @return list<int> The 1-based line of each tag, in the order they appear.
+	 */
+	public static function strayTranslateTags(string $translationText): array {
+		$masked = preg_replace_callback(
+			self::ARMOURED_NOWIKI,
+			static function (array $span): string {
+				return str_repeat("\x00", strlen($span[0]));
+			},
+			$translationText
+		);
+
+		$lines = [];
+		if (preg_match_all(self::TRANSLATE_TAG, $masked, $found, PREG_OFFSET_CAPTURE)) {
+			foreach ($found[0] as $tag) {
+				$lines[] = substr_count($translationText, "\n", 0, $tag[1]) + 1;
+			}
+		}
+		return $lines;
 	}
 
 	/**

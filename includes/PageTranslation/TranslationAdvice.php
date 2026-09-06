@@ -48,6 +48,7 @@ class TranslationAdvice {
 		'reserved',
 		'unmarked',
 		'disagree',
+		'markup',
 		'orphan',
 		'standalone',
 		'stale',
@@ -107,7 +108,7 @@ class TranslationAdvice {
 	/**
 	 * The comment for a run that found something, or null for one that found nothing.
 	 *
-	 * @param list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,detail?:string}> $findings
+	 * @param list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,line?:string,detail?:string}> $findings
 	 * @param list<string> $languages Rendered once each, in this order.
 	 */
 	public function comment(array $findings, array $languages = ['en']): ?string {
@@ -176,7 +177,7 @@ class TranslationAdvice {
 	/**
 	 * The comment in one language: what was found, under a heading per kind, then what it costs.
 	 *
-	 * @param array<string,array<string,list<array{unit?:string,lang?:string,detail?:string}>>> $grouped
+	 * @param array<string,array<string,list<array{unit?:string,lang?:string,line?:string,detail?:string}>>> $grouped
 	 */
 	private function body(array $grouped, string $language): string {
 		$body = $this->heading($language) . $this->msg($this->key('wikven-translations-lead'), $language) . "\n";
@@ -227,9 +228,14 @@ class TranslationAdvice {
 	 * What one finding is called on its file's line: a unit by number and language, and anything
 	 * else by the message the check itself produced.
 	 *
-	 * @param array{unit?:string,lang?:string,detail?:string} $finding
+	 * @param array{unit?:string,lang?:string,line?:string,detail?:string} $finding
 	 */
 	private function note(array $finding, string $language): string {
+		// A finding about a place rather than a unit says where, since that is what a reader opens
+		// the file to look at.
+		if (isset($finding['line'])) {
+			return $this->msg('wikven-translations-line', $language, [$finding['line']]);
+		}
 		if (!isset($finding['unit'])) {
 			return (string)( $finding['detail'] ?? '' );
 		}
@@ -263,8 +269,8 @@ class TranslationAdvice {
 	/**
 	 * The findings a scoped comment is about; all of them where nothing was scoped.
 	 *
-	 * @param list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,detail?:string}> $findings
-	 * @return list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,detail?:string}>
+	 * @param list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,line?:string,detail?:string}> $findings
+	 * @return list<array{kind:string,file:string,source?:string,unit?:string,lang?:string,line?:string,detail?:string}>
 	 */
 	private function inScope(array $findings): array {
 		if ($this->paths === null) {
@@ -299,8 +305,8 @@ class TranslationAdvice {
 	 * Findings by kind, then by file, each file's findings in the order they were found, so one
 	 * line can carry several units of the same file without repeating the file name.
 	 *
-	 * @param list<array{kind:string,file:string,unit?:string,lang?:string,detail?:string}> $findings
-	 * @return array<string,array<string,list<array{unit?:string,lang?:string,detail?:string}>>>
+	 * @param list<array{kind:string,file:string,unit?:string,lang?:string,line?:string,detail?:string}> $findings
+	 * @return array<string,array<string,list<array{unit?:string,lang?:string,line?:string,detail?:string}>>>
 	 */
 	private static function group(array $findings): array {
 		$grouped = [];
