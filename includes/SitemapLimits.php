@@ -11,9 +11,9 @@ namespace MediaWiki\Extension\Wikven;
  * sitemap it wrote anyway, and it exists because until now only the count was ever asked about.
  *
  * The count is the cap a realistic site reaches first. Measured from the file this project's own
- * documentation bake produces: 72 URLs in 6,008 bytes, 83 bytes each, so 50,000 URLs of that shape
- * would come to about 4.2 MB -- an order of magnitude under the byte cap, and the count itself a
- * factor of roughly 700 away. Reaching 50 MB while still under 50,000 URLs takes about 1,000 bytes
+ * documentation bake produces: 74 URLs in 6,180 bytes, 83 bytes each, so 50,000 URLs of that shape
+ * would come to about 4.0 MB -- an order of magnitude under the byte cap, and the count itself a
+ * factor of roughly 675 away. Reaching 50 MB while still under 50,000 URLs takes about 1,000 bytes
  * per URL, a location around 900 characters; deep subpage titles in a non-Latin script,
  * percent-encoded, could plausibly get there. Such a site wrote an oversized sitemap, had it
  * rejected, and heard nothing at all, because the only cap it passed was the one nothing checked.
