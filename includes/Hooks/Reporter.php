@@ -17,12 +17,15 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 	 * A PHP Error -- a missing class, a TypeError, an argument count -- is a Throwable and not an
 	 * Exception, so it goes past MaintenanceRunner's catch and reaches MWExceptionHandler, whose
 	 * guard against a script claiming success is a register_shutdown_function() that exits 255.
-	 * The standalone binary discards a status set from a shutdown function, and only that: three
-	 * lines of PHP measure it, exit(7) at the top of a file giving 7 under the binary and the same
-	 * exit(7) from a shutdown function giving 0.
+	 * That one route is the one the standalone binary loses, and only that: embedded FrankenPHP
+	 * reads the status out of the engine and runs the shutdown functions after, so a status set
+	 * from one is set too late to be read rather than refused. Three lines of PHP measure it,
+	 * exit(7) at the top of a file giving 7 under the binary and the same exit(7) from a shutdown
+	 * function giving 0.
 	 *
 	 * So this closes the gap where it opens, with the same 255 said from the exception handler
-	 * itself. It costs nothing under a real PHP binary, where both routes already answer 255.
+	 * itself, which is early enough. It costs nothing under a real PHP binary, where both routes
+	 * already answer 255.
 	 *
 	 * It matters because the binary re-invokes itself for every step of a build through that path
 	 * -- embedded FrankenPHP leaves PHP_BINARY empty, so a step runs as `<self> php-cli` -- and a
@@ -33,8 +36,9 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 	 *
 	 * Installed here rather than in WikvenSettings.php because installHandler() runs in Setup.php
 	 * after LocalSettings.php and would replace anything put there. This hook is the first thing
-	 * wikven runs after it; an Error before this point is core's to report, and under a real PHP
-	 * binary core does.
+	 * wikven runs after it, and the window it leaves is not one to worry about: with no handler
+	 * installed yet, an Error before this point ends the run through PHP's own fatal path, which
+	 * says 255 under either runtime.
 	 */
 	public function onSetupAfterCache(): void {
 		self::install(MW_ENTRY_POINT, defined('MW_PHPUNIT_TEST'), 'set_exception_handler');
@@ -42,6 +46,11 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 
 	/**
 	 * Put the handler in front of core's, where this is a run whose status is worth correcting.
+	 *
+	 * What is handed to $set is the one thing here no test reaches: a test can watch that a
+	 * handler was installed and can drive handler() directly, but calling the installed one means
+	 * calling core's reporter and then a real exit. A bake with an Error thrown into it is what
+	 * covers this line.
 	 *
 	 * @param string $entryPoint MW_ENTRY_POINT, naming what kind of run this is.
 	 * @param bool $underTest Whether PHPUnit is running, which owns the handler while it is.
