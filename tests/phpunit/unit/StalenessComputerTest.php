@@ -454,4 +454,45 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 			'a page of its own with an ordinary comment' => ["<!-- draft -->\nAn id names one.", false]
 		];
 	}
+
+	/**
+	 * A <translate> tag in a translation, which is the shape docs/Skins/ko.wikitext shipped in: the
+	 * tags copied from the source page around a code block the source keeps outside them. Two
+	 * paragraphs of the published Korean page were in English because of it.
+	 *
+	 * @dataProvider provideStrayTranslateTags
+	 */
+	public function testStrayTranslateTags(string $translation, array $expected) {
+		$this->assertSame($expected, StalenessComputer::strayTranslateTags($translation));
+	}
+
+	public static function provideStrayTranslateTags(): array {
+		return [
+			'an ordinary translation' => ["<!--T:title @a1b2c3d4-->\n스킨\n\n<!--T:1 @b2c3d4e5-->\n본문.\n", []],
+			'nothing at all' => ['', []],
+			// Both halves, each on its own: a file may carry either without the other, and a reader
+			// opening it has to be sent to the line rather than to the pair.
+			'the shape Skins/ko shipped in' => [
+				"<!--T:6 @a1b2c3d4-->\n본문:\n</translate>\n\n<syntaxhighlight lang=\"yaml\">\nskins:\n"
+					. "</syntaxhighlight>\n\n<translate>\n<!--T:34 @b2c3d4e5-->\n다음.\n",
+				[3, 9]
+			],
+			'a closing tag alone' => ["<!--T:1 @a1b2c3d4-->\n본문.\n</translate>\n", [3]],
+			'an opening tag alone' => ["<!--T:1 @a1b2c3d4-->\n본문.\n\n<translate>\n", [4]],
+			'the nowrap spelling, which parse() also accepts' => [
+				"<!--T:1 @a1b2c3d4-->\n본문.\n<translate nowrap>\n",
+				[3]
+			],
+			// Four units of this project's own Korean write about the tag inside <nowiki>, which is
+			// documenting it rather than carrying it -- and is what a substring search gets wrong.
+			'a unit that writes about the tag' => [
+				"<!--T:1 @a1b2c3d4-->\n내용을 <code><nowiki><translate></nowiki></code>로 감싸십시오.\n",
+				[]
+			],
+			'a unit that writes the tag escaped' => [
+				"<!--T:1 @a1b2c3d4-->\n내용을 <code>&lt;translate&gt;</code>로 감싸십시오.\n",
+				[]
+			]
+		];
+	}
 }
