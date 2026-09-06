@@ -157,6 +157,69 @@ jobs:
           print('og:url is absolute on every page that carries one')
           PY
 
+          # A page that stops being indexed is invisible by construction: nothing 404s, nothing
+          # reads wrong, and the only place it shows is a crawler's view of the site weeks later.
+          # __NOINDEX__ is a behaviour switch, so a page that writes the word while telling a
+          # reader to use it takes it -- Deploying noindexed itself, in both languages, and left
+          # the sitemap, with every gate here green (#655). It is written through <nowiki> now.
+          #
+          # Read off the rendered pages rather than the sources, because the source is where the
+          # word legitimately appears, and named rather than counted, because a count passes one
+          # page swapping for another and the swap is what nobody would read.
+          #
+          # The sitemap is the other half of the same fact and the build derives it separately, so
+          # the two have to agree with the list and with each other. That half also catches a page
+          # leaving the sitemap for a reason that has nothing to do with noindex.
+          python3 - <<'PY'
+          import glob, os, re, sys
+          import xml.etree.ElementTree as ET
+          from urllib.parse import unquote
+
+          # The pages this site means to keep out of the index. Search is a results page, and a
+          # results page is not one to index; it carries __NOINDEX__ for that reason.
+          expected = {'Search.html'}
+          base = 'https://chaotic-ground.github.io/wikven/'
+          ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+
+          pages, noindexed, indexable_copies = set(), set(), {}
+          for path in glob.glob('dist/**/*.html', recursive=True):
+              page = os.path.relpath(path, 'dist')
+              with open(path, encoding='utf-8') as handle:
+                  tag = re.search(r'<meta name="robots" content="([^"]*)"', handle.read())
+              noindex = bool(tag and 'noindex' in tag.group(1))
+              copy = page.split('/')[0]
+              if copy in ('citizen', 'minerva'):
+                  # A skin copy is noindex wholesale, so nobody arrives from a search result
+                  # reading the site in a skin they never picked.
+                  if not noindex:
+                      indexable_copies.setdefault(copy, []).append(page)
+                  continue
+              pages.add(page)
+              if noindex:
+                  noindexed.add(page)
+
+          listed = {unquote(loc.text[len(base):]) for loc in
+                    ET.parse('dist/sitemap.xml').getroot().findall('s:url/s:loc', ns)
+                    if (loc.text or '').startswith(base)}
+
+          problems = []
+          for copy, indexable in sorted(indexable_copies.items()):
+              problems.append(f'{copy}/ has {len(indexable)} indexable page(s): {sorted(indexable)[:5]}')
+          if noindexed != expected:
+              problems.append(f'the site noindexes {sorted(noindexed)}, expected {sorted(expected)}')
+          missing = pages - listed - expected
+          if missing:
+              problems.append(f'{len(missing)} indexable page(s) are not in sitemap.xml: {sorted(missing)[:5]}')
+          strays = listed & expected
+          if strays:
+              problems.append(f'sitemap.xml names noindexed page(s): {sorted(strays)}')
+          if problems:
+              for problem in problems:
+                  print(f'::error::{problem}')
+              sys.exit('a page changed whether search engines index it')
+          print(f'{len(pages)} pages, {len(noindexed)} noindexed, {len(listed)} in sitemap.xml')
+          PY
+
           # The card a shared link shows has to be an absolute URL -- read by something that never
           # saw the page -- AND has to name a file this build actually wrote. Both halves are
           # asserted, because either alone passes while the card is broken: WikiSEO builds the URL
