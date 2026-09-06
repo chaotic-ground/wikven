@@ -151,16 +151,22 @@ When set, and UniversalLanguageSelector is enabled, the build bakes that extensi
 
 <translate>
 <!--T:203-->
-'''Default:''' none
+'''Default:''' the faults MediaWiki and the bundled extensions already track
 
 <!--T:204-->
-Categories no page may be in when the build finishes, named without the <code>Category:</code> prefix. A build that puts a page in one of them stops and says which pages did.
+Categories no page may be in when the build finishes. A build that puts a page in one of them stops and says which pages did.
 
 <!--T:205-->
-MediaWiki does not refuse a page it cannot render properly; it renders what it can and files the page in a tracking category. A template used without a required argument draws its placeholder, a Lua error prints where the module's answer should be, a page whose template expansion ran past its limit is cut short — and each of those is a page that builds, publishes, and reads as something nobody wrote. The category is the only thing that says so, and a static export does not carry it.
+MediaWiki does not refuse a page it cannot render properly; it renders what it can and files the page in a tracking category. A template used without a required argument draws its placeholder, a Lua error prints where the module's answer should be, a reference points at a source the page never gives, a page whose template expansion ran past its limit is cut short — and each of those is a page that builds, publishes, and reads as something nobody wrote. The category is the only thing that says so, and a static export does not carry it.
 
-<!--T:206-->
-Name your own the same way. A template can file a page itself:
+<!--T:209-->
+The default is every one of those MediaWiki and the bundled extensions already track, so a site that sets nothing stops on them. Left out are the categories that record a choice rather than a fault — hidden categories, indexed and noindexed pages, magic links, and the counts of a deprecated syntax's remaining uses — none of which is a reason to refuse a build.
+
+<!--T:210-->
+Write an entry as the tracking category's message key, which is how MediaWiki names these: nothing in it says “Pages with template loops”, it says <code>template-loop-category</code>, and a wiki reading in another language answers that key with its own name. A key belonging to an extension the site does not load names nothing and is passed over. To drop one of the defaults, edit its message to <code>-</code>, MediaWiki's own way of switching a tracking category off.
+
+<!--T:211-->
+Anything that is not a message key is read as a category name, with or without the <code>Category:</code> prefix, and what a site writes is added to the default rather than replacing it. A template can file a page itself:
 
 <!--T:207-->
 <pre>{{#if:{{{1|}}}||[[Category:Pages with template errors]]}}</pre>

@@ -43,8 +43,9 @@ config:
   # -- and TextExtracts ends a truncated extract with "...", so it never runs. What it does do is
   # turn an empty extract into a description of ".", which is worse than the tag being absent.
   WikiSeoEnableAutoDescription: true
-  # A build that puts a page in one of these stops. Template:note files a note that was given no
-  # text, which otherwise draws the template's placeholder and builds green -- see that template.
+  # Added to the categories wikven fails on by default. Template:note files a note that was given
+  # no text, which otherwise draws the template's placeholder and builds green -- see that
+  # template.
   WikvenFailOnCategories:
     - Pages with template errors
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven

@@ -920,23 +920,18 @@ class Build extends Maintenance {
 	 * MediaWiki renders a page with a fault in it and files the page in a tracking category rather
 	 * than refusing; the export then publishes the page and drops the category, which is not in it.
 	 * FailOnCategories says what a category with anything in it is worth, and this is what asks.
-	 *
-	 * A name is read as a category title, so a site may write "Pages with template errors" or spell the
-	 * namespace itself; a name no title can be made of is a mistake in the site's own file and is
-	 * said rather than skipped.
 	 */
 	private function assertNamedCategoriesAreEmpty(): void {
 		$named = (array)( $GLOBALS['wgWikvenFailOnCategories'] ?? [] );
-		if (!$named) {
-			return;
-		}
 		$members = [];
-		foreach ($named as $name) {
-			$title = Title::newFromText((string)$name, NS_CATEGORY);
-			if (!$title || $title->getNamespace() !== NS_CATEGORY) {
-				$this->fatalError("Wikven: WikvenFailOnCategories names '$name', which is not a category");
+		foreach ($named as $entry) {
+			$title = $this->categoryNamed((string)$entry);
+			if ($title) {
+				$members[$title->getText()] = $this->pagesIn($title);
 			}
-			$members[$title->getText()] = $this->pagesIn($title);
+		}
+		if (!$members) {
+			return;
 		}
 		// Every one of them at once: a reader who fixes the first and bakes again to meet the
 		// second has paid for a whole build to be told something this run already knew.
@@ -944,6 +939,49 @@ class Build extends Maintenance {
 		if ($failures) {
 			$this->fatalError(implode("\n", $failures));
 		}
+	}
+
+	/**
+	 * The category one entry of WikvenFailOnCategories names, or null where it names none.
+	 *
+	 * An entry is a message key where this wiki has that message and a category title otherwise,
+	 * because a message is how MediaWiki holds a tracking category's name: nothing in core says
+	 * "Pages with template loops", it says template-loop-category, and a wiki reading in another
+	 * language answers that key with its own name. Naming the key is therefore the only way the
+	 * default list can name core's faults without deciding what language the sites using it read
+	 * in, and a site writing a category of its own still writes the name.
+	 *
+	 * The two cannot collide in practice -- a category name is a page title and a message key is
+	 * not one a wiki would title a category -- and where they somehow do, the message wins and
+	 * says so by resolving to the name it holds.
+	 *
+	 * Null is for a message a wiki has edited to "-", which is MediaWiki's own way of switching a
+	 * tracking category off: a category nothing can be filed into is not one to look in.
+	 *
+	 * A key belonging to an extension this site does not load has no message either, and falls to
+	 * the category reading, where it names a category nothing files into and is found empty. That
+	 * is what lets the default carry every bundled extension's faults while a site loads none of
+	 * them, and it costs one query each for the ones it does not have.
+	 */
+	private function categoryNamed(string $entry): ?Title {
+		$message = wfMessage($entry)->inContentLanguage();
+		if ($message->exists()) {
+			if ($message->isDisabled()) {
+				return null;
+			}
+			$entry = $message->plain();
+			// A tracking category message may name one category per namespace, through $1 and the
+			// parser functions around it. Rendering that here would ask about one namespace and
+			// call the rest empty, which is worse than not asking, so it is passed over.
+			if (str_contains($entry, '{{')) {
+				return null;
+			}
+		}
+		$title = Title::newFromText($entry, NS_CATEGORY);
+		if (!$title || $title->getNamespace() !== NS_CATEGORY) {
+			$this->fatalError("Wikven: WikvenFailOnCategories names '$entry', which is not a category");
+		}
+		return $title;
 	}
 
 	/**
