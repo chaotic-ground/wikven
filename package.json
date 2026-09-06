@@ -1,10 +1,9 @@
 {
 	"name": "wikven",
-	"description": "Tests for the wikven static export: what the bake produced, and how it renders in a browser.",
+	"description": "Browser end-to-end tests for the wikven static export.",
 	"private": true,
 	"license": "GPL-3.0-or-later",
 	"scripts": {
-		"test:bake": "python3 tests/bake/assert_bake.py --expect tests/bake/docs.toml --source docs dist",
 		"test:e2e": "playwright test"
 	},
 	"devDependencies": {

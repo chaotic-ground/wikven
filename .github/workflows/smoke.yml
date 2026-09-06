@@ -106,17 +106,21 @@ jobs:
       # push: changing one check in #663 took parsing this workflow's YAML and extracting the
       # heredoc back out to a file, to run it against two bakes that were already on disk.
       #
-      # A contributor with a bake runs the same checks with `npm run test:bake`. What is added here
+      # A contributor with a bake runs the same checks with `composer test:bake`. What is added here
       # is only what a runner has and a laptop does not: the logs the two bakes wrote, the second
       # bake for the checks that compare the pair, and --github, which turns each problem into an
       # annotation. The checks themselves emit no workflow commands, so they read the same either
       # way.
+      #
+      # Spelled out rather than run through the composer script it mirrors: composer prints its own
+      # banner over the report, and silencing that with --quiet silences the report with it.
       - name: Assert the bake produced a complete, self-contained site
         run: |
-          npm run test:bake -- \
+          php tests/bake/assert-bake.php \
+            --expect tests/bake/docs.php --source docs \
             --log bake.log --log bake-again.log \
             --compare-with dist-again \
-            --github
+            --github dist
 
       # Two bakes of the same source have to produce the same bytes, and until now nothing said so.
       # Everything in the bake that exists for it -- the frozen clock and SOURCE_DATE_EPOCH, the

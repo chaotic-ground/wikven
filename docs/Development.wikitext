@@ -208,8 +208,8 @@ php tests/phpunit/phpunit.php extensions/Wikven/tests/phpunit/integration
 composer phpcs
 composer test          # minus-x: file modes and shebangs
 
-# Assertions on a site you have already baked into dist/. Python only, so no install.
-npm run test:bake
+# Assertions on a site you have already baked into dist/. Plain PHP, so no install.
+composer test:bake
 
 # Browser tests, against a site you have already baked into dist/.
 npm ci
@@ -220,7 +220,7 @@ npm run test:e2e
 <!--T:36-->
 * '''Unit tests''' (<code>tests/phpunit/unit/</code>) cover the helper classes that are pure string or path work.
 * '''Integration tests''' (<code>tests/phpunit/integration/</code>) cover the hooks and the classes that need services around them.
-* '''The bake assertions''' (<code>tests/bake/</code>) read a site that has already been baked and say whether it is complete and self-contained: no <code>load.php</code> left in the CSS, a search bundle in every skin copy, every print-footer link resolving. What is this site's rather than {{SITENAME}}'s -- where it is published, which pages it keeps out of the index, which skins it builds -- is named in <code>tests/bake/docs.toml</code>, so the same command reads any site's bake. <code>smoke.yml</code> bakes this documentation site with the real image, runs them, and diffs the whole site against a second bake, because two bakes of one source have to be byte-identical.
+* '''The bake assertions''' (<code>tests/bake/</code>) read a site that has already been baked and say whether it is complete and self-contained: no <code>load.php</code> left in the CSS, a search bundle in every skin copy, every print-footer link resolving. What is this site's rather than {{SITENAME}}'s -- where it is published, which pages it keeps out of the index, which skins it builds -- is named in <code>tests/bake/docs.php</code>, so the same command reads any site's bake. <code>smoke.yml</code> bakes this documentation site with the real image, runs them, and diffs the whole site against a second bake, because two bakes of one source have to be byte-identical.
 * '''Browser tests''' (<code>tests/e2e/</code>, Playwright) drive the baked site in Chromium: the skin switcher, the settings page, search in each skin, and Minerva's menu.
 
 <!--T:37-->
