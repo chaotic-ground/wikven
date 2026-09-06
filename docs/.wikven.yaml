@@ -48,6 +48,11 @@ config:
   # template.
   WikvenFailOnCategories:
     - Pages with template errors
+  # ParserFunctions keeps its string functions behind this, off by default, because a wiki that
+  # takes edits from anyone can be made to spend a lot of parser on them. Nobody edits this site:
+  # it is a directory of files in a repository, rendered once at build time. Template:draft needs
+  # #explode to read a version out of a page's title.
+  PFEnableStringFunctions: true
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1

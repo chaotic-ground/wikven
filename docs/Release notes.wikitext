@@ -1,0 +1,8 @@
+{{DISPLAYTITLE:What's new}}
+__NOTOC__
+What each release of {{SITENAME}} brought, newest first, in the words of somebody who would use it
+rather than in the words of the commits. The complete list of changes, generated from those commits,
+is in [https://github.com/chaotic-ground/wikven/blob/main/CHANGELOG.md CHANGELOG.md] and on the
+[https://github.com/chaotic-ground/wikven/releases releases page].
+
+* [[Release notes/1.1.0|1.1.0]]
