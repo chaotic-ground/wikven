@@ -41,9 +41,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-06T06:38:11Z">
-<meta property="article:published_time" content="2026-09-06T06:38:11Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Translating - Wikven","headline":"Translating - Wikven","mainEntityOfPage":"Translating","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Translating\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Translating\/en.html","description":"Wikven can build a site in more than one language using MediaWiki's Translate extension. Translate normally expects translators to work in an in-wiki editor, which...","dateModified":"2026-09-06T06:38:11Z","datePublished":"2026-09-06T06:38:11Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-06T11:47:14Z">
+<meta property="article:published_time" content="2026-09-06T11:47:14Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Translating - Wikven","headline":"Translating - Wikven","mainEntityOfPage":"Translating","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Translating\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Translating\/en.html","description":"Wikven can build a site in more than one language using MediaWiki's Translate extension. Translate normally expects translators to work in an in-wiki editor, which...","dateModified":"2026-09-06T11:47:14Z","datePublished":"2026-09-06T11:47:14Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Translating_en rootpage-Translating_en skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
@@ -490,7 +490,7 @@ It runs a real MediaWiki at build time.
 &lt;!--T:2-->
 빌드 시 실제 미디어위키를 실행합니다.
 </pre>
-<p>A unit left empty counts as not yet translated: <code>translate check</code> reports it and the build renders it in the source language, so you can translate a page a few units at a time. The <code>@a1b2c3d4</code> stamp is added by <code>translate stamp</code> (see below), not by hand.
+<p>A unit left empty counts as not yet translated: <code>translate check</code> reports it and the build renders it in the source language, so you can translate a page a few units at a time. The <code>@a1b2c3d4</code> stamp is added by <code>translate stamp</code> (see below), not by hand. Only those markers and their text belong in the file: the <code>&lt;translate></code> tags, and whatever the source page keeps outside them, stay on the source page, where the export reads them for every language. One written here is swallowed by the unit above it, and that unit is then shown in the source language rather than yours — so <code>translate check</code> refuses it.
 </p>
 </section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Translating_the_page_title">Translating the page title</h2></div>
 <p>A page's title is a unit too, under the reserved marker <code>&lt;!--T:title--></code>. It is the one unit that is not part of the page's wikitext: its source text is the page's own title, so nothing is added to the source page and pages in the source language render exactly as they did. This is Translate's own page display title; Wikven only spells the marker shorter.
@@ -544,7 +544,7 @@ It runs a real MediaWiki at build time.
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/en.wikitext" title="This page was last edited on 6 September 2026, at 06:38." data-timestamp="1788676691"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>6 September 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Translating/en.wikitext" title="This page was last edited on 6 September 2026, at 11:47." data-timestamp="1788695234"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>6 September 2026</span></a></li>
 			
 		</ul>
 		
@@ -670,7 +670,7 @@ It runs a real MediaWiki at build time.
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 6 September 2026, at 06:38.</div>
+		        <div class="page-info__text"> This page was last edited on 6 September 2026, at 11:47.</div>
 		    </section>
 		</div>
 </footer>		</div>
