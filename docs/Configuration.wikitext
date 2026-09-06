@@ -172,7 +172,7 @@ Anything that is not a message key is read as a category name, with or without t
 <pre>{{#if:{{{1|}}}||[[Category:Pages with template errors]]}}</pre>
 
 <!--T:208-->
-{{note|1=Give the category <code><nowiki>__HIDDENCAT__</nowiki></code>, so it stays off the page footer. The export does not include a category page, and a link to one it does not have is a link to nothing.}}
+{{note|text=Give the category <code><nowiki>__HIDDENCAT__</nowiki></code>, so it stays off the page footer. The export does not include a category page, and a link to one it does not have is a link to nothing.}}
 </translate>
 
 === <code>WikvenFileNames</code> ===
@@ -191,7 +191,7 @@ Set it to <code>encoded</code> where the output directory is a Windows filesyste
 Four characters a Windows path cannot hold either — a quote, an asterisk, a question mark and a backslash — stay escaped under both, so a page called <code>What?</code> is written as <code>What%3F.html</code> either way. They are rare in a title and keeping them escaped costs nothing legible, which saves the sites that never have one from needing <code>encoded</code> at all.
 
 <!--T:73-->
-{{note|Changing this changes every URL the site serves. A link somebody else made to a page keeps pointing at the old name, which is no longer there. Pick one before publishing rather than after.}}
+{{note|type=warning|text=Changing this changes every URL the site serves. A link somebody else made to a page keeps pointing at the old name, which is no longer there. Pick one before publishing rather than after.}}
 </translate>
 
 === <code>WikvenBuildFor</code> ===
@@ -277,7 +277,7 @@ A <code>package</code> constraint that is not an exact version — <code>~4.1</c
 Each method needs a host tool present at build time: <code>tarball</code> uses <code>tar</code>, <code>repository</code> uses <code>git</code> (and [<tvar name="2">https://getcomposer.org/</tvar> Composer] when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]] they must be on your <code>PATH</code>.
 
 <!--T:25-->
-{{note|The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}
+{{note|type=warning|text=The build downloads and '''runs''' the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.}}
 
 <!--T:44-->
 Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See [[<tvar name="1">Special:MyLanguage/Deploying#keeping-pins-current</tvar>|Deploying]] for keeping one current.

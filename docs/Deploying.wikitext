@@ -77,13 +77,13 @@ jobs:
 
 <translate>
 <!--T:26-->
-{{note|The action is pinned to a released version — <code>@v<tvar name="2">{{WIKVENVERSION}}</tvar></code> is the current one — and no <code>image</code> is named on purpose: an action left to its default runs the image of the release it was cut from, so the two cannot fall out of step. To pin the image by hand as well, add <code>image: ghcr.io/chaotic-ground/wikven:<tvar name="3">{{WIKVENVERSION}}</tvar></code>; the git tag carries the <code>v</code> and the image tag does not. To try a change before it is released, name a dated <code>nightly-YYYY-MM-DD</code> pre-release from the [<tvar name="1">https://github.com/chaotic-ground/wikven/releases</tvar> releases page] in both places: a nightly tag names a commit of <code>main</code> and its image was built from that same commit, so naming both from one keeps them together.}}
+{{note|text=The action is pinned to a released version — <code>@v<tvar name="2">{{WIKVENVERSION}}</tvar></code> is the current one — and no <code>image</code> is named on purpose: an action left to its default runs the image of the release it was cut from, so the two cannot fall out of step. To pin the image by hand as well, add <code>image: ghcr.io/chaotic-ground/wikven:<tvar name="3">{{WIKVENVERSION}}</tvar></code>; the git tag carries the <code>v</code> and the image tag does not. To try a change before it is released, name a dated <code>nightly-YYYY-MM-DD</code> pre-release from the [<tvar name="1">https://github.com/chaotic-ground/wikven/releases</tvar> releases page] in both places: a nightly tag names a commit of <code>main</code> and its image was built from that same commit, so naming both from one keeps them together.}}
 
 <!--T:4-->
 Enable Pages for the repository under '''Settings → Pages → Build and deployment → Source: GitHub Actions'''. This documentation site is published this way.
 
 <!--T:5-->
-{{note|A GitHub '''project''' page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because {{SITENAME}} writes them relative, but anything that needs an absolute path must include that base path: set [[<tvar name="1">Special:MyLanguage/Searching</tvar>|search]]'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A '''user/organization''' page (served at the domain root) needs no such setting.}}
+{{note|text=A GitHub '''project''' page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because {{SITENAME}} writes them relative, but anything that needs an absolute path must include that base path: set [[<tvar name="1">Special:MyLanguage/Searching</tvar>|search]]'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A '''user/organization''' page (served at the domain root) needs no such setting.}}
 
 <!--T:6-->
 == Any static host ==

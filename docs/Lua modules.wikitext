@@ -6,7 +6,7 @@ __TOC__
 A great many wikis keep their templates' logic in Lua, and {{SITENAME}} runs a real MediaWiki at build time, so a module runs the way it always does. The page that invokes it is written out with the module's answer already in it; the module itself never becomes a page of the published site. Lua on a MediaWiki is [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Scribunto</tvar> Scribunto], which MediaWiki bundles.
 
 <!--T:2-->
-{{note|Both products render Lua, but only the Docker image needs nothing from you; the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] wants an interpreter installed on arm64. The table below has the three cases. A build that cannot render Lua stops and says so, rather than publishing pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them.}}
+{{note|text=Both products render Lua, but only the Docker image needs nothing from you; the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] wants an interpreter installed on arm64. The table below has the three cases. A build that cannot render Lua stops and says so, rather than publishing pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them.}}
 
 <!--T:3-->
 == Enabling it ==

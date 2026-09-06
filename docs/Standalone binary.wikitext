@@ -117,7 +117,7 @@ The output is the same as the Docker image's, give or take the one host tool nam
 '''[[<tvar name="1">Special:MyLanguage/Lua modules</tvar>|Lua modules]], on arm64.''' The PHP this binary is built from carries no <code>luasandbox</code>, so Scribunto falls back to running an external <code>lua</code> program — and to the interpreter it carries in its own source tree when no other is named. That interpreter is built for 64-bit x86, and Scribunto has no arm64 one to offer instead — the five it bundles are all Intel. It picks among them by operating system and integer size, so on arm64 it selects a program that cannot start. Install Lua 5.1 and name it under <code>ScribuntoEngineConf.luastandalone.luaPath</code>; on x86-64 nothing is needed.
 
 <!--T:25-->
-{{note|A site that lists Scribunto where nothing can run it is refused, with a message saying what to install, rather than baked into pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them. The refusal is in the exit status too, so a script that bakes and then deploys stops instead of shipping nothing.}}
+{{note|text=A site that lists Scribunto where nothing can run it is refused, with a message saying what to install, rather than baked into pages with <code><nowiki>{{#invoke:}}</nowiki></code> showing in them. The refusal is in the exit status too, so a script that bakes and then deploys stops instead of shipping nothing.}}
 
 <!--T:19-->
 == Optional host tools ==
@@ -130,7 +130,7 @@ The binary renders on its own, but uses these host programs when they are presen
 * '''[<tvar name="6">https://git-scm.com/</tvar> git]''' is needed only to fetch [[<tvar name="2">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|third-party extensions and skins]].
 
 <!--T:22-->
-{{note|Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|third-party extensions or skins]], relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.}}
+{{note|text=Fetching over HTTPS, Wikimedia Commons images via InstantCommons and any [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|third-party extensions or skins]], relies on your system's CA certificates. On a minimal system without them, install your distribution's CA bundle (for example the <code>ca-certificates</code> package). A site with only local content and images needs no network access.}}
 </translate>
 
 {{prevnext}}
