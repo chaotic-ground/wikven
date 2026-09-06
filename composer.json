@@ -7,6 +7,7 @@
 	"scripts": {
 		"test": "minus-x check .",
 		"fix": "minus-x fix .",
+		"test:bake": "php tests/bake/assert-bake.php --expect tests/bake/docs.php --source docs dist",
 		"phpcs": "phpcs -sp",
 		"phpcbf": "phpcbf"
 	},
