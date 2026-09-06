@@ -42,9 +42,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-03T00:46:07Z">
-<meta property="article:published_time" content="2026-09-03T00:46:07Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration.html","description":"Configuration lives in a .wikven.yaml file in your source directory. It follows the same shape as MediaWiki's own YAML settings format: a top-level extensions list...","dateModified":"2026-09-03T00:46:07Z","datePublished":"2026-09-03T00:46:07Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-06T01:10:00Z">
+<meta property="article:published_time" content="2026-09-06T01:10:00Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration.html","description":"Configuration lives in a .wikven.yaml file in your source directory. It follows the same shape as MediaWiki's own YAML settings format: a top-level extensions list...","dateModified":"2026-09-06T01:10:00Z","datePublished":"2026-09-06T01:10:00Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="citizen-toc-enabled citizen-sections-enabled mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration rootpage-Configuration skin-citizen action-view skin--responsive">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div>
@@ -514,22 +514,33 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><b>Default:</b> <code>false</code>
 </p><p>When set, and UniversalLanguageSelector is enabled, the build bakes that extension's webfonts for the languages your pages use into a stylesheet the export serves itself, so a reader whose system has no font for a script sees the intended typeface instead of empty boxes. It is off unless asked for, because the fonts are extra payload for a site whose readers may not need them. It does nothing without UniversalLanguageSelector; see <a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a>.
 </p>
-</section><section id="citizen-section-12" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenFileNames"><code>WikvenFileNames</code></h3></div>
+</section><section id="citizen-section-12" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenFailOnCategories"><code>WikvenFailOnCategories</code></h3></div>
+<p><b>Default:</b> the faults MediaWiki and the bundled extensions already track
+</p><p>Categories no page may be in when the build finishes. A build that puts a page in one of them stops and says which pages did.
+</p><p>MediaWiki does not refuse a page it cannot render properly; it renders what it can and files the page in a tracking category. A template used without a required argument draws its placeholder, a Lua error prints where the module's answer should be, a reference points at a source the page never gives, a page whose template expansion ran past its limit is cut short — and each of those is a page that builds, publishes, and reads as something nobody wrote. The category is the only thing that says so, and a static export does not carry it.
+</p><p>The default is every one of those MediaWiki and the bundled extensions already track, so a site that sets nothing stops on them. Left out are the categories that record a choice rather than a fault — hidden categories, indexed and noindexed pages, magic links, and the counts of a deprecated syntax's remaining uses — none of which is a reason to refuse a build.
+</p><p>Write an entry as the tracking category's message key, which is how MediaWiki names these: nothing in it says “Pages with template loops”, it says <code>template-loop-category</code>, and a wiki reading in another language answers that key with its own name. A key belonging to an extension the site does not load names nothing and is passed over. To drop one of the defaults, edit its message to <code>-</code>, MediaWiki's own way of switching a tracking category off.
+</p><p>Anything that is not a message key is read as a category name, with or without the <code>Category:</code> prefix, and what a site writes is added to the default rather than replacing it. A template can file a page itself:
+</p>
+<pre>{{#if:{{{1|}}}||[[Category:Pages with template errors]]}}</pre>
+<style data-mw-deduplicate="TemplateStyles:r93">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Give the category <code>__HIDDENCAT__</code>, so it stays off the page footer. The export does not include a category page, and a link to one it does not have is a link to nothing.</p></div>
+</div>
+</section><section id="citizen-section-13" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenFileNames"><code>WikvenFileNames</code></h3></div>
 <p><b>Default:</b> <code>readable</code>
 </p><p>How a page is named in the output, and so what every link to it says. The default names each page as its title is written — <code>Vector_(skin).html</code>, <code>File:Bakery_oven.jpg.html</code> — which makes the plainest URLs, and is what this documentation site is published under. What a link carries is that name URL-encoded, since a static server decodes the path it is asked for before looking for the file.
 </p><p>Set it to <code>encoded</code> where the output directory is a Windows filesystem. Windows cannot hold a file whose name has a colon in it, so a bind mount from Docker Desktop cannot take a page outside the main namespace under the default; <code>encoded</code> leaves every escape the page cache made in place — <code>File%3ABakery_oven.jpg.html</code> — which any filesystem can hold. The cost is in the URLs, which carry that percent sign doubled: the link to that page reads <code>./File%253ABakery_oven.jpg.html</code>, because a link is the name URL-encoded and the name itself has a percent in it.
 </p><p>Four characters a Windows path cannot hold either — a quote, an asterisk, a question mark and a backslash — stay escaped under both, so a page called <code>What?</code> is written as <code>What%3F.html</code> either way. They are rare in a title and keeping them escaped costs nothing legible, which saves the sites that never have one from needing <code>encoded</code> at all.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r92">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Changing this changes every URL the site serves. A link somebody else made to a page keeps pointing at the old name, which is no longer there. Pick one before publishing rather than after.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r93"/><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Changing this changes every URL the site serves. A link somebody else made to a page keeps pointing at the old name, which is no longer there. Pick one before publishing rather than after.</p></div>
 </div>
-</section><section id="citizen-section-13" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenBuildFor"><code>WikvenBuildFor</code></h3></div>
+</section><section id="citizen-section-14" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenBuildFor"><code>WikvenBuildFor</code></h3></div>
 <p><b>Default:</b> <code>site</code>
 </p><p>Set it to <code>skin-preview</code> and the chrome is left as the skin drew it: the personal menu, the toolbox, the tabs and the footer are the skin's own work rather than Wikven's reading of them, which is what a skin author baking a few pages wants to look at. Everything that makes the output a working set of files is unchanged.
 </p><p><b>This mode is experimental, and will stay so.</b> A skin is written against several MediaWiki releases; a bake renders on the one Wikven carries. What you get is your skin on that version and no evidence about any other, which is less than a skin author needs and more than this project can widen. <code>examples/skin-preview</code> in the Wikven repository is a source tree to bake with it, and its README is where the mode is described.
 </p><p><span id="WikvenStyleDirectory"></span>
 <span id="WikvenAssetDirectory"></span>
 </p>
-</section><section id="citizen-section-14" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenAssetDirectory"><code>WikvenAssetDirectory</code></h3></div>
+</section><section id="citizen-section-15" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenAssetDirectory"><code>WikvenAssetDirectory</code></h3></div>
 <p><b>Default:</b> <code>assets</code>
 </p><p>Where under the output directory the build writes everything it generates: the stylesheets and script bundles it dumps out of MediaWiki, and the images and webfont files their CSS names. The path is relative to the output directory and the build writes the links to match, so nothing else needs telling.
 </p><p>One directory rather than one per kind, because a stylesheet reaches its images by a path relative to itself — they cannot be parted. Set it to <code>.</code> to put them all in the output root among your pages instead.
@@ -539,7 +550,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p><span id="WikvenRepositories"></span>
 </p>
-</section><section id="citizen-section-15" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
+</section><section id="citizen-section-16" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="WikvenRepositories"><code>WikvenRepositories</code></h3></div>
 <p><b>Default:</b> empty
 </p><p>Sources for the third-party extensions and skins you list in <code>extensions</code> and <code>skins</code>. The lists stay plain names (the shape MediaWiki itself uses); this map says where to get the ones that are not bundled with wikven. They are fetched at build time, before MediaWiki loads them. Whether an entry is an extension or a skin is taken from which list its name appears in, so you never write the name twice. A name listed in <code>extensions</code> or <code>skins</code> that is neither bundled nor declared here fails the build, since a site published without what its author asked for is worse than one that did not build.
 </p><p>Each entry chooses one of three methods by the key it carries:
@@ -567,7 +578,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>A <code>package</code> constraint that is not an exact version — <code>~4.1</code>, <code>^4</code>, <code>*</code> — is warned about in the build log for the reason the note below gives. It is not an error: taking whatever the registry serves is a bargain you are entitled to make, the same one a moving <code>reference</code> makes, and the build only says you have made it.
 </p><p>Each method needs a host tool present at build time: <code>tarball</code> uses <code>tar</code>, <code>repository</code> uses <code>git</code> (and <a rel="nofollow" class="external text" href="https://getcomposer.org/">Composer</a> when <code>composer: true</code>), and <code>package</code> uses Composer. The Docker image bundles all of these; with the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> they must be on your <code>PATH</code>.
 </p>
-<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r92"/><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r93"/><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The build downloads and <b>runs</b> the code you name here, with network access: a cloned extension's PHP and any Composer scripts execute during the build. Only declare sources you trust. For a tamper-evident, reproducible build, pin a tarball with <code>sha256</code> and a repository with <code>commit</code> (an exact SHA); a mutable <code>reference</code> tag/branch or a floating <code>package</code> constraint can change underneath you.</p></div>
 </div>
 <p>Nothing moves an exact pin for you, though: this file belongs to no ecosystem a dependency bot reads, so a pin left alone is a pin left behind. See <a href="./Deploying.html#keeping-pins-current" title="Special:MyLanguage/Deploying">Deploying</a> for keeping one current.
 </p><p>Moving wikven moves the core underneath these pins. A wikven major accompanies every bump of the bundled MediaWiki, which is about twice a year, and a site that declares <code>WikvenRepositories</code> is carrying code wikven does not test, released on a calendar that is not wikven's. Crossing a major hands that code a MediaWiki it has never run on.
@@ -576,11 +587,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>This very site fetches <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:TabberNeue">TabberNeue</a> this way (see its <code>.wikven.yaml</code>): the tabbed Docker/binary command examples on <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are rendered by the fetched extension. (TemplateStyles, used by this site's templates, is bundled in MediaWiki and so needs no source here.)
 </p><p><span id="ContentNamespaces"></span>
 </p>
-</section><section id="citizen-section-16" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
+</section><section id="citizen-section-17" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
 <p><b>Default:</b> <code>[0, 6]</code>
 </p><p>A standard MediaWiki setting (<a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces"><code>$wgContentNamespaces</code></a>) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven sets the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see <a href="./Pages.html#categories" title="Special:MyLanguage/Pages">Pages#Categories</a>. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
 </p>
-</section></section><section id="citizen-section-17" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Defaults">Defaults</h2></div>
+</section></section><section id="citizen-section-18" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Defaults">Defaults</h2></div>
 <p>Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. It also ships an <code>extensions</code> and a <code>skins</code> default, so every site gets <a href="./Searching.html" title="Special:MyLanguage/Searching">SifterSearch</a> search and the Vector skin without listing them. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
 </p><p>Titles are kept as written (rather than first-letter-capitalized, MediaWiki's default) so the entry page can be the lowercase <code>index</code>, which the build writes as <code>index.html</code>, the file a static host serves at the site root. The file is otherwise commented; each comment notes why Wikven sets that value.
 </p><p>To see the current defaults, read the bundled <code>default.yml</code>. From the Docker image:
@@ -589,7 +600,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>It is also in the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/default.yml">repository</a>.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r96">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Why_wikitext.html" title="Special:MyLanguage/Why wikitext">Why wikitext</a></div><div class="wikven-prevnext-next"><a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a> →</div></div>
+<style data-mw-deduplicate="TemplateStyles:r97">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Why_wikitext.html" title="Special:MyLanguage/Why wikitext">Why wikitext</a></div><div class="wikven-prevnext-next"><a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a> →</div></div>
 
 </section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Configuration.html">https://chaotic-ground.github.io/wikven/Configuration.html</a>"</div></div>
@@ -609,7 +620,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 	<div class="citizen-menu__content">
 		
 		<ul class="citizen-menu__content-list">
-			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration.wikitext" title="This page was last edited on 3 September 2026, at 00:46." data-timestamp="1788396367"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>3 September 2026</span></a></li>
+			<li id="lm-time" class="mw-list-item"><a data-mw="interface" id="citizen-lastmod-relative" href="https://github.com/chaotic-ground/wikven/commits/main/docs/Configuration.wikitext" title="This page was last edited on 6 September 2026, at 01:10." data-timestamp="1788657000"><span class="citizen-ui-icon mw-ui-icon-history mw-ui-icon-wikimedia-history"></span><span>6 September 2026</span></a></li>
 			
 		</ul>
 		
@@ -803,12 +814,27 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-WikvenBundleWebfonts-sublist" class="citizen-toc-list">
 			</ul>
 		</li>
+		<li id="toc-WikvenFailOnCategories"
+			class="citizen-toc-list-item citizen-toc-level-2">
+			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenFailOnCategories" role="button">
+				<div class="citizen-toc-content">
+					<div class="citizen-toc-text">
+						<span class="citizen-toc-numb">3.9</span>
+						<span class="citizen-toc-heading">WikvenFailOnCategories</span>
+					</div>
+					
+				</div>
+			</a>
+			
+			<ul id="toc-WikvenFailOnCategories-sublist" class="citizen-toc-list">
+			</ul>
+		</li>
 		<li id="toc-WikvenFileNames"
 			class="citizen-toc-list-item citizen-toc-level-2">
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenFileNames" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3.9</span>
+						<span class="citizen-toc-numb">3.10</span>
 						<span class="citizen-toc-heading">WikvenFileNames</span>
 					</div>
 					
@@ -823,7 +849,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenBuildFor" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3.10</span>
+						<span class="citizen-toc-numb">3.11</span>
 						<span class="citizen-toc-heading">WikvenBuildFor</span>
 					</div>
 					
@@ -838,7 +864,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenAssetDirectory" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3.11</span>
+						<span class="citizen-toc-numb">3.12</span>
 						<span class="citizen-toc-heading">WikvenAssetDirectory</span>
 					</div>
 					
@@ -853,7 +879,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#WikvenRepositories" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3.12</span>
+						<span class="citizen-toc-numb">3.13</span>
 						<span class="citizen-toc-heading">WikvenRepositories</span>
 					</div>
 					
@@ -868,7 +894,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<a class="citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" href="#ContentNamespaces" role="button">
 				<div class="citizen-toc-content">
 					<div class="citizen-toc-text">
-						<span class="citizen-toc-numb">3.13</span>
+						<span class="citizen-toc-numb">3.14</span>
 						<span class="citizen-toc-heading">ContentNamespaces</span>
 					</div>
 					
@@ -905,7 +931,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div class="page-info">
 		    <section id="footer-info-lastmod" class="page-info__item">
 		        <div class="page-info__label">Last modified</div>
-		        <div class="page-info__text"> This page was last edited on 3 September 2026, at 00:46.</div>
+		        <div class="page-info__text"> This page was last edited on 6 September 2026, at 01:10.</div>
 		    </section>
 		</div>
 </footer>		</div>
