@@ -49,6 +49,57 @@
 <!--T:32 @5019cd96-->
 그러니 오류 문서가 필요한지는 호스트에 달렸습니다. 자기 오류 문서를 보여 주는 곳도 있고, Cloudflare Pages는 당신의 오류 문서 아니면 당신의 대문을 보여 줍니다. 소스 트리에 <code>404</code>라는 이름의 문서를 두면 빌드가 <code>dist/404.html</code>을 쓰고, GitHub Pages와 GitLab Pages, Codeberg Pages가 없는 주소에 대해 그 파일을 제공합니다. 그 문서에는 <code><nowiki>__NOINDEX__</nowiki></code>를 넣으십시오. 사이트맵은 색인해 달라는 초대이고, 오류 문서는 누구도 초대할 문서가 아닙니다.
 
+<!--T:33 @0a17608a-->
+== 검색 엔진에 사이트의 존재를 알리기 ==
+
+<!--T:34 @35537444-->
+사이트를 발행한다고 색인에 오르지는 않습니다. [[$1|<code>WikvenSiteUrl</code>]]이 주어지면 빌드는 <code>dist/sitemap.xml</code>을 쓰며, 내보낸 모든 문서를 절대 주소로 적어 둡니다. 이 파일은 사이트가 자기가 무엇을 담고 있는지 스스로 밝힌 것이어서, 이것을 읽는 크롤러는 문서에 닿기 위해 링크가 따로 필요하지 않습니다. 어떤 빌드도 하지 못하는 일은 그 파일이 거기 있다고 누군가에게 알리는 것입니다.
+
+<!--T:35 @49ac1072-->
+보통은 <code>robots.txt</code>가 그 일을, 사이트맵을 가리키는 <code>Sitemap:</code> 줄로 합니다. {{SITENAME}}은 그런 파일을 쓰지 않으며, 많은 사이트에서는 둘 자리조차 없습니다. 크롤러는 <code>robots.txt</code>를 '''호스트 루트'''에서만 읽으므로, 하위 디렉터리 아래에 발행된 사이트 — 대개 포지의 프로젝트 페이지 — 는 그 파일을 사이트가 아니라 호스트 주인에게 속한 주소에 두어야 합니다. 호스트 전체가 여러분 것이라면 그 파일은 빌드와 업로드 사이에 여러분이 직접 놓는 한 단계이며, 그 안의 <code>Sitemap:</code> 줄은 같은 호스트의 하위 디렉터리에 있는 사이트맵을 가리킬 수 있습니다.
+
+<!--T:36 @366feb0c-->
+그것이 안 되면 엔진마다 자기 웹마스터 콘솔에서 손으로 알려야 하고, 남은 지름길은 없습니다. 구글의 사이트맵 핑 종단점은 [$1 2023년에 폐지되어] 404를 답하는데, 받은 것의 대부분이 스팸이었기 때문입니다. 어떤 콘솔도 여러분이 그 사이트를 통제한다는 것을 증명하기 전에는 제출을 받지 않습니다.
+
+<!--T:37 @61928611-->
+=== 사이트가 여러분 것임을 증명하기 ===
+
+<!--T:38 @e4146e97-->
+콘솔마다 몇 가지 증명 방법을 제공하는데, 정적 내보내기가 언제나 할 수 있는 것은 모든 문서의 head에 메타 태그를 넣는 것입니다. 그런 태그는 문서가 아니라 사이트에 관한 것이라 문서를 그렇게 쓰는 것으로는 담을 수 없고, 따라서 확장 기능이 필요합니다. [$1 WikiSEO]는 엔진마다 설정 키 하나를 태그 하나로 바꿉니다. 이미지에 들어 있지 않으므로, 다른 서드파티 확장 기능과 마찬가지로 [[$2|<code>WikvenRepositories</code> 맵]]에 소스가 필요합니다.
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - WikiSEO
+config:
+  GoogleSiteVerificationKey: your-token-from-search-console
+  BingSiteVerificationKey: your-token-from-bing-webmaster-tools
+</syntaxhighlight>
+
+<translate>
+<!--T:39 @3504832a-->
+여섯 개가 있으며, 다른 설정 변수와 똑같이 <code>config</code> 아래에 두고, 저마다 자기 태그를 씁니다.
+
+<!--T:40 @b184383f-->
+{| class="wikitable"
+! 설정 !! 메타 태그 !! 엔진
+|-
+| <code>GoogleSiteVerificationKey</code> || <code>google-site-verification</code> || 구글
+|-
+| <code>BingSiteVerificationKey</code> || <code>msvalidate.01</code> || 빙
+|-
+| <code>NaverSiteVerificationKey</code> || <code>naver-site-verification</code> || 네이버
+|-
+| <code>YandexSiteVerificationKey</code> || <code>yandex-verification</code> || 얀덱스
+|-
+| <code>PinterestSiteVerificationKey</code> || <code>p:domain_verify</code> || 핀터레스트
+|-
+| <code>NortonSiteVerificationKey</code> || <code>norton-safeweb-site-verification</code> || 노턴 세이프 웹
+|}
+
+<!--T:41 @21895952-->
+이 가운데 어느 것도 자격 증명이 아니므로, 공개 저장소는 다른 어떤 설정과 마찬가지로 이것을 두기에 나쁠 것 없는 자리입니다. 그 값은 소유 주장 말고는 아무것도 허락하지 않으며, 엔진은 사이트의 문서를 받아 태그를 읽는 누구에게나 그 값을 도로 보여 줍니다. 이 문서 사이트는 그중 첫 번째로 소유가 확인되어 있습니다.
+
 <!--T:8 @4a3c7f11-->
 <span id="preview-locally"></span>
 == 로컬에서 미리 보기 ==
