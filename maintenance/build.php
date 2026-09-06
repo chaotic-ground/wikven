@@ -921,7 +921,7 @@ class Build extends Maintenance {
 	 * than refusing; the export then publishes the page and drops the category, which is not in it.
 	 * FailOnCategories says what a category with anything in it is worth, and this is what asks.
 	 *
-	 * A name is read as a category title, so a site may write "Notes with no text" or spell the
+	 * A name is read as a category title, so a site may write "Pages with template errors" or spell the
 	 * namespace itself; a name no title can be made of is a mistake in the site's own file and is
 	 * said rather than skipped.
 	 */

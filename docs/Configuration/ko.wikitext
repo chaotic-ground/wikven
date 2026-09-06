@@ -100,8 +100,8 @@ MediaWiki 자체의 "소개" 바닥글 링크는 별개이며, 빌드가 채워 
 <!--T:206 @1862c9dd-->
 직접 만든 것도 같은 방식으로 적습니다. 틀이 스스로 문서를 분류에 넣을 수 있습니다.
 
-<!--T:207 @4ed50671-->
-<pre>{{#if:{{{1|}}}||[[Category:Notes with no text]]}}</pre>
+<!--T:207 @ada80014-->
+<pre>{{#if:{{{1|}}}||[[Category:Pages with template errors]]}}</pre>
 
 <!--T:208 @624d0105-->
 {{note|1=분류에는 <code><nowiki>__HIDDENCAT__</nowiki></code>를 넣어 문서 하단에 나오지 않게 하십시오. 내보내기에는 분류 문서가 들어가지 않으므로, 없는 문서로 가는 링크가 됩니다.}}

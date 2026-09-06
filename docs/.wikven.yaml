@@ -46,7 +46,7 @@ config:
   # A build that puts a page in one of these stops. Template:note files a note that was given no
   # text, which otherwise draws the template's placeholder and builds green -- see that template.
   WikvenFailOnCategories:
-    - Notes with no text
+    - Pages with template errors
   WikvenFooterUrl: https://github.com/chaotic-ground/wikven
   WikvenEditUrl: https://github.com/chaotic-ground/wikven/edit/main/docs/$1
   WikvenHistoryUrl: https://github.com/chaotic-ground/wikven/commits/main/docs/$1

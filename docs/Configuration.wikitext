@@ -163,7 +163,7 @@ MediaWiki does not refuse a page it cannot render properly; it renders what it c
 Name your own the same way. A template can file a page itself:
 
 <!--T:207-->
-<pre>{{#if:{{{1|}}}||[[Category:Notes with no text]]}}</pre>
+<pre>{{#if:{{{1|}}}||[[Category:Pages with template errors]]}}</pre>
 
 <!--T:208-->
 {{note|1=Give the category <code><nowiki>__HIDDENCAT__</nowiki></code>, so it stays off the page footer. The export does not include a category page, and a link to one it does not have is a link to nothing.}}
