@@ -158,12 +158,14 @@ jobs:
 
       # Every configuration variable extension.json declares is one a site author can set, and
       # docs/Configuration.wikitext is where they look it up. Six of them had never reached that
-      # page. The three skipped are derived from WIKVEN_WORKDIR by the build and are documented
-      # there as ones not to set.
+      # page. The skipped ones are worked out by the build rather than written by a site -- three
+      # from WIKVEN_WORKDIR, three from the site's own skins list and DefaultSkin -- and are
+      # documented there as ones not to set.
       - name: Check every configuration variable is documented
         run: |
           set -euo pipefail
           internal="WikvenSourceDirectory WikvenHtmlDirectory WikvenSourceHistoryFile"
+          internal="$internal WikvenSkins WikvenMainSkin WikvenMissing"
           status=0
           for key in $(jq -r '.config | keys[]' extension.json); do
             case " $internal " in

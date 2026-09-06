@@ -532,10 +532,7 @@ class Main implements
 	 * @return array<string,string>
 	 */
 	private function duplicatedByThisSkin(Title $title, string $skin): array {
-		// Asked for rather than read: extension.json does not declare WikvenMainSkin --
-		// WikvenSettings.php derives it from the environment -- so a wiki running the extension
-		// outside a build has no such key, and get() there would throw on every page it renders.
-		$mainSkin = $this->config->has('WikvenMainSkin') ? (string)$this->config->get('WikvenMainSkin') : '';
+		$mainSkin = (string)$this->config->get('WikvenMainSkin');
 		if ($mainSkin === '' || $skin === $mainSkin) {
 			return [];
 		}

@@ -292,16 +292,13 @@ class Adder implements
 	}
 
 	/**
-	 * Every skin the site is rendered in, and none where the wiki is not a build.
-	 *
-	 * Asked for rather than read: extension.json does not declare WikvenSkins --
-	 * WikvenSettings.php derives it from the environment -- so a wiki running the extension outside
-	 * a build has no such key, and get() there would throw on every page it renders.
+	 * Every skin the site is rendered in, and none where the wiki is not a build -- which is the
+	 * declared default, so this is a plain read.
 	 *
 	 * @return array The skin names, in the order the site listed them.
 	 */
 	private function skins(): array {
-		return $this->config->has('WikvenSkins') ? (array)$this->config->get('WikvenSkins') : [];
+		return (array)$this->config->get('WikvenSkins');
 	}
 
 	/** The page listing what the site redistributes, or null where the site asked for none. */

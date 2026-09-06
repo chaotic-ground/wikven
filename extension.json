@@ -158,6 +158,18 @@
 			"value": "",
 			"description": "Absolute path to the directory the build writes the static site to. Set by WikvenSettings.php from WIKVEN_WORKDIR (per-skin passes point it at a subdirectory); empty means nothing is written, which is what a wiki running the extension outside a build has."
 		},
+		"WikvenSkins": {
+			"value": [],
+			"description": "Canonical names of the skins the site is built with, in the order the site listed them. Set by WikvenSettings.php from the `skins` list, reading each skin.json for the name MediaWiki knows the skin by -- which is not always the name it was listed under -- and dropping any the image does not provide. Empty means no skin was named, which is what a wiki running the extension outside a build has."
+		},
+		"WikvenMainSkin": {
+			"value": "",
+			"description": "Canonical name of the skin the site is read in: the one whose pages are written to the output root, every other skin going to a subdirectory of its own. Set by WikvenSettings.php from DefaultSkin where the site named a skin it builds, and from the first built skin otherwise. Empty means no skin was named, which is what a wiki running the extension outside a build has."
+		},
+		"WikvenMissing": {
+			"value": [],
+			"description": "What the site asked for that nothing here provides, one sentence per name, collected rather than counted because the build has to be able to say which. Set by WikvenSettings.php as it loads each extension and skin. Empty is the ordinary case, and the only one a build is allowed to finish in."
+		},
 		"WikvenAssetDirectory": {
 			"value": "assets",
 			"description": "Directory the build writes everything it generates into, under the output directory: the stylesheets, the script bundles, and the images and webfont files their CSS names. Left at the output root with \".\", where they sit among the pages. One directory rather than one per kind because a stylesheet reaches its images by a path relative to itself, so they cannot be parted."
