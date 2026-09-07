@@ -28,7 +28,7 @@ RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
 # (MediaWiki/Guzzle uses PHP stream wrappers over openssl).
 # Digest-pinned, version-tagged so Dependabot's bumps read as versions. The pin fixes the toolchain
 # but not the build: build-static.sh fetches a nightly static-php-cli, which picks the library versions.
-FROM dunglas/frankenphp:static-builder-musl-1.12.7@sha256:a94970c674975833dd09ba40dd1e8b9b7ccdac562f493722c1e9f5f6d81c5ae7 AS builder
+FROM dunglas/frankenphp:static-builder-musl-1.12.7@sha256:5b7c8d9c3da7fc672154796039365f4e25ae9ff77a1cafb783c6db313863655d AS builder
 WORKDIR /go/src/app
 COPY --from=app /var/www/html ./dist/app
 # A small Caddy module registers the `build`, `serve` and `translate` subcommands,
