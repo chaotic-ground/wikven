@@ -1,7 +1,7 @@
 # Base images are digest-pinned and version-tagged so Dependabot's bumps read as version numbers
 # rather than digests. Dependabot keeps them current. The pin fixes the base images alone: apk below
 # still resolves against the current Alpine index at build time, so the image is not reproducible.
-FROM composer:2.10.2@sha256:4d71c3c2109c61d5415544264b59ad4087e4c5b7244481723664138fd36d5040 AS composer
+FROM composer:2.10.3@sha256:d8f6343d3fae98107426bc49163ccad46ef85aabd4a27d80a74401fab4aba332 AS composer
 
 # The alpine variant, because nothing here serves over HTTP: `build` runs a maintenance script and
 # `serve` runs PHP's own server, so the Apache the default variant carries is never started. Same
