@@ -43,10 +43,9 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * The navigation always loses the personal tools (no accounts on a static
-	 * site). The edit, source and history tabs are kept only when their URLs are
-	 * configured and the page has a source file behind them; a generated page
-	 * (no source) drops them so they cannot 404.
+	 * The navigation always loses the personal tools. The edit, source and history tabs are kept
+	 * only when their URLs are configured and the page has a source file behind them; a generated
+	 * page drops them so they cannot 404.
 	 */
 	public function testNavigationDropsPersonalToolsAndSourcelessTabs() {
 		$dir = $this->getNewTempDirectory();
@@ -73,8 +72,8 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * The discussion tab goes, wherever a skin reads it from: a static export carries no
-	 * discussion, and core has no setting that turns talk namespaces off (T35298). The subject
-	 * tab beside it stays, as it does in every skin the export renders.
+	 * discussion, and core has no setting that turns talk namespaces off (T35298). The subject tab
+	 * beside it stays.
 	 */
 	public function testNavigationDropsTheDiscussionTab() {
 		$links = $this->navigationFor('Real');
@@ -110,9 +109,8 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * A skin preview keeps every affordance this class would take away.
 	 *
-	 * The whole of Hider is an argument about what a static host can answer for, and a skin author
-	 * baking pages to look at their skin is not asking that: the menus, the tabs and the edit links
-	 * are the skin's work, and that work is the subject.
+	 * The whole of Hider is an argument about what a static host can answer for, which a skin
+	 * author baking pages to look at their skin is not asking.
 	 */
 	public function testASkinPreviewIsLeftTheChromeTheSkinDrew() {
 		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);

@@ -10,11 +10,10 @@ use MediaWikiUnitTestCase;
  */
 class TranslationAdviceTest extends MediaWikiUnitTestCase {
 	/**
-	 * The advice with the real English messages behind it, so what is asserted below is the wording
-	 * a contributor actually reads, and a key nobody added to i18n/en.json fails the test.
+	 * The advice with the real English messages behind it, so a key nobody added to i18n/en.json
+	 * fails the test.
 	 *
-	 * A language other than English is answered with the same text under a tag, enough to see that
-	 * each language gets its own rendering.
+	 * Another language is answered with the same text under a tag, enough to see each rendering.
 	 */
 	private function advice(): TranslationAdvice {
 		$messages = json_decode(file_get_contents(__DIR__ . '/../../../i18n/en.json'), true);
@@ -50,9 +49,8 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * A stray <translate> tag is about a place in the file rather than about a unit, so the line is
-	 * what the reader is sent to. And it gates: a unit that will not be used is not a translation
-	 * falling behind.
+	 * A stray <translate> tag is about a place in the file rather than a unit, so the line is what
+	 * the reader is sent to. And it gates: a unit that will not be used is not one merely behind.
 	 */
 	public function testAStrayTagIsListedByItsLineAndCanFailTheCheck() {
 		$body = $this->advice()->comment([

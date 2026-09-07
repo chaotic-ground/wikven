@@ -117,9 +117,8 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * Citizen registers a service worker from load.php whenever the client-side script path is
-	 * the wiki root, and an export has no load.php to answer it. The value is overridden for
-	 * Citizen alone, so a skin that does not read it keeps whatever core reports.
+	 * Citizen registers a service worker from load.php whenever the client-side script path is the
+	 * wiki root. The value is overridden for Citizen alone.
 	 *
 	 * @dataProvider provideScriptPathSkins
 	 */
@@ -313,8 +312,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * A skin preview is added nothing that changes how the page looks.
 	 *
-	 * No repository link in the footer, no skin list in the sidebar, and none of wikven's own
-	 * styles or appearance modules: what the skin renders is what a skin author is looking at.
+	 * No repository link, no skin list, and none of wikven's own styles or appearance modules.
 	 */
 	public function testASkinPreviewIsAddedNoChromeOfOurOwn() {
 		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);
@@ -346,9 +344,8 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * What a preview keeps is what stops the page asking for something that is not there.
 	 *
-	 * Citizen's service worker registers against a load.php no export has, and its search
-	 * shortcuts reach for modules no export ships. Neither is an opinion about how the page should
-	 * look, so neither is a preview's to drop.
+	 * Citizen's service worker registers against a load.php no export has, which is not an opinion
+	 * about how the page should look.
 	 */
 	public function testASkinPreviewStillStopsTheExportAskingForWhatIsNotThere() {
 		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);
@@ -380,9 +377,7 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 * A translated site's footer link goes through Special:MyLanguage, so a reader is sent to what
 	 * they can read.
 	 *
-	 * resolveTranslationLinks.php runs on exactly this condition and settles the link by the
-	 * language of the page holding it. Without the prefix a Korean reader on Licenses/ko.html would
-	 * follow the footer to the English page.
+	 * Without the prefix a Korean reader on Licenses/ko.html would follow it to the English page.
 	 */
 	public function testATranslatedSiteLinksTheReaderToTheirOwnLanguage() {
 		$licenses = Title::newFromText('Licenses');
@@ -404,9 +399,8 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * Every page carries a link to what the site redistributes.
 	 *
-	 * Which of the two hrefs is written depends on whether Translate is installed beside this
-	 * suite, and the jobs disagree, so what is asserted here is that the link leads to the page.
-	 * The two cases above pin each spelling.
+	 * Which href is written depends on whether Translate is installed beside this suite, and the
+	 * jobs disagree, so what is asserted is that the link leads to the page.
 	 */
 	public function testTheFooterSaysWhereToFindWhatTheSiteRedistributes() {
 		$this->overrideConfigValue('WikvenLicensesPage', 'Licenses');

@@ -18,8 +18,8 @@ class AssetFileTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The failure this exists to catch: buildStyles writes site.styles.css under the asset
-	 * directory, so a link written for that directory while the file is looked for at the output
-	 * root finds nothing, and the page ships without MediaWiki:Common.css or any styles-only gadget.
+	 * directory, so a link written for the output root finds nothing and the page ships without
+	 * MediaWiki:Common.css.
 	 */
 	public function testAnAssetDirectoryMovesTheFileAsWellAsTheHref() {
 		$this->assertSame(

@@ -71,10 +71,8 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * A successful response carrying headers, answered the way MWHttpRequest answers them.
 	 *
-	 * getResponseHeader() is documented case-insensitive and the real class lowercases the name it
-	 * is asked for. MockHttpTrait's fake lowercases the name it was *given*, so it answers a
-	 * lowercase ask and nothing else -- and core asks for "Last-Modified". This is a fake for that
-	 * one method.
+	 * MockHttpTrait's fake lowercases the name it was *given* rather than the one asked for, and
+	 * core asks for "Last-Modified". This is a fake for that one method.
 	 *
 	 * @param string $body The response body.
 	 * @param array<string,string> $headers The response headers, in any case.
@@ -155,8 +153,7 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * Every lookup this repository makes says which tool made it and where to go about it.
 	 *
-	 * Core would sign them "MediaWiki/" and its version, which names the library rather than the
-	 * thing that asked, and Commons is the server a bake asks most.
+	 * Core would sign them "MediaWiki/" and its version, naming the library rather than the asker.
 	 */
 	public function testALookupSaysWhichToolIsAskingAndWhereToGoAboutIt() {
 		$agents = [];

@@ -5,8 +5,7 @@ namespace MediaWiki\Extension\Wikven;
 use StatusValue;
 
 // LocalSettings.php loads this class by hand, before wfLoadExtension has given the extension an
-// autoloader, and lint() below asks BuildFor and OutputName which values they know. Fetch those
-// neighbours the same way rather than leave that answer to an autoloader that is not there yet.
+// autoloader, so its neighbours are fetched the same way.
 require_once __DIR__ . '/BuildFor.php';
 require_once __DIR__ . '/OutputName.php';
 
@@ -48,9 +47,8 @@ class SiteConfig {
 	/**
 	 * Config the build works out for itself, which a site's file cannot set.
 	 *
-	 * All three come from WIKVEN_WORKDIR: the source directory, the output directory beside it, and
-	 * the git log the bake action dumps there. A site that set one would move where its pages come
-	 * from without moving where its own config file is looked for.
+	 * All three come from WIKVEN_WORKDIR. A site that set one would move where its pages come from
+	 * without moving where its own config file is looked for.
 	 */
 	public const DERIVED_CONFIG = [
 		'WikvenSourceDirectory',
@@ -61,9 +59,8 @@ class SiteConfig {
 	/**
 	 * Config the build works out from the site's own lists, which a site's file cannot set either.
 	 *
-	 * A site says which skins to build and which to read it in with DefaultSkin; the build turns
-	 * those into the names MediaWiki knows and the one whose pages go to the output root.
-	 * WikvenMissing is what it found missing while loading them.
+	 * A site says which skins to build and which to read it in; the build turns those into the
+	 * names MediaWiki knows.
 	 */
 	public const DERIVED_SKIN_CONFIG = [
 		'WikvenSkins',
@@ -74,9 +71,8 @@ class SiteConfig {
 	/**
 	 * Lint decoded site-config contents, returning a warning per silently-dropped mistake.
 	 *
-	 * About shape and values only. Whether a name under "config" is one anything defines is
-	 * undefinedConfig()'s question, and it cannot be asked this early: the extensions that would
-	 * answer it are still queued when a site's file is read.
+	 * About shape and values only. Whether a name under "config" is one anything defines cannot be
+	 * asked this early: the extensions that would answer are still queued.
 	 *
 	 * @param mixed $data Decoded .wikven.yaml/.json contents.
 	 * @return string[] Warning messages, empty when the file is sound.
@@ -117,10 +113,8 @@ class SiteConfig {
 				$warnings[] = "'$urlKey' should be a URL template containing \$1 (replaced by the source file name).";
 			}
 		}
-		// The base every absolute URL is built on, which is either one a crawler can fetch or
-		// nothing at all. An unusable one is not ignorable the way a wrong logo is: it would be
-		// written into a sitemap and an hreflang, where a URL nothing resolves is worse than the
-		// feature being off.
+		// The base every absolute URL is built on, which is either one a crawler can fetch or nothing
+		// at all: an unusable one in a sitemap is worse than no sitemap.
 		$siteUrl = $config['WikvenSiteUrl'] ?? '';
 		if ($siteUrl !== '' && ( !is_string($siteUrl) || !SiteUrl::fromWritten($siteUrl)->isKnown() )) {
 			$named = is_string($siteUrl) ? "'$siteUrl'" : get_debug_type($siteUrl);
@@ -133,9 +127,8 @@ class SiteConfig {
 			}
 		}
 
-		// The settings whose value is chosen from a list rather than written freely, so the ones
-		// where a near miss is worth naming: each reads anything it does not know as its own
-		// default, which is the safe reading but a silent one.
+		// The settings whose value is chosen from a list rather than written freely, so the ones where
+		// a near miss is worth naming: each reads what it does not know as its own default.
 		$chosen = [
 			'WikvenBuildFor' => [BuildFor::all(), BuildFor::SITE],
 			'WikvenFileNames' => [OutputName::all(), OutputName::READABLE]
@@ -157,10 +150,8 @@ class SiteConfig {
 	/**
 	 * Config-schema failures, as lines naming the setting that is wrong.
 	 *
-	 * SettingsBuilder::validate() checks the settings core defines against their schema, which is
-	 * how a site hears that it wrote a list where a number belongs. Core renders a StatusValue as a
-	 * debug table wrapped at twenty-five characters, so the name and the reason are pulled out
-	 * here. Only errors are read.
+	 * Core renders a StatusValue as a debug table wrapped at twenty-five characters, so the name
+	 * and the reason are pulled out here. Only errors are read.
 	 *
 	 * @param StatusValue $status What SettingsBuilder::validate() returned.
 	 * @return string[] One line per failed setting, empty when the config conforms.
@@ -187,9 +178,8 @@ class SiteConfig {
 	/**
 	 * Config names declared by a set of extension and skin manifests, as a lookup set.
 	 *
-	 * ExtensionRegistry turns each name under a manifest's "config" map straight into a global, and
-	 * nothing on that path reaches the schema SettingsBuilder validates against. A manifest
-	 * declaring a prefix other than "wg" is skipped whole: $wgSettings writes no other.
+	 * ExtensionRegistry turns each name under a manifest's "config" map straight into a global,
+	 * which never reaches the schema SettingsBuilder validates against.
 	 *
 	 * @param string[] $manifestPaths Absolute paths to extension.json/skin.json files.
 	 * @return array<string,true> Config names, as keys.
@@ -220,8 +210,8 @@ class SiteConfig {
 	/**
 	 * Config names a site wrote that nothing defines, each with a near miss where there is one.
 	 *
-	 * This is the quietest mistake a config file can make: the name is written into a global, no
-	 * code ever reads that global, and the build succeeds having ignored the line.
+	 * The quietest mistake a config file can make: the name goes into a global nothing reads, and
+	 * the build succeeds.
 	 *
 	 * @param string[] $configKeys The names under "config" in the site's file.
 	 * @param string[] $defined Every config name something here defines.
@@ -246,9 +236,8 @@ class SiteConfig {
 	/**
 	 * The defined name closest to $name, or null when none of them is close enough to suggest.
 	 *
-	 * A misspelling is a character or two out. Past that a suggestion is a guess that costs more
-	 * than the warning gains. The allowance grows with the name: a short one reaches an unrelated
-	 * name in fewer edits.
+	 * A misspelling is a character or two out; past that a suggestion is a guess. The allowance
+	 * grows with the name.
 	 *
 	 * @param string $name A config name nothing defines.
 	 * @param string[] $defined Every config name something here defines.
@@ -275,9 +264,8 @@ class SiteConfig {
 	/**
 	 * Is $name usable as the directory name of a bundled extension or skin?
 	 *
-	 * The names in a site's extensions and skins lists become paths under $IP, so a name carrying a
-	 * path separator names a directory somewhere else entirely and would be loaded as if the image
-	 * had shipped it. fetchExtensions.php asks the same of every WikvenRepositories key.
+	 * These names become paths under $IP, so one carrying a separator would be loaded from
+	 * elsewhere as if the image had shipped it.
 	 *
 	 * @param string $name A name from a config file's 'extensions' or 'skins' list.
 	 * @return bool Whether the name is a plain directory name.

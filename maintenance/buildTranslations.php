@@ -32,9 +32,8 @@ require_once "$IP/maintenance/Maintenance.php";
  * translated units from "<Page>/<lang>.wikitext" source files (flagging stale ones fuzzy), and
  * render the translated pages so Translate's <languages/> and stats reflect them in the export.
  *
- * A page's translated title rides along as one more unit: the file's reserved "title" unit is
- * written to Translate's own "Page display title" unit, which Translate then applies as the
- * translation page's display title.
+ * A page's translated title rides along as one more unit, written to Translate's own "Page
+ * display title" unit.
  */
 class BuildTranslations extends Maintenance {
 	public function __construct() {
@@ -73,13 +72,11 @@ class BuildTranslations extends Maintenance {
 		}
 
 		// Render the translated pages only once every page is marked and its units are loaded. Rendering
-		// inline per page let the page marked just before another (the main page sorts last) render before
-		// the shared message index caught up, silently producing no <Page>/<lang> page for it.
+		// inline let a page render before the shared message index caught up, silently producing none.
 		$this->drainJobs();
-		// Deferring the renders is not enough on its own, because the drains above have already done
-		// some: saving a unit page queues a RenderTranslationPageJob, which the next prepare() runs.
-		// Those renders asked #ifexist whether units that did not exist yet existed, and
-		// Title::newFromText() memoizes "no such page" for the life of the process (#460, #464).
+		// Deferring the renders is not enough on its own: saving a unit page queues a
+		// RenderTranslationPageJob, which the next prepare() runs, and those renders asked #ifexist
+		// about units that did not exist yet -- an answer Title memoizes (#460, #464).
 		Title::clearCaches();
 		foreach ($prepared as $title) {
 			$this->render($title);
@@ -127,17 +124,15 @@ class BuildTranslations extends Maintenance {
 			return false;
 		}
 		// A page Translate cannot parse -- an unclosed <translate>, two markers in one unit -- throws
-		// out of the marker. One page must not end the bake, so report it and leave it untranslated;
-		// checkTranslations reports the same page, which is where the author is meant to see it.
+		// out of the marker. One page must not end the bake, so report it and leave it untranslated.
 		try {
 			$operation = $marker->getMarkOperation($record, null, $pageTitle !== null);
 			if (!$operation->getUnitValidationStatus()->isOK()) {
 				$this->output("Wikven: {$title->getPrefixedText()} has invalid translation units; skipping\n");
 				return false;
 			}
-			// Keep Translate's "Page display title" unit only for a page whose title is translatable;
-			// a page that fixes its own display title has nothing to translate and would otherwise sit
-			// short of 100% forever. No priority languages, transclusion, or forced syntax upgrade.
+			// Keep Translate's "Page display title" unit only for a page whose title is translatable; a page
+			// that fixes its own would otherwise sit short of 100% forever.
 			$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
 			$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
 		} catch (ParsingFailure $failure) {
@@ -189,9 +184,8 @@ class BuildTranslations extends Maintenance {
 
 		foreach ($translations as $lang => $translationFile) {
 			if (!is_file($translationFile)) {
-				// The file is the one the language was discovered at, so it is only missing if the
-				// source tree changed under the build. Say so: the page would otherwise be exported
-				// in that language with nothing translated and nothing to explain why.
+				// The file is the one the language was discovered at, so it is only missing if the source tree
+				// changed under the build. The page would otherwise be exported with nothing translated.
 				$this->output("Wikven: $prefixed has no readable $lang translation at $translationFile\n");
 				continue;
 			}
@@ -212,10 +206,8 @@ class BuildTranslations extends Maintenance {
 					continue;
 				}
 				if (( $status[(string)$id] ?? '' ) === StalenessComputer::STALE) {
-					// Translate reads the title unit straight into the page title, without the fuzzy
-					// handling it gives body units, so a !!FUZZY!! prefix would show up in <h1> and
-					// <title>. Leave a stale title out instead and let the page fall back to its
-					// untranslated title, the way a page with no translated title already renders.
+					// Translate reads the title unit straight into the page title, without the fuzzy handling it
+					// gives body units, so a stale one is left out to fall back rather than show !!FUZZY!!.
 					if ($isTitle) {
 						continue;
 					}
@@ -239,8 +231,7 @@ class BuildTranslations extends Maintenance {
 	private function drainJobs(): void {
 		$group = $this->getServiceContainer()->getJobQueueGroup();
 		// pop() with no type shuffles the queue types to avoid starvation, and these jobs create the
-		// translated pages, so a shuffled order hands them different page and revision ids on every
-		// bake. Drain one type at a time, in name order, until nothing is left anywhere.
+		// translated pages, so a shuffled order hands them different ids on every bake.
 		while (true) {
 			// The search index is left for the end of the build; see Search::INDEX_JOB.
 			$types = array_diff($group->getQueuesWithJobs(), [Search::INDEX_JOB]);

@@ -19,8 +19,7 @@ class OutputNameTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The defect this class exists for. A title made only of letters agreed by luck; anything else
-	 * had the build write one name and every link say another, and the reader got a 404 out of a
-	 * build that exited 0.
+	 * had the build write one name and every link say another.
 	 *
 	 * @dataProvider provideReadable
 	 */
@@ -78,8 +77,7 @@ class OutputNameTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The relationship that makes a link work: a static server url-decodes the path it is asked
-	 * for, so the link is the name url-encoded and nothing else. Escaping the link to look like the
-	 * name -- which is what the build used to do by accident -- asks for a different file.
+	 * for, so the link is the name url-encoded and nothing else.
 	 *
 	 * @dataProvider provideHrefs
 	 */
@@ -129,9 +127,8 @@ class OutputNameTest extends MediaWikiUnitTestCase {
 	/**
 	 * A prefixed name handed in whole names the file its namespace and dbkey name apart.
 	 *
-	 * The Special:MyLanguage marker is built that way: the target's prefixed name rides inside the
-	 * marker's own dbkey, and resolveTranslationLinks.php then looks for the file that name spells.
-	 * So the two spellings of one title have to land on one file.
+	 * The Special:MyLanguage marker is built that way, so the two spellings of one title have to
+	 * land on one file.
 	 *
 	 * @dataProvider provideBothSchemes
 	 */

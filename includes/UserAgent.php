@@ -5,15 +5,13 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * What wikven calls itself on the servers it fetches from.
  *
- * A bake reaches other people's machines -- Commons for every embedded image, git for every
- * declared extension -- and their logs are their only chance of telling this traffic apart.
- * Wikimedia's User-Agent policy asks for that, and MediaWiki's own "MediaWiki/1.46.0" names the
- * library rather than the tool, so requests carry this instead:
+ * A bake reaches other people's machines, and their logs are their only chance of telling this
+ * traffic apart. MediaWiki's own "MediaWiki/1.46.0" names the library rather than the tool, so
+ * requests carry this instead:
  *
  *     Wikven/0.1.0 (+https://github.com/chaotic-ground/wikven) MediaWiki/1.46.0
  *
- * The version is read from extension.json rather than written here twice. Dependency-free on
- * purpose: fetchExtensions loads it by path, before wikven's autoloader exists.
+ * Dependency-free on purpose: fetchExtensions loads it by path.
  */
 class UserAgent {
 	/**
@@ -30,8 +28,7 @@ class UserAgent {
 	/**
 	 * The string a request goes out under where wikven is the whole of what is sending it.
 	 *
-	 * The library is named after the tool, which is the order the policy asks for and the order
-	 * a reader wants: what made this request, then what it was built with.
+	 * The library is named after the tool, which is the order the policy asks for.
 	 */
 	public static function string(): string {
 		return defined('MW_VERSION') ? self::tool() . ' MediaWiki/' . MW_VERSION : self::tool();
@@ -54,9 +51,8 @@ class UserAgent {
 	/**
 	 * The same, after whatever the client would have said on its own.
 	 *
-	 * git is the one. Some proxies pass HTTP git traffic only when the User-Agent still looks like
-	 * a git client's, so replacing "git/2.43.0" outright would break a fetch on networks nobody
-	 * here can see.
+	 * git is the one: some proxies pass its HTTP traffic only while the User-Agent still looks
+	 * like a git client's.
 	 */
 	public static function after(string $client): string {
 		$client = trim($client);

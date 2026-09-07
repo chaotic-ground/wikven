@@ -19,9 +19,8 @@ class Indexer {
 	/**
 	 * How the source language of a translation page is looked up.
 	 *
-	 * A seam, so the rule below can be tested without Translate, which the test suite does not
-	 * install. Phan wants the nullable return parenthesised, or it reads the annotation only as far
-	 * as "callable(Title)".
+	 * A seam, so the rule below can be tested without Translate. Phan wants the nullable return
+	 * parenthesised.
 	 *
 	 * @var callable(Title):(?string)
 	 */
@@ -38,9 +37,8 @@ class Indexer {
 	/**
 	 * Leave out a translation page written in the language it was translated from.
 	 *
-	 * A marked page gets a translation page per language, the source language included, so an
-	 * English reader was offered "Installation" and "Installation/en" both (#454). The source page
-	 * is the one kept: it is where the site's own links land, and the only one an unmarked page has.
+	 * A marked page gets one per language, the source language included, so an English reader was
+	 * offered both (#454). The source page is the one kept.
 	 */
 	public function onSifterSearchIndexPage(Title $title, bool &$index) {
 		$sourceLanguage = ( $this->sourceLanguageOf )($title);
@@ -53,8 +51,7 @@ class Indexer {
 	 * The language a translation page is in: the segment after its source page's title.
 	 *
 	 * Not Title::getSubpageText(), which answers with the whole title unless subpages are on for
-	 * the namespace, and nothing turns them on for NS_MAIN. Translate names these
-	 * "<source>/<language>" whatever MediaWiki thinks a subpage is.
+	 * the namespace, and nothing turns them on for NS_MAIN.
 	 */
 	private static function translationLanguage(Title $title): ?string {
 		$text = $title->getText();
@@ -65,9 +62,8 @@ class Indexer {
 	/**
 	 * The language a translation page was translated from, or null where it is not one.
 	 *
-	 * What is asked of Translate is whether this is a translation page, not whether the title looks
-	 * like one: isTranslationPage() checks that the page above it is marked, so a wiki keeping a
-	 * page of its own called "Foo/en" keeps it in the index.
+	 * isTranslationPage() checks that the page above is marked, so a wiki keeping a page of its
+	 * own called "Foo/en" keeps it in the index.
 	 */
 	private static function translateSourceLanguage(Title $title): ?string {
 		if (!ExtensionRegistry::getInstance()->isLoaded('Translate')) {

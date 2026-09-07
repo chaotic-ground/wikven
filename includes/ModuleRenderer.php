@@ -16,10 +16,8 @@ class ModuleRenderer {
 	/**
 	 * Render the modules named by $context and return the response body.
 	 *
-	 * ResourceLoader::respond() sends response headers before the body, and the build drives it from
-	 * CLI scripts that have already written to stdout, so each header() call raises "headers already
-	 * sent". makeModuleResponse() is the same body generation without that wrapper; this adds back
-	 * the parts of respond() that shape the body.
+	 * ResourceLoader::respond() sends response headers first, and the build drives it from CLI
+	 * scripts that have already written to stdout. makeModuleResponse() is the body alone.
 	 *
 	 * @param ResourceLoader $rl
 	 * @param Context $context Modules, language, skin and 'only' mode to render.
@@ -45,14 +43,12 @@ class ModuleRenderer {
 			$modules[$name] = $module;
 		}
 
-		// Batches the version and message-blob lookups the modules would otherwise make one at a
-		// time, exactly as respond() does before generating. respond() turns a failure here into an
-		// error comment in the response; the build wants it to stop, so let it escape.
+		// Batches the version and message-blob lookups the modules would otherwise make one at a time,
+		// as respond() does. respond() turns a failure here into an error comment; let it escape.
 		$rl->preloadModuleInfo(array_keys($modules), $context);
 
-		// makeModuleResponse() catches a throwing module, logs it and leaves an "error" load state
-		// in the body -- respond() would additionally have written the exception into the dumped
-		// file, which is no way to notice it either. Watch the logger instead and fail the build.
+		// makeModuleResponse() catches a throwing module, logs it and leaves an "error" load state in
+		// the body; respond() would have written the exception into the dumped file. Watch the logger.
 		$previousLogger = $rl->getLogger();
 		$collector = new class extends AbstractLogger {
 			/** @var string[] Messages logged for a module that could not be built. */
@@ -105,9 +101,8 @@ class ModuleRenderer {
 	/**
 	 * The comment respond() would have prefixed for modules that are not registered.
 	 *
-	 * A response carrying scripts reports them to the client itself, as a "missing" load state; one
-	 * that does not can only say so in a comment. Nothing in the build asks for an unregistered
-	 * module, so this exists to keep a broken build's output what it always was.
+	 * Nothing in the build asks for one, so this exists to keep a broken build's output what it
+	 * always was.
 	 *
 	 * @param Context $context
 	 * @param string[] $missing Requested module names that are not registered.
@@ -121,9 +116,8 @@ class ModuleRenderer {
 			return '';
 		}
 		$states = array_fill_keys($missing, 'missing');
-		// makeModuleResponse() silences encodeJson()'s warning here because the names came off a
-		// web request and invalid UTF-8 in one is a client error (T331641). The build's names come
-		// from its own registry and file names, where that would be worth hearing about.
+		// makeModuleResponse() silences encodeJson()'s warning here because the names came off a web
+		// request, where invalid UTF-8 is a client error (T331641). The build's come from its registry.
 		return ResourceLoader::makeComment('Problematic modules: ' . $context->encodeJson($states));
 	}
 }

@@ -5,14 +5,12 @@ namespace MediaWiki\Extension\Wikven;
 use MediaWiki\Utils\ExecutableFinder;
 
 /**
- * When each source file last changed, and who changed it, as the repository's git history tells it.
+ * When each source file last changed, and who changed it, as git tells it.
  *
- * The wiki a bake fills has no edit history of its own: every page is written in one import pass,
- * so what that pass stamps is what the reader is told. The file's mtime gave the moment of the
- * checkout -- one instant for every page, and the one date SOURCE_DATE_EPOCH cannot freeze.
+ * The wiki a bake fills has no edit history of its own, so what the import pass stamps is what the
+ * reader is told, and the file's mtime gave the moment of the checkout.
  *
- * Two ways in: a dump of `git log` named by $wgWikvenSourceHistoryFile, or git itself. Neither
- * being available is not an error.
+ * Two ways in: a dump of `git log`, or git itself.
  */
 class SourceHistory {
 	/**
@@ -24,8 +22,8 @@ class SourceHistory {
 
 	/**
 	 * The log, newest commit first, with each commit as a header record followed by the files it
-	 * touched, all NUL-separated so that no path needs quoting. Paths come out relative to the
-	 * source directory, and commits touching nothing under it are left out.
+	 * touched, all NUL-separated so that no path needs quoting. Paths are relative to the source
+	 * directory.
 	 */
 	private const LOG_ARGUMENTS = [
 		// Deters git from refusing to read a checkout owned by another user, which is every
@@ -125,8 +123,7 @@ class SourceHistory {
 	 * Who last changed the file, as git records their name, and then every other name that same
 	 * author has committed under, newest first.
 	 *
-	 * A git author name is free text and MediaWiki's is not ("A / B" holds a slash). The rest of the
-	 * list invents nothing: the same person as spelled elsewhere here, matched on the email.
+	 * A git author name is free text and MediaWiki's is not ("A / B" holds a slash).
 	 *
 	 * @return list<string>
 	 */

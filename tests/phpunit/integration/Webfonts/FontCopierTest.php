@@ -69,9 +69,8 @@ class FontCopierTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * The regression this class exists for: a bake that delivers some of the fonts its stylesheet
-	 * names is not a bake that delivered them. Counting the copies made hid this, since one copy
-	 * out of two counted as success and the build went on to write @font-face rules pointing at a
-	 * file no reader can fetch.
+	 * names is not a bake that delivered them. Counting copies hid it, one out of two counting as
+	 * success.
 	 */
 	public function testAFontTheRepositoryDoesNotHaveIsReportedEvenWhenOthersCopy() {
 		$this->repositoryHolds('Alef/Alef-Regular.woff2');

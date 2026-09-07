@@ -35,10 +35,9 @@ class ModuleRendererTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * The build swapped ResourceLoader::respond() (load.php's entry point, which emits HTTP
-	 * headers) for ModuleRenderer::render(). Everything the static site serves is one of these
-	 * responses, so the two must produce the same bytes for every shape the build dumps -- a
-	 * quieter bake that changes the CSS or JS would be worse than the noise it removes.
+	 * The build swapped ResourceLoader::respond(), which emits HTTP headers, for
+	 * ModuleRenderer::render(). Everything the static site serves is one of these responses, so a
+	 * quieter bake that changed the CSS or JS would be worse than the noise it removed.
 	 *
 	 * @dataProvider provideResponseShapes
 	 */
@@ -122,9 +121,9 @@ class ModuleRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertNotSame('', $body, 'the response came back as a return value');
 		$this->assertSame([], $warnings, 'no PHP warning raised while rendering');
 
-		// Under PHPUnit the response is buffered, so header() has nothing to complain about and
-		// the check above cannot tell a fixed call from a lucky one. Where output has really been
-		// flushed -- a bake, which is the reported case -- respond() warns and render() does not.
+		// Under PHPUnit the response is buffered, so header() has nothing to complain about and the
+		// check above cannot tell a fixed call from a lucky one. Where output has really been flushed,
+		// respond() warns and render() does not.
 		if (!headers_sent()) {
 			return;
 		}
@@ -142,9 +141,8 @@ class ModuleRendererTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * The one place the two paths are meant to differ, pinned on purpose.
 	 *
-	 * A module that throws is caught by makeModuleResponse(), which logs it and leaves an "error"
-	 * load state. respond() writes the exception text and its backtrace into the response, so the
-	 * build used to dump an asset with a stack trace inside it. render() stops instead.
+	 * respond() writes a throwing module's exception text into the response, so the build used to
+	 * dump an asset with a stack trace inside it. render() stops instead.
 	 */
 	public function testRenderThrowsOnAModuleThatCannotBeBuilt() {
 		$rl = $this->getServiceContainer()->getResourceLoader();

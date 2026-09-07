@@ -65,9 +65,8 @@ class Hider implements
 		unset($links['actions']['watch'], $links['actions']['unwatch']);
 
 		// The discussion tab. MediaWiki has no setting that turns talk namespaces off (T35298), so it is
-		// dropped from the navigation every skin builds from. A `#ca-talk` rule is not enough: Minerva
-		// renders the same data through a tab bar that keeps no id. Both menus, because a skin asking
-		// core for the legacy `namespaces` one is rendered from that copy.
+		// dropped from the navigation every skin builds from. Both menus, for a skin still asking core
+		// for the legacy one.
 		foreach (['associated-pages', 'namespaces'] as $menu) {
 			foreach (array_keys($links[$menu] ?? []) as $key) {
 				// 'talk' in the main namespace, '<subject>_talk' everywhere else.

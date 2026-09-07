@@ -5,9 +5,8 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * Where a build reads and writes, worked out from the one directory it was pointed at.
  *
- * A bake is handed a single workdir and everything else hangs off it: the source tree, the export,
- * the scratch space, and the git log the bake action dumps beside them. Stated here once because
- * WikvenSettings.php needs it twice, before a site's configuration is applied and again afterwards.
+ * A bake is handed a single workdir and everything else hangs off it. Stated here once because
+ * WikvenSettings.php needs it twice, before a site's configuration is applied and again after.
  */
 class BuildPaths {
 	/**

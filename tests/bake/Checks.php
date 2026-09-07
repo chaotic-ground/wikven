@@ -6,11 +6,8 @@ namespace MediaWiki\Extension\Wikven\Bake;
  * What a finished bake has to be true of, one method per fact.
  *
  * Each check reads a baked site and returns the problems it found, as sentences a reader can act
- * on. None of them knows it is running on a CI runner: a check that wants to be loud says so by
- * returning a problem, and assert-bake.php decides whether that becomes a line of prose or a
- * workflow command.
- *
- * The order all() lists them in is the order of the report.
+ * on. None knows it is running on a CI runner: assert-bake.php decides whether a problem becomes
+ * prose or a workflow command.
  */
 class Checks {
 	/** The sitemap protocol's namespace, which every element in the file is in. */
@@ -188,8 +185,8 @@ class Checks {
 	/** @return string[] */
 	private static function bakeWarnings(Site $site): array {
 		// A bake with something to say about the site's own configuration says it and carries on, so a
-		// warning is only ever seen by whoever reads the log. The site's .wikven.yaml is the
-		// configuration wikven recommends, so a warning about it is a mistake worth stopping for.
+		// warning is only ever seen by whoever reads the log. This site's .wikven.yaml is the
+		// configuration wikven recommends.
 		$warnings = [];
 		foreach ($site->logs as $log) {
 			foreach (explode("\n", $site->read($log)) as $line) {
@@ -206,9 +203,9 @@ class Checks {
 
 	/** @return string[] */
 	private static function sitemap(Site $site): array {
-		// The site configuration says where this site is published, so the bake owes it a sitemap.
-		// The bug this guards against fataled the whole build and shipped anyway, because the code
-		// path only runs for a site that sets WikvenSiteUrl and no test site did.
+		// The site configuration says where this site is published, so the bake owes it a sitemap. The
+		// bug this guards against fataled the whole build and shipped anyway, the path running only for
+		// a site that sets WikvenSiteUrl.
 		$path = $site->path('sitemap.xml');
 		if (!is_file($path) || filesize($path) === 0) {
 			return ["$path is missing or empty"];
@@ -251,10 +248,8 @@ class Checks {
 
 	/** @return string[] */
 	private static function ogUrl(Site $site): array {
-		// og:url has to be a whole URL: it is read off the page by something that never saw the
-		// page's address. Title::getFullURL() answers the GetFullURL hook, so this is the tag that
-		// proves that hook fired -- before it existed WikiSEO published "http:index.html" here,
-		// green across every other check.
+		// og:url has to be a whole URL, and this is the tag that proves the GetFullURL hook fired:
+		// before it existed WikiSEO published "http:index.html" here.
 		$bad = [];
 		foreach ($site->htmlFiles() as $path) {
 			$found = [];
@@ -274,10 +269,8 @@ class Checks {
 
 	/** @return string[] */
 	private static function noindex(Site $site): array {
-		// A page that stops being indexed is invisible by construction: nothing 404s, and the only place
-		// it shows is a crawler's view of the site weeks later. __NOINDEX__ is a behaviour switch, so a
-		// page telling a reader to use it took it -- Deploying noindexed itself, in both languages, with
-		// every gate here green (#655).
+		// A page that stops being indexed is invisible by construction. __NOINDEX__ is a behaviour
+		// switch, so a page telling a reader to use it took it, with every gate green (#655).
 		$expected = (array)$site->expect['noindex_pages'];
 		$copies = (array)$site->expect['skin_copies'];
 
@@ -352,9 +345,8 @@ class Checks {
 
 	/** @return string[] */
 	private static function ogImage(Site $site): array {
-		// The card a shared link shows has to be an absolute URL -- read by something that never saw the
-		// page -- AND has to name a file this build actually wrote. Either half alone passes while the
-		// card is broken: WikiSEO builds the URL under the upload path, and storeImages moves the file.
+		// The card a shared link shows has to be an absolute URL AND name a file this build wrote:
+		// either half alone passes while the card is broken.
 		$missing = [];
 		$relative = [];
 		$seen = 0;
@@ -393,10 +385,8 @@ class Checks {
 
 	/** @return string[] */
 	private static function hotlinkHost(Site $site): array {
-		// A picture this site borrows from a repository is downloaded and republished, and what says the
-		// export stopped depending on it is that nothing still names the host. A reference the rewrite
-		// does not match is the failure nobody hears about: a schema.org block spells the same URL
-		// "https:\/\/upload.wikimedia.org\/...", which went through untouched for a while.
+		// What says the export stopped depending on a borrowed picture's repository is that nothing
+		// still names the host -- a schema.org block spells it "https:\/\/upload.wikimedia.org\/...".
 		$guilty = [];
 		foreach ($site->filesEndingIn('') as $path) {
 			$text = $site->read($path);
@@ -449,10 +439,9 @@ class Checks {
 
 	/** @return string[] */
 	private static function buildHost(Site $site): array {
-		// Nothing a reader is handed may name the machine that built it. The build installs against
+		// Nothing a reader is handed may name the machine that built it: the build installs against
 		// http://localhost:4000, so any address reaching the output through $wgServer is the
-		// container's; two places had one, green across every other check. Scoped to the head, because
-		// docs/Deploying.wikitext tells a reader to open the preview at a local address.
+		// container's. Scoped to the head, where no prose can legitimately name one.
 		$bad = [];
 		foreach ($site->filesEndingIn('') as $path) {
 			$isHtml = str_ends_with($path, '.html');
@@ -528,9 +517,7 @@ class Checks {
 	/** @return string[] */
 	private static function specialSearchLink(Site $site): array {
 		// The export has no Special:Search, so a link to it answers 404 (#393). Vector writes one for
-		// the collapsed search box, on every page it renders, and the results page is where that
-		// belongs; the hidden "title" input naming the special page is left to SifterSearch, which
-		// repoints it, so this matches the link alone.
+		// the collapsed search box on every page; the hidden "title" input is SifterSearch's.
 		$guilty = [];
 		foreach ($site->htmlFiles() as $path) {
 			if (str_contains($site->read($path), 'Special:Search.html')) {
@@ -545,10 +532,8 @@ class Checks {
 
 	/** @return string[] */
 	private static function pagefindBundles(Site $site): array {
-		// A skin copy reads the search index out of its own directory, which is what keeps a search
-		// from the skin a reader chose inside that skin's copy (#399). The bundle is put there by the
-		// skin pass; without it the copy's search answers nothing at all, and only the browser tests
-		// would notice.
+		// A skin copy reads the search index out of its own directory, which keeps a search from the
+		// skin a reader chose inside that copy (#399). Without it the search answers nothing.
 		$problems = [];
 		foreach (['', ...( (array)$site->expect['skin_copies'] )] as $copy) {
 			$root = $copy === '' ? $site->dist : $site->path($copy);
@@ -563,8 +548,7 @@ class Checks {
 	/** @return string[] */
 	private static function pagefindLanguages(Site $site): array {
 		// Each page is indexed in the language it is written in, so Pagefind builds one index per
-		// language and a reader searching from a translated page is answered out of that language's
-		// index (#400). A single index meant every translation was stemmed by English rules.
+		// language (#400). A single index meant every translation was stemmed by English rules.
 		$metas = $site->glob($site->path('pagefind', '*.pf_meta'));
 		if (!$metas) {
 			return [$site->path('pagefind') . ' holds no search index at all'];
@@ -600,9 +584,8 @@ class Checks {
 	/** @return string[] */
 	private static function pagefindSourceLanguage(Site $site): array {
 		// Marking a page for translation gives it a translation page in the source language too, so
-		// English was counted twice (#454). What says only the source page is indexed now is the
-		// absence of any "/en.html" from the English index; a count would not, the pages indexed not
-		// being the source files.
+		// English was counted twice (#454). What says only the source page is indexed now is the absence
+		// of any "/en.html" from the English index.
 		$language = (string)$site->expect['source_language'];
 		$pattern = '~"url":"[^"]*/' . preg_quote($language, '~') . '\.html"~';
 		foreach ($site->glob($site->path('pagefind', 'fragment', "{$language}_*")) as $fragment) {
@@ -647,8 +630,7 @@ class Checks {
 	/** @return string[] */
 	private static function skinModules(Site $site): array {
 		// A skin the site never asked for has no business in the script every reader downloads: the
-		// installer used to enable every skin on disk, and MonoBook and Timeless rode into each
-		// bundle (#637). Read out of the startup manifest, which is what the bundle is built from.
+		// installer used to enable every skin on disk (#637). Read out of the startup manifest.
 		$expected = (array)$site->expect['skin_modules'];
 		sort($expected, SORT_STRING);
 		$manifests = [
@@ -678,9 +660,8 @@ class Checks {
 
 	/** @return string[] */
 	private static function luaModules(Site $site): array {
-		// A Lua module runs at build time and its answer is baked into the page that invoked it
-		// (#465). Module:Example answers with the title of the page it ran on, so this says both that
-		// Scribunto rendered at all and that the module saw which page it was on, per language.
+		// A Lua module runs at build time and its answer is baked into the page that invoked it (#465).
+		// Module:Example answers with the title of the page it ran on, per language.
 		$problems = [];
 		$pages = (array)$site->expect['lua_pages'];
 		ksort($pages);
@@ -702,9 +683,7 @@ class Checks {
 	/** @return string[] */
 	private static function printfooterLinks(Site $site): array {
 		// Every printfooter "Retrieved from" link must resolve from the page that carries it (#394).
-		// Core builds it from the page's own URL and expands away the "./" wikven writes, so a page
-		// exported into a subdirectory needs the "../" per level rename.php adds; the link is
-		// print-only on screen, which is exactly why nothing else would catch it.
+		// Core expands away the "./" wikven writes, and the link is print-only on screen.
 		$problems = [];
 		foreach ($site->htmlFiles() as $page) {
 			// Line by line and last match wins, which is what the sed this replaces did.
@@ -730,9 +709,8 @@ class Checks {
 
 	/** @return string[] */
 	private static function headLinks(Site $site): array {
-		// Every address a page names for itself has to be one the export actually has (#394 again, one
-		// layer out). A canonical url and an hreflang alternate are whole urls, so nothing in the export
-		// resolves them -- and one alternate pointing at a 404 loses the whole set it belongs to.
+		// Every address a page names for itself has to be one the export actually has (#394 again).
+		// One hreflang alternate pointing at a 404 loses the whole set it belongs to.
 		$hrefs = [];
 		foreach ($site->htmlFiles() as $page) {
 			$tags = [];
@@ -801,8 +779,7 @@ class Checks {
 			$problems[] = $site->path('fonts', 'uls', $directory) . ' holds no .woff2 file';
 		}
 		// Every url() must resolve from the stylesheet's own directory, which is what lets the fonts
-		// load from a page at any depth. Resolved against that directory and not against the output
-		// root, which is the whole point when the two are not the same.
+		// load from a page at any depth -- not against the output root, when the two differ.
 		$found = [];
 		preg_match_all("~url\('([^']*)'\)~", $css, $found);
 		$references = array_values(array_unique($found[1]));
@@ -818,8 +795,7 @@ class Checks {
 	/** @return string[] */
 	private static function languageBars(Site $site): array {
 		// Every <languages/> bar lists every language the source has (#333 baked them short). A page
-		// with N languages is emitted N+1 times and each copy carries N entries, so the target is
-		// derived from the source tree rather than pinned to a number.
+		// with N languages is emitted N+1 times, so the target is derived from the source tree.
 		$source = rtrim((string)$site->source, '/');
 		$expected = 0;
 		foreach ($site->glob("$source/*.wikitext") as $path) {
@@ -863,8 +839,7 @@ class Checks {
 	/** @return string[] */
 	private static function prevnextRows(Site $site): array {
 		// Every page the sidebar names gets a navigation row, and the two ends of the sequence get one
-		// link rather than two. The order lives in MediaWiki:Sidebar and Module:Sequence reads it
-		// (#455); before that it was restated in each call, and both ends went wrong.
+		// link rather than two. The order lives in MediaWiki:Sidebar and Module:Sequence reads it (#455).
 		$missing = [];
 		foreach (self::sidebarPages($site) as $page) {
 			$path = $site->path(str_replace(' ', '_', $page) . '.html');
@@ -886,8 +861,8 @@ class Checks {
 	/** @return string[] */
 	private static function prevnextLabel(Site $site): array {
 		// A prevnext link is labelled with the target page's own title, so on a translated page it must
-		// carry the translated one. The label is not in the calling page's source: the call sits outside
-		// the translate tags, and the template reads the target's own title unit.
+		// carry the translated one. The call sits outside the translate tags, and the template reads
+		// the target's own title unit.
 		$page = (string)$site->expect['prevnext_page'];
 		$language = (string)$site->expect['prevnext_language'];
 		$order = self::sidebarPages($site);
@@ -919,9 +894,8 @@ class Checks {
 			return ["$translation has no translated title to expect"];
 		}
 
-		// Newlines are flattened before the block is read: the template writes its markup over
-		// several lines, and what is being matched is one span of it. An empty match fails the case
-		// below rather than passing it, so a prevnext that stopped rendering is caught here too.
+		// Newlines are flattened before the block is read: the template writes its markup over several
+		// lines, and what is matched is one span of it. An empty match fails the case below.
 		$rendered = $site->path($page, "$language.html");
 		$flat = is_file($rendered) ? str_replace("\n", ' ', $site->read($rendered)) : '';
 		$found = [];

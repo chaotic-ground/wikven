@@ -6,11 +6,9 @@ namespace MediaWiki\Extension\Wikven;
  * What a build says about a category the site asked no page to be in.
  *
  * A tracking category is how MediaWiki reports something it will not refuse to render: a template
- * used without a required argument draws its placeholder, a Lua error prints in place of the
- * module's answer. The page still builds, and the export publishes it without a word.
+ * used without an argument draws its placeholder, and the export publishes the page.
  *
- * Which of those is a fault is the site's own judgement, so nothing is listed by default; a named
- * category with anything in it stops the build.
+ * Which of those is a fault is the site's judgement, so nothing is listed by default.
  */
 class FailOnCategories {
 	/** How many pages a complaint names before it stops and counts the rest. */
@@ -42,8 +40,8 @@ class FailOnCategories {
 	/**
 	 * The pages, up to the point where a list stops helping.
 	 *
-	 * One source line can reach every skin's copy of a page and every language of it, so a category
-	 * naming nine pages may be one mistake. The first few are what a reader needs to find it.
+	 * One source line can reach every skin's copy of a page and every language of it, so the first
+	 * few are what a reader needs.
 	 *
 	 * @param string[] $pages
 	 */

@@ -5,19 +5,15 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * What the build hands core's image importer, and what its answer means.
  *
- * importImages.php reports "no suitable files could be found for import" with the same false it
- * reports a failed import with, so its answer on its own cannot tell an image the wiki rejected
- * from a site that simply ships none. The files the build found before running it settle which of
- * the two happened.
+ * importImages.php reports "no suitable files could be found" with the same false it reports a
+ * failed import with, so the files the build found beforehand settle which happened.
  */
 class ImageImport {
 	/**
 	 * The files core's importer will consider, found the way importImages.php finds them.
 	 *
-	 * Subdirectories included, because pages are read from them too, and matched on the extension
-	 * without regard to case. Symlinked directories are followed because core's findFiles tests
-	 * is_dir, which a link satisfies: refusing to follow one left every file under it imported and
-	 * invisible to outside(), collisions() and failed().
+	 * Symlinked directories are followed because core's findFiles tests is_dir: refusing to follow
+	 * one left every file under it imported and invisible to the checks below.
 	 *
 	 * @param string $directory Source directory, without a trailing slash.
 	 * @param string[] $extensions Allowed extensions, as $wgFileExtensions holds them.
@@ -51,9 +47,8 @@ class ImageImport {
 	/**
 	 * Files that would import as the same page, keyed by the name they would share.
 	 *
-	 * A File: title is wfBaseName($file) and nothing else, so two images with one name in two
-	 * directories are one page: the importer takes the first and skips the second. The name
-	 * compared is the one core normalises to; case is left alone, CapitalLinks being off.
+	 * A File: title is wfBaseName($file) and nothing else, so two images sharing a name are one
+	 * page and the importer skips the second.
 	 *
 	 * @param string[] $sources Absolute paths, as sources() returns them.
 	 * @return array<string, string[]> Shared name => the paths that claim it, two or more of them.
@@ -75,8 +70,8 @@ class ImageImport {
 	/**
 	 * The File: page a file of this name imports as, as far as two of them being one page goes.
 	 *
-	 * TitleParser does this to every title: runs of space, underscore and the space-like characters
-	 * listed here collapse to one underscore and are trimmed off both ends. Kept to that one rule.
+	 * TitleParser collapses runs of the space-like characters listed here to one underscore and
+	 * trims them off both ends.
 	 *
 	 * @param string $name A file's base name.
 	 * @return string The name two files have to share to be one page.
@@ -92,11 +87,10 @@ class ImageImport {
 	}
 
 	/**
-	 * Files among $sources that are not really in the source tree, which is not a thing to import.
+	 * Files among $sources that are not really in the source tree.
 	 *
-	 * is_file() follows a link and so does the walk, so a source tree could have the build upload
-	 * whatever is on the other side. Asked of the resolved path, the file at the end being what
-	 * gets uploaded.
+	 * is_file() follows a link and so does the walk, so a tree could have the build upload what
+	 * sits on the far side.
 	 *
 	 * @param string $directory Source directory, as sources() was given it.
 	 * @param string[] $sources Absolute paths, as sources() returns them.

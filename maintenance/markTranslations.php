@@ -70,8 +70,8 @@ class MarkTranslations extends Maintenance {
 	/**
 	 * The text of every translation a page already has.
 	 *
-	 * Numbering reads them because a number one of them still carries stays taken even after the unit
-	 * it was written for is deleted; a file that is not a base page simply has none.
+	 * Numbering reads them because a number one of them still carries stays taken even after the
+	 * unit it was written for is deleted.
 	 *
 	 * @param string $baseFile
 	 * @param callable(string):bool $isKnownLanguage

@@ -13,12 +13,11 @@ require_once "$IP/maintenance/Maintenance.php";
 /**
  * Write sitemap.xml, naming every page this build exported.
  *
- * A sitemap is how a crawler is told a page exists without a link to it. The protocol wants
- * absolute URLs, so this writes nothing until the site has said where it will be published.
+ * The protocol wants absolute URLs, so this writes nothing until the site has said where it is
+ * published. The pages come from the output directory rather than the database: core's
+ * generateSitemap.php names rows that were never exported.
  *
- * The pages come from the output directory rather than the database, those being two different
- * sets: core's generateSitemap.php names MediaWiki:Mainpage and the rest, rows that were never
- * exported. There is no <lastmod> either -- the wall clock would make two bakes differ (#411).
+ * There is no <lastmod> -- the wall clock would make two bakes differ (#411).
  */
 class BuildSitemap extends Maintenance {
 	/** The conventional name: what a crawler looks for, and what a webmaster tool is pointed at. */
@@ -38,10 +37,8 @@ class BuildSitemap extends Maintenance {
 		if (!$siteUrl->isKnown()) {
 			return;
 		}
-		// One sitemap for the site, written by the pass that renders what the site serves. Every
-		// other pass renders the same pages again under dist/<skin>/ for preview, and those carry
-		// noindex; a second sitemap naming them would ask a crawler to index what the pages
-		// themselves tell it to skip.
+		// One sitemap for the site, written by the pass that renders what the site serves. Every other
+		// pass renders the same pages under dist/<skin>/ for preview, and those carry noindex.
 		$mainSkin = (string)$config->get('WikvenMainSkin');
 		if ((string)$config->get('DefaultSkin') !== $mainSkin) {
 			return;
@@ -95,9 +92,7 @@ class BuildSitemap extends Maintenance {
 	/**
 	 * Whether a rendered page is one a crawler may index, read from the page itself.
 	 *
-	 * A sitemap is an invitation to index, so naming a page that answers "noindex" asks a crawler to
-	 * do what the page refuses. The page is asked rather than the configuration, __NOINDEX__
-	 * settling it a page at a time.
+	 * The page is asked rather than the configuration, __NOINDEX__ settling it a page at a time.
 	 */
 	private static function invitesIndexing(string $path): bool {
 		$html = (string)file_get_contents($path);
@@ -110,9 +105,8 @@ class BuildSitemap extends Maintenance {
 	/**
 	 * The sitemap document for a set of absolute URLs.
 	 *
-	 * Escaped rather than written in: a page name keeps every character the file cache's escaping
-	 * gave back, and "&" is one of them, so a site with a page called "Bread & butter" would
-	 * otherwise write XML nothing can parse.
+	 * Escaped rather than written in: a page name keeps every character the cache's escaping gave
+	 * back, "&" among them.
 	 *
 	 * @param string[] $urls
 	 */

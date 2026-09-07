@@ -5,21 +5,16 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * What a page is called in the output, and what a link has to say to reach it.
  *
- * The two disagreed: the file cache named "Vector_%28skin%29.html" while links were written from
- * the title as "Vector_(skin).html", and a build that exited 0 gave the reader a 404. A static
- * server url-decodes the path it asks for, so a link is not an escaped name but the url-encoding
- * of one:
- *
- *     file  = the page's name on disk, in the spelling the site asked for
- *     href  = href(file), the only string that reaches it
+ * The two disagreed: the cache named "Vector_%28skin%29.html" while links said
+ * "Vector_(skin).html", and a build that exited 0 gave a 404. A static server url-decodes the
+ * path it asks for, so a link is not an escaped name but href(name).
  */
 class OutputName {
 	/**
 	 * Names as the titles are written: "Vector_(skin).html", "File:Bakery_oven.jpg.html".
 	 *
 	 * The prettiest urls, and what this documentation site is published under. Windows cannot hold
-	 * a colon in a file name, so a site whose output directory is a Windows filesystem -- a bind
-	 * mount from Docker Desktop, say -- wants ENCODED instead.
+	 * a colon in a file name, so such a site wants ENCODED instead.
 	 */
 	public const READABLE = 'readable';
 
@@ -36,8 +31,7 @@ class OutputName {
 	 * The escapes a readable name keeps: " * ? \ -- and only those.
 	 *
 	 * The characters $wgLegalTitleChars allows that a Windows path cannot, other than ":", which
-	 * ENCODED exists to escape, and "/", which becomes a real directory either way. A page called
-	 * "What?" is rare, and "What%3F.html" still reads.
+	 * ENCODED escapes, and "/", which becomes a real directory either way.
 	 */
 	private const KEPT = ['%22', '%2A', '%3F', '%5C'];
 
@@ -54,8 +48,7 @@ class OutputName {
 	 * The spelling this build writes, falling back to readable.
 	 *
 	 * An unrecognised value reads as readable, which is what a site that said nothing would have
-	 * got; SiteConfig::lint() has already named it by then. Read from the global rather than
-	 * injected config, as BuildFor beside it is.
+	 * got; SiteConfig::lint() has already named it by then.
 	 */
 	public static function current(): string {
 		$configured = $GLOBALS['wgWikvenFileNames'] ?? self::READABLE;
@@ -79,9 +72,8 @@ class OutputName {
 	/**
 	 * The same file, worked out from the name the file cache gave it.
 	 *
-	 * rename.php reads the cache directory with no titles to hand; fillMinervaMenu.php walks it
-	 * before that pass has run. A name with no "ns<N>%3A" prefix was not written by the cache and
-	 * is left exactly as it is.
+	 * rename.php reads the cache directory with no titles to hand. A name with no "ns<N>%3A" was
+	 * not written by the cache and is left as it is.
 	 *
 	 * @param string $cacheName A base name, e.g. "ns6%3ABakery_oven%2Ejpg.html".
 	 * @param callable(int):string $namespaceText Namespace number to its text in the content language.
@@ -101,9 +93,8 @@ class OutputName {
 	/**
 	 * The link that reaches a file, which is that file's name url-encoded.
 	 *
-	 * Only "%", "?" and "#" are escaped: they would otherwise start an escape, a query and a
-	 * fragment, and everything else a name can hold is already a path character. "%" goes first,
-	 * and its own "%25" is not escaped again, so a kept "%3F" comes out as "%253F".
+	 * Only "%", "?" and "#" are escaped, and "%" first: its own "%25" is not escaped again, so a
+	 * kept "%3F" comes out as "%253F".
 	 */
 	public static function href(string $file): string {
 		return str_replace(['%', '?', '#'], ['%25', '%3F', '%23'], $file);
@@ -122,9 +113,8 @@ class OutputName {
 	/**
 	 * A namespace and an already-escaped body, in the site's spelling.
 	 *
-	 * The namespace arrives as the content language spells it and the body as the file cache left
-	 * it, so both go through one spelling here. That is what keeps a namespace whose own text is
-	 * not plain letters -- "도움말", "MediaWiki・トーク" -- from coming out half escaped under ENCODED.
+	 * The namespace arrives as the content language spells it and the body as the cache left it,
+	 * so both go through one spelling rather than coming out half escaped.
 	 */
 	private static function assemble(string $namespaceText, string $body, string $scheme): string {
 		$body = self::spell($body, $scheme);
@@ -138,9 +128,8 @@ class OutputName {
 	/**
 	 * One escaped string, written as the site spells it.
 	 *
-	 * Two escapes are undone either way: "%2E", the cache escaping every dot, without which a name
-	 * cannot end in ".html", and "%2F", the subpage separator, exported as a real directory. A
-	 * readable name gives up the rest too, but for KEPT.
+	 * Two escapes are undone either way: "%2E", without which a name cannot end in ".html", and
+	 * "%2F", the subpage separator, exported as a real directory.
 	 */
 	private static function spell(string $escaped, string $scheme): string {
 		$escaped = str_replace(['%2E', '%2F'], ['.', '/'], $escaped);

@@ -26,9 +26,8 @@ class SkinPassTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * The failure this exists for. A pass that died halfway wrote everything up to the point it
-	 * died, and under the standalone binary it returned 0 as well; the missing line is the only
-	 * thing that separates it from a pass that finished.
+	 * The failure this exists for. A pass that died halfway wrote everything up to that point and
+	 * under the standalone binary returned 0 as well; the missing line is the only difference.
 	 */
 	public function testAPassThatStoppedHalfwaySaysNothing() {
 		$output =

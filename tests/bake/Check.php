@@ -15,8 +15,7 @@ class Check {
 
 	/**
 	 * Input beyond the site itself: the source tree, the bake's logs, a second bake. Given none of
-	 * it, the runner reports the check skipped rather than passed, because a check that quietly
-	 * passes when its input is missing is the kind that stops being a check without anyone noticing.
+	 * it, the runner reports the check skipped rather than passed.
 	 *
 	 * @var string[]
 	 */

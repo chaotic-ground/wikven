@@ -5,10 +5,9 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * Where in a rendered page a reference is read by something that never saw the page.
  *
- * The body's pictures are read by a browser that already has the page, so a copy beside it resolves
- * and the export stays a directory anyone can open from disk. An og:image is read by a crawler
- * handed the tag alone. Where the shape no longer says which is which -- a foreign repository
- * answers both whole -- where the reference sits is all that still knows.
+ * The body's pictures are read by a browser that already has the page; an og:image is read by a
+ * crawler handed the tag alone. Where the shape no longer says which is which, where the
+ * reference sits is all that does.
  */
 final class HeadMetadata {
 	/** @var list<array{int, int}> Start and end offset of each span, in the page it was read from. */

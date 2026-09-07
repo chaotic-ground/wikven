@@ -65,9 +65,8 @@ class ComposerInstallTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The one this exists for. composer/installers does not CamelCase a skin, so a site listing
-	 * "Chameleon" and asking for "mediawiki/chameleon-skin" gets skins/chameleon, which on a
-	 * case-sensitive filesystem is a different directory. Nothing failed: the package installed,
-	 * the log said "skipping skin 'Chameleon'", and the site went out without its skin.
+	 * "Chameleon" gets skins/chameleon. Nothing failed: the package installed, the log said
+	 * "skipping skin 'Chameleon'", and the site went out without its skin.
 	 */
 	public function testASkinInstalledUnderAnotherNameIsNamed() {
 		$tree = $this->makeTree(['skins/chameleon'], [
@@ -151,8 +150,7 @@ class ComposerInstallTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * Composer's record is read defensively because it is not this build's file: an entry without a
-	 * name is nothing this can act on, and one without a path is a package that is installed but
-	 * nowhere this build can point at.
+	 * name is nothing this can act on, and one without a path is nowhere this can point at.
 	 */
 	public function testAnEntryWithoutANameOrAPathIsHandled() {
 		$tree = $this->makeTree([], [

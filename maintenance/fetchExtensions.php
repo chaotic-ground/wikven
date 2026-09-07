@@ -17,9 +17,8 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-// Wikven's autoloader is not active this early: making the extensions MediaWiki will load present is
-// what this script is for, so it runs before that. Loaded directly for the same reason loadConfig()
-// loads SiteConfig directly below, and both classes are dependency-free so that is all it takes.
+// Wikven's autoloader is not active this early: making the extensions MediaWiki will load
+// present is what this script is for. Loaded directly, as loadConfig() loads SiteConfig below.
 require_once __DIR__ . '/../includes/Attempts.php';
 require_once __DIR__ . '/../includes/ComposerInstall.php';
 require_once __DIR__ . '/../includes/FetchPin.php';
@@ -112,8 +111,7 @@ class FetchExtensions extends Maintenance {
 			}
 
 			// Written last: a tree stamped before its fetch finished would be taken for a good one by the
-			// next build, which is the state this is here to catch. The commit goes in with it, because a
-			// reference is not a pin: the tag it names can be moved.
+			// next build. The commit goes in with it, because a reference is not a pin.
 			$commit = isset($spec['repository'])
 				? self::gitOutput(['-C', $dest, 'rev-parse', 'HEAD'])
 				: null;
@@ -164,9 +162,7 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * Whether an existing $dest has to go before the fetch, saying either way what it decided.
 	 *
-	 * A tree fetched from this same source is the fetch already made; one with no pin was not
-	 * fetched by wikven. One fetched from a different source is a pin that moved under a build
-	 * that would otherwise keep the old code.
+	 * A tree with no pin was not fetched by wikven; one from a different source is a moved pin.
 	 */
 	private function isStale(array $spec, string $dest, string $pin, string $name, string $kind): bool {
 		$stamp = FetchPin::inside($dest);
@@ -199,8 +195,8 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * The commit the declared reference points at now, where that is not the one on disk.
 	 *
-	 * Only for a spec that names a reference: a commit is already the whole answer, and a tarball
-	 * has none to move. One `git ls-remote`, and a remote that will not answer leaves disk alone.
+	 * Only for a spec that names a reference. One `git ls-remote`, and a remote that will not
+	 * answer leaves disk alone.
 	 *
 	 * @return string|null The commit to fetch, or null where there is nothing to do.
 	 */
@@ -209,10 +205,9 @@ class FetchExtensions extends Maintenance {
 		if ($reference === '' || $commit === null || empty($spec['repository'])) {
 			return null;
 		}
-		// Both the reference and its peeled form: git matches a pattern against whole ref
-		// components, so "v4.0.2" alone never lists "refs/tags/v4.0.2^{}" -- and for an
-		// annotated tag that line is the only one carrying the commit a checkout lands on. Ask
-		// for the tag alone and every build would read the tag object as a moved reference.
+		// Both the reference and its peeled form: git matches a pattern against whole ref components, so
+		// "v4.0.2" alone never lists "refs/tags/v4.0.2^{}" -- and for an annotated tag that line is the
+		// only one carrying the commit a checkout lands on.
 		$answer = self::gitOutput([
 			'ls-remote',
 			'--',
@@ -349,8 +344,7 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * Install the composer packages a site asked for, and check each one landed where it is loaded.
 	 *
-	 * Where a package goes is composer's answer, not this file's, so it is asked afterwards rather
-	 * than assumed; ComposerInstall says why the two can differ.
+	 * Where a package goes is composer's answer, so it is asked afterwards; see ComposerInstall.
 	 *
 	 * @param string $IP MediaWiki's install directory.
 	 * @param array<string,string> $packages Package name to version constraint.
@@ -435,9 +429,8 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * How to call git, with the User-Agent it should send in front of the subcommand.
 	 *
-	 * A clone over HTTPS is wikven reaching somebody else's server, and git signs it with nothing
-	 * but its own version. http.userAgent puts git's back in front of wikven's rather than
-	 * replacing it: some proxies carry git traffic only while it looks like a git client's.
+	 * http.userAgent puts git's own string back in front of wikven's: some proxies carry git
+	 * traffic only while it looks like a git client's.
 	 *
 	 * @return string[] argv up to but not including the subcommand.
 	 */
@@ -464,8 +457,8 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * What `git $arguments` printed, or null where it could not be run or did not succeed.
 	 *
-	 * Located rather than spawned by name, as SourceHistory does: proc_open() warns of its own when
-	 * the command is not there, and a host without git is an answer this can give.
+	 * Located rather than spawned by name, as SourceHistory does: a host without git is an answer
+	 * this can give.
 	 *
 	 * @param string[] $arguments
 	 */
@@ -506,9 +499,7 @@ class FetchExtensions extends Maintenance {
 	/**
 	 * Run a command that reaches the network, giving it more than one go before the build fails.
 	 *
-	 * Used for the fetching alone. The commands around it -- git init, a checkout, an extraction --
-	 * work on what is already local, so one failure from those is a real one; see Attempts for why a
-	 * fetch is different.
+	 * The commands around it work on what is already local, so one failure from those is real.
 	 *
 	 * @param string[] $cmd
 	 * @param string $what What the command is doing, for the reports and the error.

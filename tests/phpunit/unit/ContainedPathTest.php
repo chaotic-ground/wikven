@@ -52,10 +52,9 @@ class ContainedPathTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * The failure this exists to catch. storeImages matches $wgUploadPath references in a page's
-	 * rendered HTML, and the text of a page is whatever someone wrote: "/images/../../../etc/passwd"
-	 * needs no markup to get there, since neither dots nor slashes are escaped on the way out. Left
-	 * unbounded, the file is copied into the output directory and published with the site.
+	 * The failure this exists to catch. storeImages matches $wgUploadPath references in rendered
+	 * HTML, and "/images/../../../etc/passwd" needs no markup to get there. Left unbounded, the
+	 * file is published with the site.
 	 */
 	public function testAPathThatClimbsOutOfTheDirectoryIsRefused() {
 		$this->assertNull(ContainedPath::under($this->root, '/../outside/secret.txt'));
@@ -68,10 +67,8 @@ class ContainedPathTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * A link is followed rather than refused, deliberately. Neither directory this bounds holds
-	 * anything the author of a path put there, while refusing links here would have silently
-	 * dropped the assets of a MediaWiki whose skins/ and extensions/ are symlinked, which is how
-	 * people develop against one. What a source tree can bring is refused by ImageImport.
+	 * A link is followed rather than refused, deliberately. Refusing one here would silently drop
+	 * the assets of a MediaWiki whose skins/ is symlinked, which is how people develop against one.
 	 */
 	public function testALinkIsThisDirectoryToAnswerFor() {
 		$this->assertSame("$this->root/link/secret.txt", ContainedPath::under($this->root, '/link/secret.txt'));

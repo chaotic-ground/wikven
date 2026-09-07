@@ -25,8 +25,7 @@ class BuildScripts extends Maintenance {
 
 	/**
 	 * Modules pulled in at run time rather than queued by the page that needs them, so nothing in
-	 * the rendered HTML names them and collectPageModules() cannot find them. TabberNeue loads its
-	 * arrow icons the moment it finds a tabber. Unseeded, the browser asks load.php and gets a 404.
+	 * the rendered HTML names them. Unseeded, the browser asks load.php and gets a 404.
 	 */
 	private const RUNTIME_MODULES = ['ext.tabberNeue.icons'];
 
@@ -68,9 +67,8 @@ class BuildScripts extends Maintenance {
 		// Same for the modules core decides on by looking at the rendered page rather than by
 		// queueing them, which is collapsibles and sortable tables. See LazyModules.
 		$seeds = array_merge($seeds, $this->collectLazyModules($htmlDir, $readyConfig));
-		// Same for Citizen's preferences panel (theme, font size, page width), lazy-loaded when the
-		// dropdown is first opened. Seeding it is what makes the panel work statically; unseeded it
-		// reports "Couldn't load preferences". Vue and its Codex components come along with it.
+		// Same for Citizen's preferences panel, lazy-loaded when the dropdown is first opened. Unseeded
+		// it reports "Couldn't load preferences". Vue and its Codex components come along with it.
 		$preferences = 'skins.citizen.preferences';
 		if (
 			$defaultSkin === 'citizen'
@@ -96,9 +94,8 @@ class BuildScripts extends Maintenance {
 		$bundle = $this->dump($rl, $closure, $languageCode, $defaultSkin, null, []);
 		file_put_contents("$outDir/modules-static.js", $bundle, LOCK_EX);
 
-		// Combined bundle embeds icon CSS pointing at load.php images. The bundle injects its CSS
-		// into the document, so url()s resolve against the page; inline the images as data: URIs
-		// so they load from any page depth (subpages like index/ko.html) and base path.
+		// Combined bundle embeds icon CSS pointing at load.php images. The bundle injects its CSS into
+		// the document, so inline the images as data: URIs to load from any page depth.
 		AssetLocalizer::localizeAssets(
 			$rl,
 			$outDir,
@@ -174,9 +171,8 @@ class BuildScripts extends Maintenance {
 	/**
 	 * mediawiki.page.ready's own configuration, which decides what it will go looking for.
 	 *
-	 * Core builds this in the module's config.json callback: these defaults, then the
-	 * SkinPageReadyConfig hook, which is where a skin turns a feature off. Read here rather than
-	 * assumed, so a site that switches one off gets the same answer from a bake as from a wiki.
+	 * Read rather than assumed, so a site that switches a feature off gets the same answer from a
+	 * bake as from a wiki.
 	 */
 	private function readyConfig(ResourceLoader $rl, string $lang, string $skin): array {
 		$query = ResourceLoader::makeLoaderQuery([], $lang, $skin, null, null, Context::DEBUG_OFF, null);
@@ -198,9 +194,8 @@ class BuildScripts extends Maintenance {
 	/**
 	 * The lazy modules any rendered page needs, from the same pass over the same HTML.
 	 *
-	 * Top-level pages only, as collectPageModules() reads them: a translation is rendered from the
-	 * source page's wikitext, so a collapsible on one is a collapsible on the other. Scanning
-	 * deeper would also reach the per-skin copies.
+	 * Top-level pages only: a translation is rendered from the source page's wikitext, and scanning
+	 * deeper would reach the per-skin copies.
 	 *
 	 * @return string[]
 	 */

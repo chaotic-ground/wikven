@@ -5,13 +5,9 @@ namespace MediaWiki\Extension\Wikven\PageTranslation;
 /**
  * What `translate check` found, written for the person who wrote the translation.
  *
- * The check's own output is GitHub Actions annotations, the right shape for someone reading a diff
- * and the wrong one for someone meeting this workflow: "Stale translation unit T:3 (ko)" does not
- * say what a stamp is or which command writes one. So the findings are also gathered into one
- * comment, grouped by what went wrong.
- *
- * Every word of it is a message in i18n/, reached through a callable so the comment can be tested
- * without a wiki.
+ * The check's own output is GitHub Actions annotations, the right shape for someone reading a
+ * diff and the wrong one for someone meeting this workflow. Every word here is a message in
+ * i18n/, reached through a callable so the comment can be tested without a wiki.
  */
 class TranslationAdvice {
 	/**
@@ -31,11 +27,10 @@ class TranslationAdvice {
 	private const SEPARATOR = "\n---\n\n";
 
 	/**
-	 * The kinds of finding, in the order they are shown: the ones that stop a page being translated
-	 * at all first, then the ones about a translation of a page that is otherwise fine.
+	 * The kinds of finding, in the order shown: the ones that stop a page being translated at all
+	 * first, then the ones about a translation that is merely behind.
 	 *
-	 * Each names two messages, a heading and the advice under it. The advice names the command,
-	 * because the command is the part a contributor cannot guess.
+	 * Each names a heading and the advice under it.
 	 */
 	private const KINDS = [
 		'parse',
@@ -81,9 +76,8 @@ class TranslationAdvice {
 	/**
 	 * The same advice, but only about the paths a change touches.
 	 *
-	 * A page waiting for a translation since long before this change is not this contributor's to
-	 * answer. A translation counts as touched when its own file was, and when its source page was:
-	 * editing an English page is what makes its translations stale.
+	 * A translation counts as touched when its own file was, and when its source page was: editing
+	 * an English page is what makes its translations stale.
 	 *
 	 * @param list<string> $paths As the findings name their files: repo-relative, in the same
 	 *   shape --path-prefix produces.
@@ -98,8 +92,7 @@ class TranslationAdvice {
 	 * The comment for a run that found something, or null for one that found nothing.
 	 *
 	 * A finding carries a kind and a file, then whichever of source, unit, lang, line and detail
-	 * its kind has to say. Written as a plain string map rather than as the shape, which no longer
-	 * fits on a line the coding standard will take.
+	 * its kind has to say.
 	 *
 	 * @param list<array<string,string>> $findings
 	 * @param list<string> $languages Rendered once each, in this order.
@@ -122,9 +115,8 @@ class TranslationAdvice {
 	/**
 	 * The body of a run that found nothing, which is how a consumer tells that from a finding.
 	 *
-	 * CLEAR_MARKER on its own line is what says so; what to do about it is the consumer's to
-	 * decide. wikven's own action deletes the comment it left before; the prose below is for a
-	 * consumer that keeps its comment.
+	 * CLEAR_MARKER on its own line is what says so; the prose below is for a consumer that keeps
+	 * its comment.
 	 *
 	 * @param list<string> $languages
 	 */
@@ -149,7 +141,7 @@ class TranslationAdvice {
 	 * One rendering per language, minus any that came out the same as one already there.
 	 *
 	 * A language with no translation of these messages falls back to English and would otherwise
-	 * say everything twice, which reads as a bug rather than as the honest "not translated yet".
+	 * say everything twice.
 	 *
 	 * @param list<string> $languages
 	 * @param callable(string):string $render

@@ -5,21 +5,16 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * Where composer put the packages a site asked for, and whether that is where the build looks.
  *
- * A name in a site's extensions: or skins: list is a directory name, and WikvenSettings.php turns
- * it straight into a path under $IP. A composer package names its own directory instead, and the
+ * A name in a site's list is a directory name; a composer package names its own directory, and the
  * two need not agree: an extension is CamelCased, a skin is not, and a package declaring neither
  * type lands in vendor/.
- *
- * So a site listing "Chameleon" and asking for "mediawiki/chameleon-skin" got skins/chameleon and
- * went out without its skin.
  */
 class ComposerInstall {
 	/**
 	 * Where composer put each package it installed, keyed by package name.
 	 *
-	 * Read from composer's own record rather than worked out from the package name, because the
-	 * directory depends on the type the package declares as much as on what it is called, and only
-	 * the package knows its type.
+	 * Read from composer's own record: the directory depends on the type the package declares, and
+	 * only the package knows its type.
 	 *
 	 * @param string $installPath MediaWiki's install directory ($IP).
 	 * @return array<string,array{version:string,path:string}> Absolute paths, by package name; a
@@ -92,9 +87,8 @@ class ComposerInstall {
 	/**
 	 * What the site could write instead, where there is something worth writing.
 	 *
-	 * Only a package composer put directly under extensions/ or skins/ has a name to offer: one
-	 * that landed in vendor/ declared neither MediaWiki type. A package that landed in the other of
-	 * the two is a component listed as the wrong kind.
+	 * Only a package composer put under extensions/ or skins/ has a name to offer: one that landed
+	 * in vendor/ declared neither type.
 	 *
 	 * @param string $installPath MediaWiki's install directory ($IP).
 	 * @param string $kind 'extension' or 'skin', as the site listed it.
@@ -117,9 +111,8 @@ class ComposerInstall {
 	/**
 	 * Whether a version constraint names one release and no other.
 	 *
-	 * A tarball is pinned by its sha256 and a repository by its commit; for a package the pin is an
-	 * exact version, and anything looser takes whatever the registry serves that day. That is a
-	 * bargain a site may make, so this only decides whether the build says so.
+	 * A tarball is pinned by its sha256 and a package by an exact version. Anything looser is a
+	 * bargain a site may make.
 	 *
 	 * @param string $constraint What follows the colon in "vendor/name:constraint", or "*".
 	 */

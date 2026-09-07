@@ -15,12 +15,9 @@ require_once "$IP/maintenance/Maintenance.php";
 /**
  * Rewrite one translation's marker stamps (@hash) to the current source unit hashes.
  *
- * A stamp is not a fact the tool can work out: it records that whoever wrote the translation wrote
- * it against this version of the source. Translate keeps that record when a translator saves
- * through the wiki, and a file arriving as a commit never passes through there.
- *
- * So this takes one file and has no sweep: a sweep would be that assertion made about pages nobody
- * opened.
+ * A stamp is not a fact the tool can work out: it records that whoever wrote the translation
+ * wrote it against this version of the source, and a file arriving as a commit never passes
+ * through the wiki. So this takes one file and has no sweep.
  */
 class StampTranslations extends Maintenance {
 	public function __construct() {

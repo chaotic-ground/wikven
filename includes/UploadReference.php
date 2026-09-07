@@ -3,15 +3,13 @@
 namespace MediaWiki\Extension\Wikven;
 
 /**
- * What a rendered page says about a picture it shows, and what the export should say instead.
+ * What a page says about a picture, and what the export should say instead.
  *
  * Every picture is copied into the asset directory under a content-addressed name, so every
- * reference moves with it: a stored file is named under $wgUploadPath, a hotlinked one at its
- * repository's host.
+ * reference moves with it.
  *
- * A page spells the same URL two ways. Root-relative in the body and whole in head metadata, where
- * whole means something reads it away from the page; a foreign repository answers both whole, so
- * HeadMetadata is asked where it sits.
+ * A page spells the same URL two ways: root-relative in the body, whole in head metadata. A
+ * foreign repository answers both whole, so HeadMetadata is asked instead.
  */
 final class UploadReference {
 	/** A slash as a page can spell it: bare in an attribute, backslash-escaped inside JSON. */
@@ -39,8 +37,7 @@ final class UploadReference {
 	 */
 	public static function stored(string $uploadPath, SiteUrl $siteUrl): self {
 		// Neither the host nor the path may hold "<" or ">". {{filepath:}} writes its URL into an
-		// autolink's text as well as into the href, and nothing quotes the text, so a path that
-		// admits them eats the "</a>" after it and the build aborts over a file nobody can find.
+		// autolink's text as well as the href, so a path admitting them eats the "</a>" after it.
 		$slash = self::SLASH;
 		$host = '(?<host>(?:https?:)?' . $slash . $slash . '[^/\s"\\\\<>]+)?';
 		$upload = str_replace('/', $slash, preg_quote($uploadPath, '~'));
@@ -53,9 +50,8 @@ final class UploadReference {
 	/**
 	 * References to pictures a foreign repository serves, which the page names at that host.
 	 *
-	 * No "host" group: every one of these carries one, so it would say "whole" about the body's
-	 * pictures as loudly as about the head's. The query is kept, unlike a stored picture's, because
-	 * a thumbnailer answers the URL it was given.
+	 * No "host" group: every one of these carries one. The query is kept, unlike a stored
+	 * picture's, because a thumbnailer answers the URL it was given.
 	 *
 	 * @param string $host The repository's file host, e.g. "upload.wikimedia.org".
 	 * @param SiteUrl $siteUrl Where the export is published, if the site has said.

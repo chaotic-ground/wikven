@@ -56,10 +56,8 @@ class IndexerTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * Built the way MediaWiki builds it, the handler asks Translate rather than a stand-in. Neither
-	 * answer may cost a page its place: where Translate is absent the lookup says so and stops, and
-	 * where it is installed, a page nobody marked for translation is not a translation page.
-	 *
-	 * Both answers are reached, because the jobs differ in what they install.
+	 * answer may cost a page its place, and both are reached, the jobs differing in what they
+	 * install.
 	 */
 	public function testTheHandlerAsBuiltLeavesAnUnmarkedPageAlone() {
 		$index = true;

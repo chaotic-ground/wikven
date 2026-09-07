@@ -40,10 +40,8 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * A caller that asked for a whole URL gets one. getFullURL() runs its own hook after
-	 * expanding what getLocalURL() returned, so the answer is recomputed from the same title
-	 * rather than recovered from "./Getting_Started.html", which expand() reads as a bare path
-	 * and hands back without a host.
+	 * A caller that asked for a whole URL gets one. getFullURL() runs its own hook after expanding
+	 * getLocalURL()'s answer, which expand() reads as a bare path and hands back without a host.
 	 */
 	public function testAWholeUrlIsWhole() {
 		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
@@ -105,9 +103,8 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * A diff goes where the history goes. The export holds one revision of a page, so what changed
-	 * is only in the repository: Citizen's "last modified" button asks for the latest diff, with a
-	 * "diff" parameter carrying no value, and would otherwise resolve to the page it is already on.
+	 * A diff goes where the history goes. Citizen's "last modified" button asks for the latest
+	 * diff, with a "diff" parameter carrying no value, and would resolve to the page it is on.
 	 *
 	 * @dataProvider provideDiffQueries
 	 */
@@ -178,8 +175,7 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * A Special:MyLanguage link is written canonically, not in this wiki's own words for it.
 	 *
-	 * The link is not a link to a file but the marker resolveTranslationLinks.php reads, and a
-	 * marker matched by one spelling has to be written in one -- otherwise a Korean wiki writes
+	 * A marker matched by one spelling has to be written in one -- otherwise a Korean wiki writes
 	 * "특수:MyLanguage/..." and that pass walks past it.
 	 */
 	public function testSpecialMyLanguageIsMarkedCanonicallyInAnotherContentLanguage() {
@@ -199,8 +195,7 @@ class MainTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * So does one capitalised differently, which is the same fault on an English wiki: MediaWiki
-	 * matches a special page's name however it was typed, so "Special:Mylanguage/X" is that page as
-	 * surely as "Special:MyLanguage/X" and has to reach the pass as the same marker.
+	 * matches a special page's name however it was typed.
 	 */
 	public function testSpecialMyLanguageIsMarkedCanonicallyFromAnotherCapitalisation() {
 		$url = '/x';
@@ -217,8 +212,7 @@ class MainTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * The "View source" tab points at the page's source file, and in Citizen it brings an icon: the
-	 * skin renders the page actions as icon buttons and drops their labels below desktop width, so
-	 * a tab it has no icon for is a blank box. Its icon map is keyed by core's names.
+	 * skin drops tab labels below desktop width, so a tab with no icon is a blank box.
 	 */
 	public function testViewSourceTabCarriesCitizensIcon() {
 		$dir = $this->getNewTempDirectory();
@@ -258,9 +252,8 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * A skin preview gets no tab of wikven's own.
 	 *
-	 * The row of page actions is the skin's layout, and a skin author baking pages to look at it
-	 * has not asked for an extra tab in it. Everything this class does to make the output work as
-	 * files is untouched, so there is still a preview to look at.
+	 * The row of page actions is the skin's layout, and everything that makes the output work as
+	 * files is untouched.
 	 */
 	public function testASkinPreviewGetsNoTabOfOurOwn() {
 		$dir = $this->getNewTempDirectory();

@@ -3,14 +3,11 @@
 namespace MediaWiki\Extension\Wikven;
 
 /**
- * The modules MediaWiki loads by looking at a rendered page, decided here instead of in a browser.
+ * The modules MediaWiki loads by looking at a rendered page, decided here rather than in a browser.
  *
- * Core queues most of a page's JavaScript while rendering it, and the build reads that queue out of
- * the HTML. Two are not: mediawiki.page.ready waits until the page is in a browser, looks for
- * .mw-collapsible and table.sortable, and asks load.php for what it finds.
- *
- * An export has no load.php, so the feature is silently absent (#483). The decision itself is kept;
- * only its timing moves.
+ * Core queues most of a page's JavaScript while rendering, and the build reads that queue out of
+ * the HTML. mediawiki.page.ready instead waits for a browser and asks load.php, which an export
+ * has none of, so the feature was silently absent (#483).
  */
 class LazyModules {
 	/**
@@ -44,8 +41,7 @@ class LazyModules {
 	/**
 	 * Whether the HTML carries an element with this class, optionally only on one tag.
 	 *
-	 * Read off the markup rather than parsed, the caller having one string per page. The class is
-	 * matched as a whole token, so "mw-collapsible" does not answer for "mw-collapsible-content".
+	 * Matched as a whole token, so "mw-collapsible" does not answer for "mw-collapsible-content".
 	 *
 	 * @param string $html
 	 * @param string $class The class to look for.

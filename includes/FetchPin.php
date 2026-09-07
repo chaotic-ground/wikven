@@ -6,16 +6,15 @@ namespace MediaWiki\Extension\Wikven;
  * What a fetched extension or skin was fetched from, written next to it so the next build can tell.
  *
  * fetchExtensions skips any directory already there, which is wrong where the tree came from
- * somewhere else: move a pin to a new tag, build again in a tree that survives, and the old
- * checkout stays. So a fetched tree carries a line naming what fetched it, and the next build
+ * somewhere else. So a fetched tree carries a line naming what fetched it, and the next build
  * compares; a tree with no line is left as found.
  */
 class FetchPin {
 	/**
 	 * The file a fetched tree carries, inside the tree so it cannot outlive it.
 	 *
-	 * Named for what it is rather than hidden away in a state directory: someone reading the
-	 * extension folder to work out where its code came from should find the answer in it.
+	 * Named for what it is rather than hidden in a state directory: someone reading the extension
+	 * folder should find the answer in it.
 	 */
 	public const FILE = '.wikven-fetch.json';
 
@@ -25,9 +24,8 @@ class FetchPin {
 	/**
 	 * What a source spec fetches, as one line: the same source is the same line.
 	 *
-	 * Keys and values rather than JSON, because the line is written into the tree it fetched and
-	 * the first thing anyone does with a file like that is read it. The hex pins are lowercased, as
-	 * the validators lowercase them.
+	 * Keys and values rather than JSON, because the first thing anyone does with such a file is
+	 * read it.
 	 *
 	 * @param array $spec One WikvenRepositories entry.
 	 */
@@ -54,9 +52,7 @@ class FetchPin {
 	/**
 	 * What fetched $directory: the source, and the commit it landed on where there was one.
 	 *
-	 * Null where nothing wikven fetched put the tree there, which includes a file written by a
-	 * version of this that has since changed shape: an unreadable stamp is no answer, and the
-	 * tree it sits in is somebody else's to keep.
+	 * Null where nothing wikven fetched put the tree there, an unreadable stamp included.
 	 *
 	 * @return array{source:string,commit:?string}|null
 	 */
@@ -85,8 +81,8 @@ class FetchPin {
 	/**
 	 * The commit a `git ls-remote` answer points $reference at, or null if it said nothing.
 	 *
-	 * An annotated tag is listed twice, as the tag object and again as the commit it wraps with
-	 * a ^{} suffix; the commit is the one to keep, since that is what a checkout ends up on.
+	 * An annotated tag is listed twice, the second with a ^{} suffix carrying the commit a checkout
+	 * ends up on.
 	 */
 	public static function pointedAt(string $lsRemote): ?string {
 		$found = null;

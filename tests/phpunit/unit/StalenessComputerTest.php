@@ -40,9 +40,8 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testMarkDoesNotHandOutANumberATranslationStillCarries() {
-		// The highest-numbered unit has been deleted and a new one written where it stood. Its number
-		// is not free while a translation still answers to it: giving it to the new unit would hand
-		// that unit the deleted one's translations, which then read as merely stale.
+		// The highest-numbered unit has been deleted and a new one written where it stood. Its number is
+		// not free: giving it to the new unit would hand that unit the deleted one's translations.
 		$this->assertSame(
 			"<translate>\n<!--T:1-->\nAlpha.\n\n<!--T:3-->\nGamma.\n</translate>",
 			StalenessComputer::mark(
@@ -233,10 +232,8 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testNowikiInsideABlockHidesNothing() {
-		// parse() unarmours a block's contents before segmenting them, so <nowiki> shelters a marker
-		// from the block scan but not from the unit it lands in. One segment is one unit however many
-		// markers it holds, and Translate refuses this one outright (pt-shake-multiple), which the
-		// check reports on its own.
+		// parse() unarmours a block's contents before segmenting them, so <nowiki> shelters a marker from
+		// the block scan but not from the unit it lands in. Translate refuses this one outright.
 		$text = "<translate>\n<!--T:1-->\nUse <nowiki><!--T:9--></nowiki> here.\n</translate>";
 		$units = StalenessComputer::sourceUnits($text);
 		$this->assertSame([1], array_keys($units));
@@ -424,17 +421,15 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testACommentMerelyMentioningAVerbatimTagDoesNotSwallowLaterUnits() {
-		// An HTML comment is inert to MediaWiki's parser, so a tag name it merely mentions -- as a
-		// reviewer note might -- must not read as a real, unclosed opener; that would otherwise run
-		// to the end of the page and hide every later unit.
+		// An HTML comment is inert to MediaWiki's parser, so a tag name it merely mentions must not read
+		// as a real, unclosed opener; that would run to the end of the page and hide every later unit.
 		$text = "<!--T:1-->\n하나.\n<!-- reviewer: do not wrap this in <nowiki> -->\n<!--T:2-->\n둘.";
 		$this->assertSame([1, 2], array_keys(StalenessComputer::translationUnits($text)));
 	}
 
 	/**
-	 * The defect: "translate scaffold ko --all" appended markers to whatever sat at the translation's
-	 * path, so a page of its own named for a language became a translation of its parent and went
-	 * missing from the next build with nothing said.
+	 * The defect: "translate scaffold ko --all" appended markers to whatever sat at the path, so a
+	 * page of its own named for a language became a translation of its parent.
 	 *
 	 * @dataProvider provideIsScaffoldable
 	 */
@@ -456,9 +451,8 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * A <translate> tag in a translation, which is the shape docs/Skins/ko.wikitext shipped in: the
-	 * tags copied from the source page around a code block the source keeps outside them. Two
-	 * paragraphs of the published Korean page were in English because of it.
+	 * A <translate> tag in a translation, which is the shape docs/Skins/ko.wikitext shipped in.
+	 * Two paragraphs of the published Korean page were in English because of it.
 	 *
 	 * @dataProvider provideStrayTranslateTags
 	 */

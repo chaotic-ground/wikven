@@ -14,10 +14,8 @@ use Throwable;
  * Locates translatable source pages and their translations by wikven's naming convention.
  *
  * A base page "<Page>.wikitext" that wraps content in <translate> is translatable; its
- * translations live at "<Page>/<lang>.wikitext" for any known language code, and carry that base
- * page's <!--T:n--> unit markers. Which languages exist is discovered from the files present, not
- * declared. Shared by checkTranslations (CI) and buildTranslations (materialize) so both agree on
- * what is a base and what is a translation.
+ * translations live at "<Page>/<lang>.wikitext" and carry that page's <!--T:n--> unit markers.
+ * Which languages exist is discovered from the files present, not declared.
  */
 class TranslationSource {
 	/** A translate tag of either half, as Translate's own containsMarkup() looks for one. */
@@ -28,25 +26,24 @@ class TranslationSource {
 
 	/**
 	 * Tags whose contents MediaWiki hands over unparsed, so a magic word inside one never runs.
-	 * <pre> and <nowiki> always; <syntaxhighlight> and <source> only where that extension is loaded,
-	 * which is the common case and the one wikven's own docs run under.
+	 * <pre> and <nowiki> always; <syntaxhighlight> and <source> only where that extension is
+	 * loaded, which is the case wikven's own docs run under.
 	 */
 	private const UNEXPANDED_TAGS = ['syntaxhighlight', 'source', 'nowiki', 'pre'];
 
 	/** Whether a page's wikitext marks it as translatable (a real <translate>, not one shown as an example). */
 	public static function isTranslatable(string $text): bool {
-		// Translate's parser hook runs on raw wikitext, before any extension tag is stripped, so a
-		// <translate> shown in a <syntaxhighlight> is one it parses. Only <nowiki> hides a tag from it.
-		// A placeholder rather than an empty string: removing the span could splice "</" onto "translate>".
+		// Translate's parser hook runs on raw wikitext, before any extension tag is stripped, so only
+		// <nowiki> hides a tag from it. A placeholder rather than an empty string: removing the span
+		// could splice "</" onto "translate>".
 		return preg_match(self::TRANSLATE_TAG, preg_replace(self::ARMOURED_NOWIKI, "\x7f", $text)) === 1;
 	}
 
 	/**
 	 * The source text of a page's title translation unit, or null when its title is not translatable.
 	 *
-	 * The unit's source text is the page's own title, as Translate synthesizes its "Page display
-	 * title" unit. A page setting {{DISPLAYTITLE:}} itself is excluded: that word sits outside
-	 * <translate>, so it is copied into every translation and fixes one title for every language.
+	 * A page setting {{DISPLAYTITLE:}} itself is excluded: that word sits outside <translate> and
+	 * fixes one title for every language.
 	 *
 	 * @param string $baseFile Absolute path of the base page's source file.
 	 * @param string $sourceDir Source directory the file lives under; the title is relative to it.
@@ -110,9 +107,8 @@ class TranslationSource {
 	/**
 	 * Whether an absolute path is a translation file.
 	 *
-	 * True when it is named "<lang>.wikitext" for a known language, its sibling base page is
-	 * translatable, and it carries <!--T:n--> unit markers. The markers settle it: hundreds of
-	 * language codes are also English words, so the name alone had "API/id" read as Indonesian.
+	 * Named "<lang>.wikitext" for a known language, sibling to a translatable base page, and
+	 * carrying unit markers -- which settle it, "API/id" having been read as Indonesian.
 	 *
 	 * @param string $absolutePath
 	 * @param callable(string):bool $isKnownLanguage
@@ -152,9 +148,7 @@ class TranslationSource {
 	/**
 	 * Subpages that a language code names but that are read as pages of their own, keyed by code.
 	 *
-	 * Named for a language, sitting under a translatable page, and carrying no unit marker. That
-	 * reading is usually right -- "API/id" is about identifiers, not Indonesian -- and when it is
-	 * not, this is what lets checkTranslations say so.
+	 * Named for a language, under a translatable page, and carrying no unit marker.
 	 *
 	 * @param string $baseFile
 	 * @param callable(string):bool $isKnownLanguage
@@ -184,9 +178,8 @@ class TranslationSource {
 			return [];
 		}
 		$found = [];
-		// The directory name comes from a page title, and *, ? and [ are legal there; a glob pattern
-		// built from it would expand them in every path component, so "C*-algebra" would also match the
-		// translations of "Clifford-algebra" and import their units into the wrong page.
+		// The directory name comes from a page title, and *, ? and [ are legal there; a glob built from
+		// it would expand them, so "C*-algebra" would also match "Clifford-algebra".
 		foreach (new FilesystemIterator($directory, FilesystemIterator::SKIP_DOTS) as $file) {
 			if (!$file->isFile() || $file->getExtension() !== 'wikitext') {
 				continue;
@@ -202,9 +195,8 @@ class TranslationSource {
 	/**
 	 * The translation files a base page has, keyed by the language each is written in.
 	 *
-	 * By the paths they were found at rather than rebuilt from the page title: a title has been
-	 * through MediaWiki's normalization and no longer spells the file it came from
-	 * ("Getting_Started.wikitext" imports as "Getting Started").
+	 * By the paths they were found at rather than rebuilt from the page title, which has been
+	 * through normalization ("Getting_Started.wikitext" imports as "Getting Started").
 	 *
 	 * @param string $baseFile
 	 * @param callable(string):bool $isKnownLanguage
@@ -221,8 +213,8 @@ class TranslationSource {
 	/**
 	 * Every language the source tree carries a translation in.
 	 *
-	 * The languages a site is built in are the ones its pages have translations for. Read from the
-	 * files because there is no setting to read: a second list would be one to fall out of step.
+	 * Read from the files because there is no setting to read: a second list would be one to fall
+	 * out of step.
 	 *
 	 * @param string $sourceDir
 	 * @param callable(string):bool $isKnownLanguage
@@ -242,9 +234,8 @@ class TranslationSource {
 	/**
 	 * Every translatable base page under a source directory.
 	 *
-	 * A translation is never one, whatever it holds. A <translate> it quotes is real to Translate as
-	 * much as to wikven, so nothing downstream would object to "<Page>/<lang>" being marked as a page
-	 * in its own right; the unit markers it carries are what say it is not (see isTranslationFile).
+	 * A translation is never one, whatever it holds: a <translate> it quotes is real to Translate
+	 * too, and the unit markers are what say it is not (see isTranslationFile).
 	 *
 	 * @param string $sourceDir
 	 * @param callable(string):bool $isKnownLanguage

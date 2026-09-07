@@ -7,17 +7,14 @@
  *     php tests/comments/assert-comments.php --github includes maintenance tests
  *
  * Measured against MediaWiki core and its bundled extensions, wikven's comments were never too
- * many -- 7.3 blocks per 100 lines of code, against 5.2 in core's includes/ and 9.8 in Cite -- but
- * they were three to five times too long: a class docblock ran to 473 words where core's ninetieth
- * percentile is 46, so a reader after the one sentence saying why a line is there had to read an
- * essay to find it (#678).
+ * many -- 7.3 blocks per 100 lines of code, against 5.2 in core's includes/ -- but they were three
+ * to five times too long: a class docblock ran to 473 words where core's ninetieth percentile is
+ * 46 (#678, #680).
  *
  * So the budget is per comment rather than per file, with a whole-tree ratio behind it. Budget.php
  * holds both and says why they are where they are.
  *
  * --github additionally emits a ::error:: workflow command per problem.
- *
- * Plain PHP, and no MediaWiki: reading source files needs only the tokenizer PHP already ships.
  */
 
 namespace MediaWiki\Extension\Wikven\Comments;

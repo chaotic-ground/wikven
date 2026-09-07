@@ -90,10 +90,8 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * A page reaches its translations by the paths they were found at, because a page title cannot
-	 * be turned back into one: "Getting_Started.wikitext" imports as "Getting Started", and a path
-	 * rebuilt from that title points at a directory the source tree does not have, so the build
-	 * would find no Korean to load and say nothing about it.
+	 * A page reaches its translations by the paths they were found at, a title not turning back
+	 * into one: "Getting_Started.wikitext" imports as "Getting Started".
 	 */
 	public function testATranslationIsFoundAtThePathItsLanguageWasDiscoveredAt() {
 		$dir = $this->getNewTempDirectory();
@@ -115,9 +113,8 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * Hundreds of language codes are also ordinary English words -- "id", "no", "is", "it" -- so a
-	 * name alone had a translatable page's "API/id" subpage read as an Indonesian translation, and
-	 * the page went missing with nothing said. A page written to stand on its own has no reason to
-	 * carry a source page's unit numbers.
+	 * name alone had "API/id" read as an Indonesian translation and the page went missing with
+	 * nothing said.
 	 */
 	public function testASubpageNamedForALanguageIsAPageOfItsOwnWithoutMarkers() {
 		$dir = $this->getNewTempDirectory();
@@ -159,8 +156,8 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * The cost the marker rule carries, kept in view: a translation written by hand, without
-	 * running translate scaffold, is imported as an ordinary subpage. It is visible in the built
-	 * site under its own name rather than lost, and translate check says so.
+	 * running translate scaffold, is imported as an ordinary subpage. It is visible under its own
+	 * name rather than lost.
 	 */
 	public function testAnUnmarkedTranslationIsImportedUnderItsOwnName() {
 		$dir = $this->getNewTempDirectory();

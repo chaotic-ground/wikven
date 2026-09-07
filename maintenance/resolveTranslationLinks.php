@@ -16,12 +16,11 @@ require_once "$IP/maintenance/Maintenance.php";
  * Resolve Translate's Special:MyLanguage/ links in the exported HTML.
  *
  * Translation pages are parsed in the source-page context, so the page language is not known at
- * render time; the exported path is. This runs after Rename, over the final tree: it reads each
- * file's language from its path, then rewrites every "Special:MyLanguage/Target" link to the
- * target's translation in that language when it exists.
+ * render time; the exported path is. This runs after Rename, reading each file's language from
+ * its path.
  *
- * "The final tree" is this pass's own pages, the walk going through SkinOutput: a link in
- * dist/citizen/Foo/ko.html must not be decided by whether dist/Foo/ko.html exists.
+ * The walk goes through SkinOutput: a link in dist/citizen/Foo/ko.html must not be decided by
+ * whether dist/Foo/ko.html exists.
  */
 class ResolveTranslationLinks extends Maintenance {
 	public function __construct() {

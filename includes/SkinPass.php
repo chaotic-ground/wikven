@@ -5,10 +5,9 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * What a skin pass says when it has finished, and how the build reads that back.
  *
- * What a pass exits with cannot be trusted here: an uncaught PHP Error reaches MediaWiki's handler,
- * whose guard is a shutdown function calling exit(255), and the standalone binary drops a code set
- * from one. So a pass that died halfway through returned 0, and a build reported success over an
- * export of 15 pages out of 222. A line a pass can only write at the end of its own work cannot.
+ * An uncaught Error reaches MediaWiki's handler, whose guard is a shutdown function calling
+ * exit(255), and the standalone binary drops a code set from one. So a pass that died halfway
+ * returned 0, over an export of 15 pages out of 222.
  */
 class SkinPass {
 	private const WROTE = 'Wikven: this pass wrote';
@@ -25,10 +24,10 @@ class SkinPass {
 	}
 
 	/**
-	 * What is wrong with a set of finished passes, said in the words a build stops on.
+	 * What is wrong with a set of finished passes.
 	 *
-	 * Three questions, and the second is the one this class exists for: did the pass return
-	 * success, did it say it finished, and do the passes agree on how much of the site there is.
+	 * Three questions, and the second is why this class exists: did the pass return success, did it
+	 * say it finished, and do the passes agree on how much there is.
 	 *
 	 * @param array<string,array{exit:int,output:string}> $passes Skin name to what it returned and said.
 	 * @return string[] Empty where every pass finished and they agree.

@@ -75,8 +75,7 @@ class Build extends Maintenance {
 		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
 		$this->runJobs("$ip/maintenance/runJobs.php");
 		// Categories are written by the links update each edit queues, which runJobs above runs, so
-		// this is the first point they are known -- and it is before the passes, so a site with a
-		// fault in it is told before three skins render it.
+		// this is the first point they are known -- and it is before the passes.
 		$this->assertNamedCategoriesAreEmpty();
 		// Every page the export will hold now exists and nothing writes another revision after
 		// this, so this is where each page can be told when it was last edited, and by whom.
@@ -101,9 +100,8 @@ class Build extends Maintenance {
 	/**
 	 * Say that a skin preview is experimental, once, before the work starts.
 	 *
-	 * Not unfinished: a skin is written against several MediaWiki releases and this renders on the
-	 * one the build carries, which is less than a skin author needs and more than this project can
-	 * widen. From the orchestrating pass, so it is said once and not per skin.
+	 * Not unfinished: this renders on the MediaWiki the build carries and says nothing about the
+	 * others. From the orchestrating pass, so it is said once.
 	 */
 	private function announceSkinPreview(): void {
 		if (!BuildFor::skinPreview()) {
@@ -120,7 +118,7 @@ class Build extends Maintenance {
 	 * Say what this site's Lua and this build's Lua make of each other; see Scribunto.
 	 *
 	 * Only one of the two ends the build, and it is the one the site asked for: Scribunto listed
-	 * where nothing can run it. The other is a remark about Module: files nobody asked to run.
+	 * where nothing can run it.
 	 */
 	private function checkLuaAgainstThisBuild(): void {
 		$source = rtrim((string)$this->getConfig()->get('WikvenSourceDirectory'), '/');
@@ -141,9 +139,8 @@ class Build extends Maintenance {
 	/**
 	 * Every file under the source directory, relative to it.
 	 *
-	 * Not ImportWikitext's list, which SourceFile::isPageFile() filters by asking MediaWiki for the
-	 * content model -- so with Scribunto absent a module file is not a page file, and would be
-	 * missing from exactly the case worth catching.
+	 * Not ImportWikitext's list, which is filtered by content model -- so with Scribunto absent a
+	 * module file would be missing from exactly the case worth catching.
 	 *
 	 * @return string[]
 	 */
@@ -190,9 +187,8 @@ class Build extends Maintenance {
 	/**
 	 * Whether the lua binary Scribunto carries can run here.
 	 *
-	 * Existing is not enough, which is why this runs it. None of the five binaries Scribunto
-	 * bundles is arm64, and LuaStandaloneInterpreter picks by PHP_OS and PHP_INT_SIZE, so on arm it
-	 * selects the x86-64 one and finds out when the process will not start.
+	 * Existing is not enough: none of the five Scribunto bundles is arm64, and it picks among them
+	 * by PHP_OS and PHP_INT_SIZE, so on arm it selects the x86-64 one.
 	 */
 	private static function bundledLuaRuns(): bool {
 		$lua =
@@ -209,9 +205,8 @@ class Build extends Maintenance {
 	/**
 	 * Run the queue one type at a time, in name order: the runner otherwise shuffles the types.
 	 *
-	 * The search index is held back to the end. SifterSearch enqueues a rebuild per revision
-	 * inserted and each pass of the queue picks up whichever arrived since, so a bake was running
-	 * Pagefind 21 times.
+	 * The search index is held back to the end: SifterSearch enqueues a rebuild per revision, so a
+	 * bake was running Pagefind 21 times.
 	 */
 	private function runJobs(string $file): void {
 		$group = $this->getServiceContainer()->getJobQueueGroup();
@@ -241,9 +236,8 @@ class Build extends Maintenance {
 	 * Date every page at the commit that last changed the file it was written from, and credit
 	 * that commit's author.
 	 *
-	 * Every revision here is written by the build, so the "last edited" line reported whichever
-	 * landed last; the file's mtime gave the moment CI cloned the repository, the one date
-	 * SOURCE_DATE_EPOCH could not freeze (#406).
+	 * The file's mtime gave the moment CI cloned the repository -- the one date SOURCE_DATE_EPOCH
+	 * could not freeze (#406).
 	 */
 	private function stampSourceHistory(): void {
 		$config = $this->getConfig();
@@ -291,9 +285,8 @@ class Build extends Maintenance {
 	 * What the history says about the file a page was written from, or null for a page the build
 	 * wrote itself.
 	 *
-	 * SourceFile's naming convention answers which file that is: "Skins" came from
-	 * "Skins.wikitext", "Skins/ko" from "Skins/ko.wikitext". The one page with no file of its own
-	 * is the source-language page Translate adds.
+	 * SourceFile's naming convention answers which file that is. The one page without one is the
+	 * source-language page Translate adds.
 	 *
 	 * @return ?array{timestamp:int,authors:string[]}
 	 */
@@ -316,9 +309,8 @@ class Build extends Maintenance {
 	/**
 	 * Stop the "last edited" lines naming the accounts the build writes under.
 	 *
-	 * The wiki is filled by maintenance scripts, so Minerva was offering the build's own account to
-	 * every reader as the person who last edited the page (#406). DELETED_USER is how MediaWiki
-	 * says an author is not public, and skins answer it without a name.
+	 * Minerva was offering the build's own account as the last editor (#406). DELETED_USER is how
+	 * MediaWiki says an author is not public.
 	 */
 	private function hideBuildAuthors(): void {
 		$names = [User::MAINTENANCE_SCRIPT_USER];
@@ -349,9 +341,7 @@ class Build extends Maintenance {
 	/**
 	 * Drop the cached copies of the revision rows the two steps above rewrote in place.
 	 *
-	 * RevisionStore caches a page's newest revision row for a week, keyed on the page and revision
-	 * ids alone, and an edit in place changes neither. Without this the skin passes would render
-	 * each page with the date it had before it was stamped.
+	 * RevisionStore caches that row for a week, keyed on ids an edit in place does not change.
 	 */
 	private function forgetCachedRevisionRows(): void {
 		$cache = $this->getServiceContainer()->getMainWANObjectCache();
@@ -377,9 +367,8 @@ class Build extends Maintenance {
 	/**
 	 * Freeze page_touched once content is final; wiki-page modules fold it into their version hash.
 	 *
-	 * Once in the orchestrator rather than per pass: it writes content state, and it is one of the
-	 * two writes that kept a pass from being a reader (#407). The pages are then rendered with the
-	 * frozen value, which keeps the module version hashes stable.
+	 * Once in the orchestrator rather than per pass, and one of the two writes that kept a pass
+	 * from being a reader (#407).
 	 */
 	private function freezePageTouched(): void {
 		$dbw = $this->getPrimaryDB();
@@ -408,8 +397,7 @@ class Build extends Maintenance {
 	 * Render every enabled skin, several passes at a time.
 	 *
 	 * The passes are independent by construction: everything they read is in the database before
-	 * the first one starts, and each is a separate process writing its own output directory (#407).
-	 * What they still share is the database, hence the copy each takes below.
+	 * the first starts, and each writes its own output directory (#407).
 	 *
 	 * @param string[] $skins
 	 */
@@ -480,9 +468,8 @@ class Build extends Maintenance {
 	 */
 	private function startSkinPass(array $command, string $skin, string $databaseDirectory): array {
 		// The skin, the database and the working directory are passed to the child alone, so this
-		// process's own environment and cwd stay untouched. run.php resolves relative to the
-		// install root, hence $GLOBALS['IP'] as the child's cwd. Both variables are set even when
-		// empty, so a pass never inherits a value another run left behind.
+		// process's own environment and cwd stay untouched. Both are set even when empty, so a pass
+		// never inherits a value another run left behind.
 		$environment = ['WIKVEN_BUILD_SKIN' => $skin, 'WIKVEN_BUILD_DB_DIR' => $databaseDirectory] + getenv();
 		$descriptors = [0 => STDIN, 1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
 		$pipes = [];
@@ -603,9 +590,8 @@ class Build extends Maintenance {
 	/**
 	 * Give each pass a copy of the database to render from.
 	 *
-	 * A pass reads the content, but it still writes: the object cache is a table of this database,
-	 * and SQLite takes one writer at a time. The copies are taken after the populate phase, so
-	 * every pass inherits its cached lookups. A server database is left alone.
+	 * The object cache is a table of this database and SQLite takes one writer at a time. Copied
+	 * after the populate phase, so every pass inherits its cached lookups.
 	 *
 	 * @param string[] $skins
 	 * @return array<string,string> Skin to the directory holding its copy; empty where they share one.
@@ -696,9 +682,8 @@ class Build extends Maintenance {
 		// holds a history/ tree, which the static host would not serve.
 		$history = "$dir/history";
 		if (is_dir($history)) {
-			// Say so rather than tidy up in silence: on a bake that starts from an empty output
-			// directory, a tree here means the skipped action is no longer being asked for, and
-			// every page has paid for a render nobody reads.
+			// Say so rather than tidy up in silence: a tree here means the skipped action is no longer
+			// being asked for, and every page has paid for a render nobody reads.
 			$this->output("Wikven: removing a history/ tree the export does not want ($history)\n");
 			$this->removeDirectory($history);
 		}
@@ -715,24 +700,21 @@ class Build extends Maintenance {
 	/**
 	 * Put the search bundle's entry file in an order it will come out in again next bake.
 	 *
-	 * Pagefind names each language's index in one JSON map and writes it in whatever order it
-	 * iterated, so two bakes agree on every index and disagree on the order. Reproducibility is the
-	 * build's promise (#411), not the indexer's.
+	 * Pagefind writes its language map in whatever order it iterated, so two bakes disagree on
+	 * this file alone (#411).
 	 */
 	private function stabilizeSearchIndex(): void {
-		// SifterSearch's own settings stay on $GLOBALS here and in the two methods below: they
-		// exist only where that extension is loaded, and Config::get() throws on a key nothing has
-		// defined -- which would turn this path's "search is off" case into a fatal.
+		// SifterSearch's own settings stay on $GLOBALS here and below: they exist only where that
+		// extension is loaded, and Config::get() throws on a key nothing has defined.
 		$bundle = rtrim((string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' ), '/');
 		if ($bundle === '') {
 			return;
 		}
 		$path = "$bundle/" . Search::INDEX_ENTRY_FILE;
 		if (!is_file($path)) {
-			// Three things used to end here together and only two are fine: search off, search on
-			// with nothing to index, and search on with an index that did not get built. The job
-			// having run is what tells the third from the other two, since Search::isActive() asks
-			// only whether the setting is set.
+			// Three things used to end here together and only two are fine: search off, search on with
+			// nothing to index, and search on with a bundle that did not get built. The job having run
+			// tells the third.
 			if ($this->searchIndexRan) {
 				$this->fatalError(
 					"Wikven: the search index was not written ($path), though the job that builds it"
@@ -749,10 +731,10 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * Point this pass's search at a bundle of its own, and say where that bundle has to be written.
+	 * Point this pass's search at a bundle of its own, and say where it goes.
 	 *
-	 * The search index was the one thing a skin copy went on reading out of the export root, which
-	 * sent a reader who searched back to the root copy (#399).
+	 * The index was the one thing a skin copy read out of the export root, which sent a reader
+	 * back to the root copy (#399).
 	 *
 	 * @return ?string The directory the bundle must be copied to, or null where nothing is to change.
 	 */
@@ -776,8 +758,8 @@ class Build extends Maintenance {
 	/**
 	 * Duplicate the built Pagefind bundle into this pass's copy of the site.
 	 *
-	 * The index job is held back to the end of the populate phase (see runJobs), which is before
-	 * any skin renders, so the bundle is complete and nothing writes to it again while this reads.
+	 * The index job is held back to the end of the populate phase, before any skin renders, so
+	 * nothing writes to the bundle while this reads it.
 	 */
 	private function copySearchBundle(string $destination): void {
 		$source = rtrim((string)( $GLOBALS['wgSifterSearchOutputDir'] ?? '' ), '/');
@@ -846,8 +828,7 @@ class Build extends Maintenance {
 	 * Stop on a category the site said a finished build must find empty.
 	 *
 	 * MediaWiki files a page with a fault in it into a tracking category rather than refusing it,
-	 * and the export publishes the page and drops the category. FailOnCategories says what a
-	 * category with anything in it is worth; this is what asks.
+	 * and the export publishes the page and drops the category.
 	 */
 	private function assertNamedCategoriesAreEmpty(): void {
 		$named = (array)$this->getConfig()->get('WikvenFailOnCategories');
@@ -872,9 +853,8 @@ class Build extends Maintenance {
 	/**
 	 * The category one entry of WikvenFailOnCategories names, or null where it names none.
 	 *
-	 * An entry is a message key where this wiki has that message and a category title otherwise,
-	 * because a message is how MediaWiki holds a tracking category's name. Null is a message edited
-	 * to "-", which switches the category off.
+	 * An entry is a message key where this wiki has that message and a category title otherwise, a
+	 * message being how MediaWiki holds a tracking category's name.
 	 */
 	private function categoryNamed(string $entry): ?Title {
 		$message = wfMessage($entry)->inContentLanguage();
@@ -883,9 +863,8 @@ class Build extends Maintenance {
 				return null;
 			}
 			$entry = $message->plain();
-			// A tracking category message may name one category per namespace, through $1 and the
-			// parser functions around it. Rendering that here would ask about one namespace and
-			// call the rest empty, which is worse than not asking, so it is passed over.
+			// A tracking category message may name one category per namespace, through $1. Rendering that
+			// here would ask about one namespace and call the rest empty, so it is passed over.
 			if (str_contains($entry, '{{')) {
 				return null;
 			}
@@ -901,8 +880,7 @@ class Build extends Maintenance {
 	 * The pages in one category, as this wiki names them.
 	 *
 	 * Through Category rather than a query of our own: categorylinks reaches its rows by way of
-	 * linktarget in this MediaWiki and did not in the last one, and a category that must be empty
-	 * is not worth knowing that.
+	 * linktarget in this MediaWiki and did not in the last one.
 	 *
 	 * @return string[]
 	 */
@@ -947,9 +925,8 @@ class Build extends Maintenance {
 	/**
 	 * Stop on a name in the site's extensions or skins list that nothing here provides.
 	 *
-	 * WikvenSettings collects these rather than failing on them, because fetchExtensions.php boots
-	 * it to install the very components that are missing. By here they are installed, so a name
-	 * still unaccounted for would publish a site missing whatever the author asked for.
+	 * WikvenSettings collects these rather than failing, because fetchExtensions.php boots it to
+	 * install the very components that are missing. By here they are installed.
 	 */
 	private function assertEverythingListedIsHere(): void {
 		$missing = $this->getConfig()->get('WikvenMissing');
@@ -975,8 +952,7 @@ class Build extends Maintenance {
 		$sources = ImageImport::sources($directory, $extensions);
 
 		// The walk follows links, as core's does, so an image that is one -- or one under a linked
-		// directory -- would have the build upload whatever is on the other side: a file outside the
-		// source tree, on this machine, published with the site.
+		// directory -- would have the build upload whatever is on the other side.
 		$outside = ImageImport::outside($directory, $sources);
 		if ($outside !== []) {
 			foreach ($outside as $one) {
@@ -988,9 +964,8 @@ class Build extends Maintenance {
 			);
 		}
 
-		// A File: title is the file's name alone, so two images sharing a name in two directories
-		// are one page, and the importer below would take the first and skip the second with a line
-		// nobody reads. Said here, with both paths, before anything is imported.
+		// A File: title is the file's name alone, so two images sharing a name in two directories are
+		// one page, and the importer would take the first and skip the second with a line nobody reads.
 		$collisions = ImageImport::collisions($sources);
 		if ($collisions !== []) {
 			foreach ($collisions as $name => $paths) {
@@ -1005,15 +980,14 @@ class Build extends Maintenance {
 		$child = $this->createChild(ImportImages::class, $file);
 		$child->setArg(0, $directory);
 		$child->setOption('extensions', implode(',', $extensions));
-		// No --skip-dupes. It skips a file whose *content* matches one already imported, whatever
-		// the two are called, so a logo shipped twice under two names left the second with no File:
-		// page. collisions() above already stops the build on two source files sharing a name.
+		// No --skip-dupes. It skips a file whose *content* matches one already imported, so a logo
+		// shipped twice under two names left the second with no File: page.
 		//
-		// Subdirectories, because pages are read from them; sources() above walked the same way.
+		// Subdirectories, because pages are read from them.
 		$child->setOption('search-recursively', true);
 		// An image the wiki rejected leaves every page embedding it with a red File: link, so this
-		// step aborts the build the way step() aborts it for a page that did not import. A source
-		// holding no image at all is answered with the same false and is not a failure.
+		// step aborts the build. A source holding no image at all answers the same false and is not
+		// a failure.
 		if (ImageImport::failed($child->execute(), $sources)) {
 			// The count is of the images offered, not of the ones that failed: the importer's own
 			// summary above holds that number, and it named each file as it choked on it.
@@ -1027,7 +1001,6 @@ class Build extends Maintenance {
 	 * Every source image now has a File: page, or the build stops naming the ones that do not.
 	 *
 	 * The importer answers "I skipped that one" with the same success as "I imported them all".
-	 * Whichever reason it had, the page is left with a red link, so the check is on the outcome.
 	 *
 	 * @param string[] $sources Absolute paths, as ImageImport::sources() returns them.
 	 */
@@ -1075,9 +1048,8 @@ class Build extends Maintenance {
 	/**
 	 * Delete the page the installer wrote, unless the source provides one by that name.
 	 *
-	 * It holds MediaWiki's "MediaWiki has been installed" boilerplate, which every bake was
-	 * exporting as a page of the site. It is also the one page created before wikven's settings
-	 * load, so its revision keeps the real clock and made the export differ between bakes.
+	 * It holds MediaWiki's "has been installed" boilerplate, and is the one page created before
+	 * wikven's settings load, so its revision kept the real clock.
 	 */
 	private function dropInstalledMainPage(Title $installed, User $user): void {
 		if (!$installed->canExist() || !$installed->exists()) {
@@ -1133,9 +1105,8 @@ class Build extends Maintenance {
 
 	/**
 	 * Generate a Settings page: the reader's own display choices, which a static export keeps in
-	 * the browser rather than in a user account. It stands in for Special:MobileOptions, and it is
-	 * a page rather than a panel so every skin can link to it. The controls are drawn by
-	 * ext.Wikven.appearance into the placeholders below.
+	 * the browser rather than in a user account. It stands in for Special:MobileOptions, and the
+	 * controls are drawn into the placeholders below.
 	 */
 	private function setSettingsPage(): void {
 		$config = $this->getConfig();
@@ -1185,9 +1156,8 @@ class Build extends Maintenance {
 	/**
 	 * Give the site a page saying what it redistributes, and link it from every page.
 	 *
-	 * Every page carries other people's code: buildScripts bakes MediaWiki's module closure into
-	 * modules-static.js, and buildStyles writes each skin's CSS. The page lists what the export
-	 * carries and nothing else -- not PHP or the tools that made the build.
+	 * Every page carries other people's code -- MediaWiki's module closure, each skin's CSS -- and
+	 * this lists what the export carries and nothing else.
 	 */
 	private function setLicensesPage(): void {
 		$title = LicensesPage::title();
@@ -1196,8 +1166,7 @@ class Build extends Maintenance {
 		}
 
 		// Only where the site left the page to the build. A site that wrote its own is writing the
-		// language pages under it too, or marking it for translation and letting buildTranslations
-		// write them; either way a copy of ours under its title would be one it never asked for.
+		// language pages under it too, so a copy of ours would be one it never asked for.
 		if (!$title->exists()) {
 			$this->savePage($title->getPrefixedText(), $this->licensesText(null), 'Generate the licenses page');
 			foreach ($this->translatedLanguages() as $lang) {
@@ -1214,10 +1183,8 @@ class Build extends Maintenance {
 			}
 		}
 
-		// The footer entry is chrome, and a skin preview has none of wikven's -- see BuildFor.
-		// The page is still written, so nothing is lost; what is missing is the link to it, and a
-		// preview that quietly dropped the one link saying what the site carries would be teaching
-		// the wrong lesson about the mode.
+		// The footer entry is chrome, and a skin preview has none of wikven's -- see BuildFor. The
+		// page is still written; what is missing is the link to it.
 		if (BuildFor::skinPreview()) {
 			$this->output(
 				"Wikven: skin preview -- the footer does not link {$title->getPrefixedText()};"
@@ -1268,9 +1235,7 @@ class Build extends Maintenance {
 	 * What the build ran on: MediaWiki, PHP and the database, with their versions, and the server
 	 * besides where a standalone binary is what ran it.
 	 *
-	 * Only MediaWiki is redistributed -- every page loads modules-static.js, its module closure --
-	 * and the registry below cannot answer for it, so its license is named here. PHP and the
-	 * database ran the build and stayed behind.
+	 * Only MediaWiki is redistributed, and the registry cannot answer for it.
 	 */
 	private function coreTable(?string $lang): string {
 		$db = $this->getServiceContainer()->getConnectionProvider()->getReplicaDatabase();
@@ -1303,9 +1268,8 @@ class Build extends Maintenance {
 	 * The server a standalone-binary build ran on, as further rows for the table above, or none
 	 * where it ran on something else.
 	 *
-	 * Named with their licenses where PHP and the database are not: FrankenPHP and Caddy are
-	 * compiled into the executable wikven redistributes. Their licenses are written here because a
-	 * Go build records none.
+	 * FrankenPHP and Caddy are compiled into the executable wikven redistributes, and a Go build
+	 * records no licenses.
 	 *
 	 * @return list<array{string, string, string}>
 	 */
@@ -1325,9 +1289,8 @@ class Build extends Maintenance {
 		$rows = [];
 		foreach (explode(';', $declared) as $entry) {
 			[$name, $version] = array_pad(explode(' ', trim($entry), 2), 2, '');
-			// An entry this version has no license for is dropped rather than shown bare: a
-			// licenses page is the wrong place to learn that wikven has stopped keeping up with
-			// what it ships, and the binary and this file are released together anyway.
+			// An entry this version has no license for is dropped rather than shown bare: a licenses page
+			// is the wrong place to learn that wikven has stopped keeping up with what it ships.
 			if (!isset($known[$name])) {
 				continue;
 			}
@@ -1391,9 +1354,8 @@ class Build extends Maintenance {
 	 * A wikitext table of components with versions, project links and licenses, under the given
 	 * messages.
 	 *
-	 * The license is the one the component declares in its own extension.json. Special:Version
-	 * links each to the license text it ships; an export has no such page, so the identifier
-	 * stands alone, and a component declaring none leaves the cell empty.
+	 * The license is the one the component declares in its own extension.json, and a component
+	 * declaring none leaves the cell empty.
 	 */
 	private function componentTable(
 		string $headingKey,
@@ -1405,10 +1367,8 @@ class Build extends Maintenance {
 			return '';
 		}
 		ksort($things);
-		// Sortable: a reader looking for one license reads down the license column, and these are
-		// the only tables on the page long enough for that to be the difference between finding it
-		// and reading everything. buildScripts sees the class and puts jquery.tablesorter in the
-		// bundle, which an export needs because nothing can fetch it later (#483).
+		// Sortable: these are the only tables on the page long enough for that to matter. buildScripts
+		// sees the class and puts jquery.tablesorter in the bundle, which an export needs (#483).
 		$text = '== ' . $this->contentMsg($headingKey, $lang) . " ==\n";
 		$text .=
 			"{| class=\"wikitable sortable\"\n! "

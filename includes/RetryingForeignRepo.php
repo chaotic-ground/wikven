@@ -7,21 +7,17 @@ use RuntimeException;
 
 /**
  * A foreign file repository (Wikimedia Commons through InstantCommons, or any other api.php repo)
- * that gives a request the remote failed to answer a second and a third chance, and says so
- * plainly when it still has no thumbnail to show for it.
+ * that gives a request the remote failed to answer a second and a third chance.
  *
- * Every parse of a page embedding a Commons image asks for its thumbnail URL, and MediaWiki makes
- * that request once. An empty lookup is not merely a missing thumbnail: ForeignAPIFile::transform()
- * then reads a media handler language nothing sets, so the parse dies and takes the build with it.
+ * An empty lookup is not merely a missing thumbnail: ForeignAPIFile::transform() then reads a
+ * media handler language nothing sets, so the parse dies and takes the build with it.
  */
 class RetryingForeignRepo extends ForeignAPIRepo {
 	/**
 	 * @inheritDoc
 	 *
-	 * Core's only caller of this is the ForeignAPIFile::transform() branch described above, which
-	 * cannot cope with a false: it reads a language off a media handler that has none, and throws.
-	 * So end the build here, where the file and the reason are still known, rather than three
-	 * frames later with neither. Every false returned from here is already fatal today.
+	 * Core's only caller is the ForeignAPIFile::transform() branch above, which cannot cope with a
+	 * false. So end the build here, where the file and the reason are still known.
 	 */
 	public function getThumbUrlFromCache($name, $width, $height, $params = '') {
 		$url = parent::getThumbUrlFromCache($name, $width, $height, $params);
@@ -57,10 +53,8 @@ class RetryingForeignRepo extends ForeignAPIRepo {
 	/**
 	 * @inheritDoc
 	 *
-	 * Named here rather than passed to each request, because httpGet() above hands core the options
-	 * and core writes this key over whatever came in. Left alone it is "MediaWiki/1.46.0 (server)
-	 * ForeignAPIRepo/2.1", which names the library and not the tool that wanted it -- and a bake
-	 * asks Commons more than it asks anyone.
+	 * Named here rather than passed to each request, because httpGet() hands core the options and
+	 * core writes this key over whatever came in. Left alone it names the library, not the tool.
 	 */
 	public function getUserAgent() {
 		return UserAgent::tool() . ' ' . parent::getUserAgent();

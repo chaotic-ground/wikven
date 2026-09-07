@@ -93,10 +93,8 @@ class ImageImportTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * The failure this exists to catch. Pages are read from subdirectories -- "Guide/Setup.wikitext"
-	 * is the page "Guide/Setup" -- so an image beside one used to be the half of that directory the
-	 * build could not see: the page imported, the image did not, and the reader got a red link with
-	 * nothing in the log about it.
+	 * The failure this exists to catch. Pages are read from subdirectories, so an image beside one
+	 * used to be the half of that directory the build could not see.
 	 */
 	public function testItReadsTheSubdirectoriesPagesAreReadFrom() {
 		mkdir($this->directory . '/Guide/Deep', 0777, true);
@@ -180,10 +178,9 @@ class ImageImportTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * The defect a walk that stopped at linked directories had: core's findFiles tests is_dir, which
-	 * a link to a directory satisfies, so core imported every file under one while this list saw
-	 * none of them -- and the refusal, the collision check and the failure count all looked past a
-	 * whole directory of files that were about to be published.
+	 * The defect a walk that stopped at linked directories had: core's findFiles tests is_dir,
+	 * which a link satisfies, so core imported every file under one while this list saw none of
+	 * them.
 	 */
 	public function testFilesUnderALinkedDirectoryAreFoundAndRefused() {
 		touch($this->directory . '/inside.png');

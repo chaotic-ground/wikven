@@ -5,13 +5,11 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * How many times the build asks somebody else's server for something before it gives up.
  *
- * A bake fetches third-party extensions and skins over the network, and asks Commons for the
- * thumbnail of every image a page embeds. One refusal used to end the build -- failed by a service
- * having a bad minute rather than by anything in the source.
+ * One refusal used to end the build -- failed by a service having a bad minute rather than by
+ * anything in the source.
  *
- * Nothing in the box does this: HttpRequestFactory carries no retry, wait-condition-loop waits on
- * a condition, and Guzzle's middleware would miss the caller that repeats a `composer update` in a
- * subprocess.
+ * Nothing in the box does this: HttpRequestFactory carries no retry, and Guzzle's middleware would
+ * miss the caller that repeats a `composer update`.
  */
 class Attempts {
 	/** How many times one fetch is tried. Two retries is enough for a blip and short of a queue. */
@@ -20,9 +18,8 @@ class Attempts {
 	/**
 	 * Run $work until it answers with something other than false, at most $attempts times.
 	 *
-	 * False is the failure, and only false: a request can succeed with an empty body, and a caller
-	 * that answers with a bool says so by returning true. Whatever the successful attempt answered
-	 * is what comes back.
+	 * False is the failure, and only false: a request can succeed with an empty body, and a bool
+	 * caller says so by returning true.
 	 *
 	 * @param callable():mixed $work Does the work; answers false if it failed, anything else if not.
 	 * @param int $attempts How many times to run it. Below one is treated as one: a caller that asks
@@ -49,8 +46,7 @@ class Attempts {
 	/**
 	 * Seconds to wait before attempt number $attempt: none before the first, then 2, 4, 8...
 	 *
-	 * Doubling rather than a fixed wait because the two failures worth retrying differ: a 500 wants
-	 * a moment, and a 429 wants to be asked less often.
+	 * Doubling rather than a fixed wait: a 500 wants a moment, a 429 wants to be asked less often.
 	 */
 	public static function backoff(int $attempt): int {
 		return $attempt <= 1 ? 0 : 1 << ( $attempt - 1 );
