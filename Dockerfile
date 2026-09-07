@@ -58,8 +58,8 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 # Commits, not the branch tip: REL1_46 takes translatewiki updates weekly, so a branch pin builds a
 # different Translate from the same wikven commit a week later. Bumped by updatecli, which reads the
 # branch these follow from its own manifest, so that branch moves there when this image's does.
-ARG TRANSLATE_VERSION=9712a29d4501c1e71abdb807754cdb6ff80a1ee2
-ARG ULS_VERSION=d33a5434bd80c3f7acb02541b9394665c84ea585
+ARG TRANSLATE_VERSION=afbd690fcf71a21dbd3939f50f97e0cff88a840d
+ARG ULS_VERSION=f914eba81f7f7196140febbfce3ed6e17d65ba22
 # Translate asks for its two runtime deps by range, so an unpinned install takes whatever Packagist
 # serves that day. Core's own answer to this is exact versions and no lock file, so: exact versions,
 # passed as temporary constraints rather than written into Translate's manifest. Bumped by updatecli.

@@ -108,7 +108,7 @@ config:
     # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      commit: f0212f7fc0dc3403b8da334250af2188b07143ec
+      commit: 6dd857d35b77bf2c025c838fe01c339739f1e0c5
     # WikiSEO writes the head tags a static export cannot get any other way: the site
     # verification token above, and later the canonical and hreflang links. Not bundled in the
     # image, so it is fetched here.
@@ -118,4 +118,4 @@ config:
     # reads 2.7.0 and >= 1.42. The tag is mis-stamped, so its name promises code it does not hold.
     WikiSEO:
       repository: https://github.com/wikimedia/mediawiki-extensions-WikiSEO.git
-      commit: 3f8aeb66f322d6687a3623e377cd8f0488f39f71
+      commit: 358a3d4775c36d6a0044330416bb6be9b6463a12
