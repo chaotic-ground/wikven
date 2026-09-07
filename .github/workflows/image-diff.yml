@@ -1,0 +1,130 @@
+---
+name: Image Diff
+
+# A dependabot bump of a pinned image says which two digests and stops there, because a digest has
+# no changelog and compares to nothing a reader can open. What it does have is the commit it was
+# built from, recorded in the image itself, and two of those make a compare url. It is left as a
+# comment rather than written into the body: that body is dependabot's, and editing it is what
+# stops dependabot rebasing the pull request.
+
+on:
+  pull_request_target:  # zizmor: ignore[dangerous-triggers]
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - Dockerfile
+      - "*.Dockerfile"
+  # A pull request already open when this landed never fired the trigger above.
+  workflow_dispatch:
+    inputs:
+      pull-request:
+        description: The pull request to comment on.
+        required: true
+
+permissions: {}
+
+# Cancel superseded runs, keyed on the pull request rather than github.ref: under
+# pull_request_target that is the base branch, so every pull request would share one group.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || inputs.pull-request }}
+  cancel-in-progress: true
+
+jobs:
+  # Nothing from the pull request is checked out or run here. The two Dockerfiles are read through
+  # the API and the rest is registry metadata, so a fork's branch cannot execute anything.
+  image-diff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number || inputs.pull-request }}
+          # A later run rewrites the comment carrying this, so a pull request pushed to again
+          # keeps one comment rather than collecting one per push.
+          MARKER: "<!-- wikven: what changed in the image -->"
+        run: |
+          set -euo pipefail
+
+          # The event carries these on a pull_request_target run but not on a dispatch, so both
+          # are read here and the rest has one path through it.
+          read -r base head <<< "$(gh api "repos/$REPOSITORY/pulls/$NUMBER" \
+            --jq '"\(.base.sha) \(.head.sha)"')"
+
+          files=$(gh api "repos/$REPOSITORY/pulls/$NUMBER/files" --paginate \
+            --jq '.[].filename' | grep -i 'dockerfile$' || true)
+          if [ -z "$files" ]; then
+            echo "wikven: no Dockerfile in this pull request."
+            exit 0
+          fi
+
+          work=$(mktemp -d)
+
+          # "<image> <digest>", one line per image pinned by digest at the given revision.
+          pins() {
+            for file in $files; do
+              # A file the pull request adds is not there on the base, and that is not an error.
+              gh api "repos/$REPOSITORY/contents/$file?ref=$1" \
+                -H "Accept: application/vnd.github.raw" || true
+            done | awk '
+              $1 == "FROM" && $2 ~ /@sha256:[0-9a-f]+$/ {
+                split($2, part, "@")
+                name = part[1]
+                sub(/:[^:\/]*$/, "", name)
+                print name, part[2]
+              }
+            '
+          }
+
+          # "<source url>\t<commit>" off the image itself, empty when it records neither.
+          built_from() {
+            docker buildx imagetools inspect "$1" --format '{{json .Image}}' 2>/dev/null |
+              jq -r '
+                def pick: if has("config") then . else (.["linux/amd64"] // (to_entries[0].value)) end;
+                pick | (.config.Labels // {}) |
+                [(.["org.opencontainers.image.source"] // ""),
+                 (.["org.opencontainers.image.revision"] // "")] | @tsv
+              ' || true
+          }
+
+          pins "$base" | sort > "$work/before"
+          pins "$head" | sort > "$work/after"
+
+          links=$(join "$work/before" "$work/after" | while read -r name old new; do
+            [ "$old" != "$new" ] || continue
+            was=$(built_from "$name@$old")
+            now=$(built_from "$name@$new")
+            source=$(printf '%s' "$now" | cut -f1)
+            case "$source" in https://github.com/*) ;; *) continue ;; esac
+            from=$(printf '%s' "$was" | cut -f2)
+            to=$(printf '%s' "$now" | cut -f2)
+            [ -n "$from" ] && [ -n "$to" ] && [ "$from" != "$to" ] || continue
+            printf '* [%s](%s/compare/%s...%s)\n' "$name" "${source%/}" "$from" "$to"
+          done)
+
+          if [ -z "$links" ]; then
+            echo "wikven: no repinned image names a commit to compare."
+            exit 0
+          fi
+
+          { printf '%s\n' "$MARKER"; echo
+            echo "A digest names a build rather than a change. These images record the commit they"
+            echo "were built from, and that is a range:"; echo
+            printf '%s\n' "$links"; } > "$work/comment"
+
+          id=$(gh api "repos/$REPOSITORY/issues/$NUMBER/comments" --paginate \
+            --jq ".[] | select(.body | contains(\"$MARKER\")) | .id" | head -n1 || true)
+          if [ -n "$id" ]; then
+            jq -n --rawfile body "$work/comment" '{body: $body}' |
+              gh api -X PATCH "repos/$REPOSITORY/issues/comments/$id" --input -
+            echo "wikven: updated the image comment on #$NUMBER."
+          else
+            jq -n --rawfile body "$work/comment" '{body: $body}' |
+              gh api -X POST "repos/$REPOSITORY/issues/$NUMBER/comments" --input -
+            echo "wikven: commented on #$NUMBER."
+          fi
