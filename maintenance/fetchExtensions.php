@@ -9,6 +9,7 @@ use MediaWiki\Settings\Source\Format\JsonFormat;
 use MediaWiki\Settings\Source\Format\YamlFormat;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Wikimedia\FileBackend\FSFile\TempFSFileFactory;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -282,12 +283,17 @@ class FetchExtensions extends Maintenance {
 
 	private function fetchTarball(string $url, string $dest, string $name, string $kind, ?string $sha256 = null): void {
 		$this->output("Wikven: downloading $kind '$name' from $url\n");
-		$tmp = tempnam(sys_get_temp_dir(), 'wikven');
+		// Core's, so the download goes when this returns and when it does not: half of the ways out
+		// of here are a fatalError, and each one used to leave the tarball in the temp directory.
+		$download = ( new TempFSFileFactory() )->newTempFSFile('wikven');
+		if ($download === null) {
+			$this->fatalError("Wikven: could not make a temporary file to download $kind '$name' into.");
+		}
+		$tmp = $download->getPath();
 		$this->download($url, $tmp, "download $kind '$name'");
 		if ($sha256 !== null) {
 			if (!TarballChecksum::matches($sha256, $tmp)) {
 				$actual = is_file($tmp) ? hash_file('sha256', $tmp) : 'nothing';
-				unlink($tmp);
 				$this->fatalError(
 					"Wikven: $kind '$name' tarball sha256 mismatch (expected $sha256, got $actual)."
 				);
@@ -298,7 +304,6 @@ class FetchExtensions extends Maintenance {
 			$this->fatalError("Wikven: could not create '$dest'.");
 		}
 		$this->run(['tar', '-xzf', $tmp, '-C', $dest, '--strip-components=1'], "extract $kind '$name'");
-		unlink($tmp);
 	}
 
 	private function fetchGit(array $spec, string $dest, string $name, string $kind): void {
