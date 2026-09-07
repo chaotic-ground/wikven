@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@cc701a03cc15d749b81267e2b657b10c508ab208  # v2.1.0
+      - uses: femiwiki/quibble-action@4c99d26a916c8e8887a2622d26d979c26658106f  # v2.1.1
         with:
           stage: phan
           dependencies: ${{ env.PHAN_DEPENDENCIES }}
@@ -63,7 +63,7 @@ jobs:
         with:
           persist-credentials: false
       - id: quibble
-        uses: femiwiki/quibble-action@cc701a03cc15d749b81267e2b657b10c508ab208  # v2.1.0
+        uses: femiwiki/quibble-action@4c99d26a916c8e8887a2622d26d979c26658106f  # v2.1.1
         with:
           stage: coverage
           dependencies: ${{ env.WIKI_DEPENDENCIES }}
