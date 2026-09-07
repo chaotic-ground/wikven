@@ -130,3 +130,102 @@ jobs:
           for branch in $BRANCHES; do
             link "$branch"
           done
+
+      # updatecli writes each release's notes into a <pre>, where markdown is text: a heading
+      # arrives as its hashes, a link as its brackets. And it writes one <pre> per release the bump
+      # crosses, so a pin that skipped a few opens with screens of them. The newest couple are
+      # rendered here and the rest dropped, the span they covered being what the compare link above
+      # is for.
+      - name: Render the release notes a bump brings
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          # Newest first, so these are the ones a reader wants.
+          KEEP: "2"
+          # Characters of one release's notes. A body over GitHub's limit is refused, and a project
+          # that writes an essay for a release should not cost the pull request the rest of it.
+          LIMIT: "8000"
+        run: |
+          set -euo pipefail
+
+          work=$(mktemp -d)
+          for number in $(gh pr list --repo "$REPOSITORY" --state open \
+            --json number,headRefName \
+            --jq '.[] | select(.headRefName | startswith("updatecli_main_")) | .number'); do
+            gh pr view "$number" --repo "$REPOSITORY" --json body --jq .body > "$work/body"
+            awk -v keep="$KEEP" -v limit="$LIMIT" '
+              # Every character updatecli escaped on the way in, and no other: the notes are
+              # markdown, and a decoder that guessed at more would rewrite what an author wrote.
+              function decode(text) {
+                gsub(/&#xA;/, "\n", text)
+                gsub(/&#x9;/, "\t", text)
+                gsub(/&#34;/, "\"", text)
+                gsub(/&#39;/, "\047", text)
+                gsub(/&quot;/, "\"", text)
+                gsub(/&apos;/, "\047", text)
+                gsub(/&lt;/, "<", text)
+                gsub(/&gt;/, ">", text)
+                gsub(/&amp;/, "\\&", text)
+                sub(/\n+$/, "", text)
+                return text
+              }
+
+              function shorten(text,   cut) {
+                if (length(text) <= limit) { return text }
+                cut = substr(text, 1, limit)
+                sub(/\n[^\n]*$/, "", cut)
+                return cut "\n\n_(truncated)_"
+              }
+
+              BEGIN { keep = keep + 0; limit = limit + 0 }
+
+              /^    <action / { shown = 0; dropped = 0 }
+
+              # One release, as updatecli lays it out: the block, the version, the notes, the close.
+              /^            <details>$/ { inblock = 1; version = ""; notes = ""; next }
+              inblock && /^                <summary>/ {
+                version = $0
+                sub(/^ *<summary>/, "", version)
+                sub(/<\/summary>$/, "", version)
+                next
+              }
+              inblock && /^                <pre>/ {
+                notes = $0
+                sub(/^ *<pre>/, "", notes)
+                sub(/<\/pre>$/, "", notes)
+                next
+              }
+              inblock && /^            <\/details>$/ {
+                inblock = 0
+                if (notes == "") { next }
+                if (++shown > keep) { dropped++; next }
+                # Column zero and a blank line on each side: indent it and GitHub reads the notes
+                # as a code block, run it up against the tags and it reads them as more html.
+                print "<details>"
+                print "<summary>" version "</summary>"
+                print ""
+                print shorten(decode(notes))
+                print ""
+                print "</details>"
+                next
+              }
+              inblock { next }
+
+              # Html rather than markdown, because the line after this one is indented and a blank
+              # line before it would make that a code block.
+              /^        <\/details>$/ && dropped > 0 {
+                print "<p><em>" dropped (dropped == 1 ? " older release is" : " older releases are") \
+                  " not shown.</em></p>"
+                dropped = 0
+              }
+
+              { print }
+            ' "$work/body" > "$work/rendered"
+
+            if cmp -s "$work/body" "$work/rendered"; then
+              echo "wikven: #$number has no notes left to render."
+            else
+              gh pr edit "$number" --repo "$REPOSITORY" --body-file "$work/rendered"
+              echo "wikven: rendered the release notes on #$number."
+            fi
+          done
