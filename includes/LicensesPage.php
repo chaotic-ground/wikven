@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven;
 
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
+use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\Title\Title;
 
 /**

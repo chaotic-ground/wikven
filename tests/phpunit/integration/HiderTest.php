@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\BuildFor;
+use MediaWiki\Extension\Wikven\Build\BuildFor;
 use MediaWiki\Extension\Wikven\Hooks\Hider;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Skin\SkinTemplate;

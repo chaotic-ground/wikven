@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\ContainedPath;
+use MediaWiki\Extension\Wikven\Output\ContainedPath;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\ContainedPath
+ * @covers \MediaWiki\Extension\Wikven\Output\ContainedPath
  */
 class ContainedPathTest extends MediaWikiUnitTestCase {
 	private string $root;

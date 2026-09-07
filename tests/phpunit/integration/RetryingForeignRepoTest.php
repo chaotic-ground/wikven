@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\RetryingForeignRepo;
+use MediaWiki\Extension\Wikven\Fetching\RetryingForeignRepo;
 use MediaWiki\Http\MWHttpRequest;
 use MediaWiki\Status\Status;
 use MediaWikiIntegrationTestCase;
@@ -14,7 +14,7 @@ use Wikimedia\ObjectCache\WANObjectCache;
 /**
  * The repository as MediaWiki drives it: its own httpGet(), not just the retry helper.
  *
- * @covers \MediaWiki\Extension\Wikven\RetryingForeignRepo
+ * @covers \MediaWiki\Extension\Wikven\Fetching\RetryingForeignRepo
  */
 class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 	use MockHttpTrait;

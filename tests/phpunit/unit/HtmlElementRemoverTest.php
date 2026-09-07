@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\HtmlElementRemover;
+use MediaWiki\Extension\Wikven\Output\HtmlElementRemover;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\HtmlElementRemover
+ * @covers \MediaWiki\Extension\Wikven\Output\HtmlElementRemover
  */
 class HtmlElementRemoverTest extends MediaWikiUnitTestCase {
 	private function byId(): callable {

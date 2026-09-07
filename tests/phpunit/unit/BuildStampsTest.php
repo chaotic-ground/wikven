@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\BuildStamps;
+use MediaWiki\Extension\Wikven\Build\BuildStamps;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\BuildStamps
+ * @covers \MediaWiki\Extension\Wikven\Build\BuildStamps
  */
 class BuildStampsTest extends MediaWikiUnitTestCase {
 	/** A page as the file cache wrote it, with every stamp a real bake produced. */

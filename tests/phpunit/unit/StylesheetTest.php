@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\Stylesheet;
+use MediaWiki\Extension\Wikven\Output\Stylesheet;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\Stylesheet
+ * @covers \MediaWiki\Extension\Wikven\Output\Stylesheet
  */
 class StylesheetTest extends MediaWikiUnitTestCase {
 	/** One rule, so a written file has bytes worth reading back. */

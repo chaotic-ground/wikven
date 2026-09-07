@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\BuildFor;
+use MediaWiki\Extension\Wikven\Build\BuildFor;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\BuildFor
+ * @covers \MediaWiki\Extension\Wikven\Build\BuildFor
  */
 class BuildForTest extends MediaWikiUnitTestCase {
 	protected function tearDown(): void {

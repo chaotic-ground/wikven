@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\ComposerInstall;
+use MediaWiki\Extension\Wikven\Fetching\ComposerInstall;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\ComposerInstall
+ * @covers \MediaWiki\Extension\Wikven\Fetching\ComposerInstall
  */
 class ComposerInstallTest extends MediaWikiUnitTestCase {
 	/** @var string[] */

@@ -4,14 +4,14 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
-use MediaWiki\Extension\Wikven\AssetFile;
-use MediaWiki\Extension\Wikven\BuildFor;
+use MediaWiki\Extension\Wikven\Build\BuildFor;
 use MediaWiki\Extension\Wikven\LicensesPage;
-use MediaWiki\Extension\Wikven\OutputName;
+use MediaWiki\Extension\Wikven\Output\AssetFile;
+use MediaWiki\Extension\Wikven\Output\OutputName;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationFamily;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SiteUrl;
-use MediaWiki\Extension\Wikven\SourceFile;
+use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\Html\Html;
 use MediaWiki\Language\LanguageCode;
 use MediaWiki\MediaWikiServices;

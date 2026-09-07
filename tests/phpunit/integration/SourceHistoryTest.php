@@ -2,14 +2,14 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\SourceHistory;
+use MediaWiki\Extension\Wikven\Source\SourceHistory;
 use MediaWikiIntegrationTestCase;
 
 /**
  * How a source directory is resolved to a history: the dumped log actions/bake mounts, and what
  * happens where neither that nor a reachable checkout answers.
  *
- * @covers \MediaWiki\Extension\Wikven\SourceHistory
+ * @covers \MediaWiki\Extension\Wikven\Source\SourceHistory
  */
 class SourceHistoryTest extends MediaWikiIntegrationTestCase {
 	/** A page name no checkout this ever runs in can hold, so git cannot answer for it either. */

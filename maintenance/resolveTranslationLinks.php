@@ -3,6 +3,9 @@
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\Extension\Wikven\Build\SkinOutput;
+use MediaWiki\Extension\Wikven\Output\OutputName;
+use MediaWiki\Extension\Wikven\Output\RelativeUrl;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Registration\ExtensionRegistry;
 

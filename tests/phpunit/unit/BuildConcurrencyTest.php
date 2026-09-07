@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\BuildConcurrency;
+use MediaWiki\Extension\Wikven\Build\BuildConcurrency;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\BuildConcurrency
+ * @covers \MediaWiki\Extension\Wikven\Build\BuildConcurrency
  */
 class BuildConcurrencyTest extends MediaWikiUnitTestCase {
 	/** Four processors, as a runner has. */

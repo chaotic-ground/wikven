@@ -2,12 +2,12 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\AssetLocalizer;
+use MediaWiki\Extension\Wikven\Output\AssetLocalizer;
 use MediaWiki\ResourceLoader\ResourceLoader;
 use MediaWikiIntegrationTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\AssetLocalizer
+ * @covers \MediaWiki\Extension\Wikven\Output\AssetLocalizer
  */
 class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	/**

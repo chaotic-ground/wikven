@@ -3,7 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\Wikven\RetryingForeignRepo;
+use MediaWiki\Extension\Wikven\Fetching\RetryingForeignRepo;
 use MediaWiki\FileRepo\ForeignAPIRepo;
 
 class Retrier implements \MediaWiki\Hook\SetupAfterCacheHook {

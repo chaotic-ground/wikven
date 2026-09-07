@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\SourceHistory;
+use MediaWiki\Extension\Wikven\Source\SourceHistory;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\SourceHistory
+ * @covers \MediaWiki\Extension\Wikven\Source\SourceHistory
  */
 class SourceHistoryTest extends MediaWikiUnitTestCase {
 	/** Build a log the way `git log -z --name-only` writes one: NUL after every record. */

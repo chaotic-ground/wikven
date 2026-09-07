@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\HeadMetadata;
+use MediaWiki\Extension\Wikven\Output\HeadMetadata;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\HeadMetadata
+ * @covers \MediaWiki\Extension\Wikven\Output\HeadMetadata
  */
 class HeadMetadataTest extends MediaWikiUnitTestCase {
 	/** Where "MARK" sits in $html, which is where each test asks about. */

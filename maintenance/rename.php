@@ -3,6 +3,8 @@
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\Extension\Wikven\Output\OutputName;
+use MediaWiki\Extension\Wikven\Output\RelativeUrl;
 use MediaWiki\MediaWikiServices;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''

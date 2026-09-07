@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\BuildFor;
+use MediaWiki\Extension\Wikven\Build\BuildFor;
 use MediaWiki\Extension\Wikven\Hooks\Main;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\Title\Title;

@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\SourceFile;
+use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWikiIntegrationTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\SourceFile
+ * @covers \MediaWiki\Extension\Wikven\Source\SourceFile
  */
 class SourceFileTest extends MediaWikiIntegrationTestCase {
 	/**

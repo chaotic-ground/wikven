@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\LazyModules;
+use MediaWiki\Extension\Wikven\Output\LazyModules;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\LazyModules
+ * @covers \MediaWiki\Extension\Wikven\Output\LazyModules
  */
 class LazyModulesTest extends MediaWikiUnitTestCase {
 	private const ON = ['collapsible' => true, 'sortable' => true];

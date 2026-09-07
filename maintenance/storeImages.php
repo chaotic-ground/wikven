@@ -3,6 +3,11 @@
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\Extension\Wikven\Fetching\UserAgent;
+use MediaWiki\Extension\Wikven\Output\AssetFile;
+use MediaWiki\Extension\Wikven\Output\ContainedPath;
+use MediaWiki\Extension\Wikven\Output\Png;
+use MediaWiki\Extension\Wikven\Output\UploadReference;
 use MediaWiki\MediaWikiServices;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''

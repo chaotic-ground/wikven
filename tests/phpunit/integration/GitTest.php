@@ -2,13 +2,13 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\Git;
+use MediaWiki\Extension\Wikven\Fetching\Git;
 use MediaWikiIntegrationTestCase;
 
 /**
  * What git says, and the three ways of getting no answer.
  *
- * @covers \MediaWiki\Extension\Wikven\Git
+ * @covers \MediaWiki\Extension\Wikven\Fetching\Git
  */
 class GitTest extends MediaWikiIntegrationTestCase {
 	public function testWhatGitPrintsComesBack() {

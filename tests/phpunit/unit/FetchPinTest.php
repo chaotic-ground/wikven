@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\FetchPin;
+use MediaWiki\Extension\Wikven\Fetching\FetchPin;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\FetchPin
+ * @covers \MediaWiki\Extension\Wikven\Fetching\FetchPin
  */
 class FetchPinTest extends MediaWikiUnitTestCase {
 	private string $directory;

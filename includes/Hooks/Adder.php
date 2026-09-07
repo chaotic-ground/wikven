@@ -3,10 +3,10 @@
 namespace MediaWiki\Extension\Wikven\Hooks;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\Wikven\BuildFor;
-use MediaWiki\Extension\Wikven\OutputName;
+use MediaWiki\Extension\Wikven\Build\BuildFor;
+use MediaWiki\Extension\Wikven\Build\SkinList;
+use MediaWiki\Extension\Wikven\Output\OutputName;
 use MediaWiki\Extension\Wikven\Search;
-use MediaWiki\Extension\Wikven\SkinList;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Output\OutputPage;

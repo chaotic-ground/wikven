@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\Png;
+use MediaWiki\Extension\Wikven\Output\Png;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\Png
+ * @covers \MediaWiki\Extension\Wikven\Output\Png
  */
 class PngTest extends MediaWikiUnitTestCase {
 	private const SIGNATURE = "\x89PNG\r\n\x1a\n";

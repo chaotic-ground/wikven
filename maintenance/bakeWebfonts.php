@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\Extension\Wikven\Output\AssetFile;
 use MediaWiki\Extension\Wikven\Webfonts\FontCopier;
 use MediaWiki\Extension\Wikven\Webfonts\FontRepository;
 use MediaWiki\Registration\ExtensionRegistry;

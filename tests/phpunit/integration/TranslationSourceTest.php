@@ -3,7 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
-use MediaWiki\Extension\Wikven\SourceFile;
+use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 

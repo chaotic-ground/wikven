@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven;
 
 use FilesystemIterator;
 use Maintenance;
+use MediaWiki\Extension\Wikven\Build\BuildStamps;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
