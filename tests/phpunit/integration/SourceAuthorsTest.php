@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\SourceAuthors;
+use MediaWiki\Extension\Wikven\Source\SourceAuthors;
 use MediaWikiIntegrationTestCase;
 
 /**

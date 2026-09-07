@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\TarballChecksum;
+use MediaWiki\Extension\Wikven\Fetching\TarballChecksum;
 use MediaWikiUnitTestCase;
 
 /**

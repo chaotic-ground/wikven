@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\ModuleRenderer;
+use MediaWiki\Extension\Wikven\Output\ModuleRenderer;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\FileModule;

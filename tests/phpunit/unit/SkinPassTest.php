@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\SkinPass;
+use MediaWiki\Extension\Wikven\Build\SkinPass;
 use MediaWikiUnitTestCase;
 
 /**

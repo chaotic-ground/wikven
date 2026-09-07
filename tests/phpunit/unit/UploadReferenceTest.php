@@ -2,8 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
+use MediaWiki\Extension\Wikven\Output\UploadReference;
 use MediaWiki\Extension\Wikven\SiteUrl;
-use MediaWiki\Extension\Wikven\UploadReference;
 use MediaWikiUnitTestCase;
 
 /**

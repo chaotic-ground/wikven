@@ -2,6 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven;
 
+use MediaWiki\Extension\Wikven\Build\BuildFor;
+use MediaWiki\Extension\Wikven\Output\OutputName;
 use StatusValue;
 
 // LocalSettings.php loads this class by hand, before wfLoadExtension has given the extension an

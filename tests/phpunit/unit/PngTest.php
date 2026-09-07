@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\Png;
+use MediaWiki\Extension\Wikven\Output\Png;
 use MediaWikiUnitTestCase;
 
 /**

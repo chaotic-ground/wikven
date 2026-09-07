@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\HeadMetadata;
+use MediaWiki\Extension\Wikven\Output\HeadMetadata;
 use MediaWikiUnitTestCase;
 
 /**

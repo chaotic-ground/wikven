@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\Stylesheet;
+use MediaWiki\Extension\Wikven\Output\Stylesheet;
 use MediaWikiUnitTestCase;
 
 /**

@@ -3,7 +3,7 @@
 namespace MediaWiki\Extension\Wikven\PageTranslation;
 
 use FilesystemIterator;
-use MediaWiki\Extension\Wikven\SourceFile;
+use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Parser;
 use RecursiveDirectoryIterator;

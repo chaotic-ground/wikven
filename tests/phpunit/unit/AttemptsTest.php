@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\Attempts;
+use MediaWiki\Extension\Wikven\Fetching\Attempts;
 use MediaWikiUnitTestCase;
 
 /**

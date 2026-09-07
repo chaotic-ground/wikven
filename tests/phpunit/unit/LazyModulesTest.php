@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\LazyModules;
+use MediaWiki\Extension\Wikven\Output\LazyModules;
 use MediaWikiUnitTestCase;
 
 /**

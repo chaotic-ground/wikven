@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\FetchPin;
+use MediaWiki\Extension\Wikven\Fetching\FetchPin;
 use MediaWikiUnitTestCase;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\SkinOutput;
+use MediaWiki\Extension\Wikven\Build\SkinOutput;
 use MediaWikiIntegrationTestCase;
 
 /**

@@ -4,6 +4,12 @@ namespace MediaWiki\Extension\Wikven;
 
 use FilesystemIterator;
 use Maintenance;
+use MediaWiki\Extension\Wikven\Fetching\Attempts;
+use MediaWiki\Extension\Wikven\Fetching\ComposerInstall;
+use MediaWiki\Extension\Wikven\Fetching\FetchPin;
+use MediaWiki\Extension\Wikven\Fetching\Git;
+use MediaWiki\Extension\Wikven\Fetching\TarballChecksum;
+use MediaWiki\Extension\Wikven\Fetching\UserAgent;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Settings\Source\Format\JsonFormat;
 use MediaWiki\Settings\Source\Format\YamlFormat;
@@ -19,12 +25,12 @@ require_once "$IP/maintenance/Maintenance.php";
 
 // Wikven's autoloader is not active this early: making the extensions MediaWiki will load
 // present is what this script is for. Loaded directly, as loadConfig() loads SiteConfig below.
-require_once __DIR__ . '/../includes/Attempts.php';
-require_once __DIR__ . '/../includes/ComposerInstall.php';
-require_once __DIR__ . '/../includes/FetchPin.php';
-require_once __DIR__ . '/../includes/Git.php';
-require_once __DIR__ . '/../includes/TarballChecksum.php';
-require_once __DIR__ . '/../includes/UserAgent.php';
+require_once __DIR__ . '/../includes/Fetching/Attempts.php';
+require_once __DIR__ . '/../includes/Fetching/ComposerInstall.php';
+require_once __DIR__ . '/../includes/Fetching/FetchPin.php';
+require_once __DIR__ . '/../includes/Fetching/Git.php';
+require_once __DIR__ . '/../includes/Fetching/TarballChecksum.php';
+require_once __DIR__ . '/../includes/Fetching/UserAgent.php';
 
 /** Fetch third-party extensions/skins declared in .wikven.yaml before MediaWiki loads them. */
 class FetchExtensions extends Maintenance {

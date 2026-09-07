@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\RelativeUrl;
+use MediaWiki\Extension\Wikven\Output\RelativeUrl;
 use MediaWikiUnitTestCase;
 
 /**

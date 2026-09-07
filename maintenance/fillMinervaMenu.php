@@ -5,6 +5,10 @@ namespace MediaWiki\Extension\Wikven;
 use FilesystemIterator;
 use Maintenance;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\Wikven\Build\BuildFor;
+use MediaWiki\Extension\Wikven\Build\SkinList;
+use MediaWiki\Extension\Wikven\Output\HtmlListInserter;
+use MediaWiki\Extension\Wikven\Output\OutputName;
 use MediaWiki\Html\Html;
 use MediaWiki\Title\Title;
 

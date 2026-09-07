@@ -2,8 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\BuildFor;
-use MediaWiki\Extension\Wikven\OutputName;
+use MediaWiki\Extension\Wikven\Build\BuildFor;
+use MediaWiki\Extension\Wikven\Output\OutputName;
 use MediaWiki\Extension\Wikven\SiteConfig;
 use MediaWikiUnitTestCase;
 use StatusValue;

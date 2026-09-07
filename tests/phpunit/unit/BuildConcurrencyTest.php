@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\BuildConcurrency;
+use MediaWiki\Extension\Wikven\Build\BuildConcurrency;
 use MediaWikiUnitTestCase;
 
 /**

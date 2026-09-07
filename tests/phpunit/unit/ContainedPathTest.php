@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\ContainedPath;
+use MediaWiki\Extension\Wikven\Output\ContainedPath;
 use MediaWikiUnitTestCase;
 
 /**

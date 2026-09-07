@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\HtmlListInserter;
+use MediaWiki\Extension\Wikven\Output\HtmlListInserter;
 use MediaWikiUnitTestCase;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\UserAgent;
+use MediaWiki\Extension\Wikven\Fetching\UserAgent;
 use MediaWikiUnitTestCase;
 
 /**

@@ -6,10 +6,10 @@ wfLoadExtension('Wikven');
 
 // Paths derive from one workdir (src input, dist output, .cache ephemeral state); BuildPaths
 // holds the rule. Required by hand: wfLoadExtension above only queues the extension.
-require_once "$IP/extensions/Wikven/includes/BuildPaths.php";
+require_once "$IP/extensions/Wikven/includes/Build/BuildPaths.php";
 $wikvenWorkEnv = getenv('WIKVEN_WORKDIR');
 $wikvenWork = $wikvenWorkEnv !== false && $wikvenWorkEnv !== '' ? $wikvenWorkEnv : '/workspace';
-$wikvenPaths = MediaWiki\Extension\Wikven\BuildPaths::fromWorkdir($wikvenWork);
+$wikvenPaths = MediaWiki\Extension\Wikven\Build\BuildPaths::fromWorkdir($wikvenWork);
 $wikvenSrc = $wikvenPaths['source'];
 $wikvenDist = $wikvenPaths['dist'];
 $wikvenCache = $wikvenPaths['cache'];

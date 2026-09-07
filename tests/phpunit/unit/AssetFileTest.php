@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\AssetFile;
+use MediaWiki\Extension\Wikven\Output\AssetFile;
 use MediaWikiUnitTestCase;
 
 /**

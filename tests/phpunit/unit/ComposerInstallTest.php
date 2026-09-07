@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\ComposerInstall;
+use MediaWiki\Extension\Wikven\Fetching\ComposerInstall;
 use MediaWikiUnitTestCase;
 
 /**

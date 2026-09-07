@@ -6,6 +6,7 @@ use Maintenance;
 use MediaWiki\Cache\HTMLFileCache;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
+use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\Page\Article;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;

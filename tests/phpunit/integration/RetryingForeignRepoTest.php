@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\RetryingForeignRepo;
+use MediaWiki\Extension\Wikven\Fetching\RetryingForeignRepo;
 use MediaWiki\Http\MWHttpRequest;
 use MediaWiki\Status\Status;
 use MediaWikiIntegrationTestCase;

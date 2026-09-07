@@ -3,6 +3,10 @@
 namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
+use MediaWiki\Extension\Wikven\Output\AssetFile;
+use MediaWiki\Extension\Wikven\Output\AssetLocalizer;
+use MediaWiki\Extension\Wikven\Output\ModuleRenderer;
+use MediaWiki\Extension\Wikven\Output\Stylesheet;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\ResourceLoader\Context;

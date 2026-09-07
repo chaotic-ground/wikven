@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\SourceHistory;
+use MediaWiki\Extension\Wikven\Source\SourceHistory;
 use MediaWikiUnitTestCase;
 
 /**

@@ -2,8 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
+use MediaWiki\Extension\Wikven\Fetching\RetryingForeignRepo;
 use MediaWiki\Extension\Wikven\Hooks\Retrier;
-use MediaWiki\Extension\Wikven\RetryingForeignRepo;
 use MediaWiki\FileRepo\ForeignAPIRepo;
 use MediaWiki\FileRepo\ForeignDBRepo;
 use MediaWikiUnitTestCase;

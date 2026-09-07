@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
-use MediaWiki\Extension\Wikven\Git;
+use MediaWiki\Extension\Wikven\Fetching\Git;
 use MediaWikiIntegrationTestCase;
 
 /**

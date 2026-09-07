@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\BuildStamps;
+use MediaWiki\Extension\Wikven\Build\BuildStamps;
 use MediaWikiUnitTestCase;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
-use MediaWiki\Extension\Wikven\HtmlElementRemover;
+use MediaWiki\Extension\Wikven\Output\HtmlElementRemover;
 use MediaWikiUnitTestCase;
 
 /**

@@ -15,6 +15,7 @@ use MediaWiki\Extension\Translate\Services as TranslateServices;
 use MediaWiki\Extension\Translate\Statistics\MessageGroupStats;
 use MediaWiki\Extension\Wikven\PageTranslation\StalenessComputer;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
+use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;

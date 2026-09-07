@@ -7,6 +7,7 @@ use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
+use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\Import\WikiRevision;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\SlotRecord;
