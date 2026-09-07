@@ -15,13 +15,10 @@ require_once "$IP/maintenance/Maintenance.php";
 
 /**
  * Bake UniversalLanguageSelector webfonts into the export as a plain stylesheet: @font-face plus
- * :lang() rules for the languages the pages use, with the woff2 files copied alongside. It
- * reproduces the font ULS would apply by default, without shipping ULS's runtime JavaScript, which
- * pulls fonts from load.php.
+ * :lang() rules for the languages the pages use, with the woff2 files alongside, so an export can
+ * ship them without ULS's runtime JavaScript.
  *
- * Opt-in via $wgWikvenBundleWebfonts, since it adds font payload; a no-op when off or when ULS is
- * not installed. The stylesheet is linked like site.styles.css, and its font url()s resolve against
- * the stylesheet itself, so they hold from every page whatever its depth.
+ * Opt-in via $wgWikvenBundleWebfonts. The font url()s resolve against the stylesheet.
  */
 class BakeWebfonts extends Maintenance {
 	/** Output subdirectory (under the dist root) the woff2 files are copied into. */
@@ -71,9 +68,8 @@ class BakeWebfonts extends Maintenance {
 		}
 
 		$missing = FontCopier::copy("$ulsDir/data/fontrepo/fonts", "$htmlDir/" . self::FONTS_SUBDIR, $built['files']);
-		// The stylesheet names every one of these files, so shipping it without them gives the
-		// reader the tofu the site opted into bundled fonts to spare them. The site asked for these
-		// fonts; a build that cannot deliver them has not done what it was asked, and says so.
+		// The stylesheet names every one of these files, so shipping it without them gives the reader
+		// the tofu the site opted into bundled fonts to spare them.
 		if ($missing !== []) {
 			$counts = count($missing) . ' of ' . count($built['files']);
 			$this->fatalError("Wikven: $counts webfont file(s) could not be copied: " . implode(', ', $missing));

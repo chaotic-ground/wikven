@@ -18,8 +18,8 @@ class TranslationFamilyTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The rule this class exists for. Translate makes a translation page for the source's own
-	 * language, and it is the source page's article again at a second address; hreflang cannot say
-	 * a language is at two of them, so the source page keeps the language.
+	 * language, which is the source's article again at a second address; hreflang cannot say a
+	 * language is at two.
 	 */
 	public function testTheSourceLanguagesOwnTranslationPageDoesNotTakeTheLanguage() {
 		$this->assertSame(

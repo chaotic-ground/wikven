@@ -10,12 +10,10 @@ use MediaWiki\Languages\LanguageNameUtils;
 /**
  * Says what language the pages the build writes for itself are in.
  *
- * A page is in the wiki's content language unless something answers otherwise, and for a
- * translation page Translate is what answers. The licenses page the build writes per language has
- * that shape and nobody to answer for it, so every copy went out as English.
+ * A page is in the content language unless something answers otherwise, and for a translation
+ * page Translate is what answers. The licenses page has that shape and nobody to answer for it.
  *
- * Three things read that answer and all three were wrong: the "lang" attribute on <html>, the
- * :lang() rule ULS uses to pick a webfont, and the language SifterSearch files the page under.
+ * Three things read that answer: <html lang>, ULS's :lang() webfont rule, and SifterSearch.
  */
 class Declarer implements PageContentLanguageHook {
 	private LanguageFactory $languageFactory;

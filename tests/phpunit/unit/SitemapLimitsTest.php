@@ -15,9 +15,9 @@ class SitemapLimitsTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * The protocol says "no more than" and "no larger than", so the cap itself is inside it. A
-	 * site of exactly 50,000 pages hearing that it has too many would be wrong twice: the sitemap
-	 * is valid, and the complaint would send someone looking for a fault that is not there.
+	 * The protocol says "no more than" and "no larger than", so the cap itself is inside it. A site
+	 * of exactly 50,000 pages hearing that it has too many would be sent looking for a fault that
+	 * is not there.
 	 */
 	public function testASiteExactlyAtBothCapsIsWithinThem() {
 		$this->assertNull(SitemapLimits::exceeded('sitemap.xml', SitemapLimits::URLS, SitemapLimits::BYTES));
@@ -34,9 +34,8 @@ class SitemapLimitsTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The gap this class was added for. At about 1,000 bytes per URL -- a location around 900
-	 * characters, which deep subpage titles in a non-Latin script could percent-encode their way
-	 * to -- a site passes the byte cap while still well under the count, and before this it was
-	 * told nothing at all.
+	 * characters, which deep percent-encoded titles could reach -- a site passes the byte cap while
+	 * well under the count.
 	 */
 	public function testASitemapPastTheByteCapUnderTheUrlCapIsSaid() {
 		$this->assertSame(

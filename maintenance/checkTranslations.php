@@ -72,9 +72,8 @@ class CheckTranslations extends Maintenance {
 		$prefix = $prefix === '' ? '' : rtrim($prefix, '/') . '/';
 		$isKnownLanguage = [$this->getServiceContainer()->getLanguageNameUtils(), 'isKnownLanguageTag'];
 
-		// Counted apart because only one of them gates: a page that bakes wrong -- a source page
-		// Translate refuses, or a translation carrying markup that stops a unit being used -- is the
-		// author's to fix, while a translation falling behind is the translation system working.
+		// Counted apart because only one of them gates: a page that bakes wrong is the author's to fix,
+		// while a translation falling behind is the translation system working.
 		$errors = 0;
 		$stale = 0;
 		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
@@ -100,9 +99,8 @@ class CheckTranslations extends Maintenance {
 				$translationText = (string)file_get_contents($translationFile);
 				$reportFile = $prefix . substr($translationFile, strlen($source) + 1);
 
-				// A tag the translation should not carry at all, which is not a unit falling behind
-				// but a unit that will not be used: read before the units, because a file in this
-				// state has a translation nobody sees and every unit in it reads as up to date.
+				// A tag the translation should not carry at all, which is not a unit falling behind but a unit
+				// that will not be used: read before the units, since every unit in such a file reads as current.
 				foreach (StalenessComputer::strayTranslateTags($translationText) as $line) {
 					$errors++;
 					$this->findings[] = [
@@ -123,10 +121,9 @@ class CheckTranslations extends Maintenance {
 						continue;
 					}
 					$stale++;
-					// The source page is carried alongside because editing it is what puts a
-					// translation of it behind: a comment kept to one change counts such a finding
-					// as belonging to whoever moved the source, not only to whoever last touched
-					// the translation.
+					// The source page is carried alongside because editing it is what puts a translation of it
+					// behind: a comment kept to one change counts such a finding as belonging to whoever moved
+					// the source.
 					$this->findings[] = [
 						'kind' => $unit['status'],
 						'file' => $reportFile,
@@ -144,9 +141,7 @@ class CheckTranslations extends Maintenance {
 			}
 
 			// Named for a language but carrying none of the source's unit markers, so read as a page in its
-			// own right. That is usually what it is -- "API/id" is about identifiers, not Indonesian. The
-			// language code goes in as detail rather than as lang, an --comment-languages=auto run having no
-			// reason to write in it.
+			// own right. The code goes in as detail, not as lang: an auto-languages run must not write in it.
 			foreach (TranslationSource::pagesNamedForALanguage($baseFile, $isKnownLanguage) as $lang => $page) {
 				$reportPage = $prefix . substr($page, strlen($source) + 1);
 				$this->findings[] = [
@@ -185,9 +180,8 @@ class CheckTranslations extends Maintenance {
 	/**
 	 * Write the comment body for --comment-file, or nothing when the option is not given.
 	 *
-	 * A clean run still writes one, carrying TranslationAdvice::CLEAR_MARKER: a consumer that only
-	 * ever heard from a run with findings could not tell a complaint that has been answered from a
-	 * run that never happened, and would leave the answered one standing on the change.
+	 * A clean run still writes one, carrying CLEAR_MARKER: a consumer could not otherwise tell an
+	 * answered complaint from a run that never happened.
 	 */
 	private function writeComment(): void {
 		$path = (string)$this->getOption('comment-file', '');
@@ -210,8 +204,7 @@ class CheckTranslations extends Maintenance {
 	 * The paths --comment-paths named, or null when it named none and the comment is about the
 	 * whole tree.
 	 *
-	 * The file is written by whatever knows what the change touches, so a run that cannot read it
-	 * says so and comments about everything -- the behaviour this option narrows.
+	 * A run that cannot read the file comments about everything, which is what this narrows.
 	 *
 	 * @return list<string>|null
 	 */
@@ -237,9 +230,8 @@ class CheckTranslations extends Maintenance {
 	/**
 	 * The languages the comment is written in: English, then whatever --comment-languages asked for.
 	 *
-	 * English leads because it is the one language the workflow can count on a reader of the change
-	 * having in common with it. What follows is for the contributor: "auto" reads it off the
-	 * findings.
+	 * English leads as the one language a reader of the change is likely to share; "auto" reads
+	 * the rest off the findings.
 	 *
 	 * @return list<string>
 	 */

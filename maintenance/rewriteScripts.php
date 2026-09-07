@@ -74,9 +74,8 @@ class RewriteScripts extends Maintenance {
 			$trigger = array_merge($trigger, $this->defaultGadgetModules());
 			$trigger = array_values(array_unique($trigger));
 
-			// Stop the startup module from auto-loading anything over the network. Only the first match:
-			// the assignment lives in the RLQ script near the top of the page, and the same string can
-			// legitimately recur in the article body, e.g. a page documenting this pattern.
+			// Stop the startup module from auto-loading anything over the network. Only the first match: the
+			// assignment lives in the RLQ script near the top, and the string can recur in the body.
 			$html = preg_replace('/RLPAGEMODULES=\[[^\]]*\]/', 'RLPAGEMODULES=[]', $html, 1);
 
 			// Swap the async load.php startup tag for the local bundle + trigger.
@@ -150,9 +149,8 @@ class RewriteScripts extends Maintenance {
 	/**
 	 * Leave Citizen with the search its no-JS fallback gives it, or with none at all.
 	 *
-	 * Citizen's own search is a command palette backed by the REST API, which an export has no
-	 * server for. Underneath it the skin renders an ordinary search form that works, and
-	 * commandPalette.js deletes it the moment it finds its trigger by id.
+	 * Under the palette an export has no server for, the skin renders a working search form, which
+	 * commandPalette.js deletes on finding its trigger.
 	 */
 	private function citizenSearch(string $html, bool $searchWorks): string {
 		if ($searchWorks) {

@@ -10,9 +10,8 @@ class RelativeUrl {
 	/**
 	 * Add a "../" per level to every root-relative reference in a page moved $depth subdirectories down.
 	 *
-	 * A subpage title such as "Manual/Config" caches to a flat file but is exported into a real
-	 * "Manual/" directory, so its references need a "../" per level. Covers href/src/srcset, CSS
-	 * url(), the page's own JavaScript config and its schema.org block.
+	 * A subpage such as "Manual/Config" caches flat but is exported into a real directory. Covers
+	 * href/src/srcset, CSS url(), RLCONF and the schema.org block.
 	 */
 	public static function reparent(string $html, int $depth): string {
 		if ($depth < 1) {
@@ -89,8 +88,7 @@ class RelativeUrl {
 	 * Rebase the root-relative URLs a page carries in its JavaScript config.
 	 *
 	 * "./Page.html" means "from the output root", a claim only true of a page at the root. In an
-	 * attribute the passes above correct it; the same string handed to the client through mw.config
-	 * rides in RLCONF, where nothing was. Only that object: a bare string carries no marker.
+	 * attribute the passes above correct it; in RLCONF nothing was.
 	 *
 	 * @param string $html A rendered page.
 	 * @param callable(string):string $rebase Takes the matched "." or "..", returns its replacement.
@@ -124,9 +122,7 @@ class RelativeUrl {
 	 * Rebase the root-relative URLs a page carries in its schema.org block.
 	 *
 	 * The claim reparentConfigVars() answers, one escaping further along: json_encode() spells
-	 * "./assets/..." as ".\/assets\/...", which none of the passes above sees, so a subpage's
-	 * schema.org image resolved inside the subpage's own directory. Scoped to the block for the
-	 * reason reparentConfigVars() is scoped to RLCONF.
+	 * "./assets/..." as ".\/assets\/...", which none of the passes above sees.
 	 *
 	 * @param string $html A rendered page.
 	 * @param callable(string):string $rebase Takes the matched "." or "..", returns its replacement.
@@ -151,8 +147,8 @@ class RelativeUrl {
 	 * The offset just past the "}" closing the object literal that opens at $open, or null if the
 	 * text runs out first.
 	 *
-	 * Braces inside a string are not counted, so a config value holding one does not end the object
-	 * early. A non-greedy match up to the next "};" stops at the first value that contains it.
+	 * Braces inside a string are not counted, so a config value holding one does not end the
+	 * object early.
 	 */
 	private static function objectEnd(string $text, int $open): ?int {
 		$depth = 0;
@@ -186,9 +182,7 @@ class RelativeUrl {
 	 * Rebase the printfooter's "Retrieved from" link, the one reference that reaches a page having
 	 * lost the "./" the rest of this class goes by.
 	 *
-	 * Skin::printSource() expands Title::getCanonicalURL() a second time, and UrlUtils' dot-segment
-	 * removal drops the leading "./". What survives is still a path from the output root but no
-	 * longer says so, so from a subdirectory it answers 404.
+	 * Skin::printSource() expands the URL a second time, and dot-segment removal drops the "./".
 	 */
 	private static function rebasePrintFooter(string $html, string $up): string {
 		return preg_replace_callback(
@@ -212,8 +206,7 @@ class RelativeUrl {
 	/**
 	 * Whether $href is a bare path from the output root -- what the printfooter's link is left as.
 	 *
-	 * Everything else names something the depth of the page cannot move: an absolute URL, a path
-	 * from the host root, a fragment, or a link that kept its marker. A title such as
+	 * Everything else names something the page's depth cannot move. A title such as
 	 * "File:Oven.jpg.html" reads like a scheme, hence the test for "://".
 	 */
 	private static function isRootRelative(string $href): bool {
@@ -264,9 +257,7 @@ class RelativeUrl {
 	 * Resolve Translate's "Special:MyLanguage/Target" links, that special page not being exported,
 	 * to a static target: "Target/<lang>.html" where a translation exists, else "Target.html".
 	 *
-	 * Matched as the canonical spelling alone, which is the only one that reaches here: both sides
-	 * that write this marker write it canonically. The colon is matched in both spellings
-	 * OutputName writes.
+	 * The canonical spelling alone reaches here, both sides writing the marker that way.
 	 *
 	 * @param string $html
 	 * @param string|null $lang The page's language, or null for a source page (always the source target).

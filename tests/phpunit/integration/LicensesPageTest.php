@@ -15,8 +15,8 @@ class LicensesPageTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * The copies are the ones the build wrote, in every language the source tree carries.
 	 *
-	 * retranslateChrome re-renders these with their own language as the interface language, so this
-	 * is the list of pages whose chrome the build is entitled to change.
+	 * retranslateChrome re-renders these with their own language, so this is the list of pages
+	 * whose chrome the build may change.
 	 */
 	public function testTheCopiesAreTheOnesTheBuildWrote() {
 		$source = $this->sourceTreeTranslatedIntoKorean();
@@ -30,9 +30,8 @@ class LicensesPageTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * A copy the site provided itself is the site's, and re-rendering it is not the build's to do.
 	 *
-	 * This is the page the Declarer hook keeps its hands off (#561): English prose about Korean
-	 * licensing terms, at the title a Korean copy would have had. Re-rendering it in ko would wrap
-	 * Korean chrome around English prose.
+	 * This is the page the Declarer hook keeps its hands off (#561): English prose at the title a
+	 * Korean copy would take.
 	 */
 	public function testASourceCopyIsNotTheBuildsToRecache() {
 		$source = $this->sourceTreeTranslatedIntoKorean();

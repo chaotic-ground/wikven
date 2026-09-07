@@ -3,25 +3,23 @@
 namespace MediaWiki\Extension\Wikven\Comments;
 
 /**
- * How much prose each kind of comment is allowed, and how much the tree is allowed altogether.
+ * How much prose each kind of comment is allowed, and how much the tree is.
  *
- * The ceilings are per comment because that is where the drift was: the count was already normal
- * for a MediaWiki tree and only the length was out. Each is about twice core's ninetieth percentile
- * for its kind, so a constraint that needs a paragraph still gets one.
- *
- * The ratio is the second gate: a hundred comments just under a ceiling add up to the same essay.
+ * The ceilings are per comment because that is where the drift was: the count was normal and only
+ * the length was out. Each sits a third above core's ninetieth percentile, and the ratio behind
+ * them is what comments just under a ceiling would slip.
  */
 class Budget {
 	/** @var array<string,int> Words of prose allowed in one comment of each kind. */
 	private const CEILINGS = [
-		Comment::FILE => 150,
-		Comment::TYPE => 90,
-		Comment::MEMBER => 60,
-		Comment::NOTE => 60
+		Comment::FILE => 120,
+		Comment::TYPE => 60,
+		Comment::MEMBER => 40,
+		Comment::NOTE => 40
 	];
 
 	/** @var float Words of prose per line of code, over everything read. Core's includes/ runs 2.1. */
-	private const RATIO = 4.5;
+	private const RATIO = 4.0;
 
 	/** @var Comment[] */
 	public array $overrun = [];

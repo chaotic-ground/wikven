@@ -11,8 +11,7 @@ use MediaWiki\Registration\ExtensionRegistry;
  * Serves {{WIKVENVERSION}}: the version of the Wikven that is building this page.
  *
  * A site saying which Wikven built it had to write the number by hand, and the documentation had
- * the same problem in a worse place -- it tells readers which tag to pin an action to, so a stale
- * number there is a workflow that does not resolve. A variable is right by construction.
+ * the same problem in a worse place: it tells readers which tag to pin an action to.
  *
  * MediaWiki's own {{CURRENTVERSION}} answers for MediaWiki; this answers for what wrote the site.
  */

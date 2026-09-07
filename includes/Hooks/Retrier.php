@@ -24,9 +24,8 @@ class Retrier implements \MediaWiki\Hook\SetupAfterCacheHook {
 	 * @inheritDoc
 	 *
 	 * Let a remote file repository retry a request instead of treating the first failure as final;
-	 * see RetryingForeignRepo for why one failed request is otherwise fatal. Core fills in the rest
-	 * of each repository's settings in SetupDynamicConfig.php, which runs after LocalSettings.php,
-	 * so the class is swapped here rather than declared with the repository.
+	 * see RetryingForeignRepo. Core fills in the rest of its settings after LocalSettings.php, so
+	 * the class is swapped here.
 	 */
 	public function onSetupAfterCache(): void {
 		// The read goes through the service and the write cannot: Config is read-only, and what

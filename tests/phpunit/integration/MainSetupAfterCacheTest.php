@@ -90,9 +90,9 @@ class MainSetupAfterCacheTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * Citizen turns core's search wiring off, because its own search is the command palette; the
-	 * export keeps the plain form the skin renders under it, and that is what the wiring attaches
-	 * to. Only Citizen's answer is corrected, so no other skin's choice is disturbed.
+	 * Citizen turns core's search wiring off, its own search being the command palette; the export
+	 * keeps the plain form under it, which is what the wiring attaches to. Only Citizen's answer is
+	 * corrected.
 	 *
 	 * @dataProvider provideSearchWiringSkins
 	 */
@@ -115,10 +115,8 @@ class MainSetupAfterCacheTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * ULS fetches its input methods from load.php the first time a reader focuses a text field, and
-	 * an export has no load.php. Emptying the selector list is what leaves the handler nothing to
-	 * bind to, and it belongs here: set at LocalSettings time, an empty array reads to
-	 * ExtensionRegistry as "not set" and ULS's own default replaces it.
+	 * ULS fetches its input methods from load.php the first time a reader focuses a field. Emptying
+	 * the selector list leaves the handler nothing to bind to, and it belongs here.
 	 */
 	public function testUlsInputMethodsAreLeftWithNoFieldToBindTo() {
 		$this->setMwGlobals('wgULSImeSelectors', ['input[type=text]', 'textarea']);

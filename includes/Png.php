@@ -10,9 +10,8 @@ class Png {
 	/**
 	 * Return the PNG without the chunks whose payload is a timestamp.
 	 *
-	 * A thumbnail of unchanged source differs between bakes because ImageMagick stamps what it
-	 * writes: a tIME chunk, date:* text chunks, and Thumb::MTime. MediaWiki removes only Thumb::URI
-	 * and offers no way to pass -strip. Only clocks are dropped, and every remaining CRC stays valid.
+	 * ImageMagick stamps what it writes: a tIME chunk, date:* text chunks, and Thumb::MTime.
+	 * MediaWiki removes only Thumb::URI and offers no way to pass -strip.
 	 *
 	 * @param string $data Raw file contents.
 	 * @return string|null The rewritten PNG, or null if this is not a PNG whose chunks parse

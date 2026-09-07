@@ -7,9 +7,8 @@ class BuildStamps {
 	/**
 	 * What a page records about the request that rendered it, rather than about the page.
 	 *
-	 * Each entry is a pattern and its replacement. The ids are blanked rather than deleted, because
-	 * mw.config.get() on a missing key returns null where scripts expect a number. The comments are
-	 * dropped whole: they are debugging output for a live wiki.
+	 * The ids are blanked rather than deleted, because mw.config.get() on a missing key returns
+	 * null where scripts expect a number.
 	 */
 	private const STAMPS = [
 		// A fresh id per request, and how long that request took.

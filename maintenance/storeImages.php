@@ -27,10 +27,8 @@ class StoreImages extends Maintenance {
 		$assetDirectory = (string)$config->get('WikvenAssetDirectory');
 		$uploadDir = rtrim((string)$config->get('UploadDirectory'), '/');
 
-		// The pictures a page carries are as much the build's own output as the stylesheets are --
-		// nobody typed "img-1a2b3c4d5e6f.png" -- so they go where the rest of it goes. Made rather
-		// than assumed: BuildScripts happens to have made it already, and a step that depends on a
-		// sibling having run is the kind of seam this build keeps getting caught by.
+		// The pictures a page carries are as much the build's own output as the stylesheets are, so they
+		// go where the rest of it goes. Made rather than assumed: depending on a sibling is a seam.
 		$assetPath = AssetFile::path($htmlDir, $assetDirectory);
 		if (!wfMkdirParents($assetPath, null, __METHOD__)) {
 			$this->error("Wikven: could not create the asset directory $assetPath");
@@ -54,9 +52,8 @@ class StoreImages extends Maintenance {
 			$html = file_get_contents($file);
 
 			// Stored first, and only then hotlinked. Each pass reads what the one before it wrote, and both
-			// can now write the published base into a page. A site published under a path holding the upload
-			// path would have the second pass match the first one's answers; the repository's host is not a
-			// base anyone publishes under.
+			// can now write the published base into a page; the repository's host is not a base anyone
+			// publishes under.
 			$html = $references->rewrite(
 				$html,
 				function (string $path) use (&$map, $uploadDir, $htmlDir, $assetDirectory): ?string {

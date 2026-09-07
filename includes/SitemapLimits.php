@@ -5,13 +5,10 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * What a sitemap that is past the protocol's limits says about itself.
  *
- * One sitemap is capped twice over -- 50,000 URLs and 50MB -- and a site over either has to split
- * across several files. Splitting is not built (#626); this is only the sentence a build says
- * about a sitemap it wrote anyway.
+ * One sitemap is capped twice over -- 50,000 URLs and 50MB -- and splitting is not built (#626);
+ * this is only the sentence a build says about a sitemap it wrote anyway.
  *
- * The count is the cap a realistic site reaches first: this project's own bake writes 83 bytes a
- * URL, so 50,000 of them come to about 4 MB. Reaching 50 MB first takes locations around 900
- * characters.
+ * The count is the cap a realistic site reaches first: this bake writes 83 bytes a URL.
  */
 class SitemapLimits {
 	/** URLs one sitemap may name before it has to be split across several. */
@@ -21,17 +18,14 @@ class SitemapLimits {
 	 * Bytes one sitemap may reach, uncompressed.
 	 *
 	 * The protocol spells the number out -- "50MB (52,428,800 bytes)" -- so the megabyte here is
-	 * 1024 * 1024. Uncompressed is what it caps and the only measurement there is: the document is
-	 * plain XML, and whatever serves it compresses it or does not.
+	 * 1024 * 1024, and uncompressed is the only measurement there is.
 	 */
 	public const BYTES = 50 * 1024 * 1024;
 
 	/**
 	 * What is wrong with a sitemap of this size, or null where it is inside both caps.
 	 *
-	 * Both caps are weighed into one sentence, so a file over both is a single complaint. The file
-	 * is written either way, so a site that grows past a cap still has something on disk and a
-	 * message explaining it.
+	 * Both caps are weighed into one sentence, and the file is written either way.
 	 *
 	 * @param string $file What was written, so the complaint names the thing to go and look at.
 	 * @param int $urls How many pages it names.

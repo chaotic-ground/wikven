@@ -36,8 +36,8 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The three the build works out from the site's own lists. Each is a declared setting, so a
-	 * site's file can write one and $wgSettings->apply() will hand it over; WikvenSettings.php
-	 * writes the derived answer afterwards, and the site is left wondering why nothing happened.
+	 * site's file can write one and $wgSettings->apply() will hand it over -- and WikvenSettings.php
+	 * writes the derived answer afterwards.
 	 */
 	public function testASkinSettingTheBuildDerivesForItselfWarns() {
 		foreach (SiteConfig::DERIVED_SKIN_CONFIG as $derived) {
@@ -150,9 +150,8 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * Whose a name is takes reading the manifests of everything queued, which is not something
-	 * lint() is in a position to do: it runs while a site's file is being read, and the extensions
-	 * that would answer are still queued. undefinedConfig() below is where that question is asked.
+	 * Whose a name is takes reading the manifests of everything queued, which lint() is in no
+	 * position to do: it runs while a site's file is read, and those extensions are still queued.
 	 */
 	public function testLintDoesNotJudgeWhetherAConfigNameExists() {
 		$this->assertSame([], SiteConfig::lint(['config' => ['WikvenFooterURL' => 'x']]));
@@ -217,9 +216,8 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * A site's file reaches globals through $wgSettings, which writes the "wg" prefix and no other,
-	 * so a setting behind a different prefix cannot be written from one at all. Counting it as
-	 * known would tell a site that wrote it that the line was taken.
+	 * A site's file reaches globals through $wgSettings, which writes the "wg" prefix and no other.
+	 * Counting a setting behind another prefix as known would tell a site the line was taken.
 	 */
 	public function testManifestConfigNamesSkipsAManifestBehindAnotherPrefix() {
 		$this->assertSame(

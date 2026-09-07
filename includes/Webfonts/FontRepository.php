@@ -6,12 +6,9 @@ namespace MediaWiki\Extension\Wikven\Webfonts;
  * Turn UniversalLanguageSelector's font-repository data into a static @font-face stylesheet, so an
  * export can ship webfonts without ULS's runtime JavaScript.
  *
- * ULS applies, with no reader interaction, the first font listed for a language, unless that entry
- * is "system". This reproduces that default: an @font-face for the font and its bold and italic
- * variants, and a :lang() rule that applies it.
- *
- * The url()s are written relative to a caller-supplied base -- the path from the stylesheet to the
- * copied woff2 files -- so they resolve from any page depth.
+ * ULS applies the first font listed for a language unless that entry is "system", and this
+ * reproduces that default. The url()s are written relative to a caller-supplied base, so they
+ * resolve from any page depth.
  */
 class FontRepository {
 	/** @var array<string,string[]> Language code => font family names, in preference order. */

@@ -9,10 +9,9 @@ use MediaWiki\Title\Title;
  * Where the page saying what a site redistributes lives, and what its per-language copies are
  * called.
  *
- * One place, because two things have to agree on it and they run in different processes. build.php
- * writes "<Page>/<lang>" while it populates the wiki; the Declarer hook, in every skin pass after
- * that, has to recognise the same titles to say what language they are in. A rule kept twice is a
- * rule that drifts, and the drift here is silent: the page still renders, in the wrong language.
+ * One place, because two things have to agree on it in different processes: build.php writes
+ * "<Page>/<lang>", and the Declarer hook has to recognise the same titles. The drift would be
+ * silent -- the page still renders, in the wrong language.
  */
 class LicensesPage {
 	/** The page the site asked for, or null where it asked for none (the name set empty). */
@@ -29,9 +28,8 @@ class LicensesPage {
 	/**
 	 * The language a title is a generated copy in, or null where it is not one.
 	 *
-	 * Generated is the whole of it. The build writes copies only where it wrote the page itself, so
-	 * a subpage under a page the source tree provides belongs to the site, or to Translate, and
-	 * this must not answer for it.
+	 * The build writes copies only where it wrote the page itself, so a subpage under a source page
+	 * is the site's or Translate's.
 	 *
 	 * @param Title $title
 	 * @param callable(string):bool $isKnownLanguage
@@ -64,9 +62,8 @@ class LicensesPage {
 	/**
 	 * The copies the build wrote, keyed by the language each one is in.
 	 *
-	 * The languages are the ones the source tree carries translations in, because those are the
-	 * ones build.php writes a copy for. Which of those copies are the build's own is the question
-	 * above, asked once per language.
+	 * The languages are the ones the source tree carries translations in. Which of those copies are
+	 * the build's own is the question above.
 	 *
 	 * @param string $sourceDir
 	 * @param callable(string):bool $isKnownLanguage

@@ -14,10 +14,8 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 	 *
 	 * Make a run that died of an Error say so in its exit status.
 	 *
-	 * An Error goes past MaintenanceRunner's catch to MWExceptionHandler, whose guard is a shutdown
-	 * function exiting 255 -- which the standalone binary reads the status too early to see, so a
-	 * build step that died handed back 0. Installed from a hook because core's installHandler()
-	 * runs after LocalSettings.php.
+	 * MWExceptionHandler's guard is a shutdown function exiting 255, which the binary reads the
+	 * status too early to see, so a step that died handed back 0.
 	 */
 	public function onSetupAfterCache(): void {
 		self::install(MW_ENTRY_POINT, defined('MW_PHPUNIT_TEST'), 'set_exception_handler');
@@ -26,8 +24,7 @@ class Reporter implements \MediaWiki\Hook\SetupAfterCacheHook {
 	/**
 	 * Put the handler in front of core's, where this is a run whose status is worth correcting.
 	 *
-	 * What is handed to $set is the one thing here no test reaches: calling the installed handler
-	 * means calling core's reporter and then a real exit.
+	 * $set is the one thing here no test reaches: calling the installed handler means a real exit.
 	 *
 	 * @param string $entryPoint MW_ENTRY_POINT, naming what kind of run this is.
 	 * @param bool $underTest Whether PHPUnit is running, which owns the handler while it is.

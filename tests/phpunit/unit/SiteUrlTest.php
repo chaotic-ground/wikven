@@ -48,10 +48,8 @@ class SiteUrlTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * A base is about to become a directory that file names hang off, and a query or a fragment
-	 * cannot be one: appending the trailing slash after either gives ".../wiki?x=1/index.html".
-	 * Both are things a site can reasonably paste out of an address bar, so they are dropped rather
-	 * than refused.
+	 * A base is about to become a directory that file names hang off, and a query cannot be one:
+	 * the trailing slash after it gives ".../wiki?x=1/index.html". A site pastes these.
 	 */
 	public function testAQueryOrFragmentCannotBeTheDirectoryFileNamesHangOff() {
 		$this->assertSame(
@@ -128,9 +126,7 @@ class SiteUrlTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The failure a bare RFC 3986 resolution walks into: a reference whose first segment holds a
-	 * colon is a URL with a scheme, and the default file-name spelling keeps colons -- this name is
-	 * a real one on wikven's own documentation site. Resolved bare it comes back
-	 * "file:Note_icon.svg.html", which is relative, lower-cased, and not the page.
+	 * colon is a URL with a scheme, and the default file-name spelling keeps colons.
 	 */
 	public function testAColonInAFileNameIsNotReadAsAScheme() {
 		$this->assertSame(

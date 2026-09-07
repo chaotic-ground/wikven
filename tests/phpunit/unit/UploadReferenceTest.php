@@ -39,9 +39,7 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The defect this class exists for. MediaWiki hands a head tag File::getFullUrl(), so a scheme
-	 * and host arriving here is MediaWiki saying this will be read away from the page. Answered
-	 * with a path beside the page it means nothing: a crawler that never saw the page has nothing
-	 * to resolve it against.
+	 * and host arriving here is MediaWiki saying this will be read away from the page.
 	 */
 	public function testAWholeReferenceIsAnsweredWhole() {
 		$this->assertSame(
@@ -73,9 +71,8 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * json_encode() escapes a slash unless told not to, and an extension writing a schema.org block
-	 * calls it plainly. Matching only the bare spelling is how one page could carry a rewritten
-	 * og:image and, for the same file, a JSON-LD image still naming the upload path.
+	 * json_encode() escapes a slash unless told not to. Matching only the bare spelling is how one
+	 * page could carry a rewritten og:image and a JSON-LD image still naming the upload path.
 	 */
 	public function testAJsonEscapedReferenceIsMatchedAndAnsweredEscaped() {
 		$this->assertSame(
@@ -140,9 +137,8 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * {{filepath:}} writes its URL into the autolink's text as well as into the href, and nothing
-	 * quotes the text. A path that admits "<" runs on into the tag after it, and the build aborts
-	 * over "/Card.png</a>", a file that was never referenced.
+	 * {{filepath:}} writes its URL into the autolink's text as well as the href, and nothing quotes
+	 * the text, so a path admitting "<" runs on into the tag after it.
 	 */
 	public function testAnAutolinkedUrlDoesNotSwallowTheTagAfterIt() {
 		$asked = null;
@@ -176,9 +172,8 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * A stored picture named from the head arrives whole, so the shape has always been enough to
-	 * answer it. It is answered by where it sits as well, because that is the rule the shape stands
-	 * in for -- and a page that names one root-relatively is then right rather than lucky.
+	 * A stored picture named from the head arrives whole, so the shape has always been enough. It
+	 * is answered by where it sits as well, because that is the rule the shape stands in for.
 	 */
 	public function testAReferenceFromTheSiteRootInTheHeadIsAnsweredWhole() {
 		$this->assertSame(
@@ -201,8 +196,7 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The defect this half exists for. A foreign repository's file is a whole URL wherever it is
-	 * named, so nothing about the reference says who reads it, and answering the head's copy beside
-	 * the page left an og:image no crawler can resolve.
+	 * named, so answering the head's copy beside the page left an og:image nothing can resolve.
 	 */
 	public function testAHotlinkInTheHeadIsAnsweredWhole() {
 		$this->assertSame(
@@ -226,8 +220,7 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The spelling a schema.org block writes. Nothing matched it, so a page could carry a rewritten
-	 * og:image beside a JSON-LD image still hotlinking the repository -- and the build called itself
-	 * self-contained, because a reference it never saw is not one it can report.
+	 * og:image beside a JSON-LD image still hotlinking the repository.
 	 */
 	public function testAJsonEscapedHotlinkIsMatchedAndAnsweredEscaped() {
 		$html = '<html><head><script type="application/ld+json">{"url":"%s"}</script></head></html>';

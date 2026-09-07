@@ -111,9 +111,7 @@ class Reader {
 	/**
 	 * Words of prose in a comment, with the markers and the @tag blocks taken out.
 	 *
-	 * A tag and the indented lines under it are the signature written a second time. Counting them
-	 * would make somebody choose between documenting a parameter and explaining a decision, which
-	 * is not a choice any budget should ask for.
+	 * A tag and the lines indented under it are the signature written a second time.
 	 */
 	public static function words(string $text): int {
 		$body = preg_replace('#^[ \t]*(/\*+|\*+/|\*|//+|\#+)#m', '', $text);

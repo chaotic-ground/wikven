@@ -14,17 +14,15 @@ require_once "$IP/maintenance/Maintenance.php";
 /**
  * Move each cached page to the file the site is served from; see OutputName.
  *
- * The file cache names a page "ns<N>%3A<escaped dbkey>.html". OutputName says what that becomes --
- * a readable namespace, the dots and subpage slashes restored, and the rest of the escaping either
- * undone or left standing depending on the site's setting -- and every link the build wrote names
- * the same destination, because it asked the same class from the other side.
+ * The file cache names a page "ns<N>%3A<escaped dbkey>.html", and OutputName says what that
+ * becomes. Every link the build wrote names the same destination, because it asked the same class
+ * from the other side.
  */
 class Rename extends Maintenance {
 	/**
 	 * How many pages this pass named, for the caller that has to say what the pass produced.
 	 *
-	 * The build reads it back out of the object it ran; see Build::renderSkin(), which is what
-	 * turns a number nobody was checking into the pass's proof that it finished.
+	 * The build reads it back out of the object it ran; see Build::renderSkin().
 	 */
 	public int $named = 0;
 
@@ -59,9 +57,8 @@ class Rename extends Maintenance {
 	/**
 	 * Put one page where its name says it goes.
 	 *
-	 * A subpage title such as "Manual/Config" caches to a flat file and is exported into a real
-	 * "Manual/" directory, so its root-relative references need a "../" per level to keep pointing
-	 * at the same files; a page at the root is a plain move.
+	 * A subpage such as "Manual/Config" caches flat and is exported into a real directory, so its
+	 * root-relative references need a "../" per level.
 	 */
 	private function place(string $path, string $filename, string $name): void {
 		$destination = "$path/$name";

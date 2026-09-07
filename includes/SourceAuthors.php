@@ -9,10 +9,9 @@ use MediaWiki\User\UserRigorOptions;
 /**
  * The accounts a build writes pages under: one per author the source history names.
  *
- * A revision has to belong to someone, and the point of reading the history is that the name the
- * footer shows is the one the "View history" commit list shows. A name MediaWiki will not take is
- * retried as the other names that author has committed under; only when none is usable does this
- * fall back to the account the build writes under, which hideBuildAuthors() then hides.
+ * The point of reading the history is that the footer shows the name the "View history" commit
+ * list shows. Only when no spelling of a name is one MediaWiki will take does this fall back to
+ * the account the build writes under.
  */
 class SourceAuthors {
 	private UserFactory $factory;
@@ -32,11 +31,10 @@ class SourceAuthors {
 	}
 
 	/**
-	 * The account to write a page under, given the names the history has for its author.
+	 * The account to write a page under.
 	 *
-	 * The first name MediaWiki will take wins. The list is one person -- the name on the commit,
-	 * then the others they have committed under (see SourceHistory::authors()) -- so a name a
-	 * username cannot carry costs the attribution only when every spelling of it is refused.
+	 * The first name MediaWiki will take wins, and the list is one person: the name on the commit,
+	 * then the others they have committed under.
 	 *
 	 * @param string[] $names
 	 */

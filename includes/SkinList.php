@@ -8,9 +8,8 @@ use MediaWiki\Skin\Skin;
 /** Each enabled skin's copy of the current page: the switcher, wherever a skin can show it. */
 class SkinList {
 	/**
-	 * The href is the root-relative form every other link is written in ("./x" from the main skin's
-	 * output, "../x" from a skin subdirectory), so rename.php reparents these by the page's own
-	 * depth along with the rest and a subpage's links stay correct.
+	 * The href is the root-relative form every other link is written in, so rename.php reparents
+	 * these by the page's own depth along with the rest.
 	 *
 	 * @return list<array{id:string,text:string,href:?string,active:bool}> The current skin's own
 	 *   entry has no href. Empty when there is nothing to switch between.

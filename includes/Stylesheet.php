@@ -5,11 +5,10 @@ namespace MediaWiki\Extension\Wikven;
 /** The CSS files a build dumps into the export directory. */
 class Stylesheet {
 	/**
-	 * Write one stylesheet out, and say what went wrong when it did not reach the disk.
+	 * Write one stylesheet out, and say what went wrong.
 	 *
-	 * The caller is meant to stop the build rather than move on to the next module: a bake that
-	 * filled the disk used to leave the site unstyled and say so only through wfDebug(), which goes
-	 * nowhere.
+	 * The caller is meant to stop the build: a bake that filled the disk used to leave the site
+	 * unstyled and say so only through wfDebug().
 	 *
 	 * @param string $filename Where the stylesheet goes.
 	 * @param string $text The CSS to write there.

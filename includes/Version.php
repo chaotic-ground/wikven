@@ -5,10 +5,8 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * The version a loaded component declares for itself.
  *
- * Read from ExtensionRegistry's credits, which is where a manifest's "version" lands and the same
- * place the licenses page reads every other component's from. Kept apart from the hook that serves
- * {{WIKVENVERSION}} so the one question -- what does this component say it is -- can be asked of a
- * plain array in a test, without a registry or a wiki.
+ * Read from ExtensionRegistry's credits, where a manifest's "version" lands. Kept apart from the
+ * hook that serves {{WIKVENVERSION}} so it can be asked of a plain array in a test.
  */
 class Version {
 	/**

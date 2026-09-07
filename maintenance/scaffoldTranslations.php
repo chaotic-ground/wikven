@@ -66,9 +66,8 @@ class ScaffoldTranslations extends Maintenance {
 	/**
 	 * Stop on the pages that were left alone, having written the ones that were fine.
 	 *
-	 * Said at the end rather than where each is found, because --all walks the whole tree: a first
-	 * refusal that ended the run would leave the rest of the language unscaffolded and hide however
-	 * many more there are.
+	 * Said at the end rather than where each is found: --all walks the whole tree, and a first
+	 * refusal would hide the rest.
 	 */
 	private function reportRefusals(): void {
 		if ($this->refused === []) {

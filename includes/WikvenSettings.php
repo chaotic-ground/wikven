@@ -4,10 +4,8 @@ wfLoadExtension('Wikven');
 
 // Static-export build internals; user-overridable defaults live in default.yml.
 
-// Paths derive from one workdir (src input, dist output, .cache ephemeral state). BuildPaths holds
-// the rule; this file asks it again after a site's configuration is applied, and one copy of the
-// rule cannot disagree with the other. Required by hand: wfLoadExtension above only queues the
-// extension, so its autoloader is not there yet.
+// Paths derive from one workdir (src input, dist output, .cache ephemeral state); BuildPaths
+// holds the rule. Required by hand: wfLoadExtension above only queues the extension.
 require_once "$IP/extensions/Wikven/includes/BuildPaths.php";
 $wikvenWorkEnv = getenv('WIKVEN_WORKDIR');
 $wikvenWork = $wikvenWorkEnv !== false && $wikvenWorkEnv !== '' ? $wikvenWorkEnv : '/workspace';
@@ -25,41 +23,38 @@ $wgWikvenHtmlDirectory = $wikvenDist;
 
 // That file cache holds two actions per page, and the export is one of them: rebuildFileCache.php
 // renders ?action=history for every page in every skin pass, into a tree the pass then deletes.
-// Swap it for an action that renders nothing (see SkippedHistoryAction for why not $wgActions).
+// Swap it for an action that renders nothing.
 $GLOBALS['wgActions']['history'] = MediaWiki\Extension\Wikven\SkippedHistoryAction::class;
 
 // Per-page "last edited" dates come from the source tree's git history, which a bake usually
-// cannot reach: actions/bake mounts the source directory without the .git beside it, so the action
-// dumps the log on the runner and mounts it here instead. See SourceHistory.
+// cannot reach: actions/bake mounts the source directory without the .git beside it, so it dumps
+// the log on the runner instead. See SourceHistory.
 $wgWikvenSourceHistoryFile = $wikvenPaths['history'];
 
 // $wgCacheEpoch would otherwise follow LocalSettings.php's mtime, which the entrypoint rewrites
 // every bake, and it is a version input of any module carrying a versionCallback.
 $wgInvalidateCacheOnLocalSettingsChange = false;
 
-// The database queue pops jobs in random order by default, to spread concurrent runners over
-// different rows. A build has one runner and wants a fixed order: the jobs that render translated
-// pages create those pages, so a random order gives them different ids on every bake.
+// The database queue pops jobs in random order by default. A build has one runner and wants a
+// fixed order: the jobs that render translated pages create those pages, so a random order gives
+// them different ids on every bake.
 $GLOBALS['wgJobTypeConf']['default']['order'] = 'fifo';
 
 // The NewPP limit report is a wall-clock measurement of the parse, so it differs between bakes.
 // It is addressed to someone debugging a live wiki, and nothing in an export can act on it.
 $wgEnableParserLimitReporting = false;
 
-// Run the whole build as of one instant. Every revision and upload is created while the build
-// runs, so with a live clock the pages report themselves as edited seconds ago, differently in
-// each bake. That is what SOURCE_DATE_EPOCH means; wikven's GitHub action passes the commit being
-// built. Without it a fixed date is used.
+// Run the whole build as of one instant: with a live clock the pages report themselves as edited
+// seconds ago, differently in each bake. wikven's action passes the commit being built.
 $wikvenEpoch = getenv('SOURCE_DATE_EPOCH');
 $wikvenEpoch = is_string($wikvenEpoch) && preg_match('/^\d+$/', trim($wikvenEpoch))
 	? (int)trim($wikvenEpoch)
 	: 946_684_800;
 Wikimedia\Timestamp\ConvertibleTimestamp::setFakeTime($wikvenEpoch);
 
-// A build parses every page many times over, and each parse of a page embedding a Commons image
-// asks commons.wikimedia.org for that image's thumbnail URL again. MediaWiki caches those lookups
-// in the main object cache, which the installer leaves at CACHE_NONE, leaving a three-entry
-// per-process cache a site with four Commons URLs thrashes. Point it at the build's own database.
+// Each parse of a page embedding a Commons image asks commons.wikimedia.org for its thumbnail
+// URL again, and the installer leaves the main object cache at CACHE_NONE, so all that is left
+// is a three-entry per-process one.
 $wgMainCacheType = CACHE_DB;
 
 // The frozen clock makes this one impossible to invalidate: CacheTime::expired() tests
@@ -97,9 +92,9 @@ unset($wgFooterIcons['poweredby']);
 
 // Detect image backend at run time; SVG never via ImageMagick (IM7 lacks `convert`).
 $wikvenFindExe = static function (array $names) {
-	// Core's own environment checks locate the same binaries with this, so the two agree on where they
-	// are: it splits PATH and also searches the standard bin directories a stripped-down PATH omits.
-	// It reaches nothing but getenv() and is_executable(), so it is safe this early.
+	// Core's own environment checks locate the same binaries with this, so the two agree on where
+	// they are: it splits PATH and also searches the standard bin directories a stripped-down PATH
+	// omits. It reaches nothing but getenv() and is_executable().
 	if (class_exists(\MediaWiki\Utils\ExecutableFinder::class)) {
 		return \MediaWiki\Utils\ExecutableFinder::findInDefaultPaths($names) ?: null;
 	}
@@ -186,11 +181,9 @@ foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {
 // Push merged config into globals so the logo handling below reads final values.
 $wgSettings->apply();
 
-// Core keeps a site's address in two halves and a site should not have to write it twice: it
-// writes WikvenSiteUrl once, and this hands core the half core understands; see SiteUrl.
-//
-// $wgServer gets it too. Nothing in a build fetches from it, so a reader was being handed the
-// build container's address.
+// Core keeps a site's address in two halves and a site should not write it twice: it writes
+// WikvenSiteUrl once, and this hands core the half it understands (see SiteUrl). $wgServer too,
+// a reader having been handed the container's address.
 $wikvenSiteUrl = MediaWiki\Extension\Wikven\SiteUrl::fromWritten((string)( $wgWikvenSiteUrl ?? '' ));
 if ($wikvenSiteUrl->isKnown()) {
 	$wgCanonicalServer = $wikvenSiteUrl->canonicalServer();
@@ -198,15 +191,14 @@ if ($wikvenSiteUrl->isKnown()) {
 }
 
 // And take back the three the build works out for itself, which apply() has just handed to
-// whatever a site's file said. A site that set WikvenSourceDirectory would be configured from one
-// tree and built from another, SiteConfig::locate() having run against the workdir long before.
+// whatever a site's file said. A site that set WikvenSourceDirectory would be configured from
+// one tree and built from another.
 $wgWikvenSourceDirectory = $wikvenPaths['source'];
 $wgWikvenHtmlDirectory = $wikvenPaths['dist'];
 $wgWikvenSourceHistoryFile = $wikvenPaths['history'];
 
-// Say which setting core cannot accept, while the site's file is still the obvious suspect.
-// Without this a wrong-typed value is carried until something reads it. It cannot catch a
-// misspelled key: validate() walks the schema's keys rather than the file's.
+// Say which setting core cannot accept, while the site's file is still the obvious suspect. It
+// cannot catch a misspelled key: validate() walks the schema's keys rather than the file's.
 foreach (MediaWiki\Extension\Wikven\SiteConfig::schemaErrors($wgSettings->validate()) as $wikvenBadSetting) {
 	error_log("Wikven: WARNING in configuration: $wikvenBadSetting");
 }
@@ -216,13 +208,10 @@ $config['extensions'] = array_values(array_unique(array_filter($config['extensio
 $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_string'), SORT_STRING));
 
 // A name in these two lists is a directory in this image, and both loops below turn it straight
-// into a path: one carrying a path separator resolves outside the image and is then loaded as if
-// the image had shipped it. fetchExtensions.php already refuses such a name, so refuse it where
-// the loading happens too.
+// into a path: one carrying a separator resolves outside the image and is loaded anyway.
 
-// Anything named below that is not on disk is a name whose settings nobody here can account for.
-// Collected rather than counted, because the build fails on it and has to say which names -- and
-// this file cannot fail on it itself, fetchExtensions.php booting it to install what is missing.
+// Anything named below that is not on disk is a name whose settings nobody here can account
+// for. Collected rather than counted, because the build fails on it and has to say which names.
 $GLOBALS['wgWikvenMissing'] = [];
 
 // Register each bundled skin; canonical name (may differ from dir) read from skin.json.
@@ -258,10 +247,8 @@ $wikvenNamedSkin = $wikvenSiteData['config']['DefaultSkin'] ?? '';
 if (!is_string($wikvenNamedSkin)) {
 	$wikvenNamedSkin = '';
 }
-// Through $GLOBALS because this is the one place the file reads core's default before it
-// sets it below, and nothing else in the tree declares that global any more: the
-// maintenance scripts that used to say `global $wgDefaultSkin;` ask the config service now,
-// so a bare read here is a name static analysis can no longer account for.
+// Through $GLOBALS because this is the one place the file reads core's default before setting
+// it below, and nothing else in the tree declares that global any more.
 $wikvenFirstSkin = $wgWikvenSkins[0] ?? $GLOBALS['wgDefaultSkin'];
 if ($wikvenNamedSkin !== '' && !in_array($wikvenNamedSkin, $wgWikvenSkins, true)) {
 	// Named by its canonical name, which is what MediaWiki calls a skin and is not always what you
@@ -284,12 +271,12 @@ $wikvenBuildSkin = getenv('WIKVEN_BUILD_SKIN');
 if ($wikvenBuildSkin !== false && in_array($wikvenBuildSkin, $wgWikvenSkins, true)) {
 	$wgDefaultSkin = $wikvenBuildSkin;
 	// Source images are uploaded by the pass that populates the wiki, so by the time a skin renders
-	// there is nothing left to upload, and an "Upload file" link would point at a Special: page the
-	// export does not have. Citizen's is the visible one, in the sidebar rather than the toolbox.
+	// an "Upload file" link would point at a Special: page the export does not have. Citizen's is
+	// the visible one.
 	$wgEnableUploads = false;
 	// The passes run beside each other, and SQLite takes one writer at a time -- a pass still
-	// writes to the object cache, which is a table. build.php hands each one a copy of the
-	// database to work on and names its directory here; nothing reads the copies afterwards.
+	// writes to the object cache, which is a table. build.php hands each a copy of the database
+	// and names its directory here.
 	$wikvenPassDatabase = getenv('WIKVEN_BUILD_DB_DIR');
 	if (is_string($wikvenPassDatabase) && is_dir($wikvenPassDatabase)) {
 		$wgSQLiteDataDir = $wikvenPassDatabase;
@@ -322,10 +309,9 @@ foreach ($config['extensions'] ?? [] as $extension) {
 	}
 }
 
-// UniversalLanguageSelector would have the browser pull its webfont module and font files from
-// load.php, which a static export cannot serve; with $wgWikvenBundleWebfonts set, bakeWebfonts.php
-// bakes the same fonts into a static stylesheet instead. Its input methods go the same way. The
-// flag below is not what stops that fetch: Main::onSetupAfterCache() empties the selector list.
+// UniversalLanguageSelector would have the browser pull its webfonts from load.php, which a
+// static export cannot serve; with $wgWikvenBundleWebfonts set, bakeWebfonts.php bakes them into
+// a stylesheet instead. What stops the fetch is Main::onSetupAfterCache().
 if (in_array('UniversalLanguageSelector', $config['extensions'], true)) {
 	$GLOBALS['wgULSWebfontsEnabled'] = false;
 	$GLOBALS['wgULSIMEEnabled'] = false;
@@ -348,14 +334,12 @@ if (
 	$GLOBALS['wgSifterSearchOutputDir'] = "$wikvenDist/pagefind";
 }
 
-// Say which config names nothing defines, now that everything that could define one is queued.
-// This is the quietest way a line in a site's file is lost: $wgSettings writes the name into a
-// global nothing reads. Silent while a name in this site's lists is missing, fetchExtensions.php
-// booting this file to install those.
+// Say which config names nothing defines. This is the quietest way a line in a site's file is
+// lost: $wgSettings writes the name into a global nothing reads. Silent while a name in this
+// site's lists is missing.
 if ($wikvenSiteFile !== null && $GLOBALS['wgWikvenMissing'] === []) {
 	// Core's names are already in hand, and most of a config file is core settings. Only what they
-	// leave over is worth opening two dozen manifests for, which is usually nothing at all -- and
-	// this runs in every process a build starts.
+	// leave over is worth opening two dozen manifests for, and this runs in every build process.
 	$wikvenDefined = array_fill_keys($wgSettings->getDefinedConfigKeys(), true);
 	$wikvenUnaccounted = array_diff_key($wikvenSiteConfig, $wikvenDefined);
 	if ($wikvenUnaccounted !== []) {

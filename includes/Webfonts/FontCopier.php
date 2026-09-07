@@ -5,9 +5,8 @@ namespace MediaWiki\Extension\Wikven\Webfonts;
 /**
  * Copy the woff2 files a baked stylesheet names out of UniversalLanguageSelector's font repository.
  *
- * The stylesheet and the files it points at are one thing: an @font-face whose url() answers 404
- * leaves the reader with exactly the tofu the bundled font was there to spare them. So this reports
- * every file that did not arrive rather than counting the ones that did.
+ * An @font-face whose url() answers 404 leaves the reader with exactly the tofu the bundled font
+ * was there to spare them, so this reports every file that did not arrive.
  */
 class FontCopier {
 	/**

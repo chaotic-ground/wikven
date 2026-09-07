@@ -9,12 +9,9 @@ use InvalidArgumentException;
 /**
  * Where a built site will be published, and so the one place an absolute URL can come from.
  *
- * A sitemap's <loc>, an hreflang alternate and an og:url must be fully qualified, and nothing else
- * in a build knows where the output is going: onGetLocalURL rewrites every link to a file beside
- * the one asking. So a site says where it publishes or those features stay off; a value that says
- * nothing and one this cannot use both hand back ''.
- *
- * The URL work is Guzzle's, which arrives with core.
+ * A sitemap's <loc>, an hreflang alternate and an og:url must be fully qualified, and nothing
+ * else in a build knows where the output is going. So a site says where it publishes, or those
+ * features stay off.
  */
 final class SiteUrl {
 	/** The published base, ending in a slash, or '' where the site has not said. */
@@ -30,9 +27,7 @@ final class SiteUrl {
 	 * A written value read as a base, usable or not.
 	 *
 	 * Only http and https, which is wikven's check rather than the library's: a crawler fetches
-	 * neither a mailto: nor an irc:. A query, a fragment and a
-	 * password are dropped rather than refused. The trailing slash is settled here because every
-	 * caller joins a file name to it.
+	 * neither a mailto: nor an irc:. A query, a fragment and a password are dropped.
 	 */
 	public static function fromWritten(string $written): self {
 		$trimmed = trim($written);
@@ -68,19 +63,17 @@ final class SiteUrl {
 	/**
 	 * The scheme and host of the base, for $wgCanonicalServer, or '' where there is no base.
 	 *
-	 * Core keeps the two halves apart -- a path lives in $wgArticlePath -- and a site should not
-	 * have to. It writes the whole URL once and this hands core the half it understands.
+	 * Core keeps the two halves apart and a site should not have to.
 	 */
 	public function canonicalServer(): string {
 		return $this->base === '' ? '' : (string)( new Uri($this->base) )->withPath('');
 	}
 
 	/**
-	 * The absolute URL of a file the build wrote, or '' where the site has not said where it is.
+	 * The absolute URL of a file the build wrote, or '' where the site has not said.
 	 *
-	 * The name arrives from OutputName already encoded, so it is resolved rather than encoded
-	 * again. The "./" matters: under RFC 3986 a first segment holding a colon is a scheme, so
-	 * "File:Note_icon.svg.html" resolved bare comes back lower-cased and not the page.
+	 * The "./" matters: under RFC 3986 a first segment with a colon is a scheme, so a File: name
+	 * resolved bare is not the page.
 	 */
 	public function forFile(string $href): string {
 		if ($this->base === '') {

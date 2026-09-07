@@ -17,12 +17,9 @@ require_once "$IP/maintenance/Maintenance.php";
 /**
  * Put the site's navigation in Minerva's main menu.
  *
- * Minerva builds that menu from its own Menu\Definitions and reads MediaWiki:Sidebar only to
- * override the href of its two hardcoded entries, so a site's own navigation never reaches it: the
- * Definitions class is final, its builder is constructed inside the skin, and it registers no menu
- * hook. So the entries are written into the rendered pages instead.
- *
- * Runs before rename.php, so hrefs written as "./Page.html" are reparented with every other link.
+ * Minerva builds that menu from its own Menu\Definitions and nothing in PHP can add to it: the
+ * class is final and it registers no menu hook. So the entries are written into the rendered
+ * pages instead, before rename.php, so their hrefs are reparented with every other link.
  */
 class FillMinervaMenu extends Maintenance {
 	/** The list Minerva renders its own discovery entries into; ours follow it. */
@@ -49,9 +46,8 @@ class FillMinervaMenu extends Maintenance {
 		if ($config->get('DefaultSkin') !== 'minerva' || $dir === '' || !is_dir($dir)) {
 			return;
 		}
-		// The site's own navigation written into the skin's menu is the largest edit wikven makes
-		// to any skin's chrome, so it is the first thing a skin preview does without: what Minerva
-		// builds from its own definitions is what a skin author came to look at. See BuildFor.
+		// The site's own navigation written into the skin's menu is the largest edit wikven makes to any
+		// skin's chrome, so it is the first thing a skin preview does without. See BuildFor.
 		if (BuildFor::skinPreview()) {
 			$this->output("Skin preview: leaving Minerva's main menu as the skin builds it\n");
 			return;
@@ -69,10 +65,8 @@ class FillMinervaMenu extends Maintenance {
 			if (!$file->isFile() || $file->getExtension() !== 'html') {
 				continue;
 			}
-			// A group of its own each, as Minerva's own groups are: one list, one band of the menu.
-			// The file is still under its cache name here, and what goes in is a link rather than a
-			// name: rename.php runs after this pass, so ask OutputName what it will leave behind and
-			// then what reaches it.
+			// A group of its own each, as Minerva's own groups are: one list, one band of the menu. The file
+			// is still under its cache name here, so ask OutputName what it will leave behind.
 			$page = OutputName::href(OutputName::fromCache($file->getFilename(), $namespaceText));
 			$html = (string)file_get_contents($file->getPathname());
 			$filled = HtmlListInserter::after(
@@ -186,9 +180,8 @@ class FillMinervaMenu extends Maintenance {
 	}
 
 	/**
-	 * Every link section of the sidebar, in order. A site names its own sections -- the docs site
-	 * puts one entry in `navigation` and the rest in a section of its own -- so all of them are
-	 * taken, minus the three core handles that are not navigation.
+	 * Every link section of the sidebar, in order. A site names its own sections, so all of them
+	 * are taken, minus the three core handles that are not navigation.
 	 *
 	 * @return iterable<array>
 	 */

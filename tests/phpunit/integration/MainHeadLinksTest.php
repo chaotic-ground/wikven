@@ -10,10 +10,8 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * What a page's head says about its own address and about its translations.
  *
- * Its own class because the answer is only as good as the pages behind it: a set names a
- * translation where one was really written, so the code asks each candidate whether it exists and
- * the tests have to write one. MediaWiki decides whether a test class gets a database once, for
- * the whole class, so this cannot live beside the tests in MainTest that need none.
+ * Its own class because the answer is only as good as the pages behind it, and MediaWiki decides
+ * whether a test class gets a database once, for the whole class.
  *
  * @group Database
  * @covers \MediaWiki\Extension\Wikven\Hooks\Main
@@ -27,7 +25,7 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 	 * A page says which of its addresses is the real one, whole.
 	 *
 	 * A host that answers /Getting_Started for Getting_Started.html gives the same document two
-	 * addresses, and a skin copy gives it a third. Naming the one settles all of them at once.
+	 * addresses, and a skin copy a third.
 	 */
 	public function testAPageNamesTheWholeAddressItIsPublishedAt() {
 		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
@@ -42,8 +40,7 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * An hreflang value has to be a whole url, and a site that has not said where it is published
-	 * has none to give. Naming the build container's own address would be worse than saying
-	 * nothing, so a page that would carry a set carries none.
+	 * has none to give. Naming the build container's address would be worse than saying nothing.
 	 */
 	public function testWithoutASiteUrlThereIsNoSetToWrite() {
 		$this->licensedSiteTranslatedIntoKorean();
@@ -56,8 +53,7 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * With no whole address to give, a skin copy can still say which page it duplicates: that page
-	 * is in the export one directory up, so pointing at it needs no notion of where the site is
-	 * published. This is what the export said before it said anything else.
+	 * is one directory up, so pointing at it needs no notion of where the site is published.
 	 */
 	public function testWithoutASiteUrlASkinCopyStillNamesThePageItDuplicates() {
 		$this->overrideConfigValue('WikvenSiteUrl', '');
@@ -84,8 +80,7 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * The licenses page is the one page on a site that is genuinely several languages without
-	 * Translate knowing it: the build writes the page and a copy per language the source tree is
-	 * translated into. Without this it would be the one page saying nothing about them.
+	 * Translate knowing it. Without this it would be the one page saying nothing about them.
 	 */
 	public function testTheLicensesPageNamesItsTranslations() {
 		$this->licensedSiteTranslatedIntoKorean();
@@ -104,8 +99,7 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * Every page of a set names the whole set, itself included, because a search engine reads them
-	 * as a group only where the group agrees on its own membership. What differs between them is
-	 * the canonical url, which is each page's own.
+	 * as a group only where the group agrees on its membership.
 	 */
 	public function testALicensesCopyNamesTheSameSetAsThePageItself() {
 		$this->licensedSiteTranslatedIntoKorean();
@@ -121,9 +115,8 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * A language the source tree is translated into is not by itself a licenses page in that
-	 * language. build.php writes a copy only for a language it can translate the page's own
-	 * messages into, and an alternate naming a page the export does not have is a set a search
-	 * engine throws away whole.
+	 * language, and an alternate naming a page the export does not have is a set a search engine
+	 * throws away whole.
 	 */
 	public function testALicensesCopyTheBuildDidNotWriteIsNotNamed() {
 		$this->licensedSiteTranslatedIntoKorean();
@@ -153,9 +146,7 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * The same links read as what each one says: the language it claims, or "canonical", against
-	 * the page it names with the site's own address taken off the front. The markup itself is
-	 * pinned by testAPageNamesTheWholeAddressItIsPublishedAt; what a set has to get right is which
-	 * page answers for which language, and that is what this shows.
+	 * the page it names. What a set has to get right is which page answers for which language.
 	 *
 	 * @return array<string,string>
 	 */

@@ -12,12 +12,9 @@ use SplFileInfo;
  * The pages one skin pass owns, out of everything under its output directory.
  *
  * For the main skin that directory is dist/ itself, the parent of every other skin's output, so
- * "everything under my output directory" is not "my pages": writing one races the pass that owns
- * it (#407, #409).
+ * writing everything under it would race the pass that owns a page (#407, #409).
  *
- * Which directory belongs to which is decided by name, and with CapitalLinks off a page can take a
- * skin's name. The main pass then skips that page with the skin's copies -- the safe half of a
- * collision nothing can resolve.
+ * With CapitalLinks off a page can take a skin's name, and the main pass skips it.
  */
 class SkinOutput {
 	/**

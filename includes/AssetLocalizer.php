@@ -12,9 +12,8 @@ class AssetLocalizer {
 	/**
 	 * Rewrite asset url()s in the given dumped CSS/JS files to point at copies in $dir.
 	 *
-	 * A CSS file resolves its url()s relative to itself, so a "./img-*.svg" beside it works from any
-	 * depth. A JS bundle injects its CSS into the document, where url()s resolve against the page
-	 * and break on subpages; pass $inline for those, to embed the images.
+	 * A CSS file resolves its url()s against itself; a JS bundle's resolve against the page. Pass
+	 * $inline for those, to embed the images.
 	 */
 	public static function localizeAssets(
 		ResourceLoader $rl,
@@ -49,9 +48,8 @@ class AssetLocalizer {
 				$text
 			);
 
-			// (2) Direct skin/resource/extension asset paths. Fonts (Citizen ships its own) only in a
-			// plain stylesheet, which is where an @font-face can do any good: inlining one into a JS
-			// bundle would carry the whole typeface, in base64, in every page's JavaScript.
+			// (2) Direct skin/resource/extension asset paths. Fonts only in a plain stylesheet, where an
+			// @font-face can do any good: inlining one would carry the whole typeface in base64.
 			if ($mwRoot !== '') {
 				$types = $inline ? 'svg|png|gif|jpe?g' : 'svg|png|gif|jpe?g|woff2?|ttf|otf';
 				$text = preg_replace_callback(
@@ -77,10 +75,8 @@ class AssetLocalizer {
 	/**
 	 * Undo the escaping a URL picked up from being embedded in a JS bundle's JSON string literal.
 	 *
-	 * ResourceLoader escapes those with JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT, so
-	 * json_decode is the exact inverse and covers every escape those flags produce. Text that is not a
-	 * JSON string body -- a plain CSS file, where nothing was escaped in the first place -- passes
-	 * through unchanged.
+	 * ResourceLoader escapes those with JSON_HEX_*, so json_decode is the exact inverse. A plain
+	 * CSS file, where nothing was escaped, passes through unchanged.
 	 */
 	private static function decodeJsonString(string $text): string {
 		$decoded = json_decode('"' . $text . '"');
@@ -90,9 +86,8 @@ class AssetLocalizer {
 	/**
 	 * Encode raw image bytes as a data: URI usable unquoted inside url().
 	 *
-	 * CSSMin percent-encodes printable text (an SVG, typically) rather than base64-encoding it, and
-	 * leaves the spaces bare because it quotes the url() it builds. Here the URI goes in unquoted,
-	 * and a bare space makes the declaration invalid, so put those back.
+	 * CSSMin leaves the spaces in a percent-encoded SVG bare because it quotes its url(). Here the
+	 * URI is unquoted, where a bare space makes the declaration invalid.
 	 */
 	private static function dataUri(string $bytes, string $mime): string {
 		return str_replace(' ', '%20', CSSMin::encodeStringAsDataURI($bytes, $mime));

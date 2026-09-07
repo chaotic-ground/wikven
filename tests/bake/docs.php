@@ -14,19 +14,16 @@
  */
 
 return [
-	// Where this site is published. Every whole address the export writes -- the sitemap, og:url,
-	// og:image, the canonical and hreflang links -- is built from it, and each is checked against
-	// it. The same value as WikvenSiteUrl in docs/.wikven.yaml, which is what the bake itself reads.
+	// Where this site is published. Every whole address the export writes is built from it and
+	// checked against it. The same value as WikvenSiteUrl in docs/.wikven.yaml.
 	'site_url' => 'https://chaotic-ground.github.io/wikven/',
 
 	// The skins docs/.wikven.yaml adds, each of which gets a whole second copy of the site under a
-	// directory of this name. A copy is noindex wholesale and carries its own search bundle and its
-	// own module bundle, so the checks need to know which directories are copies rather than pages.
+	// directory of this name. The checks need to know which directories are copies rather than pages.
 	'skin_copies' => ['citizen', 'minerva'],
 
-	// Every skin module the startup manifest may register: the two copies above plus the default
-	// from default.yml. Exact, rather than a list of names not to find -- a check that only knows
-	// the two skins that once rode in uninvited would pass the next one (#637).
+	// Every skin module the startup manifest may register. Exact, rather than a list of names not to
+	// find: a check that only knows the two that once rode in uninvited would pass the next (#637).
 	'skin_modules' => ['skins.citizen', 'skins.minerva', 'skins.vector'],
 
 	// The pages this site means to keep out of the index. Search is a results page, and a results
@@ -46,20 +43,17 @@ return [
 	'sortable_page' => 'Licenses.html',
 
 	// A translated page in a script UniversalLanguageSelector bundles a font for, and the directory
-	// that font is copied into. Without a page in such a script every webfont assertion passes
-	// vacuously on an empty stylesheet, so the fixture is named rather than assumed.
+	// that font is copied into. Without one, every webfont assertion passes vacuously.
 	'webfont_language' => 'km',
 	'webfont_directory' => 'KhmerOSbattambang',
 
 	// The translated page whose navigation row proves a prevnext link is labelled with its target's
-	// own translated title. Which page follows it comes from MediaWiki:Sidebar, and the title to
-	// expect from that page's own source, so this names only the fixture.
+	// own translated title. What follows it comes from MediaWiki:Sidebar, so this names the fixture.
 	'prevnext_page' => 'Searching',
 	'prevnext_language' => 'ko',
 
 	// Pages that invoke a Lua module, and the answer Module:Example gives on each: the title of the
-	// page it ran on. Spelled out per page rather than derived from the file name, because the file
-	// name has underscores where the title has spaces (#465).
+	// page it ran on. Spelled out per page because the file name has underscores (#465).
 	'lua_pages' => [
 		'Lua_modules.html' => 'Lua modules',
 		'Lua_modules/ko.html' => 'Lua modules/ko'

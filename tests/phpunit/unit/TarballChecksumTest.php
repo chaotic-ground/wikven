@@ -41,9 +41,9 @@ class TarballChecksumTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * "sha256:" with nothing after it is how YAML spells a key whose value has not been filled in
-	 * yet. Reading that as "pins nothing" fetched the tarball unverified without a word -- the one
-	 * outcome the key exists to prevent -- so it is a pin that fails validation instead.
+	 * "sha256:" with nothing after it is how YAML spells an unfilled key. Reading that as "pins
+	 * nothing" fetched the tarball unverified -- the one outcome the key exists to prevent -- so
+	 * it is a pin that fails validation instead.
 	 */
 	public function testASpecWhoseChecksumIsEmptyHasPinnedSomethingUnreadable() {
 		$this->assertSame('', TarballChecksum::wanted(['sha256' => null]));
@@ -77,10 +77,9 @@ class TarballChecksumTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * The promise this exists to hold. Configuration says "the build aborts on a mismatch", and a
-	 * tarball is the one fetch method whose source can change without the site's configuration
-	 * changing -- so a comparison that stopped saying no would let a build run code nobody chose,
-	 * with the documentation still promising it could not.
+	 * The promise this exists to hold. Configuration says "the build aborts on a mismatch", so a
+	 * comparison that stopped saying no would let a build run code nobody chose, with the
+	 * documentation still promising it could not.
 	 */
 	public function testAFileThatDoesNotIsRefused() {
 		file_put_contents($this->file, 'wikven, tampered with');

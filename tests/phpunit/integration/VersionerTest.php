@@ -17,10 +17,9 @@ use MediaWikiIntegrationTestCase;
  */
 class VersionerTest extends MediaWikiIntegrationTestCase {
 	/**
-	 * The wiring, which a unit test cannot reach: Wikven.magic.php has to map the text
-	 * WIKVENVERSION to the id, GetMagicVariableIDs has to list that id, and only then is
-	 * ParserGetVariableValueSwitch asked for a value. Miss any one of the three and a page
-	 * renders the braces, or the empty string, with nothing said.
+	 * The wiring, which a unit test cannot reach: Wikven.magic.php has to map the text to the id,
+	 * GetMagicVariableIDs has to list it, and only then is ParserGetVariableValueSwitch asked. Miss
+	 * one and a page renders the braces.
 	 */
 	public function testAPageGetsTheVersionThisWikvenDeclares() {
 		$declared = Version::of(ExtensionRegistry::getInstance()->getAllThings(), 'Wikven');

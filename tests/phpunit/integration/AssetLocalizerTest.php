@@ -13,9 +13,8 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * The ResourceLoader service, with $GLOBALS['IP'] then pointed at a fixture install root.
 	 *
-	 * AssetLocalizer resolves a direct asset path against $IP, so these tests have to move it. The
-	 * container reads the real install the first time it builds the ResourceLoader, and errors out
-	 * on a fixture root -- so build it first, while $IP is still the real one.
+	 * The container reads the real install the first time it builds the ResourceLoader, so build
+	 * it while $IP is still the real one.
 	 */
 	private function resourceLoaderRootedAt(string $mwRoot): ResourceLoader {
 		$rl = $this->getServiceContainer()->getResourceLoader();
@@ -26,8 +25,7 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * Direct skin/resource/extension asset url()s in dumped CSS are the most regex-fragile part of
 	 * the static export: if they stop matching, the output silently points at paths that only exist
-	 * inside a live MediaWiki. Assert that every reference form the build emits is rewritten, that
-	 * look-alike paths are left untouched, and that the bytes are copied out.
+	 * inside a live MediaWiki.
 	 */
 	public function testLocalizeAssetsRewritesDirectAssetPaths() {
 		$mwRoot = $this->getNewTempDirectory();
@@ -68,10 +66,8 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * A JS bundle injects its CSS into the document, so a "./img-*.svg" url() would
-	 * resolve against the page and 404 on any subpage. In $inline mode the image
-	 * must instead be embedded as a data: URI (depth- and base-path-safe) with no
-	 * file written out.
+	 * A JS bundle injects its CSS into the document, so a "./img-*.svg" url() would resolve against
+	 * the page and 404 on any subpage. In $inline mode the image must be embedded instead.
 	 */
 	public function testLocalizeAssetsInlinesAssetsAsDataUris() {
 		$mwRoot = $this->getNewTempDirectory();
@@ -94,10 +90,9 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * A skin that ships its own typeface (Citizen does) points @font-face at a path only a live
-	 * MediaWiki serves, so the export renders in a fallback font and 404s once per face. The font
-	 * is copied out beside the stylesheet -- but never inlined, which would put the whole typeface
-	 * in base64 into every page's JavaScript.
+	 * A skin that ships its own typeface points @font-face at a path only a live MediaWiki serves.
+	 * The font is copied out beside the stylesheet -- but never inlined, which would put the whole
+	 * typeface in base64 into every page's JavaScript.
 	 */
 	public function testLocalizeAssetsCopiesFontsForStylesheetsOnly() {
 		$mwRoot = $this->getNewTempDirectory();
@@ -130,8 +125,7 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * A real icon SVG carries attributes, so the inlined URI has spaces between them. CSSMin leaves
-	 * those bare because it quotes the url() it builds itself; the one emitted here is unquoted,
-	 * and a bare space makes the whole declaration invalid.
+	 * those bare because it quotes its url(); the one emitted here is unquoted.
 	 */
 	public function testLocalizeAssetsEncodesSpacesInInlinedAssets() {
 		$mwRoot = $this->getNewTempDirectory();

@@ -10,10 +10,9 @@ use Wikimedia\RemexHtml\Tokenizer\Tokenizer;
 /**
  * Removes whole elements, subtree included, from raw HTML by byte range.
  *
- * RemexHtml's tokenizer -- the same one MediaWiki's own parser uses -- finds real tag boundaries
- * and nesting depth regardless of tag name, attribute quoting, or a ">" inside an attribute value.
- * Only the matched ranges are spliced out with substr(); everything else is untouched, byte for
- * byte, unlike a tree-builder-based rewrite that would reserialize the whole document.
+ * RemexHtml's tokenizer -- the same one MediaWiki's parser uses -- finds real tag boundaries and
+ * nesting depth whatever the attribute quoting. Only the matched ranges are spliced out; the rest
+ * is untouched byte for byte, unlike a tree-builder rewrite.
  */
 class HtmlElementRemover {
 	/**

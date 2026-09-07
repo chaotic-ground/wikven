@@ -10,9 +10,8 @@ use MediaWikiIntegrationTestCase;
  */
 class SearchTest extends MediaWikiIntegrationTestCase {
 	/**
-	 * Both answers are about SifterSearch, which is not installed in this suite, so what is
-	 * pinned here is the shape of that: with no search extension there is neither a working box
-	 * nor a results page to submit to, whatever the settings around them say.
+	 * Both answers are about SifterSearch, which is not installed in this suite: with no search
+	 * extension there is neither a working box nor a results page, whatever the settings say.
 	 */
 	public function testWithoutSifterSearchNothingIsActive() {
 		$this->setMwGlobals([
@@ -49,8 +48,7 @@ class SearchTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * The bundle's location is what decides which copy of the site a search answers with, so this
-	 * is the whole of #399's fix: the copy's directory goes ahead of the bundle's own, and every
-	 * URL SifterSearch derives from the path follows it in.
+	 * is the whole of #399's fix: the copy's directory goes ahead of the bundle's own.
 	 *
 	 * @dataProvider provideCopyBundlePaths
 	 */
@@ -98,9 +96,8 @@ class SearchTest extends MediaWikiIntegrationTestCase {
 			. '"include_characters":["_","‿","⁀","⁔","︳","︴","﹍","﹎","﹏","＿"]}';
 
 	/**
-	 * The fixtures are the real thing: the two files a single source produced on one runner, which
-	 * agreed on every hash and page count and disagreed on the order alone. That is the whole
-	 * failure, and normalising is what makes the two bakes byte-identical again (#411).
+	 * The fixtures are the real thing: two files one source produced on one runner, agreeing on
+	 * every hash and page count and disagreeing on the order alone (#411).
 	 */
 	public function testStableIndexEntrySettlesTheLanguageOrder() {
 		$this->assertNotSame(
@@ -115,9 +112,8 @@ class SearchTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * Only the order of that one map may move. The version and the character list keep their place,
-	 * and the characters keep their bytes -- escaping them to ‿ would make this file differ
-	 * from an older bake for no reason, which is the very thing being fixed.
+	 * Only the order of that one map may move. The version and the character list keep their place
+	 * and their bytes, which is the very thing being fixed.
 	 */
 	public function testStableIndexEntryChangesNothingButTheOrder() {
 		$stable = Search::stableIndexEntry(self::ENTRY_KO_FIRST);

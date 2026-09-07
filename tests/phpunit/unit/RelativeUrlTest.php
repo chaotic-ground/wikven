@@ -203,10 +203,8 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * A schema.org block names a picture with the URL storeImages left there. Where the site has
-	 * said where it is published that is a whole URL and no depth applies to it; where it has not,
-	 * it is a path from the output root spelled the way json_encode() spells one, which the
-	 * attribute and bare "./" passes both walk straight past.
+	 * A schema.org block names a picture with the URL storeImages left there, spelled the way
+	 * json_encode() spells a path, which both passes above walk straight past.
 	 */
 	public function testAJsonLdUrlFromTheOutputRootIsRebased() {
 		$this->assertSame(
@@ -305,8 +303,8 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * The marker is a link like any other, so under encoded file names it arrives with the colon
-	 * escaped and the target escaped with it. What follows the marker is the target's own link, so
-	 * appending "/<lang>.html" to it still names the translation's link.
+	 * escaped and the target with it. What follows is the target's own link, so appending
+	 * "/<lang>.html" still names the translation.
 	 */
 	public function testMyLanguageIsFoundUnderEncodedFileNames() {
 		$this->assertSame(
