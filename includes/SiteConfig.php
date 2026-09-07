@@ -8,8 +8,8 @@ use StatusValue;
 
 // LocalSettings.php loads this class by hand, before wfLoadExtension has given the extension an
 // autoloader, so its neighbours are fetched the same way.
-require_once __DIR__ . '/BuildFor.php';
-require_once __DIR__ . '/OutputName.php';
+require_once __DIR__ . '/Build/BuildFor.php';
+require_once __DIR__ . '/Output/OutputName.php';
 
 /** Helpers for a site's configuration file (accepted .wikven.* names; see CONFIG_FILENAMES). */
 class SiteConfig {
