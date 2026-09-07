@@ -8,6 +8,7 @@
 		"test": "minus-x check .",
 		"fix": "minus-x fix .",
 		"test:bake": "php tests/bake/assert-bake.php --expect tests/bake/docs.php --source docs dist",
+		"test:comments": "php tests/comments/assert-comments.php includes maintenance tests",
 		"phpcs": "phpcs -sp",
 		"phpcbf": "phpcbf"
 	},
