@@ -38,9 +38,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-07T12:37:07Z">
-<meta property="article:published_time" content="2026-09-07T12:37:07Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-07T12:37:07Z","datePublished":"2026-09-07T12:37:07Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-07T14:42:39Z">
+<meta property="article:published_time" content="2026-09-07T14:42:39Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-07T14:42:39Z","datePublished":"2026-09-07T14:42:39Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Development_en rootpage-Development_en skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
@@ -772,7 +772,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Continuous_integration">Continuous integration</h2></div>
 <ul><li><code>lint.yml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs), holds every source comment to a word budget, and checks that this site documents every Wikven configuration variable and every step of the build.</li>
-<li><code>test.yml</code> and <code>quibble.yml</code> run the PHPUnit suites and MediaWiki's own structure tests.</li>
+<li><code>test.yml</code> runs the PHPUnit suites, phan and coverage against a real MediaWiki, and builds the Caddy plugin.</li>
 <li><code>smoke.yml</code> bakes this site and asserts the output, in a browser and byte for byte.</li>
 <li><code>translations.yml</code> reports out-of-date translations in <code>docs/</code>, through the <a href="../Commands/en.html#check-translations" title="Special:MyLanguage/Commands">check-translations action</a>.</li>
 <li><code>docker-image.yml</code> builds the image, and publishes it only when a release or a nightly asks it to: a push to <code>main</code> builds and stops, which is what keeps the layer cache the other image jobs read from going cold. A publish goes from the one build to both <code>ghcr.io/chaotic-ground/wikven</code> and <code>quay.io/chaotic-ground/wikven</code>, and reads every tag back afterwards, so one that reaches one registry and not the other fails rather than passes. quay.io authenticates through a robot account federated to this repository's OIDC identity, so there is no registry token in the repository secrets.</li>
@@ -795,7 +795,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 7 September 2026, at 12:37.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 7 September 2026, at 14:42.</li>
 </ul>
 
 	<ul id="footer-places">
