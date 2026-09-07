@@ -69,14 +69,8 @@ class RetranslateChrome extends Maintenance {
 	 * The licenses page's own language copies, which the walk above cannot reach.
 	 *
 	 * That walk finds translations by their source files, and these have none: build.php writes
-	 * them, message by message, in each language the site is built in. They are pages in that
-	 * language all the same -- the Declarer hook answers for them -- so the chrome around them has
-	 * to follow, or a Korean page keeps an English menu and footer.
-	 *
-	 * Only the copies the build wrote: a page the source tree provided, under that title or under
-	 * one of its language subpages, is the site's or Translate's, and is handled above. LicensesPage
-	 * is asked which those are, the same as the Declarer hook asks it, so the chrome a copy wears
-	 * and the language it declares cannot end up disagreeing.
+	 * them message by message. They are pages in that language all the same, so the chrome has to
+	 * follow. Only the copies the build wrote.
 	 *
 	 * @param string $source
 	 * @param string $contentLang

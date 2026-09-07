@@ -187,10 +187,9 @@ class Checks {
 
 	/** @return string[] */
 	private static function bakeWarnings(Site $site): array {
-		// A bake with something to say about the site's own configuration says it and carries on, so
-		// a warning is only ever seen by whoever reads the log. The site's .wikven.yaml is the
-		// configuration wikven recommends; a warning about it is a mistake either in that file or in
-		// the code that reports on it, and both are worth stopping for.
+		// A bake with something to say about the site's own configuration says it and carries on, so a
+		// warning is only ever seen by whoever reads the log. The site's .wikven.yaml is the
+		// configuration wikven recommends, so a warning about it is a mistake worth stopping for.
 		$warnings = [];
 		foreach ($site->logs as $log) {
 			foreach (explode("\n", $site->read($log)) as $line) {
@@ -275,19 +274,10 @@ class Checks {
 
 	/** @return string[] */
 	private static function noindex(Site $site): array {
-		// A page that stops being indexed is invisible by construction: nothing 404s, nothing reads
-		// wrong, and the only place it shows is a crawler's view of the site weeks later.
-		// __NOINDEX__ is a behaviour switch, so a page that writes the word while telling a reader
-		// to use it takes it -- Deploying noindexed itself, in both languages, and left the sitemap,
-		// with every gate here green (#655). It is written through <nowiki> now.
-		//
-		// Read off the rendered pages rather than the sources, because the source is where the word
-		// legitimately appears, and named rather than counted, because a count passes one page
-		// swapping for another and the swap is what nobody would read.
-		//
-		// The sitemap is the other half of the same fact and the build derives it separately, so the
-		// two have to agree with the list and with each other. That half also catches a page leaving
-		// the sitemap for a reason that has nothing to do with noindex.
+		// A page that stops being indexed is invisible by construction: nothing 404s, and the only place
+		// it shows is a crawler's view of the site weeks later. __NOINDEX__ is a behaviour switch, so a
+		// page telling a reader to use it took it -- Deploying noindexed itself, in both languages, with
+		// every gate here green (#655).
 		$expected = (array)$site->expect['noindex_pages'];
 		$copies = (array)$site->expect['skin_copies'];
 
@@ -362,12 +352,9 @@ class Checks {
 
 	/** @return string[] */
 	private static function ogImage(Site $site): array {
-		// The card a shared link shows has to be an absolute URL -- read by something that never saw
-		// the page -- AND has to name a file this build actually wrote. Both halves are asserted,
-		// because either alone passes while the card is broken: WikiSEO builds the URL under
-		// MediaWiki's upload path, which the export does not serve, and storeImages moves it to the
-		// published file. Get one half of that wrong and the tag is either a relative URL no crawler
-		// can resolve or an absolute one pointing at nothing.
+		// The card a shared link shows has to be an absolute URL -- read by something that never saw the
+		// page -- AND has to name a file this build actually wrote. Either half alone passes while the
+		// card is broken: WikiSEO builds the URL under the upload path, and storeImages moves the file.
 		$missing = [];
 		$relative = [];
 		$seen = 0;
@@ -406,19 +393,10 @@ class Checks {
 
 	/** @return string[] */
 	private static function hotlinkHost(Site $site): array {
-		// A picture this site borrows from a repository is downloaded and republished, and what says
-		// the export stopped depending on that repository is that nothing in it still names the
-		// host. The documentation site embeds one, so this has something to be about.
-		//
-		// A reference the rewrite does not match is the failure nobody hears about: the build
-		// reports the files it could not fetch, and a reference it never saw is not one of them. A
-		// schema.org block spells the same URL "https:\/\/upload.wikimedia.org\/...", and for a
-		// while that spelling went through untouched while the og:image beside it was rewritten.
-		// Searched as raw text for that reason -- either spelling holds the host verbatim.
-		//
-		// Every file rather than the pages alone, and skipping the ones that are not text, which is
-		// the reading `grep -rI` gave this before it was a check: a picture is named from a
-		// stylesheet and from a script bundle as readily as from a page.
+		// A picture this site borrows from a repository is downloaded and republished, and what says the
+		// export stopped depending on it is that nothing still names the host. A reference the rewrite
+		// does not match is the failure nobody hears about: a schema.org block spells the same URL
+		// "https:\/\/upload.wikimedia.org\/...", which went through untouched for a while.
 		$guilty = [];
 		foreach ($site->filesEndingIn('') as $path) {
 			$text = $site->read($path);
@@ -472,17 +450,9 @@ class Checks {
 	/** @return string[] */
 	private static function buildHost(Site $site): array {
 		// Nothing a reader is handed may name the machine that built it. The build installs against
-		// http://localhost:4000 and every step is a maintenance script, so any address that reaches
-		// the output through $wgServer is the container's, not the site's. Two places had one, green
-		// across every other check: WikiSEO named it as the site's author and publisher in the
-		// JSON-LD of every page, and mw.config shipped it as wgServer in the module bundle,
-		// disagreeing with the wgServerName beside it.
-		//
-		// Scoped to the head, because "http://localhost:8080" is also a correct sentence:
-		// docs/Deploying.wikitext tells a reader to open the preview there, and wikitext autolinks
-		// it, so the body legitimately holds an anchor to a local address. The head is machine-read
-		// metadata about the site and can hold no such sentence. The generated bundles are searched
-		// whole; they hold no prose either.
+		// http://localhost:4000, so any address reaching the output through $wgServer is the
+		// container's; two places had one, green across every other check. Scoped to the head, because
+		// docs/Deploying.wikitext tells a reader to open the preview at a local address.
 		$bad = [];
 		foreach ($site->filesEndingIn('') as $path) {
 			$isHtml = str_ends_with($path, '.html');
@@ -594,9 +564,7 @@ class Checks {
 	private static function pagefindLanguages(Site $site): array {
 		// Each page is indexed in the language it is written in, so Pagefind builds one index per
 		// language and a reader searching from a translated page is answered out of that language's
-		// index (#400). A single index means every translation was stamped with the wiki's content
-		// language and stemmed by English rules, which is what this site looked like until
-		// SifterSearch indexed per page rather than per wiki.
+		// index (#400). A single index meant every translation was stemmed by English rules.
 		$metas = $site->glob($site->path('pagefind', '*.pf_meta'));
 		if (!$metas) {
 			return [$site->path('pagefind') . ' holds no search index at all'];
@@ -632,15 +600,9 @@ class Checks {
 	/** @return string[] */
 	private static function pagefindSourceLanguage(Site $site): array {
 		// Marking a page for translation gives it a translation page in the source language too, so
-		// "Installation" and "Installation/en" hold the same English text under two titles and
-		// English was counted twice for every translated page (#454). Only the source page is
-		// indexed now, and what says so is the absence of any "/en.html" from the English index -- a
-		// count would not, since the pages indexed are not the source files: the build generates
-		// Licenses and Settings, which have no files, and the search results page has a file but is
-		// not indexed. Those two cancelled out the day this was written, so a count read off the
-		// source tree would have passed by luck and broken on the next page added.
-		//
-		// This reads Pagefind's fragments, which are gzipped JSON carrying the page's url.
+		// English was counted twice (#454). What says only the source page is indexed now is the
+		// absence of any "/en.html" from the English index; a count would not, the pages indexed not
+		// being the source files.
 		$language = (string)$site->expect['source_language'];
 		$pattern = '~"url":"[^"]*/' . preg_quote($language, '~') . '\.html"~';
 		foreach ($site->glob($site->path('pagefind', 'fragment', "{$language}_*")) as $fragment) {
@@ -666,10 +628,8 @@ class Checks {
 	/** @return string[] */
 	private static function sortableTable(Site $site): array {
 		// A sortable table needs jquery.tablesorter, and core does not queue it while rendering:
-		// mediawiki.page.ready looks for table.sortable in the browser and fetches the module from
-		// load.php, which an export does not have (#483). The build makes that decision instead, so
-		// what this checks is that it made it -- the module has to be in the bundle, and the page
-		// that asked for it has to still be there to ask.
+		// mediawiki.page.ready looks for table.sortable in the browser and fetches it from load.php,
+		// which an export does not have (#483). The build makes that decision instead.
 		$page = $site->path((string)$site->expect['sortable_page']);
 		if (!is_file($page) || !preg_match('~class="[^"]*\bsortable\b~', $site->read($page))) {
 			return ["$page no longer has a sortable table for this to be about"];
@@ -686,14 +646,9 @@ class Checks {
 
 	/** @return string[] */
 	private static function skinModules(Site $site): array {
-		// A skin the site never asked for has no business in the script every reader downloads. The
-		// installer used to enable every skin it found on disk, and MonoBook and Timeless rode into
-		// each bundle and onto the licenses page as skins this site publishes (#637). Read out of
-		// the startup manifest, which is the registry the bundle is built from, and so is where a
-		// skin nobody asked for shows up first. Each copy checked, not just the root: a reader of
-		// one skin downloads that copy's bundle and no other.
-		// Exact, rather than a list of names not to find: a check that only knows the two that went
-		// wrong would pass the next one.
+		// A skin the site never asked for has no business in the script every reader downloads: the
+		// installer used to enable every skin on disk, and MonoBook and Timeless rode into each
+		// bundle (#637). Read out of the startup manifest, which is what the bundle is built from.
 		$expected = (array)$site->expect['skin_modules'];
 		sort($expected, SORT_STRING);
 		$manifests = [
@@ -724,12 +679,8 @@ class Checks {
 	/** @return string[] */
 	private static function luaModules(Site $site): array {
 		// A Lua module runs at build time and its answer is baked into the page that invoked it
-		// (#465). Module:Example answers with the title of the page it ran on, so this says both
-		// that Scribunto rendered at all -- without it the invocation is left in the page as
-		// "{{#invoke:Example|thisPage}}", which is what used to happen quietly -- and that the
-		// module saw which page it was on, per language.
-		// Named per page rather than derived, because the file name has underscores where the title
-		// the module answers with has spaces.
+		// (#465). Module:Example answers with the title of the page it ran on, so this says both that
+		// Scribunto rendered at all and that the module saw which page it was on, per language.
 		$problems = [];
 		$pages = (array)$site->expect['lua_pages'];
 		ksort($pages);
@@ -779,11 +730,9 @@ class Checks {
 
 	/** @return string[] */
 	private static function headLinks(Site $site): array {
-		// Every address a page names for itself has to be one the export actually has (#394 again,
-		// one layer out). A canonical url and an hreflang alternate are whole urls, so nothing in
-		// the export resolves them and nothing else would notice one naming a page that was never
-		// written -- and a single alternate pointing at a 404 is enough for a search engine to throw
-		// away the whole set it belongs to.
+		// Every address a page names for itself has to be one the export actually has (#394 again, one
+		// layer out). A canonical url and an hreflang alternate are whole urls, so nothing in the export
+		// resolves them -- and one alternate pointing at a 404 loses the whole set it belongs to.
 		$hrefs = [];
 		foreach ($site->htmlFiles() as $page) {
 			$tags = [];
@@ -913,10 +862,9 @@ class Checks {
 
 	/** @return string[] */
 	private static function prevnextRows(Site $site): array {
-		// Every page the sidebar names gets a navigation row, and the two ends of the sequence get
-		// one link rather than two. The order lives in MediaWiki:Sidebar and Module:Sequence reads
-		// it (#455); before that it was restated in each call, and what went wrong twice was exactly
-		// this -- a page in the sidebar with no row, and the last page with none either.
+		// Every page the sidebar names gets a navigation row, and the two ends of the sequence get one
+		// link rather than two. The order lives in MediaWiki:Sidebar and Module:Sequence reads it
+		// (#455); before that it was restated in each call, and both ends went wrong.
 		$missing = [];
 		foreach (self::sidebarPages($site) as $page) {
 			$path = $site->path(str_replace(' ', '_', $page) . '.html');
@@ -937,15 +885,9 @@ class Checks {
 
 	/** @return string[] */
 	private static function prevnextLabel(Site $site): array {
-		// A prevnext link is labelled with the target page's own title, so on a translated page it
-		// must carry the translated one. The label is not in the calling page's source: the call
-		// sits outside the translate tags and passes a page name, and the template reads the title
-		// from the target's own title unit, which is the whole point -- a label restated in the
-		// caller would be a second copy of a string that is already translated once.
-		// One page is the fixture, and the expectation is read from the source rather than written
-		// into the expectations file: any Korean at all would pass a string pinned there. Which page
-		// follows it is read from the sidebar for the same reason the row itself is -- naming it
-		// would make this a check of a particular order rather than of the label.
+		// A prevnext link is labelled with the target page's own title, so on a translated page it must
+		// carry the translated one. The label is not in the calling page's source: the call sits outside
+		// the translate tags, and the template reads the target's own title unit.
 		$page = (string)$site->expect['prevnext_page'];
 		$language = (string)$site->expect['prevnext_language'];
 		$order = self::sidebarPages($site);

@@ -14,17 +14,10 @@ class ImageImport {
 	/**
 	 * The files core's importer will consider, found the way importImages.php finds them.
 	 *
-	 * Subdirectories included, because pages are read from them too: a source tree where
-	 * "Guide/Setup.wikitext" is the page "Guide/Setup" is one where "Guide/diagram.png" is the
-	 * image that page embeds, and reading one and not the other left the page with a red link and
-	 * the build with nothing to say about it. Matches on the extension without regard to case.
-	 *
-	 * Walks exactly what core's importImages walks, symlinked directories included, because the
-	 * point of this list is to be the same files core is about to import. It refused to follow a
-	 * linked directory once, which sounds safer and was not: core follows one (its findFiles tests
-	 * is_dir, which a link to a directory satisfies), so every file under it was imported while
-	 * this list -- and therefore outside(), collisions() and failed() -- could not see any of them.
-	 * Where a walk stops is not where to answer a symlink; outside() is.
+	 * Subdirectories included, because pages are read from them too, and matched on the extension
+	 * without regard to case. Symlinked directories are followed because core's findFiles tests
+	 * is_dir, which a link satisfies: refusing to follow one left every file under it imported and
+	 * invisible to outside(), collisions() and failed().
 	 *
 	 * @param string $directory Source directory, without a trailing slash.
 	 * @param string[] $extensions Allowed extensions, as $wgFileExtensions holds them.
@@ -58,19 +51,9 @@ class ImageImport {
 	/**
 	 * Files that would import as the same page, keyed by the name they would share.
 	 *
-	 * A File: title is the file's name and nothing else -- core takes wfBaseName($file) and makes
-	 * the title from that -- so two images with one name in two directories are one page. The
-	 * importer takes the first and skips the second, the name being taken, with a line among
-	 * thousands; whichever page embedded the second then shows the other one's picture. Reading
-	 * subdirectories is what makes this reachable, so it is answered where it becomes reachable.
-	 *
-	 * The name a file claims is the name after core normalises it, not the name on disk: a title
-	 * collapses every run of space, underscore and the other whitespace it knows to one underscore
-	 * and trims those off the ends, so "Bakery oven.png" and "Bakery_oven.png" are one page and
-	 * comparing the two strings would have said they were two. Case is left alone: default.yml sets
-	 * CapitalLinks to false -- the entry page is the lowercase "index" -- so "diagram.png" and
-	 * "Diagram.png" really are two titles here, and reporting them would fail a build that is fine.
-	 * A site that turns CapitalLinks back on makes that pair one page again, and this will not say so.
+	 * A File: title is wfBaseName($file) and nothing else, so two images with one name in two
+	 * directories are one page: the importer takes the first and skips the second. The name
+	 * compared is the one core normalises to; case is left alone, CapitalLinks being off.
 	 *
 	 * @param string[] $sources Absolute paths, as sources() returns them.
 	 * @return array<string, string[]> Shared name => the paths that claim it, two or more of them.
@@ -92,11 +75,8 @@ class ImageImport {
 	/**
 	 * The File: page a file of this name imports as, as far as two of them being one page goes.
 	 *
-	 * MediaWiki\Title\TitleParser does this to every title it makes: runs of space, underscore and
-	 * the space-like characters listed here collapse to a single underscore, and those are trimmed
-	 * off both ends. Kept to that one rule -- the parser also normalises Unicode and rejects titles
-	 * outright, neither of which changes whether two files answer to one name often enough to carry
-	 * a copy of core's parser in here.
+	 * TitleParser does this to every title: runs of space, underscore and the space-like characters
+	 * listed here collapse to one underscore and are trimmed off both ends. Kept to that one rule.
 	 *
 	 * @param string $name A file's base name.
 	 * @return string The name two files have to share to be one page.
@@ -114,21 +94,9 @@ class ImageImport {
 	/**
 	 * Files among $sources that are not really in the source tree, which is not a thing to import.
 	 *
-	 * is_file() follows a link and so does the walk, so a source tree can offer one named
-	 * picture.png, or a whole linked directory of them, and have the build upload whatever is on the
-	 * other side -- files outside the tree, on the machine doing the building, published with the
-	 * site. A tree of wiki content has no use for one, so rather than resolve them they are refused,
-	 * by name, where the tree is read.
-	 *
-	 * Asked of the resolved path rather than of each entry, because the file at the end is what gets
-	 * uploaded: a link to a file and a real file under a linked directory both leave the tree, and
-	 * only one of the two is itself a link. A name that resolves to nothing -- a link with nothing on
-	 * the other side -- is refused here too, since containment cannot be shown for it.
-	 *
-	 * This is where wikven answers symlinks at all. ContainedPath, which bounds the paths that come
-	 * back out of rendered pages, does not: the directories it bounds hold nothing an author put
-	 * there, and a check in it would silently refuse the symlinked skins/ of a MediaWiki checkout
-	 * somebody develops against.
+	 * is_file() follows a link and so does the walk, so a source tree could have the build upload
+	 * whatever is on the other side. Asked of the resolved path, the file at the end being what
+	 * gets uploaded.
 	 *
 	 * @param string $directory Source directory, as sources() was given it.
 	 * @param string[] $sources Absolute paths, as sources() returns them.

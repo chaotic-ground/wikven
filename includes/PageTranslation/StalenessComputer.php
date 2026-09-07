@@ -7,15 +7,12 @@ use InvalidArgumentException;
 /**
  * Unit-level staleness of a translation against its source page.
  *
- * Both the source (a <translate>-marked page) and each translation carry the same
- * <!--T:n--> unit markers; a translation marker also records the source unit hash it
- * was synced to (<!--T:n @<hash>-->). A translation unit is stale when the current
- * source unit no longer hashes to that stamp. This is pure string work, shared by the
- * CI check and the build-time materialize step, so both judge staleness identically.
+ * Both the source and each translation carry the same <!--T:n--> unit markers; a translation
+ * marker also records the source unit hash it was synced to (<!--T:n @<hash>-->), and the unit is
+ * stale when the current source no longer hashes to that stamp. Pure string work, shared by the
+ * CI check and the build-time materialize step.
  *
- * A page's title is a unit too, under the reserved id "title": it behaves like every other unit
- * except that its source text is the page's own title rather than a span of the wikitext, so the
- * callers that know which page they are looking at pass that title in.
+ * A page's title is a unit too, under the reserved id "title", whose source text callers pass in.
  */
 class StalenessComputer {
 	public const OK = 'ok';
@@ -27,14 +24,9 @@ class StalenessComputer {
 	 * Reserved unit id for a page's translated title, wikven's spelling of Translate's own
 	 * "Page display title" unit.
 	 *
-	 * Like Translate's, this unit is not part of the page contents: its source text is the page's
-	 * own title, which the source wikitext never repeats, so it exists only in a translation file
-	 * ("<!--T:title @<hash>-->" followed by the translated title).
-	 *
-	 * mark() only ever hands out numbers, so the tooling never produces this id; the unit scan does
-	 * accept it, though, so a source page could still carry a hand-written "<!--T:title-->". That
-	 * unit would collide with the page title and be lost, so sourceUnits() rejects it outright and
-	 * usesReservedId() lets the check report it.
+	 * Its source text is the page's own title, which the source wikitext never repeats, so it
+	 * exists only in a translation file. The unit scan accepts this id, so sourceUnits() rejects a
+	 * hand-written one and usesReservedId() reports it.
 	 */
 	public const TITLE_UNIT_ID = 'title';
 
@@ -83,8 +75,7 @@ class StalenessComputer {
 	 * Assign <!--T:n--> markers to the still-unmarked units inside a page's <translate> blocks.
 	 *
 	 * Units are the blank-line-separated blocks Translate segments on; an already-marked unit keeps
-	 * its number and new ones continue from the highest on the page. The marker goes on its own line
-	 * before the unit, which both the unit scan and Translate's own re-parse honour. Idempotent.
+	 * its number and new ones continue from the highest on the page. Idempotent.
 	 *
 	 * @param string $text
 	 * @param string[] $translations The page's existing translations, whose own markers say which
@@ -152,8 +143,7 @@ class StalenessComputer {
 	 *
 	 * This is what tells a translation from a page that merely sits where one would: a translation
 	 * is written unit by unit against a marked source and carries that source's numbers, and
-	 * nothing else in a source tree has a reason to. scaffold() writes them for a new one, so every
-	 * translation made the documented way has them from the moment it is created.
+	 * scaffold() writes them for a new one.
 	 *
 	 * @param string $text A page's wikitext.
 	 */
@@ -164,20 +154,9 @@ class StalenessComputer {
 	/**
 	 * Where a translation carries a <translate> tag, which belongs to the source page alone.
 	 *
-	 * A translation file is a list of units and nothing else: translationUnits() runs each unit
-	 * from its own marker to the next, so anything between two markers becomes part of the unit
-	 * before it. A </translate> written into a translation is therefore not ignored -- it is
-	 * appended to a unit's translated text, and Translate does not use a unit that arrives looking
-	 * like that. It falls back to the source language instead, which is a translation silently not
-	 * shown: nothing 404s, nothing is stale, and the paragraph is simply in English.
-	 *
-	 * That shipped. docs/Skins/ko.wikitext carried the tags around two code blocks it had copied
-	 * from its source page, and two paragraphs of the published Korean page were in English from
-	 * the day it was written until #674, with every gate green.
-	 *
-	 * Armoured nowiki is masked first, exactly as blockRanges() and Translate itself read a page: a
-	 * translation writing about the tag inside <nowiki> is documenting it rather than carrying it,
-	 * and four units of this project's own Korean do that.
+	 * A translation file is a list of units and nothing else: a </translate> written into one is
+	 * appended to that unit's translated text, and Translate falls back to the source language
+	 * rather than use it. docs/Skins/ko.wikitext shipped that way until #674.
 	 *
 	 * @param string $translationText A translation file's wikitext.
 	 * @return list<int> The 1-based line of each tag, in the order they appear.
@@ -204,12 +183,8 @@ class StalenessComputer {
 	 * Whether scaffold() may write over what is already at a translation's path.
 	 *
 	 * A file named for a language that carries no unit marker is a page of its own -- "API/id" is
-	 * about identifiers, not Indonesian -- and that is what every other reader here takes it for.
-	 * Appending markers to one would answer that question the other way behind its author's back:
-	 * the page would become a translation of its parent and go missing from the site with nothing
-	 * said. So it is left alone and reported, rather than scaffolded into.
-	 *
-	 * Nothing there at all, or a file holding only whitespace, is nobody's page and is written to.
+	 * about identifiers, not Indonesian. Appending markers to one would make it a translation of
+	 * its parent and lose it from the site, so it is left alone and reported.
 	 *
 	 * @param ?string $existing What is at the translation's path, or null when nothing is.
 	 */
@@ -255,10 +230,9 @@ class StalenessComputer {
 	/**
 	 * Split a source page into units keyed by their <!--T:n--> marker id.
 	 *
-	 * A source page is Translate's format, so it is read Translate's way round: cut each <translate>
-	 * block into units first, then find the marker inside one. Scanning for markers first and cutting
-	 * between them would put the marker at a unit's edge, which is only where parseUnit() finds it
-	 * when the unit is written in the ordinary form.
+	 * Read Translate's way round: cut each <translate> block into units first, then find the marker
+	 * inside one. Scanning for markers first would put the marker at a unit's edge, which is only
+	 * where parseUnit() finds it in the ordinary form.
 	 *
 	 * @return array<string,array{hash:?string,text:string}> id => [null, unit text]
 	 */
@@ -291,8 +265,8 @@ class StalenessComputer {
 	 * Every unit a translation of this page owes: the page-title unit, when the page has a
 	 * translatable title, followed by the <!--T:n--> units of its wikitext.
 	 *
-	 * The title unit comes first, as it does in Translate, and carries the page title as its source
-	 * text, so renaming the page restamps to a different hash and the translated title goes stale.
+	 * The title unit comes first, as in Translate, and carries the page title as its source text,
+	 * so renaming the page restamps to a different hash and the translated title goes stale.
 	 *
 	 * @param string $sourceText
 	 * @param ?string $pageTitle The page's own title, or null for a page with no translatable title.
@@ -415,9 +389,8 @@ class StalenessComputer {
 	 * Byte ranges of the <translate> block contents in a source page, each as [start, endExclusive].
 	 *
 	 * Translate armours <nowiki> before it looks for a block, so a whole pair shown in one is
-	 * invisible to it; blanking the span with a same-length filler keeps every offset the page's own.
-	 * A <nowiki> merely inside a block still yields its markers, because Translate unarmours a block's
-	 * contents before segmenting them.
+	 * invisible to it; blanking the span with a same-length filler keeps every offset the page's
+	 * own. A <nowiki> merely inside a block still yields its markers.
 	 *
 	 * @return list<array{int,int}>
 	 */
@@ -444,17 +417,8 @@ class StalenessComputer {
 	 * Byte ranges of the verbatim spans in a page, each as [start, endExclusive].
 	 *
 	 * A self-contained regex rather than MediaWiki's tag extractor, so this class stays pure string
-	 * work usable outside a MediaWiki bootstrap; it recognises paired and self-closing forms with
-	 * optional attributes, in any letter case, which is all the docs pages use.
-	 *
-	 * An unclosed verbatim tag runs to the end of the page, matching how MediaWiki renders it. That
-	 * is the safer reading: the alternative -- treating the span as absent -- would hand the rest of
-	 * the page back to the marker scan, turning example text into counted units. But an HTML comment
-	 * is inert to MediaWiki's parser, so a tag name it merely mentions -- e.g. "<!-- don't wrap this
-	 * in <nowiki> -->" -- must not seed a span in the first place: read as a real opener, that "runs
-	 * to the end of the page" rule would swallow every marker after it. Scanning match by match,
-	 * instead of in one preg_match_all pass, lets a match like that be skipped in place, so a genuine
-	 * span later in the page is still found.
+	 * work. An unclosed tag runs to the end of the page, as MediaWiki renders it; but a tag name an
+	 * HTML comment merely mentions must not seed a span. Hence match by match.
 	 *
 	 * @return list<array{int,int}>
 	 */

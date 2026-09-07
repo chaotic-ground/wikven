@@ -111,9 +111,8 @@ class HiderTest extends MediaWikiIntegrationTestCase {
 	 * A skin preview keeps every affordance this class would take away.
 	 *
 	 * The whole of Hider is an argument about what a static host can answer for, and a skin author
-	 * baking pages to look at their skin is not asking that question: the personal menu, the
-	 * toolbox, the talk tab and the section edit links are the skin's work, and the work is the
-	 * thing being looked at.
+	 * baking pages to look at their skin is not asking that: the menus, the tabs and the edit links
+	 * are the skin's work, and that work is the subject.
 	 */
 	public function testASkinPreviewIsLeftTheChromeTheSkinDrew() {
 		$this->overrideConfigValue('WikvenBuildFor', BuildFor::SKIN_PREVIEW);

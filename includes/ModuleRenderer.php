@@ -16,19 +16,10 @@ class ModuleRenderer {
 	/**
 	 * Render the modules named by $context and return the response body.
 	 *
-	 * ResourceLoader::respond() is load.php's web entry point: before echoing the module body it
-	 * calls sendResponseHeaders(), which emits Content-Type, ETag, Cache-Control and Expires with
-	 * header() (and, for an image request, Image::sendResponseHeaders()). The build drives it from
-	 * CLI maintenance scripts that have already written to stdout, so headers_sent() is true and
-	 * every one of those header() calls raises "Cannot modify header information - headers already
-	 * sent", hundreds of times per bake. Output buffering cannot help: ob_start() does not un-send
-	 * headers, which is why the ob_start()/ob_get_clean() pairs that used to wrap respond() here
-	 * captured the body but not the warnings.
-	 *
-	 * makeModuleResponse() is the same body generation without the response wrapper -- it is what
-	 * core itself calls to embed a module in HTML (ClientHtml::makeLoad()). This method adds back
-	 * the parts of respond() that shape the body rather than the response: splitting the requested
-	 * names into registered modules and missing ones, and preloading module info.
+	 * ResourceLoader::respond() sends response headers before the body, and the build drives it from
+	 * CLI scripts that have already written to stdout, so each header() call raises "headers already
+	 * sent". makeModuleResponse() is the same body generation without that wrapper; this adds back
+	 * the parts of respond() that shape the body.
 	 *
 	 * @param ResourceLoader $rl
 	 * @param Context $context Modules, language, skin and 'only' mode to render.
@@ -114,12 +105,9 @@ class ModuleRenderer {
 	/**
 	 * The comment respond() would have prefixed for modules that are not registered.
 	 *
-	 * A response that carries scripts reports them to the client itself, as a "missing" load state
-	 * built by makeModuleResponse(); one that does not (a styles response) can only say so in a
-	 * comment, and respond() is what prepends it. Nothing in the build asks for an unregistered
-	 * module -- the CSS files buildStyles renders are only created for modules ResourceLoader
-	 * knows (Hooks\Main::addStyleToList()) -- so this exists to keep a broken build's output what
-	 * it always was, rather than to be read.
+	 * A response carrying scripts reports them to the client itself, as a "missing" load state; one
+	 * that does not can only say so in a comment. Nothing in the build asks for an unregistered
+	 * module, so this exists to keep a broken build's output what it always was.
 	 *
 	 * @param Context $context
 	 * @param string[] $missing Requested module names that are not registered.

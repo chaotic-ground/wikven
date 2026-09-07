@@ -14,17 +14,14 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 require_once "$IP/maintenance/Maintenance.php";
 
 /**
- * Bake UniversalLanguageSelector webfonts into the export as a plain stylesheet:
- * @font-face plus :lang() rules for the languages the pages use, with the woff2
- * files copied alongside. It reproduces the font ULS would apply by default,
- * without shipping ULS's runtime JavaScript (which pulls fonts from load.php,
- * an endpoint a static host cannot serve).
+ * Bake UniversalLanguageSelector webfonts into the export as a plain stylesheet: @font-face plus
+ * :lang() rules for the languages the pages use, with the woff2 files copied alongside. It
+ * reproduces the font ULS would apply by default, without shipping ULS's runtime JavaScript, which
+ * pulls fonts from load.php.
  *
- * Opt-in via $wgWikvenBundleWebfonts, since it adds font payload; a no-op when
- * off or when ULS is not installed. The stylesheet is linked like site.styles.css
- * (rewriteScripts wires it in, rename's reparenting keeps the <link> correct at
- * any subpage depth), and its font url()s resolve against the stylesheet itself,
- * so they hold from every page regardless of depth or host subdirectory.
+ * Opt-in via $wgWikvenBundleWebfonts, since it adds font payload; a no-op when off or when ULS is
+ * not installed. The stylesheet is linked like site.styles.css, and its font url()s resolve against
+ * the stylesheet itself, so they hold from every page whatever its depth.
  */
 class BakeWebfonts extends Maintenance {
 	/** Output subdirectory (under the dist root) the woff2 files are copied into. */

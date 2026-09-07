@@ -14,9 +14,8 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	 * The ResourceLoader service, with $GLOBALS['IP'] then pointed at a fixture install root.
 	 *
 	 * AssetLocalizer resolves a direct asset path against $IP, so these tests have to move it. The
-	 * service container reads the real install the first time it builds the ResourceLoader, to
-	 * register core's own modules, and errors out on a fixture root that has none of them -- so
-	 * build it first, while $IP is still the real one.
+	 * container reads the real install the first time it builds the ResourceLoader, and errors out
+	 * on a fixture root -- so build it first, while $IP is still the real one.
 	 */
 	private function resourceLoaderRootedAt(string $mwRoot): ResourceLoader {
 		$rl = $this->getServiceContainer()->getResourceLoader();
@@ -25,12 +24,10 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * Direct skin/resource/extension asset url()s in dumped CSS are the most
-	 * regex-fragile part of the static export: if they stop matching, the output
-	 * silently points at paths that only exist inside a live MediaWiki. Assert
-	 * that every reference form the build emits is rewritten to a local copy,
-	 * that look-alike paths which must NOT match are left untouched, and that the
-	 * referenced bytes are actually copied out.
+	 * Direct skin/resource/extension asset url()s in dumped CSS are the most regex-fragile part of
+	 * the static export: if they stop matching, the output silently points at paths that only exist
+	 * inside a live MediaWiki. Assert that every reference form the build emits is rewritten, that
+	 * look-alike paths are left untouched, and that the bytes are copied out.
 	 */
 	public function testLocalizeAssetsRewritesDirectAssetPaths() {
 		$mwRoot = $this->getNewTempDirectory();
@@ -133,9 +130,8 @@ class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * A real icon SVG carries attributes, so the inlined URI has spaces between them. CSSMin leaves
-	 * those bare because it quotes the url() it builds itself; the one emitted here is unquoted (a
-	 * quote inside a JS bundle's CSS string would need escaping), and a bare space makes the whole
-	 * declaration invalid -- the browser drops it and the icon renders blank.
+	 * those bare because it quotes the url() it builds itself; the one emitted here is unquoted,
+	 * and a bare space makes the whole declaration invalid.
 	 */
 	public function testLocalizeAssetsEncodesSpacesInInlinedAssets() {
 		$mwRoot = $this->getNewTempDirectory();

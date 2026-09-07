@@ -13,8 +13,8 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 	 * The advice with the real English messages behind it, so what is asserted below is the wording
 	 * a contributor actually reads, and a key nobody added to i18n/en.json fails the test.
 	 *
-	 * A language other than English is answered with the same text under a tag, standing in for a
-	 * translation of the messages: enough to see that each language gets its own rendering.
+	 * A language other than English is answered with the same text under a tag, enough to see that
+	 * each language gets its own rendering.
 	 */
 	private function advice(): TranslationAdvice {
 		$messages = json_decode(file_get_contents(__DIR__ . '/../../../i18n/en.json'), true);

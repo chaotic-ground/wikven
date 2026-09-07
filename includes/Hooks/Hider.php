@@ -64,13 +64,10 @@ class Hider implements
 		// pointing at the login page, so ext.Wikven.styles still hides what it re-adds.
 		unset($links['actions']['watch'], $links['actions']['unwatch']);
 
-		// The discussion tab. A static export cannot carry a discussion -- there is nothing behind
-		// the tab to read and no way to post to it -- and MediaWiki has no setting that turns talk
-		// namespaces off (T35298), so it is dropped from the navigation every skin builds from.
-		// A `#ca-talk` rule in ext.Wikven.styles is not enough: that id is core's own on the tab,
-		// and Minerva renders the same data through a tab bar of its own that keeps no id to hide.
-		// Both menus, because a skin still asking core for the legacy `namespaces` one is rendered
-		// from that copy rather than from `associated-pages`.
+		// The discussion tab. MediaWiki has no setting that turns talk namespaces off (T35298), so it is
+		// dropped from the navigation every skin builds from. A `#ca-talk` rule is not enough: Minerva
+		// renders the same data through a tab bar that keeps no id. Both menus, because a skin asking
+		// core for the legacy `namespaces` one is rendered from that copy.
 		foreach (['associated-pages', 'namespaces'] as $menu) {
 			foreach (array_keys($links[$menu] ?? []) as $key) {
 				// 'talk' in the main namespace, '<subject>_talk' everywhere else.

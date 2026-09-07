@@ -57,11 +57,9 @@ class IndexerTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * Built the way MediaWiki builds it, the handler asks Translate rather than a stand-in. Neither
 	 * answer may cost a page its place: where Translate is absent the lookup says so and stops, and
-	 * where it is installed, a page nobody marked for translation is not a translation page. A wiki
-	 * without content translation must not be a wiki that loses pages.
+	 * where it is installed, a page nobody marked for translation is not a translation page.
 	 *
-	 * Both answers are reached, because the jobs differ in what they install: the quibble jobs bring
-	 * Translate along (quibble.yml names it), the phpunit jobs install MediaWiki alone.
+	 * Both answers are reached, because the jobs differ in what they install.
 	 */
 	public function testTheHandlerAsBuiltLeavesAnUnmarkedPageAlone() {
 		$index = true;

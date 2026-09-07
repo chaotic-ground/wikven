@@ -19,16 +19,10 @@ class Adder implements
 	\MediaWiki\Hook\SidebarBeforeOutputHook,
 	\MediaWiki\Hook\SkinAddFooterLinksHook {
 	/**
-	 * Skins that move every sidebar section from the toolbox onward into their page-tools menu
-	 * (SkinVector22::extractPageToolsFromSidebar splices from the toolbox to the end), so a section
-	 * of our own lands there beside it, under a heading naming what it holds. Everywhere else the
-	 * skin list goes in the toolbox: Citizen splices the toolbox alone and Minerva reads no other
-	 * section, so a section of our own would leave their page-tools menus for the sidebar drawer,
-	 * or vanish.
-	 *
-	 * The page-tools menu is where the section is rendered, not where a reader is meant to find it:
-	 * ext.Wikven.vectorSkins moves it into the appearance menu, beside the other choices about how
-	 * a page looks. This stays as the fallback a reader without JavaScript is left with.
+	 * Skins that move every sidebar section from the toolbox onward into their page-tools menu, so
+	 * a section of our own lands there beside it. Everywhere else the skin list goes in the
+	 * toolbox, where Citizen and Minerva would not find one. ext.Wikven.vectorSkins then moves it
+	 * into the appearance menu; this is the fallback without JavaScript.
 	 */
 	private const OWN_SECTION_SKINS = ['vector-2022'];
 
@@ -45,9 +39,9 @@ class Adder implements
 	 * Offer each enabled skin's copy of this page, in the toolbox Hider has just emptied or in a
 	 * section of our own.
 	 *
-	 * Minerva is not served here. It reads no sidebar section but `navigation` and the toolbox, and
-	 * its toolbox is the page-actions menu, which is not where a site-wide setting belongs;
-	 * fillMinervaMenu.php writes the same entries into its main menu instead.
+	 * Minerva is not served here: it reads no sidebar section but `navigation` and the toolbox, and
+	 * its toolbox is the page-actions menu. fillMinervaMenu.php writes the same entries into its
+	 * main menu instead.
 	 *
 	 * @inheritDoc
 	 */
@@ -84,12 +78,10 @@ class Adder implements
 		// should look: both stop the export asking for something it does not have, which a preview
 		// has no more of than a published site does.
 		if (MW_ENTRY_POINT === 'cli' && $skin->getSkinName() === 'citizen') {
-			// Citizen registers a service worker at "$wgScriptPath/load.php" whenever the client-side
-			// script path is the wiki root (""), which is what the build installs with, and the request
-			// 404s on every page. There is no script path in a static export -- no index.php, load.php
-			// or api.php -- so say so, and the registration returns early on its own guard. Citizen is
-			// the only thing that reads the value for a decision; what else reads it builds api.php and
-			// rest.php URLs, which are dead here whichever way it is set.
+			// Citizen registers a service worker at "$wgScriptPath/load.php" whenever the client-side script
+			// path is the wiki root (""), which is what the build installs with, and the request 404s on
+			// every page. There is no script path in a static export, so say so, and the registration
+			// returns early on its own guard.
 			$out->addJsConfigVars('wgScriptPath', null);
 
 			// The skin's search shortcuts outlive the command palette the bake leaves out: skin.js
@@ -100,13 +92,10 @@ class Adder implements
 		}
 
 		// Minerva's own, and ahead of the guard for the same reason: most of what it hides is a
-		// Special: page an export has no server for, which a preview has no more of than a site.
+		// Special: page an export has no server for.
 		//
-		// A sheet of wikven's own rather than the "+skins.minerva.styles" entry under
-		// ResourceModuleSkinStyles these rules used to be, for the reason ext.Wikven.styles gives
-		// for Citizen: a second declaration of a skin's key replaces the first rather than merging,
-		// so wikven's entry and MinervaNeue's own could not both survive. Which one did came down
-		// to load order, and nothing said the other had gone.
+		// A sheet of wikven's own rather than a "+skins.minerva.styles" entry: a second declaration of a
+		// skin's key replaces the first rather than merging, so which survived came down to load order.
 		if ($skin->getSkinName() === 'minerva') {
 			$out->addModuleStyles('ext.Wikven.minervaStyles');
 		}
@@ -187,14 +176,9 @@ class Adder implements
 	/**
 	 * Ask for what Special:MobileOptions asks for, on the page the export offers in its place.
 	 *
-	 * The controls there are not the special page's markup: its script renders them from the
-	 * client preferences the page declares, which is why they can be had at all without a wiki
-	 * behind them. So the page carries the same empty form, and buildScripts.php bundles the
-	 * modules because this queued them.
-	 *
-	 * The one control not offered is "Expand all sections": clientPreferences.js draws a preference
-	 * only when the page carries its class, and no page here does, because nothing in a bake
-	 * collapses a section to begin with.
+	 * The controls there are not the special page's markup: its script renders them from the client
+	 * preferences the page declares, so the page here carries the same empty form. "Expand all
+	 * sections" is not offered, being drawn only for a page carrying its class.
 	 */
 	private function prepareSettingsPage(OutputPage $out): void {
 		$page = (string)$this->config->get('WikvenSettingsPage');
@@ -265,17 +249,9 @@ class Adder implements
 	/**
 	 * Where the footer's licenses link points.
 	 *
-	 * Root-relative like every other link the build writes, so rename.php reparents it for a
-	 * subpage along with the rest.
-	 *
-	 * Through Special:MyLanguage where Translate is loaded, which is the condition
-	 * resolveTranslationLinks.php runs on: that pass rewrites the link to the reader's own
-	 * language, or to the source page where that language has no translation. Without the prefix a
-	 * Korean reader on Licenses/ko.html would be sent to the English page, and since this link is
-	 * the site's only guaranteed route to it, there is no second way in.
-	 *
-	 * Written plainly where Translate is not loaded, because then the pass never runs and the
-	 * special page, which no export contains, would be left standing in the href.
+	 * Root-relative like every other link the build writes, and through Special:MyLanguage where
+	 * Translate is loaded, which is the condition resolveTranslationLinks.php runs on: without the
+	 * prefix a Korean reader on Licenses/ko.html would be sent to the English page.
 	 */
 	public static function licensesHref(Title $licenses, bool $translated): string {
 		$namespace = (string)$licenses->getNsText();
@@ -283,10 +259,8 @@ class Adder implements
 			return './' . OutputName::href(OutputName::of($namespace, $licenses->getDBkey()));
 		}
 		// Built as the title it stands for, rather than spelt out, so this marker and the one
-		// GetLocalURL writes for a real Special:MyLanguage link are the same string in either
-		// spelling of the file names -- which is what resolveMyLanguage() matches on. "Special" is
-		// the canonical namespace name, the one Hooks\Main::nameFor() writes whatever this wiki
-		// calls that namespace itself, so the two markers agree in the content language too.
+		// GetLocalURL writes for a real Special:MyLanguage link are the same string in either spelling
+		// of the file names, which is what resolveMyLanguage() matches on.
 		$page = Title::makeName($licenses->getNamespace(), $licenses->getDBkey());
 		return './' . OutputName::href(OutputName::of('Special', "MyLanguage/$page"));
 	}

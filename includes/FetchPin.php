@@ -5,24 +5,10 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * What a fetched extension or skin was fetched from, written next to it so the next build can tell.
  *
- * A bake fetches what WikvenRepositories names, and a fetch it has already made is one it should
- * not make again: fetchExtensions skips any directory that is already there. That is right where
- * the tree came from the same source, and wrong where it did not -- move a pin to a new tag, build
- * again in a tree that survives (a bind mount, the standalone binary's own install, a container
- * that is not thrown away), and the old checkout stays, silently, with nothing on the build's
- * output to say the new pin was not what got built.
- *
- * So a fetched tree carries a line naming what fetched it, and the next build compares. Same line,
- * nothing to do; different line, the tree goes and the fetch is made again. A tree with no line at
- * all is left exactly as it was found: it is bundled in the image, or somebody put it there, and a
- * build is in no position to decide it knows better.
- *
- * A reference is not a pin, though it is written like one: `reference: main` names whatever the
- * branch points at today, and a tag can be moved. So a git fetch also records the commit it ended
- * up on, and a build that finds the source unchanged asks the remote what that reference points at
- * now -- one round trip, and only where the tree is already there -- and fetches again when the
- * answer has moved. A remote that cannot be reached is not an error: the tree that is there is
- * kept, and the build says why it could not check.
+ * fetchExtensions skips any directory already there, which is wrong where the tree came from
+ * somewhere else: move a pin to a new tag, build again in a tree that survives, and the old
+ * checkout stays. So a fetched tree carries a line naming what fetched it, and the next build
+ * compares; a tree with no line is left as found.
  */
 class FetchPin {
 	/**
@@ -40,10 +26,8 @@ class FetchPin {
 	 * What a source spec fetches, as one line: the same source is the same line.
 	 *
 	 * Keys and values rather than JSON, because the line is written into the tree it fetched and
-	 * the first thing anyone does with a file like that is read it.
-	 *
-	 * The hex pins are lowercased because the validators lowercase them and a spec may not have;
-	 * nothing else is touched, since a URL's path is the remote's to be particular about.
+	 * the first thing anyone does with a file like that is read it. The hex pins are lowercased, as
+	 * the validators lowercase them.
 	 *
 	 * @param array $spec One WikvenRepositories entry.
 	 */

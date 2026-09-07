@@ -12,10 +12,9 @@ class AssetLocalizer {
 	/**
 	 * Rewrite asset url()s in the given dumped CSS/JS files to point at copies in $dir.
 	 *
-	 * A CSS file resolves its url()s relative to itself, so a "./img-*.svg" next to it works from
-	 * any page depth. A JS bundle instead injects its CSS into the document, where url()s resolve
-	 * against the page, breaking on subpages ("index/ko.html" would fetch "index/img-*.svg"). Pass
-	 * $inline for JS bundles to embed the images as data: URIs, which are depth- and base-path-safe.
+	 * A CSS file resolves its url()s relative to itself, so a "./img-*.svg" beside it works from any
+	 * depth. A JS bundle injects its CSS into the document, where url()s resolve against the page
+	 * and break on subpages; pass $inline for those, to embed the images.
 	 */
 	public static function localizeAssets(
 		ResourceLoader $rl,
@@ -91,11 +90,9 @@ class AssetLocalizer {
 	/**
 	 * Encode raw image bytes as a data: URI usable unquoted inside url().
 	 *
-	 * CSSMin percent-encodes printable text (an SVG, typically) instead of base64-encoding it, which
-	 * is what ResourceLoader itself does for the same images when it inlines them into a CSS bundle.
-	 * It leaves the spaces bare though, because it quotes the url() it builds; here the URI goes in
-	 * unquoted (a quote inside a JS bundle's CSS string would have to be escaped), and a bare space
-	 * makes the whole declaration invalid, so put those back. Base64 output has none to put back.
+	 * CSSMin percent-encodes printable text (an SVG, typically) rather than base64-encoding it, and
+	 * leaves the spaces bare because it quotes the url() it builds. Here the URI goes in unquoted,
+	 * and a bare space makes the declaration invalid, so put those back.
 	 */
 	private static function dataUri(string $bytes, string $mime): string {
 		return str_replace(' ', '%20', CSSMin::encodeStringAsDataURI($bytes, $mime));

@@ -178,12 +178,9 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * A Special:MyLanguage link is written canonically, not in this wiki's own words for it.
 	 *
-	 * The link is not a link to a file -- no export holds that special page -- but the marker
-	 * resolveTranslationLinks.php reads to send a reader to their own copy of the target, and a
-	 * marker matched by one spelling has to be written in one. On a wiki whose content language is
-	 * not English the namespace is that language's word for it, so the marker written from the
-	 * wiki's own naming would be "특수:MyLanguage/..." and that pass would walk past it, leaving
-	 * every translated page pointing at a file the site does not have.
+	 * The link is not a link to a file but the marker resolveTranslationLinks.php reads, and a
+	 * marker matched by one spelling has to be written in one -- otherwise a Korean wiki writes
+	 * "특수:MyLanguage/..." and that pass walks past it.
 	 */
 	public function testSpecialMyLanguageIsMarkedCanonicallyInAnotherContentLanguage() {
 		$this->setContentLang('ko');
@@ -219,10 +216,9 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * The "View source" tab points at the page's source file in the repository, and in Citizen it
-	 * brings an icon: the skin renders the page actions as icon buttons and stops rendering their
-	 * labels below desktop width, so a tab it has no icon for is a blank box there. It maps icons
-	 * onto the keys core uses, and this key is Wikven's own.
+	 * The "View source" tab points at the page's source file, and in Citizen it brings an icon: the
+	 * skin renders the page actions as icon buttons and drops their labels below desktop width, so
+	 * a tab it has no icon for is a blank box. Its icon map is keyed by core's names.
 	 */
 	public function testViewSourceTabCarriesCitizensIcon() {
 		$dir = $this->getNewTempDirectory();
@@ -264,8 +260,7 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	 *
 	 * The row of page actions is the skin's layout, and a skin author baking pages to look at it
 	 * has not asked for an extra tab in it. Everything this class does to make the output work as
-	 * files -- rewriting a link to "./X.html" above all -- is untouched, so there is still a
-	 * preview to look at.
+	 * files is untouched, so there is still a preview to look at.
 	 */
 	public function testASkinPreviewGetsNoTabOfOurOwn() {
 		$dir = $this->getNewTempDirectory();

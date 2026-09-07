@@ -8,18 +8,15 @@
  *
  * The checks themselves live in Checks.php and know nothing about where they are run. This file
  * reads the site's expectations, decides which checks have the input they asked for, runs them all,
- * and prints one line per check plus whatever each had to say. It exits 1 if any of them found a
- * problem.
+ * and prints one line per check plus whatever each had to say. It exits 1 if any found a problem.
  *
  * Every check runs even after one fails, which the shell step this replaces could not do: it ran
- * under `set -e`, so the first failure hid the rest and a broken bake took as many pushes to
- * understand as it had problems.
+ * under `set -e`, so the first failure hid the rest.
  *
- * --github additionally emits a ::error:: workflow command per problem, so the annotations that
- * used to be written into the assertions are now the runner's business rather than theirs.
+ * --github additionally emits a ::error:: workflow command per problem, so the annotations are the
+ * runner's business rather than each check's.
  *
- * Plain PHP, and no MediaWiki: a finished bake is a directory of files, so reading one needs
- * neither a wiki nor a second language in the tree to run it.
+ * Plain PHP, and no MediaWiki: a finished bake is a directory of files.
  */
 
 namespace MediaWiki\Extension\Wikven\Bake;

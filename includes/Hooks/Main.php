@@ -65,18 +65,9 @@ class Main implements
 	/**
 	 * The whole URL of the page, for a caller that asked for one.
 	 *
-	 * getFullURL() and getCanonicalURL() each run their own hook after calling getLocalURL() and
-	 * expanding the result, and each is handed the same Title this build already knows how to name.
-	 * So the answer is recomputed from that title rather than recovered from the string: which of
-	 * the three hooks ran is the only honest signal that a caller wanted an absolute URL, and core
-	 * delivers it.
-	 *
-	 * Without it they get what expand() makes of a relative link, which is not a URL at all --
-	 * "./index.html" comes back as "index.html", and a caller that prepends a scheme publishes
-	 * "http:index.html". That is what WikiSEO put in og:url on every page.
-	 *
-	 * Where the site has not said where it is published there is no address to give, so the value
-	 * is left as it was: a wrong absolute URL would be worse than an obviously relative one.
+	 * Which of the three URL hooks ran is the only honest signal that a caller wanted an absolute
+	 * URL, so the answer is recomputed from the Title rather than from what expand() made of a
+	 * relative link -- which was "http:index.html" in WikiSEO's og:url.
 	 *
 	 * @inheritDoc
 	 */
@@ -111,10 +102,8 @@ class Main implements
 	/**
 	 * A file this build wrote, named relative to the output root.
 	 *
-	 * A page links to it from beside itself, which is what makes an export work from any
-	 * directory. Its whole URL needs the address the site is published at, and where the site
-	 * has not said there is none to give: a wrong absolute URL is worse than an obviously
-	 * relative one, so a caller that asked for one is left with what it had.
+	 * A page links to it from beside itself, which is what makes an export work from any directory.
+	 * Its whole URL needs the address the site is published at, and there may be none.
 	 *
 	 * @return array{local:string,whole:?string}
 	 */
@@ -128,11 +117,8 @@ class Main implements
 	/**
 	 * Where a title points in this export, or null where the build leaves the URL alone.
 	 *
-	 * One decision for all three URL hooks, so a Commons file, a Special:Translate link and an
-	 * edit link are answered the same whether the caller wanted a relative URL or a whole one.
-	 * Both answers are worked out here rather than one derived from the other: 'local' is what a
-	 * page links to, and 'whole' the address the export is served at, null where the site has not
-	 * said where that is.
+	 * One decision for all three URL hooks, so a Commons file and an edit link are answered the
+	 * same whether the caller wanted a relative URL or a whole one.
 	 *
 	 * @param Title $title
 	 * @param string $query
@@ -179,11 +165,9 @@ class Main implements
 			}
 		}
 
-		// Vector renders the collapsed search box as a link to Special:Search -- the page the "f"
-		// accesskey opens, and at a narrow viewport the whole of the search affordance -- and the
-		// export has no such page. Where search lands here is SifterSearch's results page, so send
-		// it there instead of at a 404. SifterSearch retargets the link itself once its script
-		// runs; writing the link out right is what makes the exported page correct on its own.
+		// Vector renders the collapsed search box as a link to Special:Search, which the export has
+		// no page for; where search lands here is SifterSearch's results page. Its script retargets
+		// the link too, but writing it out right makes the page correct on its own.
 		if ($title->isSpecial('Search')) {
 			$search = $this->searchHref($query);
 			// Nowhere to land: the toggle stays the button its own script treats it as, and there
@@ -199,8 +183,8 @@ class Main implements
 		$action = $params['action'] ?? null;
 		// A diff is history too. The export holds one revision of a page, so what changed is only
 		// in the repository, and a link asking to see it belongs where the history link goes:
-		// Citizen's "last modified" button asks for the latest diff ("diff" with no value), and
-		// without this it resolves to the page it is already on.
+		// Citizen's "last modified" button asks for the latest diff, and without this it resolves
+		// to the page it is already on.
 		$wantsHistory = $action === 'history' || array_key_exists('diff', $params);
 		// For edit/history, $1 is the source filename so the link targets the editable file.
 		if ($action === 'edit' && $editUrl) {
@@ -223,18 +207,9 @@ class Main implements
 	/**
 	 * The namespace and title a link is written from.
 	 *
-	 * A page is named as this wiki names it, which is the answer rename.php gets from the content
-	 * language when it names the file, so link and file agree. A special page is named canonically
-	 * instead, because it has no file: no export contains one, so where such a link survives it is
-	 * a marker for a later pass -- Special:MyLanguage, which resolveTranslationLinks.php rewrites
-	 * to the reader's own copy of the target, and which Hooks\Adder writes by that spelling too.
-	 *
-	 * A marker has to be one string, and this wiki's own spelling is several: the namespace is
-	 * that language's word for it ("특수" on a Korean wiki), the special page answers to aliases of
-	 * its own ("내언어"), and an alias is matched however it was capitalised, so even an English wiki
-	 * writes "Special:Mylanguage/X" for a link typed that way. Written canonically, all of those
-	 * arrive as the marker that pass matches on; the special pages that are not markers name a file
-	 * no export has in either spelling, and stay the dead links they already were.
+	 * A page is named as this wiki names it. A special page is named canonically instead: it has no
+	 * file, so a surviving link is a marker for a later pass -- Special:MyLanguage -- and this
+	 * wiki's own spelling of one is several strings, not one.
 	 *
 	 * @return array{string,string} Namespace text and dbkey, as OutputName::of() takes them.
 	 */
@@ -256,10 +231,8 @@ class Main implements
 	 * Where a search goes in the export: the results page, carrying the term the link asks for
 	 * (SifterSearch's widget reads it from "?search="), or nowhere.
 	 *
-	 * With no results page named there is nowhere to land, so the link is left the button its own
-	 * script already treats it as: Vector's toggle prevents the navigation and opens the box, which
-	 * is the whole of what it is for, and a reader without scripts has no search here either way --
-	 * Pagefind answers in the browser. That beats a link to a page that answers 404.
+	 * With none named the link is left the button its own script treats it as; a reader without
+	 * scripts has no search here either way, Pagefind answering in the browser.
 	 */
 	private function searchHref(string $query): ?string {
 		$results = Search::resultsPage();
@@ -318,16 +291,9 @@ class Main implements
 	/**
 	 * Let core wire up Citizen's search box again, so SifterSearch's typeahead reaches it.
 	 *
-	 * Citizen sets SkinPageReadyConfig's "search" to false, because its own search is the command
-	 * palette rather than the box core would attach to. An export has no backend for the palette,
-	 * so rewriteScripts leaves the plain form the skin renders underneath it standing instead --
-	 * and that form is what core's wiring, and through it the Pagefind typeahead SifterSearch
-	 * substitutes, attaches to. Everything else the flag governs is the box we are keeping.
-	 *
-	 * Registered at run time rather than in extension.json because order decides this: handlers
-	 * declared there run in load order, and wikven loads before the skins do, so a handler of ours
-	 * would be overruled by Citizen's. HookContainer::register() appends after every extension and
-	 * skin handler, which is the only place a correction can sit.
+	 * Citizen sets SkinPageReadyConfig's "search" to false, its own search being the command
+	 * palette, which an export has no backend for. Registered at run time because extension.json
+	 * handlers run in load order, and wikven loads before the skins.
 	 */
 	private function restoreCitizenSearchWiring(): void {
 		if (!Search::isActive()) {
@@ -341,17 +307,9 @@ class Main implements
 	/**
 	 * Leave ULS's input methods with no field to attach to.
 	 *
-	 * ULSIMEEnabled, which WikvenSettings turns off, does not stop the request: ext.uls.interface
-	 * binds a focus handler to every text field whatever that flag says, and the flag is read
-	 * inside ext.uls.ime, which the handler has fetched from load.php by then. So the empty
-	 * selector list is what actually keeps the export quiet on the first click into a field.
-	 *
-	 * It has to be set here rather than in WikvenSettings.php, because an empty array is the one
-	 * value ExtensionRegistry does not keep: it reads as "not set", and the extension's own
-	 * default replaces it wholesale when the registry applies extension.json config.
-	 *
-	 * The key is the test for ULS: it exists because ULS's extension.json declares it, which is
-	 * also why this asks has() first -- get() throws on a key nothing has defined.
+	 * ULSIMEEnabled does not stop the request: ext.uls.interface binds a focus handler whatever it
+	 * says, and reads the flag inside ext.uls.ime. Set here because an empty array reads to
+	 * ExtensionRegistry as "not set".
 	 */
 	private function unbindUlsInputMethods(): void {
 		if (!$this->config->has('ULSImeSelectors')) {
@@ -416,18 +374,10 @@ class Main implements
 			'href' => str_replace('$1', SourceFile::titleToParam($title->getPrefixedText()), $viewSourceUrl)
 		];
 
-		// Citizen draws the page actions as icon buttons and stops rendering their labels below
-		// desktop width (font-size: 0, Pagetools.less), so a tab it has no icon for is a blank box
-		// the width of its padding: nothing to read and little to hit. Its icons come from a map
-		// keyed by the names core uses, which this tab -- being ours -- is not in; what the skin
-		// does for every entry is turn an 'icon' the item carries into the markup, so the tab has
-		// to bring its own. wikiText rather than the editLock the skin gives core's "View source",
-		// because the Edit tab beside it works: a padlock would read as a permission this reader is
-		// missing rather than as a link to the file.
-		//
-		// Citizen alone, because core hands the key to whichever skin renders the page. Vector 2022
-		// suppresses icons on the tabs themselves, but not in the page-tools dropdown it copies
-		// them into, where Edit and View history next to it have none.
+		// Citizen draws page actions as icon buttons and drops their labels below desktop width
+		// (Pagetools.less), so a tab it has no icon for is a blank box; its icon map is keyed
+		// by core's names, which this tab is not among. Vector 2022 needs none: it suppresses
+		// icons on the tabs themselves.
 		if ($sktemplate->getSkinName() === 'citizen') {
 			$links['views']['wikven-viewsource']['icon'] = 'wikiText';
 		}
@@ -480,15 +430,9 @@ class Main implements
 	/**
 	 * What the head says about this document's own address, and about its translations.
 	 *
-	 * Every page is written once per skin and served at more than one address besides: a host that
-	 * answers /Development for Development.html gives the same document two of them, and nothing in
-	 * the page said which one it is. A whole canonical url settles all of it at once -- the skin
-	 * copies, the extension-less form, and any other spelling a host invents -- because it names
-	 * the one address rather than ruling the others out one at a time.
-	 *
-	 * Both a canonical url and an hreflang value have to be whole, so where the site has not said
-	 * where it is published there is no set to write and only the skin copies have anything left
-	 * to say; see duplicatedByThisSkin().
+	 * Every page is written once per skin and served at more than one address besides. A whole
+	 * canonical url settles all of that at once, and needs the address the site is published at;
+	 * without one, only the skin copies have anything to say.
 	 *
 	 * @param Title $title The page being rendered.
 	 * @param string $skin The skin rendering this copy of it.
@@ -524,10 +468,8 @@ class Main implements
 	/**
 	 * What a page can still say about its address with no whole one to give.
 	 *
-	 * A skin copy duplicates the main skin's copy of the same page, and that one is in the export
-	 * beside it, so it can be pointed at from one directory up without knowing where the site is
-	 * published. The main skin's own copy has nothing to say here: the addresses it would be
-	 * distinguishing itself from are a host's invention, and naming one needs the site's address.
+	 * A skin copy duplicates the main skin's copy, which is in the export beside it, so it can be
+	 * pointed at from one directory up. The main skin's own copy has nothing to say here.
 	 *
 	 * @return array<string,string>
 	 */
@@ -561,15 +503,9 @@ class Main implements
 	/**
 	 * The pages this document shares its content with: which one owns it, and one page per language.
 	 *
-	 * A translatable page is three or more pages. "Development" is the source, written in whatever
-	 * language its author wrote it in, and "Development/ko" is the Korean one. Translate also makes
-	 * a translation page for the source's own language -- "Development/en" -- and that page is the
-	 * source page's article again, word for word, at a second address.
-	 *
-	 * hreflang has no way to say that a language is at two addresses, so one of them has to own the
-	 * language, and it is the source page: every link in the export names it, and "/en" is reached
-	 * only from a language bar. So the source page is what "en" points at, and "/en" says the
-	 * source page is where its content really lives.
+	 * "Development", "Development/ko" and "Development/en" are three pages of one article. hreflang
+	 * cannot say a language is at two addresses, so the source page owns it: every link in the
+	 * export names it.
 	 *
 	 * @return array{owner:Title,source:Title,languages:array<string,Title>}
 	 */
@@ -614,12 +550,8 @@ class Main implements
 	/**
 	 * The licenses page's family, which is not Translate's.
 	 *
-	 * The build writes that page and a copy per language the source tree translates into, so they
-	 * are ordinary pages that Translate has never heard of -- and without this the one page on the
-	 * site that is genuinely three languages would be the one page saying nothing about them.
-	 *
-	 * LicensesPage answers which titles those are; the set of copies is read from the source tree,
-	 * so it is asked once and kept. Every page of every skin pass comes through here.
+	 * The build writes that page and a copy per translated language, so they are ordinary pages
+	 * Translate has never heard of. The set of copies is read from the source tree once.
 	 *
 	 * @return ?array{owner:Title,source:Title,languages:array<string,Title>} Null where the title
 	 *   is not part of that family.
@@ -634,11 +566,9 @@ class Main implements
 		if (LicensesPage::generatedLanguage($title, $isKnownLanguage) === null && !$title->equals($page)) {
 			return null;
 		}
-		// Only the copies that are really there. LicensesPage reads the source tree, which says
-		// which languages the site is translated into; build.php writes a copy per language it
-		// could translate the page's messages into, and without Translate that is none of them.
-		// An alternate naming a page the export does not have is a link to a 404 in every other
-		// page's head, and a set with one of those in it is a set a search engine throws away.
+		// Only the copies that are really there: build.php writes one per language it could
+		// translate the page's messages into, and without Translate that is none of them. An
+		// alternate naming a page the export does not have is a set a search engine throws away.
 		$this->licensesCopies ??= array_filter(
 			LicensesPage::generatedCopies(
 				(string)$this->config->get('WikvenSourceDirectory'),

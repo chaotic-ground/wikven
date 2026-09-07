@@ -74,12 +74,11 @@ class Build extends Maintenance {
 		// Materialize content translations before RunJobs so rendered translation pages get exported.
 		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
 		$this->runJobs("$ip/maintenance/runJobs.php");
-		// Every category a page belongs to is known now, and not before: a page's categories are
-		// written by the links update its edit queues, which runJobs above is what runs. Asked
-		// here rather than after the passes, so a site with a fault in it is told before three
-		// skins render it.
+		// Categories are written by the links update each edit queues, which runJobs above runs, so
+		// this is the first point they are known -- and it is before the passes, so a site with a
+		// fault in it is told before three skins render it.
 		$this->assertNamedCategoriesAreEmpty();
-		// Every page the export will hold now exists, and nothing writes another revision after
+		// Every page the export will hold now exists and nothing writes another revision after
 		// this, so this is where each page can be told when it was last edited, and by whom.
 		$this->stampSourceHistory();
 		$this->hideBuildAuthors();
@@ -88,7 +87,7 @@ class Build extends Maintenance {
 		// below can be readers of it.
 		$this->freezePageTouched();
 		// The search index is built by now, by the job runJobs() holds back to the end, and every
-		// skin pass below copies it. Settle it here so the one copy they all take is already stable.
+		// pass below copies it. Settled here so the one copy they all take is stable.
 		$this->stabilizeSearchIndex();
 
 		$config = $this->getConfig();
@@ -102,15 +101,9 @@ class Build extends Maintenance {
 	/**
 	 * Say that a skin preview is experimental, once, before the work starts.
 	 *
-	 * Not experimental as in unfinished. A skin is written against several MediaWiki releases and
-	 * this renders on the one the build carries, so what it shows is that skin on that version and
-	 * nothing about the others -- which is less than a skin author needs, and more than this
-	 * project can widen. Documenting the mode at length in Configuration would promise the rest of
-	 * it, so the limit is said here, where somebody is running the mode and can weigh it, and again
-	 * in examples/skin-preview.
-	 *
-	 * From the orchestrating pass rather than from renderSkin(), which has returned above: a line
-	 * per skin would say it once per pass and be noise by the third.
+	 * Not unfinished: a skin is written against several MediaWiki releases and this renders on the
+	 * one the build carries, which is less than a skin author needs and more than this project can
+	 * widen. From the orchestrating pass, so it is said once and not per skin.
 	 */
 	private function announceSkinPreview(): void {
 		if (!BuildFor::skinPreview()) {
@@ -124,11 +117,10 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * Say what this site's Lua and this build's Lua make of each other; see Scribunto for the ways
-	 * they used to pass quietly and produce a site with braces in it.
+	 * Say what this site's Lua and this build's Lua make of each other; see Scribunto.
 	 *
-	 * Only one of the two ends the build, and it is the one the site asked for: Scribunto listed where
-	 * nothing can run it. The other is a remark about Module: files the site never asked to run.
+	 * Only one of the two ends the build, and it is the one the site asked for: Scribunto listed
+	 * where nothing can run it. The other is a remark about Module: files nobody asked to run.
 	 */
 	private function checkLuaAgainstThisBuild(): void {
 		$source = rtrim((string)$this->getConfig()->get('WikvenSourceDirectory'), '/');
@@ -149,9 +141,9 @@ class Build extends Maintenance {
 	/**
 	 * Every file under the source directory, relative to it.
 	 *
-	 * Not ImportWikitext's list, which is filtered by SourceFile::isPageFile() -- and that asks
-	 * MediaWiki for the title's content model, so with Scribunto absent a module file is not a page
-	 * file and would be missing from exactly the case worth catching.
+	 * Not ImportWikitext's list, which SourceFile::isPageFile() filters by asking MediaWiki for the
+	 * content model -- so with Scribunto absent a module file is not a page file, and would be
+	 * missing from exactly the case worth catching.
 	 *
 	 * @return string[]
 	 */
@@ -172,18 +164,15 @@ class Build extends Maintenance {
 	/**
 	 * Whether anything here can run Lua.
 	 *
-	 * Four ways, in the order Scribunto would find them. luasandbox is the engine the image carries.
-	 * Failing that, Scribunto's standalone engine runs an external lua: the one this site configured,
-	 * one on PATH, or -- and this is the case that is easy to forget -- one Scribunto ships itself,
-	 * which is what it falls back to when luaPath is null.
+	 * Four ways, in the order Scribunto would find them: luasandbox, then the standalone engine's
+	 * external lua -- this site's, one on PATH, or the one Scribunto ships and falls back to.
 	 */
 	private static function luaEngineAvailable(): bool {
 		if (extension_loaded('luasandbox')) {
 			return true;
 		}
-		// Scribunto's own setting, and this is a static with no getConfig() to ask. It stays on
-		// $GLOBALS for the second reason too: the key is absent wherever Scribunto is not loaded,
-		// which is the case the caller above is here to report.
+		// Scribunto's own setting, and this is a static with no getConfig() to ask. $GLOBALS also
+		// answers where Scribunto is not loaded at all, which is the case being reported.
 		$configured = (string)( $GLOBALS['wgScribuntoEngineConf']['luastandalone']['luaPath'] ?? '' );
 		if ($configured !== '' && is_executable($configured)) {
 			return true;
@@ -201,13 +190,9 @@ class Build extends Maintenance {
 	/**
 	 * Whether the lua binary Scribunto carries can run here.
 	 *
-	 * Existing is not enough, which is why this runs it. None of the five binaries Scribunto bundles is
-	 * arm64 -- they are Intel, Linux and Windows in 32- and 64-bit and macOS in 64 -- and
-	 * LuaStandaloneInterpreter picks among them by PHP_OS and PHP_INT_SIZE, so on arm it selects the
-	 * x86-64 one, passes its own is_executable() check on it, and only finds out when the process will
-	 * not start. The path below mirrors that choice for 64-bit Linux, which is the only platform either
-	 * wikven product runs on; executing it is what makes the mirror safe, since a wrong guess answers
-	 * no rather than promising Lua that never arrives.
+	 * Existing is not enough, which is why this runs it. None of the five binaries Scribunto
+	 * bundles is arm64, and LuaStandaloneInterpreter picks by PHP_OS and PHP_INT_SIZE, so on arm it
+	 * selects the x86-64 one and finds out when the process will not start.
 	 */
 	private static function bundledLuaRuns(): bool {
 		$lua =
@@ -224,11 +209,9 @@ class Build extends Maintenance {
 	/**
 	 * Run the queue one type at a time, in name order: the runner otherwise shuffles the types.
 	 *
-	 * The search index is held back to the end. SifterSearch enqueues a rebuild for every revision
-	 * inserted, and although a pending one absorbs the rest, each pass of the queue picks up
-	 * whichever has arrived since. A bake was running Pagefind 21 times and leaving 20 dead
-	 * generations of hashed index files in the output, since Pagefind writes into a directory rather
-	 * than replacing it. Held back, it runs once, over the finished content.
+	 * The search index is held back to the end. SifterSearch enqueues a rebuild per revision
+	 * inserted and each pass of the queue picks up whichever arrived since, so a bake was running
+	 * Pagefind 21 times.
 	 */
 	private function runJobs(string $file): void {
 		$group = $this->getServiceContainer()->getJobQueueGroup();
@@ -258,18 +241,9 @@ class Build extends Maintenance {
 	 * Date every page at the commit that last changed the file it was written from, and credit
 	 * that commit's author.
 	 *
-	 * The footer's "last edited" line reports a page's newest revision, and every revision here is
-	 * written by the build: the import stamps its own instant, and a translatable page is written
-	 * again by Translate's marker and once more per language by its render jobs. Chasing each of
-	 * those writes means guessing which one lands last; stamping the rows once the content is
-	 * final does not, and it is the same answer for all of them. What the file's mtime used to
-	 * give was the moment CI cloned the repository -- one instant for every page, a different one
-	 * for every bake of the same commit, and the one date SOURCE_DATE_EPOCH could not freeze
-	 * (#406). git has the real one, and it is what the "View history" link opens.
-	 *
-	 * A page the history says nothing about -- one generated by the build, like Licenses and
-	 * Settings, or a source file never committed -- keeps the frozen build clock, which dates it
-	 * at the commit being built. That is true of the export as a whole, if not of the page.
+	 * Every revision here is written by the build, so the "last edited" line reported whichever
+	 * landed last; the file's mtime gave the moment CI cloned the repository, the one date
+	 * SOURCE_DATE_EPOCH could not freeze (#406).
 	 */
 	private function stampSourceHistory(): void {
 		$config = $this->getConfig();
@@ -317,10 +291,9 @@ class Build extends Maintenance {
 	 * What the history says about the file a page was written from, or null for a page the build
 	 * wrote itself.
 	 *
-	 * SourceFile's naming convention answers which file that is for an imported page and for a
-	 * translated one alike: "Skins" came from "Skins.wikitext" and "Skins/ko" from
-	 * "Skins/ko.wikitext". The one page with no file of its own is the source-language page
-	 * Translate adds ("Skins/en"), which follows the page it repeats.
+	 * SourceFile's naming convention answers which file that is: "Skins" came from
+	 * "Skins.wikitext", "Skins/ko" from "Skins/ko.wikitext". The one page with no file of its own
+	 * is the source-language page Translate adds.
 	 *
 	 * @return ?array{timestamp:int,authors:string[]}
 	 */
@@ -343,20 +316,9 @@ class Build extends Maintenance {
 	/**
 	 * Stop the "last edited" lines naming the accounts the build writes under.
 	 *
-	 * The wiki is filled by maintenance scripts, so unless the source history just named a page's
-	 * author, the account on its newest revision is the build's own: "Maintenance script" for
-	 * everything the import and the page setters above wrote, and Translate's FuzzyBot for the
-	 * translated pages its jobs render. Minerva's footer bar was offering that name to every
-	 * reader as the person who last edited the page (#406). It names nobody, and the export has no
-	 * user page, contributions or account for it to lead to.
-	 *
-	 * MediaWiki's own way of saying that a revision's author is not public is the DELETED_USER bit,
-	 * and skins answer it without a name: Minerva emits no editor at all for a revision whose
-	 * RevisionRecord::getUser() is null, leaving its bar to read "Last edited <when> by an
-	 * anonymous user" -- which is what the export knows -- and with no name there is no link to a
-	 * user page the export does not have. Vector's #footer-info-lastmod never carried an author.
-	 * The pages that would report the bit itself, history and diffs, are not rendered, and page
-	 * content hangs off a separate bit (DELETED_TEXT) this leaves alone.
+	 * The wiki is filled by maintenance scripts, so Minerva was offering the build's own account to
+	 * every reader as the person who last edited the page (#406). DELETED_USER is how MediaWiki
+	 * says an author is not public, and skins answer it without a name.
 	 */
 	private function hideBuildAuthors(): void {
 		$names = [User::MAINTENANCE_SCRIPT_USER];
@@ -387,13 +349,9 @@ class Build extends Maintenance {
 	/**
 	 * Drop the cached copies of the revision rows the two steps above rewrote in place.
 	 *
-	 * RevisionStore keeps the row of a page's newest revision in the object cache for a week, keyed
-	 * on the page and revision ids alone (RevisionStore::ROW_CACHE_KEY), and an edit in place
-	 * changes neither id. The build reads most pages long before those two steps run -- the job
-	 * queue parses every one of them -- so without this the skin passes, fresh processes over the
-	 * same database-backed cache, would render each page with the date it had before it was
-	 * stamped. Nothing else in the cache is touched: the Commons thumbnail lookups it also holds
-	 * are why the build has one at all (see WikvenSettings.php).
+	 * RevisionStore caches a page's newest revision row for a week, keyed on the page and revision
+	 * ids alone, and an edit in place changes neither. Without this the skin passes would render
+	 * each page with the date it had before it was stamped.
 	 */
 	private function forgetCachedRevisionRows(): void {
 		$cache = $this->getServiceContainer()->getMainWANObjectCache();
@@ -419,18 +377,9 @@ class Build extends Maintenance {
 	/**
 	 * Freeze page_touched once content is final; wiki-page modules fold it into their version hash.
 	 *
-	 * Once, in the orchestrator, rather than once per skin pass: what it writes is content state,
-	 * the same in every pass and derived from nothing a pass did, so a three-skin bake was running
-	 * the same full-table update three times for two no-ops. It is also one of the two writes that
-	 * kept a pass from being a reader of the database -- rebuildFileCache.php puts the wiki in
-	 * read-only mode for its own duration, so a pass has no business writing around it -- and a
-	 * reader is what a pass has to be to run beside another one (#407).
-	 *
-	 * Freezing here also means the pages are rendered with the frozen value rather than with
-	 * whatever the import and the job queue left, since the passes now boot after it. That is the
-	 * point of the freeze rather than a cost of moving it: SOURCE_DATE_EPOCH differs per commit,
-	 * so a page_touched written under the frozen clock differs per commit too, and pinning it is
-	 * what keeps the module version hashes embedded in the HTML stable between bakes.
+	 * Once in the orchestrator rather than per pass: it writes content state, and it is one of the
+	 * two writes that kept a pass from being a reader (#407). The pages are then rendered with the
+	 * frozen value, which keeps the module version hashes stable.
 	 */
 	private function freezePageTouched(): void {
 		$dbw = $this->getPrimaryDB();
@@ -441,9 +390,8 @@ class Build extends Maintenance {
 			->caller(__METHOD__)
 			->execute();
 
-		// The modules read page_touched through LinkCache, not the row just written: this process
-		// has warmed it filling the wiki, and its MediaWiki: entries are kept in the object cache
-		// as well, which the passes below boot onto rather than build for themselves.
+		// The modules read page_touched through LinkCache rather than the row just written; this
+		// process warmed it filling the wiki, and the passes below boot onto its object cache.
 		$linkCache = $this->getServiceContainer()->getLinkCache();
 		$pages = $dbw->newSelectQueryBuilder()
 			->select(['page_namespace', 'page_title'])
@@ -460,16 +408,8 @@ class Build extends Maintenance {
 	 * Render every enabled skin, several passes at a time.
 	 *
 	 * The passes are independent by construction: everything they read is in the database before
-	 * the first one starts, each writes into an output directory of its own, and each is a
-	 * separate process with its own boot. So the skin phase is the half of the bake that
-	 * parallelizes, and the half that grows -- the populate phase above is O(pages) and stays
-	 * serial, while this is O(pages x skins) and gains a pass every time a skin is added (#407).
-	 *
-	 * What the passes still share is the database, and a pass is not quite a reader of it: the
-	 * object cache is a table ($wgMainCacheType = CACHE_DB), and SQLite takes one writer at a
-	 * time. Each therefore gets a copy of the database file to work on, which also keeps a pass
-	 * from reading what another one cached -- so a pass renders from the same state whether it
-	 * runs first, last or beside the others, which is what keeps the output reproducible (#411).
+	 * the first one starts, and each is a separate process writing its own output directory (#407).
+	 * What they still share is the database, hence the copy each takes below.
 	 *
 	 * @param string[] $skins
 	 */
@@ -497,8 +437,8 @@ class Build extends Maintenance {
 					continue;
 				}
 				// Whole and in one piece, now that the pass is done: three renders writing to this
-				// process's own stdout as they go would interleave into something no one could
-				// attribute a failure from, and the log is how a bake is debugged.
+				// process's own stdout as they went would interleave into something no one could
+				// attribute a failure from.
 				$this->reportPass($skin, $running[$skin], $exit);
 				$finished[$skin] = ['exit' => $exit, 'output' => $running[$skin]['output'][1]];
 				unset($running[$skin]);
@@ -540,11 +480,9 @@ class Build extends Maintenance {
 	 */
 	private function startSkinPass(array $command, string $skin, string $databaseDirectory): array {
 		// The skin, the database and the working directory are passed to the child alone, so this
-		// process's own environment and cwd stay untouched while a skin renders. run.php resolves
-		// relative to the install root, which the binary's php-cli requires, hence $GLOBALS['IP']
-		// as the child's cwd. An array argv also means the arguments never pass through a shell to
-		// be quoted for. Both variables are set even when empty, so that a pass never inherits a
-		// value another run left in this process's environment.
+		// process's own environment and cwd stay untouched. run.php resolves relative to the
+		// install root, hence $GLOBALS['IP'] as the child's cwd. Both variables are set even when
+		// empty, so a pass never inherits a value another run left behind.
 		$environment = ['WIKVEN_BUILD_SKIN' => $skin, 'WIKVEN_BUILD_DB_DIR' => $databaseDirectory] + getenv();
 		$descriptors = [0 => STDIN, 1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
 		$pipes = [];
@@ -665,18 +603,12 @@ class Build extends Maintenance {
 	/**
 	 * Give each pass a copy of the database to render from.
 	 *
-	 * A pass reads the content, but it still writes: the object cache is a table of this database
-	 * ($wgMainCacheType = CACHE_DB, which is there so the Commons thumbnail lookups a bake makes
-	 * are made once). SQLite takes one writer at a time, so passes sharing the file would be
-	 * serialized by it at best and fail with SQLITE_BUSY at worst. The file is small and the
-	 * content is final by now, so a copy each is the cheap way out -- and the copies are taken
-	 * after the populate phase, so each pass inherits its lookups rather than repeating them.
-	 *
-	 * A server database has no such limit and is left alone, as is a single-pass bake.
+	 * A pass reads the content, but it still writes: the object cache is a table of this database,
+	 * and SQLite takes one writer at a time. The copies are taken after the populate phase, so
+	 * every pass inherits its cached lookups. A server database is left alone.
 	 *
 	 * @param string[] $skins
-	 * @return array<string,string> Skin to the data directory holding its copy; empty when the
-	 *   passes share the database.
+	 * @return array<string,string> Skin to the directory holding its copy; empty where they share one.
 	 */
 	private function copyDatabasePerPass(array $skins): array {
 		$config = $this->getConfig();
@@ -783,15 +715,9 @@ class Build extends Maintenance {
 	/**
 	 * Put the search bundle's entry file in an order it will come out in again next bake.
 	 *
-	 * Pagefind names each language's index in one JSON map and writes that map in whatever order it
-	 * happened to iterate, so two bakes of one source produce two spellings of the same fact: the
-	 * index hashes and page counts match, the order of the languages does not. One language has no
-	 * order to get wrong, which is why this surfaced only once translations were indexed in their
-	 * own language rather than all as the wiki's.
-	 *
-	 * Reproducibility is the build's promise (#411), not the indexer's, so the build keeps it --
-	 * exactly as StripBuildStamps drops the per-request ids MediaWiki leaves in a page. Search
-	 * explains what is safe to rewrite and why nothing reading the bundle can tell.
+	 * Pagefind names each language's index in one JSON map and writes it in whatever order it
+	 * iterated, so two bakes agree on every index and disagree on the order. Reproducibility is the
+	 * build's promise (#411), not the indexer's.
 	 */
 	private function stabilizeSearchIndex(): void {
 		// SifterSearch's own settings stay on $GLOBALS here and in the two methods below: they
@@ -803,11 +729,10 @@ class Build extends Maintenance {
 		}
 		$path = "$bundle/" . Search::INDEX_ENTRY_FILE;
 		if (!is_file($path)) {
-			// Three things used to end here together, and only two of them are fine: search off,
-			// search on with nothing to index, and search on with an index that did not get built.
-			// The job having run is what tells the third from the other two -- a Pagefind run that
-			// died leaves the site with a search box wired to a bundle that is not there, since
-			// Search::isActive() asks only whether the setting is set.
+			// Three things used to end here together and only two are fine: search off, search on
+			// with nothing to index, and search on with an index that did not get built. The job
+			// having run is what tells the third from the other two, since Search::isActive() asks
+			// only whether the setting is set.
 			if ($this->searchIndexRan) {
 				$this->fatalError(
 					"Wikven: the search index was not written ($path), though the job that builds it"
@@ -826,15 +751,8 @@ class Build extends Maintenance {
 	/**
 	 * Point this pass's search at a bundle of its own, and say where that bundle has to be written.
 	 *
-	 * A skin copy already holds its own pages, styles and scripts; the search index was the one
-	 * thing it went on reading out of the export root, and reading it there is what sent a reader
-	 * who searched back to the root copy (#399, and Search::copyBundlePath for why the bundle's
-	 * location decides that). So the copy gets its own, and every URL SifterSearch derives from it
-	 * -- a result, the results page, the form's target, the "containing" row -- lands in the copy
-	 * without anything on the client having to correct it.
-	 *
-	 * The main skin renders into the export root, where the index already is, so it needs none of
-	 * this; nor does a site whose bundle sits somewhere this cannot put a copy beside.
+	 * The search index was the one thing a skin copy went on reading out of the export root, which
+	 * sent a reader who searched back to the root copy (#399).
 	 *
 	 * @return ?string The directory the bundle must be copied to, or null where nothing is to change.
 	 */
@@ -927,9 +845,9 @@ class Build extends Maintenance {
 	/**
 	 * Stop on a category the site said a finished build must find empty.
 	 *
-	 * MediaWiki renders a page with a fault in it and files the page in a tracking category rather
-	 * than refusing; the export then publishes the page and drops the category, which is not in it.
-	 * FailOnCategories says what a category with anything in it is worth, and this is what asks.
+	 * MediaWiki files a page with a fault in it into a tracking category rather than refusing it,
+	 * and the export publishes the page and drops the category. FailOnCategories says what a
+	 * category with anything in it is worth; this is what asks.
 	 */
 	private function assertNamedCategoriesAreEmpty(): void {
 		$named = (array)$this->getConfig()->get('WikvenFailOnCategories');
@@ -955,23 +873,8 @@ class Build extends Maintenance {
 	 * The category one entry of WikvenFailOnCategories names, or null where it names none.
 	 *
 	 * An entry is a message key where this wiki has that message and a category title otherwise,
-	 * because a message is how MediaWiki holds a tracking category's name: nothing in core says
-	 * "Pages with template loops", it says template-loop-category, and a wiki reading in another
-	 * language answers that key with its own name. Naming the key is therefore the only way the
-	 * default list can name core's faults without deciding what language the sites using it read
-	 * in, and a site writing a category of its own still writes the name.
-	 *
-	 * The two cannot collide in practice -- a category name is a page title and a message key is
-	 * not one a wiki would title a category -- and where they somehow do, the message wins and
-	 * says so by resolving to the name it holds.
-	 *
-	 * Null is for a message a wiki has edited to "-", which is MediaWiki's own way of switching a
-	 * tracking category off: a category nothing can be filed into is not one to look in.
-	 *
-	 * A key belonging to an extension this site does not load has no message either, and falls to
-	 * the category reading, where it names a category nothing files into and is found empty. That
-	 * is what lets the default carry every bundled extension's faults while a site loads none of
-	 * them, and it costs one query each for the ones it does not have.
+	 * because a message is how MediaWiki holds a tracking category's name. Null is a message edited
+	 * to "-", which switches the category off.
 	 */
 	private function categoryNamed(string $entry): ?Title {
 		$message = wfMessage($entry)->inContentLanguage();
@@ -1045,10 +948,8 @@ class Build extends Maintenance {
 	 * Stop on a name in the site's extensions or skins list that nothing here provides.
 	 *
 	 * WikvenSettings collects these rather than failing on them, because fetchExtensions.php boots
-	 * it to install the very components that are missing while it runs. By here they are installed,
-	 * so a name still unaccounted for is one nothing will account for -- and a build that carries on
-	 * publishes a site missing whatever the author asked that name for, with one line in a log of
-	 * thousands to say so. A typo in a skin name is the ordinary case.
+	 * it to install the very components that are missing. By here they are installed, so a name
+	 * still unaccounted for would publish a site missing whatever the author asked for.
 	 */
 	private function assertEverythingListedIsHere(): void {
 		$missing = $this->getConfig()->get('WikvenMissing');
@@ -1105,11 +1006,8 @@ class Build extends Maintenance {
 		$child->setArg(0, $directory);
 		$child->setOption('extensions', implode(',', $extensions));
 		// No --skip-dupes. It skips a file whose *content* matches one already imported, whatever
-		// the two are called, so a logo shipped twice under two names left the second name with no
-		// File: page and every page embedding it red-linking, reported as one skipped line and a
-		// successful build. Nothing is lost by dropping it: a name already taken is skipped by the
-		// importer with or without it, and two source files cannot share a name here anyway --
-		// collisions() above has already stopped the build if they do.
+		// the two are called, so a logo shipped twice under two names left the second with no File:
+		// page. collisions() above already stops the build on two source files sharing a name.
 		//
 		// Subdirectories, because pages are read from them; sources() above walked the same way.
 		$child->setOption('search-recursively', true);
@@ -1128,11 +1026,8 @@ class Build extends Maintenance {
 	/**
 	 * Every source image now has a File: page, or the build stops naming the ones that do not.
 	 *
-	 * The importer answers "I skipped that one" with the same success it answers "I imported them
-	 * all" with, and it has more than one reason to skip: a duplicate under another name, a title
-	 * core would not make from the file's own name, a name already taken. Whichever it was, the
-	 * page embedding the image is left with a red link and the build says nothing, so the check is
-	 * on the outcome rather than on the reasons -- the pages that were supposed to be here.
+	 * The importer answers "I skipped that one" with the same success as "I imported them all".
+	 * Whichever reason it had, the page is left with a red link, so the check is on the outcome.
 	 *
 	 * @param string[] $sources Absolute paths, as ImageImport::sources() returns them.
 	 */
@@ -1238,12 +1133,9 @@ class Build extends Maintenance {
 
 	/**
 	 * Generate a Settings page: the reader's own display choices, which a static export keeps in
-	 * the browser rather than in a user account. It stands in for Special:MobileOptions, which is
-	 * MobileFrontend's and which no bake writes, and it is a page rather than a panel so every
-	 * skin can link to it.
-	 *
-	 * The controls themselves are drawn by ext.Wikven.appearance into the placeholders below;
-	 * wikitext cannot carry a radio, and the choices mean nothing without the script anyway.
+	 * the browser rather than in a user account. It stands in for Special:MobileOptions, and it is
+	 * a page rather than a panel so every skin can link to it. The controls are drawn by
+	 * ext.Wikven.appearance into the placeholders below.
 	 */
 	private function setSettingsPage(): void {
 		$config = $this->getConfig();
@@ -1257,10 +1149,8 @@ class Build extends Maintenance {
 		}
 
 		// Special:MobileOptions is an empty form its own script fills, so this page is the same
-		// empty form: Adder queues the modules, and MediaWiki draws the controls it would have
-		// drawn there. Wikitext carries no <form>, and that stylesheet's layout rules all name
-		// one, so fillMinervaMenu.php puts a real form inside this. The skin list is wikven's own,
-		// and follows in a section of its own.
+		// empty form. Wikitext carries no <form> and that stylesheet's layout rules all name one,
+		// so fillMinervaMenu.php puts a real form inside this.
 		$text = "<div id=\"wikven-settings-form\"></div>\n";
 		if (count((array)$config->get('WikvenSkins')) > 1) {
 			$text .= $this->settingsSection(
@@ -1295,44 +1185,9 @@ class Build extends Maintenance {
 	/**
 	 * Give the site a page saying what it redistributes, and link it from every page.
 	 *
-	 * A built site is not only the author's words. buildScripts bakes MediaWiki's own module
-	 * closure into modules-static.js and buildStyles writes each skin's and extension's CSS beside
-	 * it, so every page the export serves carries other people's code, under other people's
-	 * licenses. Something has to say so, and it has to be reachable: a page only a reader who goes
-	 * looking would find is not an acknowledgement, which is why the footer links this one.
-	 *
-	 * One page, and not the two it is tempting to write. A site's own introduction is the site's to
-	 * write and the build has nothing to add to it; what the site redistributes is not an
-	 * introduction, and is the one thing here the build knows and the author cannot. So the
-	 * introduction is left alone and this is what gets generated.
-	 *
-	 * The whole page is written here rather than assembled from generated templates. Templates
-	 * were the earlier shape and their cost fell on every site rather than on this one: a template
-	 * the build writes unconditionally is a title in the site's own Template namespace that the
-	 * site can no longer use, and no site should carry a reserved name so that this page can be
-	 * built out of parts.
-	 *
-	 * What it lists is what the published site carries and nothing else. MediaWiki, because
-	 * buildScripts bakes its module closure into modules-static.js; the extensions and skins,
-	 * because buildStyles writes their CSS and their scripts go into the same bundle. PHP, the
-	 * database and the tools that made the build are not in it: a static site does not ship them,
-	 * and a licenses page that named them would be claiming a redistribution that never happened.
-	 *
-	 * A source page of the configured name is used as written, as every generated page's is: a site
-	 * that writes this one itself has taken the question on deliberately. Set the name empty and no
-	 * page is written and the footer entry goes with it, which is a site saying it will acknowledge
-	 * this its own way.
-	 *
-	 * It is written once per language the site is built in, at "<Page>/<lang>", because a notice
-	 * nobody can read is not one either: every string on it is a message, wikven's own and core's
-	 * Special:Version ones, so each language costs a render and nothing else. The footer's
-	 * Special:MyLanguage link then lands on the reader's own copy.
-	 *
-	 * The languages are the ones the source tree has translations in, not every language MediaWiki
-	 * knows. Nothing could reach the rest: resolveTranslationLinks settles each link by the
-	 * language of the page carrying it, and a reader is only ever on a page in a language the site
-	 * has content in, so a copy in any other language would be a file no link in the export points
-	 * at -- several hundred of them, once per skin, in the search index.
+	 * Every page carries other people's code: buildScripts bakes MediaWiki's module closure into
+	 * modules-static.js, and buildStyles writes each skin's CSS. The page lists what the export
+	 * carries and nothing else -- not PHP or the tools that made the build.
 	 */
 	private function setLicensesPage(): void {
 		$title = LicensesPage::title();
@@ -1413,22 +1268,9 @@ class Build extends Maintenance {
 	 * What the build ran on: MediaWiki, PHP and the database, with their versions, and the server
 	 * besides where a standalone binary is what ran it.
 	 *
-	 * Of the three fixed rows only one is redistributed, and it is the one that carries the most:
-	 * every page of the export loads modules-static.js, which is MediaWiki's module closure, so
-	 * core goes out with every site whatever else it installs -- and it is the component the
-	 * registry below cannot answer for, since it is not an entry in it. So MediaWiki's license is
-	 * named. PHP and the database ran the build and stayed behind; a license beside them would read
-	 * as a claim that the site ships them, and it ships neither. The lead-in says so, because an
-	 * empty cell on its own would read as a component that declared nothing. runtimeSoftware()
-	 * says why the rows it adds are named with theirs.
-	 *
-	 * They are here at all because "what built this" is worth knowing and an export has no
-	 * Special:Version to ask.
-	 *
-	 * MediaWiki's license is read from core's own composer.json rather than written here, the same
-	 * way each extension's is read from its extension.json: this file should not be the second
-	 * place that fact is kept. Unreadable leaves the cell empty, because a guess on a licenses page
-	 * is worse than a gap.
+	 * Only MediaWiki is redistributed -- every page loads modules-static.js, its module closure --
+	 * and the registry below cannot answer for it, so its license is named here. PHP and the
+	 * database ran the build and stayed behind.
 	 */
 	private function coreTable(?string $lang): string {
 		$db = $this->getServiceContainer()->getConnectionProvider()->getReplicaDatabase();
@@ -1459,19 +1301,11 @@ class Build extends Maintenance {
 
 	/**
 	 * The server a standalone-binary build ran on, as further rows for the table above, or none
-	 * where it ran on something else: the Docker image, or a wiki of your own with the extension
-	 * installed.
+	 * where it ran on something else.
 	 *
-	 * Named with their licenses where PHP and the database are not, and the difference is who
-	 * handed them to you. PHP came inside the base image you pulled and stayed behind; FrankenPHP
-	 * and Caddy are the executable you downloaded, compiled in and redistributed by wikven, so
-	 * their terms are yours to know. What the site publishes is unchanged either way -- it carries
-	 * neither -- which is what the lead-in above says.
-	 *
-	 * The names and versions come from the binary itself: caddy/wikven.go reads them out of the Go
-	 * build that assembled it and passes them in, so they cannot claim a version other than the one
-	 * linked. The licenses are written here because a Go build records none, which makes this their
-	 * one place rather than their second.
+	 * Named with their licenses where PHP and the database are not: FrankenPHP and Caddy are
+	 * compiled into the executable wikven redistributes. Their licenses are written here because a
+	 * Go build records none.
 	 *
 	 * @return list<array{string, string, string}>
 	 */
@@ -1557,11 +1391,9 @@ class Build extends Maintenance {
 	 * A wikitext table of components with versions, project links and licenses, under the given
 	 * messages.
 	 *
-	 * The license is the one the component declares in its own extension.json, which is the only
-	 * place that fact is kept and the reason a page acknowledging it need not be written by hand.
-	 * Special:Version links each one to the license text it ships; an export has no such page, so
-	 * the identifier stands on its own, and a component declaring none leaves the cell empty rather
-	 * than being guessed at.
+	 * The license is the one the component declares in its own extension.json. Special:Version
+	 * links each to the license text it ships; an export has no such page, so the identifier
+	 * stands alone, and a component declaring none leaves the cell empty.
 	 */
 	private function componentTable(
 		string $headingKey,

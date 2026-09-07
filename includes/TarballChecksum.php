@@ -5,26 +5,19 @@ namespace MediaWiki\Extension\Wikven;
 /**
  * The sha256 a WikvenRepositories tarball entry pins, and whether a download is the file it names.
  *
- * Configuration promises this: "64 hex characters; the build aborts on a mismatch", and tells a
- * site to pin one "for a tamper-evident, reproducible build". A tarball is the one fetch method
- * whose source can change under a site without its configuration changing -- a URL serves whatever
- * it serves today -- so the pin is the only thing between a site and running code nobody chose.
+ * Configuration promises this: "64 hex characters; the build aborts on a mismatch". A tarball is
+ * the one fetch method whose source can change under a site without its configuration changing, so
+ * the pin is the only thing between a site and running code nobody chose.
  *
- * Kept here rather than inside the maintenance script so the promise can be held to a test: what a
- * spec pins, what counts as a sha256, and whether a file answers to one are three questions with
- * answers that do not need a wiki.
+ * Kept here rather than inside the maintenance script so the promise can be held to a test.
  */
 class TarballChecksum {
 	/**
 	 * The checksum a spec pins, lowercased and trimmed, or null where it pins none.
 	 *
-	 * Says nothing about whether the value is a checksum; that is isValid()'s question, asked
-	 * separately so a spec that pins nonsense is told apart from one that pins nothing.
-	 *
-	 * Null is a pin, not the absence of one. "sha256:" with nothing after it is how YAML spells a
-	 * key whose value the author has not filled in yet, and reading that as "pins nothing" fetched
-	 * the tarball unverified without a word -- the one outcome the key exists to prevent. Only a
-	 * spec with no sha256 key at all pins nothing.
+	 * Says nothing about whether the value is a checksum; that is isValid()'s question. Null is a
+	 * pin, not the absence of one: "sha256:" with nothing after it is a key nobody has filled in
+	 * yet, and reading that as "pins nothing" fetched the tarball unverified.
 	 *
 	 * @param array $spec One WikvenRepositories entry.
 	 */

@@ -381,9 +381,8 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	 * they can read.
 	 *
 	 * resolveTranslationLinks.php runs on exactly this condition and settles the link by the
-	 * language of the page holding it. Without the prefix a Korean reader on Licenses/ko.html
-	 * would follow the footer to the English page -- and this link is the site's only guaranteed
-	 * route there, so there is no second way in.
+	 * language of the page holding it. Without the prefix a Korean reader on Licenses/ko.html would
+	 * follow the footer to the English page.
 	 */
 	public function testATranslatedSiteLinksTheReaderToTheirOwnLanguage() {
 		$licenses = Title::newFromText('Licenses');
@@ -405,13 +404,9 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * Every page carries a link to what the site redistributes.
 	 *
-	 * The built site ships MediaWiki's own JavaScript and each skin's CSS, and the page saying so
-	 * is no use if only a reader who goes looking finds it.
-	 *
 	 * Which of the two hrefs is written depends on whether Translate is installed beside this
-	 * suite, and the jobs disagree: the coverage run has it and the phpunit runs do not. So what is
-	 * asserted here is that the link is present and leads to the page; the exact spelling of each
-	 * route is pinned by the two cases above, which pass the flag in rather than reading it.
+	 * suite, and the jobs disagree, so what is asserted here is that the link leads to the page.
+	 * The two cases above pin each spelling.
 	 */
 	public function testTheFooterSaysWhereToFindWhatTheSiteRedistributes() {
 		$this->overrideConfigValue('WikvenLicensesPage', 'Licenses');

@@ -53,12 +53,10 @@ class StoreImages extends Maintenance {
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);
 
-			// Stored first, and only then hotlinked. Each pass reads what the one before it wrote,
-			// and both can now write the published base into a page. A site published under a path
-			// holding the upload path -- "https://example.org/images/" -- would have the second
-			// pass match the first one's answers and hunt for files nobody referenced; the
-			// repository's host is not a base anyone publishes under, so this way round nothing
-			// either writes can be mistaken for a reference by the other.
+			// Stored first, and only then hotlinked. Each pass reads what the one before it wrote, and both
+			// can now write the published base into a page. A site published under a path holding the upload
+			// path would have the second pass match the first one's answers; the repository's host is not a
+			// base anyone publishes under.
 			$html = $references->rewrite(
 				$html,
 				function (string $path) use (&$map, $uploadDir, $htmlDir, $assetDirectory): ?string {

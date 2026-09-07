@@ -114,10 +114,9 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * Hundreds of language codes are also ordinary English words -- "id", "no", "is", "it", "as",
-	 * "be" -- so a name alone had a translatable page's "API/id" subpage read as an Indonesian
-	 * translation, and the page then went missing from the built site with nothing said about it.
-	 * The unit markers are what settle it: a page written to stand on its own has no reason to
+	 * Hundreds of language codes are also ordinary English words -- "id", "no", "is", "it" -- so a
+	 * name alone had a translatable page's "API/id" subpage read as an Indonesian translation, and
+	 * the page went missing with nothing said. A page written to stand on its own has no reason to
 	 * carry a source page's unit numbers.
 	 */
 	public function testASubpageNamedForALanguageIsAPageOfItsOwnWithoutMarkers() {

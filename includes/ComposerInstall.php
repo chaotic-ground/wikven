@@ -6,16 +6,12 @@ namespace MediaWiki\Extension\Wikven;
  * Where composer put the packages a site asked for, and whether that is where the build looks.
  *
  * A name in a site's extensions: or skins: list is a directory name, and WikvenSettings.php turns
- * it straight into a path under $IP. A composer package names its own directory instead, through
- * composer/installers, and the two do not have to agree: a "mediawiki-extension" is CamelCased
- * with a trailing "-extension" cut off (mediawiki/tabber-neue-extension -> extensions/TabberNeue),
- * a "mediawiki-skin" is not CamelCased at all (mediawiki/chameleon-skin -> skins/chameleon), and a
- * package declaring neither type lands in vendor/ like any other library.
+ * it straight into a path under $IP. A composer package names its own directory instead, and the
+ * two need not agree: an extension is CamelCased, a skin is not, and a package declaring neither
+ * type lands in vendor/.
  *
- * So a site listing "Chameleon" and asking for "mediawiki/chameleon-skin" got skins/chameleon,
- * which on a case-sensitive filesystem is a different directory. Every step succeeded: the package
- * installed, the log said "skipping skin 'Chameleon' (not bundled in this image)", the build
- * carried on, and the site went out without its skin.
+ * So a site listing "Chameleon" and asking for "mediawiki/chameleon-skin" got skins/chameleon and
+ * went out without its skin.
  */
 class ComposerInstall {
 	/**
@@ -97,9 +93,8 @@ class ComposerInstall {
 	 * What the site could write instead, where there is something worth writing.
 	 *
 	 * Only a package composer put directly under extensions/ or skins/ has a name to offer: one
-	 * that landed in vendor/ declared neither MediaWiki type, and renaming the entry would not make
-	 * it a component. A package that landed in the other of the two is a component, just not the
-	 * kind it was listed as, and the list it belongs in is the more useful half of that answer.
+	 * that landed in vendor/ declared neither MediaWiki type. A package that landed in the other of
+	 * the two is a component listed as the wrong kind.
 	 *
 	 * @param string $installPath MediaWiki's install directory ($IP).
 	 * @param string $kind 'extension' or 'skin', as the site listed it.
@@ -123,9 +118,8 @@ class ComposerInstall {
 	 * Whether a version constraint names one release and no other.
 	 *
 	 * A tarball is pinned by its sha256 and a repository by its commit; for a package the pin is an
-	 * exact version, and anything looser takes whatever the registry serves on the day. That is a
-	 * bargain a site is entitled to make -- the same one a moving `reference` makes -- so this only
-	 * decides whether the build says so.
+	 * exact version, and anything looser takes whatever the registry serves that day. That is a
+	 * bargain a site may make, so this only decides whether the build says so.
 	 *
 	 * @param string $constraint What follows the colon in "vendor/name:constraint", or "*".
 	 */

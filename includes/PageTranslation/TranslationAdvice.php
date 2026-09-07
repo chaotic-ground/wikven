@@ -5,19 +5,13 @@ namespace MediaWiki\Extension\Wikven\PageTranslation;
 /**
  * What `translate check` found, written for the person who wrote the translation.
  *
- * The check's own output is GitHub Actions annotations: one line per finding, on the file it
- * belongs to, which is the right shape for someone reading a diff and the wrong one for someone
- * meeting this workflow for the first time. An annotation says "Stale translation unit T:3 (ko)";
- * it does not say that a stamp is what makes a unit current, or which command writes one.
+ * The check's own output is GitHub Actions annotations, the right shape for someone reading a diff
+ * and the wrong one for someone meeting this workflow: "Stale translation unit T:3 (ko)" does not
+ * say what a stamp is or which command writes one. So the findings are also gathered into one
+ * comment, grouped by what went wrong.
  *
- * So the same findings are also gathered into one comment: grouped by what went wrong, each group
- * saying what to run, and the whole thing ending on what does and does not fail the build.
- *
- * Every word of it is a message in i18n/, because the person being advised is by definition
- * someone working in another language: the comment can be rendered once per language, so a
- * contributor who sent a Korean translation reads the advice in Korean under the English. The
- * messages are reached through a callable rather than wfMessage() directly, so the shape of the
- * comment is tested without a wiki behind it.
+ * Every word of it is a message in i18n/, reached through a callable so the comment can be tested
+ * without a wiki.
  */
 class TranslationAdvice {
 	/**
@@ -87,14 +81,9 @@ class TranslationAdvice {
 	/**
 	 * The same advice, but only about the paths a change touches.
 	 *
-	 * A check reads the whole source tree, which is what a maintainer wants and the opposite of
-	 * what a comment wants: a page that has been waiting for a translation since long before this
-	 * change is not this contributor's to answer, and saying so on every change is how a comment
-	 * stops being read at all. So the comment is kept to the files in front of the reader.
-	 *
-	 * A translation counts as touched when its own file was, and also when the source page it
-	 * translates was: editing an English page is exactly what makes its translations stale, and
-	 * the person who did it is the one who needs to hear so.
+	 * A page waiting for a translation since long before this change is not this contributor's to
+	 * answer. A translation counts as touched when its own file was, and when its source page was:
+	 * editing an English page is what makes its translations stale.
 	 *
 	 * @param list<string> $paths As the findings name their files: repo-relative, in the same
 	 *   shape --path-prefix produces.
@@ -109,8 +98,8 @@ class TranslationAdvice {
 	 * The comment for a run that found something, or null for one that found nothing.
 	 *
 	 * A finding carries a kind and a file, then whichever of source, unit, lang, line and detail
-	 * its kind has to say. Written here as a plain string map rather than as the shape, which no
-	 * longer fits on a line the coding standard will take.
+	 * its kind has to say. Written as a plain string map rather than as the shape, which no longer
+	 * fits on a line the coding standard will take.
 	 *
 	 * @param list<array<string,string>> $findings
 	 * @param list<string> $languages Rendered once each, in this order.
@@ -134,10 +123,8 @@ class TranslationAdvice {
 	 * The body of a run that found nothing, which is how a consumer tells that from a finding.
 	 *
 	 * CLEAR_MARKER on its own line is what says so; what to do about it is the consumer's to
-	 * decide. wikven's own action deletes the comment it left before, because a comment saying
-	 * there is nothing wrong is one nobody needs and the run's annotations hold the record either
-	 * way. The prose below is for a consumer that keeps its comment and wants something to put
-	 * where the complaint stood.
+	 * decide. wikven's own action deletes the comment it left before; the prose below is for a
+	 * consumer that keeps its comment.
 	 *
 	 * @param list<string> $languages
 	 */
@@ -262,9 +249,8 @@ class TranslationAdvice {
 	/**
 	 * The message for a comment about everything, or the one that says it is about a change.
 	 *
-	 * Two messages rather than one hedged wording, because a comment that has been narrowed and
-	 * one that has not are saying different things, and a reader deciding whether the check is
-	 * quiet about the rest of the wiki should not have to guess which they are holding.
+	 * Two messages rather than one hedged wording, because a comment that has been narrowed and one
+	 * that has not are saying different things.
 	 */
 	private function key(string $key): string {
 		return $this->paths === null ? $key : "$key-scoped";

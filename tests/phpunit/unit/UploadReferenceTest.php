@@ -38,10 +38,10 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * The defect this class exists for. MediaWiki hands a head tag File::getFullUrl(), which is the
-	 * body's URL expanded against $wgServer, so a scheme and host arriving here is MediaWiki saying
-	 * this will be read away from the page. Answered with a path beside the page it means nothing:
-	 * a crawler that never saw the page has nothing to resolve it against.
+	 * The defect this class exists for. MediaWiki hands a head tag File::getFullUrl(), so a scheme
+	 * and host arriving here is MediaWiki saying this will be read away from the page. Answered
+	 * with a path beside the page it means nothing: a crawler that never saw the page has nothing
+	 * to resolve it against.
 	 */
 	public function testAWholeReferenceIsAnsweredWhole() {
 		$this->assertSame(

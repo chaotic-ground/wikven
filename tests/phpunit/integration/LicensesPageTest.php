@@ -31,9 +31,8 @@ class LicensesPageTest extends MediaWikiIntegrationTestCase {
 	 * A copy the site provided itself is the site's, and re-rendering it is not the build's to do.
 	 *
 	 * This is the page the Declarer hook keeps its hands off (#561): English prose about Korean
-	 * licensing terms, sitting at the title a Korean copy would have had. Re-rendering it in ko
-	 * would wrap Korean chrome around English prose and leave the html lang saying en, because the
-	 * hook still -- rightly -- calls the page English.
+	 * licensing terms, at the title a Korean copy would have had. Re-rendering it in ko would wrap
+	 * Korean chrome around English prose.
 	 */
 	public function testASourceCopyIsNotTheBuildsToRecache() {
 		$source = $this->sourceTreeTranslatedIntoKorean();
