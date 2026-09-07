@@ -81,7 +81,6 @@ updates:
         patterns:
           - "*"
   - package-ecosystem: terraform
-    # The github provider that applies this repository's own settings, and the lock file beside it.
     directory: /.tf
     schedule:
       interval: weekly
