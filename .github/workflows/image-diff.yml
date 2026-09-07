@@ -1,5 +1,5 @@
 ---
-name: Image Diff
+name: Image diff
 
 # A dependabot bump of a pinned image says which two digests and stops there, because a digest has
 # no changelog and compares to nothing a reader can open. What it does have is the commit it was
