@@ -2,8 +2,6 @@
 
 namespace MediaWiki\Extension\Wikven;
 
-use MediaWiki\Utils\ExecutableFinder;
-
 /**
  * When each source file last changed, and who changed it, as git tells it.
  *
@@ -154,28 +152,6 @@ class SourceHistory {
 	 * @param string[] $arguments
 	 */
 	private static function git(string $directory, array $arguments): ?string {
-		// Located rather than spawned by name: proc_open() raises a PHP warning of its own when the
-		// command is not there, and a host without git is one of the answers this method gives.
-		$binary = ExecutableFinder::findInDefaultPaths(['git']) ?: null;
-		if ($binary === null) {
-			return null;
-		}
-
-		// An array argv never reaches a shell, so a directory name needs no quoting. git's own
-		// complaints (no repository here, nothing committed yet) are the expected outcome rather
-		// than something to print, and the exit status already reports them.
-		$descriptors = [
-			0 => ['file', '/dev/null', 'r'],
-			1 => ['pipe', 'w'],
-			2 => ['file', '/dev/null', 'w']
-		];
-		$pipes = [];
-		$process = proc_open(array_merge([$binary, '-C', $directory], $arguments), $descriptors, $pipes);
-		if ($process === false) {
-			return null;
-		}
-		$output = stream_get_contents($pipes[1]);
-		fclose($pipes[1]);
-		return proc_close($process) === 0 && $output !== false ? $output : null;
+		return Git::output(array_merge(['-C', $directory], $arguments));
 	}
 }
