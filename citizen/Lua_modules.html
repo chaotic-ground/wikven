@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Lua modules - Wikven</title>
@@ -449,13 +449,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <style data-mw-deduplicate="TemplateStyles:r101">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}.mw-parser-output .wikven-note-warning{border:1px solid var(--border-color-warning,#ab7f2a);background-color:var(--background-color-warning-subtle,#fdf2d5)}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Both products render Lua, but only the Docker image needs nothing from you; the <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> wants an interpreter installed on arm64. The table below has the three cases. A build that cannot render Lua stops and says so, rather than publishing pages with <code>{{#invoke:}}</code> showing in them.</p></div>
 </div>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Enabling_it">Enabling it</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Enabling_it">Enabling it</h2></div><div class="citizen-section-body">
 <p>Name it in your <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a> and that is all. Scribunto is bundled with MediaWiki, so it needs no <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> entry</a>, and on most builds the engine needs no configuration either.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Scribunto</span>
 </pre></div>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Writing_a_module">Writing a module</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Writing_a_module">Writing a module</h2></div><div class="citizen-section-body">
 <p>A module is content, so it lives in your source tree beside your pages. Its file carries no <code>.wikitext</code> marker, because a <code>Module:</code> page's content model is Lua and not wikitext:
 </p>
 <div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>src/
@@ -506,11 +506,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p><code>Lua modules</code>
 </p><p>The invocation sits outside the <code>&lt;translate></code> tags, because a module's return value is not a translation unit. It reaches a reader of any language exactly as the module wrote it, so the words belong in the sentence around it and not in the module.
 </p>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_reaches_the_published_site">What reaches the published site</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_reaches_the_published_site">What reaches the published site</h2></div><div class="citizen-section-body">
 <p>The module's output, and nothing else. <code>Module:</code> is not a content namespace, so the module is never exported as a page and its Lua source is not published; what a reader downloads is the page with that answer already in it. Nothing runs in the reader's browser, because nothing is left to run: the module ran once, at build time.
 </p><p>That is worth knowing when you decide what to put in a module. Anything a module computes from the wiki's own content — a table assembled from other pages, a sorted list, a page's own order in a series — is computed once and frozen. Anything a module would need at read time, like the reader's clock or a query, has nowhere to run.
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Which_product_renders_it">Which product renders it</h2></div>
+</div></section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Which_product_renders_it">Which product renders it</h2></div><div class="citizen-section-body">
 <p>Scribunto has two engines and picks between them itself. The first is <code>luasandbox</code>, a PHP extension; the second runs an external <code>lua</code> program, and falls back to an interpreter Scribunto carries in its own source tree. Which one you get depends on the product, and only one of the three arrangements asks anything of you.
 </p>
 <table class="wikitable">
@@ -545,7 +545,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>That setting is read on every product, so a source tree carrying it builds the same everywhere.
 </p>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="When_the_build_and_the_site_disagree">When the build and the site disagree</h2></div>
+</div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="When_the_build_and_the_site_disagree">When the build and the site disagree</h2></div><div class="citizen-section-body">
 <p>Two things can be out of step here, and what the site asked for decides which is which: Lua the site asked for and this build cannot give ends the build, and Lua the site never asked for is only reported, with the bake going on.
 </p><p><b>Modules with no Scribunto.</b> A source tree with <code>Module:</code> files and no <code>Scribunto</code> in <code>extensions</code> is built, and told what those files come to: a <code>{{#invoke:}}</code> is left in the page as its own source text, and a module named with the <code>.wikitext</code> marker is published as a page — your Lua, exported for the world to read. The build says what it sees rather than deciding for you, because a <code>Module:</code> file is a guess read off a name and may be on its way in, on its way out, or kept for something else.
 </p>
@@ -568,7 +568,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Extensions.html" title="Special:MyLanguage/Extensions">Extensions</a></div><div class="wikven-prevnext-next"><a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Lua_modules.html">https://chaotic-ground.github.io/wikven/Lua_modules.html</a>"</div></div>
 			</div>
 			

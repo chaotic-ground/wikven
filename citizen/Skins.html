@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Skins - Wikven</title>
@@ -446,7 +446,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>You can choose <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions_and_skins">bundled skins</a> in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p>
 <meta property="mw:PageProp/toc"/>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Supported_skins">Supported skins</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Supported_skins">Supported skins</h2></div><div class="citizen-section-body">
 <p>Wikven supports three skins. This documentation site is built with all three, so every change is exercised in each of them.
 </p>
 <ul><li><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Skin:Vector">Vector</a> (default; <code>Vector</code> selects the skin's <code>vector-2022</code> variant, Vector 2022)</li>
@@ -455,7 +455,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>Any other skin is untested rather than refused: every skin bundled with MediaWiki is available by name, MonoBook among them, and a third-party skin can be fetched like Citizen is.
 </p><p>Minerva needs more said about it than the other two, a build working around parts of the skin rather than configuring them. That is collected in the <a href="./Skins.html#minerva-appendix" title="Special:MyLanguage/Skins">appendix</a> rather than here.
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Configuring_the_skin">Configuring the skin</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Configuring_the_skin">Configuring the skin</h2></div><div class="citizen-section-body">
 <p><code>skins</code> says which skins to build. Wikven builds Vector whatever else you list, so naming another one adds it rather than replaces it:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
@@ -471,7 +471,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>Without it the site is read in the first skin built, which is the only answer a site with one skin needs. A <code>DefaultSkin</code> naming a skin the site does not build is reported and ignored, since a default nothing renders would leave the output root with no pages in it.
 </p><p><span id="building-more-than-one-skin"></span>
 </p>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Building_more_than_one_skin">Building more than one skin</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Building_more_than_one_skin">Building more than one skin</h2></div><div class="citizen-section-body">
 <p>List more than one skin and the site is built in every one of them, and the reader picks. This documentation site does that with all three. It is one line of configuration and rather more than one line of consequences, so they are worth knowing:
 </p>
 <ul><li><b>The site is rendered once per skin.</b> A bake with three skins does three full renders and writes about three times as many files. The renders run beside each other, one per processor the build is allowed, so the time they add is what the machine has no processor to spare for: given three, a three-skin bake costs about what a one-skin bake does; given one — or with <a href="./Commands.html#environment-variables" title="Special:MyLanguage/Commands"><code>WIKVEN_BUILD_JOBS</code> set to <code>1</code></a> — about three times as much.</li>
@@ -481,14 +481,14 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>With a single skin there is no switcher and no copy: the output is exactly what it was before.
 </p><p><span id="settings"></span>
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Settings">Settings</h2></div>
+</div></section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Settings">Settings</h2></div><div class="citizen-section-body">
 <p>The build writes one page of its own for the reader: <code>Settings</code>, named by the <a href="./Configuration.html#WikvenSettingsPage" title="Special:MyLanguage/Configuration"><code>WikvenSettingsPage</code> setting</a>. It stands in for the preferences a live wiki would offer, which a static site has no server for, and holds the choices that are the reader's rather than yours:
 </p>
 <ul><li><b>which skin to read the site in</b>, on a site built with more than one; and</li>
 <li><b>the colour theme</b> (and text size, where the skin has one), which comes from MobileFrontend's own display controls, so this part appears only on a site that has <a href="./Extensions.html" title="Special:MyLanguage/Extensions">MobileFrontend</a> enabled.</li></ul>
 <p>Both choices are kept in the reader's browser, for that site alone, with no account and nothing stored on any server. Write a source page named <code>Settings</code> and yours is used instead; set <code>WikvenSettingsPage</code> empty and no page is written and nothing links to one.
 </p>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Third-party_skins">Third-party skins</h2></div>
+</div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Third-party_skins">Third-party skins</h2></div><div class="citizen-section-body">
 <p>A skin that is not bundled can be listed in <code>skins</code> too, with its source declared in the <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a>. It is fetched at build time and may be the default like any other. This documentation site fetches Citizen this way, offered alongside the other two.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
@@ -499,7 +499,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/example/Example.git</span>
 <span class="w">      </span><span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REL1_46</span>
 </pre></div>
-</section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Skin-specific_configuration">Skin-specific configuration</h2></div>
+</div></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Skin-specific_configuration">Skin-specific configuration</h2></div><div class="citizen-section-body">
 <p>Use the <code>config</code> map.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
@@ -508,8 +508,8 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A setting reaches the skin the same way any other does, but it only does something if the skin still reads it in a build. Minerva is the one place where most do not; see <a href="./Skins.html#minerva-settings" title="Special:MyLanguage/Skins">Minerva settings</a> in the appendix before reaching for one.
 </p><p><span id="minerva-appendix"></span>
 </p>
-</section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Appendix:_Minerva">Appendix: Minerva</h2></div>
-<section id="citizen-section-8" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="Minerva_and_MobileFrontend">Minerva and MobileFrontend</h3></div>
+</div></section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Appendix:_Minerva">Appendix: Minerva</h2></div><div class="citizen-section-body">
+<section id="citizen-section-8" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="Minerva_and_MobileFrontend">Minerva and MobileFrontend</h3></div><div class="citizen-section-body">
 <p>MinervaNeue is bundled with MediaWiki; <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:MobileFrontend">MobileFrontend</a>, which it grew up alongside, is not. Without it the skin skips its own <code>initMobile.js</code> and loses what that sets up, the table of contents toggle among it. Fetch the pair if you enable Minerva. This site does, so the recommended configuration is the one every build renders.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr" dir="ltr"><pre><span></span><span class="nt">skins</span><span class="p">:</span>
@@ -524,7 +524,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>Wikven renders Minerva without it as well: the entries it offers that a static host cannot serve are dropped either way.
 </p>
-</section><section id="citizen-section-9" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="How_Minerva_is_supported">How Minerva is supported</h3></div>
+</div></section><section id="citizen-section-9" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="How_Minerva_is_supported">How Minerva is supported</h3></div><div class="citizen-section-body">
 <p>Minerva is built and exercised like the other two, but more of that support is Wikven working around the skin than configuring it. Minerva builds its main menu from its own definitions rather than from <code>MediaWiki:Sidebar</code>, and several of its controls expect MobileFrontend or a live wiki behind them, so the build stands in for both:
 </p>
 <ul><li>The site's own navigation is written into the main menu of every rendered page, there being no sidebar section the skin would read it from.</li>
@@ -536,14 +536,14 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A reader meets none of this. It is worth knowing before changing Minerva's chrome, though: a change there usually lands in <code>maintenance/fillMinervaMenu.php</code> or <code>resources/skins.minerva.styles.less</code> rather than in configuration.
 </p><p><span id="minerva-settings"></span>
 </p>
-</section><section id="citizen-section-10" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="Minerva_settings">Minerva settings</h3></div>
+</div></section><section id="citizen-section-10" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="Minerva_settings">Minerva settings</h3></div><div class="citizen-section-body">
 <p>Most of the <code>$wgMinerva*</code> settings do nothing in a build, whether or not MobileFrontend is installed. Ten of the sixteen the skin declares are registered as MobileFrontend features and read back in <code>SkinOptions::setMinervaSkinOptions()</code>, which runs from the <code>RequestContextCreateSkinMobile</code> hook — and MobileFrontend fires that only once it has decided to serve a mobile view, which takes a mobile domain, a mobile device, or <code>useformat=mobile</code>. A bake is none of those, so the skin options keep the defaults compiled into them and these settings are inert: <code>MinervaShowCategories</code>, <code>MinervaPageIssuesNewTreatment</code>, <code>MinervaTalkAtTop</code>, <code>MinervaDonateLink</code>, <code>MinervaDonateBanner</code>, <code>MinervaHistoryInPageActions</code>, <code>MinervaOverflowInPageActions</code>, <code>MinervaAdvancedMainMenu</code>, <code>MinervaPersonalMenu</code> and <code>MinervaNightMode</code>.
 </p><p>The other six the skin reads off the configuration itself, so they behave as documented: <code>MinervaEnableSiteNotice</code>, <code>MinervaAlwaysShowLanguageButton</code>, <code>MinervaDownloadNamespaces</code>, <code>MinervaNightModeOptions</code>, <code>MinervaTypeahead</code> and <code>MinervaABSamplingRate</code>. <code>MinervaTypeahead</code> is the one worth reaching for: the skin's typeahead runs on the static index rather than on the search API the setting names, so its <code>options</code> are read while its API URLs are not, and the empty thumbnail column is turned off there — see <a href="./Searching.html" title="Special:MyLanguage/Searching">Searching</a>. <code>MinervaABSamplingRate</code> has nothing to act on, there being no A/B bucketing to sample. The language button is hidden either way, its overlay being MobileFrontend's.
 </p><p>What the inert ones would have configured, Wikven supplies its own way where it can: the colour theme is on the <code>Settings</code> page the build writes in place of <code>Special:MobileOptions</code>, and the site's own navigation is written into the main menu of every rendered page.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Images.html" title="Special:MyLanguage/Images">Images</a></div><div class="wikven-prevnext-next"><a href="./Searching.html" title="Special:MyLanguage/Searching">Searching</a> →</div></div>
 
-</section></section></div>
+</div></section></div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Skins.html">https://chaotic-ground.github.io/wikven/Skins.html</a>"</div></div>
 			</div>
 			

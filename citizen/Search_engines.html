@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Search engines - Wikven</title>
@@ -445,11 +445,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><a href="./Search_engines/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="검색 엔진 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Publishing a site does not put it in an index. Given <a href="./Configuration.html#WikvenSiteUrl" title="Special:MyLanguage/Configuration"><code>WikvenSiteUrl</code></a> the bake writes <code>dist/sitemap.xml</code>, naming every page it exported at an absolute address, and that file is the site's own account of what it holds: a crawler reading it needs no link to reach a page. What no build can do is tell anybody the file is there.
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Announcing_the_sitemap">Announcing the sitemap</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Announcing_the_sitemap">Announcing the sitemap</h2></div><div class="citizen-section-body">
 <p>Ordinarily <code>robots.txt</code> does it, through the <code>Sitemap:</code> line naming the file. Wikven writes no such file, and on many sites there would be nowhere to put one. A crawler reads <code>robots.txt</code> from the <b>host root</b> and from nowhere else, so a site published under a subdirectory — a project page on a forge, most often — would need the file at an address belonging to whoever owns the host rather than to the site. Where the whole host is yours the file is a step of your own between the bake and the upload, and the <code>Sitemap:</code> line in it can name a sitemap sitting in a subdirectory of that host.
 </p><p>Failing that, each engine has to be told by hand in its own webmaster console, and no shortcut is left: Google's sitemap ping endpoint was <a rel="nofollow" class="external text" href="https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping">withdrawn in 2023</a> and answers 404, most of what it received having been spam. No console takes a submission until you have proved you control the site.
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Proving_that_the_site_is_yours">Proving that the site is yours</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Proving_that_the_site_is_yours">Proving that the site is yours</h2></div><div class="citizen-section-body">
 <p>Each console offers a few proofs, and the one a static export can always give is a meta tag in the head of every page. Such a tag is about the site rather than about a page, which is not something a page can be written to carry, so it takes an extension: <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiSEO">WikiSEO</a> turns one configuration key per engine into one tag. It does not ship in the image, so it needs a source under the <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a> like any other third-party extension.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
@@ -500,7 +500,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a></div><div class="wikven-prevnext-next"><a href="./Troubleshooting.html" title="Special:MyLanguage/Troubleshooting">Troubleshooting</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Search_engines.html">https://chaotic-ground.github.io/wikven/Search_engines.html</a>"</div></div>
 			</div>
 			

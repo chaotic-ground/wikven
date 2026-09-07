@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Why wikitext - Wikven</title>
@@ -445,24 +445,24 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><a href="./Why_wikitext/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="위키텍스트를 쓰는 이유 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven authors content in <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Wikitext">Wikitext</a>, MediaWiki's markup, rather than Markdown. If you are coming from a Markdown-based site generator, here is what changes, and why you might want it.
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_wikitext_adds">What wikitext adds</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_wikitext_adds">What wikitext adds</h2></div><div class="citizen-section-body">
 <ul><li><b><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates">Templates</a></b> — reusable, parameterised snippets transcluded with <code>{{...}}</code>. Markdown has no equivalent; you copy and paste instead. See <a href="./Pages.html#templates" title="Special:MyLanguage/Pages">Pages#Templates</a>.</li>
 <li><b><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions">Parser functions</a> and magic words</b> — light logic and computed values (<code>{{#if:}}</code>, dates, page info) written in the page itself.</li>
 <li><b>Structured linking</b> — <code>[[Page]]</code> internal links, <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories">categories</a> and redirects, managed by the wiki rather than by hand.</li>
 <li><b>Rich media and references</b> — image <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Images">thumbnails and galleries</a> and footnotes in one consistent syntax.</li>
 <li><b>An extension ecosystem</b> — syntax highlighting, math and more, added as <a href="./Configuration.html" title="Special:MyLanguage/Configuration">extensions</a>.</li>
 <li><b>One definition</b> — wikitext is whatever MediaWiki's parser makes of it, so a page renders the same wherever it is parsed. Markdown is less standardised than it looks: <a rel="nofollow" class="external text" href="https://commonmark.org/">CommonMark</a> pins down a core, but <a rel="nofollow" class="external text" href="https://github.github.com/gfm/">GitHub Flavored Markdown</a> and tool-specific variants (such as Phabricator's Remarkup) render the same text differently.</li></ul>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_Markdown_does_better">What Markdown does better</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_Markdown_does_better">What Markdown does better</h2></div><div class="citizen-section-body">
 <ul><li><b>Simplicity</b> — a smaller, more readable syntax with a gentler learning curve; wikitext's tables and template calls in particular take longer to pick up.</li>
 <li><b>Ubiquity</b> — Markdown is supported almost everywhere and familiar to most writers, so contributors usually arrive already knowing it.</li>
 <li><b>Tooling</b> — editors, formatters and linters for Markdown are plentiful and mature; the equivalents for wikitext are thinner outside a wiki.</li>
 <li><b>Lightweight rendering</b> — Markdown renders with a small library, whereas wikitext normally needs MediaWiki itself.</li></ul>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Where_Wikven_fits">Where Wikven fits</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Where_Wikven_fits">Where Wikven fits</h2></div><div class="citizen-section-body">
 <p>That last cost, running MediaWiki, is the one Wikven removes: it renders your wikitext through MediaWiki once, at build time, and ships plain static HTML. You get templates, parser functions and the rest with nothing to run in production. Reach for Wikven when that trade is worth it, typically when your content is already wikitext, or when templates and transclusion would save real work.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Limitations.html" title="Special:MyLanguage/Limitations">Limitations</a></div><div class="wikven-prevnext-next"><a href="./Configuration.html" title="Special:MyLanguage/Configuration">Configuration</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Why_wikitext.html">https://chaotic-ground.github.io/wikven/Why_wikitext.html</a>"</div></div>
 			</div>
 			

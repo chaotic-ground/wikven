@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="ko" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="ko" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Lua 모듈 - Wikven</title>
@@ -450,7 +450,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </div>
 <p><span id="Enabling_it"></span>
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="켜기"><span id=".EC.BC.9C.EA.B8.B0"></span>켜기</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="켜기"><span id=".EC.BC.9C.EA.B8.B0"></span>켜기</h2></div><div class="citizen-section-body">
 <p><a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> 파일</a>에 이름을 적으면 그것으로 끝입니다. Scribunto는 MediaWiki에 함께 들어 있으므로 <a href="../Configuration/ko.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> 항목</a>이 필요 없고, 대부분의 빌드에서는 엔진도 설정할 것이 없습니다.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
@@ -458,7 +458,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p><span id="Writing_a_module"></span>
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="모듈_작성하기"><span id=".EB.AA.A8.EB.93.88_.EC.9E.91.EC.84.B1.ED.95.98.EA.B8.B0"></span>모듈 작성하기</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="모듈_작성하기"><span id=".EB.AA.A8.EB.93.88_.EC.9E.91.EC.84.B1.ED.95.98.EA.B8.B0"></span>모듈 작성하기</h2></div><div class="citizen-section-body">
 <p>모듈은 콘텐츠이므로 다른 문서와 나란히 소스 트리에 놓입니다. 파일에는 <code>.wikitext</code> 표시를 붙이지 않는데, <code>Module:</code> 문서의 콘텐츠 모델은 위키텍스트가 아니라 Lua이기 때문입니다:
 </p>
 <div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>src/
@@ -510,12 +510,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>호출문은 <code>&lt;translate></code> 태그 밖에 있습니다. 모듈의 반환값은 번역 단위가 아니기 때문입니다. 어떤 언어의 독자에게든 모듈이 쓴 그대로 전달되므로, 말은 모듈이 아니라 그것을 감싼 문장이 담당해야 합니다.
 </p><p><span id="What_reaches_the_published_site"></span>
 </p>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="게시된_사이트에_남는_것"><span id=".EA.B2.8C.EC.8B.9C.EB.90.9C_.EC.82.AC.EC.9D.B4.ED.8A.B8.EC.97.90_.EB.82.A8.EB.8A.94_.EA.B2.83"></span>게시된 사이트에 남는 것</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="게시된_사이트에_남는_것"><span id=".EA.B2.8C.EC.8B.9C.EB.90.9C_.EC.82.AC.EC.9D.B4.ED.8A.B8.EC.97.90_.EB.82.A8.EB.8A.94_.EA.B2.83"></span>게시된 사이트에 남는 것</h2></div><div class="citizen-section-body">
 <p>모듈의 출력뿐입니다. <code>Module:</code>은 콘텐츠 이름공간이 아니므로 모듈은 결코 문서로 내보내지지 않고 Lua 소스도 게시되지 않습니다. 독자가 받는 것은 그 답이 이미 담긴 문서입니다. 독자의 브라우저에서는 아무것도 실행되지 않는데, 실행될 것이 남아 있지 않기 때문입니다. 모듈은 빌드 시점에 한 번 실행되었습니다.
 </p><p>모듈에 무엇을 담을지 정할 때 알아둘 만한 점입니다. 모듈이 위키 자체의 내용에서 계산해 내는 것, 다른 문서들에서 모은 표나 정렬된 목록이나 연속물 안에서 그 문서가 놓인 순서 같은 것은 한 번 계산되어 고정됩니다. 독자의 시계나 질의처럼 읽는 시점에 필요한 것은 실행될 곳이 없습니다.
 </p><p><span id="Which_product_renders_it"></span>
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="어느_제품이_렌더링하나"><span id=".EC.96.B4.EB.8A.90_.EC.A0.9C.ED.92.88.EC.9D.B4_.EB.A0.8C.EB.8D.94.EB.A7.81.ED.95.98.EB.82.98"></span>어느 제품이 렌더링하나</h2></div>
+</div></section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="어느_제품이_렌더링하나"><span id=".EC.96.B4.EB.8A.90_.EC.A0.9C.ED.92.88.EC.9D.B4_.EB.A0.8C.EB.8D.94.EB.A7.81.ED.95.98.EB.82.98"></span>어느 제품이 렌더링하나</h2></div><div class="citizen-section-body">
 <p>Scribunto에는 엔진이 둘 있고, 어느 쪽을 쓸지는 스스로 고릅니다. 하나는 PHP 확장인 <code>luasandbox</code>이고, 다른 하나는 외부 <code>lua</code> 프로그램을 실행하며 따로 지정된 것이 없으면 Scribunto가 자기 소스 트리에 들고 다니는 인터프리터로 떨어집니다. 어느 쪽이 될지는 제품에 달렸고, 세 가지 조합 중 여러분에게 무언가를 요구하는 것은 하나뿐입니다.
 </p>
 <table class="wikitable">
@@ -551,7 +551,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>이 설정은 모든 제품에서 읽히므로, 이것을 담은 소스 트리는 어디서나 똑같이 빌드됩니다.
 </p><p><span id="When_the_build_and_the_site_disagree"></span>
 </p>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="빌드와_사이트가_어긋날_때"><span id=".EB.B9.8C.EB.93.9C.EC.99.80_.EC.82.AC.EC.9D.B4.ED.8A.B8.EA.B0.80_.EC.96.B4.EA.B8.8B.EB.82.A0_.EB.95.8C"></span>빌드와 사이트가 어긋날 때</h2></div>
+</div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="빌드와_사이트가_어긋날_때"><span id=".EB.B9.8C.EB.93.9C.EC.99.80_.EC.82.AC.EC.9D.B4.ED.8A.B8.EA.B0.80_.EC.96.B4.EA.B8.8B.EB.82.A0_.EB.95.8C"></span>빌드와 사이트가 어긋날 때</h2></div><div class="citizen-section-body">
 <p>여기서 어긋날 수 있는 것은 둘이고, 어느 쪽인지는 사이트가 무엇을 요구했는지가 가릅니다. 사이트가 요구했는데 이 빌드가 줄 수 없는 Lua는 빌드를 끝내고, 사이트가 요구한 적 없는 Lua는 알리기만 하며 베이크는 계속됩니다.
 </p><p><b>Scribunto 없는 모듈.</b> <code>Module:</code> 파일이 있는데 <code>extensions</code>에 <code>Scribunto</code>가 없는 소스 트리도 빌드되며, 그 파일들이 무엇이 되는지를 알려줍니다. <code>{{#invoke:}}</code>는 문서에 자기 소스 텍스트로 남고, <code>.wikitext</code> 표시를 붙인 모듈은 문서로 게시됩니다. 여러분의 Lua가 세상에 읽히도록 내보내지는 것입니다. 빌드는 대신 결정하지 않고 본 것을 말하는데, <code>Module:</code> 파일이라는 판단은 이름에서 읽어낸 짐작이고 그 파일은 들어오는 중일 수도, 나가는 중일 수도, 다른 용도로 두고 있는 것일 수도 있기 때문입니다.
 </p>
@@ -574,7 +574,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Extensions/ko.html" title="Special:MyLanguage/Extensions">확장 기능</a></div><div class="wikven-prevnext-next"><a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">자바스크립트</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Lua_modules/ko.html">https://chaotic-ground.github.io/wikven/Lua_modules/ko.html</a>"</div></div>
 			</div>
 			

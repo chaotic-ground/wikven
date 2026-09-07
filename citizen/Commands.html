@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Commands - Wikven</title>
@@ -447,7 +447,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><a href="./Commands/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="명령어 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Every way of running Wikven — the <a href="./Installation.html#Docker" title="Special:MyLanguage/Installation">Docker image</a>, the <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">standalone binary</a> and the GitHub actions — drives the same build. This page is the reference for all three: what you can run, what you can pass it, and what it reads from the environment.
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="The_working_directory">The working directory</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="The_working_directory">The working directory</h2></div><div class="citizen-section-body">
 <p>Wikven works out of a single directory, and everything else is derived from it:
 </p>
 <dl><dt><code>&lt;workdir>/src</code></dt>
@@ -458,7 +458,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dd>The throwaway database and MediaWiki's scratch space. Nothing here is part of your site, and it can be deleted between builds.</dd></dl>
 <p>The Docker image has the working directory at <code>/workspace</code>, which is why builds mount <code>src</code> and <code>dist</code> under it. The binary uses the current directory. Either way, <code>WIKVEN_WORKDIR</code> overrides it.
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="build"><code>build</code></h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="build"><code>build</code></h2></div><div class="citizen-section-body">
 <p>Builds <code>src/</code> into <code>dist/</code>. This is the image's default command, so the Docker form needs no argument:
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
@@ -473,7 +473,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p class="mw-empty-elt"></p></div></div></div>
 <p>It takes no options; everything a build can be told is in your <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a>. A failed build exits non-zero and says which page or step failed.
 </p>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="serve"><code>serve</code></h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="serve"><code>serve</code></h2></div><div class="citizen-section-body">
 <p>Serves an already-built <code>dist/</code> for local preview, on port 8080. It builds nothing: run <code>build</code> first.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r101">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}.mw-parser-output .wikven-note-warning{border:1px solid var(--border-color-warning,#ab7f2a);background-color:var(--background-color-warning-subtle,#fdf2d5)}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>This is for looking at a build on your own machine, and it is not a way to publish one. Both products listen on every interface by default, and one of them is PHP's own web server, whose manual says it "should not be used on a public network" and is "not intended for production usage". To put a site in front of readers, <a href="./Deploying.html" title="Special:MyLanguage/Deploying">publish <code>dist/</code></a> on a host instead.</p></div>
@@ -496,7 +496,7 @@ wikven<span class="w"> </span>serve<span class="w"> </span>--listen<span class="
 </div>
 <p><span id="translate"></span>
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="translate"><code>translate</code></h2></div>
+</div></section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="translate"><code>translate</code></h2></div><div class="citizen-section-body">
 <p>The four helpers behind <a href="./Translating.html" title="Special:MyLanguage/Translating">Translating</a>. They work on your source tree and exit without building anything.
 </p>
 <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r101"/><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Both products have these. The image runs them against the mounted source tree; the binary runs them against the working directory, which is the only difference between the two forms below.</p></div>
@@ -537,7 +537,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <dd>Prepend a prefix to reported file names, so they read as repository paths rather than paths inside the container.</dd></dl>
 <p><span id="environment-variables"></span>
 </p>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Environment_variables">Environment variables</h2></div>
+</div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Environment_variables">Environment variables</h2></div><div class="citizen-section-body">
 <dl><dt><code>WIKVEN_WORKDIR</code></dt>
 <dd>The working directory described above. Defaults to <code>/workspace</code> in the image and to the current directory for the binary.</dd>
 <dt><code>SOURCE_DATE_EPOCH</code></dt>
@@ -547,7 +547,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <p>There are three more, none of them useful to set by hand. The build sets two on itself to run one skin's render pass: <code>WIKVEN_BUILD_SKIN</code> names the skin, and <code>WIKVEN_BUILD_DB_DIR</code> names the copy of the database that pass writes to, since the passes run beside each other and SQLite takes one writer at a time. <code>WIKVEN_BUILD_DB_DIR</code> is read only when <code>WIKVEN_BUILD_SKIN</code> is set, and setting that one turns the build into a render pass over a wiki nothing has filled, so it writes a site of nothing. The third is <code>WIKVEN_RUNTIME</code>, which the standalone binary sets on every command it runs: it names the server the binary was compiled from, and the build puts that on the licenses page it writes.
 </p><p><span id="bake"></span>
 </p>
-</section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="The_bake_action">The <code>bake</code> action</h2></div>
+</div></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="The_bake_action">The <code>bake</code> action</h2></div><div class="citizen-section-body">
 <p>Bakes a source tree with the Docker image, on a GitHub Actions runner. See <a href="./Deploying.html" title="Special:MyLanguage/Deploying">Deploying</a> for a complete workflow.
 </p>
 <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r101"/><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Both actions are pinned by tag, and <code>@v1.0.0</code> is the current release. Naming no <code>image</code> is enough on its own: the action then runs the image of the release it was cut from, the matching <code>:1.0.0</code> — the git tag carries the <code>v</code> and the image tag does not — so the two cannot fall out of step. To try a change before it is released, name a dated <code>nightly-YYYY-MM-DD</code> pre-release from the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">releases page</a>, and name the image from the same nightly while you are there.</p></div>
@@ -597,7 +597,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </p><p>The action also dumps the source tree's <code>git log</code> and hands it to the build, which is how each page is dated at the commit that last changed it. That needs the whole history: check out with <code>fetch-depth: 0</code>, or every page is dated at the commit being built. The action says so in the log when it happens.
 </p><p><span id="check-translations"></span>
 </p>
-</section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="The_check-translations_action">The <code>check-translations</code> action</h2></div>
+</div></section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="The_check-translations_action">The <code>check-translations</code> action</h2></div><div class="citizen-section-body">
 <p>Runs <code>translate check</code> over a source tree and reports each finding as an annotation on the file it belongs to.
 </p>
 <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r101"/><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Annotations are for whoever is reading the diff. A contributor sending their first translation is better served by being told what to run, which <code>comment: true</code> does: one comment on the pull request, the findings grouped by what went wrong, each group naming the command that answers it. It is edited on each run rather than added to, and taken down once nothing is left to report -- a comment saying nothing is wrong is one nobody needs, and the annotations hold the record either way. That contributor is by definition working in another language, so the comment can speak it: <code>comment-languages: auto</code> writes it in English and in the language of the translation it is about, from wikven's own interface messages. The job needs <code>pull-requests: write</code>; a pull request from a fork carries a read-only token, and the comment is then skipped with a line in the log.</p></div>
@@ -649,7 +649,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </td></tr></tbody></table>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">Standalone binary</a></div><div class="wikven-prevnext-next"><a href="./Writing_an_extension.html" title="Special:MyLanguage/Writing an extension">Writing an extension</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Commands.html">https://chaotic-ground.github.io/wikven/Commands.html</a>"</div></div>
 			</div>
 			

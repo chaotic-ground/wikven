@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="ko" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="ko" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>문서 - Wikven</title>
@@ -446,21 +446,21 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>소스 디렉터리의 각 파일은 하나의 문서가 됩니다. Wikven은 파일 경로에서 문서의 제목과 이름공간을 이끌어 내므로, 파일 이름이 곧 이를 정하는 방법입니다.
 </p><p><span id="From_file_name_to_page"></span>
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="파일_이름에서_문서까지"><span id=".ED.8C.8C.EC.9D.BC_.EC.9D.B4.EB.A6.84.EC.97.90.EC.84.9C_.EB.AC.B8.EC.84.9C.EA.B9.8C.EC.A7.80"></span>파일 이름에서 문서까지</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="파일_이름에서_문서까지"><span id=".ED.8C.8C.EC.9D.BC_.EC.9D.B4.EB.A6.84.EC.97.90.EC.84.9C_.EB.AC.B8.EC.84.9C.EA.B9.8C.EC.A7.80"></span>파일 이름에서 문서까지</h2></div><div class="citizen-section-body">
 <p><code>.wikitext</code>로 끝나는 파일은 경로에서 <code>.wikitext</code>를 뗀 것이 제목인 위키 문서가 됩니다. 따라서 <code>src/Help.wikitext</code>는 "Help" 문서이며 <code>Help.html</code>로 제공됩니다.
 </p><p>제목은 쓴 그대로 유지됩니다. 공백은 공백으로 남고(밑줄이 아니라 <code>Getting Started.wikitext</code>로 파일 이름을 지으세요), 첫 글자의 대소문자도 그대로입니다. 공백이 남는 것은 제목이고, 그 문서가 빌드되는 파일은 <code>Getting_Started.html</code>입니다. MediaWiki가 제목의 공백을 경로에서는 밑줄로 쓰기 때문입니다. 진입 문서는 <code>index</code>로 이름 지어 <code>index.html</code>로 빌드되게 하세요. 이 파일이 바로 정적 호스트가 사이트 루트에서 제공하는 파일입니다.
 </p><p>파일 이름이 제목으로 깔끔하게 대응되지 않으면(MediaWiki가 이를 다르게 정규화하는 경우), 빌드가 경고를 냅니다. 문서의 편집·역사 링크가 파일 이름에서 만들어지는데, 그렇지 않으면 링크가 제대로 연결되지 않기 때문입니다. 이미 정규화된 제목으로 파일 이름을 바꾸세요.
 </p><p><span id="Linking_between_pages"></span>
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="문서_간_링크"><span id=".EB.AC.B8.EC.84.9C_.EA.B0.84_.EB.A7.81.ED.81.AC"></span>문서 간 링크</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="문서_간_링크"><span id=".EB.AC.B8.EC.84.9C_.EA.B0.84_.EB.A7.81.ED.81.AC"></span>문서 간 링크</h2></div><div class="citizen-section-body">
 <p>표준 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Links">위키텍스트 링크</a>인 <code>[[Title]]</code>이나 <code>[[Title|label]]</code>로 링크합니다. Wikven은 정적 출력에서 이를 대응하는 <code>.html</code> 경로로 다시 써 주므로, 내부 링크가 서버 없이도 작동합니다.
 </p><p><span id="Subpages"></span>
 </p>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="하위_문서"><span id=".ED.95.98.EC.9C.84_.EB.AC.B8.EC.84.9C"></span>하위 문서</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="하위_문서"><span id=".ED.95.98.EC.9C.84_.EB.AC.B8.EC.84.9C"></span>하위 문서</h2></div><div class="citizen-section-body">
 <p>파일을 하위 디렉터리에 두면 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Subpages">하위 문서</a>가 만들어집니다. <code>src/Guide/Setup.wikitext</code>는 "Guide/Setup" 문서가 됩니다. 하위 디렉터리의 그림도 함께 가져오지만, 그림의 이름은 파일 이름뿐입니다. <code>src/Guide/diagram.png</code>는 "Guide/diagram.png"가 아니라 <code><span class="mw-default-size" typeof="mw:File"><a href="https://commons.wikimedia.org/wiki/File:Diagram.png" class="mw-file-description"><img src="../assets/img-c0863e09a6ae.png" decoding="async" width="540" height="405" class="mw-file-element"/></a></span></code>이므로, 두 디렉터리가 같은 <code>diagram.png</code>를 가질 수 없습니다. 그런 경우 빌드는 한 문서가 다른 문서의 그림을 보여주는 사이트를 발행하는 대신, 둘 다 이름을 대고 멈춥니다. 그림은 링크가 아니라 파일이어야 하는데, 이유는 같습니다. 링크가 가리키는 것은 여러분이 발행하는 것의 일부가 아니므로, 빌드는 그것을 올리는 대신 이름을 대고 거부합니다.
 </p><p><span id="reserved-names"></span>
 </p>
-<section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="하위_문서가_쓸_수_없는_이름"><span id=".ED.95.98.EC.9C.84_.EB.AC.B8.EC.84.9C.EA.B0.80_.EC.93.B8_.EC.88.98_.EC.97.86.EB.8A.94_.EC.9D.B4.EB.A6.84"></span>하위 문서가 쓸 수 없는 이름</h3></div>
+<section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="하위_문서가_쓸_수_없는_이름"><span id=".ED.95.98.EC.9C.84_.EB.AC.B8.EC.84.9C.EA.B0.80_.EC.93.B8_.EC.88.98_.EC.97.86.EB.8A.94_.EC.9D.B4.EB.A6.84"></span>하위 문서가 쓸 수 없는 이름</h3></div><div class="citizen-section-body">
 <p>하위 문서는 출력에서 디렉터리가 되는데, 그중 몇몇 디렉터리는 빌드 자신의 것입니다. 거기에 놓이는 문서는 거부되지 않습니다. 이미 다른 것이 들어가는 자리에 파일이 쓰일 뿐이고, 독자가 받는 것은 나중에 끝난 쪽입니다. 영향을 받는 것은 하위 문서뿐인데, 디렉터리를 만드는 것이 하위 문서뿐이기 때문입니다. <code>citizen</code>이라는 이름의 문서는 <code>citizen.html</code>로 빌드되어 다른 것들 옆에 아무 탈 없이 놓입니다.
 </p>
 <dl><dt>첫 번째 다음의 모든 스킨</dt>
@@ -475,12 +475,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dd>매 과정 끝에 출력에서 제거되며, 제거했다는 줄이 남습니다. 정적 호스트에는 내보낼 문서 역사가 없으니, 거기에 무언가 있으리라 기대되지 않습니다.</dd></dl>
 <p><span id="translation-not-subpage"></span>
 </p>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="번역은_하위_문서가_아닙니다"><span id=".EB.B2.88.EC.97.AD.EC.9D.80_.ED.95.98.EC.9C.84_.EB.AC.B8.EC.84.9C.EA.B0.80_.EC.95.84.EB.8B.99.EB.8B.88.EB.8B.A4"></span>번역은 하위 문서가 아닙니다</h3></div>
+</div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="번역은_하위_문서가_아닙니다"><span id=".EB.B2.88.EC.97.AD.EC.9D.80_.ED.95.98.EC.9C.84_.EB.AC.B8.EC.84.9C.EA.B0.80_.EC.95.84.EB.8B.99.EB.8B.88.EB.8B.A4"></span>번역은 하위 문서가 아닙니다</h3></div><div class="citizen-section-body">
 <p><a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역 가능한</a> 문서 — 내용을 <code>&lt;translate></code>로 감싼 문서 — 는 자기 하위 문서 중 언어 이름을 단 것을, <em>그 하위 문서가 원본의 <code>&lt;!--T:n--></code> 마커를 지니고 있을 때</em> 가져갑니다. 번역 가능한 <code>Guide.wikitext</code> 옆의 마커가 있는 <code>Guide/ko.wikitext</code> 파일은 "Guide"의 한국어 번역이지 "Guide/ko" 문서가 아니며, 아무 경고도 나오지 않습니다. 그 이름 규칙 위에 이 기능이 세워져 있기 때문입니다. 마커가 없으면 쓰인 그대로 문서입니다. 언어 코드는 평범한 낱말이기도 해서 — <code>id</code>, <code>no</code>, <code>it</code> — 식별자를 다루는 문서가 인도네시아어 번역이 되어서는 안 되기 때문입니다.
 </p><p>세 조건이 동시에 성립해야 하므로, 그중 하나만 깨면 됩니다. <code>&lt;translate></code>를 지니지 않은 문서의 하위 문서는 쓰인 그대로 하위 문서이고, 언어 코드가 아닌 이름도, 마커가 없는 파일도 마찬가지입니다. 번역이 마커를 어떻게 얻는지는 <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역하기</a>를 참고하십시오.
 </p><p><span id="Namespaces"></span>
 </p>
-</section></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="이름공간"><span id=".EC.9D.B4.EB.A6.84.EA.B3.B5.EA.B0.84"></span>이름공간</h2></div>
+</div></section></div></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="이름공간"><span id=".EC.9D.B4.EB.A6.84.EA.B3.B5.EA.B0.84"></span>이름공간</h2></div><div class="citizen-section-body">
 <p>파일 이름 앞에 이름공간을 붙이면 문서가 그 이름공간에 놓입니다:
 </p>
 <ul><li><code>Template:Infobox.wikitext</code>는 "Template:Infobox" 틀입니다 (<a href="../Pages/ko.html#templates" title="Special:MyLanguage/Pages">틀</a> 참고).</li>
@@ -488,7 +488,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><code>MediaWiki:Common.css</code>와 <code>MediaWiki:Common.js</code>는 사이트 전역 스타일시트와 스크립트입니다 (<a href="../JavaScript/ko.html" title="Special:MyLanguage/JavaScript">자바스크립트</a> 참고). 이 파일들은 이름 자체가 콘텐츠 유형을 담고 있으므로 확장자를 그대로 유지하며 <code>.wikitext</code> 표시가 필요 없습니다.</li></ul>
 <p><span id="categories"></span>
 </p>
-</section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="분류"><span id=".EB.B6.84.EB.A5.98"></span>분류</h2></div>
+</div></section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="분류"><span id=".EB.B6.84.EB.A5.98"></span>분류</h2></div><div class="citizen-section-body">
 <p>문서에 <code>[[Category:Name]]</code>을 추가하면 그 문서를 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories">분류</a>할 수 있습니다. 분류는 다른 위키와 마찬가지로 문서 하단에 표시됩니다.
 </p><p>다만 분류 자체의 문서는 기본적으로 내보내지지 않습니다. Wikven은 정적 사이트에 <i>콘텐츠</i> 문서만 기록하며, 콘텐츠로 치는 것은 주(main) 이름공간과 File: 이름공간뿐입니다. (이름공간에는 숫자 ID가 있습니다: 주 이름공간은 <code>0</code>, File:은 <code>6</code>, Category는 <code>14</code>입니다.) 그래서 하단의 분류는 정적 호스트가 제공하지 않는 <code>Category:Name.html</code>로 연결되는 죽은 링크가 되며, 이는 분류 문서를 내보내기 전까지 그렇습니다. 그렇게 하려면 <a href="../Configuration/ko.html#ContentNamespaces" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> 파일</a>에서 <code>ContentNamespaces</code>를 설정하고 소스에 <code>Category:Name.wikitext</code> 파일을 추가하세요:
 </p>
@@ -499,7 +499,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>유지보수용이나 추적용 분류를 하단에서 빼려면, 그 분류 문서에 <code>__HIDDENCAT__</code> <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words">매직 워드</a>를 추가하세요. 정적 내보내기에는 로그인한 독자가 없으므로, 숨겨진 분류는 모두에게 하단에서 보이지 않습니다.
 </p><p><span id="templates"></span>
 </p>
-</section><section id="citizen-section-8" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="틀"><span id=".ED.8B.80"></span>틀</h2></div>
+</div></section><section id="citizen-section-8" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="틀"><span id=".ED.8B.80"></span>틀</h2></div><div class="citizen-section-body">
 <p>소스에 <code>Template:Name.wikitext</code> 파일을 두고 아무 문서에서나 <code>{{Name}}</code>으로 사용하세요. 예를 들어 다음 파일을:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="gs">'''참고:'''</span> <span class="p">{{{</span><span class="nv">1</span><span class="p">}}}</span>
@@ -511,14 +511,14 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>"<b>참고:</b> 편집할 때마다 사이트를 다시 빌드하세요."로 렌더링됩니다. 틀은 위치 매개변수(<code>{{{1}}}</code>)와 이름 매개변수를 받고 MediaWiki에서와 똑같이 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Parser_functions">파서 함수</a>를 실행합니다. 문법 자체는 표준 MediaWiki입니다. <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Templates">Help:Templates</a> 참고.
 </p><p><span id="variables"></span>
 </p>
-</section><section id="citizen-section-9" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="변수"><span id=".EB.B3.80.EC.88.98"></span>변수</h2></div>
+</div></section><section id="citizen-section-9" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="변수"><span id=".EB.B3.80.EC.88.98"></span>변수</h2></div><div class="citizen-section-body">
 <p>MediaWiki 자체의 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Magic_words">매직 워드</a>는 다른 곳에서와 똑같이 동작합니다. <code>{{PAGENAME}}</code>, <code>{{SITENAME}}</code>, 빌드가 돌아간 MediaWiki를 가리키는 <code>{{CURRENTVERSION}}</code> 같은 것들입니다. Wikven은 여기에 자기 것 하나를 더합니다:
 </p>
 <dl><dt><code>{{WIKVENVERSION}}</code></dt>
 <dd>그 문서를 빌드한 Wikven의 버전입니다. 이 사이트에서는 <code>1.0.0</code>입니다. 숫자를 고치는 것을 누군가 기억해야 하는 대신 문서가 스스로 버전을 말해야 할 때 쓰세요. 무엇이 이 사이트를 만들었는지 밝히는 꼬리말이나, 어느 태그를 고정해야 하는지 알려 주는 문서 같은 곳입니다. 이 값은 Wikven 자신의 <code>extension.json</code>에 있는 숫자이고, 릴리스된 태그가 지니는 숫자와 같습니다.</dd></dl>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Getting_Started/ko.html" title="Special:MyLanguage/Getting Started">시작하기</a></div><div class="wikven-prevnext-next"><a href="../Images/ko.html" title="Special:MyLanguage/Images">이미지</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Pages/ko.html">https://chaotic-ground.github.io/wikven/Pages/ko.html</a>"</div></div>
 			</div>
 			

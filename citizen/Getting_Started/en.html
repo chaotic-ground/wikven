@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Getting Started - Wikven</title>
@@ -483,7 +483,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p class="mw-empty-elt"></p></div></div></div>
 <p>Opening <code>dist/index.html</code> directly also works, though some links and assets resolve correctly only when served. To publish it online, see <a href="../Deploying/en.html" title="Special:MyLanguage/Deploying">Deploying</a>.
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Setting_the_title_of_the_site">Setting the title of the site</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Setting_the_title_of_the_site">Setting the title of the site</h2></div><div class="citizen-section-body">
 <p>For configuration, create a <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a> in your <code>src</code> directory.
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF > src/.wikven.yaml</span>
@@ -493,7 +493,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>Build again with the same command as before, and the site is titled "My Site".
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Adding_a_second_page">Adding a second page</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Adding_a_second_page">Adding a second page</h2></div><div class="citizen-section-body">
 <p>Every <code>.wikitext</code> file becomes a page. Add another one and link to it from the first with <code>[[...]]</code>:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'This is the help page.'</span><span class="w"> </span>><span class="w"> </span>src/Help.wikitext
@@ -501,7 +501,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>Build again: the home page now links to <code>Help.html</code>, and the link works with no server. See <a href="../Pages/en.html" title="Special:MyLanguage/Pages">Pages</a> for how file names map to page titles and namespaces.
 </p>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Adding_a_template">Adding a template</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Adding_a_template">Adding a template</h2></div><div class="citizen-section-body">
 <p>Templates, the main reason to reach for Wikven over Markdown, let you reuse content. Put a <code>Template:</code> page in your source and transclude it with <code>{{...}}</code>:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">"'''Note:''' {{{1}}}"</span><span class="w"> </span>><span class="w"> </span><span class="s2">"src/Template:Note.wikitext"</span>
@@ -511,7 +511,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Installation/en.html" title="Special:MyLanguage/Installation">Installation</a></div><div class="wikven-prevnext-next"><a href="../Pages/en.html" title="Special:MyLanguage/Pages">Pages</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Getting_Started/en.html">https://chaotic-ground.github.io/wikven/Getting_Started/en.html</a>"</div></div>
 			</div>
 			

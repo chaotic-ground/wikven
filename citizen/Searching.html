@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Searching - Wikven</title>
@@ -447,11 +447,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><a href="./Searching/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="검색 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Static sites have no server to answer queries, so MediaWiki's built-in search does not work in the export. Wikven ships <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/SifterSearch">SifterSearch</a> built in and enabled by default: it builds a static search index at build time and serves results entirely in the browser, so every site has working search with no setup. This documentation site uses it.
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="How_it_works">How it works</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="How_it_works">How it works</h2></div><div class="citizen-section-body">
 <p>SifterSearch indexes the rendered pages with <a rel="nofollow" class="external text" href="https://pagefind.app/">Pagefind</a> and writes a static index bundle into the build output. On each page it feeds those results into the skin's own search box: the Codex typeahead where the skin mounts one (Vector 2022 and MinervaNeue), and core's classic suggestions box elsewhere. Either way the box suggests as you type, a suggestion leads to the page it names, and nothing behind it is asked — no API, no database, no <code>load.php</code>.
 </p><p>A site built with more than one skin is written once per skin, and each of those copies carries the index as well as the pages, under its own <code>pagefind/</code>. A result is a page in the copy the reader is already reading, so choosing a skin survives a search.
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Configuring_it">Configuring it</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Configuring_it">Configuring it</h2></div><div class="citizen-section-body">
 <p>Search needs no configuration: the index is written to a <code>pagefind/</code> directory under the build output and served from <code>/pagefind/</code>. You only adjust it in a few cases, all in <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>.
 </p><p>If your site lives in a subdirectory, set the bundle path to include it. This site deploys under <code>/wikven</code> on GitHub Pages:
 </p>
@@ -484,7 +484,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <span class="w">      </span><span class="nt">showThumbnail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">      </span><span class="nt">showDescription</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Full_results_page">Full results page</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Full_results_page">Full results page</h2></div><div class="citizen-section-body">
 <p>The skin's search box shows the top matches as you type. For a page that lists
 all matches, create an (otherwise empty) content page and name it in
 <code>SifterSearchResultsPage</code>. SifterSearch mounts its full search UI
@@ -494,7 +494,7 @@ titled <code>Search</code>.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Skins.html" title="Special:MyLanguage/Skins">Skins</a></div><div class="wikven-prevnext-next"><a href="./Extensions.html" title="Special:MyLanguage/Extensions">Extensions</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Searching.html">https://chaotic-ground.github.io/wikven/Searching.html</a>"</div></div>
 			</div>
 			

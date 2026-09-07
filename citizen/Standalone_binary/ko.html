@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="ko" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="ko" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>단독 실행 바이너리 - Wikven</title>
@@ -448,7 +448,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>미리 빌드된 Windows 바이너리도 없습니다. 단일 자체 완결형 실행 파일을 만들어 내는 툴체인이 아직 Windows를 지원하지 않기 때문입니다 (<a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/issues/192">이슈 #192</a> 참고).
 </p><p><span id="Download"></span>
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="다운로드"><span id=".EB.8B.A4.EC.9A.B4.EB.A1.9C.EB.93.9C"></span>다운로드</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="다운로드"><span id=".EB.8B.A4.EC.9A.B4.EB.A1.9C.EB.93.9C"></span>다운로드</h2></div><div class="citizen-section-body">
 <p>자신의 아키텍처에 맞는 바이너리를 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">최신 릴리스</a>에서 내려받아 실행 가능하게 만드십시오:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
@@ -462,7 +462,7 @@ curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>
 </pre></div>
 <p><span id="Verify"></span>
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="검증"><span id=".EA.B2.80.EC.A6.9D"></span>검증</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="검증"><span id=".EA.B2.80.EC.A6.9D"></span>검증</h2></div><div class="citizen-section-body">
 <p>각 릴리스 바이너리는 <code>.sha256</code> 체크섬과 서명된 빌드 출처(provenance) 증명과 함께 게시됩니다. <code>PATH</code>에 설치하는 바이너리를 신뢰하기 전에 확인하려면, 릴리스 이름 그대로 내려받아 체크섬을 검증하십시오:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-LO<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
@@ -475,7 +475,7 @@ sha256sum<span class="w"> </span>-c<span class="w"> </span>wikven-linux-x86_64.s
 </pre></div>
 <p><span id="Install"></span>
 </p>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="설치"><span id=".EC.84.A4.EC.B9.98"></span>설치</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="설치"><span id=".EC.84.A4.EC.B9.98"></span>설치</h2></div><div class="citizen-section-body">
 <p>내려받은 파일은 그대로 실행됩니다. 저장한 디렉터리에서 <code>./wikven</code>을 실행하면 됩니다. 어디서나 그냥 <code>wikven</code>으로 실행하려면 <code>PATH</code>에 설치하십시오:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>sudo<span class="w"> </span>install<span class="w"> </span>wikven<span class="w"> </span>/usr/local/bin/
@@ -487,7 +487,7 @@ sha256sum<span class="w"> </span>-c<span class="w"> </span>wikven-linux-x86_64.s
 <p>아래 명령들은 바이너리가 <code>PATH</code>에 있다고 가정합니다. 이 단계를 건너뛰었다면, 내려받은 디렉터리에서 <code>./wikven</code>으로 실행하십시오.
 </p><p><span id="Building_a_site"></span>
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="사이트_빌드하기"><span id=".EC.82.AC.EC.9D.B4.ED.8A.B8_.EB.B9.8C.EB.93.9C.ED.95.98.EA.B8.B0"></span>사이트 빌드하기</h2></div>
+</div></section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="사이트_빌드하기"><span id=".EC.82.AC.EC.9D.B4.ED.8A.B8_.EB.B9.8C.EB.93.9C.ED.95.98.EA.B8.B0"></span>사이트 빌드하기</h2></div><div class="citizen-section-body">
 <p>위키텍스트와 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>을 <code>src/</code> 디렉터리에 넣은 다음 빌드하십시오:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>src
@@ -501,14 +501,14 @@ wikven<span class="w"> </span>build
 <p>출력물은 아래에서 이름을 대는 호스트 도구 하나를 빼면 Docker 이미지의 것과 동일합니다. 바이너리는 MediaWiki, 번들된 확장 기능과 스킨, 그리고 모든 인터페이스 언어를 내장하며, Wikven의 기본값 위에 겹쳐지는 동일한 <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>을 읽습니다.
 </p><p><span id="What_it_asks_of_the_host"></span>
 </p>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="호스트에_요구하는_것"><span id=".ED.98.B8.EC.8A.A4.ED.8A.B8.EC.97.90_.EC.9A.94.EA.B5.AC.ED.95.98.EB.8A.94_.EA.B2.83"></span>호스트에 요구하는 것</h2></div>
+</div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="호스트에_요구하는_것"><span id=".ED.98.B8.EC.8A.A4.ED.8A.B8.EC.97.90_.EC.9A.94.EA.B5.AC.ED.95.98.EB.8A.94_.EA.B2.83"></span>호스트에 요구하는 것</h2></div><div class="citizen-section-body">
 <p><b><a href="../Lua_modules/ko.html" title="Special:MyLanguage/Lua modules">Lua 모듈</a>, arm64에서.</b> 이 바이너리가 빌드된 PHP에는 <code>luasandbox</code>가 없으므로, Scribunto는 외부 <code>lua</code> 프로그램을 실행하는 쪽으로 떨어지고 — 따로 지정된 것이 없으면 자기 소스 트리에 들고 다니는 인터프리터를 씁니다. 그 인터프리터는 64비트 x86용으로 빌드돼 있고, Scribunto에는 대신 내놓을 arm64용이 없습니다 — 번들된 다섯 개가 전부 인텔입니다. 그중에서 운영체제와 정수 크기로 고르므로 arm64에서는 시작할 수 없는 프로그램을 집습니다. Lua 5.1을 설치하고 <code>ScribuntoEngineConf.luastandalone.luaPath</code>에 그 경로를 적어주십시오. x86-64에서는 아무것도 필요 없습니다.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r101">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}.mw-parser-output .wikven-note-warning{border:1px solid var(--border-color-warning,#ab7f2a);background-color:var(--background-color-warning-subtle,#fdf2d5)}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>Scribunto를 나열했는데 그것을 실행할 것이 아무것도 없는 사이트는 거부되며, <code>{{#invoke:}}</code>가 그대로 보이는 문서로 구워지는 대신 무엇을 설치하면 되는지 말합니다. 거부는 종료 코드에도 담기므로, 굽고 나서 배포하는 스크립트는 아무것도 없는 것을 올리는 대신 멈춥니다.</p></div>
 </div>
 <p><span id="Optional_host_tools"></span>
 </p>
-</section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="선택적_호스트_도구"><span id=".EC.84.A0.ED.83.9D.EC.A0.81_.ED.98.B8.EC.8A.A4.ED.8A.B8_.EB.8F.84.EA.B5.AC"></span>선택적 호스트 도구</h2></div>
+</div></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="선택적_호스트_도구"><span id=".EC.84.A0.ED.83.9D.EC.A0.81_.ED.98.B8.EC.8A.A4.ED.8A.B8_.EB.8F.84.EA.B5.AC"></span>선택적 호스트 도구</h2></div><div class="citizen-section-body">
 <p>바이너리는 자체적으로 렌더링하지만, 다음 호스트 프로그램이 있으면 활용합니다:
 </p>
 <ul><li><b><a rel="nofollow" class="external text" href="https://imagemagick.org/">ImageMagick</a></b>과 <b><a rel="nofollow" class="external text" href="https://gitlab.gnome.org/GNOME/librsvg">librsvg</a></b>는 더 높은 품질의 섬네일을 만들어 냅니다. 이들이 없으면 바이너리는 래스터 이미지에 내장 <a rel="nofollow" class="external text" href="https://libgd.github.io/">GD</a> 라이브러리를 사용하고 SVG를 인라인으로 제공합니다. <a href="../Images/ko.html" title="Special:MyLanguage/Images">이미지</a> 참고.</li>
@@ -517,7 +517,7 @@ wikven<span class="w"> </span>build
 </div>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Configuration/ko.html" title="Special:MyLanguage/Configuration">설정</a></div><div class="wikven-prevnext-next"><a href="../Commands/ko.html" title="Special:MyLanguage/Commands">명령어</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="" lang="ko" dir="ltr">원본 주소 "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Standalone_binary/ko.html">https://chaotic-ground.github.io/wikven/Standalone_binary/ko.html</a>"</div></div>
 			</div>
 			

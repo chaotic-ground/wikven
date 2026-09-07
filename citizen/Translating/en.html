@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Translating - Wikven</title>
@@ -445,7 +445,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><a href="../Translating/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="번역 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven can build a site in more than one language using MediaWiki's <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:Translate">Translate extension</a>. Translate normally expects translators to work in an in-wiki editor, which a static build has no room for, so Wikven drives it from your source tree instead: you translate by adding files and committing them, the same way you write any other page.
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Enabling_translation">Enabling translation</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Enabling_translation">Enabling translation</h2></div><div class="citizen-section-body">
 <p>Add <code>Translate</code> to <code>extensions</code> in your <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a>, along with <code>UniversalLanguageSelector</code>, which Translate depends on. Both are bundled in the Wikven image, so there is nothing to install.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
@@ -455,7 +455,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p>A static export cannot serve UniversalLanguageSelector's runtime webfonts (they load from a live endpoint), so by default Wikven turns them off and readers see each script in their own system fonts. Set <code>WikvenBundleWebfonts</code> to bake the fonts into the site instead, so a reader whose system lacks a font for a script still sees the intended typeface.
 </p><p>You do not list the languages you translate into: as with Translate itself, a language exists as soon as a translation for it does. The language you write your pages in stays the source language.
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Marking_a_page_for_translation">Marking a page for translation</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Marking_a_page_for_translation">Marking a page for translation</h2></div><div class="citizen-section-body">
 <p>Wrap the parts of a page that should be translated in <code>&lt;translate></code> tags, add <code>&lt;languages/></code> where you want the language bar, and give each unit a <code>&lt;!--T:n--></code> marker. This is Translate's own <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:Translate/Page_translation_administration">page-translation markup</a>:
 </p>
 <pre>&lt;languages/>
@@ -475,7 +475,7 @@ It runs a real MediaWiki at build time.
 </pre></div>
 <p>Pass a single file instead of <code>--all</code> to mark just that page. Marking is idempotent and stable: it keeps the numbers already there and only adds markers for new units, so re-run it whenever you add content. The numbers are the unit identity; a translation references them to line its units up with the source. The build renders the language bar and, for each language, a page at <code>Page/lang</code>.
 </p>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Adding_a_translation">Adding a translation</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Adding_a_translation">Adding a translation</h2></div><div class="citizen-section-body">
 <p>A translation lives next to the page, named <code>&lt;Page>/&lt;lang>.wikitext</code>: the Korean translation of <code>Intro.wikitext</code> is <code>Intro/ko.wikitext</code>. Generate its skeleton with <code>translate scaffold</code>, which writes an empty <code>&lt;!--T:n--></code> marker for every source unit and lists each unit's source text as a guide:
 </p>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>scaffold<span class="w"> </span>ko<span class="w"> </span>Intro.wikitext
@@ -492,7 +492,7 @@ It runs a real MediaWiki at build time.
 </pre>
 <p>A unit left empty counts as not yet translated: <code>translate check</code> reports it and the build renders it in the source language, so you can translate a page a few units at a time. The <code>@a1b2c3d4</code> stamp is added by <code>translate stamp</code> (see below), not by hand. Only those markers and their text belong in the file: the <code>&lt;translate></code> tags, and whatever the source page keeps outside them, stay on the source page, where the export reads them for every language. One written here is swallowed by the unit above it, and that unit is then shown in the source language rather than yours — so <code>translate check</code> refuses it.
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Translating_the_page_title">Translating the page title</h2></div>
+</div></section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Translating_the_page_title">Translating the page title</h2></div><div class="citizen-section-body">
 <p>A page's title is a unit too, under the reserved marker <code>&lt;!--T:title--></code>. It is the one unit that is not part of the page's wikitext: its source text is the page's own title, so nothing is added to the source page and pages in the source language render exactly as they did. This is Translate's own page display title; Wikven only spells the marker shorter.
 </p><p>Write the translated title at the top of the translation file, ahead of the numbered units, where <code>translate scaffold</code> puts its marker:
 </p>
@@ -505,14 +505,14 @@ It runs a real MediaWiki at build time.
 <p>The translated page then shows that title in its heading and in the browser tab, in place of the <code>Page/lang</code> subpage name. Nothing else changes: <code>translate check</code> reports a missing or out-of-date title like any other unit, <code>translate stamp</code> stamps it, and renaming the source page puts every translated title out of date, exactly as editing a paragraph does.
 </p><p>A page that sets its own title with the <code>DISPLAYTITLE</code> magic word is the exception. That magic word sits outside <code>&lt;translate></code>, so it is copied into every translation of the page and fixes the same title in every language; such a page has no title unit to translate.
 </p>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Stamping">Stamping</h2></div>
+</div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Stamping">Stamping</h2></div><div class="citizen-section-body">
 <p>When you have translated a page, run <code>translate stamp</code> on the translation you wrote, so its units record the source version you wrote them against. Mount your source directory writable:
 </p>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>stamp<span class="w"> </span>Intro/ko.wikitext
 </pre></div>
 <p>One translation at a time, and there is no flag for the whole tree. A stamp is not something the tool can work out: it is your word that you read the unit against the source it now claims to match. Stamping a page you did not open would say that about translations nobody has looked at, and a translation left behind would then read as current -- which is exactly what the stamp exists to catch.
 </p>
-</section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Keeping_translations_up_to_date">Keeping translations up to date</h2></div>
+</div></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Keeping_translations_up_to_date">Keeping translations up to date</h2></div><div class="citizen-section-body">
 <p>When you change a source unit, its translations no longer match their stamp and are <b>out of date</b>. Wikven does not hide this:
 </p>
 <ul><li>In the built site, an out-of-date unit is marked as an outdated translation, exactly as it would be on a wiki running Translate.</li>
@@ -526,7 +526,7 @@ It runs a real MediaWiki at build time.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../JavaScript/en.html" title="Special:MyLanguage/JavaScript">JavaScript</a></div><div class="wikven-prevnext-next"><a href="../Editing_sidebar/en.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Translating/en.html">https://chaotic-ground.github.io/wikven/Translating/en.html</a>"</div></div>
 			</div>
 			

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Extensions - Wikven</title>
@@ -446,7 +446,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><a href="./Extensions/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="확장 기능 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven runs a real MediaWiki at build time, so a MediaWiki extension works the way it always does — as long as what it does can be finished before the site is published. This page is about which extensions you can have, and how to get one that is not already there.
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Enabling_an_extension">Enabling an extension</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Enabling_an_extension">Enabling an extension</h2></div><div class="citizen-section-body">
 <p>List it in your <a href="./Configuration.html" title="Special:MyLanguage/Configuration"><code>.wikven.yaml</code> file</a> by name. Extensions that ship inside Wikven need nothing else:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
@@ -455,7 +455,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>A name Wikven cannot find on disk fails the build, naming it. A typo would otherwise show up as an extension that quietly did nothing, on a site already published. Anything not shipped has to say where it comes from, under the <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a>.
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_is_already_there">What is already there</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_is_already_there">What is already there</h2></div><div class="citizen-section-body">
 <p>The Wikven image carries everything <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Bundled_extensions">bundled with MediaWiki</a> — ParserFunctions, Cite, Gadgets, SyntaxHighlight_GeSHi, TemplateStyles and the rest — plus three Wikven adds for what a static site needs:
 </p>
 <dl><dt><a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:UniversalLanguageSelector">SifterSearch</a></dt>
@@ -469,7 +469,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--entrypoint<span class="w"> </span>ls<span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>extensions
 docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--entrypoint<span class="w"> </span>ls<span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>skins
 </pre></div>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Anything_else">Anything else</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Anything_else">Anything else</h2></div><div class="citizen-section-body">
 <p>An extension that is not in the image is fetched at build time from a source you declare — a tarball, a Git repository, or a Composer package. The name still goes in <code>extensions</code>; <code>WikvenRepositories</code> only says where to get it:
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
@@ -482,7 +482,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </pre></div>
 <p>This documentation site fetches TabberNeue exactly like that — the tabs on <a href="./Getting_Started.html" title="Special:MyLanguage/Getting Started">Getting Started</a> are it — along with MobileFrontend, which <a href="./Skins.html" title="Special:MyLanguage/Skins">MinervaNeue</a> leans on. See the <a href="./Configuration.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> map</a> for the three ways to name a source, the host tools each one needs, and why to pin what you fetch.
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_will_not_work">What will not work</h2></div>
+</div></section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_will_not_work">What will not work</h2></div><div class="citizen-section-body">
 <p>An extension has to do its work during the build, because the published site is files on a host that runs no PHP. That rules out a whole class of them, however well they behave on a live wiki:
 </p>
 <ul><li><b>Anything that edits.</b> VisualEditor, WikiEditor and CodeEditor have nothing to save to.</li>
@@ -494,7 +494,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Searching.html" title="Special:MyLanguage/Searching">Searching</a></div><div class="wikven-prevnext-next"><a href="./Lua_modules.html" title="Special:MyLanguage/Lua modules">Lua modules</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Extensions.html">https://chaotic-ground.github.io/wikven/Extensions.html</a>"</div></div>
 			</div>
 			

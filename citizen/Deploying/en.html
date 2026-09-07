@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Deploying - Wikven</title>
@@ -446,7 +446,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <li><a href="../Deploying/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="배포하기 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Wikven writes a self-contained <code>dist/</code> directory of static files, with no server or database behind it. Host it anywhere that serves static files.
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_a_build_writes">What a build writes</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_a_build_writes">What a build writes</h2></div><div class="citizen-section-body">
 <p>Everything the site needs is in <code>dist/</code>, and nothing in it is fetched from anywhere else at view time:
 </p>
 <div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>dist/
@@ -467,7 +467,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>Two things about that layout are worth knowing before you point a host at it. Links between pages are <b>relative</b>, so the site works at a domain root and in a subdirectory alike, and even from the filesystem. But anything addressed from the site root rather than from the page — the search bundle most visibly — has to be told the base path; that is the note under GitHub Pages below. And each extra skin's directory is a <b>complete copy</b>, so a three-skin site is roughly three times the files: see <a href="../Skins/en.html#building-more-than-one-skin" title="Special:MyLanguage/Skins">Skins</a>.
 </p>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="GitHub_Pages">GitHub Pages</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="GitHub_Pages">GitHub Pages</h2></div><div class="citizen-section-body">
 <p>This workflow rebuilds and publishes the site on every push. It bakes the source with the Wikven <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/bake">composite action</a>, then uploads <code>dist/</code> to Pages.
 </p>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
@@ -507,10 +507,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r101"/><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>A GitHub <b>project</b> page is served from a subdirectory (<code>username.github.io/repo/</code>). Page-to-page links keep working because Wikven writes them relative, but anything that needs an absolute path must include that base path: set <a href="../Searching/en.html" title="Special:MyLanguage/Searching">search</a>'s <code>SifterSearchBundlePath</code> to <code>/repo/pagefind/</code> (this site uses <code>/wikven/pagefind/</code>). A <b>user/organization</b> page (served at the domain root) needs no such setting.</p></div>
 </div>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Any_static_host">Any static host</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Any_static_host">Any static host</h2></div><div class="citizen-section-body">
 <p>Because <code>dist/</code> is just files, you can serve it from any static host (<a rel="nofollow" class="external text" href="https://www.netlify.com/">Netlify</a>, <a rel="nofollow" class="external text" href="https://pages.cloudflare.com/">Cloudflare Pages</a>, an object store like <a rel="nofollow" class="external text" href="https://aws.amazon.com/s3/">S3</a>, or a plain web server). Build the site in your CI or locally, then point the host at the <code>dist/</code> directory, or upload its contents to the server's document root.
 </p>
-<section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="What_each_host_does_with_the_addresses">What each host does with the addresses</h3></div>
+<section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading3 citizen-section-heading"><h3 id="What_each_host_does_with_the_addresses">What each host does with the addresses</h3></div><div class="citizen-section-body">
 <p>A page is a file. Wikven writes <code>Getting_Started.html</code> rather than <code>Getting_Started/index.html</code>, and every link a page carries is relative to where that file sits. So any host that serves files serves the site, with nothing to configure.
 </p><p>Some hosts also answer the address without the extension, so that <code>/Getting_Started</code> reaches the same page as <code>/Getting_Started.html</code>. GitHub Pages, <a rel="nofollow" class="external text" href="https://docs.gitlab.com/user/project/pages/">GitLab Pages</a> and Cloudflare Pages do; <a rel="nofollow" class="external text" href="https://codeberg.page/">Codeberg Pages</a>, an object store and a plain web server do not. The site works either way, because the links Wikven writes carry the extension; it matters only for an address somebody types or shares by hand.
 </p><p><b>Netlify</b> is the one to turn something off on. Its <a rel="nofollow" class="external text" href="https://docs.netlify.com/manage/routing/redirects/redirect-options/">Pretty URLs</a>, on by default, forward <code>/Getting_Started</code> to <code>/Getting_Started/</code> and rewrite <code>/Getting_Started.html</code> to the same address. Wikven writes no <code>Getting_Started/</code> directory, so a page served there sits one directory deeper than its own links expect, and its stylesheets and pictures resolve to nothing. It is under Project configuration → Build &amp; deploy → Post processing.
@@ -519,7 +519,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>Being in the sitemap is not the same as being in an index, and no build can put a site in one. <a href="../Search_engines/en.html" title="Special:MyLanguage/Search engines">Search engines</a> is what to read next.
 </p><p><span id="preview-locally"></span>
 </p>
-</section></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Preview_locally">Preview locally</h2></div>
+</div></section></div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Preview_locally">Preview locally</h2></div><div class="citizen-section-body">
 <p>Open <code>dist/index.html</code> directly, or serve the directory so links and assets resolve exactly as they will in production. Wikven has a built-in <code>serve</code> command for this.
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-Binary-label" href="#tabber-Binary" aria-controls="tabber-Binary">Binary</a><a class="tabber__tab" role="tab" id="tabber-Docker-label" href="#tabber-Docker" aria-controls="tabber-Docker">Docker</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Binary" aria-labelledby="tabber-Binary-label"><p class="mw-empty-elt">
@@ -537,13 +537,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p class="mw-empty-elt"></p></div></div></div>
 <p>Any static server works too, for example <code>cd dist &amp;&amp; python3 -m http.server</code>.
 </p>
-</section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Dates,_authors_and_reproducible_builds"><span id="Dates.2C_authors_and_reproducible_builds"></span>Dates, authors and reproducible builds</h2></div>
+</div></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Dates,_authors_and_reproducible_builds"><span id="Dates.2C_authors_and_reproducible_builds"></span>Dates, authors and reproducible builds</h2></div><div class="citizen-section-body">
 <p>Each page's "last edited" line names the commit that last changed <b>that page's source file</b>, and credits that commit's author. The wiki a build fills has no history of its own — every page is written in one import pass — so the repository's history is where those two facts come from.
 </p><p>That history has to be reachable. The <a href="../Commands/en.html#bake" title="Special:MyLanguage/Commands">bake action</a> reads it on the runner and hands it to the build, but a <b>shallow checkout knows only the last commit</b>, which is why the workflow above checks out with <code>fetch-depth: 0</code>. Without the full history nothing fails: every page is simply dated at the commit being built and credited to nobody. The action says so in the log when it happens, and that line is the only warning you get.
 </p><p>The rest follows from the same idea. A build runs with its clock frozen at <code>SOURCE_DATE_EPOCH</code> — the commit's own date, when the action sets it — so two builds of one commit produce <b>byte-identical</b> output, down to the timestamps in the pages. It means a redeploy of unchanged content changes nothing on the host, and a diff between two builds only ever shows what you actually edited. Wikven's own continuous integration asserts it by baking this site twice and comparing the results.
 </p><p><span id="keeping-pins-current"></span>
 </p>
-</section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Keeping_pinned_sources_current">Keeping pinned sources current</h2></div>
+</div></section><section id="citizen-section-7" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Keeping_pinned_sources_current">Keeping pinned sources current</h2></div><div class="citizen-section-body">
 <p>The pins that make those builds reproducible are the ones nothing moves for you. An exact <a href="../Configuration/en.html#WikvenRepositories" title="Special:MyLanguage/Configuration"><code>WikvenRepositories</code> pin</a> stays exact until you change it, and no bot will change it: <code>.wikven.yaml</code> is Wikven's own file, and Dependabot only watches the ecosystems it recognises. A site can therefore sit years behind on a skin with every check green.
 </p><p>Which way out of that you take is yours to choose, and the two are not the same bargain:
 </p>
@@ -591,7 +591,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Editing_sidebar/en.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a></div><div class="wikven-prevnext-next"><a href="../Search_engines/en.html" title="Special:MyLanguage/Search engines">Search engines</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Deploying/en.html">https://chaotic-ground.github.io/wikven/Deploying/en.html</a>"</div></div>
 			</div>
 			

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<html class="client-nojs skin-theme-clientpref-os citizen-feature-autohide-navigation-clientpref-1 citizen-feature-image-dimming-clientpref-0 citizen-feature-pure-black-clientpref-0 citizen-feature-custom-font-size-clientpref-standard citizen-feature-custom-width-clientpref-standard citizen-feature-performance-mode-clientpref-1 citizen-header-position-left citizen-header-position-mobile-bottom skin-theme-clientpref-thumb-standard" lang="en" dir="ltr" data-mw-citizen-html="3.22">
 <head>
 <meta charset="UTF-8">
 <title>Standalone binary - Wikven</title>
@@ -448,7 +448,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p><p>On macOS and Windows, use the <a href="./Installation.html#Docker" title="Special:MyLanguage/Installation">Docker image</a> instead. Wikven provides no prebuilt macOS binary, for cost reasons: for a downloaded binary to run without Gatekeeper blocking it, Apple requires it to be signed and notarized through a paid Apple Developer Program account (US$99/year), and that cost is not justified for the project yet (see <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/issues/322">issue #322</a>). The only alternative, telling users to clear the quarantine by hand, trains them to bypass a security check, so it is not offered. A macOS user who wants a binary regardless can compile one from source with <a rel="nofollow" class="external text" href="https://frankenphp.dev/docs/static/">FrankenPHP's static build</a>; a locally built binary is not quarantined.
 </p><p>There is no prebuilt Windows binary either: the toolchain that produces a single self-contained executable does not support Windows yet (see <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/issues/192">issue #192</a>).
 </p>
-</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Download">Download</h2></div>
+</section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Download">Download</h2></div><div class="citizen-section-body">
 <p>Download the binary for your architecture from the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">latest release</a> and make it executable:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
@@ -460,7 +460,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nv">tag</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/chaotic-ground/wikven/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'s/.*"tag_name": *"\(nightly-[^"]*\)".*/\1/p'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n1<span class="k">)</span>
 curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>wikven<span class="w"> </span><span class="s2">"https://github.com/chaotic-ground/wikven/releases/download/</span><span class="nv">$tag</span><span class="s2">/wikven-linux-x86_64"</span>
 </pre></div>
-</section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Verify">Verify</h2></div>
+</div></section><section id="citizen-section-2" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Verify">Verify</h2></div><div class="citizen-section-body">
 <p>Each release binary is published with a <code>.sha256</code> checksum and a signed build-provenance attestation. To check it before trusting a binary you install onto your <code>PATH</code>, download it under its release name and verify the checksum:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>curl<span class="w"> </span>-LO<span class="w"> </span>https://github.com/chaotic-ground/wikven/releases/latest/download/wikven-linux-x86_64
@@ -471,7 +471,7 @@ sha256sum<span class="w"> </span>-c<span class="w"> </span>wikven-linux-x86_64.s
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>gh<span class="w"> </span>attestation<span class="w"> </span>verify<span class="w"> </span>wikven-linux-x86_64<span class="w"> </span>--repo<span class="w"> </span>chaotic-ground/wikven
 </pre></div>
-</section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Install">Install</h2></div>
+</div></section><section id="citizen-section-3" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Install">Install</h2></div><div class="citizen-section-body">
 <p>The downloaded file already runs as-is — <code>./wikven</code> from the directory you saved it in. To run it as plain <code>wikven</code> from anywhere, install it onto your <code>PATH</code>:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>sudo<span class="w"> </span>install<span class="w"> </span>wikven<span class="w"> </span>/usr/local/bin/
@@ -482,7 +482,7 @@ sha256sum<span class="w"> </span>-c<span class="w"> </span>wikven-linux-x86_64.s
 </pre></div>
 <p>The commands below assume it is on your <code>PATH</code>. If you skipped this step, run it as <code>./wikven</code> from the directory you downloaded it to.
 </p>
-</section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Building_a_site">Building a site</h2></div>
+</div></section><section id="citizen-section-4" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Building_a_site">Building a site</h2></div><div class="citizen-section-body">
 <p>Put your wikitext and a <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a> in a <code>src/</code> directory, then build:
 </p>
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>src
@@ -495,12 +495,12 @@ wikven<span class="w"> </span>build
 </pre></div>
 <p>The output is the same as the Docker image's, give or take the one host tool named below: the binary embeds MediaWiki, the bundled extensions and skins, and every interface language, and it reads the same <a href="./Configuration.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a> layered over Wikven's defaults.
 </p>
-</section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_it_asks_of_the_host">What it asks of the host</h2></div>
+</div></section><section id="citizen-section-5" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="What_it_asks_of_the_host">What it asks of the host</h2></div><div class="citizen-section-body">
 <p><b><a href="./Lua_modules.html" title="Special:MyLanguage/Lua modules">Lua modules</a>, on arm64.</b> The PHP this binary is built from carries no <code>luasandbox</code>, so Scribunto falls back to running an external <code>lua</code> program — and to the interpreter it carries in its own source tree when no other is named. That interpreter is built for 64-bit x86, and Scribunto has no arm64 one to offer instead — the five it bundles are all Intel. It picks among them by operating system and integer size, so on arm64 it selects a program that cannot start. Install Lua 5.1 and name it under <code>ScribuntoEngineConf.luastandalone.luaPath</code>; on x86-64 nothing is needed.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r101">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}.mw-parser-output .wikven-note-warning{border:1px solid var(--border-color-warning,#ab7f2a);background-color:var(--background-color-warning-subtle,#fdf2d5)}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>A site that lists Scribunto where nothing can run it is refused, with a message saying what to install, rather than baked into pages with <code>{{#invoke:}}</code> showing in them. The refusal is in the exit status too, so a script that bakes and then deploys stops instead of shipping nothing.</p></div>
 </div>
-</section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Optional_host_tools">Optional host tools</h2></div>
+</div></section><section id="citizen-section-6" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="Optional_host_tools">Optional host tools</h2></div><div class="citizen-section-body">
 <p>The binary renders on its own, but uses these host programs when they are present:
 </p>
 <ul><li><b><a rel="nofollow" class="external text" href="https://imagemagick.org/">ImageMagick</a></b> and <b><a rel="nofollow" class="external text" href="https://gitlab.gnome.org/GNOME/librsvg">librsvg</a></b> produce higher-quality thumbnails. Without them the binary uses the built-in <a rel="nofollow" class="external text" href="https://libgd.github.io/">GD</a> library for raster images and serves SVG inline. See <a href="./Images.html" title="Special:MyLanguage/Images">Images</a>.</li>
@@ -509,7 +509,7 @@ wikven<span class="w"> </span>build
 </div>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./Configuration.html" title="Special:MyLanguage/Configuration">Configuration</a></div><div class="wikven-prevnext-next"><a href="./Commands.html" title="Special:MyLanguage/Commands">Commands</a> →</div></div>
 
-</section></div>
+</div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Standalone_binary.html">https://chaotic-ground.github.io/wikven/Standalone_binary.html</a>"</div></div>
 			</div>
 			
