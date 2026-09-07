@@ -27,9 +27,9 @@ jobs:
 
       - id: version
         run: |
-          v=$(sed -n 's#.*biomejs\.dev/schemas/\([^/]*\)/.*#\1#p' biome.json)
+          v=$(sed -n 's#.*biomejs\.dev/schemas/\([^/]*\)/.*#\1#p' .biome.json)
           if [ -z "$v" ]; then
-            echo "::error file=biome.json::could not read a version from the \$schema URL"
+            echo "::error file=.biome.json::could not read a version from the \$schema URL"
             exit 1
           fi
           echo "v=$v" >> "$GITHUB_OUTPUT"
