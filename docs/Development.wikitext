@@ -232,7 +232,7 @@ The e2e run serves <code>dist/</code> under a <code>/wikven/</code> path prefix,
 
 <!--T:23-->
 * <code>lint.yml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs), holds every source comment to a word budget, and checks that this site documents every {{SITENAME}} configuration variable and every step of the build.
-* <code>test.yml</code> and <code>quibble.yml</code> run the PHPUnit suites and MediaWiki's own structure tests.
+* <code>test.yml</code> runs the PHPUnit suites, phan and coverage against a real MediaWiki, and builds the Caddy plugin.
 * <code>smoke.yml</code> bakes this site and asserts the output, in a browser and byte for byte.
 * <code>translations.yml</code> reports out-of-date translations in <code>docs/</code>, through the [[<tvar name="2">Special:MyLanguage/Commands#check-translations</tvar>|check-translations action]].
 * <code>docker-image.yml</code> builds the image, and publishes it only when a release or a nightly asks it to: a push to <code>main</code> builds and stops, which is what keeps the layer cache the other image jobs read from going cold. A publish goes from the one build to both <code>ghcr.io/chaotic-ground/wikven</code> and <code>quay.io/chaotic-ground/wikven</code>, and reads every tag back afterwards, so one that reaches one registry and not the other fails rather than passes. quay.io authenticates through a robot account federated to this repository's OIDC identity, so there is no registry token in the repository secrets.

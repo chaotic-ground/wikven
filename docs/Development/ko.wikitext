@@ -188,9 +188,9 @@ e2e 실행은 GitHub Pages가 그러하듯 <code>dist/</code>를 <code>/wikven/<
 <!--T:22 @9c7c0fee-->
 == 지속적 통합 ==
 
-<!--T:23 @683abb91-->
+<!--T:23 @274806a1-->
 * <code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행하고, 모든 소스 주석을 낱말 수 예산 안에 묶어 두며, 이 사이트가 {{SITENAME}}의 모든 설정 변수와 빌드의 모든 단계를 문서화하고 있는지 검사합니다.
-* <code>test.yml</code>과 <code>quibble.yml</code>은 PHPUnit 스위트와 MediaWiki 자체의 구조 테스트를 실행합니다.
+* <code>test.yml</code>은 실제 MediaWiki를 상대로 PHPUnit 스위트와 phan, 커버리지를 실행하고 Caddy 플러그인을 빌드합니다.
 * <code>smoke.yml</code>은 이 사이트를 굽고 그 출력을 브라우저에서, 그리고 바이트 단위로 검증합니다.
 * <code>translations.yml</code>은 [[$2|check-translations 액션]]을 통해 <code>docs/</code>의 오래된 번역을 보고합니다.
 * <code>docker-image.yml</code>은 이미지를 빌드하되, 릴리스나 나이틀리가 요청할 때만 게시합니다. <code>main</code>에 푸시하면 빌드하고 멈추는데, 이것이 다른 이미지 작업들이 읽는 레이어 캐시를 식지 않게 합니다. 게시는 한 번의 빌드에서 <code>ghcr.io/chaotic-ground/wikven</code>과 <code>quay.io/chaotic-ground/wikven</code> 양쪽으로 나가며, 게시한 뒤 모든 태그를 되읽으므로 한쪽 레지스트리에만 도달한 게시는 통과하지 않고 실패합니다. quay.io 인증은 이 저장소의 OIDC 신원에 연합된 로봇 계정으로 이루어지므로, 저장소 시크릿에 레지스트리 토큰이 없습니다.
