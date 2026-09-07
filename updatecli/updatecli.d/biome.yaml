@@ -37,6 +37,6 @@ targets:
     scmid: default
     sourceid: npm
     spec:
-      file: biome.json
+      file: .biome.json
       matchpattern: 'biomejs\.dev/schemas/[^/]+/schema\.json'
       replacepattern: 'biomejs.dev/schemas/{{ source "npm" }}/schema.json'
