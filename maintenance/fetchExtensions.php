@@ -7,7 +7,6 @@ use Maintenance;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Settings\Source\Format\JsonFormat;
 use MediaWiki\Settings\Source\Format\YamlFormat;
-use MediaWiki\Utils\ExecutableFinder;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -22,6 +21,7 @@ require_once "$IP/maintenance/Maintenance.php";
 require_once __DIR__ . '/../includes/Attempts.php';
 require_once __DIR__ . '/../includes/ComposerInstall.php';
 require_once __DIR__ . '/../includes/FetchPin.php';
+require_once __DIR__ . '/../includes/Git.php';
 require_once __DIR__ . '/../includes/TarballChecksum.php';
 require_once __DIR__ . '/../includes/UserAgent.php';
 
@@ -455,31 +455,14 @@ class FetchExtensions extends Maintenance {
 	}
 
 	/**
-	 * What `git $arguments` printed, or null where it could not be run or did not succeed.
-	 *
-	 * Located rather than spawned by name, as SourceHistory does: a host without git is an answer
-	 * this can give.
+	 * What `git $arguments` printed, trimmed, or null where it could not be run or did not succeed.
 	 *
 	 * @param string[] $arguments
 	 */
 	private static function gitOutput(array $arguments): ?string {
-		$binary = ExecutableFinder::findInDefaultPaths(['git']) ?: null;
-		if ($binary === null) {
-			return null;
-		}
-		$descriptors = [
-			0 => ['file', '/dev/null', 'r'],
-			1 => ['pipe', 'w'],
-			2 => ['file', '/dev/null', 'w']
-		];
-		$pipes = [];
-		$process = proc_open(array_merge([$binary], $arguments), $descriptors, $pipes);
-		if ($process === false) {
-			return null;
-		}
-		$output = (string)stream_get_contents($pipes[1]);
-		fclose($pipes[1]);
-		return proc_close($process) === 0 ? trim($output) : null;
+		$output = Git::output($arguments);
+
+		return $output === null ? null : trim($output);
 	}
 
 	/**
