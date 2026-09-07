@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Build\BuildPaths;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\BuildPaths
+ * @covers \MediaWiki\Extension\Wikven\Build\BuildPaths
  */
 class BuildPathsTest extends MediaWikiUnitTestCase {
 	private string $workdir;

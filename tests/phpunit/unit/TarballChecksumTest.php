@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Fetching\TarballChecksum;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\TarballChecksum
+ * @covers \MediaWiki\Extension\Wikven\Fetching\TarballChecksum
  */
 class TarballChecksumTest extends MediaWikiUnitTestCase {
 	/** sha256 of the string "wikven", which the fixtures below are written with. */

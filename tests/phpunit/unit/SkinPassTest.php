@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Build\SkinPass;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\SkinPass
+ * @covers \MediaWiki\Extension\Wikven\Build\SkinPass
  */
 class SkinPassTest extends MediaWikiUnitTestCase {
 	/** One rule asked in two directions, which is what keeps the two sides of it agreeing. */

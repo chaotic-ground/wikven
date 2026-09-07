@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Source\SourceAuthors;
 use MediaWikiIntegrationTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\SourceAuthors
+ * @covers \MediaWiki\Extension\Wikven\Source\SourceAuthors
  * @group Database
  */
 class SourceAuthorsTest extends MediaWikiIntegrationTestCase {

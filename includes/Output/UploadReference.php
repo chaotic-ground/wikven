@@ -2,6 +2,8 @@
 
 namespace MediaWiki\Extension\Wikven\Output;
 
+use MediaWiki\Extension\Wikven\SiteUrl;
+
 /**
  * What a page says about a picture, and what the export should say instead.
  *

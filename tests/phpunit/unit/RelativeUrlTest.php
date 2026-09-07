@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Output\RelativeUrl;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\RelativeUrl
+ * @covers \MediaWiki\Extension\Wikven\Output\RelativeUrl
  */
 class RelativeUrlTest extends MediaWikiUnitTestCase {
 	public function testDepthZeroLeavesTheHtmlUntouched() {

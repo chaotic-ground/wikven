@@ -8,7 +8,7 @@ use MediaWikiIntegrationTestCase;
 /**
  * What git says, and the three ways of getting no answer.
  *
- * @covers \MediaWiki\Extension\Wikven\Git
+ * @covers \MediaWiki\Extension\Wikven\Fetching\Git
  */
 class GitTest extends MediaWikiIntegrationTestCase {
 	public function testWhatGitPrintsComesBack() {

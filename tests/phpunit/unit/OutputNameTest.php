@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Output\OutputName;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\OutputName
+ * @covers \MediaWiki\Extension\Wikven\Output\OutputName
  */
 class OutputNameTest extends MediaWikiUnitTestCase {
 	/** Namespace numbers as the wiki this file describes has them. */

@@ -61,7 +61,7 @@ class UserAgent {
 
 	/** The version this copy of wikven is, or "dev" for a checkout that has no release in it. */
 	private static function version(): string {
-		$file = __DIR__ . '/../extension.json';
+		$file = __DIR__ . '/../../extension.json';
 		$manifest = is_readable($file) ? json_decode((string)file_get_contents($file), true) : null;
 		$version = is_array($manifest) ? trim((string)( $manifest['version'] ?? '' )) : '';
 		return $version !== '' ? $version : 'dev';

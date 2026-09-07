@@ -7,7 +7,7 @@ use MediaWiki\ResourceLoader\ResourceLoader;
 use MediaWikiIntegrationTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\AssetLocalizer
+ * @covers \MediaWiki\Extension\Wikven\Output\AssetLocalizer
  */
 class AssetLocalizerTest extends MediaWikiIntegrationTestCase {
 	/**

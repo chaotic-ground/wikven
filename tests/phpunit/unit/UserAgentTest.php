@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Fetching\UserAgent;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\UserAgent
+ * @covers \MediaWiki\Extension\Wikven\Fetching\UserAgent
  */
 class UserAgentTest extends MediaWikiUnitTestCase {
 	/** The version a release moves, read from the same file the class reads. */

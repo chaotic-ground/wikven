@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\SourceFile::filenameToTitle
+ * @covers \MediaWiki\Extension\Wikven\Source\SourceFile::filenameToTitle
  */
 class SourceFileTest extends MediaWikiUnitTestCase {
 	/**

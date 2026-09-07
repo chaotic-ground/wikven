@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Output\AssetFile;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\AssetFile
+ * @covers \MediaWiki\Extension\Wikven\Output\AssetFile
  */
 class AssetFileTest extends MediaWikiUnitTestCase {
 	public function testTheOutputRootIsSpelledAsADot() {

@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Fetching\Attempts;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\Attempts
+ * @covers \MediaWiki\Extension\Wikven\Fetching\Attempts
  */
 class AttemptsTest extends MediaWikiUnitTestCase {
 	/** Answers false the first $failures times it is called, then true. */

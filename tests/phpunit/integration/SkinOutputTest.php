@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Build\SkinOutput;
 use MediaWikiIntegrationTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\SkinOutput
+ * @covers \MediaWiki\Extension\Wikven\Build\SkinOutput
  */
 class SkinOutputTest extends MediaWikiIntegrationTestCase {
 	private const SKINS = ['vector-2022', 'citizen', 'minerva'];

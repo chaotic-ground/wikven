@@ -7,7 +7,7 @@ use MediaWiki\Extension\Wikven\SiteUrl;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\UploadReference
+ * @covers \MediaWiki\Extension\Wikven\Output\UploadReference
  */
 class UploadReferenceTest extends MediaWikiUnitTestCase {
 	/** Publishes every path as one asset, so a test can read what was written rather than which. */

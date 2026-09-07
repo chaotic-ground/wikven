@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Output\HtmlListInserter;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\HtmlListInserter
+ * @covers \MediaWiki\Extension\Wikven\Output\HtmlListInserter
  */
 class HtmlListInserterTest extends MediaWikiUnitTestCase {
 	/** Two lists, so a match has to be the one asked for rather than the first one in the page. */

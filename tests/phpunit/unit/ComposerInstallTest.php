@@ -6,7 +6,7 @@ use MediaWiki\Extension\Wikven\Fetching\ComposerInstall;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\Wikven\ComposerInstall
+ * @covers \MediaWiki\Extension\Wikven\Fetching\ComposerInstall
  */
 class ComposerInstallTest extends MediaWikiUnitTestCase {
 	/** @var string[] */

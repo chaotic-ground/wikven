@@ -15,7 +15,7 @@ use RuntimeException;
  * both paths under test here refuse to make up an answer when it is unreachable.
  *
  * @group Database
- * @covers \MediaWiki\Extension\Wikven\ModuleRenderer
+ * @covers \MediaWiki\Extension\Wikven\Output\ModuleRenderer
  */
 class ModuleRendererTest extends MediaWikiIntegrationTestCase {
 	/** Every response shape the build dumps, as (modules, only, extra query) for makeLoaderQuery. */
