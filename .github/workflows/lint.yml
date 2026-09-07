@@ -59,16 +59,18 @@ jobs:
   rumdl:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      # Named, because the action's default is to ask GitHub what the latest release is, and GitHub
+      # answered that with a 504 three times in one afternoon. Its own name so that updatecli has
+      # something to match on: the version input is written the same way two jobs down, for taplo.
+      RUMDL_VERSION: "0.2.62"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
       - uses: rvben/rumdl@96c8520425eaf1b6d362e4a98754adf6ee604acb  # v0.2.62
         with:
-          # Named, because the default is to ask GitHub what the latest release is, and GitHub
-          # answered that with a 504 three times in one afternoon. Keep it at the action's own tag
-          # above; dependabot moves that line and cannot move this one.
-          version: "0.2.62"
+          version: ${{ env.RUMDL_VERSION }}
 
   taplo:
     runs-on: ubuntu-latest

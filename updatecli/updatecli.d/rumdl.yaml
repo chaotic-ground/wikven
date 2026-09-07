@@ -1,0 +1,48 @@
+---
+name: "build(deps): bump rumdl"
+pipelineid: rumdl
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+sources:
+  release:
+    name: Latest rumdl release
+    kind: githubrelease
+    spec:
+      owner: rvben
+      repository: rumdl
+      versionfilter:
+        kind: semver
+    # The action builds its own tag and its own pip constraint from this, so it takes the number
+    # without the "v" the release carries.
+    transformers:
+      - trimprefix: v
+
+targets:
+  # Which rumdl the action installs. Dependabot moves the action beside it; the two are the same
+  # project and should read as the same version.
+  lint:
+    name: 'build(deps): bump rumdl to {{ source "release" }}'
+    kind: file
+    scmid: default
+    sourceid: release
+    spec:
+      file: .github/workflows/lint.yml
+      matchpattern: 'RUMDL_VERSION: "[^"]*"'
+      replacepattern: 'RUMDL_VERSION: "{{ source "release" }}"'
