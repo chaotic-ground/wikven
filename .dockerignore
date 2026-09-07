@@ -1,16 +1,52 @@
 # What COPY ./ must not put in the image -- and, through binary.Dockerfile's COPY --from=app, in
 # the standalone binary either. Everything here is a thing that builds or checks wikven rather than
 # a thing wikven runs, and a site built with the image reads none of it.
-.git
-.github
+#
+# One .dockerignore filters the context of every build that uses it, so caddy/ is deliberately
+# absent: binary.Dockerfile copies it out of this same context to link into the binary.
 .claude
+.dockerignore
+.git
+.gitignore
+.github
+.phan
+.rumdl_cache
 .tf
 .venv
-.rumdl_cache
-docs
-examples
-tests
-node_modules
-vendor
+actions
 dist
 dist-again
+docs
+examples
+node_modules
+out
+playwright-report
+pw-root
+test-results
+tests
+updatecli
+vendor
+
+# The tooling's own configuration, which lives in the root and so is not covered by a directory
+# above. Nothing in a bake opens any of it: the one composer.json a build reads is MediaWiki's, by
+# absolute path. wikven's own stays -- it is what says this directory is a package -- but its lock
+# file is a development artifact.
+.biome.json
+.codecov.yml
+.phpcs.xml
+.release-please-config.json
+.release-please-manifest.json
+.rumdl.toml
+.taplo.toml
+.typos.toml
+.yamllint.yml
+Dockerfile
+binary.Dockerfile
+composer.lock
+grumphp.yml
+mago.toml
+package-lock.json
+package.json
+playwright.config.js
+pyproject.toml
+uv.lock
