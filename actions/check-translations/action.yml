@@ -40,9 +40,11 @@ inputs:
   comment-languages:
     description: >-
       Languages the comment is written in besides English, which always leads.
-      "auto" takes them from what was found, so a contributor who sent a Korean
-      translation is answered in Korean under the English; a comma-separated
-      list of codes (e.g. "ko,fr") names them outright. The wording comes from
+      "auto" takes them from the translations the pull request touches, so a
+      contributor who sent a Korean translation is answered in Korean under the
+      English, and one who edited an English page is answered in English alone
+      even where that put its Korean translation behind; a comma-separated list
+      of codes (e.g. "ko,fr") names them outright. The wording comes from
       wikven's own i18n messages, so a language nobody has translated those into
       falls back to English and is left out rather than repeated. Does nothing
       unless "comment" is on.

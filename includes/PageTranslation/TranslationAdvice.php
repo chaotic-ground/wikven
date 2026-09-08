@@ -89,6 +89,32 @@ class TranslationAdvice {
 	}
 
 	/**
+	 * The languages of the translations the change touches: what its author writes in.
+	 *
+	 * Not the findings' languages: editing an English page puts its Korean translation behind,
+	 * and its author may not read Korean. Unscoped, the findings are all there is.
+	 *
+	 * @param array<string,string> $translations Language code by translation file.
+	 * @param list<array<string,string>> $findings
+	 * @return list<string> Sorted, each once.
+	 */
+	public function languagesFor(array $translations, array $findings): array {
+		if ($this->paths === null) {
+			$languages = array_column($findings, 'lang');
+		} else {
+			$languages = [];
+			foreach ($this->paths as $path) {
+				if (isset($translations[$path])) {
+					$languages[] = $translations[$path];
+				}
+			}
+		}
+		$languages = array_values(array_unique($languages));
+		sort($languages);
+		return $languages;
+	}
+
+	/**
 	 * The comment for a run that found something, or null for one that found nothing.
 	 *
 	 * A finding carries a kind and a file, then whichever of source, unit, lang, line and detail
