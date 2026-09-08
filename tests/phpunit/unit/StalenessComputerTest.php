@@ -489,4 +489,28 @@ class StalenessComputerTest extends MediaWikiUnitTestCase {
 			]
 		];
 	}
+
+	/** A translation with no markers has no units, whatever else is written in it. */
+	public function testATranslationWithoutMarkersHasNoUnits() {
+		$this->assertSame([], StalenessComputer::translationUnits("Hello.\n\nNo markers here."));
+	}
+
+	/** Re-running the scaffold on a translation that already has every unit changes nothing. */
+	public function testAScaffoldWithNothingToAddLeavesTheTranslationAsItIs() {
+		$source = "<!--T:1-->\nHello.\n\n<!--T:2-->\nGoodbye.";
+		$existing = "<!--T:1-->\n안녕하세요.\n\n<!--T:2-->\n안녕히 가세요.";
+
+		$this->assertSame($existing, StalenessComputer::scaffold($source, $existing));
+		$this->assertSame('', StalenessComputer::scaffold('No units at all.'));
+	}
+
+	/** Restamping reads the spans a page quotes verbatim, and a page with no comments has none. */
+	public function testATranslationWithoutAnyCommentIsRestampedUntouched() {
+		$translation = 'Nothing here is a marker, not even <nowiki>this</nowiki>.';
+
+		$this->assertSame(
+			$translation,
+			StalenessComputer::restamp("<!--T:1-->\nHello.", $translation)
+		);
+	}
 }

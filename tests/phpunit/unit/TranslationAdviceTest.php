@@ -242,4 +242,16 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 		$this->assertStringNotContainsString("\n---\n", $body);
 		$this->assertSame(1, substr_count($body, 'text of wikven-translations-title'));
 	}
+
+	/**
+	 * A finding about a file that is not a page -- the config, a script -- has no translations
+	 * under it, so it belongs to the change that names it and to nothing else.
+	 */
+	public function testAFindingAboutSomethingOtherThanAPageIsNotClaimedByAnotherChange() {
+		$advice = $this->advice()->about(['docs/index.wikitext']);
+
+		$this->assertNull($advice->comment([
+			['kind' => 'parse', 'file' => 'docs/.wikven.yaml', 'detail' => 'pt-shake-position']
+		]));
+	}
 }
