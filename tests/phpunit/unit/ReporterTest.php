@@ -75,4 +75,19 @@ class ReporterTest extends MediaWikiUnitTestCase {
 
 		$this->assertSame([], $installed);
 	}
+
+	/**
+	 * The hook reads the run it is in rather than being told about it, and the run it is in here is
+	 * PHPUnit's -- which owns the handler, so nothing is installed over it.
+	 */
+	public function testTheHookLeavesAPhpunitRunAlone() {
+		$previous = set_exception_handler(null);
+		set_exception_handler($previous);
+
+		( new Reporter() )->onSetupAfterCache();
+
+		$installed = set_exception_handler(null);
+		set_exception_handler($installed);
+		$this->assertSame($previous, $installed);
+	}
 }

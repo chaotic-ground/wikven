@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
+use MediaWiki\Extension\Wikven\Hooks\Versioner;
 use MediaWiki\Extension\Wikven\Version;
 use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -45,5 +46,22 @@ class VersionerTest extends MediaWikiIntegrationTestCase {
 				Title::newFromText('Versioner test'),
 				ParserOptions::newFromAnon()
 			);
+	}
+
+	/** Every registered variable comes through the hook; another extension's is left to it. */
+	public function testAVariableThatIsNotOursIsLeftAlone() {
+		$value = 'untouched';
+		$cache = [];
+		$frame = false;
+
+		( new Versioner() )->onParserGetVariableValueSwitch(
+			$this->getServiceContainer()->getParserFactory()->getInstance(),
+			$cache,
+			'currentversion',
+			$value,
+			$frame
+		);
+
+		$this->assertSame('untouched', $value);
 	}
 }
