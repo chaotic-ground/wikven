@@ -3,6 +3,9 @@
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\Source\SourceAuthors;
+use MediaWiki\Status\Status;
+use MediaWiki\User\User;
+use MediaWiki\User\UserFactory;
 use MediaWikiIntegrationTestCase;
 
 /**
@@ -52,5 +55,22 @@ class SourceAuthorsTest extends MediaWikiIntegrationTestCase {
 		[$authors, $build] = $this->authors();
 
 		$this->assertSame($build, $authors->accountFor([]));
+	}
+
+	/**
+	 * A name MediaWiki will take can still fail to save, and a build that wrote revisions against
+	 * the account it did not get would attribute them to a user id that is not there.
+	 */
+	public function testAnAccountThatCannotBeSavedLeavesThePageUnattributed() {
+		$build = $this->getTestUser()->getUser();
+		$refused = $this->createMock(User::class);
+		$refused->method('isRegistered')->willReturn(false);
+		$refused->method('addToDatabase')->willReturn(Status::newFatal('userexists'));
+		$factory = $this->createMock(UserFactory::class);
+		$factory->method('newFromName')->willReturn($refused);
+
+		$authors = new SourceAuthors($factory, $build);
+
+		$this->assertSame($build, $authors->accountFor(['Leslie']));
 	}
 }

@@ -66,4 +66,40 @@ class SourceFileTest extends MediaWikiIntegrationTestCase {
 		$this->assertTrue(SourceFile::exists('Getting Started'), 'imported page');
 		$this->assertFalse(SourceFile::exists('Version'), 'generated page');
 	}
+
+	/**
+	 * The "$1" in an edit or history URL is a path in someone's repository, so the slash and the
+	 * namespace colon stay as they are and everything else is encoded.
+	 *
+	 * @dataProvider provideTitlesAsParameters
+	 */
+	public function testTitleToParam(string $titleText, string $expected) {
+		$this->assertSame($expected, SourceFile::titleToParam($titleText));
+	}
+
+	public static function provideTitlesAsParameters() {
+		return [
+			'a space' => ['Getting Started', 'Getting%20Started.wikitext'],
+			'a subpage' => ['Manual/Config', 'Manual/Config.wikitext'],
+			'a namespace' => ['Help:Search', 'Help:Search.wikitext'],
+			'a title with its own content model' => ['MediaWiki:Common.css', 'MediaWiki:Common.css'],
+			'a character a URL cannot carry' => ['Q&A', 'Q%26A.wikitext']
+		];
+	}
+
+	/** A wiki running the extension outside a build has no source directory to look in. */
+	public function testNothingExistsWithoutASourceDirectory() {
+		$this->overrideConfigValue('WikvenSourceDirectory', '');
+
+		$this->assertFalse(SourceFile::exists('Getting Started'));
+	}
+
+	/**
+	 * A title core will not parse resolves no content model, so it is treated as one that has none
+	 * of its own and gets the marker.
+	 */
+	public function testATitleCoreWillNotParseGetsTheMarker() {
+		$this->assertSame('<.wikitext', SourceFile::titleToFilename('<'));
+		$this->assertFalse(SourceFile::isPageFile('<'));
+	}
 }

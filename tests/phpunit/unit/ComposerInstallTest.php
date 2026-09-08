@@ -242,4 +242,38 @@ class ComposerInstallTest extends MediaWikiUnitTestCase {
 		}
 		rmdir($path);
 	}
+
+	/** composer's record is not this build's file, so anything but a list of packages is no answer. */
+	public function testARecordThatIsNotAListOfPackagesIsNoAnswer() {
+		$tree = $this->makeTree();
+		mkdir("{$tree['ip']}/vendor/composer", 0777, true);
+		file_put_contents("{$tree['ip']}/vendor/composer/installed.json", 'not json at all');
+
+		$this->assertSame([], ComposerInstall::locations($tree['ip']));
+	}
+
+	/**
+	 * Only a package under extensions/ or skins/ has a name to suggest; one that landed anywhere
+	 * else declared no component type, so the report names where it went and stops there.
+	 */
+	public function testAPackageOutsideBothComponentDirectoriesIsAnsweredWithoutASuggestion() {
+		$tree = $this->makeTree(['resources/Helper'], [
+			['name' => 'example/helper', 'version' => '1.0.0', 'install-path' => '../../resources/Helper']
+		]);
+
+		$problem = ComposerInstall::misplaced(
+			$tree['ip'],
+			[
+				'package' => 'example/helper',
+				'name' => 'Helper',
+				'kind' => 'extension',
+				'dest' => "{$tree['ip']}/extensions/Helper"
+			],
+			ComposerInstall::locations($tree['ip'])
+		);
+
+		$this->assertNotNull($problem);
+		$this->assertStringContainsString('installed into resources/Helper', $problem);
+		$this->assertStringNotContainsString('instead', $problem);
+	}
 }

@@ -4,11 +4,21 @@ namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
 use MediaWiki\Extension\Wikven\Fetching\UserAgent;
 use MediaWikiUnitTestCase;
+use ReflectionProperty;
 
 /**
  * @covers \MediaWiki\Extension\Wikven\Fetching\UserAgent
  */
 class UserAgentTest extends MediaWikiUnitTestCase {
+	/**
+	 * The string is built once and kept. Whoever asked first in this process built it, so clearing
+	 * it is what puts each test back on the manifest read rather than on that answer.
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+		( new ReflectionProperty(UserAgent::class, 'tool') )->setValue(null, null);
+	}
+
 	/** The version a release moves, read from the same file the class reads. */
 	private function version(): string {
 		$manifest = json_decode(file_get_contents(__DIR__ . '/../../../extension.json'), true);
