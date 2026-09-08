@@ -45,9 +45,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-08T11:22:57Z">
-<meta property="article:published_time" content="2026-09-08T11:22:57Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-08T11:22:57Z","datePublished":"2026-09-08T11:22:57Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-08T12:07:21Z">
+<meta property="article:published_time" content="2026-09-08T12:07:21Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development\/en.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-08T12:07:21Z","datePublished":"2026-09-08T12:07:21Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Development_en rootpage-Development_en skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -353,7 +353,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 <ul><li><code>lint.yml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs), holds every source comment to a word budget, and checks that this site documents every Wikven configuration variable and every step of the build.</li>
 <li><code>test.yml</code> runs the PHPUnit suites, phan and coverage against a real MediaWiki, and builds the Caddy plugin.</li>
 <li><code>smoke.yml</code> bakes this site and asserts the output, in a browser and byte for byte.</li>
-<li><code>translations.yml</code> reports out-of-date translations in <code>docs/</code>, through the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/tree/main/actions/check-translations">check-translations action</a>.</li>
+<li><code>translations.yml</code> reports out-of-date translations in <code>docs/</code>, through the <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/actions/check-translations/action.yml">check-translations action</a>.</li>
 <li><code>docker-image.yml</code> builds the image, and publishes it only when a release or a nightly asks it to: a push to <code>main</code> builds and stops, which is what keeps the layer cache the other image jobs read from going cold. A publish goes from the one build to both <code>ghcr.io/chaotic-ground/wikven</code> and <code>quay.io/chaotic-ground/wikven</code>, and reads every tag back afterwards, so one that reaches one registry and not the other fails rather than passes. quay.io authenticates through a robot account federated to this repository's OIDC identity, so there is no registry token in the repository secrets.</li>
 <li><code>deploy-docs.yml</code> builds the <code>docs/</code> directory with the image and deploys the result to GitHub Pages, so this site is itself a Wikven build; <code>pr-preview.yml</code> does the same per pull request, into a subdirectory that is torn down when the pull request closes.</li>
 <li><code>binary.yml</code> builds the standalone <a href="../Standalone_binary/en.html" title="Special:MyLanguage/Standalone binary">binary</a>, on pull requests that touch it and for each platform on a release. <code>release-please.yml</code> calls it to attach the binaries to a version release, and <code>nightly.yml</code> calls it daily to publish a dated <code>nightly-YYYY-MM-DD</code> pre-release. Both create the release as a draft, attach the binaries, then publish it, because GitHub's immutable releases lock a release's assets once it is published. <code>nightly.yml</code> publishes the image under that same dated tag, and <code>:latest</code> with it until a released version takes that over.</li>
@@ -378,8 +378,8 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1788866577">
-  				<span>Last edited on 8 September 2026, at 11:22</span>
+  				data-timestamp="1788869241">
+  				<span>Last edited on 8 September 2026, at 12:07</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -402,7 +402,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 8 September 2026, at 11:22.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 8 September 2026, at 12:07.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
