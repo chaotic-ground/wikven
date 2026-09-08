@@ -9,6 +9,7 @@ use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Extension\Wikven\Build\BuildConcurrency;
 use MediaWiki\Extension\Wikven\Build\BuildFor;
+use MediaWiki\Extension\Wikven\Build\BuildTimes;
 use MediaWiki\Extension\Wikven\Build\SkinPass;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
 use MediaWiki\Extension\Wikven\Source\SourceAuthors;
@@ -47,8 +48,12 @@ class Build extends Maintenance {
 	 */
 	private bool $searchIndexRan = false;
 
+	/** What each phase of this process took, printed when it is over. */
+	private BuildTimes $times;
+
 	public function __construct() {
 		parent::__construct();
+		$this->times = new BuildTimes();
 		$this->addDescription('Run the full wikven static-site build in a single process.');
 	}
 
@@ -66,41 +71,62 @@ class Build extends Maintenance {
 
 		// Before the output directory is emptied, because a site this build cannot render is better
 		// told so with its last bake still in place.
-		$this->assertEverythingListedIsHere();
-		$this->checkLuaAgainstThisBuild();
-		$this->clearOutputDirectory();
-		$this->setMainPage();
-		$this->importImages("$ip/maintenance/importImages.php");
-		$this->step(ImportWikitext::class, "$own/importWikitext.php");
-		$this->assertMainPageExists();
-		$this->setLicensesPage();
-		$this->setSettingsPage();
-		$this->dropDeadPlaceLinks();
-		$this->dropDeadCategoryLink();
+		$this->phase('check what the site listed', $this->assertEverythingListedIsHere(...));
+		$this->phase('check the Lua', $this->checkLuaAgainstThisBuild(...));
+		$this->phase('clear the output directory', $this->clearOutputDirectory(...));
+		$this->phase('set the main page', $this->setMainPage(...));
+		$this->phase('import the images', $this->importImages(...), "$ip/maintenance/importImages.php");
+		$this->step('import the pages', ImportWikitext::class, "$own/importWikitext.php");
+		$this->phase('check the main page arrived', $this->assertMainPageExists(...));
+		$this->phase('write the licenses page', $this->setLicensesPage(...));
+		$this->phase('write the settings page', $this->setSettingsPage(...));
+		$this->phase('drop the dead place links', $this->dropDeadPlaceLinks(...));
+		$this->phase('drop the dead category link', $this->dropDeadCategoryLink(...));
 		// Materialize content translations before RunJobs so rendered translation pages get exported.
-		$this->step(BuildTranslations::class, "$own/buildTranslations.php");
-		$this->runJobs("$ip/maintenance/runJobs.php");
+		$this->step('build the translations', BuildTranslations::class, "$own/buildTranslations.php");
+		$this->phase('run the jobs', $this->runJobs(...), "$ip/maintenance/runJobs.php");
 		// Categories are written by the links update each edit queues, which runJobs above runs, so
 		// this is the first point they are known -- and it is before the passes.
-		$this->assertNamedCategoriesAreEmpty();
+		$this->phase('check the categories', $this->assertNamedCategoriesAreEmpty(...));
 		// Every page the export will hold now exists and nothing writes another revision after
 		// this, so this is where each page can be told when it was last edited, and by whom.
-		$this->stampSourceHistory();
-		$this->hideBuildAuthors();
-		$this->forgetCachedRevisionRows();
+		$this->phase('stamp the source history', $this->stampSourceHistory(...));
+		$this->phase('hide the build authors', $this->hideBuildAuthors(...));
+		$this->phase('forget the cached revision rows', $this->forgetCachedRevisionRows(...));
 		// The content is final here, so this is the last write the database needs and the passes
 		// below can be readers of it.
-		$this->freezePageTouched();
+		$this->phase('freeze the page timestamps', $this->freezePageTouched(...));
 		// The search index is built by now, by the job runJobs() holds back to the end, and every
 		// pass below copies it. Settled here so the one copy they all take is stable.
-		$this->stabilizeSearchIndex();
+		$this->phase('settle the search index', $this->stabilizeSearchIndex(...));
 
 		$config = $this->getConfig();
 		$skins = (array)$config->get('WikvenSkins');
 		if (!$skins) {
 			$skins = [(string)$config->get('DefaultSkin')];
 		}
-		$this->renderSkinPasses(array_values($skins));
+		$this->phase('render the skins', $this->renderSkinPasses(...), array_values($skins));
+		$this->output($this->times->report('the build'));
+	}
+
+	/**
+	 * Run one phase of this process, remembering what it took.
+	 *
+	 * Every phase rather than the ones a guess calls slow: what this is for is the stretch nobody
+	 * expected, and a guess is what left it unmeasured.
+	 *
+	 * @param string $name What the phase does, as the report names it.
+	 * @param callable $work
+	 * @param mixed ...$arguments Handed to $work.
+	 * @return mixed What $work answered, for the phases whose answer is read.
+	 */
+	private function phase(string $name, callable $work, mixed ...$arguments) {
+		$started = hrtime(true);
+		try {
+			return $work(...$arguments);
+		} finally {
+			$this->times->add($name, ( hrtime(true) - $started ) / 1e9);
+		}
 	}
 
 	/**
@@ -486,7 +512,14 @@ class Build extends Maintenance {
 		// Non-blocking, so reading a quiet pass never holds up a talkative one.
 		stream_set_blocking($pipes[1], false);
 		stream_set_blocking($pipes[2], false);
-		return ['process' => $process, 'pipes' => $pipes, 'output' => [1 => '', 2 => '']];
+		// Started here rather than timed inside the pass, so what it says includes the boot a pass
+		// needs before it can say anything at all.
+		return [
+			'process' => $process,
+			'pipes' => $pipes,
+			'output' => [1 => '', 2 => ''],
+			'started' => hrtime(true)
+		];
 	}
 
 	/**
@@ -571,7 +604,8 @@ class Build extends Maintenance {
 	 * @param int $exit
 	 */
 	private function reportPass(string $skin, array $pass, int $exit): void {
-		$this->output("--- $skin pass" . ( $exit === 0 ? '' : " failed (exit $exit)" ) . " ---\n");
+		$took = BuildTimes::seconds(( hrtime(true) - $pass['started'] ) / 1e9);
+		$this->output("--- $skin pass" . ( $exit === 0 ? '' : " failed (exit $exit)" ) . ", $took ---\n");
 		$this->output($pass['output'][1]);
 		if ($pass['output'][2] !== '') {
 			$this->error(rtrim($pass['output'][2], "\n"));
@@ -661,27 +695,33 @@ class Build extends Maintenance {
 
 		// Before anything renders or is dumped: the bundle path reaches the client inside the script
 		// bundle buildScripts writes below, so this pass has to be pointed at its own copy first.
-		$searchBundle = $this->pointSearchAtThisCopy();
+		$searchBundle = $this->phase('point the search at this copy', $this->pointSearchAtThisCopy(...));
 
-		$this->step(RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", ['overwrite' => true]);
+		$this->step('render the pages', RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", [
+			'overwrite' => true
+		]);
 		// RebuildFileCache renders in the content language; re-render translations in their own.
-		$this->step(RetranslateChrome::class, "$own/retranslateChrome.php");
+		$this->step('re-render the translations', RetranslateChrome::class, "$own/retranslateChrome.php");
 		// Every page is rendered by now: drop what each one recorded about the request that made it.
-		$this->step(StripBuildStamps::class, "$own/stripBuildStamps.php");
-		$this->step(BuildStyles::class, "$own/buildStyles.php");
+		$this->step('strip the build stamps', StripBuildStamps::class, "$own/stripBuildStamps.php");
+		$this->step('build the styles', BuildStyles::class, "$own/buildStyles.php");
 		// Opt-in: bake ULS webfonts into a static stylesheet rewriteScripts links below.
-		$this->step(BakeWebfonts::class, "$own/bakeWebfonts.php");
-		$this->step(BuildScripts::class, "$own/buildScripts.php");
-		$this->step(RewriteScripts::class, "$own/rewriteScripts.php");
+		$this->step('bake the webfonts', BakeWebfonts::class, "$own/bakeWebfonts.php");
+		$this->step('build the scripts', BuildScripts::class, "$own/buildScripts.php");
+		$this->step('rewrite the scripts', RewriteScripts::class, "$own/rewriteScripts.php");
 		// Minerva takes no navigation from the sidebar, so its menu is filled in the rendered pages.
-		$this->step(FillMinervaMenu::class, "$own/fillMinervaMenu.php");
-		$this->step(StoreImages::class, "$own/storeImages.php");
+		$this->step('fill the Minerva menu', FillMinervaMenu::class, "$own/fillMinervaMenu.php");
+		$this->step('store the images', StoreImages::class, "$own/storeImages.php");
 		$named = $this->nameCachedPages("$own/rename.php");
 		// Rename has expanded translation pages into "<Page>/<lang>.html"; resolve MyLanguage links now.
-		$this->step(ResolveTranslationLinks::class, "$own/resolveTranslationLinks.php");
+		$this->step(
+			'resolve the translation links',
+			ResolveTranslationLinks::class,
+			"$own/resolveTranslationLinks.php"
+		);
 		// After the pages have their final names and links, so what the sitemap names is what the
 		// site serves. Writes nothing unless the site said where it will be published.
-		$this->step(BuildSitemap::class, "$own/buildSitemap.php");
+		$this->step('build the sitemap', BuildSitemap::class, "$own/buildSitemap.php");
 
 		// SkippedHistoryAction leaves RebuildFileCache nothing to write here, so this finds nothing
 		// on a normal bake; it stays as the guard for a pass over an output directory that already
@@ -696,9 +736,10 @@ class Build extends Maintenance {
 
 		// Last, so nothing above walks the bundle looking for pages to rewrite.
 		if ($searchBundle !== null) {
-			$this->copySearchBundle($searchBundle);
+			$this->phase('copy the search bundle', $this->copySearchBundle(...), $searchBundle);
 		}
 
+		$this->output($this->times->report('the ' . getenv('WIKVEN_BUILD_SKIN') . ' pass'));
 		// After everything, because that is the whole of what it says; see SkinPass.
 		$this->output(SkinPass::wrote($named) . "\n");
 	}
@@ -905,7 +946,7 @@ class Build extends Maintenance {
 	 * way to come by it; see SkinPass.
 	 */
 	private function nameCachedPages(string $file): int {
-		$rename = $this->step(Rename::class, $file);
+		$rename = $this->step('name the pages', Rename::class, $file);
 		// createChild() is typed to Maintenance, and this is the one step whose answer is read.
 		return $rename instanceof Rename ? $rename->named : 0;
 	}
@@ -915,14 +956,19 @@ class Build extends Maintenance {
 	 *
 	 * The child is handed back for the one caller that wants a number out of it; every other one
 	 * runs the step for its effect and drops it.
+	 *
+	 * @param string $name What the timing report calls this step.
+	 * @param string $class
+	 * @param string $file
+	 * @param array $options
 	 */
-	private function step(string $class, string $file, array $options = []): Maintenance {
+	private function step(string $name, string $class, string $file, array $options = []): Maintenance {
 		$child = $this->createChild($class, $file);
-		foreach ($options as $name => $value) {
-			$child->setOption($name, $value);
+		foreach ($options as $option => $value) {
+			$child->setOption($option, $value);
 		}
 		// A child returning false signals failure (e.g. a page didn't import); abort the build.
-		if ($child->execute() === false) {
+		if ($this->phase($name, $child->execute(...)) === false) {
 			$this->fatalError("Wikven: $class reported failures; aborting the build.");
 		}
 		return $child;
