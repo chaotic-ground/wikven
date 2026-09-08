@@ -67,6 +67,26 @@ jobs:
           tags: wikven
           cache-from: type=gha,scope=wikven-image
 
+      # The trees WikvenRepositories pins, kept from one run to the next. A bake clones them from
+      # other people's servers, and asking those four hosts for the same immutable tags on every
+      # push is not what their logs are for (#716). Only the first bake below is given them: the
+      # second still clones cold, so every push exercises the fetch, and the reproducibility check
+      # this job already runs compares a bake off the kept trees against a bake off fresh ones. The
+      # key holds the pins and the code that reads them, so changing either clones cold on both.
+      #
+      # zizmor reads a cache beside a docker build as something a release could be built from. This
+      # job publishes nothing -- the image is loaded, not pushed -- and a cache written on a pull
+      # request's ref is not one a run on main can read, so an entry a fork writes reaches its own
+      # bake and nothing else. The marker sits on path: rather than on the uses: line, whose comment
+      # is the pinned version and dependabot's to rewrite, and it covers this step alone: a cache
+      # added to this workflow later is reported like any other.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ~/.cache/wikven/fetch  # zizmor: ignore[cache-poisoning]
+          key: >-
+            wikven-fetch-${{ hashFiles('docs/.wikven.yaml',
+            'maintenance/fetchExtensions.php', 'includes/Fetching/**') }}
+
       # Both bakes of the reproducibility check below, at once. They are independent by construction
       # -- separate containers, separate output directories, one shared source -- and most of a
       # bake is a single process: only the skin passes run beside each other, so the second bake
@@ -78,14 +98,16 @@ jobs:
       - name: Bake the docs site twice
         run: |
           set -uo pipefail
-          mkdir -p dist dist-again
+          mkdir -p dist dist-again "$HOME/.cache/wikven/fetch"
           bake() {
             docker run --rm \
               -v "$(pwd)/docs:/workspace/src:ro" \
               -v "$(pwd)/$1:/workspace/dist" \
+              "${@:2}" \
               wikven
           }
-          bake dist > bake.log 2>&1 &
+          bake dist -v "$HOME/.cache/wikven/fetch:/workspace/fetch" \
+            -e WIKVEN_FETCH_DIR=/workspace/fetch > bake.log 2>&1 &
           first=$!
           bake dist-again > bake-again.log 2>&1 &
           second=$!
