@@ -132,4 +132,32 @@ class MainSetupAfterCacheTest extends MediaWikiIntegrationTestCase {
 		$this->main()->onSetupAfterCache();
 		$this->assertArrayNotHasKey('wgULSImeSelectors', $GLOBALS);
 	}
+
+	/** A logo written the long way is dropped whole when its file is not there to name. */
+	public function testAnArrayFormLogoWhoseFileIsMissingIsDropped() {
+		$this->overrideConfigValue('WikvenSourceDirectory', $this->getNewTempDirectory());
+		$this->overrideConfigValue('WikvenLogos', ['icon' => ['src' => 'missing.png', 'width' => 50]]);
+		$this->setMwGlobals('wgLogos', []);
+
+		$this->main()->onSetupAfterCache();
+
+		$this->assertArrayNotHasKey('icon', $GLOBALS['wgLogos']);
+	}
+
+	/**
+	 * A file name is not a page name: the source tree can hold one MediaWiki has no title for, and
+	 * there is no upload URL to answer with.
+	 */
+	public function testALogoWhoseNameIsNoTitleIsDropped() {
+		$src = $this->getNewTempDirectory();
+		// A file name carrying a character a title cannot: "<" is one core refuses outright.
+		file_put_contents("$src/a<b.png", 'not a real png, just needs to exist');
+		$this->overrideConfigValue('WikvenSourceDirectory', $src);
+		$this->overrideConfigValue('WikvenLogos', ['1x' => 'a<b.png']);
+		$this->setMwGlobals('wgLogos', []);
+
+		$this->main()->onSetupAfterCache();
+
+		$this->assertArrayNotHasKey('1x', $GLOBALS['wgLogos']);
+	}
 }

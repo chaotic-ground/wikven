@@ -4,6 +4,8 @@ namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\Build\BuildFor;
 use MediaWiki\Extension\Wikven\Hooks\Main;
+use MediaWiki\FileRepo\File\File;
+use MediaWiki\FileRepo\RepoGroup;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
@@ -280,5 +282,83 @@ class MainTest extends MediaWikiIntegrationTestCase {
 		$links = ['views' => []];
 		$this->main()->onSkinTemplateNavigation__Universal($sktemplate, $links);
 		return $links['views'];
+	}
+
+	/** A link to another wiki is that wiki's to answer for; the export rewrites its own pages only. */
+	public function testAnInterwikiLinkIsLeftAlone() {
+		$url = 'https://www.mediawiki.org/wiki/Manual:Contents';
+		$title = Title::makeTitle(NS_MAIN, 'Manual:Contents', '', 'mediawikiwiki');
+		$this->main()->onGetLocalURL($title, $url, '');
+
+		$this->assertSame('https://www.mediawiki.org/wiki/Manual:Contents', $url);
+	}
+
+	/**
+	 * A file borrowed from Commons has no File: page here, so the link goes to the page the
+	 * repository keeps for it -- or nowhere, where the repository names none.
+	 *
+	 * @dataProvider provideForeignDescriptions
+	 */
+	public function testAForeignFileLinksToTheRepositoryThatHasIt(?string $description, string $expected) {
+		$file = $this->createMock(File::class);
+		$file->method('isLocal')->willReturn(false);
+		$file->method('getDescriptionUrl')->willReturn($description);
+		$repos = $this->createMock(RepoGroup::class);
+		$repos->method('findFile')->willReturn($file);
+		$this->setService('RepoGroup', $repos);
+
+		$url = '/index.php/File:Bakery_oven.jpg';
+		$this->main()->onGetLocalURL(Title::newFromText('File:Bakery oven.jpg'), $url, '');
+
+		$this->assertSame($expected, $url);
+	}
+
+	public static function provideForeignDescriptions(): array {
+		$commons = 'https://commons.wikimedia.org/wiki/File:Bakery_oven.jpg';
+		return [
+			'a repository with a description page' => [$commons, $commons],
+			'a repository with none' => [null, '/index.php/File:Bakery_oven.jpg'],
+			'a repository answering with nothing' => ['', '/index.php/File:Bakery_oven.jpg']
+		];
+	}
+
+	/**
+	 * Translate's banner and its "Translate" tab point at Special:Translate, which the export has no
+	 * page for. The query says which page and which language, and that is a file on the edit host.
+	 */
+	public function testATranslateLinkGoesToTheTranslationsOwnSourceFile() {
+		$this->overrideConfigValue('WikvenEditUrl', 'https://example.org/edit/$1');
+
+		$url = '/index.php/Special:Translate';
+		$this->main()->onGetFullURL(
+			Title::newFromText('Special:Translate'),
+			$url,
+			'group=page-Getting+Started&language=ko&action=page'
+		);
+
+		$this->assertSame('https://example.org/edit/Getting%20Started/ko.wikitext', $url);
+	}
+
+	/**
+	 * Without both halves of that query there is no file to name, so the link is left to the other
+	 * rules -- which have nothing for a special page either.
+	 *
+	 * @dataProvider provideTranslateQueriesThatNameNoFile
+	 */
+	public function testATranslateLinkNamingNoFileIsNotRewritten(string $query) {
+		$this->overrideConfigValue('WikvenEditUrl', 'https://example.org/edit/$1');
+
+		$url = '/index.php/Special:Translate';
+		$this->main()->onGetFullURL(Title::newFromText('Special:Translate'), $url, $query);
+
+		$this->assertSame('/index.php/Special:Translate', $url);
+	}
+
+	public static function provideTranslateQueriesThatNameNoFile(): array {
+		return [
+			'no language' => ['group=page-Getting+Started'],
+			'a group that is not a page' => ['group=core&language=ko'],
+			'nothing at all' => ['']
+		];
 	}
 }
