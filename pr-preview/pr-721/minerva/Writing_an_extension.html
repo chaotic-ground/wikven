@@ -46,9 +46,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-08T12:44:21Z">
-<meta property="article:published_time" content="2026-09-08T12:44:21Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Writing an extension - Wikven","headline":"Writing an extension - Wikven","mainEntityOfPage":"Writing an extension","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Writing_an_extension.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Writing_an_extension.html","description":"This page is for people writing a MediaWiki extension or skin that has to work inside a Wikven build. It assumes you know how to write one for a live wiki; what...","dateModified":"2026-09-08T12:44:21Z","datePublished":"2026-09-08T12:44:21Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-08T12:50:37Z">
+<meta property="article:published_time" content="2026-09-08T12:50:37Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Writing an extension - Wikven","headline":"Writing an extension - Wikven","mainEntityOfPage":"Writing an extension","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Writing_an_extension.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Writing_an_extension.html","description":"This page is for people writing a MediaWiki extension or skin that has to work inside a Wikven build. It assumes you know how to write one for a live wiki; what...","dateModified":"2026-09-08T12:50:37Z","datePublished":"2026-09-08T12:50:37Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Writing_an_extension rootpage-Writing_an_extension skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -238,7 +238,7 @@ Wikven
 </p>
 <div class="mw-heading mw-heading2"><h2 id="What_a_build_is">What a build is</h2></div>
 <p>A Wikven build boots MediaWiki once, on the command line, renders every page to a file, and exits. The reader is then served plain files by a host that runs no PHP.
-</p><p>That MediaWiki is <b>1.46.0</b>, the release the image and the binary are built on, so it is the one your extension has to work with. Wikven itself supports <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/extension.json">1.46</a> and later; if you write against a newer one, a site running the released image will not have it.
+</p><p>That MediaWiki is <b>1.46.0</b>, the release the image and the binary are built on, so it is the one your extension has to work with. Wikven itself supports the release <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/extension.json"><code>extension.json</code></a> names, and later; if you write against a newer one, a site running the released image will not have it.
 </p><p>Two consequences run through everything below:
 </p>
 <ul><li><b>Your code runs at build time, not at view time.</b> There is no <code>load.php</code>, no action API and no database once the site is deployed. Anything your extension would normally do in response to a request has to happen during the build, or ship as static JavaScript that needs no server.</li>
@@ -329,8 +329,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1788871461">
-  				<span>Last edited on 8 September 2026, at 12:44</span>
+  				data-timestamp="1788871837">
+  				<span>Last edited on 8 September 2026, at 12:50</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -353,7 +353,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 8 September 2026, at 12:44.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 8 September 2026, at 12:50.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
