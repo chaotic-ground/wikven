@@ -21,10 +21,19 @@ permissions: {}
 # appearing in extension.json would otherwise take the phan config's place without a word.
 env:
   # Mirrors .phan/config.php. Nothing is gained by cloning what phan will not parse.
-  PHAN_DEPENDENCIES: Gadgets Translate
+  PHAN_DEPENDENCIES: >-
+    Gadgets
+    Translate
   # Translate refuses to install without UniversalLanguageSelector, and phan has no use for it --
-  # which is why Translate's own phan config does not name it either.
-  WIKI_DEPENDENCIES: Gadgets Translate UniversalLanguageSelector
+  # which is why Translate's own phan config does not name it either. MobileFrontend is here for the
+  # opposite reason: nothing reaches for its symbols, so phan has nothing to resolve, but Minerva
+  # leans on it and every build of this documentation site fetches it, which makes the branches
+  # behind ExtensionRegistry::isLoaded('MobileFrontend') live code on the site wikven is read on.
+  WIKI_DEPENDENCIES: >-
+    Gadgets
+    MobileFrontend
+    Translate
+    UniversalLanguageSelector
 
 # Cancel superseded runs; pushes to main are left to finish, keeping a result per merged commit.
 concurrency:
