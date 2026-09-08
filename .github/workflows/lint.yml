@@ -203,6 +203,21 @@ jobs:
           done
           exit "$status"
 
+      # The one MediaWiki version the installation page still writes down is the oldest wikven
+      # supports, which extension.json declares and the page links to. A bump that moves one and
+      # not the other leaves the page telling a reader to build against a MediaWiki this no longer
+      # supports, and the link beside the number would say so while the number did not.
+      - name: Check the documented minimum MediaWiki is the one extension.json requires
+        run: |
+          set -euo pipefail
+          minimum=$(jq -r '.requires.MediaWiki' extension.json | grep -oE '[0-9]+\.[0-9]+' | head -1)
+          if ! grep -qF "$minimum" docs/Installation.wikitext; then
+            echo "::error file=docs/Installation.wikitext::extension.json requires MediaWiki" \
+                 "$minimum, which this page does not name. Say that version where it says which" \
+                 "MediaWiki to build against."
+            exit 1
+          fi
+
       # The MediaWiki this is built on is named in half a dozen places -- the two CI matrices,
       # updatecli's extension branches, the branch-protection ruleset, extension.json's floor, and
       # the pages that tell an author what they are writing against -- and a bump that reaches only
