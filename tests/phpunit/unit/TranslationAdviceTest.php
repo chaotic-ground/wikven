@@ -209,7 +209,12 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 				'unit' => '9',
 				'lang' => 'ko'
 			],
-			['kind' => 'standalone', 'file' => 'docs/Pages/id.wikitext', 'source' => 'docs/Pages.wikitext', 'detail' => 'id']
+			[
+				'kind' => 'standalone',
+				'file' => 'docs/Pages/id.wikitext',
+				'source' => 'docs/Pages.wikitext',
+				'detail' => 'id'
+			]
 		]));
 	}
 
