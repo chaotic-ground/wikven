@@ -2,9 +2,14 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
+use MediaWiki\Content\ContentHandler;
+use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
 use MediaWiki\Extension\Wikven\Hooks\Main;
+use MediaWiki\Output\OutputPage;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\AtEase\AtEase;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -172,5 +177,167 @@ class MainHeadLinksTest extends MediaWikiIntegrationTestCase {
 		$this->overrideConfigValue('WikvenLicensesPage', 'Licenses');
 		$this->overrideConfigValue('WikvenSourceDirectory', $source);
 		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
+	}
+
+	/** An OutputPage for a page of the site, asking for the module styles a test names. */
+	private function outputFor(array $moduleStyles): OutputPage {
+		$context = new RequestContext();
+		$context->setTitle(Title::newFromText('Getting Started'));
+		$out = new OutputPage($context);
+		$out->addModuleStyles($moduleStyles);
+		return $out;
+	}
+
+	/**
+	 * The head of an exported page: the links that answer only inside a live MediaWiki go, and each
+	 * module's styles arrive as a file beside the page rather than as a load.php request.
+	 */
+	public function testTheHeadLosesItsApiLinksAndGainsItsStylesheets() {
+		$directory = $this->getNewTempDirectory();
+		$this->overrideConfigValues([
+			'WikvenHtmlDirectory' => $directory,
+			'WikvenAssetDirectory' => 'assets'
+		]);
+		$tags = [
+			'alternative-edit' => '<link rel="alternate" type="application/x-wiki">',
+			'opensearch' => '<link rel="search">',
+			'rsd' => '<link rel="EditURI">',
+			'universal-edit-button' => '<link rel="alternate">',
+			'meta-generator' => '<meta name="generator" content="MediaWiki">'
+		];
+		$out = $this->outputFor(['mediawiki.skinning.interface']);
+
+		$this->main()->onOutputPageAfterGetHeadLinksArray($tags, $out);
+
+		$this->assertSame(
+			['meta-generator', 'mediawiki.skinning.interface'],
+			array_keys($tags),
+			'the four links a static host cannot answer are gone, the module is linked'
+		);
+		$this->assertStringContainsString(
+			'assets/mediawiki.skinning.interface.css',
+			$tags['mediawiki.skinning.interface']
+		);
+		// The file the build writes the styles into has to be there for the pass that fills it.
+		$this->assertFileExists("$directory/assets/mediawiki.skinning.interface.css");
+	}
+
+	/**
+	 * What is not linked: a module nothing registered, and one whose styles belong to a reader
+	 * rather than to the page -- a static site has no reader to have them.
+	 */
+	public function testAModuleThatIsNobodysOrEverybodysOwnIsNotLinked() {
+		$this->overrideConfigValues([
+			'WikvenHtmlDirectory' => $this->getNewTempDirectory(),
+			'WikvenAssetDirectory' => 'assets'
+		]);
+		$tags = [];
+		$out = $this->outputFor(['wikven.no.such.module', 'user.styles']);
+
+		$this->main()->onOutputPageAfterGetHeadLinksArray($tags, $out);
+
+		$this->assertSame([], $tags);
+	}
+
+	/** Outside a build there is no static site to place the file in, and none is made. */
+	public function testAWikiThatIsNotBakingWritesNoStylesheetFile() {
+		$this->overrideConfigValue('WikvenHtmlDirectory', '');
+		$tags = [];
+
+		$this->main()->onOutputPageAfterGetHeadLinksArray($tags, $this->outputFor(['mediawiki.skinning.interface']));
+
+		$this->assertSame(['mediawiki.skinning.interface'], array_keys($tags));
+	}
+
+	/** A site with no licenses page has no family of copies for a page to belong to. */
+	public function testWithoutALicensesPageThereIsNoFamilyOfCopies() {
+		$this->overrideConfigValues([
+			'WikvenSiteUrl' => 'https://example.org/docs',
+			'WikvenLicensesPage' => ''
+		]);
+
+		$this->assertSame(
+			['link-canonical'],
+			array_keys($this->addressTags(Title::newFromText('Licenses')))
+		);
+	}
+
+	/** A page marked for translation, with one translation page written beside it. */
+	private function markedForTranslationInto(string $titleText, string $language): void {
+		$title = Title::newFromText($titleText);
+		$status = $this->editPage(
+			$title,
+			ContentHandler::makeContent("<translate>\n<!--T:1-->\nHi.\n</translate>", $title),
+			__METHOD__,
+			NS_MAIN,
+			$this->getTestSysop()->getUser()
+		);
+		TranslatablePage::newFromTitle($title)->addMarkedTag($status->value['revision-record']->getId());
+		$this->getExistingTestPage(Title::newFromText("$titleText/$language"));
+	}
+
+	/**
+	 * The other family: a page Translate marked. Whichever of the set is rendered, the set named is
+	 * the same, and the source page owns the language it was written in rather than its "/en" copy.
+	 *
+	 * @dataProvider provideTranslatedPagesOfOneSet
+	 */
+	public function testEveryPageOfATranslatedSetNamesTheWholeSet(string $rendered, string $canonical) {
+		$this->markTestSkippedIfExtensionNotLoaded('Translate');
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
+		$this->markedForTranslationInto('Installation', 'ko');
+
+		$this->assertSame(
+			[
+				'canonical' => $canonical,
+				'en' => 'Installation.html',
+				'ko' => 'Installation/ko.html',
+				'x-default' => 'Installation.html'
+			],
+			$this->addressed(Title::newFromText($rendered))
+		);
+	}
+
+	public static function provideTranslatedPagesOfOneSet(): array {
+		return [
+			'the source page' => ['Installation', 'Installation.html'],
+			'a translation of it' => ['Installation/ko', 'Installation/ko.html']
+		];
+	}
+
+	/** A page Translate has never heard of is a page of one language, which says nothing. */
+	public function testAPageThatIsNotTranslatedNamesNoSet() {
+		$this->markTestSkippedIfExtensionNotLoaded('Translate');
+		$this->overrideConfigValue('WikvenSiteUrl', 'https://example.org/docs');
+
+		$this->assertSame(
+			['canonical' => 'Getting_Started.html'],
+			$this->addressed(Title::newFromText('Getting Started'))
+		);
+	}
+
+	/**
+	 * A directory the build cannot make is reported rather than printed into the page: the pass
+	 * that fills these files is the one to fail, where the reason is still known.
+	 */
+	public function testAnAssetDirectoryThatCannotBeMadeStillLeavesThePageAlone() {
+		$directory = $this->getNewTempDirectory();
+		file_put_contents("$directory/assets", 'a file, where the directory has to go');
+		$this->overrideConfigValues([
+			'WikvenHtmlDirectory' => $directory,
+			'WikvenAssetDirectory' => 'assets'
+		]);
+		$tags = [];
+		$out = $this->outputFor(['mediawiki.skinning.interface']);
+
+		// The failed mkdir warns on its way to the false the code reads, and PHPUnit fails on a warning.
+		AtEase::suppressWarnings();
+		try {
+			$this->main()->onOutputPageAfterGetHeadLinksArray($tags, $out);
+		} finally {
+			AtEase::restoreWarnings();
+		}
+
+		$this->assertSame(['mediawiki.skinning.interface'], array_keys($tags));
 	}
 }
