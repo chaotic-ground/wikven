@@ -230,6 +230,54 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString('every source page', $this->advice()->allClear());
 	}
 
+	/**
+	 * The comment speaks the language of the translation the author sent, not of a finding: editing
+	 * an English page puts its Korean translation behind, and its author may not read Korean.
+	 */
+	public function testALanguageIsReadOffTheTranslationsTheChangeTouches() {
+		$translations = ['docs/Pages/ko.wikitext' => 'ko', 'docs/Licenses/km.wikitext' => 'km'];
+		$stale = [
+			[
+				'kind' => 'stale',
+				'file' => 'docs/Pages/ko.wikitext',
+				'source' => 'docs/Pages.wikitext',
+				'unit' => '3',
+				'lang' => 'ko'
+			]
+		];
+
+		$this->assertSame(
+			['ko'],
+			$this->advice()->about(['docs/Pages/ko.wikitext'])->languagesFor($translations, $stale)
+		);
+		$this->assertSame(
+			[],
+			$this->advice()->about(['docs/Pages.wikitext'])->languagesFor($translations, $stale)
+		);
+		// A page named for a language but read as one of its own is nobody's translation.
+		$this->assertSame(
+			[],
+			$this->advice()->about(['docs/API/id.wikitext'])->languagesFor($translations, [])
+		);
+		// Several translations, each once and in a stable order, whatever was found.
+		$this->assertSame(
+			['km', 'ko'],
+			$this->advice()
+				->about(['docs/Pages/ko.wikitext', 'docs/Licenses/km.wikitext', 'docs/Skins/ko.wikitext'])
+				->languagesFor($translations + ['docs/Skins/ko.wikitext' => 'ko'], [])
+		);
+	}
+
+	/** A comment about the whole tree has no author to ask, so the findings are what it goes on. */
+	public function testAnUnscopedCommentTakesItsLanguagesFromTheFindings() {
+		$languages = $this->advice()->languagesFor(['docs/Pages/ko.wikitext' => 'ko'], [
+			['kind' => 'stale', 'file' => 'docs/Licenses/km.wikitext', 'unit' => '2', 'lang' => 'km'],
+			['kind' => 'parse', 'file' => 'docs/Pages.wikitext', 'detail' => 'pt-shake-position'],
+			['kind' => 'stale', 'file' => 'docs/Skins/km.wikitext', 'unit' => '1', 'lang' => 'km']
+		]);
+		$this->assertSame(['km'], $languages);
+	}
+
 	/** An untranslated language falls back to English, and saying it all twice reads as a bug. */
 	public function testALanguageThatFallsBackIsNotRepeated() {
 		$advice = new TranslationAdvice(static function (string $key): string {

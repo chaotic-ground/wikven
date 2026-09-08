@@ -40,8 +40,8 @@ class CheckTranslations extends Maintenance {
 		);
 		$this->addOption(
 			'comment-languages',
-			'Languages to write that comment in, besides English: "auto" for the languages the findings'
-			. ' are about, or a comma-separated list of codes.',
+			'Languages to write that comment in, besides English: "auto" for the languages of the'
+			. ' translations the change touches, or a comma-separated list of codes.',
 			false,
 			true
 		);
@@ -54,6 +54,14 @@ class CheckTranslations extends Maintenance {
 	 * @var list<array{kind:string,file:string,unit?:string,lang?:string,line?:string,detail?:string}>
 	 */
 	private array $findings = [];
+
+	/**
+	 * The language each translation file in the tree is written in, keyed by the name the findings
+	 * give the file: what an auto-languages comment reads its languages off.
+	 *
+	 * @var array<string,string>
+	 */
+	private array $translations = [];
 
 	/**
 	 * @return bool Whether the run itself succeeded (what it found is reported, and gated, separately).
@@ -78,6 +86,13 @@ class CheckTranslations extends Maintenance {
 		$stale = 0;
 		foreach (TranslationSource::baseFiles($source, $isKnownLanguage) as $baseFile) {
 			$sourceText = (string)file_get_contents($baseFile);
+			$languages = TranslationSource::translationLanguages($baseFile, $isKnownLanguage);
+			// Recorded before anything can skip the page: a comment's languages come from the
+			// translations a change touches, whatever state their source page is in.
+			foreach ($languages as $lang) {
+				$translationFile = TranslationSource::translationPath($baseFile, $lang);
+				$this->translations[$prefix . substr($translationFile, strlen($source) + 1)] = $lang;
+			}
 			// A source page that marks a unit <!--T:title--> collides with the page-title unit, which
 			// sourceUnits() refuses outright. Report the source file here rather than let every
 			// translation of it fail, since the page is what has to be fixed.
@@ -94,7 +109,7 @@ class CheckTranslations extends Maintenance {
 			}
 			$errors += $this->checkSourcePage($prefix . substr($baseFile, strlen($source) + 1), $sourceText);
 			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
-			foreach (TranslationSource::translationLanguages($baseFile, $isKnownLanguage) as $lang) {
+			foreach ($languages as $lang) {
 				$translationFile = TranslationSource::translationPath($baseFile, $lang);
 				$translationText = (string)file_get_contents($translationFile);
 				$reportFile = $prefix . substr($translationFile, strlen($source) + 1);
@@ -193,7 +208,7 @@ class CheckTranslations extends Maintenance {
 		if ($paths !== null) {
 			$advice = $advice->about($paths);
 		}
-		$languages = $this->commentLanguages();
+		$languages = $this->commentLanguages($advice);
 		$body = $advice->comment($this->findings, $languages) ?? $advice->allClear($languages);
 		if (file_put_contents($path, $body) === false) {
 			$this->fatalError("Wikven: could not write the comment body to '$path'.");
@@ -230,19 +245,19 @@ class CheckTranslations extends Maintenance {
 	/**
 	 * The languages the comment is written in: English, then whatever --comment-languages asked for.
 	 *
-	 * English leads as the one language a reader of the change is likely to share; "auto" reads
-	 * the rest off the findings.
+	 * English leads as the one language a reader of the change is likely to share; "auto" adds
+	 * those of the translations the change touches.
 	 *
 	 * @return list<string>
 	 */
-	private function commentLanguages(): array {
+	private function commentLanguages(TranslationAdvice $advice): array {
 		$languages = ['en'];
 		$option = trim((string)$this->getOption('comment-languages', ''));
 		if ($option === '') {
 			return $languages;
 		}
 		$wanted = $option === 'auto'
-			? array_column($this->findings, 'lang')
+			? $advice->languagesFor($this->translations, $this->findings)
 			: array_map('trim', explode(',', $option));
 		sort($wanted);
 
