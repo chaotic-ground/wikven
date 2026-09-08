@@ -23,12 +23,10 @@ on:
         type: string
         required: true
 
+# Only what every job here needs. What the build itself needs to publish is granted on that job
+# alone, now that it is not the only one in the workflow.
 permissions:
   contents: read
-  packages: write
-  # The OIDC token exchanged for a quay.io robot token below. ghcr takes GITHUB_TOKEN instead, so
-  # this is the only registry credential in the job, and it lasts an hour.
-  id-token: write
 
 # Cancel superseded runs; pushes to main (including release-please's workflow_call) are left alone.
 concurrency:
@@ -36,9 +34,49 @@ concurrency:
   cancel-in-progress: ${{ github.event_name != 'push' }}
 
 jobs:
+  # A change under docs/ cannot reach the image, so the build below is gated on there being one
+  # (#714). The job still runs and still reports: it is a required check, and one that never reports
+  # leaves a pull request unmergeable for good, which is why the pull_request trigger above carries
+  # no path filter. Same job, same reasoning and the same failing closed as test.yml's, which says
+  # it at length.
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      docs-only: ${{ steps.paths.outputs.docs-only }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - id: paths
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -uo pipefail
+          docs_only=false
+          if [ "$EVENT" = pull_request ]; then
+            files=$(git diff --name-only HEAD^1 HEAD)
+            if [ -n "$files" ] && ! printf '%s\n' "$files" | grep -qv '^docs/'; then
+              docs_only=true
+            fi
+            printf '%s\n' "$files" | sed 's/^/changed: /'
+          fi
+          echo "only docs/ changed: $docs_only"
+          echo "docs-only=$docs_only" >> "$GITHUB_OUTPUT"
+
   docker-image:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+      # The OIDC token exchanged for a quay.io robot token below. ghcr takes GITHUB_TOKEN instead,
+      # so this is the only registry credential in the job, and it lasts an hour.
+      id-token: write
+    needs: changes
+    # Runs whatever the job above concluded, including nothing: see it for why.
+    if: ${{ !cancelled() }}
     env:
       # Publishing is this repository, on main, with a tag to publish under: a fork, a pull request
       # and an untagged push to main all build the image and stop there. Every step below that logs
@@ -53,13 +91,16 @@ jobs:
       # identity. What it authenticates with is minted per run by the exchange step.
       QUAY_ROBOT: chaotic-ground+wikven_ci
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
 
-      - uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8  # v4.2.0
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8  # v4.2.0
 
-      - uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
 
       - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         if: env.PUBLISH == 'true'
@@ -99,6 +140,7 @@ jobs:
       # released version lives in .release-please-manifest.json, and the release build checks out the
       # very commit that bumps it.
       - name: Decide whether this build takes :latest
+        if: needs.changes.outputs.docs-only != 'true'
         env:
           TAG: ${{ inputs.tag }}
         run: |
@@ -117,6 +159,7 @@ jobs:
       # which GHCR does not link the published package back to this repository.
       - name: Compute image tags and labels
         id: meta
+        if: needs.changes.outputs.docs-only != 'true'
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302  # v6.2.0
         with:
           # Every tag rule below is multiplied across both images, so one build publishes both
@@ -138,6 +181,7 @@ jobs:
             type=raw,value=main,enable=${{ env.PUBLISH != 'true' }}
 
       - name: Build and push the image
+        if: needs.changes.outputs.docs-only != 'true'
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a  # v7.3.0
         with:
           context: .
