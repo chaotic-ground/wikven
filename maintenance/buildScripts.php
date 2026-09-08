@@ -33,6 +33,9 @@ class BuildScripts extends Maintenance {
 	 */
 	private const RUNTIME_MODULES = ['ext.tabberNeue.icons'];
 
+	/** The bundle's own module that carries what onDemand() holds back. Registered by its impl. */
+	private const ON_DEMAND_MODULE = 'ext.Wikven.onDemand';
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Dump the static JS bundle (startup + module closure) for the generated pages.');
@@ -71,15 +74,17 @@ class BuildScripts extends Maintenance {
 		// Same for the modules core decides on by looking at the rendered page rather than by
 		// queueing them, which is collapsibles and sortable tables. See LazyModules.
 		$seeds = array_merge($seeds, $this->collectLazyModules($htmlDir, $readyConfig));
-		// Same for Citizen's preferences panel, lazy-loaded when the dropdown is first opened. Unseeded
-		// it reports "Couldn't load preferences". Vue and its Codex components come along with it.
+		// Citizen's preferences panel is no seed: a wiki serves it once the dropdown opens, after all
+		// the page queued, and the bundle keeps it there (onDemand()). Unseeded it reports "Couldn't
+		// load preferences"; Vue and Codex come with it.
+		$onDemand = [];
 		$preferences = 'skins.citizen.preferences';
 		if (
 			$defaultSkin === 'citizen'
 			&& $config->get('CitizenEnablePreferences')
 			&& $rl->isModuleRegistered($preferences)
 		) {
-			$seeds[] = $preferences;
+			$onDemand[] = $preferences;
 		}
 		foreach (self::RUNTIME_MODULES as $runtimeModule) {
 			if ($rl->isModuleRegistered($runtimeModule)) {
@@ -95,7 +100,9 @@ class BuildScripts extends Maintenance {
 		file_put_contents("$outDir/startup-static.js", $startup, LOCK_EX);
 
 		// 4. Dump the closure in combined mode so every module self-executes.
-		$bundle = $this->dump($rl, $closure, $languageCode, $defaultSkin, null, []);
+		$bundle =
+			$this->dump($rl, $closure, $languageCode, $defaultSkin, null, [])
+			. $this->onDemand($rl, $onDemand, $closure, $languageCode, $defaultSkin);
 		file_put_contents("$outDir/modules-static.js", $bundle, LOCK_EX);
 
 		// Combined bundle embeds icon CSS pointing at load.php images. The bundle injects its CSS into
@@ -245,6 +252,45 @@ class BuildScripts extends Maintenance {
 		$resolved['jquery'] = true;
 		$resolved['mediawiki.base'] = true;
 		return array_keys($resolved);
+	}
+
+	/**
+	 * Modules a reader's own action loads, held back until the page's have run.
+	 *
+	 * Seeded like the rest they ran early, and ULS's later copy of Codex undid the radio spacing
+	 * Citizen's panel restates at equal specificity.
+	 *
+	 * @param ResourceLoader $rl
+	 * @param string[] $modules The modules to hold back.
+	 * @param string[] $closure The page's own closure, already dumped.
+	 * @param string $lang
+	 * @param string $skin
+	 * @return string JavaScript to append to the bundle; '' when nothing is left to hold back.
+	 */
+	private function onDemand(
+		ResourceLoader $rl,
+		array $modules,
+		array $closure,
+		string $lang,
+		string $skin
+	): string {
+		$later = array_values(array_diff($this->resolveClosure($rl, $modules, $lang, $skin), $closure));
+		if ($later === []) {
+			return '';
+		}
+		// mw.loader.using is mediawiki.base's, which has not run when the bundle does. A module of the
+		// bundle's own executes once the base modules have; its callback fires whether the page's
+		// modules ran or failed, as a wiki serves these either way.
+		return (
+			"\nmw.loader.impl(function(){return["
+			. json_encode(self::ON_DEMAND_MODULE)
+			. ',function(){var run=function(){'
+			. $this->dump($rl, $later, $lang, $skin, null, [])
+			. '};mw.loader.using('
+			. json_encode($closure)
+			. ',run,run);}];});'
+			. "\n"
+		);
 	}
 
 	private function dump(

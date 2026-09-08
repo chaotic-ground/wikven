@@ -301,3 +301,28 @@ test("without JavaScript the toolbox still lists the skins, lined up", async ({
 	);
 	await context.close();
 });
+
+test("Citizen's preferences panel keeps the spacing it asks for", async ({
+	page,
+}) => {
+	await page.goto(PAGE);
+	await page.locator("#citizen-preferences-details summary").click();
+
+	// The panel restates Codex's radio spacing at equal specificity, so the copy of Codex injected
+	// last decides. Bundled among the page's modules it ran before ULS's copy: every segment then
+	// fell 6px short of its track and the theme cards' labels sat off-centre. A wiki serves the
+	// panel after the page's modules, and the bundle holds it back the same way.
+	const segment = page
+		.locator(".citizen-preferences-segmented .cdx-radio")
+		.first();
+	await expect(segment).toBeVisible({ timeout: 15000 });
+	await expect(segment).toHaveCSS("margin-bottom", "0px");
+
+	// The theme cards, for as long as Citizen draws them as cards rather than v4's circles.
+	const card = page
+		.locator(".citizen-preferences-radio .cdx-radio__label")
+		.first();
+	if (await card.count()) {
+		await expect(card).toHaveCSS("padding-left", "0px");
+	}
+});
