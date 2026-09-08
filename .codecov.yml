@@ -5,17 +5,27 @@ fixes:
 
 comment: false
 
+# What PHPUnit cannot load, it cannot cover, and counting those lines only moves the number away
+# from what it is for: whether the code under test is tested.
 ignore:
+  # Including a maintenance script runs it -- the last line of every one is RUN_MAINTENANCE_IF_MAIN
+  # -- so a test that loaded one would build a site rather than assert anything. These are half the
+  # tree's lines and every one of them counted as a miss. tests/bake and the Playwright suite do run
+  # them, for real, and report no coverage; what belongs under a unit test is moved into a class in
+  # includes/ instead, which is where most of what these scripts once held has already gone.
+  - "maintenance"
   # A settings script, not library code: LocalSettings.php require_once's it and its first line calls
-  # wfLoadExtension(), so PHPUnit cannot include it and nothing it holds is ever covered. The same
-  # reason maintenance/ is left out of the patch target below.
+  # wfLoadExtension(), so PHPUnit cannot include it and nothing it holds is ever covered.
   - "includes/WikvenSettings.php"
 
 coverage:
   status:
-    # maintenance/ is half the tree's lines with no unit tests; its diffs can never meet a patch target.
+    # Now that the number counts only what tests can reach, it is worth holding: a change may not
+    # take the whole tree down by more than a point.
+    project:
+      default:
+        target: auto
+        threshold: 1%
     patch:
       default:
         target: 70%
-        paths:
-          - includes/
