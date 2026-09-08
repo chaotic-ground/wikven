@@ -40,7 +40,7 @@
 	"wikven-translations-documentation": "See [Translating]($1) for the whole workflow.",
 	"wikven-translations-documentation-url": "https://chaotic-ground.github.io/wikven/Translating.html",
 	"wikven-translations-all-clear": "`translate check` found nothing to report: every source page reads cleanly, and every translation of one is stamped current.",
-	"wikven-translations-all-clear-scoped": "`translate check` found nothing to report about this change: the pages it touches read cleanly, and their translations are stamped current.",
+	"wikven-translations-all-clear-scoped": "`translate check` found nothing to report about this change: the pages it touches read cleanly, and the translations it touches are stamped current.",
 	"wikven-licenses-intro": "Every page of this site carries software that is not its own: MediaWiki's scripts, and the styles and scripts of each skin and extension below. They are listed here with the licenses they are published under.",
 	"wikven-licenses-software": "What this build ran on, listed for reference; the site publishes none of it apart from MediaWiki's own scripts. A license is named where wikven is what handed you the component: MediaWiki, and the server a standalone binary carries.",
 	"wikven-footer-licenses": "Licenses"

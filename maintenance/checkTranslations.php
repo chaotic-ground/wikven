@@ -136,9 +136,8 @@ class CheckTranslations extends Maintenance {
 						continue;
 					}
 					$stale++;
-					// The source page is carried alongside because editing it is what puts a translation of it
-					// behind: a comment kept to one change counts such a finding as belonging to whoever moved
-					// the source.
+					// The source page is carried alongside so a comment kept to one change can tell which
+					// translations that change is answerable for.
 					$this->findings[] = [
 						'kind' => $unit['status'],
 						'file' => $reportFile,
