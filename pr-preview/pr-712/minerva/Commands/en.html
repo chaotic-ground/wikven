@@ -46,9 +46,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-06T06:38:11Z">
-<meta property="article:published_time" content="2026-09-06T06:38:11Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Commands - Wikven","headline":"Commands - Wikven","mainEntityOfPage":"Commands","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/en.html","description":"Every way of running Wikven \u2014 the Docker image, the standalone binary and the GitHub actions \u2014 drives the same build. This page is the reference for all three: what...","dateModified":"2026-09-06T06:38:11Z","datePublished":"2026-09-06T06:38:11Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-08T11:00:16Z">
+<meta property="article:published_time" content="2026-09-08T11:00:16Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Commands - Wikven","headline":"Commands - Wikven","mainEntityOfPage":"Commands","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/en.html","description":"Every way of running Wikven \u2014 the Docker image, the standalone binary and the GitHub actions \u2014 drives the same build. This page is the reference for all three: what...","dateModified":"2026-09-08T11:00:16Z","datePublished":"2026-09-08T11:00:16Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Commands_en rootpage-Commands_en skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -375,7 +375,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <div class="mw-heading mw-heading2"><h2 id="The_check-translations_action">The <code>check-translations</code> action</h2></div>
 <p>Runs <code>translate check</code> over a source tree and reports each finding as an annotation on the file it belongs to.
 </p>
-<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r101" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Annotations are for whoever is reading the diff. A contributor sending their first translation is better served by being told what to run, which <code>comment: true</code> does: one comment on the pull request, the findings grouped by what went wrong, each group naming the command that answers it. It is edited on each run rather than added to, and taken down once nothing is left to report -- a comment saying nothing is wrong is one nobody needs, and the annotations hold the record either way. That contributor is by definition working in another language, so the comment can speak it: <code>comment-languages: auto</code> writes it in English and in the language of the translation it is about, from wikven's own interface messages. The job needs <code>pull-requests: write</code>; a pull request from a fork carries a read-only token, and the comment is then skipped with a line in the log.</p></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r101" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>Annotations are for whoever is reading the diff. A contributor sending their first translation is better served by being told what to run, which <code>comment: true</code> does: one comment on the pull request, the findings grouped by what went wrong, each group naming the command that answers it. It is edited on each run rather than added to, and taken down once nothing is left to report -- a comment saying nothing is wrong is one nobody needs, and the annotations hold the record either way. That contributor is by definition working in another language, so the comment can speak it: <code>comment-languages: auto</code> writes it in English and in the language of any translation the pull request touches, from wikven's own interface messages. A change to an English page alone is answered in English alone, even where it left a translation behind: whoever made it is not assumed to read the translation's language. The job needs <code>pull-requests: write</code>; a pull request from a fork carries a read-only token, and the comment is then skipped with a line in the log.</p></div>
 </div>
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@v1.0.0</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
@@ -415,7 +415,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <tr>
 <td><code>comment-languages</code></td>
 <td>English only</td>
-<td>Languages that comment is also written in: <code>auto</code> for the languages the findings are about, or a list such as <code>ko,fr</code>.
+<td>Languages that comment is also written in: <code>auto</code> for the languages of the translations the pull request touches, or a list such as <code>ko,fr</code>.
 </td></tr>
 <tr>
 <td><code>github-token</code></td>
@@ -439,8 +439,8 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788676691">
-  				<span>Last edited on 6 September 2026, at 06:38</span>
+  				data-timestamp="1788865216">
+  				<span>Last edited on 8 September 2026, at 11:00</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -463,7 +463,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 6 September 2026, at 06:38.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 8 September 2026, at 11:00.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
