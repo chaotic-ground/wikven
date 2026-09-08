@@ -39,7 +39,7 @@ Two things about that layout are worth knowing before you point a host at it. Li
 
 <translate>
 <!--T:3-->
-This workflow rebuilds and publishes the site on every push. It bakes the source with the {{SITENAME}} [<tvar name="1">https://github.com/chaotic-ground/wikven/tree/main/actions/bake</tvar> composite action], then uploads <code>dist/</code> to Pages.
+This workflow rebuilds and publishes the site on every push. It bakes the source with the {{SITENAME}} [<tvar name="1">https://github.com/chaotic-ground/wikven/blob/main/actions/bake/action.yml</tvar> composite action], then uploads <code>dist/</code> to Pages.
 </translate>
 
 {{#tag:syntaxhighlight|
@@ -152,7 +152,7 @@ Any static server works too, for example <code>cd dist && python3 -m http.server
 Each page's "last edited" line names the commit that last changed '''that page's source file''', and credits that commit's author. The wiki a build fills has no history of its own — every page is written in one import pass — so the repository's history is where those two facts come from.
 
 <!--T:18-->
-That history has to be reachable. The [[<tvar name="1">Special:MyLanguage/Commands#bake</tvar>|bake action]] reads it on the runner and hands it to the build, but a '''shallow checkout knows only the last commit''', which is why the workflow above checks out with <code>fetch-depth: 0</code>. Without the full history nothing fails: every page is simply dated at the commit being built and credited to nobody. The action says so in the log when it happens, and that line is the only warning you get.
+That history has to be reachable. The [<tvar name="1">https://github.com/chaotic-ground/wikven/blob/main/actions/bake/action.yml</tvar> bake action] reads it on the runner and hands it to the build, but a '''shallow checkout knows only the last commit''', which is why the workflow above checks out with <code>fetch-depth: 0</code>. Without the full history nothing fails: every page is simply dated at the commit being built and credited to nobody. The action says so in the log when it happens, and that line is the only warning you get.
 
 <!--T:19-->
 The rest follows from the same idea. A build runs with its clock frozen at <code>SOURCE_DATE_EPOCH</code> — the commit's own date, when the action sets it — so two builds of one commit produce '''byte-identical''' output, down to the timestamps in the pages. It means a redeploy of unchanged content changes nothing on the host, and a diff between two builds only ever shows what you actually edited. {{SITENAME}}'s own continuous integration asserts it by baking this site twice and comparing the results.
