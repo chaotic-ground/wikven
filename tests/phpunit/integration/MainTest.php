@@ -327,6 +327,9 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	 * page for. The query says which page and which language, and that is a file on the edit host.
 	 */
 	public function testATranslateLinkGoesToTheTranslationsOwnSourceFile() {
+		// Special:Translate is Translate's page: with the extension absent there is no such special
+		// page for a title to be, and nothing here to answer for.
+		$this->markTestSkippedIfExtensionNotLoaded('Translate');
 		$this->overrideConfigValue('WikvenEditUrl', 'https://example.org/edit/$1');
 
 		$url = '/index.php/Special:Translate';
@@ -346,6 +349,7 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideTranslateQueriesThatNameNoFile
 	 */
 	public function testATranslateLinkNamingNoFileIsNotRewritten(string $query) {
+		$this->markTestSkippedIfExtensionNotLoaded('Translate');
 		$this->overrideConfigValue('WikvenEditUrl', 'https://example.org/edit/$1');
 
 		$url = '/index.php/Special:Translate';
