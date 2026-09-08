@@ -23,6 +23,14 @@ inputs:
       "false" to always pull fresh. Takes "true" or "false" and refuses
       anything else, rather than reading it as "false" and going quiet.
     default: "true"
+  fetch-cache:
+    description: >-
+      Keep the extensions and skins WikvenRepositories pins between runs, so a
+      bake fetches them from their hosts once rather than on every push. Keyed
+      on the site's wikven configuration file, which is where the pins are, and
+      a tree is used only where it still answers the pin it was fetched for.
+      Takes "true" or "false" and refuses anything else.
+    default: "true"
   source-date-epoch:
     description: >-
       Unix time the built site should claim its content was last written, as
@@ -48,12 +56,38 @@ runs:
       with:
         path: ~/.cache/wikven/image.tar
         key: wikven-image-${{ inputs.image }}
+    # The key is the pins: the configuration file WikvenRepositories is written in. A tree fetched
+    # for another site's pins is not this site's to reuse, and one whose pin moved is refetched by
+    # the bake itself, so the worst a wrong key does is fetch what it already had.
+    - id: fetch-cache-key
+      if: inputs.fetch-cache == 'true'
+      shell: bash
+      env:
+        SOURCE: ${{ inputs.source }}
+      run: |
+        # The names wikven accepts for a site's configuration file, in its own precedence order.
+        for name in .wikven.yaml .wikven.yml .wikven.json wikven.yaml wikven.yml wikven.json; do
+          if [ -f "$SOURCE/$name" ]; then
+            printf 'key=wikven-fetch-%s\n' "$(sha256sum < "$SOURCE/$name" | cut -c1-32)" \
+              >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+        done
+        # No configuration file is no WikvenRepositories: nothing is fetched, so nothing is kept.
+        echo "key=" >> "$GITHUB_OUTPUT"
+    - if: inputs.fetch-cache == 'true' && steps.fetch-cache-key.outputs.key != ''
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+      with:
+        path: ~/.cache/wikven/fetch
+        key: ${{ steps.fetch-cache-key.outputs.key }}
     - shell: bash
       env:
         SOURCE: ${{ inputs.source }}
         OUTPUT: ${{ inputs.output }}
         IMAGE: ${{ inputs.image }}
         CACHE: ${{ inputs.cache }}
+        FETCH_CACHE: ${{ inputs.fetch-cache }}
+        FETCH_KEY: ${{ steps.fetch-cache-key.outputs.key }}
         SOURCE_DATE_EPOCH_IN: ${{ inputs.source-date-epoch }}
         JOBS: ${{ inputs.jobs }}
       run: |
@@ -71,6 +105,7 @@ runs:
           esac
         }
         require_boolean cache "$CACHE"
+        require_boolean fetch-cache "$FETCH_CACHE"
         # The same shape the build accepts, so a value it would drop back from is refused here
         # instead: WIKVEN_BUILD_JOBS reads /^[1-9]\d*$/ on a trimmed value and silently counts
         # processors otherwise, which would leave "0" or "007" looking like it had been taken.
@@ -108,6 +143,15 @@ runs:
         if [ -n "$JOBS" ]; then
           jobs=(-e "WIKVEN_BUILD_JOBS=$JOBS")
         fi
+        # Mounted only where there is a key to cache it under, so a site with nothing pinned gets
+        # no directory it never fills. The bake decides for itself whether what is in there still
+        # answers the pins; a stale or half-written tree is refetched, not built from.
+        fetch=()
+        if [ "$FETCH_CACHE" = "true" ] && [ -n "$FETCH_KEY" ]; then
+          dir="$HOME/.cache/wikven/fetch"
+          mkdir -p "$dir"
+          fetch=(-v "$dir:/workspace/fetch" -e WIKVEN_FETCH_DIR=/workspace/fetch)
+        fi
         # Each page is dated at the commit that last touched its source file, and credited to that
         # commit's author. Only this side can see the history -- the container is given the source
         # directory alone, with no .git beside it -- so dump the log for it here. Paths come out
@@ -134,5 +178,6 @@ runs:
           -v "$PWD/$OUTPUT:/workspace/dist" \
           "${epoch[@]}" \
           "${jobs[@]}" \
+          "${fetch[@]}" \
           "${history[@]}" \
           "$IMAGE"

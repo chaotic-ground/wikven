@@ -1,0 +1,12 @@
+---
+# Findings whose answer is somewhere this file can hold it, rather than in a comment on the line.
+rules:
+  cache-poisoning:
+    ignore:
+      # smoke.yml keeps the extension and skin trees a bake fetches, so this repository stops
+      # asking four other people's hosts for the same immutable tags on every push (#716). The
+      # audit reads a cache beside a docker build as something a release could be built from: this
+      # job publishes nothing -- the image is loaded, not pushed -- and a cache written on a pull
+      # request's ref is not one a run on main can read, so an entry a fork writes reaches its own
+      # bake and nothing else. Named by file rather than by line, which the next edit moves.
+      - smoke.yml

@@ -52,6 +52,7 @@ class FetchExtensions extends Maintenance {
 		$IP = $GLOBALS['IP'];
 
 		$config = $this->loadConfig($IP);
+		$cache = $this->fetchCache();
 
 		$repos = $config['config']['WikvenRepositories'] ?? [];
 		if (!is_array($repos) || $repos === []) {
@@ -100,9 +101,11 @@ class FetchExtensions extends Maintenance {
 				continue;
 			}
 
-			$dest = "$baseDir/$name";
+			$loaded = "$baseDir/$name";
+			$dest = $this->destination($cache, $baseDir, $name);
 			$pin = FetchPin::of($spec);
 			if (is_dir($dest) && !$this->isStale($spec, $dest, $pin, $name, $kind)) {
+				$this->place($dest, $loaded);
 				continue;
 			}
 
@@ -125,10 +128,71 @@ class FetchExtensions extends Maintenance {
 			if (!FetchPin::stamp($dest, $pin, $commit)) {
 				$this->fatalError("Wikven: could not record what $kind '$name' was fetched from.");
 			}
+
+			$this->place($dest, $loaded);
 		}
 
 		if ($packages !== []) {
 			$this->installPackages($IP, $packages, $asked);
+		}
+	}
+
+	/**
+	 * Where fetched trees are kept, or null to keep them where MediaWiki loads them from.
+	 *
+	 * WIKVEN_FETCH_DIR names a directory that outlives the container, so the next bake need not
+	 * fetch what this one did (#716).
+	 */
+	private function fetchCache(): ?string {
+		$dir = rtrim((string)getenv('WIKVEN_FETCH_DIR'), '/');
+		if ($dir === '') {
+			return null;
+		}
+		// Core's, which honours $wgDirectoryMode and re-checks after losing a race to another build.
+		if (!wfMkdirParents($dir, null, __METHOD__)) {
+			$this->fatalError("Wikven: WIKVEN_FETCH_DIR '$dir' is not a directory and could not be made one.");
+		}
+		$this->output("Wikven: keeping fetched extensions and skins in $dir\n");
+		return $dir;
+	}
+
+	/**
+	 * Where to fetch a component into: the cache, under the directory it is loaded from, or in it.
+	 *
+	 * @param ?string $cache WIKVEN_FETCH_DIR, or null where there is none.
+	 * @param string $baseDir The extensions or skins directory MediaWiki loads the component from.
+	 * @param string $name The component's name.
+	 */
+	private function destination(?string $cache, string $baseDir, string $name): string {
+		$loaded = "$baseDir/$name";
+		// A tree wikven did not fetch -- one the image ships, or one somebody put there -- is left
+		// where it is rather than fetched over into the cache, which is isStale()'s rule for it.
+		if ($cache === null || ( is_dir($loaded) && !is_link($loaded) && FetchPin::inside($loaded) === null )) {
+			return $loaded;
+		}
+		$under = $cache . '/' . basename($baseDir);
+		if (!wfMkdirParents($under, null, __METHOD__)) {
+			$this->fatalError("Wikven: could not make $under to fetch '$name' into.");
+		}
+		return "$under/$name";
+	}
+
+	/**
+	 * Make the place MediaWiki loads a component from lead to the tree fetched for it.
+	 *
+	 * A symlink, because MediaWiki works out an extension's own URLs from where it sits under $IP.
+	 */
+	private function place(string $dest, string $loaded): void {
+		if ($dest === $loaded) {
+			return;
+		}
+		if (is_link($loaded)) {
+			unlink($loaded);
+		} elseif (is_dir($loaded)) {
+			self::removeTree($loaded);
+		}
+		if (!symlink($dest, $loaded)) {
+			$this->fatalError("Wikven: could not link $loaded to the tree fetched into $dest.");
 		}
 	}
 
