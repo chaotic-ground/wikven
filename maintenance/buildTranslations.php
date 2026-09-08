@@ -37,6 +37,13 @@ require_once "$IP/maintenance/Maintenance.php";
  * display title" unit.
  */
 class BuildTranslations extends Maintenance {
+	/**
+	 * Translate's per-group statistics rebuild, which this script takes off the queue without
+	 * running: it recomputes for every language the numbers render() computes once every unit is in
+	 * place, and running it was a quarter of this phase.
+	 */
+	private const STATS_JOB = 'RebuildMessageGroupStatsJob';
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Mark translatable pages and load their translations from source files.');
@@ -243,7 +250,11 @@ class BuildTranslations extends Maintenance {
 			foreach ($types as $type) {
 				$job = $group->pop($type);
 				while ($job) {
-					$job->run();
+					// Acked whether or not it ran: a stats job left on the queue is one the build's own
+					// runJobs phase would pick up later, which is the work this is declining to do.
+					if ($type !== self::STATS_JOB) {
+						$job->run();
+					}
 					$group->ack($job);
 					$job = $group->pop($type);
 				}
