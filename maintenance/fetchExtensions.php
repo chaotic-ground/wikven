@@ -105,7 +105,7 @@ class FetchExtensions extends Maintenance {
 			$dest = $this->destination($cache, $baseDir, $name);
 			$pin = FetchPin::of($spec);
 			if (is_dir($dest) && !$this->isStale($spec, $dest, $pin, $name, $kind)) {
-				$this->place($dest, $loaded);
+				$this->place($dest, $loaded, $name, $kind);
 				continue;
 			}
 
@@ -129,7 +129,7 @@ class FetchExtensions extends Maintenance {
 				$this->fatalError("Wikven: could not record what $kind '$name' was fetched from.");
 			}
 
-			$this->place($dest, $loaded);
+			$this->place($dest, $loaded, $name, $kind);
 		}
 
 		if ($packages !== []) {
@@ -165,9 +165,12 @@ class FetchExtensions extends Maintenance {
 	 */
 	private function destination(?string $cache, string $baseDir, string $name): string {
 		$loaded = "$baseDir/$name";
+		if ($cache === null) {
+			return $loaded;
+		}
 		// A tree wikven did not fetch -- one the image ships, or one somebody put there -- is left
 		// where it is rather than fetched over into the cache, which is isStale()'s rule for it.
-		if ($cache === null || ( is_dir($loaded) && !is_link($loaded) && FetchPin::inside($loaded) === null )) {
+		if (is_dir($loaded) && !is_link($loaded) && FetchPin::inside($loaded) === null) {
 			return $loaded;
 		}
 		$under = $cache . '/' . basename($baseDir);
@@ -178,22 +181,24 @@ class FetchExtensions extends Maintenance {
 	}
 
 	/**
-	 * Make the place MediaWiki loads a component from lead to the tree fetched for it.
+	 * Copy the fetched tree to where MediaWiki loads the component from.
 	 *
-	 * A symlink, because MediaWiki works out an extension's own URLs from where it sits under $IP.
+	 * Copied, not linked: through a symlink one file answers to two paths, and less.php imported
+	 * Citizen's tokens under both and wrote them twice. #411's check is what noticed.
 	 */
-	private function place(string $dest, string $loaded): void {
+	private function place(string $dest, string $loaded, string $name, string $kind): void {
 		if ($dest === $loaded) {
 			return;
 		}
 		if (is_link($loaded)) {
+			// Before removeTree(), which would follow it into the cache and empty that instead.
 			unlink($loaded);
-		} elseif (is_dir($loaded)) {
-			self::removeTree($loaded);
 		}
-		if (!symlink($dest, $loaded)) {
-			$this->fatalError("Wikven: could not link $loaded to the tree fetched into $dest.");
+		self::removeTree($loaded);
+		if (!wfMkdirParents($loaded, null, __METHOD__)) {
+			$this->fatalError("Wikven: could not make $loaded to copy $kind '$name' into.");
 		}
+		$this->run(['cp', '-a', '--', "$dest/.", $loaded], "copy $kind '$name' into place");
 	}
 
 	/** Merge default.yml + site config like WikvenSettings.php, so fetches match the load. */
