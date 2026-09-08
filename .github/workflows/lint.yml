@@ -203,12 +203,13 @@ jobs:
           done
           exit "$status"
 
-      # The MediaWiki this is built on is named in half a dozen places -- the two CI matrices,
-      # updatecli's extension branches, the branch-protection ruleset, extension.json's floor, and
-      # the pages that tell an author what they are writing against -- and a bump that reaches only
-      # some of them is silent: the image carries a release CI never tests, or the promise and the
-      # docs describe a version nobody ships. The Dockerfile's tag decides what a site actually
-      # runs, so it is what the rest is checked against.
+      # The MediaWiki this is built on is named in several places -- the two CI matrices,
+      # updatecli's extension branches, the branch-protection ruleset and extension.json's floor --
+      # and a bump that reaches only some of them is silent: the image carries a release CI never
+      # tests, or the promise describes a version nobody ships. The Dockerfile's tag decides what a
+      # site actually runs, so it is what the rest is checked against. The docs are not in the list:
+      # they name no release, asking {{CURRENTVERSION}} for the one a build carries and linking
+      # extension.json for the oldest it supports.
       - name: Check every file agrees on which MediaWiki this is
         run: |
           set -euo pipefail
@@ -240,15 +241,6 @@ jobs:
             status=1
           fi
 
-          # The page that tells an extension author what they are writing against. The installation
-          # page says which MediaWiki a build carries too, but it asks {{CURRENTVERSION}} for it,
-          # and a page that reads the answer off the build cannot fall behind one.
-          page="docs/Writing an extension.wikitext"
-          if ! grep -qF "$version" "$page"; then
-            echo "::error file=$page::this page says which MediaWiki {{SITENAME}} runs on and no" \
-                 "longer names $version."
-            status=1
-          fi
           exit "$status"
 
       # Every maintenance script is a build step, and the pipeline is described in
