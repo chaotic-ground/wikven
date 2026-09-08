@@ -75,4 +75,19 @@ class HtmlElementRemoverTest extends MediaWikiUnitTestCase {
 		$html = '<body><div class="other">x</div></body>';
 		$this->assertSame($html, HtmlElementRemover::remove($html, $this->byId()));
 	}
+
+	/**
+	 * A matched void or self-closed element ends where its own tag does. Opening a span at one and
+	 * waiting for an end tag that never comes would swallow the rest of the document.
+	 */
+	public function testAMatchedVoidElementIsRemovedOnItsOwn() {
+		$this->assertSame(
+			'<body><p>keep</p></body>',
+			HtmlElementRemover::remove('<body><input id="removable" type="search"><p>keep</p></body>', $this->byId())
+		);
+		$this->assertSame(
+			'<body><p>keep</p></body>',
+			HtmlElementRemover::remove('<body><svg id="removable"/><p>keep</p></body>', $this->byId())
+		);
+	}
 }
