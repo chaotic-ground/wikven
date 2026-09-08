@@ -15,7 +15,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta name="robots" content="max-image-preview:standard">
 <meta name="format-detection" content="telephone=no">
 <meta name="google-site-verification" content="2rzhjoB0M6oJLKFCyvqcW6_SGAkxpf7o4RIWOGfpfPY">
-<meta name="description" content="Wikven을 실행하는 모든 방법 — Docker 이미지, 단독 실행 바이너리, GitHub 액션 — 은 같은 빌드를 구동합니다. 이 문서는 그 셋 모두에 대한 참고서입니다. 무엇을 실행할 수 있고, 무엇을 전달할 수 있으며, 환경에서 무엇을 읽는지를 다룹니다.">
+<meta name="description" content="Docker 이미지와 단독 실행 바이너리는 같은 빌드를 구동합니다. 이 문서는 그 둘 모두에 대한 참고서입니다. 무엇을 실행할 수 있고, 무엇을 전달할 수 있으며, 환경에서 무엇을 읽는지를 다룹니다.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%23157f93%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E">
@@ -35,13 +35,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:title" content="Commands/ko">
 <meta property="og:site_name" content="Wikven">
 <meta property="og:url" content="https://chaotic-ground.github.io/wikven/Commands/ko.html">
-<meta property="og:description" content="Wikven을 실행하는 모든 방법 — Docker 이미지, 단독 실행 바이너리, GitHub 액션 — 은 같은 빌드를 구동합니다. 이 문서는 그 셋 모두에 대한 참고서입니다. 무엇을 실행할 수 있고, 무엇을 전달할 수 있으며, 환경에서 무엇을 읽는지를 다룹니다.">
+<meta property="og:description" content="Docker 이미지와 단독 실행 바이너리는 같은 빌드를 구동합니다. 이 문서는 그 둘 모두에 대한 참고서입니다. 무엇을 실행할 수 있고, 무엇을 전달할 수 있으며, 환경에서 무엇을 읽는지를 다룹니다.">
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-08T11:00:16Z">
-<meta property="article:published_time" content="2026-09-08T11:00:16Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\uba85\ub839\uc5b4 - Wikven","headline":"\uba85\ub839\uc5b4 - Wikven","mainEntityOfPage":"\uba85\ub839\uc5b4","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/ko.html","description":"Wikven\uc744 \uc2e4\ud589\ud558\ub294 \ubaa8\ub4e0 \ubc29\ubc95 \u2014 Docker \uc774\ubbf8\uc9c0, \ub2e8\ub3c5 \uc2e4\ud589 \ubc14\uc774\ub108\ub9ac, GitHub \uc561\uc158 \u2014 \uc740 \uac19\uc740 \ube4c\ub4dc\ub97c \uad6c\ub3d9\ud569\ub2c8\ub2e4. \uc774 \ubb38\uc11c\ub294 \uadf8 \uc14b \ubaa8\ub450\uc5d0 \ub300\ud55c \ucc38\uace0\uc11c\uc785\ub2c8\ub2e4. \ubb34\uc5c7\uc744 \uc2e4\ud589\ud560 \uc218 \uc788\uace0, \ubb34\uc5c7\uc744 \uc804\ub2ec\ud560 \uc218 \uc788\uc73c\uba70, \ud658\uacbd\uc5d0\uc11c \ubb34\uc5c7\uc744 \uc77d\ub294\uc9c0\ub97c \ub2e4\ub8f9\ub2c8\ub2e4.","dateModified":"2026-09-08T11:00:16Z","datePublished":"2026-09-08T11:00:16Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-08T12:13:02Z">
+<meta property="article:published_time" content="2026-09-08T12:13:02Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"\uba85\ub839\uc5b4 - Wikven","headline":"\uba85\ub839\uc5b4 - Wikven","mainEntityOfPage":"\uba85\ub839\uc5b4","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/ko.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Commands\/ko.html","description":"Docker \uc774\ubbf8\uc9c0\uc640 \ub2e8\ub3c5 \uc2e4\ud589 \ubc14\uc774\ub108\ub9ac\ub294 \uac19\uc740 \ube4c\ub4dc\ub97c \uad6c\ub3d9\ud569\ub2c8\ub2e4. \uc774 \ubb38\uc11c\ub294 \uadf8 \ub458 \ubaa8\ub450\uc5d0 \ub300\ud55c \ucc38\uace0\uc11c\uc785\ub2c8\ub2e4. \ubb34\uc5c7\uc744 \uc2e4\ud589\ud560 \uc218 \uc788\uace0, \ubb34\uc5c7\uc744 \uc804\ub2ec\ud560 \uc218 \uc788\uc73c\uba70, \ud658\uacbd\uc5d0\uc11c \ubb34\uc5c7\uc744 \uc77d\ub294\uc9c0\ub97c \ub2e4\ub8f9\ub2c8\ub2e4.","dateModified":"2026-09-08T12:13:02Z","datePublished":"2026-09-08T12:13:02Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Commands_ko rootpage-Commands_ko skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">본문으로 이동</a>
@@ -351,28 +351,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<ul id="toc-환경_변수-sublist" class="vector-toc-list">
 		</ul>
 	</li>
-	<li id="toc-bake_액션"
+	<li id="toc-GitHub_Actions"
 		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
-		<a class="vector-toc-link" href="#bake_액션">
+		<a class="vector-toc-link" href="#GitHub_Actions">
 			<div class="vector-toc-text">
 				<span class="vector-toc-numb">6</span>
-				<span>bake 액션</span>
+				<span>GitHub Actions</span>
 			</div>
 		</a>
 		
-		<ul id="toc-bake_액션-sublist" class="vector-toc-list">
-		</ul>
-	</li>
-	<li id="toc-check-translations_액션"
-		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
-		<a class="vector-toc-link" href="#check-translations_액션">
-			<div class="vector-toc-text">
-				<span class="vector-toc-numb">7</span>
-				<span>check-translations 액션</span>
-			</div>
-		</a>
-		
-		<ul id="toc-check-translations_액션-sublist" class="vector-toc-list">
+		<ul id="toc-GitHub_Actions-sublist" class="vector-toc-list">
 		</ul>
 	</li>
 </ul>
@@ -584,7 +572,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Commands.html" title="Commands">Commands</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Commands/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><meta property="mw:PageProp/toc" />
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Commands.html" class="mw-pt-progress mw-pt-progress--complete" title="Commands (100% 번역함)" lang="en" dir="ltr">English</a></li>
 <li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
-<p>Wikven을 실행하는 모든 방법 — <a href="../Installation/ko.html#Docker" title="Special:MyLanguage/Installation">Docker 이미지</a>, <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>, GitHub 액션 — 은 같은 빌드를 구동합니다. 이 문서는 그 셋 모두에 대한 참고서입니다. 무엇을 실행할 수 있고, 무엇을 전달할 수 있으며, 환경에서 무엇을 읽는지를 다룹니다.
+<p><a href="../Installation/ko.html#Docker" title="Special:MyLanguage/Installation">Docker 이미지</a>와 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a>는 같은 빌드를 구동합니다. 이 문서는 그 둘 모두에 대한 참고서입니다. 무엇을 실행할 수 있고, 무엇을 전달할 수 있으며, 환경에서 무엇을 읽는지를 다룹니다.
 </p><p><span id="The&#95;working&#95;directory"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="작업_디렉터리"><span id=".EC.9E.91.EC.97.85_.EB.94.94.EB.A0.89.ED.84.B0.EB.A6.AC"></span>작업 디렉터리</h2></div>
@@ -681,112 +669,15 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 <dl><dt><code>WIKVEN_WORKDIR</code></dt>
 <dd>위에서 설명한 작업 디렉터리. 이미지에서는 <code>/workspace</code>, 바이너리에서는 현재 디렉터리가 기본값입니다.</dd>
 <dt><code>SOURCE_DATE_EPOCH</code></dt>
-<dd>빌드가 자기 내용이 쓰였다고 밝힐 유닉스 시각으로, <a rel="nofollow" class="external text" href="https://reproducible-builds.org/docs/source-date-epoch/">reproducible-builds 관례</a>를 따릅니다. 빌드는 시계를 그 값에 얼린 채 실행되므로 출력의 모든 시각이 일정합니다. 설정하지 않으면 고정된 날짜를 씁니다. 매번 움직이는 날짜보다 틀렸더라도 움직이지 않는 쪽이 감당하기 쉽기 때문입니다. <a href="../Commands/ko.html#bake" title="Special:MyLanguage/Commands">bake 액션</a>은 빌드 중인 커밋의 시각으로 설정합니다.</dd>
+<dd>빌드가 자기 내용이 쓰였다고 밝힐 유닉스 시각으로, <a rel="nofollow" class="external text" href="https://reproducible-builds.org/docs/source-date-epoch/">reproducible-builds 관례</a>를 따릅니다. 빌드는 시계를 그 값에 얼린 채 실행되므로 출력의 모든 시각이 일정합니다. 설정하지 않으면 고정된 날짜를 씁니다. 매번 움직이는 날짜보다 틀렸더라도 움직이지 않는 쪽이 감당하기 쉽기 때문입니다. <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/actions/bake/action.yml">bake 액션</a>은 빌드 중인 커밋의 시각으로 설정합니다.</dd>
 <dt><code>WIKVEN_BUILD_JOBS</code></dt>
 <dd>스킨 렌더링을 몇 개까지 나란히 돌릴지. 설정하지 않으면 쓸 수 있는 프로세서 하나당 하나씩 쓰는데, 호스트가 아니라 컨테이너에 허용된 몫을 따릅니다. 나란히 돌릴 렌더링이 있는 것은 <a href="../Skins/ko.html#building-more-than-one-skin" title="Special:MyLanguage/Skins">스킨을 둘 이상으로 빌드한</a> 사이트뿐입니다. 메모리가 부족한 기계이거나 로그를 순서대로 보고 싶다면 <code>1</code>로 두어 빌드를 차례대로 진행시키십시오.</dd></dl>
 <p>셋이 더 있는데, 모두 손으로 설정해서 쓸 일은 없습니다. 그중 둘은 빌드가 스킨 하나의 렌더링을 실행하려고 스스로에게 설정하는 것들입니다. <code>WIKVEN_BUILD_SKIN</code>은 그 스킨의 이름이고, <code>WIKVEN_BUILD_DB_DIR</code>은 그 렌더링이 쓸 데이터베이스 사본의 위치입니다. 렌더링들이 나란히 돌아가는데 SQLite는 한 번에 하나만 쓸 수 있기 때문입니다. <code>WIKVEN_BUILD_DB_DIR</code>은 <code>WIKVEN_BUILD_SKIN</code>이 설정되어 있을 때만 읽히고, 그 <code>WIKVEN_BUILD_SKIN</code>을 손으로 설정하면 빌드가 아무것도 채워지지 않은 위키를 렌더링하는 과정이 되어 빈 사이트를 씁니다. 나머지 하나는 <code>WIKVEN_RUNTIME</code>으로, 독립 실행 바이너리가 자신이 실행하는 모든 명령에 설정합니다. 바이너리가 무엇으로 컴파일되었는지를 담으며, 빌드는 그것을 자신이 쓰는 라이선스 문서에 올립니다.
-</p><p><span id="bake"></span>
+</p><p><span id="github-actions"></span>
 </p>
-<div class="mw-heading mw-heading2"><h2 id="bake_액션"><span id="bake_.EC.95.A1.EC.85.98"></span><code>bake</code> 액션</h2></div>
-<p>GitHub Actions 러너에서 Docker 이미지로 소스 트리를 굽습니다. 완전한 워크플로는 <a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a>를 참고하십시오.
+<div class="mw-heading mw-heading2"><h2 id="GitHub_Actions">GitHub Actions</h2></div>
+<p>복합 액션 둘이 GitHub Actions 러너에서 이미지를 실행하므로, 워크플로에 <code>docker</code> 명령을 직접 적을 일이 없습니다. <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/actions/bake/action.yml">bake 액션</a>은 소스 트리를 굽는데, 워크플로에서 사이트를 게시하는 방법이 그것입니다. 완전한 워크플로는 <a href="../Deploying/ko.html" title="Special:MyLanguage/Deploying">배포하기</a>에 있습니다. <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/actions/check-translations/action.yml">check-translations 액션</a>은 풀 리퀘스트에서 <code>translate check</code>를 실행해 발견한 것을 보고하며, <a href="../Translating/ko.html" title="Special:MyLanguage/Translating">번역하기</a>가 그것을 설명합니다. 각 액션이 받는 입력과 기본값은 액션 자신의 <code>action.yml</code>에 설명되어 있으며, 위 링크가 그 파일을 엽니다.
 </p>
-<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r101" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>두 액션 모두 태그로 고정하며, <code>@v1.0.0</code>이 현재 릴리스입니다. <code>image</code>를 지정하지 않는 것만으로 충분합니다. 그러면 액션은 자신이 잘려 나온 릴리스의 이미지, 곧 짝이 되는 <code>:1.0.0</code>를 실행합니다. 깃 태그에는 <code>v</code>가 붙고 이미지 태그에는 붙지 않으며, 그래서 둘이 어긋날 수가 없습니다. 릴리스 전의 변경을 미리 써 보려면 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/releases">릴리스 페이지</a>에서 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 사전 릴리스를 고르고, 이미지도 같은 나이틀리로 함께 지정하십시오.</p></div>
-</div>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/bake@v1.0.0</span>
-<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
-<span class="w">    </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dist</span>
-</pre></div>
-<table class="wikitable">
-<tbody><tr>
-<th>입력</th>
-<th>기본값</th>
-<th>하는 일
-</th></tr>
-<tr>
-<td><code>source</code></td>
-<td><code>src</code></td>
-<td>구울 위키 소스가 담긴 디렉터리.
-</td></tr>
-<tr>
-<td><code>output</code></td>
-<td><code>dist</code></td>
-<td>정적 사이트를 쓸 디렉터리.
-</td></tr>
-<tr>
-<td><code>image</code></td>
-<td>액션이 잘려 나온 릴리스</td>
-<td>실행할 이미지. 다른 태그로 고정하려면 덮어쓰십시오.
-</td></tr>
-<tr>
-<td><code>cache</code></td>
-<td><code>true</code></td>
-<td>이미지 참조를 키로 삼아 받아 온 이미지를 실행 사이에 캐시합니다. 항상 새로 받으려면 <code>false</code>로 두십시오.
-</td></tr>
-<tr>
-<td><code>source-date-epoch</code></td>
-<td><code>HEAD</code>의 커밋 시각</td>
-<td>굽기에 쓸 <code>SOURCE_DATE_EPOCH</code>. 한 커밋을 몇 번 구워도 문서 날짜가 같아집니다.
-</td></tr>
-<tr>
-<td><code>jobs</code></td>
-<td>프로세서당 하나</td>
-<td>굽기에 쓸 <code>WIKVEN_BUILD_JOBS</code>. 스킨 렌더링을 몇 개까지 나란히 돌릴지를 정합니다. 메모리가 모자란 러너에서는 <code>1</code>로 한 번에 하나씩 렌더링합니다.
-</td></tr></tbody></table>
-<p><code>true</code>나 <code>false</code>를 받는 입력은 — 여기서는 <code>cache</code>, 아래 다른 액션에서는 <code>gate</code>와 <code>comment</code> — 그 둘 말고는 받지 않습니다. 예전에는 둘 중 어느 것도 아닌 값이 <code>false</code>로 읽혔습니다. 그래서 <code>setup-node</code>와 <code>setup-python</code>이 값으로 캐시할 대상을 받는 철자대로 <code>cache: npm</code>이라고 쓰면, 아무 말 없이 캐시가 꺼졌습니다. 이제는 두 액션 모두 멈춰 서서 어느 입력인지 알려 줍니다.
-</p><p>액션은 소스 트리의 <code>git log</code>를 덤프해 빌드에 넘기기도 합니다. 각 문서가 그것을 마지막으로 바꾼 커밋의 날짜를 갖는 것이 그 덕분입니다. 그러려면 전체 역사가 필요하므로 <code>fetch-depth: 0</code>으로 체크아웃하십시오. 그러지 않으면 모든 문서가 빌드 중인 커밋의 날짜를 갖게 됩니다. 그런 일이 생기면 액션이 로그에 그렇게 적습니다.
-</p><p><span id="check-translations"></span>
-</p>
-<div class="mw-heading mw-heading2"><h2 id="check-translations_액션"><span id="check-translations_.EC.95.A1.EC.85.98"></span><code>check-translations</code> 액션</h2></div>
-<p>소스 트리에 <code>translate check</code>를 실행하고, 발견한 것마다 해당 파일에 주석으로 보고합니다.
-</p>
-<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r101" /><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x" /></a></span></div><div class="wikven-note-text"><p>주석(annotation)은 변경사항을 읽는 사람을 위한 것입니다. 처음으로 번역을 보내는 기여자에게는 무엇을 실행해야 하는지 알려 주는 편이 낫고, <code>comment: true</code>가 그 일을 합니다. 풀 리퀘스트에 코멘트 하나를 남기고, 발견한 것을 문제 종류별로 묶어 각각 어떤 <code>translate</code> 명령으로 해결하는지 적어 줍니다. 실행할 때마다 새로 달지 않고 기존 코멘트를 고치며, 보고할 것이 없어지면 코멘트를 내립니다. 아무 문제 없다고 알리는 코멘트는 아무도 필요로 하지 않고, 기록은 어차피 주석에 남습니다. 그 기여자는 본디 다른 언어로 일하는 사람이므로 코멘트가 그 언어로 말할 수 있습니다. <code>comment-languages: auto</code>를 주면 영어와, 풀 리퀘스트가 건드린 번역의 언어로 함께 쓰이며, 문구는 wikven 자신의 인터페이스 메시지에서 옵니다. 영어 문서만 고친 변경은 그로 인해 번역이 뒤처졌더라도 영어로만 답합니다. 그 변경을 만든 사람이 번역의 언어를 읽는다고 가정하지 않기 때문입니다. 잡에 <code>pull-requests: write</code> 권한이 필요하고, 포크에서 온 풀 리퀘스트는 읽기 전용 토큰이라 코멘트를 건너뛰며 로그에 그 사실을 남깁니다.</p></div>
-</div>
-<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaotic-ground/wikven/actions/check-translations@v1.0.0</span>
-<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src</span>
-</pre></div>
-<table class="wikitable">
-<tbody><tr>
-<th>입력</th>
-<th>기본값</th>
-<th>하는 일
-</th></tr>
-<tr>
-<td><code>source</code></td>
-<td><code>src</code></td>
-<td>검사할 위키 소스가 담긴 디렉터리.
-</td></tr>
-<tr>
-<td><code>image</code></td>
-<td>액션이 잘려 나온 릴리스</td>
-<td>실행할 이미지.
-</td></tr>
-<tr>
-<td><code>cache</code></td>
-<td><code>true</code></td>
-<td>받아 온 이미지를 실행 사이에 캐시합니다.
-</td></tr>
-<tr>
-<td><code>gate</code></td>
-<td><code>true</code></td>
-<td>원본 문서가 망가졌을 때 단계를 실패시킵니다. 오래되었거나 빠진 번역은 보고되기만 하고 단계를 실패시키지 않습니다.
-</td></tr>
-<tr>
-<td><code>comment</code></td>
-<td><code>false</code></td>
-<td>발견한 것을 종류별로 묶고 해결할 <code>translate</code> 명령을 적어 풀 리퀘스트에 코멘트도 남깁니다.
-</td></tr>
-<tr>
-<td><code>comment-languages</code></td>
-<td>영어만</td>
-<td>그 코멘트를 함께 쓸 언어. <code>auto</code>는 풀 리퀘스트가 건드린 번역의 언어를 쓰고, <code>ko,fr</code>처럼 직접 나열할 수도 있습니다.
-</td></tr>
-<tr>
-<td><code>github-token</code></td>
-<td>잡 자체의 토큰</td>
-<td>코멘트를 남길 때 쓰는 토큰.
-</td></tr></tbody></table>
 <style data-mw-deduplicate="TemplateStyles:r105">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">단독 실행 바이너리</a></div><div class="wikven-prevnext-next"><a href="../Writing_an_extension/ko.html" title="Special:MyLanguage/Writing an extension">확장 기능 만들기</a>&#160;&#8594;</div></div>
 
 </div>
@@ -800,7 +691,7 @@ docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </
 			
 <footer id="footer" class="mw-footer"  lang="ko" dir="ltr">
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> 이 문서는 2026년 9월 8일 (화) 11:00에 마지막으로 편집되었습니다.</li>
+	<li id="footer-info-lastmod"> 이 문서는 2026년 9월 8일 (화) 12:13에 마지막으로 편집되었습니다.</li>
 </ul>
 
 	<ul id="footer-places">
