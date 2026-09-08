@@ -41,33 +41,84 @@ concurrency:
   cancel-in-progress: ${{ github.event_name != 'push' }}
 
 jobs:
-  # Compile the Caddy plugin so a Go build error is caught on the PR, not later in the binary build.
-  caddy:
+  # Everything below reads code, and a change under docs/ cannot reach a line of it: fifteen
+  # runner-minutes spent on a pull request that could not have moved one assertion (#714). This job
+  # answers whether anything outside docs/ changed, and the jobs below gate their expensive steps on
+  # it. The jobs still run and still report -- they are required checks, and a required check that
+  # never reports leaves a pull request unmergeable for good, which is why this workflow has no path
+  # filter of its own.
+  #
+  # Every way of not knowing runs the tests. Only a diff that was read, and holds nothing outside
+  # docs/, answers yes; a job whose steps read `!= 'true'` runs them on an answer that never came,
+  # and each one below runs even if this job failed outright, for the same reason. The mistake this
+  # can make is skipping a test somebody needed.
+  changes:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
+    outputs:
+      docs-only: ${{ steps.paths.outputs.docs-only }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+          # A pull request is checked out as the merge of its head into its base, so the base is
+          # the first parent and the diff against it is the pull request itself. Two is all it takes
+          # to have both ends of that diff.
+          fetch-depth: 2
+      - id: paths
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -uo pipefail
+          docs_only=false
+          if [ "$EVENT" = pull_request ]; then
+            files=$(git diff --name-only HEAD^1 HEAD)
+            if [ -n "$files" ] && ! printf '%s\n' "$files" | grep -qv '^docs/'; then
+              docs_only=true
+            fi
+            printf '%s\n' "$files" | sed 's/^/changed: /'
+          fi
+          echo "only docs/ changed: $docs_only"
+          echo "docs-only=$docs_only" >> "$GITHUB_OUTPUT"
+
+  # Compile the Caddy plugin so a Go build error is caught on the PR, not later in the binary build.
+  caddy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: changes
+    # Runs whatever the job above concluded, including nothing: see it for why.
+    if: ${{ !cancelled() }}
+    steps:
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
         with:
           go-version-file: caddy/go.mod
           cache-dependency-path: caddy/go.sum
-      - run: go build ./...
+      - if: needs.changes.outputs.docs-only != 'true'
+        run: go build ./...
         working-directory: caddy
-      - run: go vet ./...
+      - if: needs.changes.outputs.docs-only != 'true'
+        run: go vet ./...
         working-directory: caddy
 
   # Run the extension's PHPUnit tests against a real MediaWiki: the 1.46 base the build ships on, and master.
   phpunit:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    needs: changes
+    # Runs whatever the job above concluded, including nothing: see it for why.
+    if: ${{ !cancelled() }}
     strategy:
       fail-fast: false
       matrix:
         mediawiki-version: [REL1_46, master]
     steps:
       - name: Check out MediaWiki core
+        if: needs.changes.outputs.docs-only != 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           repository: wikimedia/mediawiki
@@ -75,20 +126,24 @@ jobs:
           path: mediawiki
           persist-credentials: false
       - name: Check out Wikven into the extension tree
+        if: needs.changes.outputs.docs-only != 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           path: mediawiki/extensions/Wikven
           persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # 2.37.2
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # 2.37.2
         with:
           php-version: "8.3"
           extensions: mbstring, intl, calendar, sqlite3, pdo_sqlite, gd, dom, xml, fileinfo
           tools: composer
       - name: Install MediaWiki dependencies
+        if: needs.changes.outputs.docs-only != 'true'
         working-directory: mediawiki
         run: composer install --no-interaction --no-progress
       # --with-developmentsettings loads what Quibble loads; it turns on $wgEnableJavaScriptTest, which #392 needed.
       - name: Install MediaWiki (SQLite)
+        if: needs.changes.outputs.docs-only != 'true'
         working-directory: mediawiki
         run: |
           mkdir -p "$RUNNER_TEMP/wikidb"
@@ -99,9 +154,11 @@ jobs:
             --with-developmentsettings \
             TestWiki Admin
       - name: Enable Wikven
+        if: needs.changes.outputs.docs-only != 'true'
         working-directory: mediawiki
         run: echo "wfLoadExtension( 'Wikven' );" >> LocalSettings.php
       - name: Run PHPUnit
+        if: needs.changes.outputs.docs-only != 'true'
         working-directory: mediawiki
         run: composer phpunit:entrypoint -- extensions/Wikven/tests/phpunit/
 
@@ -109,15 +166,20 @@ jobs:
   phan:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    needs: changes
+    # Runs whatever the job above concluded, including nothing: see it for why.
+    if: ${{ !cancelled() }}
     strategy:
       fail-fast: false
       matrix:
         mediawiki-version: [REL1_46, master]
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: femiwiki/quibble-action@4c99d26a916c8e8887a2622d26d979c26658106f  # v2.1.1
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: femiwiki/quibble-action@4c99d26a916c8e8887a2622d26d979c26658106f  # v2.1.1
         with:
           stage: phan
           dependencies: ${{ env.PHAN_DEPENDENCIES }}
@@ -128,14 +190,19 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    needs: changes
+    # Runs whatever the job above concluded, including nothing: see it for why.
+    if: ${{ !cancelled() }}
     permissions:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
       - id: quibble
+        if: needs.changes.outputs.docs-only != 'true'
         uses: femiwiki/quibble-action@4c99d26a916c8e8887a2622d26d979c26658106f  # v2.1.1
         with:
           stage: coverage
@@ -153,7 +220,10 @@ jobs:
           # Coverage tooling lives only on MediaWiki master.
           mediawiki-version: master
           quibble-docker-image: quibble-bookworm-php83
-      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f  # v7.0.0
+      # A change that ran no tests has no report to upload. codecov's checks are not required ones
+      # (.tf/ruleset.tf lists the ones that are), so nothing waits on a report that never comes.
+      - if: needs.changes.outputs.docs-only != 'true'
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f  # v7.0.0
         with:
           files: ${{ steps.quibble.outputs.coverage }}/clover.xml
           use_oidc: true
