@@ -65,14 +65,11 @@ class Search {
 		$path = rtrim($bundlePath, '/');
 		$cut = strrpos($path, '/');
 		if ($cut === false) {
+			// "/" alone, which the trim leaves empty: a bundle at the site root has no directory
+			// of its own to reproduce.
 			return null;
 		}
-		$segment = substr($path, $cut + 1);
-		if ($segment === '') {
-			// "/" alone: a bundle at the site root has no directory of its own to reproduce.
-			return null;
-		}
-		return substr($path, 0, $cut + 1) . $directory . '/' . $segment . '/';
+		return substr($path, 0, $cut + 1) . $directory . '/' . substr($path, $cut + 1) . '/';
 	}
 
 	/** The file in the bundle that names each language's index, and the key holding that map. */

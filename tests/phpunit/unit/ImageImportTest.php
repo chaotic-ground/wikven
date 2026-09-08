@@ -248,4 +248,22 @@ class ImageImportTest extends MediaWikiUnitTestCase {
 		sort($names);
 		return $names;
 	}
+
+	/** A link with nothing on the far side is neither a directory to walk nor a file to upload. */
+	public function testADanglingSymlinkIsPassedOver() {
+		touch($this->directory . '/keep.png');
+		symlink($this->outside . '/gone.png', $this->directory . '/dangling.png');
+
+		$this->assertSame(
+			['keep.png'],
+			$this->basenames(ImageImport::sources($this->directory, self::EXTENSIONS))
+		);
+	}
+
+	/** A source directory that is not there resolves to nothing, so nothing is inside it. */
+	public function testEverySourceIsOutsideADirectoryThatDoesNotExist() {
+		$sources = [$this->directory . '/logo.png'];
+
+		$this->assertSame($sources, ImageImport::outside($this->directory . '/gone', $sources));
+	}
 }

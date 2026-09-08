@@ -335,4 +335,36 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		}
 		parent::tearDown();
 	}
+
+	/** With no map to read there are no settings to judge, so the lint stops rather than guess. */
+	public function testAConfigThatIsNotAMapEndsTheLint() {
+		$warnings = SiteConfig::lint(['extensions' => 'Foo', 'config' => 'WikvenSiteUrl=https://example.org']);
+
+		$this->assertSame(["'extensions' must be a list.", "'config' must be a map."], $warnings);
+	}
+
+	/**
+	 * An address a crawler cannot fetch is worse in a sitemap than no sitemap, so the value is named
+	 * back to whoever wrote it.
+	 *
+	 * @dataProvider provideUnusableSiteUrls
+	 * @param mixed $value
+	 * @param string $named
+	 */
+	public function testASiteUrlNothingCanFetchIsNamedAndIgnored($value, string $named) {
+		$warnings = SiteConfig::lint(['config' => ['WikvenSiteUrl' => $value]]);
+
+		$this->assertSame(
+			["'WikvenSiteUrl' is $named; expected an http or https URL. Ignoring it."],
+			$warnings
+		);
+	}
+
+	public static function provideUnusableSiteUrls(): array {
+		return [
+			'a scheme no reader follows' => ['ftp://example.org/wiki', "'ftp://example.org/wiki'"],
+			'a host with no scheme' => ['example.org', "'example.org'"],
+			'not a string at all' => [true, 'bool']
+		];
+	}
 }
