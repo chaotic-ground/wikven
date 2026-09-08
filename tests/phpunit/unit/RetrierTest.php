@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
+use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\Wikven\Fetching\RetryingForeignRepo;
 use MediaWiki\Extension\Wikven\Hooks\Retrier;
 use MediaWiki\FileRepo\ForeignAPIRepo;
@@ -72,5 +73,35 @@ class RetrierTest extends MediaWikiUnitTestCase {
 
 	public function testNoRepositoryAtAllIsHarmless() {
 		$this->assertSame([], Retrier::retrying([]));
+	}
+
+	/**
+	 * The hook is where this reaches core: the read goes through the service and the write cannot,
+	 * because what core assembles the repositories from is the global.
+	 */
+	public function testTheHookWritesTheRepositoriesBackToTheGlobal() {
+		$before = $GLOBALS['wgForeignFileRepos'] ?? null;
+		try {
+			$GLOBALS['wgForeignFileRepos'] = [];
+			$retrier = new Retrier(new HashConfig(['ForeignFileRepos' => [$this->instantCommons()]]));
+
+			$retrier->onSetupAfterCache();
+
+			$this->assertSame(RetryingForeignRepo::class, $GLOBALS['wgForeignFileRepos'][0]['class']);
+		} finally {
+			if ($before === null) {
+				unset($GLOBALS['wgForeignFileRepos']);
+			} else {
+				$GLOBALS['wgForeignFileRepos'] = $before;
+			}
+		}
+	}
+
+	/** $wgForeignFileRepos is a site's own setting, and a value that is not a repository is passed by. */
+	public function testAnEntryThatIsNotARepositoryIsLeftWhereItIs() {
+		$repos = Retrier::retrying(['nonsense', $this->instantCommons()]);
+
+		$this->assertSame('nonsense', $repos[0]);
+		$this->assertSame(RetryingForeignRepo::class, $repos[1]['class']);
 	}
 }

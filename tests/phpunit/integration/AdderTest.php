@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven\Tests\Integration;
 use MediaWiki\Extension\Wikven\Build\BuildFor;
 use MediaWiki\Extension\Wikven\Hooks\Adder;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
@@ -451,5 +452,94 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 		$skin->method('getSkinName')->willReturn($name);
 		$skin->method('getTitle')->willReturn(Title::makeTitle(NS_MAIN, 'Installation'));
 		return $skin;
+	}
+
+	/**
+	 * Timeless draws a personal-tools dropdown and a "Page tools" sidebar that a static export has
+	 * nothing to put in, and its own stylesheet loads after this, so the rule has to shout.
+	 */
+	public function testTimelessLosesTheToolsAStaticSiteCannotFill() {
+		$this->overrideConfigValue('WikvenSkins', ['timeless']);
+		$styles = [];
+		$out = $this->outputPage();
+		$out->method('addInlineStyle')->willReturnCallback(static function ($style) use (&$styles) {
+			$styles[] = $style;
+		});
+
+		$this->adder()->onBeforePageDisplay($out, $this->skin('timeless'));
+
+		$this->assertNotEmpty(array_filter($styles, static function (string $style): bool {
+			return str_contains($style, '#user-tools') && str_contains($style, '#page-tools');
+		}));
+	}
+
+	/**
+	 * The settings page stands in for Special:MobileOptions, whose controls are MobileFrontend's:
+	 * without it installed there is nothing to ask for, and the page is left as any other.
+	 */
+	public function testTheSettingsPageAsksForNothingWithoutMobileFrontend() {
+		if (ExtensionRegistry::getInstance()->isLoaded('MobileFrontend')) {
+			$this->markTestSkipped('with MobileFrontend installed the page does ask for its controls');
+		}
+		$this->overrideConfigValues([
+			'WikvenSkins' => ['minerva'],
+			'WikvenSettingsPage' => 'Settings'
+		]);
+		$out = $this->outputPage();
+		$out->method('getTitle')->willReturn(Title::makeTitle(NS_MAIN, 'Settings'));
+		$out->expects($this->never())->method('addJsConfigVars');
+
+		$this->adder()->onBeforePageDisplay($out, $this->skin('minerva'));
+	}
+
+	/** The text size a reader picks has to hold on the pages they then read. */
+	public function testMinervaCarriesTheTextSizeMobileFrontendSets() {
+		$this->markTestSkippedIfExtensionNotLoaded('MobileFrontend');
+		$this->overrideConfigValue('WikvenSkins', ['minerva']);
+		$classes = [];
+		$styles = [];
+		$out = $this->outputPage();
+		$out->method('addHtmlClasses')->willReturnCallback(static function ($class) use (&$classes) {
+			$classes[] = $class;
+		});
+		$out->method('addModuleStyles')->willReturnCallback(static function ($style) use (&$styles) {
+			$styles = array_merge($styles, (array)$style);
+		});
+
+		$this->adder()->onBeforePageDisplay($out, $this->skin('minerva'));
+
+		$this->assertContains('mf-font-size-clientpref-regular', $classes);
+		$this->assertContains('mobile.init.styles', $styles);
+	}
+
+	/** The settings page stands in for Special:MobileOptions, so it asks for what that page asks for. */
+	public function testTheSettingsPageAsksForWhatSpecialMobileOptionsAsksFor() {
+		$this->markTestSkippedIfExtensionNotLoaded('MobileFrontend');
+		$this->overrideConfigValues([
+			'WikvenSkins' => ['minerva'],
+			'WikvenSettingsPage' => 'Settings'
+		]);
+		$vars = [];
+		$modules = [];
+		$styles = [];
+		$out = $this->outputPage();
+		$out->method('getTitle')->willReturn(Title::makeTitle(NS_MAIN, 'Settings'));
+		$out->method('addJsConfigVars')->willReturnCallback(static function ($set) use (&$vars) {
+			$vars = array_merge($vars, (array)$set);
+		});
+		$out->method('addModules')->willReturnCallback(static function ($module) use (&$modules) {
+			$modules = array_merge($modules, (array)$module);
+		});
+		$out->method('addModuleStyles')->willReturnCallback(static function ($style) use (&$styles) {
+			$styles = array_merge($styles, (array)$style);
+		});
+
+		$this->adder()->onBeforePageDisplay($out, $this->skin('minerva'));
+
+		$this->assertArrayHasKey('wgMFEnableFontChanger', $vars);
+		$this->assertContains('mobile.special.mobileoptions.styles', $styles);
+		$this->assertContains('mobile.special.mobileoptions.scripts', $modules);
+		// Asked for at run time by that script, so buildScripts.php cannot see it coming.
+		$this->assertContains('oojs-ui-widgets', $modules);
 	}
 }
