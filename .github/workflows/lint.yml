@@ -203,18 +203,20 @@ jobs:
           done
           exit "$status"
 
-      # The one MediaWiki version the installation page still writes down is the oldest wikven
-      # supports, which extension.json declares and the page links to. A bump that moves one and
-      # not the other leaves the page telling a reader to build against a MediaWiki this no longer
-      # supports, and the link beside the number would say so while the number did not.
+      # The one MediaWiki version the docs still write down is the oldest wikven supports, which
+      # extension.json declares and the page links to. It is on the page for whoever writes an
+      # extension, who is the reader it decides anything for. A bump that moves one and not the
+      # other leaves that page naming a MediaWiki this no longer supports, with a link beside the
+      # number that says otherwise.
       - name: Check the documented minimum MediaWiki is the one extension.json requires
         run: |
           set -euo pipefail
+          page="docs/Writing an extension.wikitext"
           minimum=$(jq -r '.requires.MediaWiki' extension.json | grep -oE '[0-9]+\.[0-9]+' | head -1)
-          if ! grep -qF "$minimum" docs/Installation.wikitext; then
-            echo "::error file=docs/Installation.wikitext::extension.json requires MediaWiki" \
-                 "$minimum, which this page does not name. Say that version where it says which" \
-                 "MediaWiki to build against."
+          if ! grep -qF "$minimum" "$page"; then
+            echo "::error file=$page::extension.json requires MediaWiki $minimum, which this page" \
+                 "does not name. Say that version where it says which MediaWiki an extension has" \
+                 "to work with."
             exit 1
           fi
 

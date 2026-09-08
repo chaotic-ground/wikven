@@ -65,9 +65,6 @@ This produces a local <code>wikven</code> image you run exactly like the publish
 
 <!--T:14-->
 You do not install MediaWiki: every way of running {{SITENAME}} brings its own. The image and the binary are built on '''MediaWiki {{CURRENTVERSION}}''', and that is what renders your pages however you run them.
-
-<!--T:15-->
-{{SITENAME}} itself requires MediaWiki [<tvar name="1">https://github.com/chaotic-ground/wikven/blob/main/extension.json</tvar> 1.46] or later, and every change to it is tested against both that and MediaWiki's development branch. That is the range it is known to work in, and it is what to build against if you are building from source onto a MediaWiki of your own.
 </translate>
 
 ----
