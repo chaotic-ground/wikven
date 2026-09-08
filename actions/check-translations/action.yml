@@ -32,10 +32,12 @@ inputs:
       request. One comment per pull request, edited on each run, and removed
       once the findings are answered: a comment reporting that nothing is wrong
       is one nobody needs, and the annotations hold the record either way. The comment is about
-      the files the pull request touches -- and the translations of any source
-      page it touches -- rather than about the whole tree, so a page that fell
-      behind long before this change is left to the annotations. Takes "true"
-      or "false" and refuses anything else.
+      the files the pull request touches rather than about the whole tree, so a
+      page that fell behind long before this change is left to the annotations;
+      so is a translation this change itself put behind, since translating is
+      not the job of whoever edits the source. A translation of a touched page
+      is named only where it fails the check. Takes "true" or "false" and
+      refuses anything else.
     default: "false"
   comment-languages:
     description: >-

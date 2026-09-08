@@ -182,22 +182,63 @@ class TranslationAdviceTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * Editing an English page is what puts its translations behind, so the person who edited it
-	 * is told about them even though they never opened the translation file.
+	 * Editing an English page is what puts its translations behind, and that is the translation
+	 * system working: whoever edited the page is not the one to translate it, so they hear nothing.
 	 */
-	public function testTouchingASourcePageCarriesItsTranslations() {
+	public function testTouchingASourcePageDoesNotCarryATranslationThatFellBehind() {
+		$advice = $this->advice()->about(['docs/Pages.wikitext']);
+		$this->assertNull($advice->comment([
+			[
+				'kind' => 'stale',
+				'file' => 'docs/Pages/ko.wikitext',
+				'source' => 'docs/Pages.wikitext',
+				'unit' => '3',
+				'lang' => 'ko'
+			],
+			[
+				'kind' => 'untranslated',
+				'file' => 'docs/Pages/ko.wikitext',
+				'source' => 'docs/Pages.wikitext',
+				'unit' => '4',
+				'lang' => 'ko'
+			],
+			[
+				'kind' => 'orphan',
+				'file' => 'docs/Pages/ko.wikitext',
+				'source' => 'docs/Pages.wikitext',
+				'unit' => '9',
+				'lang' => 'ko'
+			],
+			['kind' => 'standalone', 'file' => 'docs/Pages/id.wikitext', 'source' => 'docs/Pages.wikitext', 'detail' => 'id']
+		]));
+	}
+
+	/**
+	 * A translation of the touched page that fails the check is another matter: it is what makes
+	 * this change red, so whoever made the change is owed the reason.
+	 */
+	public function testTouchingASourcePageCarriesATranslationThatFailsTheCheck() {
 		$body = $this->advice()
 			->about(['docs/Pages.wikitext'])
 			->comment([
 				[
-					'kind' => 'stale',
+					'kind' => 'markup',
 					'file' => 'docs/Pages/ko.wikitext',
 					'source' => 'docs/Pages.wikitext',
-					'unit' => '3',
+					'line' => '29',
 					'lang' => 'ko'
 				]
 			]);
 		$this->assertStringContainsString('docs/Pages/ko.wikitext', $body);
+		$this->assertStringContainsString('can fail the check', $body);
+	}
+
+	/** A unit the source no longer has is reported as a warning, like a stale one, and gates nothing. */
+	public function testAnOrphanUnitSaysItFailsNothing() {
+		$body = $this->advice()->comment([
+			['kind' => 'orphan', 'file' => 'a/ko.wikitext', 'unit' => '9', 'lang' => 'ko']
+		]);
+		$this->assertStringContainsString('None of this fails the check', $body);
 	}
 
 	/**

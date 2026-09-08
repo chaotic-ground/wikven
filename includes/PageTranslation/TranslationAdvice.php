@@ -45,11 +45,10 @@ class TranslationAdvice {
 	];
 
 	/**
-	 * Kinds that never fail the check, whatever the workflow asked for: a translation falling
-	 * behind, and a subpage read as a page of its own, which nothing here can tell from a page that
-	 * is meant to be one.
+	 * Kinds that never fail the check, whatever the workflow asked for: a translation behind its
+	 * source or naming a unit it lost, and a subpage read as a page of its own.
 	 */
-	private const NON_GATING_KINDS = ['standalone', 'stale', 'untranslated'];
+	private const NON_GATING_KINDS = ['orphan', 'standalone', 'stale', 'untranslated'];
 
 	/** @var callable(string,string,list<string>):string Message key, language code and parameters. */
 	private $message;
@@ -76,8 +75,8 @@ class TranslationAdvice {
 	/**
 	 * The same advice, but only about the paths a change touches.
 	 *
-	 * A translation counts as touched when its own file was, and when its source page was: editing
-	 * an English page is what makes its translations stale.
+	 * A translation counts as touched when its own file was; one whose source page was, only where
+	 * it fails the check, since translating is not the source editor's job.
 	 *
 	 * @param list<string> $paths As the findings name their files: repo-relative, in the same
 	 *   shape --path-prefix produces.
@@ -289,8 +288,14 @@ class TranslationAdvice {
 			if (in_array($finding['file'], $paths, true)) {
 				return true;
 			}
-			// A translation is also this change's when the source page it translates is.
-			if (isset($finding['source']) && in_array($finding['source'], $paths, true)) {
+			// A translation is also this change's when its source page is, but only where it fails
+			// the check: editing an English page is what puts its translations behind, and that
+			// is the translation system working.
+			if (
+				isset($finding['source'])
+				&& in_array($finding['source'], $paths, true)
+				&& !in_array($finding['kind'], self::NON_GATING_KINDS, true)
+			) {
 				return true;
 			}
 			// And the other way round: a source page nobody can read is why a translation of it
