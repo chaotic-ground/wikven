@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Wikven\Tests\Integration\Webfonts;
 
 use MediaWiki\Extension\Wikven\Webfonts\FontCopier;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\AtEase\AtEase;
 
 /**
  * FontCopier makes the output directories with wfMkdirParents, so this is an integration test.
@@ -92,5 +93,46 @@ class FontCopierTest extends MediaWikiIntegrationTestCase {
 	/** A stylesheet naming no files asks for nothing, and nothing is what is missing. */
 	public function testAskingForNoFilesIsNotAFailure() {
 		$this->assertSame([], FontCopier::copy($this->source(), $this->destination(), []));
+	}
+
+	/**
+	 * The output tree is made as the copy goes, so a path the directory cannot be made at -- here a
+	 * file already standing where the directory would go -- is one more font that did not arrive.
+	 */
+	public function testAFontWhoseDirectoryCannotBeMadeIsReported() {
+		$this->repositoryHolds('Alef/Alef-Regular.woff2');
+		mkdir("{$this->destination()}", 0777, true);
+		file_put_contents("{$this->destination()}/Alef", 'a file, where the directory has to go');
+
+		$missing = $this->copyQuietly(['Alef/Alef-Regular.woff2']);
+
+		$this->assertSame(['Alef/Alef-Regular.woff2'], $missing);
+	}
+
+	/** And so is a copy that cannot be written, whatever the reason the write failed. */
+	public function testAFontThatCannotBeWrittenIsReported() {
+		$this->repositoryHolds('Alef/Alef-Regular.woff2');
+		// A directory standing where the file goes: copy() refuses it, as it would a read-only tree.
+		mkdir("{$this->destination()}/Alef/Alef-Regular.woff2", 0777, true);
+
+		$missing = $this->copyQuietly(['Alef/Alef-Regular.woff2']);
+
+		$this->assertSame(['Alef/Alef-Regular.woff2'], $missing);
+	}
+
+	/**
+	 * A failed mkdir or copy warns on its way to the return value this class is about, and PHPUnit
+	 * turns a warning into a failed test.
+	 *
+	 * @param string[] $files
+	 * @return string[]
+	 */
+	private function copyQuietly(array $files): array {
+		AtEase::suppressWarnings();
+		try {
+			return FontCopier::copy($this->source(), $this->destination(), $files);
+		} finally {
+			AtEase::restoreWarnings();
+		}
 	}
 }

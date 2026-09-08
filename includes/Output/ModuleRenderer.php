@@ -72,11 +72,9 @@ class ModuleRenderer {
 					LogLevel::ALERT,
 					LogLevel::EMERGENCY
 				];
-				if (isset($context['exception']) && in_array((string)$level, $levels, true)) {
-					$exception = $context['exception'];
-					$this->failures[] = $exception instanceof Throwable
-						? get_class($exception) . ': ' . $exception->getMessage()
-						: (string)$message;
+				$exception = $context['exception'] ?? null;
+				if ($exception instanceof Throwable && in_array((string)$level, $levels, true)) {
+					$this->failures[] = get_class($exception) . ': ' . $exception->getMessage();
 				}
 				$this->inner->log($level, $message, $context);
 			}

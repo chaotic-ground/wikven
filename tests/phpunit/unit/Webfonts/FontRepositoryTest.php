@@ -103,4 +103,21 @@ class FontRepositoryTest extends MediaWikiUnitTestCase {
 		$built = ( new FontRepository($this->repository()) )->build(['am'], '../fonts/uls');
 		$this->assertStringContainsString("url('../fonts/uls/AbyssinicaSIL/AbyssinicaSIL-R.woff2')", $built['css']);
 	}
+
+	/**
+	 * A build reads whatever the installed ULS generated. An entry that is not a map, or one naming
+	 * no woff2, declares no font rather than a rule pointing at a file the copy will not find.
+	 */
+	public function testAFontEntryThatDeclaresNoFileIsSkipped() {
+		$repository = $this->repository();
+		$repository['languages']['aa'] = ['NotAMap'];
+		$repository['languages']['ab'] = ['NoFile'];
+		$repository['fonts']['NotAMap'] = 'AbyssinicaSIL/AbyssinicaSIL-R.woff2';
+		$repository['fonts']['NoFile'] = ['fontweight' => 'bold'];
+
+		$built = ( new FontRepository($repository) )->build(['aa', 'ab'], 'fonts/uls/');
+
+		$this->assertStringNotContainsString('@font-face', $built['css']);
+		$this->assertSame([], $built['files']);
+	}
 }

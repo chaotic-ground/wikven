@@ -340,4 +340,16 @@ class RelativeUrlTest extends MediaWikiUnitTestCase {
 			return true;
 		}));
 	}
+
+	/** A srcset written in prose is text rather than markup, and text names nothing to rebase. */
+	public function testASrcsetInProseIsLeftAlone() {
+		$html = '<p>An &lt;img&gt; takes srcset="./img-a.png 2x" as its list of sources.</p>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
+
+	/** An empty href names the page it is on, which no depth moves. */
+	public function testAnEmptyPrintFooterHrefIsLeftAlone() {
+		$html = '<div class="printfooter"><a href="">Retrieved from here</a></div>';
+		$this->assertSame($html, RelativeUrl::reparent($html, 1));
+	}
 }

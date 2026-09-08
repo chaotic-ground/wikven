@@ -137,4 +137,19 @@ class PngTest extends MediaWikiUnitTestCase {
 			'trailing bytes' => ['bytes past IEND', $signature . $ihdr . $iend . 'extra']
 		];
 	}
+
+	/**
+	 * A text chunk whose payload carries no NUL has no keyword to read, so it says nothing about a
+	 * clock and stays. ImageMagick writes none, but the format allows it and a keyword is what the
+	 * decision is made on.
+	 */
+	public function testATextChunkWithoutAKeywordIsKept() {
+		$png =
+			self::SIGNATURE
+			. $this->chunk('IHDR', str_repeat("\x01", 13))
+			. $this->chunk('tEXt', 'no keyword here')
+			. $this->chunk('IEND');
+
+		$this->assertSame($png, Png::withoutTimestamps($png));
+	}
 }
