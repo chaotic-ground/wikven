@@ -491,4 +491,55 @@ class AdderTest extends MediaWikiIntegrationTestCase {
 
 		$this->adder()->onBeforePageDisplay($out, $this->skin('minerva'));
 	}
+
+	/** The text size a reader picks has to hold on the pages they then read. */
+	public function testMinervaCarriesTheTextSizeMobileFrontendSets() {
+		$this->markTestSkippedIfExtensionNotLoaded('MobileFrontend');
+		$this->overrideConfigValue('WikvenSkins', ['minerva']);
+		$classes = [];
+		$styles = [];
+		$out = $this->outputPage();
+		$out->method('addHtmlClasses')->willReturnCallback(static function ($class) use (&$classes) {
+			$classes[] = $class;
+		});
+		$out->method('addModuleStyles')->willReturnCallback(static function ($style) use (&$styles) {
+			$styles = array_merge($styles, (array)$style);
+		});
+
+		$this->adder()->onBeforePageDisplay($out, $this->skin('minerva'));
+
+		$this->assertContains('mf-font-size-clientpref-regular', $classes);
+		$this->assertContains('mobile.init.styles', $styles);
+	}
+
+	/** The settings page stands in for Special:MobileOptions, so it asks for what that page asks for. */
+	public function testTheSettingsPageAsksForWhatSpecialMobileOptionsAsksFor() {
+		$this->markTestSkippedIfExtensionNotLoaded('MobileFrontend');
+		$this->overrideConfigValues([
+			'WikvenSkins' => ['minerva'],
+			'WikvenSettingsPage' => 'Settings'
+		]);
+		$vars = [];
+		$modules = [];
+		$styles = [];
+		$out = $this->outputPage();
+		$out->method('getTitle')->willReturn(Title::makeTitle(NS_MAIN, 'Settings'));
+		$out->method('addJsConfigVars')->willReturnCallback(static function ($set) use (&$vars) {
+			$vars = array_merge($vars, (array)$set);
+		});
+		$out->method('addModules')->willReturnCallback(static function ($module) use (&$modules) {
+			$modules = array_merge($modules, (array)$module);
+		});
+		$out->method('addModuleStyles')->willReturnCallback(static function ($style) use (&$styles) {
+			$styles = array_merge($styles, (array)$style);
+		});
+
+		$this->adder()->onBeforePageDisplay($out, $this->skin('minerva'));
+
+		$this->assertArrayHasKey('wgMFEnableFontChanger', $vars);
+		$this->assertContains('mobile.special.mobileoptions.styles', $styles);
+		$this->assertContains('mobile.special.mobileoptions.scripts', $modules);
+		// Asked for at run time by that script, so buildScripts.php cannot see it coming.
+		$this->assertContains('oojs-ui-widgets', $modules);
+	}
 }
