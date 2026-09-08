@@ -8,5 +8,9 @@ rules:
       # audit reads a cache beside a docker build as something a release could be built from: this
       # job publishes nothing -- the image is loaded, not pushed -- and a cache written on a pull
       # request's ref is not one a run on main can read, so an entry a fork writes reaches its own
-      # bake and nothing else. Named by file rather than by line, which the next edit moves.
-      - smoke.yml
+      # bake and nothing else.
+      #
+      # That one step by line rather than the whole file, so a cache added to this workflow later
+      # is still audited. Moving the step makes zizmor report it again, which is the loud half of
+      # the trade: update the number, do not widen this to the file.
+      - smoke.yml:76
