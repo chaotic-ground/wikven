@@ -44,9 +44,12 @@ class Sparer implements SetupAfterCacheHook {
 		if (!defined('NS_TRANSLATIONS') || $title->getNamespace() !== NS_TRANSLATIONS) {
 			return;
 		}
-		$updates = array_values(array_filter(
-			$updates,
-			fn($update) => get_class($update) !== $this->updateClass
-		));
+		$kept = [];
+		foreach ($updates as $update) {
+			if (get_class($update) !== $this->updateClass) {
+				$kept[] = $update;
+			}
+		}
+		$updates = $kept;
 	}
 }

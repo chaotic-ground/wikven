@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\Wikven\Tests\Unit;
 
 use DeferrableUpdate;
+use MediaWiki\Deferred\MergeableUpdate;
 use MediaWiki\Extension\Wikven\Hooks\Sparer;
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\Title\Title;
@@ -18,14 +19,16 @@ class SparerTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	/** One update stands in for WikiSEO's; the other for every update that has to survive. */
+	/**
+	 * One update stands in for WikiSEO's; the other for every update that has to survive.
+	 *
+	 * Two interfaces rather than one, because PHPUnit hands every mock of one interface the same
+	 * generated class, and what the rule reads is the class.
+	 *
+	 * @return DeferrableUpdate[]
+	 */
 	private function updates(): array {
-		return [
-			new class implements DeferrableUpdate {
-				public function doUpdate() {}
-			},
-			$this->createMock(DeferrableUpdate::class)
-		];
+		return [$this->createMock(MergeableUpdate::class), $this->createMock(DeferrableUpdate::class)];
 	}
 
 	private function sparer(DeferrableUpdate $described, ?HookContainer $hookContainer = null): Sparer {
