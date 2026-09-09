@@ -1,0 +1,88 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+Most people never need this page. [[<tvar name="1">Special:MyLanguage/Installation</tvar>|Installation]] offers a prebuilt binary and a prebuilt image, and either is a shorter road to a built site than this one. Build from source to run a change of your own, or a commit that no release carries yet.
+
+<!--T:2-->
+To run an unreleased commit without building anything, there are nightly builds: a dated <code>nightly-YYYY-MM-DD</code> image tag, and a nightly release of the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|binary]].
+
+<!--T:3-->
+Docker builds both products, the binary included -- the static PHP it embeds is compiled inside a container -- so the host needs only [<tvar name="1">https://git-scm.com/</tvar> git] and [<tvar name="2">https://www.docker.com/</tvar> Docker].
+
+<!--T:4-->
+<span id="the-image"></span>
+== The image ==
+
+<!--T:5-->
+Clone the repository and build it:
+</translate>
+
+<syntaxhighlight lang="shell" copy>
+git clone https://github.com/chaotic-ground/wikven.git
+cd wikven
+docker build -t wikven .
+</syntaxhighlight>
+
+<translate>
+<!--T:6-->
+That leaves a local <code>wikven</code> image, which you run exactly as [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] runs the published one: only the name differs.
+
+<!--T:7-->
+<span id="the-binary"></span>
+== The binary ==
+
+<!--T:8-->
+The [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]] embeds the image's own tree, so build the image first, out of the same checkout. Then:
+</translate>
+
+<syntaxhighlight lang="shell" copy>
+docker build -f binary.Dockerfile --target export -o type=local,dest=out .
+</syntaxhighlight>
+
+<translate>
+<!--T:9-->
+<code>out/wikven</code> is the executable. <code>--target export</code> stops at the last stage of <code>binary.Dockerfile</code>, which holds the compiled binary and nothing else, and <code>-o</code> writes that stage to a directory instead of loading it as an image.
+
+<!--T:10-->
+Expect it to take far longer than the image did: it compiles a static PHP from source and links FrankenPHP around the embedded tree. The workflow that builds the released binaries allows the step an hour.
+
+<!--T:11-->
+What comes out is built for the architecture you built it on, and runs from wherever you put it:
+</translate>
+
+<syntaxhighlight lang="shell" copy>
+WIKVEN_WORKDIR=. ./out/wikven build
+</syntaxhighlight>
+
+<translate>
+<!--T:12-->
+[[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|Standalone binary]] covers installing it onto your <code>PATH</code>, and the host programs it uses when they are there.
+
+<!--T:13-->
+<span id="a-github-rate-limit"></span>
+=== A GitHub rate limit ===
+
+<!--T:14-->
+The static PHP build resolves the libraries it compiles through <code>api.github.com</code>, which answers an address that sends no token 60 times an hour -- shared, on a company network, with everyone behind it. A build that stops there wants a token, which the [<tvar name="1">https://cli.github.com/</tvar> GitHub CLI] will print for an account you are already signed in to:
+</translate>
+
+<syntaxhighlight lang="shell" copy>
+GITHUB_TOKEN=$(gh auth token) docker build -f binary.Dockerfile --target export \
+  --secret id=github-token,env=GITHUB_TOKEN -o type=local,dest=out .
+</syntaxhighlight>
+
+<translate>
+<!--T:15-->
+It is passed as a build secret, so no layer of the image records it.
+</translate>
+
+----
+
+<translate>
+<!--T:16-->
+To work on {{SITENAME}} itself rather than only build it, [[<tvar name="1">Special:MyLanguage/Development</tvar>|Development]] describes what the pieces are and what the build does with them.
+</translate>
+
+{{prevnext}}

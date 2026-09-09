@@ -1,8 +1,8 @@
 <!--T:title @c3fc54aa-->
 설치
 
-<!--T:1 @0e6313f4-->
-{{SITENAME}}은 세 가지 방식으로 실행됩니다. Linux에서는 Docker가 필요 없는 단일 파일인 단독 실행 바이너리가 가장 간단합니다. macOS나 Windows에서는 Docker 이미지를 사용하십시오. {{SITENAME}}을 수정하거나 아직 배포되지 않은 버전을 실행하려면 소스에서 빌드하십시오.
+<!--T:1 @baa21957-->
+{{SITENAME}}은 두 가지 방식으로 실행됩니다. Linux에서는 Docker가 필요 없는 단일 파일인 단독 실행 바이너리가 가장 간단합니다. macOS나 Windows에서는 Docker 이미지를 사용하십시오. 직접 고친 내용이나 아직 어떤 릴리스에도 담기지 않은 커밋을 실행하려면 [[$1|소스에서 빌드]]하십시오.
 
 <!--T:2 @91714a41-->
 <span id="binary"></span>
@@ -22,16 +22,6 @@ arm64에서는 <code>wikven-linux-aarch64</code>를 사용하십시오. 이 파�
 
 <!--T:7 @9283fb88-->
 태그가 없는 이미지는 가장 최근에 릴리스된 버전입니다. 빌드를 고정하려면 버전 태그 <code>:$1</code>이나 다이제스트(<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>)를 쓰십시오. 메이저와 마이너 버전 태그도 함께 게시되며, 그 계열에 릴리스가 쌓이면 따라 움직입니다. 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 태그는 그날의 main 브랜치로, 릴리스 전의 변경을 미리 써 볼 때 쓰십시오.
-
-<!--T:8 @02225fca-->
-<span id="build-from-source"></span>
-== 소스에서 빌드 ==
-
-<!--T:9 @4a29b67a-->
-{{SITENAME}}을 수정하거나 배포되지 않은 커밋을 실행하려면, 저장소를 복제한 뒤 이미지를 직접 빌드하십시오:
-
-<!--T:10 @15d32350-->
-이렇게 하면 게시된 이미지와 똑같이 실행할 수 있는 로컬 <code>wikven</code> 이미지가 만들어집니다. 대신 단독 실행 바이너리를 소스에서 빌드하려면 [https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile <code>binary.Dockerfile</code>]을 참고하십시오.
 
 <!--T:13 @a0595f14-->
 == 어느 MediaWiki인가 ==

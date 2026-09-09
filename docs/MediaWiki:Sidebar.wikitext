@@ -27,4 +27,5 @@
 ** Special:MyLanguage/Standalone binary|sidebar-standalone-binary
 ** Special:MyLanguage/Commands|sidebar-commands
 ** Special:MyLanguage/Writing an extension|sidebar-writing-an-extension
+** Special:MyLanguage/Building from source|sidebar-building-from-source
 ** Special:MyLanguage/Development|sidebar-development
