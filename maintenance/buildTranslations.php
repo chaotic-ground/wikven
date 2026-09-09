@@ -40,14 +40,15 @@ class BuildTranslations extends Maintenance {
 	/**
 	 * Jobs this script takes off the queue without running.
 	 *
-	 * The stats and the renders, render() does again below. The others serve translators -- a memory
-	 * to suggest from, a state to review by -- which an export has nowhere to put.
+	 * The stats and the renders, render() does again below. The purge has no cache to purge; a
+	 * later phase overwrites what it touches. The rest serve translators an export lacks.
 	 *
 	 * @var string[]
 	 */
 	private const UNRUN_JOBS = [
 		'RebuildMessageGroupStatsJob',
 		'RenderTranslationPageJob',
+		'htmlCacheUpdate',
 		'TtmServerMessageUpdateJob',
 		'MessageGroupStatesUpdaterJob'
 	];
