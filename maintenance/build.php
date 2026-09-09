@@ -43,6 +43,13 @@ class Build extends Maintenance {
 	private const PASS_DATABASE_PREFIX = 'wikven-pass-';
 
 	/**
+	 * How many shares the parses ahead of the import are split into, before the machine has a say.
+	 *
+	 * passLimit() answers with the smaller of this and the processors a build may use.
+	 */
+	private const WARM_SHARDS = 8;
+
+	/**
 	 * Whether the job that builds the search index ran, which is what tells a bundle that failed to
 	 * build from a site that had nothing to index. Only the orchestrator queues it.
 	 */
@@ -76,6 +83,7 @@ class Build extends Maintenance {
 		$this->phase('clear the output directory', $this->clearOutputDirectory(...));
 		$this->phase('set the main page', $this->setMainPage(...));
 		$this->phase('import the images', $this->importImages(...), "$ip/maintenance/importImages.php");
+		$this->phase('warm the parse caches', $this->warmParseCaches(...), "$own/importWikitext.php");
 		$this->step('import the pages', ImportWikitext::class, "$own/importWikitext.php");
 		$this->phase('check the main page arrived', $this->assertMainPageExists(...));
 		$this->phase('write the licenses page', $this->setLicensesPage(...));
@@ -434,7 +442,7 @@ class Build extends Maintenance {
 	 * @param string[] $skins
 	 */
 	private function renderSkinPasses(array $skins): void {
-		$command = $this->skinPassCommand();
+		$command = $this->selfCommand(__FILE__);
 		$limit = $this->passLimit(count($skins));
 		$databases = $this->copyDatabasePerPass($skins);
 
@@ -474,11 +482,82 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * The argv that re-invokes this script for one skin, resolved once for every pass.
+	 * Parse every page before the import parses them one at a time.
 	 *
+	 * What a first parse costs is not the writing: the syntax highlighter runs pygments once per
+	 * code block. These reads share nothing but the cache they fill.
+	 *
+	 * @param string $script The import script, run in parse-only mode.
+	 */
+	private function warmParseCaches(string $script): void {
+		$shards = $this->passLimit(self::WARM_SHARDS);
+		if ($shards < 2) {
+			return;
+		}
+		$command = array_merge($this->selfCommand($script), ['--parse-only']);
+		$children = [];
+		for ($shard = 0; $shard < $shards; $shard++) {
+			$children[$shard] = $this->startChild(array_merge($command, ["--shard=$shard/$shards"]));
+		}
+		// Not fatal: a shard that failed costs the time it would have saved, and the import, which
+		// parses every page itself, is where a parse that cannot be done at all is a failure.
+		$failed = 0;
+		foreach ($children as $child) {
+			$failed += $this->waitForChild($child) === 0 ? 0 : 1;
+		}
+		if ($failed > 0) {
+			$this->error(
+				"Wikven: $failed of $shards parse(s) ahead of the import failed; it will do that work itself."
+			);
+		}
+		$this->output("Wikven: parsed the pages in $shards share(s) before importing them\n");
+	}
+
+	/**
+	 * Start one child with its output on a pipe, for a caller that reads it when the child is over.
+	 *
+	 * @param string[] $command
+	 * @return array{process:resource,pipes:array<int,?resource>}
+	 */
+	private function startChild(array $command): array {
+		$descriptors = [0 => STDIN, 1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
+		$pipes = [];
+		$process = proc_open($command, $descriptors, $pipes, $GLOBALS['IP'], getenv());
+		if ($process === false) {
+			$this->fatalError('Wikven: could not start ' . implode(' ', $command));
+		}
+		return ['process' => $process, 'pipes' => $pipes];
+	}
+
+	/**
+	 * Wait for one child, printing what it wrote to stderr.
+	 *
+	 * Its standard output is dropped: what these children say about their own progress is not this
+	 * log's, and anything that went wrong went to the other pipe.
+	 *
+	 * @param array{process:resource,pipes:array<int,?resource>} $child
+	 * @return int The child's exit code.
+	 */
+	private function waitForChild(array $child): int {
+		stream_get_contents($child['pipes'][1]);
+		$errors = trim((string)stream_get_contents($child['pipes'][2]));
+		foreach ($child['pipes'] as $pipe) {
+			fclose($pipe);
+		}
+		$exit = proc_close($child['process']);
+		if ($errors !== '') {
+			$this->error($errors);
+		}
+		return $exit;
+	}
+
+	/**
+	 * The argv that runs one of this build's own maintenance scripts in a fresh boot.
+	 *
+	 * @param string $script The script to run, as an absolute path.
 	 * @return string[]
 	 */
-	private function skinPassCommand(): array {
+	private function selfCommand(string $script): array {
 		$self = PHP_BINARY;
 		$prefix = [$self];
 		// Embedded FrankenPHP leaves PHP_BINARY empty; re-run the binary itself as "<self> php-cli".
@@ -489,7 +568,7 @@ class Build extends Maintenance {
 		if ($self === '' || !is_executable($self)) {
 			$this->fatalError('Wikven: cannot locate the PHP executable to render skins');
 		}
-		return array_merge($prefix, ['maintenance/run.php', __FILE__]);
+		return array_merge($prefix, ['maintenance/run.php', $script]);
 	}
 
 	/**

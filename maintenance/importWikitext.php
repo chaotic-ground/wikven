@@ -6,6 +6,7 @@ use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\ContentHandler;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\Wikven\Build\SourceShard;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
 use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\Import\WikiRevision;
@@ -24,6 +25,39 @@ class ImportWikitext extends Maintenance {
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription('Import *.wikitext files from the given path');
+		$this->addOption(
+			'parse-only',
+			'Parse the pages and save nothing, to leave what a parse caches where the import finds it.'
+		);
+		$this->addOption('shard', 'Which share of the pages to take, as "i/n". Only with --parse-only.', false, true);
+	}
+
+	/**
+	 * Parse this shard's pages, saving nothing.
+	 *
+	 * A parse of a page nobody has saved still fills the caches a parse fills; the expensive one is
+	 * the syntax highlighter, which runs pygments once per code block.
+	 *
+	 * @param string[] $files
+	 * @param string $sourceDirectory
+	 */
+	private function parseOnly(array $files, string $sourceDirectory): void {
+		[$mine, $of] = SourceShard::of((string)$this->getOption('shard', '0/1'));
+		$renderer = $this->getServiceContainer()->getContentRenderer();
+		$parsed = 0;
+		foreach ($files as $index => $filename) {
+			if (( $index % $of ) !== $mine) {
+				continue;
+			}
+			$title = Title::newFromText($this->filenameToTitle($filename, $sourceDirectory));
+			if (!$title) {
+				continue;
+			}
+			$text = (string)file_get_contents($filename);
+			$renderer->getParserOutput(ContentHandler::makeContent($text, $title), $title);
+			$parsed++;
+		}
+		$this->output("Wikven: parsed $parsed page(s) to fill what a parse caches\n");
 	}
 
 	/**
@@ -35,8 +69,14 @@ class ImportWikitext extends Maintenance {
 		$user = User::newSystemUser(User::MAINTENANCE_SCRIPT_USER, ['steal' => true]);
 		RequestContext::getMain()->setUser($user);
 
+		$files = $this->wikitextFiles($sourceDirectory);
+		if ($this->hasOption('parse-only')) {
+			$this->parseOnly($files, $sourceDirectory);
+			return true;
+		}
+
 		$failed = [];
-		foreach ($this->wikitextFiles($sourceDirectory) as $filename) {
+		foreach ($files as $filename) {
 			$title = Title::newFromText($this->filenameToTitle($filename, $sourceDirectory));
 			if (!$title) {
 				$this->output('Invalid title: ' . basename($filename) . "\n");
