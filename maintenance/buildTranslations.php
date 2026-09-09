@@ -38,11 +38,18 @@ require_once "$IP/maintenance/Maintenance.php";
  */
 class BuildTranslations extends Maintenance {
 	/**
-	 * Translate's per-group statistics rebuild, which this script takes off the queue without
-	 * running: it recomputes for every language the numbers render() computes once every unit is in
-	 * place, and running it was a quarter of this phase.
+	 * Jobs this script takes off the queue without running.
+	 *
+	 * The stats one recomputes what render() computes again anyway. The others serve translators --
+	 * a memory to suggest from, a state to review by -- which an export has nowhere to put.
+	 *
+	 * @var string[]
 	 */
-	private const STATS_JOB = 'RebuildMessageGroupStatsJob';
+	private const UNRUN_JOBS = [
+		'RebuildMessageGroupStatsJob',
+		'TtmServerMessageUpdateJob',
+		'MessageGroupStatesUpdaterJob'
+	];
 
 	public function __construct() {
 		parent::__construct();
@@ -250,9 +257,9 @@ class BuildTranslations extends Maintenance {
 			foreach ($types as $type) {
 				$job = $group->pop($type);
 				while ($job) {
-					// Acked whether or not it ran: a stats job left on the queue is one the build's own
-					// runJobs phase would pick up later, which is the work this is declining to do.
-					if ($type !== self::STATS_JOB) {
+					// Acked whether or not it ran: one left on the queue is one the build's own runJobs
+					// phase would pick up later, which is the work this is declining to do.
+					if (!in_array($type, self::UNRUN_JOBS, true)) {
 						$job->run();
 					}
 					$group->ack($job);
