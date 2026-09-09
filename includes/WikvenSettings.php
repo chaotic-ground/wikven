@@ -62,6 +62,17 @@ $wgMainCacheType = CACHE_DB;
 // taken mid-build never looks stale (#333). Costs a parse per skin instead of one per bake.
 $wgParserCacheType = CACHE_NONE;
 
+// The installer gives the job queue a database of its own, named by a server entry. A queue told
+// about a server caches its connection on the queue object, and JobQueueGroup::get() makes a new
+// one per call.
+
+// So every push, pop and ack opened the file and threw it away. Without the entry the queue is on
+// the wiki's own database, whose connection is kept; the separate file only keeps web traffic off
+// it.
+if (isset($GLOBALS['wgJobTypeConf']['default']['server'])) {
+	unset($GLOBALS['wgJobTypeConf']['default']['server']);
+}
+
 // MediaWiki's installer writes synchronous=NORMAL for the object cache, the localisation cache and
 // the job queue; the wiki's own file, which a bake commits into thousands of times, it leaves at
 // FULL. That one is a scratch file too.
