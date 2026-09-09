@@ -126,20 +126,21 @@ class BuildTranslations extends Maintenance {
 		User $user
 	): bool {
 		$services = $this->getServiceContainer();
+		$translate = TranslateServices::getInstance();
 
-		// importWikitext saved the base as an old revision, which bypasses the PageSaveComplete hook
-		// that writes the "ready for translation" tag. A normal edit restores it.
-		$page = $services->getWikiPageFactory()->newFromTitle($title);
-		$updater = $page->newPageUpdater($user);
-		$updater->setContent(SlotRecord::MAIN, ContentHandler::makeContent($sourceText, $title));
-		$updater->saveRevision(CommentStoreComment::newUnsavedComment('Prepare for translation'), EDIT_FORCE_BOT);
-
-		$marker = TranslateServices::getInstance()->getTranslatablePageMarker();
+		$marker = $translate->getTranslatablePageMarker();
 		$record = $services->getPageStore()->getPageByReference($title, IDBAccessObject::READ_LATEST);
 		if (!$record) {
 			$this->output("Wikven: could not load {$title->getPrefixedText()} for translation; skipping\n");
 			return false;
 		}
+
+		// importWikitext saved the base as an old revision, bypassing the PageSaveComplete hook that
+		// tags a revision ready for translation. This is that hook's whole body, without a second
+		// revision of a page whose text has not changed.
+		TranslatablePage::newFromTitle($title)->addReadyTag($record->getLatest());
+		$translate->getTranslatablePageStore()->performStatusUpdate($title);
+
 		// A page Translate cannot parse -- an unclosed <translate>, two markers in one unit -- throws
 		// out of the marker. One page must not end the bake, so report it and leave it untranslated.
 		try {
