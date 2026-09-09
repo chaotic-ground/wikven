@@ -256,6 +256,7 @@ class BuildTranslations extends Maintenance {
 				return;
 			}
 			sort($types);
+			$taken = 0;
 			foreach ($types as $type) {
 				$job = $group->pop($type);
 				while ($job) {
@@ -265,8 +266,15 @@ class BuildTranslations extends Maintenance {
 						$job->run();
 					}
 					$group->ack($job);
+					$taken++;
 					$job = $group->pop($type);
 				}
+			}
+			// A queue can name a type and then hand out nothing -- rows for a type whose queue is
+			// configured somewhere else, say. Without this the loop asks and asks forever.
+			if ($taken === 0) {
+				$this->error('Wikven: the job queue named ' . implode(', ', $types) . ' and gave nothing');
+				return;
 			}
 		}
 	}
