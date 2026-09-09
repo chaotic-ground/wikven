@@ -5,6 +5,8 @@ package wikvencaddy
 import (
 	"errors"
 	"flag"
+	"fmt"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -40,9 +42,12 @@ func init() {
 			if workdir == "" {
 				workdir = "."
 			}
-			return reexec("file-server",
-				"--root", filepath.Join(workdir, "dist"),
-				"--listen", fl.String("listen"))
+			root := filepath.Join(workdir, "dist")
+			listen := fl.String("listen")
+			// Before the server starts, because what follows is Caddy's log and the address is in
+			// it as the socket it bound -- ":8080", which is not one a browser can be given.
+			fmt.Printf("wikven: serving %s at %s\n", root, previewURL(listen))
+			return reexec("file-server", "--root", root, "--listen", listen)
 		},
 	})
 
@@ -70,6 +75,23 @@ func init() {
 			return reexec(append([]string{"php-cli", "translate.php"}, commandTail("translate")...)...)
 		},
 	})
+}
+
+// previewURL is the address to open for a listen address, as a reader would type it.
+//
+// A listen address names a socket to bind, and the three spellings of "every interface" -- an empty
+// host, 0.0.0.0, :: -- are not addresses to visit. To whoever is at the machine they are localhost.
+// An address this cannot read is handed back whole; it is the one the caller wrote.
+func previewURL(listen string) string {
+	host, port, err := net.SplitHostPort(listen)
+	if err != nil {
+		return listen
+	}
+	switch host {
+	case "", "0.0.0.0", "::":
+		host = "localhost"
+	}
+	return "http://" + net.JoinHostPort(host, port)
 }
 
 // commandTail is everything the caller wrote after the named subcommand, verbatim.

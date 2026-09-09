@@ -104,6 +104,9 @@ jobs:
       - if: needs.changes.outputs.docs-only != 'true'
         run: go vet ./...
         working-directory: caddy
+      - if: needs.changes.outputs.docs-only != 'true'
+        run: go test ./...
+        working-directory: caddy
 
   # Run the extension's PHPUnit tests against a real MediaWiki: the 1.46 base the build ships on, and master.
   phpunit:
