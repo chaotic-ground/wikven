@@ -87,6 +87,7 @@
 			"main"
 		],
 		"SifterSearchIndexPage": "indexer",
+		"TranslateSupportedLanguages": "narrower",
 		"PageContentLanguage": "declarer",
 		"GetMagicVariableIDs": "versioner",
 		"ParserGetVariableValueSwitch": "versioner"
@@ -112,6 +113,13 @@
 		},
 		"indexer": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Indexer"
+		},
+		"narrower": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Narrower",
+			"services": [
+				"MainConfig",
+				"LanguageNameUtils"
+			]
 		},
 		"reporter": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Reporter"
