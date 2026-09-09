@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url><loc>https://chaotic-ground.github.io/wikven/Building_from_source.html</loc></url>
+	<url><loc>https://chaotic-ground.github.io/wikven/Building_from_source/en.html</loc></url>
+	<url><loc>https://chaotic-ground.github.io/wikven/Building_from_source/ko.html</loc></url>
 	<url><loc>https://chaotic-ground.github.io/wikven/Commands.html</loc></url>
 	<url><loc>https://chaotic-ground.github.io/wikven/Commands/en.html</loc></url>
 	<url><loc>https://chaotic-ground.github.io/wikven/Commands/ko.html</loc></url>
