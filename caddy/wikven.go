@@ -11,10 +11,51 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/caddyserver/caddy/v2"
 	caddycmd "github.com/caddyserver/caddy/v2/cmd"
 )
 
+// What `wikven` on its own answers with.
+//
+// Caddy builds the root command from these two, and without them it introduces itself: a page
+// about an extensible server platform, telling the reader to run `caddy run`. Every word of it is
+// true of the program underneath and none of it is about the one they have.
+//
+// Caddy's own commands and examples stay under this. A plugin cannot take either off the root
+// command -- registering a command is the whole of the interface -- so the text says whose they
+// are rather than leaving a reader to try them.
+const (
+	binaryName = "wikven"
+
+	longDescription = `Wikven builds a static website out of a directory of wikitext, by running the
+MediaWiki it carries and keeping what that renders.
+
+Three commands are wikven's own:
+
+	- 'wikven build' renders src/ into dist/.
+	- 'wikven serve' serves dist/ for local preview.
+	- 'wikven translate' marks, scaffolds, stamps or checks translations.
+
+Both directories are read under WIKVEN_WORKDIR, which is the directory you run
+in unless you set it. So a first site is:
+
+	$ mkdir src && echo 'Hello, World!' > src/index.wikitext
+	$ wikven build
+	$ wikven serve
+
+The examples and the other commands below are Caddy's, the web server this
+binary is built on. They are shown because they ship with it, not because
+wikven has anything to do with them.
+
+Documentation: https://chaotic-ground.github.io/wikven/
+`
+)
+
 func init() {
+	// Read when Caddy builds the root command, which is after every init() has run.
+	caddy.CustomBinaryName = binaryName
+	caddy.CustomLongDescription = longDescription
+
 	caddycmd.RegisterCommand(caddycmd.Command{
 		Name:  "build",
 		Usage: " ",
