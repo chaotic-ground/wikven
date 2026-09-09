@@ -514,36 +514,33 @@ class Build extends Maintenance {
 	}
 
 	/**
-	 * Start one child with its output on a pipe, for a caller that reads it when the child is over.
+	 * Start one child with its errors on a pipe, read when it is over.
+	 *
+	 * Its output goes nowhere: a child's own progress is not this log's, and a pipe nobody drains
+	 * is one it stops writing into.
 	 *
 	 * @param string[] $command
-	 * @return array{process:resource,pipes:array<int,?resource>}
+	 * @return array{process:resource,errors:resource}
 	 */
 	private function startChild(array $command): array {
-		$descriptors = [0 => STDIN, 1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
+		$descriptors = [0 => STDIN, 1 => ['file', '/dev/null', 'w'], 2 => ['pipe', 'w']];
 		$pipes = [];
 		$process = proc_open($command, $descriptors, $pipes, $GLOBALS['IP'], getenv());
-		if ($process === false) {
+		if ($process === false || !isset($pipes[2])) {
 			$this->fatalError('Wikven: could not start ' . implode(' ', $command));
 		}
-		return ['process' => $process, 'pipes' => $pipes];
+		return ['process' => $process, 'errors' => $pipes[2]];
 	}
 
 	/**
-	 * Wait for one child, printing what it wrote to stderr.
+	 * Wait for one child, printing anything it complained about.
 	 *
-	 * Its standard output is dropped: what these children say about their own progress is not this
-	 * log's, and anything that went wrong went to the other pipe.
-	 *
-	 * @param array{process:resource,pipes:array<int,?resource>} $child
+	 * @param array{process:resource,errors:resource} $child
 	 * @return int The child's exit code.
 	 */
 	private function waitForChild(array $child): int {
-		stream_get_contents($child['pipes'][1]);
-		$errors = trim((string)stream_get_contents($child['pipes'][2]));
-		foreach ($child['pipes'] as $pipe) {
-			fclose($pipe);
-		}
+		$errors = trim((string)stream_get_contents($child['errors']));
+		fclose($child['errors']);
 		$exit = proc_close($child['process']);
 		if ($errors !== '') {
 			$this->error($errors);
