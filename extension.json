@@ -84,6 +84,7 @@
 		"SetupAfterCache": [
 			"reporter",
 			"retrier",
+			"sparer",
 			"main"
 		],
 		"SifterSearchIndexPage": "indexer",
@@ -123,6 +124,12 @@
 		},
 		"reporter": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Reporter"
+		},
+		"sparer": {
+			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Sparer",
+			"services": [
+				"HookContainer"
+			]
 		},
 		"retrier": {
 			"class": "MediaWiki\\Extension\\Wikven\\Hooks\\Retrier",
