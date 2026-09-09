@@ -62,6 +62,26 @@ $wgMainCacheType = CACHE_DB;
 // taken mid-build never looks stale (#333). Costs a parse per skin instead of one per bake.
 $wgParserCacheType = CACHE_NONE;
 
+// MediaWiki's installer writes synchronous=NORMAL for the object cache, the localisation cache and
+// the job queue; the wiki's own file, which a bake commits into thousands of times, it leaves at
+// FULL. That one is a scratch file too.
+
+// Spelled as the server the installer would have built, because a connection variable is named on
+// a server entry. Guarded on the type: these are SQLite pragmas.
+if ($GLOBALS['wgDBtype'] === 'sqlite') {
+	$wgDBservers = [
+		[
+			'host' => $GLOBALS['wgDBserver'],
+			'user' => $GLOBALS['wgDBuser'],
+			'password' => $GLOBALS['wgDBpassword'],
+			'dbname' => $GLOBALS['wgDBname'],
+			'type' => $GLOBALS['wgDBtype'],
+			'load' => 1,
+			'variables' => ['synchronous' => 'NORMAL']
+		]
+	];
+}
+
 // Let pages opt out of indexing with __NOINDEX__ in any namespace.
 $wgExemptFromUserRobotsControl = [];
 
