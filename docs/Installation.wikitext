@@ -3,7 +3,7 @@ __TOC__
 <languages />
 <translate>
 <!--T:1-->
-{{SITENAME}} runs in three ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. Build from source if you want to modify {{SITENAME}} or run an unreleased version.
+{{SITENAME}} runs in two ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. To run a change of your own, or a commit that no release carries yet, [[<tvar name="1">Special:MyLanguage/Building from source</tvar>|build it from source]] instead.
 
 <!--T:2-->
 <span id="binary"></span>
@@ -41,24 +41,6 @@ The same image is published to Quay as well, at <code>quay.io/chaotic-ground/wik
 
 <!--T:7-->
 The untagged image is the newest released version. To hold a build still, pin the version tag <code>:<tvar name="1">{{WIKVENVERSION}}</tvar></code> or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>); shorter tags for the major and the minor version are published too, and move as that line gains releases. A dated <code>nightly-YYYY-MM-DD</code> tag is the main branch as it stood that day, for trying a change before it is released.
-
-<!--T:8-->
-<span id="build-from-source"></span>
-== Build from source ==
-
-<!--T:9-->
-To modify {{SITENAME}} or run an unreleased commit, clone the repository and build the image yourself:
-</translate>
-
-<syntaxhighlight lang="shell" copy>
-git clone https://github.com/chaotic-ground/wikven.git
-cd wikven
-docker build -t wikven .
-</syntaxhighlight>
-
-<translate>
-<!--T:10-->
-This produces a local <code>wikven</code> image you run exactly like the published one. To build the standalone binary from source instead, see [https://github.com/chaotic-ground/wikven/blob/main/binary.Dockerfile <code>binary.Dockerfile</code>].
 
 <!--T:13-->
 == Which MediaWiki ==
