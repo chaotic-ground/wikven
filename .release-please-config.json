@@ -5,6 +5,7 @@
 			"release-type": "simple",
 			"include-component-in-tag": false,
 			"draft": true,
+			"exclude-paths": [".tf"],
 			"extra-files": [
 				{ "type": "json", "path": "extension.json", "jsonpath": "$.version" },
 				{ "type": "generic", "path": "actions/bake/action.yml" },
