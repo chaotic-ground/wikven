@@ -284,6 +284,26 @@ jobs:
             exit 1
           fi
 
+      # caddy/wikven.go writes opcache settings into the working directory and points PHP at them
+      # through PHP_INI_SCAN_DIR, so that a bake's fifteen-odd PHP processes share what the first
+      # one compiled instead of each compiling MediaWiki again. Whether PHP reads them is a claim
+      # about where a static build looks for its configuration, and the baked site looks the same
+      # either way.
+      #
+      # The file cache is the evidence. It stays empty unless opcache was both enabled for the
+      # command line and told where to write, so a build that stopped honouring the variable is a
+      # red check here rather than a slower bake nobody notices.
+      - name: The bake's opcache settings reached PHP
+        run: |
+          set -euo pipefail
+          cached=$(find work/.cache/opcache -name '*.bin' 2>/dev/null | wc -l)
+          if [ "$cached" -eq 0 ]; then
+            echo "::error::the bake compiled nothing into work/.cache/opcache; see phpEnv in caddy/wikven.go"
+            cat work/.cache/php/opcache.ini || true
+            exit 1
+          fi
+          echo "the bake left $cached compiled files for its own processes to share"
+
       # The licenses page a build writes names what it ran on, and under the binary that includes
       # the server the binary is. caddy/wikven.go reads FrankenPHP and Caddy out of the Go build
       # info and hands them to the build in WIKVEN_RUNTIME, so nothing writes those versions down.
