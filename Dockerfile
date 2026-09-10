@@ -77,6 +77,27 @@ RUN composer config --global policy.advisories.block false \
 # would otherwise be found by a site whose sitemap had gone missing.
 RUN php -r 'require "/var/www/html/vendor/autoload.php"; if (!class_exists("GuzzleHttp\\Psr7\\Uri") || !class_exists("GuzzleHttp\\Psr7\\UriResolver")) { fwrite(STDERR, "MediaWiki no longer vendors guzzlehttp/psr7; SiteUrl needs it\n"); exit(1); }'
 
+# A bake is not one PHP process. The entrypoint runs four, and the build starts one child per parse
+# shard and one per skin, each compiling MediaWiki from source over again: opcache ships enabled for
+# the web and off for the command line. The file cache is what separate processes share.
+#
+# Its directory has to exist before PHP starts, or opcache drops the setting without a word. Last of
+# the RUNs, so the image ships that directory empty and a bake fills it with its own compiles.
+#
+# The sizes are the base image's, raised: a bake's heaviest process holds 50MB of opcodes and 2,100
+# files, and a site loads extensions of its own on top. Its revalidate_freq goes back to zero: 60
+# seconds suits a web process that outlives the files it serves, and a bake writes PHP to disk after
+# PHP has started -- the extensions it fetches, and the line the entrypoint appends to
+# LocalSettings.php. Named to sort after opcache-recommended.ini, conf.d being read in order.
+RUN mkdir -p /var/cache/wikven-opcache \
+ && printf '%s\n' \
+      'opcache.enable_cli=1' \
+      'opcache.file_cache=/var/cache/wikven-opcache' \
+      'opcache.revalidate_freq=0' \
+      'opcache.memory_consumption=256' \
+      'opcache.max_accelerated_files=10000' \
+      > /usr/local/etc/php/conf.d/zz-wikven-opcache.ini
+
 COPY ./ /var/www/html/extensions/Wikven
 COPY includes/WikvenSettings.php /var/www/html/
 COPY bin/entrypoint /usr/local/bin/entrypoint
