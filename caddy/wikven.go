@@ -65,7 +65,7 @@ func init() {
 		Long: "Builds WIKVEN_WORKDIR/src into WIKVEN_WORKDIR/dist " +
 			"(WIKVEN_WORKDIR defaults to the current directory).",
 		Func: func(_ caddycmd.Flags) (int, error) {
-			return reexec("php-cli", "build.php")
+			return reexec(phpEnv(workdir()), "php-cli", "build.php")
 		},
 	})
 
@@ -79,16 +79,12 @@ func init() {
 			"directory) over HTTP, on :8080 by default, for local preview.",
 		Flags: serveFlags,
 		Func: func(fl caddycmd.Flags) (int, error) {
-			workdir := os.Getenv("WIKVEN_WORKDIR")
-			if workdir == "" {
-				workdir = "."
-			}
-			root := filepath.Join(workdir, "dist")
+			root := filepath.Join(workdir(), "dist")
 			listen := fl.String("listen")
 			// Before the server starts, because what follows is Caddy's log and the address is in
 			// it as the socket it bound -- ":8080", which is not one a browser can be given.
 			fmt.Printf("wikven: serving %s at %s\n", root, previewURL(listen))
-			return reexec("file-server", "--root", root, "--listen", listen)
+			return reexec(nil, "file-server", "--root", root, "--listen", listen)
 		},
 	})
 
@@ -113,9 +109,70 @@ func init() {
 			"scaffold and stamp write into the source tree; check only reads it.",
 		Flags: translateFlags,
 		Func: func(_ caddycmd.Flags) (int, error) {
-			return reexec(append([]string{"php-cli", "translate.php"}, commandTail("translate")...)...)
+			args := append([]string{"php-cli", "translate.php"}, commandTail("translate")...)
+			return reexec(phpEnv(workdir()), args...)
 		},
 	})
+}
+
+// The opcache settings a bake runs under, with the file cache's directory left to be filled in.
+//
+// A bake is not one PHP process: this command re-execs into one, and that one starts a child per
+// parse shard and per skin. Each would compile MediaWiki from source over again, opcache shipping
+// enabled for the web and off for the command line, and the file cache is what they share.
+//
+// revalidate_freq is zero rather than a web server's minute because a bake writes PHP to disk
+// after PHP has started -- the extensions it fetches, the require_once it appends to the
+// LocalSettings.php it just installed -- and the embed root those land in outlives the run.
+const opcacheSettings = `; Written by wikven at the start of every run; an edit here does not survive one.
+opcache.enable_cli=1
+opcache.file_cache=%s
+opcache.revalidate_freq=0
+opcache.memory_consumption=256
+opcache.max_accelerated_files=10000
+`
+
+// workdir is the directory a run reads src/ and writes dist/ under.
+func workdir() string {
+	if dir := os.Getenv("WIKVEN_WORKDIR"); dir != "" {
+		return dir
+	}
+	return "."
+}
+
+// phpEnv writes the settings above under the working directory's own cache and returns the
+// environment that points PHP at them, or nothing where they could not be written.
+//
+// Nothing is a bake that compiles more and runs slower, which is every bake before this one; it is
+// not a reason to refuse one, and the caller cannot do anything about it either way.
+//
+// The image says this in a file under conf.d. That is not open to the binary, whose PHP looks for
+// a php.ini in the directory it was run in -- the caller's, not ours -- so the settings go where
+// this can write and the environment does the pointing. PHP_INI_SCAN_DIR rather than PHPRC because
+// it adds to what PHP finds instead of replacing it, leaving a php.ini the caller wrote alone, and
+// because a child process inherits it: the children are where a shared cache pays.
+func phpEnv(dir string) []string {
+	// Absolute, because these paths outlive this process's idea of where it is: the build starts its
+	// shard and skin passes from the embed root, and a relative one would send each of them looking
+	// somewhere else -- which is every process the shared cache exists for.
+	root, err := filepath.Abs(dir)
+	if err != nil {
+		return nil
+	}
+	conf := filepath.Join(root, ".cache", "php")
+	cache := filepath.Join(root, ".cache", "opcache")
+	// The cache directory has to be there before PHP starts. opcache handed a file_cache that is
+	// not a directory drops the setting silently -- no warning, no error, and no cache.
+	if os.MkdirAll(conf, 0o777) != nil || os.MkdirAll(cache, 0o777) != nil {
+		return nil
+	}
+	settings := fmt.Sprintf(opcacheSettings, cache)
+	if os.WriteFile(filepath.Join(conf, "opcache.ini"), []byte(settings), 0o666) != nil {
+		return nil
+	}
+	// An empty value ahead of the separator is what tells PHP to keep scanning where it was built
+	// to; a value the caller set is theirs, and stays ahead of this one so this file is read last.
+	return []string{"PHP_INI_SCAN_DIR=" + os.Getenv("PHP_INI_SCAN_DIR") + ":" + conf}
 }
 
 // previewURL is the address to open for a listen address, as a reader would type it.
@@ -152,8 +209,9 @@ func commandTail(name string) []string {
 	return nil
 }
 
-// reexec runs this same binary with the given args, wiring stdio and the current environment.
-func reexec(args ...string) (int, error) {
+// reexec runs this same binary with the given args, wiring stdio and the current environment plus
+// the entries given here.
+func reexec(extraEnv []string, args ...string) (int, error) {
 	self, err := os.Executable()
 	if err != nil {
 		return 1, err
@@ -162,7 +220,7 @@ func reexec(args ...string) (int, error) {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Env = append(os.Environ(), runtimeEnv()...)
+	cmd.Env = append(append(os.Environ(), runtimeEnv()...), extraEnv...)
 	if err := cmd.Run(); err != nil {
 		// Propagate the child's own exit code, so a caller scripting on `wikven build` -- a
 		// Makefile, a CI job, a deploy script -- can tell a refusal from a success.
