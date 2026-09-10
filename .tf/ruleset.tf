@@ -65,6 +65,7 @@ resource "github_repository_ruleset" "default" {
           "phpcs",
           "phpunit (REL1_46)",
           "phpunit (master)",
+          "repository-only",
           "rumdl",
           "semantic-pull-request",
           "smoke",
