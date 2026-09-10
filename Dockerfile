@@ -13,6 +13,18 @@ FROM mediawiki:1.46.0-fpm-alpine@sha256:b0e9413c015268322cfb67908e5f92121372c740
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN apk add --no-cache rsvg-convert imagemagick-jpeg imagemagick-webp
 
+# base_convert without gmp is long division written in PHP, one round per digit, and a bake asks for
+# it constantly: every file lock names itself by a sha1 in base 36, and so does every generated id.
+# The base image builds the extensions a wiki serving readers needs, and this is not one of them.
+# Worth 2% of a bake, measured; bcmath, the middle path, is not here either.
+#
+# Compiled rather than installed: no package carries a gmp built for this PHP. The headers and the
+# toolchain come and go inside the one layer, leaving the shared library and the extension.
+RUN apk add --no-cache gmp \
+ && apk add --no-cache --virtual .gmp-build $PHPIZE_DEPS gmp-dev \
+ && docker-php-ext-install -j "$(nproc)" gmp \
+ && apk del --no-network .gmp-build
+
 # Fetched before wikven's own code is copied in, so an edit there does not bust the slow layers.
 
 # "Stable source" describes the bytes, not the service in front of them: GitHub served 500s for
