@@ -81,3 +81,30 @@ resource "github_repository_ruleset" "default" {
     }
   }
 }
+
+# gh-pages is the site itself: Deploy docs builds it from main, and pr-preview writes each open
+# pull request's preview into a subfolder beside it. Nothing recreates the branch on its own, so a
+# deletion is the published site gone until somebody notices and re-runs the workflow, and every
+# open preview with it.
+#
+# Deletion is all this blocks. The deploy action force-pushes by default, which is what lets a docs
+# deploy and a preview reach this branch without waiting on each other, so non_fast_forward would
+# trade a live site for a protected one. No bypass actors either: nothing here has cause to delete
+# it, and the rule stops no push.
+resource "github_repository_ruleset" "pages" {
+  name        = "gh-pages"
+  repository  = github_repository.this.name
+  target      = "branch"
+  enforcement = "active"
+
+  conditions {
+    ref_name {
+      include = ["refs/heads/gh-pages"]
+      exclude = []
+    }
+  }
+
+  rules {
+    deletion = true
+  }
+}
