@@ -7,8 +7,6 @@ namespace MediaWiki\Extension\Wikven;
  *
  * wikven's two products disagree: the image compiles luasandbox into its PHP, while the binary
  * reaches Lua only by shelling out, which it can on 64-bit x86 Linux and nowhere else.
- *
- * That used to be silent -- a page invoking a module rendered "{{#invoke:Greet|hello}}".
  */
 class Scribunto {
 	/** The extension a site lists to ask for Lua. */
