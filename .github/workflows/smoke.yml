@@ -122,11 +122,8 @@ jobs:
           echo '::endgroup::'
           exit "$status"
 
-      # What a finished site has to be true of is written down in tests/bake/, one Python function
-      # per fact, against expectations tests/bake/docs.toml holds for this site. It used to be 471
-      # lines of shell and embedded Python in this file, which meant the only way to run it was to
-      # push: changing one check in #663 took parsing this workflow's YAML and extracting the
-      # heredoc back out to a file, to run it against two bakes that were already on disk.
+      # What a finished site has to be true of is written down in tests/bake/, one method of the
+      # Checks class per fact, against expectations tests/bake/docs.php holds for this site.
       #
       # A contributor with a bake runs the same checks with `composer test:bake`. What is added here
       # is only what a runner has and a laptop does not: the logs the two bakes wrote, the second
