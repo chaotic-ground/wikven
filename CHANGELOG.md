@@ -1,5 +1,57 @@
 # Changelog
 
+## [1.1.0](https://github.com/chaotic-ground/wikven/compare/v1.0.0...v1.1.0) (2026-09-11)
+
+
+### Features
+
+* have a bake say where its time went ([#719](https://github.com/chaotic-ground/wikven/issues/719)) ([d9d56e5](https://github.com/chaotic-ground/wikven/commit/d9d56e53597a92cdbda20745f6771b8763cc3dd5))
+* have serve say where the site it is serving can be read ([#733](https://github.com/chaotic-ground/wikven/issues/733)) ([b1c42da](https://github.com/chaotic-ground/wikven/commit/b1c42dae62df1cfc1129a6d69423e5c8656b174f))
+* have the binary introduce itself rather than Caddy ([#734](https://github.com/chaotic-ground/wikven/issues/734)) ([fd4d889](https://github.com/chaotic-ground/wikven/commit/fd4d8891731ef33b5c1a58a71d80d7aa26e7870d))
+* let a bake keep the extensions and skins it fetched ([#723](https://github.com/chaotic-ground/wikven/issues/723)) ([ec65354](https://github.com/chaotic-ground/wikven/commit/ec65354f04ad15bc4981098ae58e184a1111330f))
+* let a site say where it will be published ([#621](https://github.com/chaotic-ground/wikven/issues/621)) ([6e458fd](https://github.com/chaotic-ground/wikven/commit/6e458fd43b3c24de7c0049eb59116711591bb6ec))
+* let WikvenFailOnCategories name the categories a build must find no page in ([#661](https://github.com/chaotic-ground/wikven/issues/661)) ([89d4726](https://github.com/chaotic-ground/wikven/commit/89d47264fd7222d5478b656addfe857a2890b4bc))
+* name the server a binary build ran on, on the licenses page ([#617](https://github.com/chaotic-ground/wikven/issues/617)) ([d68b969](https://github.com/chaotic-ground/wikven/commit/d68b9690c55ba2346143ebfd986179c20a55011b))
+* refuse a translation carrying a tag that belongs to its source page ([#675](https://github.com/chaotic-ground/wikven/issues/675)) ([d0bfe72](https://github.com/chaotic-ground/wikven/commit/d0bfe722c09638dbba20362442191c47c6396537))
+* say which address a page is published at, and where its translations are ([#658](https://github.com/chaotic-ground/wikven/issues/658)) ([002260c](https://github.com/chaotic-ground/wikven/commit/002260cf123be835e0491a408f802d8b32ff6891))
+* write a sitemap for a site that says where it is published ([#623](https://github.com/chaotic-ground/wikven/issues/623)) ([b0ad0a1](https://github.com/chaotic-ground/wikven/commit/b0ad0a1fd0d456d9e55b09843c275ecca9d22da2))
+
+
+### Bugfixes
+
+* answer a caller that asked for a whole URL with one ([#630](https://github.com/chaotic-ground/wikven/issues/630)) ([effaada](https://github.com/chaotic-ground/wikven/commit/effaada091a7db3665886f7e58d6d485908fa72d))
+* answer a change to an English page in English alone ([#715](https://github.com/chaotic-ground/wikven/issues/715)) ([7d2bc8e](https://github.com/chaotic-ground/wikven/commit/7d2bc8e95d09707ba6169f722d0a9d7cb8d43013))
+* give a picture named in a page's metadata an address that resolves ([#648](https://github.com/chaotic-ground/wikven/issues/648)) ([a2c3b32](https://github.com/chaotic-ground/wikven/commit/a2c3b321a0db7b784bb743e92286b6502fa234f9))
+* let a picture named in a page's head be told from one in its body ([#671](https://github.com/chaotic-ground/wikven/issues/671)) ([2aa57ca](https://github.com/chaotic-ground/wikven/commit/2aa57ca28e6941416f29125b0fff84651b97fab2))
+* let Citizen's preferences panel keep its own spacing ([#708](https://github.com/chaotic-ground/wikven/issues/708)) ([904775d](https://github.com/chaotic-ground/wikven/commit/904775de454c372f9d5a812f847bb38700f0ae22))
+* let the downloaded tarball go when the fetch does not ([#695](https://github.com/chaotic-ground/wikven/issues/695)) ([0595e40](https://github.com/chaotic-ground/wikven/commit/0595e4061584f78089c4217aec461da3b915c75f))
+* measure a sitemap against both the caps it has to be inside ([#669](https://github.com/chaotic-ground/wikven/issues/669)) ([a12295f](https://github.com/chaotic-ground/wikven/commit/a12295f142c7173ac16647d72c469e688fdb1458))
+* report a run the standalone binary's build died in ([#665](https://github.com/chaotic-ground/wikven/issues/665)) ([6f77af3](https://github.com/chaotic-ground/wikven/commit/6f77af3434b640d9188ac9176464b440eb5a9a11))
+* stop handing a reader the address of the machine that built the site ([#638](https://github.com/chaotic-ground/wikven/issues/638)) ([eac411d](https://github.com/chaotic-ground/wikven/commit/eac411d0297b6254c6224be5356f0c5ed03d06a6))
+* stop loading skins the site never asked for ([#662](https://github.com/chaotic-ground/wikven/issues/662)) ([99a8f9b](https://github.com/chaotic-ground/wikven/commit/99a8f9bec8f1d9dc3147503801b6727f368e77be))
+* stop shipping a Caddy module wikven cannot use ([#619](https://github.com/chaotic-ground/wikven/issues/619)) ([e186a3d](https://github.com/chaotic-ground/wikven/commit/e186a3d0556172a668579f4e6fd867dafca3067b))
+* stop the preview answering for an address the site does not have ([#650](https://github.com/chaotic-ground/wikven/issues/650)) ([18e6b01](https://github.com/chaotic-ground/wikven/commit/18e6b01731f35eb415468eea2162cebea099bc56))
+* stop the translation drain spinning on a queue that gives nothing ([#739](https://github.com/chaotic-ground/wikven/issues/739)) ([b93aeef](https://github.com/chaotic-ground/wikven/commit/b93aeef2b0f9e632863d2956b057c1e8a3e074f0))
+* tell a source editor only about translations that fail the check ([#718](https://github.com/chaotic-ground/wikven/issues/718)) ([38d5640](https://github.com/chaotic-ground/wikven/commit/38d5640f6fc20c45345c37dde634f7640aa41b91))
+* wait for the page before filling in the skins section ([#649](https://github.com/chaotic-ground/wikven/issues/649)) ([d615e2a](https://github.com/chaotic-ground/wikven/commit/d615e2a65b4ec675e3d99d89855c7a1b487f6ae9))
+
+
+### Performance
+
+* give the image the gmp its base conversions keep asking for ([#742](https://github.com/chaotic-ground/wikven/issues/742)) ([16e8f39](https://github.com/chaotic-ground/wikven/commit/16e8f39e762b5c8abcac57c29cdd09283e5a7d78))
+* keep the job queue on the database the build already has open ([#736](https://github.com/chaotic-ground/wikven/issues/736)) ([5b79453](https://github.com/chaotic-ground/wikven/commit/5b79453b4da9fcd03c73b3f7a222ccd4334f7fa1))
+* let a bake's boots share what the first one compiled ([#741](https://github.com/chaotic-ground/wikven/issues/741)) ([bfb9a14](https://github.com/chaotic-ground/wikven/commit/bfb9a14934ccb938fa8c4ff4582cb453100701c8))
+* let the binary's bake share its compiled PHP too ([#743](https://github.com/chaotic-ground/wikven/issues/743)) ([228d783](https://github.com/chaotic-ground/wikven/commit/228d78321368c4e954d92b4e66efc5f8eff15a54))
+* let the wiki's own database sync the way the three beside it do ([#725](https://github.com/chaotic-ground/wikven/issues/725)) ([bb7a8d2](https://github.com/chaotic-ground/wikven/commit/bb7a8d285d5a4c09c0cc4b8082fa2bf4e1286aa6))
+* offer Translate only the languages the source is written in ([#730](https://github.com/chaotic-ground/wikven/issues/730)) ([fd74048](https://github.com/chaotic-ground/wikven/commit/fd7404857f9dd6b2e60bea9df95cc2a81aea57f7))
+* parse the pages beside each other before importing them ([#728](https://github.com/chaotic-ground/wikven/issues/728)) ([619fb47](https://github.com/chaotic-ground/wikven/commit/619fb478adb7498c3da1c5c5c10f86c46820b0cd))
+* spare the translation units a description they will never show ([#737](https://github.com/chaotic-ground/wikven/issues/737)) ([cd45597](https://github.com/chaotic-ground/wikven/commit/cd45597ef6290becc3b5cab85b454320efece4a1))
+* stop purging a cache a bake does not have ([#735](https://github.com/chaotic-ground/wikven/issues/735)) ([bcbb842](https://github.com/chaotic-ground/wikven/commit/bcbb8427a1816290c6fae340d1679705c93c51cc))
+* stop rebuilding translation stats a bake goes on to recompute ([#722](https://github.com/chaotic-ground/wikven/issues/722)) ([500cb23](https://github.com/chaotic-ground/wikven/commit/500cb23cee1d1bdffecc7b33933cc800c1576ad4))
+* stop rendering translation pages the build renders again ([#729](https://github.com/chaotic-ground/wikven/issues/729)) ([e3d40d4](https://github.com/chaotic-ground/wikven/commit/e3d40d46fd9dd0037a710ab9f3423784bf77d7ea))
+* stop running two jobs a static export has no reader for ([#726](https://github.com/chaotic-ground/wikven/issues/726)) ([c866061](https://github.com/chaotic-ground/wikven/commit/c86606174115470fa85a16b6d7fc249793382422))
+* tag the base page ready without writing it again ([#738](https://github.com/chaotic-ground/wikven/issues/738)) ([b672785](https://github.com/chaotic-ground/wikven/commit/b67278509d5682eeca7ce6d0b55ddd5670053563))
+
 ## 1.0.0 (2026-08-31)
 
 The first release.
