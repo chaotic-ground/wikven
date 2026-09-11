@@ -34,7 +34,8 @@ resource "github_repository_ruleset" "default" {
     non_fast_forward = true
     update           = false
 
-    # Merge commits are the only allowed merge method, so linear history must not be required.
+    # Squash is the only merge method the repository allows, so main is linear however this is
+    # set: requiring it would forbid nothing that can happen here.
     required_linear_history = false
     required_signatures     = false
 
