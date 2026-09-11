@@ -56,9 +56,8 @@ jobs:
   # do, and leave every other type alone -- this is not an opinion about what such a change should
   # be called, only about the two things it cannot be.
   #
-  # It read the documentation alone until #744, a ruleset under .tf/ that called itself a feature
-  # and reached 1.1.0's changelog as one. release-please now skips those paths outright, but that
-  # is a net under the mistake; this is the place it gets caught, and told to whoever made it.
+  # release-please skips these paths as well, which is a net under the mistake. This is the place it
+  # is caught and said to whoever made it.
   repository-only:
     runs-on: ubuntu-latest
     timeout-minutes: 10

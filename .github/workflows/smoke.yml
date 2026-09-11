@@ -40,11 +40,8 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    # Every job in this repository carries one of these, and this is the job that earned them. On
-    # 2026-08-18 the runner's Ubuntu mirror stopped answering during `playwright install
-    # --with-deps`; apt fell back to archive.ubuntu.com, fetched the release files and then sat
-    # there. With no timeout the job waited out GitHub's six-hour default before anyone was told
-    # anything. The mirror is not ours to fix; how long we wait to hear about it is.
+    # Every job in this repository carries one of these: a runner that stops answering otherwise
+    # waits out GitHub's six-hour default before anybody is told anything.
     #
     # Three times what the job takes -- around ten minutes, two bakes and a browser install -- so a
     # stall is reported in minutes while a slow but healthy run never trips it.
@@ -218,15 +215,12 @@ jobs:
       #
       # And no --with-deps, which is the apt call. The runner image already carries Google Chrome,
       # Chromium, Edge and Firefox as installed packages, so the shared libraries the shell wants are
-      # on the machine before we ask for anything; --with-deps was buying nothing and paying for it.
-      # Twice -- 2026-08-18 and 2026-08-19 -- azure.archive.ubuntu.com answered nothing at all, apt
-      # fell back to archive.ubuntu.com, took the four InRelease files and then went quiet on the
-      # package indexes until the job was killed. A mirror that is not ours, on a path we do not need.
+      # on the machine before we ask for anything, and an apt call is a mirror that is not ours on a
+      # path we do not need.
       #
-      # Ran the suite locally against a real bake with nothing but the shell on disk: 57 passed. If
-      # either half were ever not enough -- a spec asking for a headed browser, or a library the image
-      # stops shipping -- Playwright says which executable or which .so it cannot find, so this cannot
-      # quietly test the wrong thing.
+      # If either half were ever not enough -- a spec asking for a headed browser, or a library the
+      # image stops shipping -- Playwright says which executable or which .so it cannot find, so this
+      # cannot quietly test the wrong thing.
       - name: Install the browser test tooling
         run: |
           npm ci
