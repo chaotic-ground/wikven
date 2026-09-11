@@ -117,3 +117,51 @@ func TestPHPEnvIsAbsolute(t *testing.T) {
 		t.Errorf("the file cache is not where the run can find it:\n%s", settings)
 	}
 }
+
+// What reaches a translation helper: the caller's own words after the subcommand, and nothing the
+// scan could have picked up on its way there.
+func TestCommandTail(t *testing.T) {
+	for _, c := range []struct {
+		why  string
+		args []string
+		want []string
+	}{
+		{
+			why:  "the words after the subcommand, in the order they were written",
+			args: []string{"/usr/local/bin/wikven", "translate", "mark", "--all"},
+			want: []string{"mark", "--all"},
+		},
+		{
+			// Why the scan starts at argv[1]. From argv[0] this would match the executable itself
+			// and hand back "translate mark", giving the helper the command word as a file name.
+			why:  "a binary installed under the subcommand's own name does not match itself",
+			args: []string{"translate", "translate", "mark"},
+			want: []string{"mark"},
+		},
+		{
+			why:  "a subcommand with nothing after it has an empty tail, not a missing one",
+			args: []string{"wikven", "translate"},
+			want: []string{},
+		},
+		{
+			why:  "the first occurrence is the subcommand; a later one is the caller's word",
+			args: []string{"wikven", "translate", "mark", "translate"},
+			want: []string{"mark", "translate"},
+		},
+		{
+			why:  "a command line the subcommand is not on",
+			args: []string{"wikven", "build"},
+			want: nil,
+		},
+	} {
+		t.Run(c.why, func(t *testing.T) {
+			original := os.Args
+			t.Cleanup(func() { os.Args = original })
+			os.Args = c.args
+
+			if got := commandTail("translate"); !slices.Equal(got, c.want) {
+				t.Errorf("commandTail(\"translate\") over %q = %#v, want %#v", c.args, got, c.want)
+			}
+		})
+	}
+}
