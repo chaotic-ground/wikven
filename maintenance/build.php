@@ -1247,10 +1247,14 @@ class Build extends Maintenance {
 			return;
 		}
 
+		// Where the choices are kept is the question a settings page with no account on it raises,
+		// so the page opens by answering it: this browser, this site, nobody signed in.
+		$text = $this->contentMsg('wikven-settings-intro') . "\n\n";
+
 		// Special:MobileOptions is an empty form its own script fills, so this page is the same
 		// empty form. Wikitext carries no <form> and that stylesheet's layout rules all name one,
 		// so fillMinervaMenu.php puts a real form inside this.
-		$text = "<div id=\"wikven-settings-form\"></div>\n";
+		$text .= "<div id=\"wikven-settings-form\"></div>\n";
 		if (count((array)$config->get('WikvenSkins')) > 1) {
 			$text .= $this->settingsSection(
 				'wikven-skins',
