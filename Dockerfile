@@ -27,9 +27,9 @@ RUN apk add --no-cache gmp \
 
 # Fetched before wikven's own code is copied in, so an edit there does not bust the slow layers.
 
-# "Stable source" describes the bytes, not the service in front of them: GitHub served 500s for
-# hours on 2026-08-17, and codeload answers 429 under load. --retry-all-errors as well as --retry,
-# because curl counts a connection reset as non-transient and would not repeat it.
+# "Stable source" describes the bytes, not the service in front of them, which answers 429 under
+# load and sometimes nothing at all. --retry-all-errors as well as --retry, because curl counts a
+# connection reset as non-transient and would not repeat it.
 ARG CURL_RETRY="--retry 5 --retry-delay 2 --retry-all-errors"
 
 # And who is asking: curl signs with its own version, naming the library rather than the project.
