@@ -1,6 +1,9 @@
 ---
 name: Release please
 
+# The release pull request is opened with GITHUB_TOKEN, so no workflow starts on it: close and
+# reopen it to run CI. Every merge to main rewrites its head, which drops those results again.
+
 on:
   push:
     branches:
