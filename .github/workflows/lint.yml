@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: rvben/rumdl@96c8520425eaf1b6d362e4a98754adf6ee604acb  # v0.2.62
+      - uses: rvben/rumdl@5606c5d6cbbfa8d61c2f23206d42aa6457ddd301  # v0.2.68
         with:
           version: ${{ env.RUMDL_VERSION }}
 
@@ -148,7 +148,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: crate-ci/typos@4d9c206a77c041268485162b8e2579ad7a5cb9a3  # v1.50.0
+      - uses: crate-ci/typos@d43b6c087ac471e2ea7b8af622ff15f05c0c365b  # v1.50.1
 
   # MediaWiki coding-standard checks mago doesn't cover: docs, naming, and forbidden patterns.
   phpcs:
