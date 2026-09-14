@@ -22,7 +22,7 @@ RUN find /var/www/html -type d -name tests -prune -exec rm -rf {} + \
 # Stage 2: a static PHP + FrankenPHP with the app embedded. curl is left out -- its HTTP/3 static
 # libs fail to link and nothing needs it, Guzzle going through PHP's stream wrappers. Pinned like
 # the base above, though build-static.sh fetches a nightly static-php-cli that picks the libraries.
-FROM dunglas/frankenphp:static-builder-musl-1.12.7@sha256:5b7c8d9c3da7fc672154796039365f4e25ae9ff77a1cafb783c6db313863655d AS builder
+FROM dunglas/frankenphp:static-builder-musl-1.12.7@sha256:327a552c16520785c328ffac004762d29f9406d0379f972ae945615d60799b04 AS builder
 WORKDIR /go/src/app
 COPY --from=app /var/www/html ./dist/app
 # A small Caddy module registers the build, serve and translate subcommands, so the binary is run
