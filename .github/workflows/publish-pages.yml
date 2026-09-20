@@ -47,12 +47,16 @@ jobs:
           # the tip of each is published, and the history of a built site is nobody's to read.
           git fetch --quiet --depth 1 origin gh-pages
           git --work-tree=dist checkout --quiet FETCH_HEAD -- .
-          # Absent until the first pull request of the repository's life, and after the last one
-          # closes the action leaves it empty rather than deleting it.
-          if git fetch --quiet --depth 1 origin previews 2>/dev/null; then
-            git --work-tree=dist checkout --quiet FETCH_HEAD -- .
-          else
+          # Absent until the first pull request of the repository's life, and empty whenever none
+          # is open: the action that tears a preview down leaves the branch rather than deleting
+          # it. Both are the ordinary state of a repository with nothing in review, and `checkout
+          # -- .` against a tree with nothing in it is an error, so neither reaches it.
+          if ! git fetch --quiet --depth 1 origin previews 2>/dev/null; then
             echo "wikven: no previews branch yet; publishing the site alone."
+          elif [ -z "$(git ls-tree FETCH_HEAD)" ]; then
+            echo "wikven: no pull request has a preview open; publishing the site alone."
+          else
+            git --work-tree=dist checkout --quiet FETCH_HEAD -- .
           fi
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
