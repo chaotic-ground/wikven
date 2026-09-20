@@ -128,12 +128,17 @@ class ImportWikitext extends Maintenance {
 		// Asked before the write rather than left to it: the store refuses invalid content by
 		// throwing, and the insert it abandons poisons the transaction, so the trace that ends the
 		// build names a page further down the list.
-		$validation = $this->getServiceContainer()->getContentHandlerFactory()
+		$validation = $this->getServiceContainer()
+			->getContentHandlerFactory()
 			->getContentHandler($content->getModel())
 			->validateSave($content, new ValidationParams($title, 0));
 		if (!$validation->isOK()) {
-			return trim($this->getServiceContainer()->getFormatterFactory()
-				->getStatusFormatter(RequestContext::getMain())->getWikiText($validation));
+			return trim(
+				$this->getServiceContainer()
+					->getFormatterFactory()
+					->getStatusFormatter(RequestContext::getMain())
+					->getWikiText($validation)
+			);
 		}
 
 		// File:/MediaWiki: pages need a current-revision edit so upload desc and edit hooks apply.
@@ -147,8 +152,12 @@ class ImportWikitext extends Maintenance {
 			if ($updater->wasSuccessful()) {
 				return null;
 			}
-			$status = $updater->getStatus();
-			return $status ? $status->getWikiText(false, false, 'en') : 'no revision was saved';
+			return trim(
+				$this->getServiceContainer()
+					->getFormatterFactory()
+					->getStatusFormatter(RequestContext::getMain())
+					->getWikiText($updater->getStatus())
+			);
 		}
 
 		// Import as an old revision; the current-revision path above takes no timestamp of its
