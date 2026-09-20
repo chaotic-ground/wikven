@@ -43,7 +43,7 @@ Math has several rendering modes, and {{SITENAME}} takes the ones that render he
 : The LaTeX, left as it was written.
 
 <!--T:9-->
-The other two, <code>mathml</code> and <code>latexml</code>, render a formula by asking a server for it — Wikimedia's, unless the site says otherwise. A build that did that would turn on someone else's uptime and publish whatever that server answered on the day it ran, and [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|two builds of one source are meant to agree]]. Naming one of those modes, or an address for one, stops the build and says so; it is not quietly dropped.
+Math's other two modes, <code>mathml</code> and <code>latexml</code>, fetch each formula from a server rather than writing it here. {{SITENAME}} does not offer them. Naming one, or an address for one, stops the build and says which line did it.
 
 <!--T:10-->
 == Writing a formula ==
