@@ -50,10 +50,6 @@ config:
   # template.
   WikvenFailOnCategories:
     - Pages with template errors
-    # Chart files a page here when it could not draw, and draws an error box in place of the
-    # chart. The box is easy to publish without noticing -- the build succeeds and the page is
-    # the right length -- so it stops the build instead.
-    - Pages using the Chart extension with rendering errors
   # ParserFunctions keeps its string functions behind this, off by default, because a wiki that
   # takes edits from anyone can be made to spend a lot of parser on them. Nobody edits this site:
   # it is a directory of files in a repository, rendered once at build time. Template:draft needs
