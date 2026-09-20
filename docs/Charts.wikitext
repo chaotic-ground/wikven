@@ -1,0 +1,109 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+A chart on a {{SITENAME}} site is drawn once, while the site is being built, and what the reader gets is the drawing. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Chart</tvar> Chart] is the extension for it, and it is the first of a kind: an extension that wants a program of its own beside MediaWiki. Setting it up is [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|fetching an extension]], plus an address.
+
+<!--T:2-->
+This page draws one. Everything below is what this site does to make it appear.
+</translate>
+
+{{#chart:Election.chart}}
+
+<translate>
+<!--T:3-->
+The numbers are the sample [<tvar name="1">https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer</tvar> chart-renderer] ships with, which is why they are about an election in Canada rather than about {{SITENAME}}. What is worth looking at is the drawing itself: view the source of this page and it is an <code>&lt;svg&gt;</code>, sitting in the HTML, with no request to make and no script to run.
+
+<!--T:4-->
+== What a site declares ==
+
+<!--T:5-->
+Chart wants [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:JsonConfig</tvar> JsonConfig] beside it, and both want telling which pages they own:
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - JsonConfig
+  - Chart
+config:
+  WikvenRepositories:
+    JsonConfig:
+      repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
+      reference: REL1_46
+    Chart:
+      repository: https://github.com/wikimedia/mediawiki-extensions-Chart.git
+      reference: REL1_46
+  JsonConfigModels:
+    Tabular.JsonConfig: JsonConfig\JCTabularContent
+    Chart.JsonConfig: MediaWiki\Extension\Chart\JCChartContent
+  JsonConfigs:
+    Tabular.JsonConfig:
+      namespace: 486
+      nsName: Data
+      pattern: '/.\.tab$/'
+      license: CC0-1.0
+      isLocal: true
+    Chart.JsonConfig:
+      namespace: 486
+      nsName: Data
+      pattern: '/.\.chart$/'
+      license: CC0-1.0
+      isLocal: true
+  ChartServiceUrl: http://host.docker.internal:6284/v1/chart/render
+</syntaxhighlight>
+
+<translate>
+<!--T:6-->
+Neither extension publishes a release tag for this branch, so those two entries follow a branch rather than pin a commit; two builds of your source can therefore fetch different code. This site pins both to a commit instead — see the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]] for why, and how.
+
+<!--T:7-->
+== Where the renderer is ==
+
+<!--T:8-->
+The renderer is a service you run, and <code>ChartServiceUrl</code> is wherever it answers. Clone [<tvar name="1">https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer</tvar> chart-renderer], <code>npm install</code>, <code>npm start</code>, and it listens on port 6284. Which address to write down depends on what does the baking:
+</translate>
+
+<translate>
+<!--T:9-->
+; a renderer with an address of its own
+: Use that address. This is the answer that keeps working wherever you move the build, and the only one that needs no explanation.
+; the [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|standalone binary]]
+: The build runs on your machine, so the renderer is at <code>http://localhost:6284/v1/chart/render</code>.
+; the image, or the [[<tvar name="2">Special:MyLanguage/Deploying</tvar>|bake action]]
+: The build runs inside a container and your machine is outside it, by the name <code>host.docker.internal</code>. That is what this site uses, and what the example above shows.
+
+<!--T:10-->
+{{note|text=A self-hosted runner whose Docker lives in a sidecar container is the case none of those covers: a bake reaches that sidecar's daemon, so neither name finds the runner. Give the renderer an address of its own there.}}
+
+<!--T:11-->
+The published site never talks to the renderer. It is asked once per chart while the page is being written, and what it answers is baked in — so the site you deploy has no dependency on it, and neither does the reader.
+
+<!--T:12-->
+== Where the data is ==
+
+<!--T:13-->
+Chart reads two pages out of the <code>Data:</code> namespace, and both are source files like any other. They take no <code>.wikitext</code> suffix, because their own names already say what they hold:
+</translate>
+
+<syntaxhighlight lang="text">
+docs/
+  Data:Election.tab      the numbers
+  Data:Election.chart    what to draw with them
+</syntaxhighlight>
+
+<translate>
+<!--T:14-->
+The <code>.tab</code> page is [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Tabular_Data</tvar> tabular data]: a schema naming the fields, and the rows. The <code>.chart</code> page says which of them to draw and how, and names its <code>.tab</code> page in <code>source</code>. Then, on any page that should show it:
+</translate>
+
+<syntaxhighlight lang="wikitext" copy>
+{{#chart:Election.chart}}
+</syntaxhighlight>
+
+<translate>
+<!--T:15-->
+Which is the line above the chart at the top of this page.
+</translate>
+
+{{prevnext}}

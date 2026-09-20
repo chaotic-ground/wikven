@@ -61,6 +61,11 @@ jobs:
           # Reader only; docker-image.yml exports this cache. See the note in smoke.yml.
           cache-from: type=gha,scope=wikven-image
 
+      # The Charts page draws a real chart, so a bake of this site wants the renderer it names
+      # answering. Without one Chart writes an error box, and WikvenFailOnCategories stops the
+      # build rather than letting that reach the site.
+      - uses: ./.github/actions/chart-renderer
+
       - name: Bake the docs site
         if: github.event.action != 'closed'
         uses: ./actions/bake

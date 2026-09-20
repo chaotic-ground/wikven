@@ -1,0 +1,51 @@
+---
+name: Chart renderer
+description: >-
+  Start the chart-renderer service this site's Charts page needs, and wait for it to answer.
+
+# Private to this repository, unlike actions/ next door: it stands up scaffolding for baking this
+# documentation site, and is not something a site of your own would use. A site of your own points
+# ChartServiceUrl at a renderer of its own; see the Charts page.
+#
+# Node is the runner's own. No setup-node and no cache, for the reason smoke.yml gives: the
+# caching trips the cache-poisoning audit, and an npm ci is not worth what that costs to weigh.
+inputs:
+  version:
+    description: The chart-renderer commit to run. Pinned, so two bakes draw with the same code.
+    required: false
+    default: 543b8eec4fa9f56110f3fa3d6957c077e5dc4438
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        git init --quiet "$RUNNER_TEMP/chart-renderer"
+        cd "$RUNNER_TEMP/chart-renderer"
+        git fetch --quiet --depth 1 \
+          https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer.git "$VERSION"
+        git checkout --quiet FETCH_HEAD
+        npm ci --no-audit --no-fund
+        # Backgrounded, and left running: the job ends and the runner reaps it. npm start builds
+        # first, so the service answers a few seconds after this returns rather than at once.
+        nohup npm start > "$RUNNER_TEMP/chart-renderer.log" 2>&1 &
+
+    - name: Wait for the renderer to answer
+      shell: bash
+      run: |
+        set -euo pipefail
+        for _ in $(seq 60); do
+          if curl -fsS -o /dev/null -X POST -H 'Content-Type: application/json' \
+               --data @"$RUNNER_TEMP/chart-renderer/docs/examples/line-1.json" \
+               http://127.0.0.1:6284/v1/chart/render; then
+            echo "wikven: the chart renderer is answering."
+            exit 0
+          fi
+          sleep 2
+        done
+        echo "::error::the chart renderer never answered; a bake would draw error boxes"
+        cat "$RUNNER_TEMP/chart-renderer.log" || true
+        exit 1

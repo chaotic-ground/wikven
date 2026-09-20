@@ -49,6 +49,11 @@ jobs:
           cache-from: type=gha,scope=wikven-image
           cache-to: type=gha,mode=max,scope=wikven-image
 
+      # The Charts page draws a real chart, so a bake of this site wants the renderer it names
+      # answering. Without one Chart writes an error box, and WikvenFailOnCategories stops the
+      # build rather than letting that reach the site.
+      - uses: ./.github/actions/chart-renderer
+
       # Dogfood the published composite action to bake the docs source.
       - name: Bake the docs site
         uses: ./actions/bake

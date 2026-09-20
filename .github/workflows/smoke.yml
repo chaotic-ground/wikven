@@ -84,6 +84,11 @@ jobs:
             wikven-fetch-${{ hashFiles('docs/.wikven.yaml',
             'maintenance/fetchExtensions.php', 'includes/Fetching/**') }}
 
+      # This site's Charts page draws a real chart, so both bakes want the renderer it names
+      # answering. Without one Chart writes an error box, and WikvenFailOnCategories stops the
+      # bake rather than letting a check pass over one.
+      - uses: ./.github/actions/chart-renderer
+
       # Both bakes of the reproducibility check below, at once. They are independent by construction
       # -- separate containers, separate output directories, one shared source -- and most of a
       # bake is a single process: only the skin passes run beside each other, so the second bake
@@ -98,6 +103,7 @@ jobs:
           mkdir -p dist dist-again "$HOME/.cache/wikven/fetch"
           bake() {
             docker run --rm \
+              --add-host=host.docker.internal:host-gateway \
               -v "$(pwd)/docs:/workspace/src:ro" \
               -v "$(pwd)/$1:/workspace/dist" \
               "${@:2}" \
