@@ -92,7 +92,8 @@ class Build extends Maintenance {
 			'import the pages that waited',
 			$this->importRefused(...),
 			"$own/importWikitext.php",
-			$import->refused()
+			// createChild() is typed to Maintenance, as it is for the other step whose answer is read.
+			$import instanceof ImportWikitext ? $import->refused() : []
 		);
 		$this->phase('check the main page arrived', $this->assertMainPageExists(...));
 		$this->phase('write the licenses page', $this->setLicensesPage(...));
@@ -1055,14 +1056,14 @@ class Build extends Maintenance {
 	 */
 	private function nameCachedPages(string $file): int {
 		$rename = $this->step('name the pages', Rename::class, $file);
-		// createChild() is typed to Maintenance, and this is the one step whose answer is read.
+		// Typed to Maintenance, the same way the import's deferred list is read in execute().
 		return $rename instanceof Rename ? $rename->named : 0;
 	}
 
 	/**
 	 * Run one build step as a child maintenance script, applying $options first.
 	 *
-	 * The child is handed back for the one caller that wants a number out of it; every other one
+	 * The child is handed back for the two callers that read what it worked out; every other one
 	 * runs the step for its effect and drops it.
 	 *
 	 * @param string $name What the timing report calls this step.
