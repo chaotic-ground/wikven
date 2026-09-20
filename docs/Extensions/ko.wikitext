@@ -58,3 +58,7 @@
 
 <!--T:17 @116a5db5-->
 Scribunto가 그중 하나이며, 대부분의 위키가 손을 뻗는 것입니다. [[$1|Lua 모듈]]에 별도 문서가 있는데, Lua 모듈은 설정이면서 콘텐츠이기도 하고 [[$2|단독 실행 바이너리]]가 그것을 렌더링할 수 없기 때문입니다.
+
+<!--T:18 @ff1daf74-->
+어떤 확장 기능은 위키 곁에 자기 프로그램을 두고 싶어 하고, 그때는 출처만이 아니라 출처와 주소가 필요합니다. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Chart</tvar> Chart]가 위키들이 가장 많이 찾는 그런 경우이고, [[<tvar name="2">Special:MyLanguage/Charts</tvar>|차트]]라는 자기 문서를 가지고 있습니다.
+
