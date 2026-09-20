@@ -4,7 +4,9 @@ namespace MediaWiki\Extension\Wikven;
 
 use Maintenance;
 use MediaWiki\CommentStore\CommentStoreComment;
+use MediaWiki\Content\Content;
 use MediaWiki\Content\ContentHandler;
+use MediaWiki\Content\ValidationParams;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\Wikven\Build\SourceShard;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
@@ -97,44 +99,13 @@ class ImportWikitext extends Maintenance {
 			$content = ContentHandler::makeContent($text, $title);
 
 			$this->output("Saving... $title");
-
-			// File:/MediaWiki: pages need a current-revision edit so upload desc and edit hooks apply.
-			if ($title->getNamespace() === NS_FILE || $title->getNamespace() === NS_MEDIAWIKI) {
-				$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
-				$updater = $page->newPageUpdater($user);
-				$updater->setContent(SlotRecord::MAIN, $content);
-				$updater->saveRevision(CommentStoreComment::newUnsavedComment('Import'));
-				// These are exactly the pages an edit hook may veto -- AbuseFilter or SpamBlacklist on a
-				// File: description, CSS validation on MediaWiki:Common.css.
-				if ($updater->wasSuccessful()) {
-					$this->output(" done\n");
-				} else {
-					$status = $updater->getStatus();
-					$reason = $status ? $status->getWikiText(false, false, 'en') : 'no revision was saved';
-					$this->output(' failed: ' . $reason . "\n");
-					$failed[] = $relative;
-				}
+			$error = $this->save($title, $content, $user);
+			if ($error === null) {
+				$this->output(" done\n");
 				continue;
 			}
-
-			// Import as an old revision; the current-revision path above takes no timestamp of its
-			// own. What it is stamped with hardly matters: the build's frozen clock stands in until
-			// the source history restamps every page (see build.php's stampSourceHistory()).
-			$revision = new WikiRevision();
-			$revision->setContent(SlotRecord::MAIN, $content);
-			$revision->setTitle($title);
-			$revision->setUserObj($user);
-			$revision->setComment('');
-			$revision->setTimestamp(wfTimestampNow());
-
-			// WikiRevision::importOldRevision() has been a deprecated shim for this service since 1.31.
-			$importer = $this->getServiceContainer()->getWikiRevisionOldRevisionImporter();
-			if ($importer->import($revision)) {
-				$this->output(" done\n");
-			} else {
-				$this->output(" failed\n");
-				$failed[] = $relative;
-			}
+			$this->output(" failed: $error\n");
+			$failed[] = $relative;
 		}
 
 		if ($failed) {
@@ -146,6 +117,57 @@ class ImportWikitext extends Maintenance {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Write one page.
+	 *
+	 * @return string|null Null once the revision is in, else why it was refused.
+	 */
+	private function save(Title $title, Content $content, User $user): ?string {
+		// Asked before the write rather than left to it: the store refuses invalid content by
+		// throwing, and the insert it abandons poisons the transaction, so the trace that ends the
+		// build names a page further down the list.
+		$validation = $this->getServiceContainer()->getContentHandlerFactory()
+			->getContentHandler($content->getModel())
+			->validateSave($content, new ValidationParams($title, 0));
+		if (!$validation->isOK()) {
+			return trim($this->getServiceContainer()->getFormatterFactory()
+				->getStatusFormatter(RequestContext::getMain())->getWikiText($validation));
+		}
+
+		// File:/MediaWiki: pages need a current-revision edit so upload desc and edit hooks apply.
+		if ($title->getNamespace() === NS_FILE || $title->getNamespace() === NS_MEDIAWIKI) {
+			$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle($title);
+			$updater = $page->newPageUpdater($user);
+			$updater->setContent(SlotRecord::MAIN, $content);
+			$updater->saveRevision(CommentStoreComment::newUnsavedComment('Import'));
+			// These are exactly the pages an edit hook may veto -- AbuseFilter or SpamBlacklist on a
+			// File: description, CSS validation on MediaWiki:Common.css.
+			if ($updater->wasSuccessful()) {
+				return null;
+			}
+			$status = $updater->getStatus();
+			return $status ? $status->getWikiText(false, false, 'en') : 'no revision was saved';
+		}
+
+		// Import as an old revision; the current-revision path above takes no timestamp of its
+		// own. What it is stamped with hardly matters: the build's frozen clock stands in until
+		// the source history restamps every page (see build.php's stampSourceHistory()).
+		$revision = new WikiRevision();
+		$revision->setContent(SlotRecord::MAIN, $content);
+		$revision->setTitle($title);
+		$revision->setUserObj($user);
+		$revision->setComment('');
+		$revision->setTimestamp(wfTimestampNow());
+
+		// WikiRevision::importOldRevision() has been a deprecated shim for this service since 1.31.
+		$importer = $this->getServiceContainer()->getWikiRevisionOldRevisionImporter();
+		if ($importer->import($revision)) {
+			return null;
+		}
+
+		return 'the importer refused the revision';
 	}
 
 	/**
