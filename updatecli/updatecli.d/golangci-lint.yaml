@@ -29,9 +29,6 @@ sources:
       repository: golangci-lint
       versionfilter:
         kind: semver
-    # Lint writes the "v" back; the tarball inside the release is named without it.
-    transformers:
-      - trimprefix: v
 
 targets:
   lint:

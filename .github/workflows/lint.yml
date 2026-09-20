@@ -118,9 +118,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      # Pinned, not read from the upstream action, which spends a REST call a run asking GitHub
-      # for its latest release; updatecli moves it.
-      GOLANGCI_LINT_VERSION: "2.5.0"
+      # Its own name so updatecli has something to match on, and an exact patch version: given one,
+      # the action resolves it on the spot, where a bare minor or "latest" fetches a version map.
+      GOLANGCI_LINT_VERSION: "v2.5.0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -131,31 +131,11 @@ jobs:
           go-version-file: caddy/go.mod
           cache-dependency-path: caddy/go.sum
 
-      - id: cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+      # Formatters configured in caddy/.golangci.yml are reported by run, so this is the whole check.
+      - uses: golangci/golangci-lint-action@d583c34f0599d37dbac4a198b9c83201be380893  # v9.3.0
         with:
-          path: ~/.local/bin/golangci-lint
-          key: golangci-lint-${{ runner.os }}-${{ env.GOLANGCI_LINT_VERSION }}
-
-      - if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          dir="golangci-lint-${GOLANGCI_LINT_VERSION}-linux-amd64"
-          base=https://github.com/golangci/golangci-lint/releases/download
-          tmp=$(mktemp -d)
-          curl -fsSL -o "$tmp/golangci-lint.tar.gz" \
-            "$base/v${GOLANGCI_LINT_VERSION}/${dir}.tar.gz"
-          tar -xzf "$tmp/golangci-lint.tar.gz" -C "$tmp"
-          mkdir -p ~/.local/bin
-          mv "$tmp/$dir/golangci-lint" ~/.local/bin/golangci-lint
-
-      - run: |
-          chmod +x ~/.local/bin/golangci-lint
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      - run: golangci-lint fmt --diff ./...
-        working-directory: caddy
-      - run: golangci-lint run ./...
-        working-directory: caddy
+          version: ${{ env.GOLANGCI_LINT_VERSION }}
+          working-directory: caddy
 
   # A comment that has grown into an essay is documentation nobody finishes reading. The budget and
   # the numbers behind it are in tests/comments/Budget.php; this is where a pull request meets them.
