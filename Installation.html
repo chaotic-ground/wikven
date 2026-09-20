@@ -554,7 +554,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 <div class="mw-highlight mw-highlight-lang-shell mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/chaotic-ground/wikven
 </pre></div>
 <p>The same image is published to Quay as well, at <code>quay.io/chaotic-ground/wikven</code>. One build pushes both addresses, so pull from whichever one answers.
-</p><p>The untagged image is the newest released version. To hold a build still, pin the version tag <code>:1.0.0</code> or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>); shorter tags for the major and the minor version are published too, and move as that line gains releases. A dated <code>nightly-YYYY-MM-DD</code> tag is the main branch as it stood that day, for trying a change before it is released.
+</p><p>The untagged image is the newest released version. To hold a build still, pin the version tag <code>:1.1.0</code> or the digest (<code>ghcr.io/chaotic-ground/wikven@sha256:...</code>); shorter tags for the major and the minor version are published too, and move as that line gains releases. A dated <code>nightly-YYYY-MM-DD</code> tag is the main branch as it stood that day, for trying a change before it is released.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Which_MediaWiki">Which MediaWiki</h2></div>
 <p>You do not install MediaWiki: every way of running Wikven brings its own. The image and the binary are built on <b>MediaWiki 1.46.0</b>, and that is what renders your pages however you run them.
