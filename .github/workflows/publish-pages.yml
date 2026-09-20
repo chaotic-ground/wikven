@@ -1,0 +1,63 @@
+---
+name: Publish pages
+
+# What readers are served, assembled here rather than served off a branch. Two branches hold
+# bytes and neither is live: gh-pages is what a push to main baked, previews is what each open
+# pull request baked. This lays the second over the first and hands the result to Pages, so each
+# branch has one writer and the site being served is an artifact nothing can push to.
+#
+# It bakes nothing. A pull request's preview costs its own build and this, not a rebuild of a site
+# that did not change.
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions: {}
+
+# The literal name is shared with nothing else, and both callers reach it, so a deploy and a
+# preview publish one after the other. Superseding an in-flight one is safe: a later publish reads
+# the same two branches, and reads whatever the earlier one was going to.
+concurrency:
+  group: publish-pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      # For the git directory alone: what gets published is fetched below, off two branches this
+      # never checks out.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Lay the previews over the site
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          # Into a work tree of its own, so the checkout above stays where it is. Shallow: only
+          # the tip of each is published, and the history of a built site is nobody's to read.
+          git fetch --quiet --depth 1 origin gh-pages
+          git --work-tree=dist checkout --quiet FETCH_HEAD -- .
+          # Absent until the first pull request of the repository's life, and after the last one
+          # closes the action leaves it empty rather than deleting it.
+          if git fetch --quiet --depth 1 origin previews 2>/dev/null; then
+            git --work-tree=dist checkout --quiet FETCH_HEAD -- .
+          else
+            echo "wikven: no previews branch yet; publishing the site alone."
+          fi
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with:
+          path: dist
+
+      - id: deploy
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128  # v5.0.0

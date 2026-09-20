@@ -1,12 +1,12 @@
 ---
 name: PR preview
 
-# Deploy a live preview of each documentation PR to a subfolder of the gh-pages branch,
-# so a reviewer can browse the rendered site at pr-preview/pr-<N>/ and it is torn down when
-# the PR closes. Only same-repo PRs opened by a human get one: a fork or Dependabot PR runs
-# with a read-only GITHUB_TOKEN and cannot push to gh-pages, so those are skipped rather than
-# failed. Runs on pull_request (not pull_request_target): the PR's own code is built, never
-# with a write-scoped token.
+# Build a live preview of each documentation PR and store it on the previews branch, which
+# publish-pages lays over the site: a reviewer browses the rendered site at pr-preview/pr-<N>/
+# beside it, and it is torn down when the PR closes. Only same-repo PRs opened by a human get
+# one: a fork or Dependabot PR runs with a read-only GITHUB_TOKEN and cannot write the branch, so
+# those are skipped rather than failed. Runs on pull_request (not pull_request_target): the PR's
+# own code is built, never with a write-scoped token.
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
@@ -22,9 +22,7 @@ on:
       - 'resources/**'
       - 'i18n/**'
 
-permissions:
-  contents: write  # push the preview to the gh-pages branch
-  deployments: write  # record the preview as a native GitHub deployment (shown on the PR)
+permissions: {}
 
 # One preview build per PR; a new push supersedes an in-flight one.
 concurrency:
@@ -33,12 +31,16 @@ concurrency:
 
 jobs:
   preview:
-    # Skip forks and Dependabot: their token cannot push to gh-pages, so a preview would only fail.
+    # Skip forks and Dependabot: their token cannot write the branch, so a preview would only fail.
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository
       && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      actions: write  # ask publish-pages.yml to run
+      contents: write  # write the preview to the previews branch
+      deployments: write  # record the preview as a native GitHub deployment (shown on the PR)
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -68,15 +70,26 @@ jobs:
           image: wikven
           cache: false  # the image was just built locally; nothing to cache or pull
 
-      # Deploy dist/ to pr-preview/pr-<N>/ on gh-pages on open/sync, and remove it on close.
-      # comment: false - the preview surfaces as a native GitHub deployment (below), not a comment.
-      - name: Deploy preview
+      # Write dist/ to pr-preview/pr-<N>/ on the previews branch on open/sync, and remove it on
+      # close. Nothing serves that branch; publish-pages below is what puts it in front of a
+      # reader. comment: false - this surfaces as a native GitHub deployment, not a comment.
+      - name: Store the preview
         uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9  # v1.8.1
         with:
           source-dir: dist
-          preview-branch: gh-pages
+          preview-branch: previews
           umbrella-dir: pr-preview
           comment: false
+
+      # Publish, which is what puts this branch's bytes in front of a reader -- and on close, what
+      # takes them away again. Asked for rather than called: a deployment to the github-pages
+      # environment is allowed from the default branch, and a pull request does not run on one.
+      # workflow_dispatch is also the one event GITHUB_TOKEN is allowed to raise.
+      - name: Publish the site with this preview beside it
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: gh workflow run publish-pages.yml --repo "$REPO"
 
       # Surface the preview as a native GitHub deployment, so the PR shows a "View deployment"
       # button and an environment badge instead of a comment. The URL matches the umbrella path
