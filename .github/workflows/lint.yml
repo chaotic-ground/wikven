@@ -114,13 +114,12 @@ jobs:
       - run: mago format --check
       - run: mago lint
 
-  # The Caddy module in caddy/ is the only Go here; caddy/.golangci.yml says what it is held to.
   golangci-lint:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      # Named for the reason rumdl's is, and moved by updatecli the same way: the upstream action
-      # would spend a REST call a run asking which release is the latest. See the note above.
+      # Pinned, not read from the upstream action, which spends a REST call a run asking GitHub
+      # for its latest release; updatecli moves it.
       GOLANGCI_LINT_VERSION: "2.5.0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1

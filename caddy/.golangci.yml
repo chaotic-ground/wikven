@@ -1,6 +1,5 @@
 ---
-# The only Go here is the Caddy module. Everything below passes as the tree stands: nothing
-# excluded, no nolint.
+# Everything below passes as the tree stands: nothing excluded, no nolint.
 version: "2"
 
 linters:
