@@ -365,6 +365,15 @@ if (
 	$GLOBALS['wgSifterSearchOutputDir'] = "$wikvenDist/pagefind";
 }
 
+// JsonConfig caches a Data: page's content, and a miss with it, where the whole build reads it.
+// A bake makes the pages it reads, so the warm-up parse writes down misses the import believes.
+if (
+	in_array('JsonConfig', $config['extensions'], true)
+	&& !array_key_exists('JsonConfigDisableCache', $wikvenSiteConfig)
+) {
+	$GLOBALS['wgJsonConfigDisableCache'] = true;
+}
+
 // Say which config names nothing defines. This is the quietest way a line in a site's file is
 // lost: $wgSettings writes the name into a global nothing reads. Silent while a name in this
 // site's lists is missing.
