@@ -67,6 +67,13 @@ sources:
       url: https://github.com/wikimedia/mediawiki-extensions-JsonConfig
       branch: REL1_46
       depth: 1
+  wikihiero:
+    name: Head of WikiHiero's REL1_46
+    kind: gitcommit
+    spec:
+      url: https://github.com/wikimedia/mediawiki-extensions-wikihiero
+      branch: REL1_46
+      depth: 1
 
 targets:
   translate:
@@ -121,3 +128,11 @@ targets:
     spec:
       file: docs/.wikven.yaml
       key: $.config.WikvenRepositories.JsonConfig.commit
+  wikihiero:
+    name: 'build(deps): bump WikiHiero to {{ source "wikihiero" }}'
+    kind: yaml
+    scmid: default
+    sourceid: wikihiero
+    spec:
+      file: docs/.wikven.yaml
+      key: $.config.WikvenRepositories.wikihiero.commit

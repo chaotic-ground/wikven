@@ -21,6 +21,7 @@
 * sidebar-extending
 ** Special:MyLanguage/Extensions|sidebar-extensions
 ** Special:MyLanguage/Charts|sidebar-charts
+** Special:MyLanguage/Hieroglyphs|sidebar-hieroglyphs
 ** Special:MyLanguage/Lua modules|sidebar-lua-modules
 ** Special:MyLanguage/Math|sidebar-math
 * sidebar-references
