@@ -1,0 +1,36 @@
+---
+# Everything below passes as the tree stands: nothing excluded, no nolint.
+version: "2"
+
+linters:
+  # errcheck, govet, ineffassign, staticcheck, unused.
+  default: standard
+
+  enable:
+    - funlen
+    - gocritic
+    - gocyclo
+    - misspell
+    # The reassignments the standard set leaves: another package's variable, and an overwrite
+    # across a branch.
+    - reassign
+    - wastedassign
+    - unconvert
+
+  settings:
+    # Above the tree's own worst case -- 48 lines, complexity 8 -- to leave room to grow into.
+    funlen:
+      lines: 60
+      statements: 40
+    gocyclo:
+      min-complexity: 10
+    govet:
+      enable-all: true
+      disable:
+        # Orders struct fields by size, to save padding this module does not pay for.
+        - fieldalignment
+
+formatters:
+  enable:
+    - gofmt
+    - goimports

@@ -82,6 +82,7 @@ jobs:
           echo "docs-only=$docs_only" >> "$GITHUB_OUTPUT"
 
   # Compile the Caddy plugin so a Go build error is caught on the PR, not later in the binary build.
+  # Vetting it is lint.yml's, under golangci-lint, which runs govet with every analyser on.
   caddy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -100,9 +101,6 @@ jobs:
           cache-dependency-path: caddy/go.sum
       - if: needs.changes.outputs.docs-only != 'true'
         run: go build ./...
-        working-directory: caddy
-      - if: needs.changes.outputs.docs-only != 'true'
-        run: go vet ./...
         working-directory: caddy
       - if: needs.changes.outputs.docs-only != 'true'
         run: go test ./...

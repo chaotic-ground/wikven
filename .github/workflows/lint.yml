@@ -114,6 +114,29 @@ jobs:
       - run: mago format --check
       - run: mago lint
 
+  golangci-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # Its own name so updatecli has something to match on, and an exact patch version: given one,
+      # the action resolves it on the spot, where a bare minor or "latest" fetches a version map.
+      GOLANGCI_LINT_VERSION: "v2.5.0"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+        with:
+          go-version-file: caddy/go.mod
+          cache-dependency-path: caddy/go.sum
+
+      # Formatters configured in caddy/.golangci.yml are reported by run, so this is the whole check.
+      - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a  # v9.3.0
+        with:
+          version: ${{ env.GOLANGCI_LINT_VERSION }}
+          working-directory: caddy
+
   # A comment that has grown into an essay is documentation nobody finishes reading. The budget and
   # the numbers behind it are in tests/comments/Budget.php; this is where a pull request meets them.
   comments:
