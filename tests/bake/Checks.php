@@ -93,7 +93,7 @@ class Checks {
 			),
 			new Check(
 				'charts',
-				'a chart was drawn at build time and the drawing is in the page',
+				'a chart was drawn at build time, and the page and the bundle both carry it',
 				self::charts(...)
 			),
 			new Check(
@@ -676,6 +676,13 @@ class Checks {
 			} elseif (!str_contains($site->read($path), '<svg')) {
 				$problems[] = "$path carries no drawing; the renderer was not reachable";
 			}
+		}
+		// The drawing is handed to ECharts in the browser, asked for by name when the chart is
+		// scrolled to. Nothing in the queue the bundle is built from says so, so unseeded the
+		// reader gets a 404.
+		$bundle = $site->path('assets', 'modules-static.js');
+		if (!is_file($bundle) || !str_contains($site->read($bundle), 'ext.chart.render')) {
+			$problems[] = 'a page draws a chart and ext.chart.render is not in the bundle';
 		}
 		return $problems;
 	}

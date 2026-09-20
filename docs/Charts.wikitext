@@ -13,7 +13,10 @@ This page draws one. Everything below is what this site does to make it appear.
 
 <translate>
 <!--T:3-->
-The numbers are the sample [<tvar name="1">https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer</tvar> chart-renderer] ships with, which is why they are about an election in Canada rather than about {{SITENAME}}. What is worth looking at is the drawing itself: view the source of this page and it is an <code>&lt;svg&gt;</code>, sitting in the HTML, with no request to make and no script to run.
+The numbers are the sample [<tvar name="1">https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer</tvar> chart-renderer] ships with, which is why they are about an election in Canada rather than about {{SITENAME}}. What is worth looking at is the drawing itself: view the source of this page and it is an <code>&lt;svg&gt;</code>, sitting in the HTML with no request to make. It is what a reader sees before anything runs, and what they are left with if nothing does.
+
+<!--T:16-->
+Then Chart hands that drawing to [<tvar name="1">https://echarts.apache.org/</tvar> ECharts] in the browser, which is what makes the legend answer: click a party and its line goes. So a site with a chart on any page carries ECharts in its script bundle — around 830&nbsp;KB, on every page of it, since the bundle is one file the whole site shares. A site that draws no chart carries none of it.
 
 <!--T:4-->
 == What a site declares ==
