@@ -62,14 +62,17 @@ jobs:
           cache-from: type=gha,scope=wikven-image
 
       # The Charts page draws a real chart, so a bake of this site wants the renderer it names
-      # answering. Without one Chart writes an error box, and WikvenFailOnCategories stops the
-      # build rather than letting that reach the site.
-      - uses: ./.github/actions/chart-renderer
+      # answering. Without one Chart writes an error box where the chart should be and the build
+      # succeeds anyway; tests/bake is what refuses that, and only smoke runs it.
+      - id: renderer
+        if: github.event.action != 'closed'
+        uses: ./.github/actions/chart-renderer
 
       - name: Bake the docs site
         if: github.event.action != 'closed'
         uses: ./actions/bake
         with:
+          host-alias: ${{ steps.renderer.outputs.address }}
           source: docs
           output: dist
           image: wikven
