@@ -1,0 +1,47 @@
+---
+name: "build(deps): bump golangci-lint"
+pipelineid: golangci-lint
+
+scms:
+  default:
+    kind: github
+    spec:
+      owner: chaotic-ground
+      repository: wikven
+      branch: main
+      user: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+
+sources:
+  release:
+    name: Latest golangci-lint release
+    kind: githubrelease
+    spec:
+      owner: golangci
+      repository: golangci-lint
+      versionfilter:
+        kind: semver
+    # Lint builds the release URL out of this, and the tarball inside it is named without the "v"
+    # the tag carries, so the number is taken without it and the "v" written back where it belongs.
+    transformers:
+      - trimprefix: v
+
+targets:
+  # The one place the version is written; Lint downloads that release and runs it over caddy/.
+  lint:
+    name: 'build(deps): bump golangci-lint to {{ source "release" }}'
+    kind: file
+    scmid: default
+    sourceid: release
+    spec:
+      file: .github/workflows/lint.yml
+      matchpattern: 'GOLANGCI_LINT_VERSION: "[^"]*"'
+      replacepattern: 'GOLANGCI_LINT_VERSION: "{{ source "release" }}"'

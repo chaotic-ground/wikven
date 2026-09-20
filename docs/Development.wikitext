@@ -231,8 +231,8 @@ The e2e run serves <code>dist/</code> under a <code>/wikven/</code> path prefix,
 == Continuous integration ==
 
 <!--T:23-->
-* <code>lint.yml</code> runs the formatters and linters (Biome, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs), holds every source comment to a word budget, and checks that this site documents every {{SITENAME}} configuration variable and every step of the build.
-* <code>test.yml</code> runs the PHPUnit suites, phan and coverage against a real MediaWiki, and builds the Caddy plugin.
+* <code>lint.yml</code> runs the formatters and linters (Biome, golangci-lint, mago, rumdl, taplo, typos, yamllint, zizmor, and phpcs), holds every source comment to a word budget, and checks that this site documents every {{SITENAME}} configuration variable and every step of the build.
+* <code>test.yml</code> runs the PHPUnit suites, phan and coverage against a real MediaWiki, and builds and tests the Caddy plugin.
 * <code>semantic-pull-request.yml</code> reads the pull request title, which becomes the squash commit's subject: it has to follow Conventional Commits, and a change to the repository rather than to {{SITENAME}} — <code>docs/</code>, the readmes, <code>.tf/</code>, <code>.github/</code> — cannot call itself <code>feat</code> or <code>fix</code>, which release-please would read as something to put in the changelog and move the version for.
 * <code>smoke.yml</code> bakes this site and asserts the output, in a browser and byte for byte.
 * <code>translations.yml</code> reports out-of-date translations in <code>docs/</code>, through the [<tvar name="2">https://github.com/chaotic-ground/wikven/blob/main/actions/check-translations/action.yml</tvar> check-translations action].

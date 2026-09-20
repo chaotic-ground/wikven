@@ -1,0 +1,60 @@
+---
+# The Caddy module is the only Go in this repository: three hundred lines registering the build,
+# serve and translate subcommands. A surface that small can be held to a strict standard from the
+# start, so it is -- every linter below passes on the tree as it stands, no file is excluded and
+# no threshold was chosen to sit above a violation already in the tree.
+#
+# The numbers leave room for a function to grow into, not for one that is already over the line;
+# each says underneath it what the tree's own worst case is, so a later move knows what it moves.
+version: "2"
+
+linters:
+  # errcheck, govet, ineffassign, staticcheck and unused. ineffassign and staticcheck's SA4006
+  # are the pair that answers "what is this variable by the time it is read": a value assigned and
+  # then overwritten before anything looks at it is reported here rather than left for a reviewer
+  # to find by reading the whole function.
+  default: standard
+
+  enable:
+    # A function nobody can hold in their head at once is the reviewing problem the two numbers
+    # under settings are about.
+    - funlen
+    - gocyclo
+    # Correctness and style checks the standard set leaves out.
+    - gocritic
+    # A write to another package's variable: the reassignment hardest to follow, because the write
+    # is nowhere near the read.
+    - reassign
+    # A value overwritten before it is read. ineffassign finds most of these; this reaches the
+    # ones that cross a branch.
+    - wastedassign
+    # A conversion that converts nothing, and a misspelling in a comment or a string.
+    - misspell
+    - unconvert
+
+  settings:
+    funlen:
+      # The longest here is init(), at 48 lines: three subcommand registrations, one literal each,
+      # which read as a list rather than as a function to follow.
+      lines: 60
+      statements: 40
+
+    gocyclo:
+      # The most branching here is runtimeEnv, at 8 -- one case per module it names.
+      min-complexity: 10
+
+    govet:
+      # For nilness, which reports a dereference of something the type checker was happy to call
+      # non-nil, and for shadow, which names the second variable standing where the first was.
+      enable-all: true
+      disable:
+        # Orders struct fields by size to save padding. That is an argument about memory, in a
+        # module that builds a handful of structs at startup; it would cost the fields nothing but
+        # the grouping that makes them readable.
+        - fieldalignment
+
+# Checked, never written, the way every other formatter in this repository is run.
+formatters:
+  enable:
+    - gofmt
+    - goimports
