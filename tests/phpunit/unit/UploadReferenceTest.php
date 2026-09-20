@@ -25,6 +25,10 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 		return UploadReference::hotlinked('upload.wikimedia.org', SiteUrl::fromWritten($siteUrl));
 	}
 
+	private static function glyphs(string $siteUrl = 'https://example.org/wikven/'): UploadReference {
+		return UploadReference::installed('/extensions', SiteUrl::fromWritten($siteUrl));
+	}
+
 	/** A page carrying one reference in the head, so a test can say where it sits and read it back. */
 	private static function inHead(string $reference): string {
 		return "<html><head><meta property=\"og:image\" content=\"$reference\"></head><body></body></html>";
@@ -309,5 +313,47 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 	public function testAUrlAtAnotherHostIsNotOurs() {
 		$html = '<img src="https://example.com/wikipedia/commons/1/12/Oven.jpg">';
 		$this->assertSame($html, self::hotlinks()->rewrite($html, self::published()));
+	}
+
+	public function testAPictureTheInstallServesIsAnsweredBesideThePage() {
+		$this->assertSame(
+			'<img src="./assets/img-abc123def456.png">',
+			self::glyphs()->rewrite('<img src="/extensions/wikihiero/img/hiero_N5.png">', self::published())
+		);
+	}
+
+	/** The install hangs a cache-buster off these, and it names no different file. */
+	public function testTheInstallsCacheBusterIsLeftOutOfThePathAndOutOfTheAnswer() {
+		$asked = null;
+		$html = self::glyphs()
+			->rewrite(
+				'<img src="/extensions/wikihiero/img/hiero_N5.png?08eb7">',
+				static function (string $path) use (&$asked): ?string {
+					$asked = $path;
+					return './assets/img-abc123def456.png';
+				}
+			);
+		$this->assertSame('/wikihiero/img/hiero_N5.png', $asked);
+		$this->assertSame('<img src="./assets/img-abc123def456.png">', $html);
+	}
+
+	/**
+	 * The defect this factory exists for. A page about extensions writes these paths as prose, and
+	 * one written there names no file for the build to go looking for.
+	 */
+	public function testThePathWrittenOutsideASrcAttributeIsLeftAlone() {
+		$prose = '<p>copied into <code>/extensions/Wikven</code></p>';
+		$this->assertSame($prose, self::glyphs()->rewrite($prose, self::published()));
+	}
+
+	public function testAGlyphThatCouldNotBePublishedIsLeftAsThePageWroteIt() {
+		$html = '<img src="/extensions/wikihiero/img/hiero_N5.png">';
+		$this->assertSame(
+			$html,
+			self::glyphs()
+				->rewrite($html, static function (string $path): ?string {
+					return null;
+				})
+		);
 	}
 }

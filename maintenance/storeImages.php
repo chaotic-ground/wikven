@@ -52,6 +52,14 @@ class StoreImages extends Maintenance {
 		// the one host a page can hotlink a picture from without having been told to.
 		$hotlinks = UploadReference::hotlinked('upload.wikimedia.org', $siteUrl);
 		$references = UploadReference::stored((string)$config->get('UploadPath'), $siteUrl);
+		// The pictures an extension or a skin serves out of its own directory, which a page names
+		// as a path to where MediaWiki is. An export is not there, so these were broken pictures.
+		$installRoot = rtrim((string)( $GLOBALS['IP'] ?? '' ), '/');
+		$scriptPath = rtrim((string)$config->get('ScriptPath'), '/');
+		$installed = [];
+		foreach (['extensions', 'resources', 'skins'] as $directory) {
+			$installed[$directory] = UploadReference::installed("$scriptPath/$directory", $siteUrl);
+		}
 
 		foreach (glob("$htmlDir/*.html") as $file) {
 			$html = file_get_contents($file);
@@ -87,6 +95,24 @@ class StoreImages extends Maintenance {
 					return $map[$ref];
 				}
 			);
+
+			foreach ($installed as $directory => $reference) {
+				$html = $reference->rewrite(
+					$html,
+					function (string $path) use (&$map, $directory, $installRoot, $htmlDir, $assetDirectory): ?string {
+						// The directory is part of the key: it is what the path is read under, and
+						// two extensions may serve a picture of the same name.
+						$key = "/$directory$path";
+						if (!array_key_exists($key, $map)) {
+							$src = ContainedPath::under($installRoot, $key);
+							$map[$key] = $src === null
+								? null
+								: $this->storeLocal($src, $key, $htmlDir, $assetDirectory);
+						}
+						return $map[$key];
+					}
+				);
+			}
 
 			file_put_contents($file, $html, LOCK_EX);
 		}
