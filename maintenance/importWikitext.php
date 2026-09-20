@@ -28,6 +28,12 @@ class ImportWikitext extends Maintenance {
 		parent::__construct();
 		$this->addDescription('Import *.wikitext files from the given path');
 		$this->addOption(
+			'defer',
+			'Report the pages a content model refused rather than failing on them; a caller will'
+			. ' import them again.'
+		);
+		$this->addArg('file', 'Import only these files, named relative to the source directory.', false, true);
+		$this->addOption(
 			'parse-only',
 			'Parse the pages and save nothing, to leave what a parse caches where the import finds it.'
 		);
@@ -62,6 +68,14 @@ class ImportWikitext extends Maintenance {
 		$this->output("Wikven: parsed $parsed page(s) to fill what a parse caches\n");
 	}
 
+	/** @var string[] Relative paths a content model refused, for a caller that will import them again. */
+	private array $refused = [];
+
+	/** @return string[] Relative paths this run deferred. */
+	public function refused(): array {
+		return $this->refused;
+	}
+
 	/**
 	 * @return bool Whether every file was imported successfully.
 	 */
@@ -77,7 +91,9 @@ class ImportWikitext extends Maintenance {
 			return true;
 		}
 
+		$defer = $this->hasOption('defer');
 		$failed = [];
+		$refused = [];
 		foreach ($files as $filename) {
 			$title = Title::newFromText($this->filenameToTitle($filename, $sourceDirectory));
 			if (!$title) {
@@ -104,14 +120,24 @@ class ImportWikitext extends Maintenance {
 				$this->output(" done\n");
 				continue;
 			}
-			$this->output(" failed: $error\n");
-			$failed[] = $relative;
+			// A refusal is not news while somebody is going to try again; the reason is, if it holds.
+			$this->output($defer ? " waiting\n" : " failed: $error\n");
+			$refused[] = $relative;
 		}
+
+		$this->refused = $refused;
 
 		if ($failed) {
 			// Fail loudly so build.php's step() aborts; a silent partial export is worse than none.
 			$this->error(
 				'Failed to import ' . count($failed) . " page(s):\n  " . implode("\n  ", $failed)
+			);
+			return false;
+		}
+
+		if ($refused && !$defer) {
+			$this->error(
+				count($refused) . " page(s) were refused:\n  " . implode("\n  ", $refused)
 			);
 			return false;
 		}
@@ -209,6 +235,19 @@ class ImportWikitext extends Maintenance {
 			}
 		}
 		sort($files);
+
+		$only = $this->getArgs();
+		if ($only) {
+			$wanted = array_flip($only);
+			$named = [];
+			foreach ($files as $path) {
+				if (isset($wanted[substr($path, strlen($sourceDirectory) + 1)])) {
+					$named[] = $path;
+				}
+			}
+			$files = $named;
+		}
+
 		return $files;
 	}
 
