@@ -1469,11 +1469,6 @@ class Build extends Maintenance {
 		$extensions = [];
 		$skins = [];
 		foreach (ExtensionRegistry::getInstance()->getAllThings() as $thingName => $credits) {
-			// wikven is registered as an extension because that is how it reaches MediaWiki, but it is
-			// not one a site installed: it is what baked the site. builtWith() says so above the tables.
-			if ($thingName === self::OWN_NAME) {
-				continue;
-			}
 			if (str_contains($credits['path'] ?? '', '/skins/')) {
 				$skins[$thingName] = $credits;
 			} else {
