@@ -114,21 +114,19 @@ jobs:
       - run: mago format --check
       - run: mago lint
 
-  # The Caddy module in caddy/ is the only Go here; caddy/.golangci.yml says what is held to what.
+  # The Caddy module in caddy/ is the only Go here; caddy/.golangci.yml says what it is held to.
   golangci-lint:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      # Named for the reason rumdl's is, and matched by updatecli the same way. The upstream action
-      # would ask GitHub which release is the latest, which is the REST call per run that the note
-      # at the top of this file is about; a release URL is fixed and costs nothing to fetch.
+      # Named for the reason rumdl's is, and moved by updatecli the same way: the upstream action
+      # would spend a REST call a run asking which release is the latest. See the note above.
       GOLANGCI_LINT_VERSION: "2.5.0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
 
-      # The module's own Go, so the linter type-checks against the version the build uses.
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
         with:
           go-version-file: caddy/go.mod
@@ -155,7 +153,6 @@ jobs:
           chmod +x ~/.local/bin/golangci-lint
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-      # Checked, not written: --diff reports what gofmt would change and exits non-zero for it.
       - run: golangci-lint fmt --diff ./...
         working-directory: caddy
       - run: golangci-lint run ./...

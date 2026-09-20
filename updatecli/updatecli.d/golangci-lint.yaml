@@ -29,13 +29,11 @@ sources:
       repository: golangci-lint
       versionfilter:
         kind: semver
-    # Lint builds the release URL out of this, and the tarball inside it is named without the "v"
-    # the tag carries, so the number is taken without it and the "v" written back where it belongs.
+    # Lint writes the "v" back; the tarball inside the release is named without it.
     transformers:
       - trimprefix: v
 
 targets:
-  # The one place the version is written; Lint downloads that release and runs it over caddy/.
   lint:
     name: 'build(deps): bump golangci-lint to {{ source "release" }}'
     kind: file
