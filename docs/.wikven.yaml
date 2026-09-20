@@ -3,6 +3,7 @@ extensions:
   - Chart
   - Gadgets
   - JsonConfig
+  - Math
   - MobileFrontend
   - ParserFunctions
   # This site has one Lua module, and Special:MyLanguage/Lua modules is about it. Listing Scribunto

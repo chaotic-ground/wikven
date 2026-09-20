@@ -12,15 +12,17 @@
 ** Special:MyLanguage/Images|sidebar-images
 ** Special:MyLanguage/Skins|sidebar-skins
 ** Special:MyLanguage/Searching|sidebar-searching
-** Special:MyLanguage/Extensions|sidebar-extensions
-** Special:MyLanguage/Charts|sidebar-charts
-** Special:MyLanguage/Lua modules|sidebar-lua-modules
 ** Special:MyLanguage/JavaScript|sidebar-javascript
 ** Special:MyLanguage/Translating|sidebar-translating
 ** Special:MyLanguage/Editing sidebar|sidebar-editing-sidebar
 ** Special:MyLanguage/Deploying|sidebar-deploying
 ** Special:MyLanguage/Search engines|sidebar-search-engines
 ** Special:MyLanguage/Troubleshooting|sidebar-troubleshooting
+* sidebar-extending
+** Special:MyLanguage/Extensions|sidebar-extensions
+** Special:MyLanguage/Charts|sidebar-charts
+** Special:MyLanguage/Lua modules|sidebar-lua-modules
+** Special:MyLanguage/Math|sidebar-math
 * sidebar-references
 ** Special:MyLanguage/Limitations|sidebar-limitations
 ** Special:MyLanguage/Why wikitext|sidebar-why-wikitext
