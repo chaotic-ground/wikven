@@ -58,3 +58,42 @@
 
 <!--T:17 @116a5db5-->
 Scribunto가 그중 하나이며, 대부분의 위키가 손을 뻗는 것입니다. [[$1|Lua 모듈]]에 별도 문서가 있는데, Lua 모듈은 설정이면서 콘텐츠이기도 하고 [[$2|단독 실행 바이너리]]가 그것을 렌더링할 수 없기 때문입니다.
+
+<!--T:18 @721c6efa-->
+== 자기 프로그램이 필요한 확장 기능 ==
+
+<!--T:19 @523c6fd8-->
+어떤 확장 기능은 MediaWiki가 아닌 것을 실행해서 일을 합니다. [https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Chart Chart]가 그런 경우이고, 이 절을 읽고 계신 이유도 아마 그것일 겁니다. Chart는 숫자를 자바스크립트로 쓰인 렌더러에 넘겨서 차트를 그리는데, 그 렌더러는 {{SITENAME}} 이미지에 들어 있지 않습니다. 설정은 위의 내려받기에 주소 하나가 더 붙는 정도입니다.
+
+<!--T:20 @ea50f3cb-->
+Chart는 곁에 [https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:JsonConfig JsonConfig]를 원하고, 둘 다 어느 문서가 자기 것인지 알려주어야 합니다:
+
+<!--T:21 @6cbce9e2-->
+둘 다 이 브랜치에 대한 배포 태그를 내지 않으므로, 위 두 항목은 커밋을 고정하지 않고 브랜치를 따라갑니다. 그래서 같은 원본을 두 번 빌드해도 서로 다른 코드를 받아올 수 있습니다. 고정하는 방법은 [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> 맵]]을 보세요.
+
+<!--T:22 @39a4fdf8-->
+=== 렌더러가 있는 곳 ===
+
+<!--T:23 @17ea9240-->
+렌더러는 직접 돌리는 서비스입니다. [<tvar name="1">https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer</tvar> chart-renderer]를 클론해 <code>npm install</code>, <code>npm start</code>를 하면 6284 포트에서 응답합니다. <code>ChartServiceUrl</code>은 그게 있는 곳이고, 그 주소는 무엇이 빌드를 하느냐에 따라 달라집니다:
+
+<!--T:24 @a2bbf5cb-->
+; [[<tvar name="1">Special:MyLanguage/Standalone binary</tvar>|독립 실행 바이너리]]
+: 빌드가 당신의 기계에서 돌므로 렌더러는 <code>http://localhost:6284/v1/chart/render</code>에 있습니다.
+; 이미지, 또는 [[<tvar name="2">Special:MyLanguage/Deploying</tvar>|베이크 액션]]
+: 빌드가 컨테이너 안에서 돌고 당신의 기계는 그 바깥이며, 이름은 <code>host.docker.internal</code>입니다. 위 예시가 쓰는 것이 그것입니다.
+; 자기 주소를 가진 렌더러
+: 그 주소를 쓰면 되고 위의 것은 하나도 해당되지 않습니다. 빌드를 어디로 옮겨도 계속 맞는 답입니다.
+
+<!--T:25 @e8a2965b-->
+저 셋이 덮지 못하는 경우가 하나 있습니다. 도커가 사이드카 컨테이너에 들어 있는 자체 호스팅 러너입니다. 베이크는 그 사이드카의 데몬에 닿으므로 어느 이름으로도 러너를 찾지 못합니다. 그럴 때는 렌더러에 자기 주소를 주세요.
+
+<!--T:26 @d43e740b-->
+=== 데이터가 있는 곳 ===
+
+<!--T:27 @21fd44b9-->
+Chart는 <code>Data:</code> 이름공간에서 문서 두 개를 읽고, 둘 다 여느 원본 파일과 같습니다. 이름 자체가 무엇을 담았는지 이미 말하므로 <code>.wikitext</code>를 붙이지 않습니다:
+
+<!--T:28 @95f7817d-->
+그다음 차트를 보여줄 문서에 <code><nowiki>{{#chart:Election.chart}}</nowiki></code>를 씁니다. 빌드는 차트마다 렌더러에 한 번 물어서 그림을 SVG로 문서 안에 적어 넣으므로, 발행된 사이트는 렌더러도, 자바스크립트가 켜진 독자도 필요로 하지 않습니다.
+
