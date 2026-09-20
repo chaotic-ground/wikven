@@ -50,6 +50,25 @@ final class UploadReference {
 	}
 
 	/**
+	 * References to files the install serves out of its own tree, such as an extension's pictures.
+	 *
+	 * Matched inside a src attribute alone, because these paths are ordinary words on a page about
+	 * extensions.
+	 *
+	 * @param string $path The served directory, e.g. "/extensions".
+	 * @param SiteUrl $siteUrl Where the export is published, if the site has said.
+	 */
+	public static function installed(string $path, SiteUrl $siteUrl): self {
+		$slash = self::SLASH;
+		$directory = str_replace('/', $slash, preg_quote($path, '~'));
+		$ref = '(?<ref>(?:' . $slash . '[^\s"?<>\\\\]+)+)';
+		// The query is a cache-buster the install puts there, and it names no different file.
+		$query = '(?:\?[^\s"<>]*)?';
+
+		return new self('~(?<=src=")' . $directory . $ref . $query . '(?=")~', $siteUrl);
+	}
+
+	/**
 	 * References to pictures a foreign repository serves, which the page names at that host.
 	 *
 	 * No "host" group: every one of these carries one. The query is kept, unlike a stored

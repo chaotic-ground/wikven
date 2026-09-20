@@ -1,0 +1,49 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+[<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiHiero</tvar> WikiHiero] writes Ancient Egyptian hieroglyphs. Like [[<tvar name="2">Special:MyLanguage/Math</tvar>|a formula]] it wants no program beside MediaWiki, but unlike one it is not bundled, so a site says where to fetch it.
+
+<!--T:2-->
+The name of Ramesses II:
+</translate>
+
+<hiero>ra-ms-s-sw</hiero>
+
+<translate>
+<!--T:3-->
+Each sign is a small picture the extension carries. The build copies the ones a page uses into the site beside the page, so the reader fetches them from wherever the site is published and from nowhere else.
+
+<!--T:4-->
+== What a site declares ==
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - wikihiero
+config:
+  WikvenRepositories:
+    wikihiero:
+      repository: https://github.com/wikimedia/mediawiki-extensions-wikihiero.git
+      commit: 1a4f3d0456c5f1671b43da7e04426153f4db4eca
+</syntaxhighlight>
+
+<translate>
+<!--T:5-->
+Lowercase, both times. A name in either place is a directory rather than a title, and this extension's directory is lowercase where it comes from — its own installation notes say <code>wfLoadExtension( 'wikihiero' )</code> — with that spelling written into where it looks for its pictures. Most extensions are spelled as they are titled, and this one is not. See the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]] for the other ways to name a source, and [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|Extensions]] for what a fetched extension is.
+
+<!--T:6-->
+== Writing hieroglyphs ==
+</translate>
+
+<syntaxhighlight lang="wikitext" copy>
+<hiero>ra-ms-s-sw</hiero>
+</syntaxhighlight>
+
+<translate>
+<!--T:7-->
+The codes between the tags are [<tvar name="1">https://en.wikipedia.org/wiki/Gardiner%27s_sign_list</tvar> Gardiner's sign list] — <code>N5</code> is the sun, <code>A1</code> a seated man — and a sign with a common reading may be written by that reading instead, as <code>ra</code> is written above. <code>-</code> sets signs side by side, <code>:</code> stacks them, and <code>*</code> joins them into one group. [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiHiero/Syntax</tvar> WikiHiero's own page] has the rest.
+</translate>
+
+{{prevnext}}

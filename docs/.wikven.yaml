@@ -15,6 +15,9 @@ extensions:
   - TextExtracts
   - Translate
   - WikiSEO
+  # Lowercase because that is the directory the extension is in, and what it looks for its own
+  # pictures under. Special:MyLanguage/Hieroglyphs is about it.
+  - wikihiero
   - UniversalLanguageSelector
 # With Vector from default.yml, this is the whole supported set.
 skins:
@@ -142,6 +145,11 @@ config:
     JsonConfig:
       repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
       commit: 75ed9e28183e8024e803ddf99a73cb79a48a0528
+    # Draws the hieroglyphs on Special:MyLanguage/Hieroglyphs. Its newest tag is two releases
+    # behind this branch, so it is pinned to a commit on the branch, as the others here are.
+    wikihiero:
+      repository: https://github.com/wikimedia/mediawiki-extensions-wikihiero.git
+      commit: 1a4f3d0456c5f1671b43da7e04426153f4db4eca
     # WikiSEO writes the head tags a static export cannot get any other way: the site
     # verification token above, and later the canonical and hreflang links. Not bundled in the
     # image, so it is fetched here.

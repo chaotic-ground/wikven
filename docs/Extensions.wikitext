@@ -68,7 +68,7 @@ config:
 This documentation site fetches TabberNeue exactly like that — the tabs on [[<tvar name="1">Special:MyLanguage/Getting Started</tvar>|Getting Started]] are it — along with MobileFrontend, which [[<tvar name="2">Special:MyLanguage/Skins</tvar>|MinervaNeue]] leans on. See the [[<tvar name="3">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]] for the three ways to name a source, the host tools each one needs, and why to pin what you fetch.
 
 <!--T:18-->
-Some extensions want a program of their own beside the wiki, which is a source and an address rather than a source alone. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Chart</tvar> Chart] is the one most wikis reach for, and it has a page of its own at [[<tvar name="2">Special:MyLanguage/Charts</tvar>|Charts]].
+An extension can want more than a source: a program of its own, running beside the wiki while the site is built. The ones there is more to say about than a name have pages of their own — [[<tvar name="1">Special:MyLanguage/Charts</tvar>|Charts]], [[<tvar name="2">Special:MyLanguage/Hieroglyphs</tvar>|Hieroglyphs]] and [[<tvar name="3">Special:MyLanguage/Math</tvar>|Math]].
 
 <!--T:12-->
 == What will not work ==

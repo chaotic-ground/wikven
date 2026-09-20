@@ -1,0 +1,23 @@
+<!--T:title @38b9b9b4-->
+상형문자
+
+<!--T:1 @d3272f22-->
+[<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiHiero</tvar> WikiHiero]는 고대 이집트 상형문자를 씁니다. [[<tvar name="2">Special:MyLanguage/Math</tvar>|수식]]처럼 MediaWiki 곁에 둘 프로그램이 필요 없지만, 수식과 달리 딸려 오지 않아서 사이트가 어디서 가져올지 적어야 합니다.
+
+<!--T:2 @0c7f5c0e-->
+람세스 2세의 이름:
+
+<!--T:3 @10031dab-->
+기호 하나하나가 확장 기능이 들고 있는 작은 그림입니다. 빌드는 문서가 쓴 그림들을 문서 옆으로 복사해 둡니다. 그래서 독자는 사이트가 퍼블리시된 곳에서만 그림을 받아오고, 다른 어디에서도 받지 않습니다.
+
+<!--T:4 @da0a2a31-->
+== 사이트가 선언하는 것 ==
+
+<!--T:5 @a321a460-->
+두 번 다 소문자입니다. 두 자리에 적는 이름은 제목이 아니라 디렉터리이고, 이 확장 기능의 디렉터리는 본래부터 소문자입니다. 자체 설치 안내도 <code>wfLoadExtension( 'wikihiero' )</code>라고 적고 있고, 자기 그림을 찾는 경로에도 그 철자가 들어가 있습니다. 대부분의 확장 기능은 제목대로 적지만 이것은 아닙니다. 출처를 적는 다른 방법은 [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> 맵]]을, 가져오는 확장 기능이 무엇인지는 [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|확장 기능]]을 보세요.
+
+<!--T:6 @44b76715-->
+== 상형문자 쓰기 ==
+
+<!--T:7 @04be6de7-->
+태그 사이의 코드는 [<tvar name="1">https://en.wikipedia.org/wiki/Gardiner%27s_sign_list</tvar> 가디너 기호 목록]입니다. <code>N5</code>는 해, <code>A1</code>은 앉은 사람이고, 흔히 읽는 소리가 있는 기호는 그 소리로 대신 쓸 수 있습니다. 위의 <code>ra</code>가 그렇습니다. <code>-</code>는 기호를 나란히 놓고, <code>:</code>는 위아래로 쌓고, <code>*</code>는 한 덩어리로 묶습니다. 나머지는 [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:WikiHiero/Syntax</tvar> WikiHiero 자체 문서]에 있습니다.

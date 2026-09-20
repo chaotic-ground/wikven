@@ -98,6 +98,11 @@ class Checks {
 			),
 			new Check('math', 'a formula was written at build time and the page carries it', self::math(...)),
 			new Check(
+				'category-links',
+				'no page shows a link to a category the export does not have',
+				self::categoryLinks(...)
+			),
+			new Check(
 				'printfooter-links',
 				'every "Retrieved from" link resolves from the page holding it',
 				self::printfooterLinks(...)
@@ -684,6 +689,22 @@ class Checks {
 		$bundle = $site->path('assets', 'modules-static.js');
 		if (!is_file($bundle) || !str_contains($site->read($bundle), 'ext.chart.render')) {
 			$problems[] = 'a page draws a chart and ext.chart.render is not in the bundle';
+		}
+		return $problems;
+	}
+
+	/** @return string[] */
+	private static function categoryLinks(Site $site): array {
+		// An extension that tracks its pages in a category puts that category in the footer, where
+		// a reader sees a red link to a page no export holds. Defining it __HIDDENCAT__ takes it
+		// out; #783 shipped without one.
+		$problems = [];
+		foreach ($site->htmlFiles() as $path) {
+			if (preg_match_all('/title="(Category:[^"]*) \(page does not exist\)"/', $site->read($path), $m)) {
+				foreach (array_unique($m[1]) as $category) {
+					$problems[] = "$path links $category, which the export does not have";
+				}
+			}
 		}
 		return $problems;
 	}
