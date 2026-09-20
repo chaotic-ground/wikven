@@ -87,7 +87,13 @@ class Build extends Maintenance {
 		$this->phase('set the main page', $this->setMainPage(...));
 		$this->phase('import the images', $this->importImages(...), "$ip/maintenance/importImages.php");
 		$this->phase('warm the parse caches', $this->warmParseCaches(...), "$own/importWikitext.php");
-		$this->step('import the pages', ImportWikitext::class, "$own/importWikitext.php");
+		$import = $this->step('import the pages', ImportWikitext::class, "$own/importWikitext.php", ['defer' => 1]);
+		$this->phase(
+			'import the pages that waited',
+			$this->importRefused(...),
+			"$own/importWikitext.php",
+			$import->refused()
+		);
 		$this->phase('check the main page arrived', $this->assertMainPageExists(...));
 		$this->phase('write the licenses page', $this->setLicensesPage(...));
 		$this->phase('write the settings page', $this->setSettingsPage(...));
@@ -549,6 +555,28 @@ class Build extends Maintenance {
 			$this->error($errors);
 		}
 		return $exit;
+	}
+
+	/**
+	 * Import again, in a fresh boot, the pages a content model refused.
+	 *
+	 * The extension that answered "no such page" keeps that answer for a process's life. One pass:
+	 * a page waiting on a page that waited still fails.
+	 *
+	 * @param string[] $refused Relative paths, as the import named them.
+	 */
+	private function importRefused(string $script, array $refused): void {
+		if ($refused === []) {
+			return;
+		}
+		$this->output(
+			'Wikven: ' . count($refused) . " page(s) waited on another page; importing them again\n"
+		);
+		// Without --defer, so this one says what it could not import and fails on it.
+		$command = array_merge($this->selfCommand($script), $refused);
+		if ($this->waitForChild($this->startChild($command)) !== 0) {
+			$this->fatalError('Wikven: ' . count($refused) . ' page(s) would not import; aborting the build.');
+		}
 	}
 
 	/**
