@@ -52,6 +52,10 @@ return [
 	'prevnext_page' => 'Searching',
 	'prevnext_language' => 'ko',
 
+	// Pages that write a formula. Math renders it here rather than fetching it, which is the whole
+	// of what Special:MyLanguage/Math promises, so the MathML in the page is what says so.
+	'math_pages' => ['Math.html', 'Math/ko.html'],
+
 	// Pages that draw a chart. Chart writes an error box rather than failing when it cannot reach
 	// its renderer, so a bake with none produces a whole site with a picture of a failure on it.
 	'chart_pages' => ['Charts.html', 'Charts/ko.html'],

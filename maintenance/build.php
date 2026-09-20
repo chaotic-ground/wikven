@@ -82,6 +82,7 @@ class Build extends Maintenance {
 		// Before the output directory is emptied, because a site this build cannot render is better
 		// told so with its last bake still in place.
 		$this->phase('check what the site listed', $this->assertEverythingListedIsHere(...));
+		$this->phase('check what the site asked for', $this->assertNothingRefused(...));
 		$this->phase('check the Lua', $this->checkLuaAgainstThisBuild(...));
 		$this->phase('clear the output directory', $this->clearOutputDirectory(...));
 		$this->phase('set the main page', $this->setMainPage(...));
@@ -1102,6 +1103,28 @@ class Build extends Maintenance {
 			. count($missing)
 			. ' name(s) nothing here provides, and a'
 			. ' build that went on would publish a site without them; aborting the build.'
+		);
+	}
+
+	/**
+	 * Stop on config a site wrote that a bake will not honour.
+	 *
+	 * Separate from the list above: what is named here works, and it is the asking that cannot be
+	 * met. WikvenRefused says what goes in it.
+	 */
+	private function assertNothingRefused(): void {
+		$refused = $this->getConfig()->get('WikvenRefused');
+		if (!is_array($refused) || $refused === []) {
+			return;
+		}
+		foreach ($refused as $one) {
+			$this->error("Wikven: this build will not do $one");
+		}
+		$this->fatalError(
+			'Wikven: the site asked for '
+			. count($refused)
+			. ' thing(s) a build will not do, and going on would publish a site that is not what'
+			. ' the configuration file describes; aborting the build.'
 		);
 	}
 

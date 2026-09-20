@@ -245,6 +245,9 @@ $config['skins'] = array_values(array_unique(array_filter($config['skins'], 'is_
 // for. Collected rather than counted, because the build fails on it and has to say which names.
 $GLOBALS['wgWikvenMissing'] = [];
 
+// The same, for what the site asked for that a bake will not do. See WikvenRefused.
+$GLOBALS['wgWikvenRefused'] = [];
+
 // Register each bundled skin; canonical name (may differ from dir) read from skin.json.
 $wgWikvenSkins = [];
 foreach ($config['skins'] ?? [] as $skin) {
@@ -372,6 +375,26 @@ if (
 	&& !array_key_exists('JsonConfigDisableCache', $wikvenSiteConfig)
 ) {
 	$GLOBALS['wgJsonConfigDisableCache'] = true;
+}
+
+// Math writes each formula itself, and its other two modes fetch it from a server instead --
+// Wikimedia's, left alone. A build is not somebody else's to answer, so those are refused.
+if (in_array('Math', $config['extensions'], true)) {
+	$wikvenMathModes = array_intersect(
+		array_map('strval', (array)( $wikvenSiteConfig['MathValidModes'] ?? [] )),
+		['mathml', 'latexml']
+	);
+	foreach ($wikvenMathModes as $wikvenMathMode) {
+		$GLOBALS['wgWikvenRefused'][] =
+			"MathValidModes entry '$wikvenMathMode' (it renders by asking a service, and a bake"
+			. ' renders with what is here; leave it out for the local modes)';
+	}
+	// Named even where no mode reads them, so a site hears about the line rather than about its
+	// effect: writing one of these is asking for the modes above, and they are not on offer.
+	$wikvenMathUrls = ['MathFullRestbaseURL', 'MathInternalRestbaseURL', 'MathMathMLUrl', 'MathLaTeXMLUrl'];
+	foreach (array_intersect($wikvenMathUrls, array_keys($wikvenSiteConfig)) as $wikvenMathUrl) {
+		$GLOBALS['wgWikvenRefused'][] = "$wikvenMathUrl (a rendering service's address, and a bake asks none)";
+	}
 }
 
 // Say which config names nothing defines. This is the quietest way a line in a site's file is

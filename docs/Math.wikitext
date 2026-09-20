@@ -1,0 +1,62 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+A formula on a {{SITENAME}} site is written once, while the site is being built, and what the reader gets is the writing. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Math</tvar> Math] is the extension for it, and unlike a [[<tvar name="2">Special:MyLanguage/Charts</tvar>|chart]] it wants nothing beside MediaWiki. It is in the image already, and naming it is the whole of the setup.
+
+<!--T:2-->
+This page writes one:
+</translate>
+
+<math display="block">\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}</math>
+
+<translate>
+<!--T:3-->
+What the reader gets is [<tvar name="1">https://developer.mozilla.org/docs/Web/MathML</tvar> MathML] sitting in the HTML, which a current browser draws by itself. There is no picture to fetch and no script to run, and the formula stays text: a reader can select it, and a screen reader can say it.
+
+<!--T:4-->
+== What a site declares ==
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - Math
+</syntaxhighlight>
+
+<translate>
+<!--T:5-->
+That is all of it. Math is [[<tvar name="1">Special:MyLanguage/Extensions#What is already there</tvar>|bundled with MediaWiki]], so there is no repository to name and no commit to pin.
+
+<!--T:6-->
+== How it renders ==
+
+<!--T:7-->
+Math has several rendering modes, and {{SITENAME}} takes the ones that render here:
+
+<!--T:8-->
+; <code>native</code>
+: MathML, written by PHP. The default, and what the formula above is.
+; <code>mathjax</code>
+: The same MathML, drawn by the MathJax library in the browser. It costs every page of the site that library.
+; <code>source</code>
+: The LaTeX, left as it was written.
+
+<!--T:9-->
+The other two, <code>mathml</code> and <code>latexml</code>, render a formula by asking a server for it — Wikimedia's, unless the site says otherwise. A build that did that would turn on someone else's uptime and publish whatever that server answered on the day it ran, and [[<tvar name="1">Special:MyLanguage/Deploying</tvar>|two builds of one source are meant to agree]]. Naming one of those modes, or an address for one, stops the build and says so; it is not quietly dropped.
+
+<!--T:10-->
+== Writing a formula ==
+</translate>
+
+<syntaxhighlight lang="wikitext" copy>
+<math>E = mc^2</math>
+<math display="block">\int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}</math>
+</syntaxhighlight>
+
+<translate>
+<!--T:11-->
+Inline by default. <code>display="block"</code> puts the formula on a line of its own and centres it, which is what the one at the top of this page does. What a formula may contain is [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Displaying_a_formula</tvar> the LaTeX subset Math accepts], and one it cannot read stops the build rather than publishing an error message where the formula should be.
+</translate>
+
+{{prevnext}}

@@ -185,6 +185,10 @@
 			"value": [],
 			"description": "What the site asked for that nothing here provides, one sentence per name, collected rather than counted because the build has to be able to say which. Set by WikvenSettings.php as it loads each extension and skin. Empty is the ordinary case, and the only one a build is allowed to finish in."
 		},
+		"WikvenRefused": {
+			"value": [],
+			"description": "What the site asked for that a bake will not do, one sentence per entry, collected the way WikvenMissing is and for the same reason: the build fails on it and has to be able to say which. What is named here is present and working -- it is the asking a static export cannot honour. Extension:Math's service rendering modes are the first: Math renders each formula locally by default, and its mathml and latexml modes fetch it from a server instead, Wikimedia's unless told otherwise, so a build would depend on someone else's uptime and publish whatever that server answered on the day it ran. Refused rather than quietly turned back to the local mode, because a site that wrote the line meant something by it."
+		},
 		"WikvenAssetDirectory": {
 			"value": "assets",
 			"description": "Directory the build writes everything it generates into, under the output directory: the stylesheets, the script bundles, and the images and webfont files their CSS names. Left at the output root with \".\", where they sit among the pages. One directory rather than one per kind because a stylesheet reaches its images by a path relative to itself, so they cannot be parted."

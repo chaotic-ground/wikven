@@ -96,6 +96,7 @@ class Checks {
 				'a chart was drawn at build time, and the page and the bundle both carry it',
 				self::charts(...)
 			),
+			new Check('math', 'a formula was written at build time and the page carries it', self::math(...)),
 			new Check(
 				'printfooter-links',
 				'every "Retrieved from" link resolves from the page holding it',
@@ -683,6 +684,22 @@ class Checks {
 		$bundle = $site->path('assets', 'modules-static.js');
 		if (!is_file($bundle) || !str_contains($site->read($bundle), 'ext.chart.render')) {
 			$problems[] = 'a page draws a chart and ext.chart.render is not in the bundle';
+		}
+		return $problems;
+	}
+
+	/** @return string[] */
+	private static function math(Site $site): array {
+		// Math writes the formula into MathML here, with PHP, and the element carries the MathML
+		// namespace when it did. What this catches is the mode changing under the documentation.
+		$problems = [];
+		foreach ((array)$site->expect['math_pages'] as $page) {
+			$path = $site->path((string)$page);
+			if (!is_file($path)) {
+				$problems[] = "$path is not in the export";
+			} elseif (!str_contains($site->read($path), 'xmlns="http://www.w3.org/1998/Math/MathML"')) {
+				$problems[] = "$path carries no MathML; the formula was not written here";
+			}
 		}
 		return $problems;
 	}
