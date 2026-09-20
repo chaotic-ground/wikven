@@ -30,7 +30,7 @@ class ImportWikitext extends Maintenance {
 		$this->addOption(
 			'defer',
 			'Report the pages a content model refused rather than failing on them; a caller will'
-				. ' import them again.'
+			. ' import them again.'
 		);
 		$this->addArg('file', 'Import only these files, named relative to the source directory.', false, true);
 		$this->addOption(
@@ -240,7 +240,7 @@ class ImportWikitext extends Maintenance {
 		if ($only) {
 			$files = array_values(array_filter(
 				$files,
-				static fn (string $path): bool => in_array(
+				static fn(string $path): bool => in_array(
 					substr($path, strlen($sourceDirectory) + 1),
 					$only,
 					true

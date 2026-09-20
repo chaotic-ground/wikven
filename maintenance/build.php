@@ -563,6 +563,7 @@ class Build extends Maintenance {
 	 * The extension that answered "no such page" keeps that answer for a process's life. One pass:
 	 * a page waiting on a page that waited still fails.
 	 *
+	 * @param string $script The import script, as an absolute path.
 	 * @param string[] $refused Relative paths, as the import named them.
 	 */
 	private function importRefused(string $script, array $refused): void {
