@@ -39,6 +39,9 @@ class Build extends Maintenance {
 	/** Fallback for the frozen timestamps when the caller names none; chosen only for being fixed. */
 	private const FROZEN_TIMESTAMP = '20000101000000';
 
+	/** What the extension registry calls wikven itself, which the licenses page pulls out of the tables. */
+	private const OWN_NAME = 'Wikven';
+
 	/** Names the directory a skin pass's own copy of the database goes in, beside the original. */
 	private const PASS_DATABASE_PREFIX = 'wikven-pass-';
 
@@ -1325,11 +1328,29 @@ class Build extends Maintenance {
 		}
 	}
 
+	/** The paragraph naming what baked the site, or nothing if the registry has no credits for it. */
+	private function builtWith(?string $lang): string {
+		$credits = ExtensionRegistry::getInstance()->getAllThings()[self::OWN_NAME] ?? null;
+		if (!is_array($credits)) {
+			return '';
+		}
+		return (
+			$this->contentMsg(
+				'wikven-licenses-built-with',
+				$lang,
+				(string)( $credits['url'] ?? '' ),
+				(string)( $credits['version'] ?? '' ),
+				(string)( $credits['license-name'] ?? '' )
+			) . "\n\n"
+		);
+	}
+
 	/** The whole licenses page, in the named language or the wiki's content language for null. */
 	private function licensesText(?string $lang): string {
 		return (
 			$this->contentMsg('wikven-licenses-intro', $lang)
 			. "\n\n"
+			. $this->builtWith($lang)
 			. rtrim($this->coreTable($lang) . $this->componentLists($lang))
 			. "\n"
 		);
@@ -1477,8 +1498,8 @@ class Build extends Maintenance {
 	 * A message in the language a generated page is written in (these pages are content, not UI
 	 * chrome), which is the wiki's content language unless a language is named.
 	 */
-	private function contentMsg(string $key, ?string $lang = null): string {
-		$message = wfMessage($key);
+	private function contentMsg(string $key, ?string $lang = null, string ...$parameters): string {
+		$message = wfMessage($key, ...$parameters);
 		return ( $lang === null ? $message->inContentLanguage() : $message->inLanguage($lang) )->text();
 	}
 
