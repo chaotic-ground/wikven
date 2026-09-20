@@ -17,8 +17,7 @@ on:
       - 'i18n/**'
   workflow_dispatch:
 
-permissions:
-  contents: write  # publish the built site to the gh-pages branch
+permissions: {}
 
 # Serialize deployments to the gh-pages branch; a newer run supersedes an in-flight one.
 concurrency:
@@ -26,9 +25,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy-pages:
+  bake:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write  # write the built site to the gh-pages branch
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -57,13 +58,20 @@ jobs:
           image: wikven
           cache: false  # the image was just built locally; nothing to cache or pull
 
-      # Publish the built site to the root of the gh-pages branch (the repo's Pages source).
-      # clean-exclude keeps the pr-preview/ tree that pr-preview.yml manages, so a production
-      # deploy never wipes an open PR's preview.
-      - name: Deploy to gh-pages
+      # The whole branch, because it holds this site and nothing else now: the previews live on
+      # a branch of their own, and publish-pages lays them over this one. Nothing serves this.
+      - name: Store the built site on gh-pages
         uses: JamesIves/github-pages-deploy-action@fa24774553152dd7873cd16ebd8d959b010c5445  # v4.9.0
         with:
           branch: gh-pages
           folder: dist
           clean: true
-          clean-exclude: pr-preview
+
+  # Serves what the job above stored, with every open pull request's preview beside it.
+  publish:
+    needs: bake
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/publish-pages.yml
