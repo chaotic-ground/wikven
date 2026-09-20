@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven;
 use FilesystemIterator;
 use Maintenance;
 use MediaWiki\Extension\Wikven\Build\BuildStamps;
+use MediaWiki\Extension\Wikven\Build\ChartIds;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 	? getenv('MW_INSTALL_PATH')
@@ -12,7 +13,7 @@ $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
 
 require_once "$IP/maintenance/Maintenance.php";
 
-/** Drop the request ids, render ids and timestamps MediaWiki stamps into every rendered page. */
+/** Drop what a rendered page records about the run that rendered it rather than about itself. */
 class StripBuildStamps extends Maintenance {
 	public function __construct() {
 		parent::__construct();
@@ -33,7 +34,9 @@ class StripBuildStamps extends Maintenance {
 				continue;
 			}
 			$html = (string)file_get_contents($file->getPathname());
-			$stripped = BuildStamps::strip($html);
+			// Chart's renderer numbers a drawing's ids per process, so the same chart comes back
+			// numbered differently on every build; ChartIds gives them numbers of the page's own.
+			$stripped = ChartIds::renumber(BuildStamps::strip($html));
 			if ($stripped !== $html) {
 				file_put_contents($file, $stripped, LOCK_EX);
 				$changed++;
