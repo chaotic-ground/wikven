@@ -4,8 +4,14 @@
 <!--T:1 @e930ab62-->
 {{SITENAME}} 사이트의 차트는 사이트를 빌드할 때 한 번 그려지고, 독자가 받는 것은 그려진 그림입니다. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Chart</tvar> Chart]가 그 일을 하는 확장 기능이고, 한 부류의 첫 번째이기도 합니다. MediaWiki 곁에 자기 프로그램을 두고 싶어 하는 확장 기능이지요. 설정은 [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|확장 기능 내려받기]]에 주소 하나가 더해지는 정도입니다.
 
-<!--T:2 @680b1301-->
-독자가 받는 것은 HTML 안에 들어앉은 <code>&lt;svg&gt;</code>입니다. 보낼 요청도, 돌릴 스크립트도 없습니다. 렌더러는 사이트를 빌드하는 동안에만 필요하고 그 뒤로는 아닙니다.
+<!--T:2 @1af9990d-->
+이 문서가 하나를 그립니다. 아래에 적힌 것이 전부 그 차트가 나타나게 하려고 이 사이트가 하는 일입니다.
+
+<!--T:3 @227af166-->
+숫자는 [<tvar name="1">https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer</tvar> chart-renderer]가 예시로 들고 있는 것이라, {{SITENAME}}이 아니라 캐나다 선거 이야기입니다. 볼 만한 것은 그림 쪽입니다. 이 문서의 원본을 보면 <code>&lt;svg&gt;</code>가 HTML 안에 그대로 들어 있고, 보낼 요청이 없습니다. 무엇이 돌기 전에 독자가 보는 것이 이것이고, 아무것도 안 돌아도 남는 것이 이것입니다.
+
+<!--T:16 @7474b9f8-->
+그다음 Chart가 그 그림을 브라우저의 [<tvar name="1">https://echarts.apache.org/</tvar> ECharts]에 넘깁니다. 범례가 대답하게 만드는 것이 이쪽이지요. 정당을 누르면 그 선이 사라집니다. 그래서 어느 문서든 차트를 그리는 사이트는 스크립트 번들에 ECharts를 싣습니다. 830&nbsp;KB쯤 되고, 번들이 사이트 전체가 공유하는 파일 하나라 모든 문서가 받습니다. 차트를 하나도 안 그리는 사이트는 이걸 싣지 않습니다.
 
 <!--T:4 @da0a2a31-->
 == 사이트가 선언하는 것 ==
@@ -44,4 +50,7 @@ Chart는 <code>Data:</code> 이름공간에서 문서 두 개를 읽고, 둘 다
 
 <!--T:14 @7a73abde-->
 <code>.tab</code> 문서는 [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Tabular_Data</tvar> 표 데이터]입니다. 필드를 이름 짓는 스키마와 행들이지요. <code>.chart</code> 문서는 그중 무엇을 어떻게 그릴지 말하고, <code>source</code>에 자기 <code>.tab</code> 문서를 적습니다. 그러고 나면 차트를 보여줄 문서에:
+
+<!--T:15 @e34655a7-->
+이 문서 맨 위 차트 바로 위에 있는 줄이 그것입니다.
 

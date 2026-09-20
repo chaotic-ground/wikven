@@ -6,7 +6,17 @@ __TOC__
 A chart on a {{SITENAME}} site is drawn once, while the site is being built, and what the reader gets is the drawing. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Chart</tvar> Chart] is the extension for it, and it is the first of a kind: an extension that wants a program of its own beside MediaWiki. Setting it up is [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|fetching an extension]], plus an address.
 
 <!--T:2-->
-What the reader gets is an <code>&lt;svg&gt;</code> sitting in the HTML, with no request to make and no script to run. The renderer is wanted while the site is being built, and not afterwards.
+This page draws one. Everything below is what this site does to make it appear.
+</translate>
+
+{{#chart:Election.chart}}
+
+<translate>
+<!--T:3-->
+The numbers are the sample [<tvar name="1">https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer</tvar> chart-renderer] ships with, which is why they are about an election in Canada rather than about {{SITENAME}}. What is worth looking at is the drawing itself: view the source of this page and it is an <code>&lt;svg&gt;</code>, sitting in the HTML with no request to make. It is what a reader sees before anything runs, and what they are left with if nothing does.
+
+<!--T:16-->
+Then Chart hands that drawing to [<tvar name="1">https://echarts.apache.org/</tvar> ECharts] in the browser, which is what makes the legend answer: click a party and its line goes. So a site with a chart on any page carries ECharts in its script bundle — around 830&nbsp;KB, on every page of it, since the bundle is one file the whole site shares. A site that draws no chart carries none of it.
 
 <!--T:4-->
 == What a site declares ==
@@ -93,5 +103,10 @@ The <code>.tab</code> page is [<tvar name="1">https://www.mediawiki.org/wiki/Spe
 <syntaxhighlight lang="wikitext" copy>
 {{#chart:Election.chart}}
 </syntaxhighlight>
+
+<translate>
+<!--T:15-->
+Which is the line above the chart at the top of this page.
+</translate>
 
 {{prevnext}}

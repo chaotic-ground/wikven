@@ -33,6 +33,13 @@ class BuildScripts extends Maintenance {
 	 */
 	private const RUNTIME_MODULES = ['ext.tabberNeue.icons'];
 
+	/**
+	 * The same, for ones an element asks for rather than the page itself: the module, keyed by its
+	 * element. Seeded off the pages written rather than the extension installed, because what
+	 * rides along can be large.
+	 */
+	private const ELEMENT_MODULES = ['wiki-chart' => 'ext.chart.render'];
+
 	/** The bundle's own module that carries what onDemand() holds back. Registered by its impl. */
 	private const ON_DEMAND_MODULE = 'ext.Wikven.onDemand';
 
@@ -89,6 +96,13 @@ class BuildScripts extends Maintenance {
 		foreach (self::RUNTIME_MODULES as $runtimeModule) {
 			if ($rl->isModuleRegistered($runtimeModule)) {
 				$seeds[] = $runtimeModule;
+			}
+		}
+		// A chart is drawn by the build and sits in the page as an SVG; Chart then asks for ECharts
+		// to make it answer the reader. Only a site with a chart on a page carries that.
+		foreach ($this->collectElementModules($htmlDir) as $elementModule) {
+			if ($rl->isModuleRegistered($elementModule)) {
+				$seeds[] = $elementModule;
 			}
 		}
 		// 2. Expand to the full dependency closure, plus the implicit base modules.
@@ -168,6 +182,25 @@ class BuildScripts extends Maintenance {
 					foreach ($list as $name) {
 						$modules[$name] = true;
 					}
+				}
+			}
+		}
+		return array_keys($modules);
+	}
+
+	/**
+	 * The modules the elements in the rendered pages will go looking for.
+	 *
+	 * @param string $htmlDir
+	 * @return string[] Module names, each named once however many pages want it.
+	 */
+	private function collectElementModules(string $htmlDir): array {
+		$modules = [];
+		foreach (glob("$htmlDir/*.html") as $file) {
+			$html = (string)file_get_contents($file);
+			foreach (self::ELEMENT_MODULES as $element => $module) {
+				if (!isset($modules[$module]) && str_contains($html, "<$element")) {
+					$modules[$module] = true;
 				}
 			}
 		}

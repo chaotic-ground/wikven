@@ -21,9 +21,9 @@ actions:
         - dependencies
 
 # Every pin here is a commit, so the branch it follows lives here rather than beside it. It is the
-# release branch of the image's MediaWiki, and moves when that base image does. Two of the three are
-# bundled by the Dockerfile; MobileFrontend is fetched at build time by the docs site, which is the
-# only site that installs it.
+# release branch of the image's MediaWiki, and moves when that base image does. Two are bundled by
+# the Dockerfile; the rest are fetched at build time by the docs site, which is the only site that
+# installs them.
 sources:
   translate:
     name: Head of Translate's REL1_46
@@ -51,6 +51,20 @@ sources:
     kind: gitcommit
     spec:
       url: https://github.com/wikimedia/mediawiki-extensions-WikiSEO
+      branch: REL1_46
+      depth: 1
+  chart:
+    name: Head of Chart's REL1_46
+    kind: gitcommit
+    spec:
+      url: https://github.com/wikimedia/mediawiki-extensions-Chart
+      branch: REL1_46
+      depth: 1
+  jsonconfig:
+    name: Head of JsonConfig's REL1_46
+    kind: gitcommit
+    spec:
+      url: https://github.com/wikimedia/mediawiki-extensions-JsonConfig
       branch: REL1_46
       depth: 1
 
@@ -91,3 +105,19 @@ targets:
     spec:
       file: docs/.wikven.yaml
       key: $.config.WikvenRepositories.WikiSEO.commit
+  chart:
+    name: 'build(deps): bump Chart to {{ source "chart" }}'
+    kind: yaml
+    scmid: default
+    sourceid: chart
+    spec:
+      file: docs/.wikven.yaml
+      key: $.config.WikvenRepositories.Chart.commit
+  jsonconfig:
+    name: 'build(deps): bump JsonConfig to {{ source "jsonconfig" }}'
+    kind: yaml
+    scmid: default
+    sourceid: jsonconfig
+    spec:
+      file: docs/.wikven.yaml
+      key: $.config.WikvenRepositories.JsonConfig.commit

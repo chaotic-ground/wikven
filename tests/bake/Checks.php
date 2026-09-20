@@ -92,6 +92,11 @@ class Checks {
 				self::luaModules(...)
 			),
 			new Check(
+				'charts',
+				'a chart was drawn at build time, and the page and the bundle both carry it',
+				self::charts(...)
+			),
+			new Check(
 				'printfooter-links',
 				'every "Retrieved from" link resolves from the page holding it',
 				self::printfooterLinks(...)
@@ -654,6 +659,30 @@ class Checks {
 					. implode(' ', $expected)
 					. ']';
 			}
+		}
+		return $problems;
+	}
+
+	/** @return string[] */
+	private static function charts(Site $site): array {
+		// Chart draws an error box where the chart should be when it cannot reach a renderer, and
+		// the build succeeds either way. The category it files that page under is cleared by the
+		// end, so the drawing is the evidence.
+		$problems = [];
+		foreach ((array)$site->expect['chart_pages'] as $page) {
+			$path = $site->path((string)$page);
+			if (!is_file($path)) {
+				$problems[] = "$path is not in the export";
+			} elseif (!str_contains($site->read($path), '<svg')) {
+				$problems[] = "$path carries no drawing; the renderer was not reachable";
+			}
+		}
+		// The drawing is handed to ECharts in the browser, asked for by name when the chart is
+		// scrolled to. Nothing in the queue the bundle is built from says so, so unseeded the
+		// reader gets a 404.
+		$bundle = $site->path('assets', 'modules-static.js');
+		if (!is_file($bundle) || !str_contains($site->read($bundle), 'ext.chart.render')) {
+			$problems[] = 'a page draws a chart and ext.chart.render is not in the bundle';
 		}
 		return $problems;
 	}

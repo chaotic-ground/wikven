@@ -52,6 +52,10 @@ return [
 	'prevnext_page' => 'Searching',
 	'prevnext_language' => 'ko',
 
+	// Pages that draw a chart. Chart writes an error box rather than failing when it cannot reach
+	// its renderer, so a bake with none produces a whole site with a picture of a failure on it.
+	'chart_pages' => ['Charts.html', 'Charts/ko.html'],
+
 	// Pages that invoke a Lua module, and the answer Module:Example gives on each: the title of the
 	// page it ran on. Spelled out per page because the file name has underscores (#465).
 	'lua_pages' => [

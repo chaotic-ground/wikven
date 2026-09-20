@@ -21,6 +21,7 @@ on:
       - 'resources/**'
       - 'i18n/**'
       - 'docs/**'
+      - '.github/actions/chart-renderer/**'
       - '.github/workflows/smoke.yml'
       - 'package.json'
       - 'package-lock.json'
@@ -84,6 +85,15 @@ jobs:
             wikven-fetch-${{ hashFiles('docs/.wikven.yaml',
             'maintenance/fetchExtensions.php', 'includes/Fetching/**') }}
 
+      # This site's Charts page draws a real chart, so both bakes want the renderer it names
+      # answering. One each, not one between them: the renderer numbers the class names inside an
+      # SVG after a counter its process keeps, so two bakes sharing one draw the same chart
+      # differently and the comparison below fails on a difference that is not the site's.
+      - id: renderer-one
+        uses: ./.github/actions/chart-renderer
+      - id: renderer-two
+        uses: ./.github/actions/chart-renderer
+
       # Both bakes of the reproducibility check below, at once. They are independent by construction
       # -- separate containers, separate output directories, one shared source -- and most of a
       # bake is a single process: only the skin passes run beside each other, so the second bake
@@ -93,20 +103,24 @@ jobs:
       #
       # Each writes to its own log because two live logs interleave into neither.
       - name: Bake the docs site twice
+        env:
+          RENDERER_ONE: ${{ steps.renderer-one.outputs.address }}
+          RENDERER_TWO: ${{ steps.renderer-two.outputs.address }}
         run: |
           set -uo pipefail
           mkdir -p dist dist-again "$HOME/.cache/wikven/fetch"
           bake() {
             docker run --rm \
+              --add-host="host.docker.internal:$1" \
               -v "$(pwd)/docs:/workspace/src:ro" \
-              -v "$(pwd)/$1:/workspace/dist" \
-              "${@:2}" \
+              -v "$(pwd)/$2:/workspace/dist" \
+              "${@:3}" \
               wikven
           }
-          bake dist -v "$HOME/.cache/wikven/fetch:/workspace/fetch" \
+          bake "$RENDERER_ONE" dist -v "$HOME/.cache/wikven/fetch:/workspace/fetch" \
             -e WIKVEN_FETCH_DIR=/workspace/fetch > bake.log 2>&1 &
           first=$!
-          bake dist-again > bake-again.log 2>&1 &
+          bake "$RENDERER_TWO" dist-again > bake-again.log 2>&1 &
           second=$!
           status=0
           wait "$first" || status=$?

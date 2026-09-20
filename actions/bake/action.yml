@@ -46,6 +46,13 @@ inputs:
       that runs out of it renders one at a time with "1". Left unset the build
       counts the processors it is allowed and uses one pass per processor.
     default: ""
+  host-alias:
+    description: >-
+      What the bake should find host.docker.internal at: a service a site points
+      MediaWiki at for the length of a build, such as Extension:Chart's renderer.
+      The Docker host by default, which is where such a service usually runs; an
+      address instead where it runs somewhere the host is not.
+    default: host-gateway
 
 runs:
   using: composite
@@ -90,6 +97,7 @@ runs:
         FETCH_KEY: ${{ steps.fetch-cache-key.outputs.key }}
         SOURCE_DATE_EPOCH_IN: ${{ inputs.source-date-epoch }}
         JOBS: ${{ inputs.jobs }}
+        HOST_ALIAS: ${{ inputs.host-alias }}
       run: |
         # A value neither "true" nor "false" used to read as "false", so `cache: npm` -- the
         # spelling setup-node and setup-python take, where the value names what to cache -- turned
@@ -175,13 +183,13 @@ runs:
         # translate subcommands write into src/, and this action never runs one.
         #
         # A service the site points MediaWiki at during the bake -- Chart's renderer is the first
-        # of them -- runs on the runner, not in here. --add-host is the daemon saying where the
-        # host is, rather than a site committing a bridge address into its config file and finding
-        # it means something else on the machine its author bakes from. It adds a line to
-        # /etc/hosts: a bake that fetches over the network could already reach the host, and this
-        # opens no port. --network=host would be a different matter and is not this.
+        # of them -- runs outside this container. --add-host is the daemon saying where, rather
+        # than a site committing an address into its config file and finding it means something
+        # else on the machine its author bakes from. It adds a line to /etc/hosts: a bake that
+        # fetches over the network could already reach the host, and this opens no port.
+        # --network=host would be a different matter and is not this.
         docker run --rm \
-          --add-host=host.docker.internal:host-gateway \
+          --add-host="host.docker.internal:$HOST_ALIAS" \
           -v "$PWD/$SOURCE:/workspace/src:ro" \
           -v "$PWD/$OUTPUT:/workspace/dist" \
           "${epoch[@]}" \
