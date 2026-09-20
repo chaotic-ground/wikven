@@ -1,6 +1,8 @@
 ---
 extensions:
+  - Chart
   - Gadgets
+  - JsonConfig
   - MobileFrontend
   - ParserFunctions
   # This site has one Lua module, and Special:MyLanguage/Lua modules is about it. Listing Scribunto
@@ -86,6 +88,27 @@ config:
   # SifterSearch is built in and indexes into dist by default; this site serves under /wikven.
   SifterSearchBundlePath: /wikven/pagefind/
   SifterSearchResultsPage: "Search"
+  # Chart and JsonConfig own the Data: namespace between them, and each has to be told which
+  # names in it are its own. Chart's README says this should be simpler; until it is, it is this.
+  JsonConfigModels:
+    Tabular.JsonConfig: JsonConfig\JCTabularContent
+    Chart.JsonConfig: MediaWiki\Extension\Chart\JCChartContent
+  JsonConfigs:
+    Tabular.JsonConfig:
+      namespace: 486
+      nsName: Data
+      pattern: '/.\.tab$/'
+      license: CC0-1.0
+      isLocal: true
+    Chart.JsonConfig:
+      namespace: 486
+      nsName: Data
+      pattern: '/.\.chart$/'
+      license: CC0-1.0
+      isLocal: true
+  # Where the renderer answers. It runs on whatever is doing the baking, outside the container
+  # the bake runs in, which actions/bake gives this name to. See Special:MyLanguage/Charts.
+  ChartServiceUrl: http://host.docker.internal:6284/v1/chart/render
   WikvenRepositories:
     # TabberNeue is not bundled in the image; clone it from Git to show off
     # third-party fetching. (TemplateStyles, which the templates use, is bundled
@@ -109,6 +132,15 @@ config:
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
       commit: 6dd857d35b77bf2c025c838fe01c339739f1e0c5
+    # Chart draws the chart on Special:MyLanguage/Charts, and JsonConfig is what holds the two
+    # Data: pages it reads. Neither tags this branch, so both are pinned to a commit on it for the
+    # reason MobileFrontend is. updatecli moves the pins.
+    Chart:
+      repository: https://github.com/wikimedia/mediawiki-extensions-Chart.git
+      commit: 831c1d06d879e2b5eec26705ddbeaf9f36392e08
+    JsonConfig:
+      repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
+      commit: 75ed9e28183e8024e803ddf99a73cb79a48a0528
     # WikiSEO writes the head tags a static export cannot get any other way: the site
     # verification token above, and later the canonical and hreflang links. Not bundled in the
     # image, so it is fetched here.
