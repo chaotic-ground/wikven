@@ -13,8 +13,8 @@
 <!--T:4 @da0a2a31-->
 == 사이트가 선언하는 것 ==
 
-<!--T:5 @ab4dbf7f-->
-두 번 다 소문자입니다. 확장 기능이 들어 있는 디렉터리 이름이자, 자기 그림을 찾을 때 쓰는 이름이기 때문입니다. 출처를 적는 다른 방법은 [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> 맵]]을, 가져오는 확장 기능이 무엇인지는 [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|확장 기능]]을 보세요.
+<!--T:5 @a321a460-->
+두 번 다 소문자입니다. 두 자리에 적는 이름은 제목이 아니라 디렉터리이고, 이 확장 기능의 디렉터리는 본래부터 소문자입니다. 자체 설치 안내도 <code>wfLoadExtension( 'wikihiero' )</code>라고 적고 있고, 자기 그림을 찾는 경로에도 그 철자가 들어가 있습니다. 대부분의 확장 기능은 제목대로 적지만 이것은 아닙니다. 출처를 적는 다른 방법은 [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> 맵]]을, 가져오는 확장 기능이 무엇인지는 [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|확장 기능]]을 보세요.
 
 <!--T:6 @44b76715-->
 == 상형문자 쓰기 ==

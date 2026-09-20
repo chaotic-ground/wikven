@@ -31,7 +31,7 @@ config:
 
 <translate>
 <!--T:5-->
-Lowercase, both times: that is the directory the extension is in, and the name it looks for its own pictures under. See the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]] for the other ways to name a source, and [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|Extensions]] for what a fetched extension is.
+Lowercase, both times. A name in either place is a directory rather than a title, and this extension's directory is lowercase where it comes from — its own installation notes say <code>wfLoadExtension( 'wikihiero' )</code> — with that spelling written into where it looks for its pictures. Most extensions are spelled as they are titled, and this one is not. See the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenRepositories</tvar>|<code>WikvenRepositories</code> map]] for the other ways to name a source, and [[<tvar name="2">Special:MyLanguage/Extensions</tvar>|Extensions]] for what a fetched extension is.
 
 <!--T:6-->
 == Writing hieroglyphs ==
