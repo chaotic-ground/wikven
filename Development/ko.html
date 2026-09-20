@@ -645,9 +645,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div id="contentSub" lang="ko" dir="ltr"><div id="mw-content-subtitle" lang="ko" dir="ltr"></div></div>
 					
 					
-					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><meta property="mw:PageProp/toc" />
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Development.html" title="Development">Development</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Development/ko.wikitext">번역한 것</a></span>이며 번역은 98% 완료했습니다.</div><div class="mw-pt-translate-header" dir="ltr" lang="ko"><span class="mw-translate-fuzzy">오래된 번역은 이렇게 표시됩니다.</span></div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><meta property="mw:PageProp/toc" />
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Development.html" class="mw-pt-progress mw-pt-progress--complete" title="Development (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>이 문서는 Wikven에 작업하고자 하는 사람들을 위해 Wikven이 어떻게 만들어지는지 설명합니다. Wikven은 위키텍스트 디렉터리를 정적 웹사이트로 바꿔 주는 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki">MediaWiki</a> 확장 기능과 소수의 관리 스크립트로 이루어져 있습니다. 새로운 렌더링 엔진을 더하는 것이 아니라, MediaWiki 자체를 구동한 다음 그 결과물을 갈무리합니다. Wikven 자체를 작업하는 것이 아니라 정적 내보내기에서 살아남아야 하는 확장 기능이나 스킨을 만드는 중이라면, <a href="../Writing_an_extension/ko.html" title="Special:MyLanguage/Writing an extension">확장 기능 만들기</a>가 그 문서입니다.
 </p><p><span id="Architecture"></span>
 </p>
@@ -786,6 +786,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 </p><p><span id="Continuous&#95;integration"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="지속적_통합"><span id=".EC.A7.80.EC.86.8D.EC.A0.81_.ED.86.B5.ED.95.A9"></span>지속적 통합</h2></div>
+<div class="mw-translate-fuzzy">
 <ul><li><code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행하고, 모든 소스 주석을 낱말 수 예산 안에 묶어 두며, 이 사이트가 Wikven의 모든 설정 변수와 빌드의 모든 단계를 문서화하고 있는지 검사합니다.</li>
 <li><code>test.yml</code>은 실제 MediaWiki를 상대로 PHPUnit 스위트와 phan, 커버리지를 실행하고 Caddy 플러그인을 빌드합니다.</li>
 <li><code>semantic-pull-request.yml</code>은 풀 리퀘스트 제목을 읽습니다. 이 제목이 스쿼시 커밋의 제목이 되므로 Conventional Commits를 따라야 하며, Wikven 자체가 아니라 저장소를 바꾸는 변경(<code>docs/</code>, 리드미, <code>.tf/</code>, <code>.github/</code>)은 <code>feat</code>나 <code>fix</code>를 칭할 수 없습니다. release-please가 그것을 변경 로그에 넣고 버전을 올릴 것으로 읽기 때문입니다.</li>
@@ -796,6 +797,7 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
 <li><code>binary.yml</code>은 단독 실행 <a href="../Standalone_binary/ko.html" title="Special:MyLanguage/Standalone binary">바이너리</a>를 빌드합니다. 해당 파일을 건드리는 풀 리퀘스트에서, 그리고 릴리스 때는 각 플랫폼용으로 실행됩니다. <code>release-please.yml</code>이 이를 호출하여 버전 릴리스에 바이너리를 첨부하고, <code>nightly.yml</code>이 매일 이를 호출하여 날짜가 붙은 <code>nightly-YYYY-MM-DD</code> 프리릴리스를 게시합니다. 둘 다 릴리스를 초안으로 만들고, 바이너리를 첨부한 다음 게시하는데, GitHub의 불변 릴리스는 릴리스가 게시되고 나면 자산을 잠그기 때문입니다. <code>nightly.yml</code>은 같은 날짜 태그로 이미지도 게시하며, 릴리스된 버전이 넘겨받기 전까지는 <code>:latest</code>도 함께 붙입니다.</li>
 <li><code>updatecli.yml</code>은 이미지와 문서 사이트가 지닌 버전 핀을 옮깁니다. <code>tofu.yml</code>은 <code>.tf/</code>에 있는 저장소 자체의 설정을 GitHub의 현재 상태와 비교해 그 차이를 풀 리퀘스트에 코멘트로 답니다. GitHub를 바꾸는 것은 적용하지 않고 이미 있는 것을 상태로 들이는 임포트만 적용하므로, 머지된 <code>.tf/</code> 변경은 누군가 <code>tofu apply</code>를 실행해야 비로소 적용됩니다.</li>
 <li><code>image-diff.yml</code>은 컨테이너 이미지의 핀을 옮기는 풀 리퀘스트에, 두 이미지가 각각 빌드된 커밋을 서로 비교하는 링크를 코멘트로 답니다. 다이제스트는 빌드를 가리킬 뿐 비교할 대상이 없는데, 이미지 자신이 어느 커밋에서 나왔는지를 담고 있습니다.</li></ul>
+</div>
 <p>버전은 <a rel="nofollow" class="external text" href="https://www.conventionalcommits.org/">Conventional Commits</a>를 따르며, release-please가 이를 사용해 변경 로그를 생성하고 버전을 올립니다.
 </p>
 <style data-mw-deduplicate="TemplateStyles:r111">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">&#8592;&#160;<a href="../Building_from_source/ko.html" title="Special:MyLanguage/Building from source">소스에서 빌드</a></div></div>
