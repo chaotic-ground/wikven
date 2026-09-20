@@ -238,14 +238,14 @@ class ImportWikitext extends Maintenance {
 
 		$only = $this->getArgs();
 		if ($only) {
-			$files = array_values(array_filter(
-				$files,
-				static fn(string $path): bool => in_array(
-					substr($path, strlen($sourceDirectory) + 1),
-					$only,
-					true
-				)
-			));
+			$wanted = array_flip($only);
+			$named = [];
+			foreach ($files as $path) {
+				if (isset($wanted[substr($path, strlen($sourceDirectory) + 1)])) {
+					$named[] = $path;
+				}
+			}
+			$files = $named;
 		}
 
 		return $files;
