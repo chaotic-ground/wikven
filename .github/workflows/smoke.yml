@@ -21,7 +21,7 @@ on:
       - 'resources/**'
       - 'i18n/**'
       - 'docs/**'
-      - '.github/actions/chart-renderer/**'
+      - '.github/actions/bake-service/**'
       - '.github/workflows/smoke.yml'
       - 'package.json'
       - 'package-lock.json'
@@ -90,9 +90,13 @@ jobs:
       # SVG after a counter its process keeps, so two bakes sharing one draw the same chart
       # differently and the comparison below fails on a difference that is not the site's.
       - id: renderer-one
-        uses: ./.github/actions/chart-renderer
+        uses: ./.github/actions/bake-service
+        with:
+          name: chart-renderer
       - id: renderer-two
-        uses: ./.github/actions/chart-renderer
+        uses: ./.github/actions/bake-service
+        with:
+          name: chart-renderer
 
       # Both bakes of the reproducibility check below, at once. They are independent by construction
       # -- separate containers, separate output directories, one shared source -- and most of a

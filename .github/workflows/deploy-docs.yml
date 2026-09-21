@@ -5,7 +5,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '.github/actions/chart-renderer/**'  # a bake of this site wants a renderer answering
+      - '.github/actions/bake-service/**'  # a bake of this site wants a renderer answering
       - 'actions/bake/**'
       - 'docs/**'
       - 'Dockerfile'
@@ -54,7 +54,9 @@ jobs:
       # answering. Without one Chart writes an error box where the chart should be and the build
       # succeeds anyway; tests/bake is what refuses that, and only smoke runs it.
       - id: renderer
-        uses: ./.github/actions/chart-renderer
+        uses: ./.github/actions/bake-service
+        with:
+          name: chart-renderer
 
       # Dogfood the published composite action to bake the docs source.
       - name: Bake the docs site
