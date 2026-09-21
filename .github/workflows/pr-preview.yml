@@ -67,13 +67,13 @@ jobs:
       # succeeds anyway; tests/bake is what refuses that, and only smoke runs it.
       - id: renderer
         if: github.event.action != 'closed'
-        uses: ./.github/actions/bake-service
+        uses: $/.github/actions/bake-service
         with:
           name: chart-renderer
 
       - name: Bake the docs site
         if: github.event.action != 'closed'
-        uses: ./actions/bake
+        uses: $/actions/bake
         with:
           host-alias: ${{ steps.renderer.outputs.address }}
           source: docs
