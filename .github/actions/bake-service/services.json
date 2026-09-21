@@ -1,0 +1,7 @@
+{
+	"chart-renderer": {
+		"port": 6284,
+		"repository": "https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer.git",
+		"reference": "543b8eec4fa9f56110f3fa3d6957c077e5dc4438"
+	}
+}

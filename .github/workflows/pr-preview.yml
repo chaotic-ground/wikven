@@ -11,7 +11,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
     paths:
-      - '.github/actions/chart-renderer/**'  # a bake of this site wants a renderer answering
+      - '.github/actions/bake-service/**'  # a bake of this site wants a renderer answering
       - 'actions/bake/**'  # the preview build is the only thing that runs it
       - 'docs/**'
       - 'Dockerfile'
@@ -67,7 +67,9 @@ jobs:
       # succeeds anyway; tests/bake is what refuses that, and only smoke runs it.
       - id: renderer
         if: github.event.action != 'closed'
-        uses: ./.github/actions/chart-renderer
+        uses: ./.github/actions/bake-service
+        with:
+          name: chart-renderer
 
       - name: Bake the docs site
         if: github.event.action != 'closed'

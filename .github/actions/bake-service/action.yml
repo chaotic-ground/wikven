@@ -1,0 +1,85 @@
+---
+name: A service beside the bake
+description: >-
+  Start a container a bake reaches by address, and wait until it answers.
+
+# Private to this repository, unlike actions/ next door: it stands up scaffolding for baking this
+# documentation site, and is not something a site of your own would use. A site of your own points
+# its extension at a service of its own; see the page about that extension.
+#
+# One container per bake rather than one two bakes share. What a service answers can depend on what
+# it has answered before -- Chart's renderer numbers a drawing after a counter its process keeps --
+# and smoke.yml bakes this site twice and compares the two.
+#
+# What each service is lives in services.json beside this, so a workflow names one and a version is
+# written down once however many workflows start it.
+inputs:
+  name:
+    description: Which entry of services.json to start.
+    required: true
+
+outputs:
+  address:
+    description: >-
+      Where it is, to be given to a bake as the host.docker.internal it should see.
+    value: ${{ steps.start.outputs.address }}
+
+runs:
+  using: composite
+  steps:
+    # Built once however many of these a job wants; a second call finds the image and skips.
+    - shell: bash
+      env:
+        NAME: ${{ inputs.name }}
+        SERVICES: ${{ github.action_path }}/services.json
+      run: |
+        set -euo pipefail
+        if ! jq -e --arg n "$NAME" 'has($n)' "$SERVICES" > /dev/null; then
+          echo "::error::no service called '$NAME' is written down in services.json"
+          exit 1
+        fi
+        if docker image inspect "wikven-service-$NAME" >/dev/null 2>&1; then
+          exit 0
+        fi
+        repository=$(jq -r --arg n "$NAME" '.[$n].repository // ""' "$SERVICES")
+        reference=$(jq -r --arg n "$NAME" '.[$n].reference // ""' "$SERVICES")
+        context=$(jq -r --arg n "$NAME" '.[$n].context // ""' "$SERVICES")
+        if [ -n "$context" ]; then
+          source=$context
+        else
+          source=$RUNNER_TEMP/service-$NAME
+          rm -rf "$source"
+          git init --quiet "$source"
+          git -C "$source" fetch --quiet --depth 1 "$repository" "$reference"
+          git -C "$source" checkout --quiet FETCH_HEAD
+        fi
+        docker build --quiet --tag "wikven-service-$NAME" "$source"
+
+    - id: start
+      shell: bash
+      env:
+        NAME: ${{ inputs.name }}
+        SERVICES: ${{ github.action_path }}/services.json
+      run: |
+        set -euo pipefail
+        port=$(jq -r --arg n "$NAME" '.[$n].port' "$SERVICES")
+        # Any answer means it is up, a 404 as much as a 200: what is waited for is the service
+        # talking at all, and what it makes of the path is the bake's business rather than this.
+        path=$(jq -r --arg n "$NAME" '.[$n].probe // "/"' "$SERVICES")
+        container=$(docker run --detach "wikven-service-$NAME")
+        # Its address on the bridge, which is what a bake is told to call host.docker.internal.
+        # The runner reaches it there too, which is how the wait below knows it is up.
+        address=$(docker inspect \
+          -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$container")
+        for _ in $(seq 60); do
+          code=$(curl -s -o /dev/null -w '%{http_code}' "http://$address:$port$path" || true)
+          if [ "$code" != "000" ]; then
+            echo "address=$address" >> "$GITHUB_OUTPUT"
+            echo "wikven: $NAME is answering at $address."
+            exit 0
+          fi
+          sleep 2
+        done
+        echo "::error::$NAME never answered, and a bake needs it"
+        docker logs "$container" || true
+        exit 1
