@@ -44,7 +44,7 @@ jobs:
           cache-from: type=gha,scope=wikven-image
 
       - name: Check the docs translations
-        uses: ./actions/check-translations
+        uses: $/actions/check-translations
         with:
           source: docs
           image: wikven

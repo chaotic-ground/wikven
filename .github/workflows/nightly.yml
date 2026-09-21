@@ -77,7 +77,7 @@ jobs:
       contents: write  # gh release upload
       id-token: write  # sign the build provenance attestation
       attestations: write  # write the build provenance attestation
-    uses: ./.github/workflows/binary.yml
+    uses: $/.github/workflows/binary.yml
     with:
       tag: ${{ needs.prepare.outputs.tag }}
 
@@ -91,7 +91,7 @@ jobs:
       packages: write
       # Exchanged for a quay.io robot token. A called workflow can only lower what its caller grants.
       id-token: write
-    uses: ./.github/workflows/docker-image.yml
+    uses: $/.github/workflows/docker-image.yml
     with:
       tag: ${{ needs.prepare.outputs.tag }}
 

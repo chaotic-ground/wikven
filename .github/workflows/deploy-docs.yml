@@ -54,13 +54,13 @@ jobs:
       # answering. Without one Chart writes an error box where the chart should be and the build
       # succeeds anyway; tests/bake is what refuses that, and only smoke runs it.
       - id: renderer
-        uses: ./.github/actions/bake-service
+        uses: $/.github/actions/bake-service
         with:
           name: chart-renderer
 
       # Dogfood the published composite action to bake the docs source.
       - name: Bake the docs site
-        uses: ./actions/bake
+        uses: $/actions/bake
         with:
           host-alias: ${{ steps.renderer.outputs.address }}
           source: docs
@@ -84,4 +84,4 @@ jobs:
       contents: read
       pages: write
       id-token: write
-    uses: ./.github/workflows/publish-pages.yml
+    uses: $/.github/workflows/publish-pages.yml
