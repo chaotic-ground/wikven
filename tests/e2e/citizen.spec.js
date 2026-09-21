@@ -190,9 +190,22 @@ test("Citizen's view-source tab is a button a reader can hit", async ({
 	expect(mask, "the icon's mask image").toMatch(/^url\(/);
 
 	// And the button around it is the size of the ones beside it, rather than an empty sliver.
-	const box = await tab.locator("a").boundingBox();
-	const history = await page.locator("#ca-history a").boundingBox();
-	expect(box.width).toBeGreaterThanOrEqual(history.width * 0.9);
+	// Polled rather than measured the once: the skin sizes the page actions after the styles it
+	// is still fetching land, and a tab measured before that reads zero wide however right it
+	// goes on to be. The ratio is what is asserted either way.
+	await expect
+		.poll(
+			async () => {
+				const box = await tab.locator("a").boundingBox();
+				const history = await page.locator("#ca-history a").boundingBox();
+				if (!box || !history?.width) {
+					return 0;
+				}
+				return box.width / history.width;
+			},
+			{ message: "the view-source tab's width against the history tab's" },
+		)
+		.toBeGreaterThanOrEqual(0.9);
 });
 
 test("a Citizen page gets everything it asks for, and asks no backend", async ({
