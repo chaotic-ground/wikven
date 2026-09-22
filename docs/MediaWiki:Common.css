@@ -101,6 +101,30 @@ body:not(.skin-citizen) .mw-parser-output a.external {
 	display: none;
 }
 
+/* A Copy button hung outside its own box makes a tab panel scroll sideways.
+ *
+ * SyntaxHighlight puts the button over the block's top-right corner rather than inside the code,
+ * and does it with a negative offset -- `.mw-highlight .mw-highlight-copy-button { top: -1em;
+ * right: -0.9em }`. `.mw-highlight` does not clip, so on an ordinary page that overhang lands in
+ * the page margin and nothing comes of it. A TabberNeue panel is `overflow-x: auto`, which is what
+ * lets a wide table inside a tab be reached, and there the overhang is content: the panel scrolled
+ * by exactly the twelve pixels the button hung out by, and clipped the button until a reader found
+ * the scroll. Every tabber this site has holds a copyable block, so every one of them did it.
+ *
+ * Neither extension is doing anything unreasonable on its own and the defect is the negative
+ * offset, so it belongs upstream in SyntaxHighlight, where a button inside the box would hold in
+ * any scrolling ancestor. wikven leaves both alone; this site pulls the button onto the block's
+ * edge, which is the least that closes it -- the button still sits above the first line of code,
+ * inside the <pre>'s own top padding, and nothing else moves. #677 keeps the upstream record.
+ *
+ * Named through `.mw-highlight` as well, not for the element but for the tie: the rule it
+ * overrides arrives in the module's `mw.loader.impl` payload, a style element added after this
+ * sheet is linked, so an equally specific selector loses to it. Two classes measured as no change
+ * at all. */
+.tabber__panel .mw-highlight .mw-highlight-copy-button {
+	right: 0;
+}
+
 /* The landing page sets its own tagline where a page title would go, so the title is taken out
  * of the flow there and nowhere else.
  *
