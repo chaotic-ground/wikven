@@ -76,3 +76,39 @@ test("the search box suggests pages as you type", async ({ page }) => {
 		page.locator('.cdx-menu-item a[href*="Search.html?search="]').first(),
 	).toBeVisible();
 });
+
+// The footer badges are the one place a built site says what built it, and both of them name a
+// file the install serves rather than one the export holds. storeImages copies each into the asset
+// directory and points the page at the copy; what proves it worked is the picture having pixels.
+//
+// A <picture> is what makes this worth a browser: the wide badge is named in a <source srcset>,
+// which the viewport (Desktop Chrome, 1280px) picks over the compact <img src>, so currentSrc is
+// the srcset reference and nothing else reads it (#775).
+for (const badge of ["Powered by wikven", "Powered by MediaWiki"]) {
+	test(`the footer badge "${badge}" is a picture the export holds`, async ({
+		page,
+	}) => {
+		await page.goto("Installation.html");
+
+		const image = page.locator(`img[alt="${badge}"]`);
+		await expect(image).toHaveCount(1);
+		// Footer icons are loading="lazy", so one below the fold is never fetched until it is looked
+		// at: without this the assertion below would read a picture nobody asked the browser for.
+		await image.scrollIntoViewIfNeeded();
+
+		// Drawn rather than broken: a 404 leaves an <img> with no intrinsic width at all. Polled
+		// because the fetch starts with the scroll above and finishes whenever it finishes.
+		await expect
+			.poll(() => image.evaluate((node) => node.naturalWidth), {
+				message: `${badge} never loaded`,
+			})
+			.toBeGreaterThan(0);
+
+		// And what it drew is a file beside the page, not a path back into the MediaWiki install,
+		// which an export does not contain.
+		const currentSrc = await image.evaluate((node) => node.currentSrc);
+		expect(currentSrc, currentSrc).not.toMatch(
+			/\/(?:resources|extensions|skins)\//,
+		);
+	});
+}

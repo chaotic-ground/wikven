@@ -52,8 +52,8 @@ final class UploadReference {
 	/**
 	 * References to files the install serves out of its own tree, such as an extension's pictures.
 	 *
-	 * Matched inside a src attribute alone, because these paths are ordinary words on a page about
-	 * extensions.
+	 * Matched inside a src or srcset attribute alone, because these paths are ordinary words on a
+	 * page about extensions.
 	 *
 	 * @param string $path The served directory, e.g. "/extensions".
 	 * @param SiteUrl $siteUrl Where the export is published, if the site has said.
@@ -64,8 +64,11 @@ final class UploadReference {
 		$ref = '(?<ref>(?:' . $slash . '[^\s"?<>\\\\]+)+)';
 		// The query is a cache-buster the install puts there, and it names no different file.
 		$query = '(?:\?[^\s"<>]*)?';
+		// A <picture> names its wide-screen alternative in a srcset. Only the attribute's own closing
+		// quote ends a reference, so a srcset holding a list matches nothing rather than half of it.
+		$attribute = '(?<=src="|srcset=")';
 
-		return new self('~(?<=src=")' . $directory . $ref . $query . '(?=")~', $siteUrl);
+		return new self('~' . $attribute . $directory . $ref . $query . '(?=")~', $siteUrl);
 	}
 
 	/**

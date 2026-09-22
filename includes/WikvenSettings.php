@@ -119,7 +119,30 @@ $wgFavicon = 'data:image/svg+xml,'
 	. ' fill="#ffffff" text-anchor="middle">W</text></svg>'
 );
 
-unset($wgFooterIcons['poweredby']);
+// A built site says what built it, the way a hosted wiki does, with MediaWiki's badge beside it
+// (#775). Both images live in the install's own tree, which an export does not contain.
+$wgFooterIcons['poweredby']['wikven'] = [
+	// storeImages.php copies each into the asset directory and points the page at the copy. It
+	// looks under $wgScriptPath, so a path that does not start there is one it will not recognise.
+	'src' => "$wgScriptPath/extensions/Wikven/resources/assets/wikven-compact.svg",
+	// Core's own shape: the compact mark on a narrow screen, the wide badge above 500px. See
+	// SetupDynamicConfig.php, which fills MediaWiki's entry in the same way.
+	'sources' => [
+		[
+			'media' => '(min-width: 500px)',
+			'srcset' => "$wgScriptPath/extensions/Wikven/resources/assets/poweredby-wikven.svg",
+			'width' => 88,
+			'height' => 31
+		]
+	],
+	'width' => 25,
+	'height' => 25,
+	// The project rather than the site's licenses page: the footer already links that page beside
+	// this badge.
+	'url' => 'https://github.com/chaotic-ground/wikven',
+	'alt' => 'Powered by wikven',
+	'lang' => 'en'
+];
 
 // Detect image backend at run time; SVG never via ImageMagick (IM7 lacks `convert`).
 $wikvenFindExe = static function (array $names) {
