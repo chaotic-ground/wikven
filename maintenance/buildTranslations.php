@@ -13,6 +13,7 @@ use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageSettings;
 use MediaWiki\Extension\Translate\PageTranslation\UpdateTranslatablePageJob;
 use MediaWiki\Extension\Translate\Services as TranslateServices;
 use MediaWiki\Extension\Translate\Statistics\MessageGroupStats;
+use MediaWiki\Extension\Wikven\Build\BuildTimes;
 use MediaWiki\Extension\Wikven\PageTranslation\StalenessComputer;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
 use MediaWiki\Extension\Wikven\Source\SourceFile;
@@ -53,8 +54,16 @@ class BuildTranslations extends Maintenance {
 		'MessageGroupStatesUpdaterJob'
 	];
 
+	/** What each step of this phase took, printed when the phase is over. */
+	private BuildTimes $times;
+
+	/** What the jobs the drains ran took, by type, under the drains that ran them. */
+	private BuildTimes $jobTimes;
+
 	public function __construct() {
 		parent::__construct();
+		$this->times = new BuildTimes();
+		$this->jobTimes = new BuildTimes();
 		$this->addDescription('Mark translatable pages and load their translations from source files.');
 	}
 
@@ -80,9 +89,17 @@ class BuildTranslations extends Maintenance {
 				$this->output("Wikven: skipping translatable page with invalid title: $relative\n");
 				continue;
 			}
-			$sourceText = (string)file_get_contents($baseFile);
-			$translations = TranslationSource::translationFiles($baseFile, $isKnownLanguage);
-			$pageTitle = TranslationSource::translatableTitle($baseFile, $source, $sourceText);
+			[$sourceText, $translations, $pageTitle] = $this->step(
+				'read the source files',
+				static function () use ($baseFile, $source, $isKnownLanguage): array {
+					$sourceText = (string)file_get_contents($baseFile);
+					return [
+						$sourceText,
+						TranslationSource::translationFiles($baseFile, $isKnownLanguage),
+						TranslationSource::translatableTitle($baseFile, $source, $sourceText)
+					];
+				}
+			);
 			if ($this->prepare($title, $sourceText, $translations, $pageTitle, $user)) {
 				$prepared[] = $title;
 			}
@@ -90,16 +107,40 @@ class BuildTranslations extends Maintenance {
 
 		// Render the translated pages only once every page is marked and its units are loaded. Rendering
 		// inline let a page render before the shared message index caught up, silently producing none.
-		$this->drainJobs();
+		$this->step('drain the remaining jobs', $this->drainJobs(...));
 		// Deferring the renders is not enough on its own: saving a unit page queues a
 		// RenderTranslationPageJob, which the next prepare() runs, and those renders asked #ifexist
 		// about units that did not exist yet -- an answer Title memoizes (#460, #464).
 		Title::clearCaches();
-		foreach ($prepared as $title) {
-			$this->render($title);
-		}
+		$this->step('render the translated pages', function () use ($prepared): void {
+			foreach ($prepared as $title) {
+				$this->render($title);
+			}
+		});
+
+		$this->output($this->times->report('the translations phase'));
+		$this->output($this->jobTimes->report('the jobs those drains ran'));
 
 		return true;
+	}
+
+	/**
+	 * Run one step of this phase, remembering what it took.
+	 *
+	 * A step the loop names again adds to the line it has, so the report reads as the phase.
+	 *
+	 * @param string $name What the report names the step.
+	 * @param callable $work
+	 * @param mixed ...$arguments Handed to $work.
+	 * @return mixed What $work answered.
+	 */
+	private function step(string $name, callable $work, mixed ...$arguments) {
+		$started = hrtime(true);
+		try {
+			return $work(...$arguments);
+		} finally {
+			$this->times->add($name, ( hrtime(true) - $started ) / 1e9);
+		}
 	}
 
 	/** Report a page Translate would not take, and answer prepare()'s "was it marked" with no. */
@@ -126,44 +167,58 @@ class BuildTranslations extends Maintenance {
 		User $user
 	): bool {
 		$services = $this->getServiceContainer();
-		$translate = TranslateServices::getInstance();
-
-		$marker = $translate->getTranslatablePageMarker();
 		$record = $services->getPageStore()->getPageByReference($title, IDBAccessObject::READ_LATEST);
 		if (!$record) {
 			$this->output("Wikven: could not load {$title->getPrefixedText()} for translation; skipping\n");
 			return false;
 		}
 
-		// importWikitext saved the base as an old revision, bypassing the PageSaveComplete hook that
-		// tags a revision ready for translation. This is that hook's whole body, without a second
-		// revision of a page whose text has not changed.
-		TranslatablePage::newFromTitle($title)->addReadyTag($record->getLatest());
-		$translate->getTranslatablePageStore()->performStatusUpdate($title);
+		$marked = $this->step('mark the pages', function () use ($record, $title, $pageTitle, $user): bool {
+			$translate = TranslateServices::getInstance();
+			$marker = $translate->getTranslatablePageMarker();
 
-		// A page Translate cannot parse -- an unclosed <translate>, two markers in one unit -- throws
-		// out of the marker. One page must not end the bake, so report it and leave it untranslated.
-		try {
-			$operation = $marker->getMarkOperation($record, null, $pageTitle !== null);
-			if (!$operation->getUnitValidationStatus()->isOK()) {
-				$this->output("Wikven: {$title->getPrefixedText()} has invalid translation units; skipping\n");
-				return false;
+			// importWikitext saved the base as an old revision, bypassing the PageSaveComplete hook that
+			// tags a revision ready for translation. This is that hook's whole body, without a second
+			// revision of a page whose text has not changed.
+			TranslatablePage::newFromTitle($title)->addReadyTag($record->getLatest());
+			$translate->getTranslatablePageStore()->performStatusUpdate($title);
+
+			// A page Translate cannot parse -- an unclosed <translate>, two markers in one unit -- throws
+			// out of the marker. One page must not end the bake, so report it and leave it untranslated.
+			try {
+				$operation = $marker->getMarkOperation($record, null, $pageTitle !== null);
+				if (!$operation->getUnitValidationStatus()->isOK()) {
+					$this->output("Wikven: {$title->getPrefixedText()} has invalid translation units; skipping\n");
+					return false;
+				}
+				// Keep Translate's "Page display title" unit only for a page whose title is translatable; a page
+				// that fixes its own would otherwise sit short of 100% forever.
+				$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
+				$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
+			} catch (ParsingFailure $failure) {
+				return $this->skipUnmarkable($title, 'is not wikitext Translate can parse', $failure->getMessage());
+			} catch (TranslatablePageMarkException $failure) {
+				return $this->skipUnmarkable($title, 'was refused for translation', $failure->getMessage());
 			}
-			// Keep Translate's "Page display title" unit only for a page whose title is translatable; a page
-			// that fixes its own would otherwise sit short of 100% forever.
-			$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
-			$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
-		} catch (ParsingFailure $failure) {
-			return $this->skipUnmarkable($title, 'is not wikitext Translate can parse', $failure->getMessage());
-		} catch (TranslatablePageMarkException $failure) {
-			return $this->skipUnmarkable($title, 'was refused for translation', $failure->getMessage());
+			return true;
+		});
+		if (!$marked) {
+			return false;
 		}
 
 		// markForTranslation only queues the update job; run the queue so the source units exist
 		// before we fill in translations.
-		$this->drainJobs();
+		$this->step('drain the marking jobs', $this->drainJobs(...));
 
-		$this->loadTranslations($title, $sourceText, $translations, $pageTitle, $user);
+		$this->step(
+			'load the translations',
+			$this->loadTranslations(...),
+			$title,
+			$sourceText,
+			$translations,
+			$pageTitle,
+			$user
+		);
 		return true;
 	}
 
@@ -264,7 +319,11 @@ class BuildTranslations extends Maintenance {
 					// Acked whether or not it ran: one left on the queue is one the build's own runJobs
 					// phase would pick up later, which is the work this is declining to do.
 					if (!in_array($type, self::UNRUN_JOBS, true)) {
+						// Timed around the run alone, so what a drain costs beside the sum of these is the
+						// queue itself rather than the work (#736).
+						$started = hrtime(true);
 						$job->run();
+						$this->jobTimes->add($type, ( hrtime(true) - $started ) / 1e9);
 					}
 					$group->ack($job);
 					$taken++;
