@@ -58,12 +58,20 @@ jobs:
         with:
           name: chart-renderer
 
+      # The Scores page draws real music, which Score renders by sending the command to a Shellbox
+      # with LilyPond in it rather than running LilyPond here. See Special:MyLanguage/Scores.
+      - id: shellbox
+        uses: $/.github/actions/bake-service
+        with:
+          name: score-shellbox
+
       # Dogfood the published composite action to bake the docs source.
       - name: Bake the docs site
         uses: $/actions/bake
         with:
           hosts: |
             host.docker.internal=${{ steps.renderer.outputs.address }}
+            score-shellbox=${{ steps.shellbox.outputs.address }}
           source: docs
           output: dist
           image: wikven

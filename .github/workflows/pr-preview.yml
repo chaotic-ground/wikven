@@ -71,12 +71,19 @@ jobs:
         with:
           name: chart-renderer
 
+      - id: shellbox
+        if: github.event.action != 'closed'
+        uses: $/.github/actions/bake-service
+        with:
+          name: score-shellbox
+
       - name: Bake the docs site
         if: github.event.action != 'closed'
         uses: $/actions/bake
         with:
           hosts: |
             host.docker.internal=${{ steps.renderer.outputs.address }}
+            score-shellbox=${{ steps.shellbox.outputs.address }}
           source: docs
           output: dist
           image: wikven

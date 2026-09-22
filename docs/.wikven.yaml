@@ -6,6 +6,7 @@ extensions:
   - Math
   - MobileFrontend
   - ParserFunctions
+  - Score
   # This site has one Lua module, and Special:MyLanguage/Lua modules is about it. Listing Scribunto
   # is all it takes: MediaWiki bundles the extension and the image compiles luasandbox into its PHP.
   - Scribunto
@@ -113,6 +114,17 @@ config:
   # Where the renderer answers. It runs on whatever is doing the baking, outside the container
   # the bake runs in, which actions/bake gives this name to. See Special:MyLanguage/Charts.
   ChartServiceUrl: http://host.docker.internal:6284/v1/chart/render
+  # Score sends LilyPond to a Shellbox rather than running it in the bake, which is what its own
+  # message asks for. Two services beside the bake means two names, so this one is not
+  # host.docker.internal; see Special:MyLanguage/Scores. Safe mode is a refusal on any LilyPond
+  # since 2.23.12, which is every LilyPond now.
+  ScoreSafeMode: false
+  ScoreUseSvg: true
+  ShellboxUrls:
+    score: http://score-shellbox:8080
+  # Not a credential: the Shellbox it agrees with lives and dies with one bake, on the docker
+  # bridge of the machine that started it. A site of your own wants a real one.
+  ShellboxSecretKey: wikven-bakes-this-documentation-site
   WikvenRepositories:
     # TabberNeue is not bundled in the image; clone it from Git to show off
     # third-party fetching. (TemplateStyles, which the templates use, is bundled
@@ -120,13 +132,13 @@ config:
     # which updatecli moves.
     TabberNeue:
       repository: https://github.com/StarCitizenTools/mediawiki-extensions-TabberNeue.git
-      reference: v4.1.0
+      reference: v4.0.2
     # Citizen is a third-party skin, fetched rather than bundled. Wikven handles
     # what it does that a static export cannot serve, so nothing is needed here.
     # Pinned to a release tag, which updatecli moves.
     Citizen:
       repository: https://github.com/StarCitizenTools/mediawiki-skins-Citizen.git
-      reference: v3.23.0
+      reference: v3.22.0
     # Minerva is bundled with MediaWiki but MobileFrontend, which it leans on, is not: without it
     # the skin skips initMobile.js entirely (see its setup.js). This site builds the pair so the
     # configuration wikven recommends for Minerva is the one CI renders. Mirrored from Gerrit,
@@ -135,7 +147,7 @@ config:
     # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      commit: d6a63f38a522a7a5738ab79dc9bf585908e5d12b
+      commit: 6dd857d35b77bf2c025c838fe01c339739f1e0c5
     # Chart draws the chart on Special:MyLanguage/Charts, and JsonConfig is what holds the two
     # Data: pages it reads. Neither tags this branch, so both are pinned to a commit on it for the
     # reason MobileFrontend is. updatecli moves the pins.
@@ -150,6 +162,10 @@ config:
     wikihiero:
       repository: https://github.com/wikimedia/mediawiki-extensions-wikihiero.git
       commit: 1a4f3d0456c5f1671b43da7e04426153f4db4eca
+    # Draws the music on Special:MyLanguage/Scores. No release tag for this branch either.
+    Score:
+      repository: https://github.com/wikimedia/mediawiki-extensions-Score.git
+      commit: acf9e50a3a5afde00ad755665e70114d63cba64b
     # WikiSEO writes the head tags a static export cannot get any other way: the site
     # verification token above, and later the canonical and hreflang links. Not bundled in the
     # image, so it is fetched here.

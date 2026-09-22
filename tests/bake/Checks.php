@@ -98,6 +98,11 @@ class Checks {
 			),
 			new Check('math', 'a formula was written at build time and the page carries it', self::math(...)),
 			new Check(
+				'scores',
+				'music was engraved at build time and the engraving is in the page',
+				self::scores(...)
+			),
+			new Check(
 				'category-links',
 				'no page shows a link to a category the export does not have',
 				self::categoryLinks(...)
@@ -704,6 +709,22 @@ class Checks {
 				foreach (array_unique($m[1]) as $category) {
 					$problems[] = "$path links $category, which the export does not have";
 				}
+			}
+		}
+		return $problems;
+	}
+
+	/** @return string[] */
+	private static function scores(Site $site): array {
+		// Score writes an error box where the music should be when it cannot reach its Shellbox.
+		// The drawing in the page is what says the engraving happened.
+		$problems = [];
+		foreach ((array)$site->expect['score_pages'] as $page) {
+			$path = $site->path((string)$page);
+			if (!is_file($path)) {
+				$problems[] = "$path is not in the export";
+			} elseif (!preg_match('/<img[^>]*srcset="[^"]*\.svg/', $site->read($path))) {
+				$problems[] = "$path carries no engraving; the Shellbox was not reachable";
 			}
 		}
 		return $problems;
