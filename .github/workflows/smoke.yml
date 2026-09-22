@@ -97,6 +97,14 @@ jobs:
         uses: $/.github/actions/bake-service
         with:
           name: chart-renderer
+      - id: shellbox-one
+        uses: $/.github/actions/bake-service
+        with:
+          name: score-shellbox
+      - id: shellbox-two
+        uses: $/.github/actions/bake-service
+        with:
+          name: score-shellbox
 
       # Both bakes of the reproducibility check below, at once. They are independent by construction
       # -- separate containers, separate output directories, one shared source -- and most of a
@@ -110,21 +118,25 @@ jobs:
         env:
           RENDERER_ONE: ${{ steps.renderer-one.outputs.address }}
           RENDERER_TWO: ${{ steps.renderer-two.outputs.address }}
+          SHELLBOX_ONE: ${{ steps.shellbox-one.outputs.address }}
+          SHELLBOX_TWO: ${{ steps.shellbox-two.outputs.address }}
         run: |
           set -uo pipefail
           mkdir -p dist dist-again "$HOME/.cache/wikven/fetch"
           bake() {
             docker run --rm \
               --add-host="host.docker.internal:$1" \
+              --add-host="score-shellbox:$2" \
               -v "$(pwd)/docs:/workspace/src:ro" \
-              -v "$(pwd)/$2:/workspace/dist" \
-              "${@:3}" \
+              -v "$(pwd)/$3:/workspace/dist" \
+              "${@:4}" \
               wikven
           }
-          bake "$RENDERER_ONE" dist -v "$HOME/.cache/wikven/fetch:/workspace/fetch" \
+          bake "$RENDERER_ONE" "$SHELLBOX_ONE" dist \
+            -v "$HOME/.cache/wikven/fetch:/workspace/fetch" \
             -e WIKVEN_FETCH_DIR=/workspace/fetch > bake.log 2>&1 &
           first=$!
-          bake "$RENDERER_TWO" dist-again > bake-again.log 2>&1 &
+          bake "$RENDERER_TWO" "$SHELLBOX_TWO" dist-again > bake-again.log 2>&1 &
           second=$!
           status=0
           wait "$first" || status=$?

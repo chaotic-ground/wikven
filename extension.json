@@ -241,6 +241,7 @@
 				"cite-tracking-category-cite-error",
 				"math-tracking-category-error",
 				"math-tracking-category-render-error",
+				"score-error-category",
 				"scribunto-common-error-category",
 				"scribunto-module-with-errors-category",
 				"syntaxhighlight-error-category",

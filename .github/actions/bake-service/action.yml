@@ -12,7 +12,14 @@ description: >-
 # and smoke.yml bakes this site twice and compares the two.
 #
 # What each service is lives in services.json beside this, so a workflow names one and a version is
-# written down once however many workflows start it.
+# written down once however many workflows start it. An entry names a `repository` to clone and
+# build, a `context` to build from this repository, or an `image` already published somewhere.
+#
+# An entry may also name a `sidecar`. Wikimedia publishes its Shellboxes as php-fpm alone, which
+# speaks FastCGI rather than HTTP, so upstream runs an httpd in front of it -- see the shellbox
+# chart in operations/deployment-charts. The sidecar joins the service's own network namespace, the
+# way the two share localhost in a pod, so one address still reaches the pair and the wait below
+# needs to know nothing about it.
 inputs:
   name:
     description: Which entry of services.json to start.
@@ -44,16 +51,27 @@ runs:
         repository=$(jq -r --arg n "$NAME" '.[$n].repository // ""' "$SERVICES")
         reference=$(jq -r --arg n "$NAME" '.[$n].reference // ""' "$SERVICES")
         context=$(jq -r --arg n "$NAME" '.[$n].context // ""' "$SERVICES")
-        if [ -n "$context" ]; then
-          source=$context
+        image=$(jq -r --arg n "$NAME" '.[$n].image // ""' "$SERVICES")
+        sidecar=$(jq -r --arg n "$NAME" '.[$n].sidecar // ""' "$SERVICES")
+        if [ -n "$image" ]; then
+          # Published elsewhere, so there is nothing to build: pull it and give it the name the
+          # rest of this action knows it by, which is also what the skip above looks for.
+          docker pull --quiet "$image" > /dev/null
+          docker tag "$image" "wikven-service-$NAME"
+        elif [ -n "$context" ]; then
+          docker build --quiet --tag "wikven-service-$NAME" "$context"
         else
           source=$RUNNER_TEMP/service-$NAME
           rm -rf "$source"
           git init --quiet "$source"
           git -C "$source" fetch --quiet --depth 1 "$repository" "$reference"
           git -C "$source" checkout --quiet FETCH_HEAD
+          docker build --quiet --tag "wikven-service-$NAME" "$source"
         fi
-        docker build --quiet --tag "wikven-service-$NAME" "$source"
+        if [ -n "$sidecar" ]; then
+          docker pull --quiet "$sidecar" > /dev/null
+          docker tag "$sidecar" "wikven-service-$NAME-sidecar"
+        fi
 
     - id: start
       shell: bash
@@ -63,17 +81,42 @@ runs:
       run: |
         set -euo pipefail
         port=$(jq -r --arg n "$NAME" '.[$n].port' "$SERVICES")
-        # Any answer means it is up, a 404 as much as a 200: what is waited for is the service
-        # talking at all, and what it makes of the path is the bake's business rather than this.
-        path=$(jq -r --arg n "$NAME" '.[$n].probe // "/"' "$SERVICES")
-        container=$(docker run --detach "wikven-service-$NAME")
+        # A service that names no probe is up as soon as it says anything, a 404 as much as a 200:
+        # what is waited for is it talking at all, and what it makes of the path is the bake's
+        # business rather than this. One that names a probe is saying that path answers 200 when
+        # it is ready, which is the stronger thing to wait for where a sidecar can answer 502 on
+        # its own while what is behind it is still coming up.
+        probe=$(jq -r --arg n "$NAME" '.[$n].probe // ""' "$SERVICES")
+        path=${probe:-/}
+        config=$(jq -r --arg n "$NAME" '.[$n].config // ""' "$SERVICES")
+        sidecar=$(jq -r --arg n "$NAME" '.[$n].sidecar // ""' "$SERVICES")
+        # Named relative to this action rather than to the checkout, as services.json itself is,
+        # so a workflow that starts a service does not also have to know where its file sits.
+        settings=()
+        if [ -n "$config" ]; then
+          settings=(-v "$GITHUB_ACTION_PATH/$config:/srv/app/config/config.json:ro")
+        fi
+        # FCGI_TCP is what the chart runs and it is what lets the pair share a localhost below,
+        # rather than the unix socket the development compose file passes between two volumes.
+        if [ -n "$sidecar" ]; then
+          settings+=(-e FCGI_MODE=FCGI_TCP)
+        fi
+        container=$(docker run --detach "${settings[@]}" "wikven-service-$NAME")
         # Its address on the bridge, which is what a bake is told to call host.docker.internal.
         # The runner reaches it there too, which is how the wait below knows it is up.
         address=$(docker inspect \
           -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$container")
+        front=
+        if [ -n "$sidecar" ]; then
+          # Into the service's own network namespace, so it answers on that same address and
+          # reaches php-fpm at 127.0.0.1:9000 without either of them being told where to look.
+          front=$(docker run --detach --network="container:$container" \
+            -e FCGI_MODE=FCGI_TCP -e SERVERGROUP=main -e "APACHE_RUN_PORT=$port" \
+            "wikven-service-$NAME-sidecar")
+        fi
         for _ in $(seq 60); do
           code=$(curl -s -o /dev/null -w '%{http_code}' "http://$address:$port$path" || true)
-          if [ "$code" != "000" ]; then
+          if [ "$code" = "200" ] || { [ -z "$probe" ] && [ "$code" != "000" ]; }; then
             echo "address=$address" >> "$GITHUB_OUTPUT"
             echo "wikven: $NAME is answering at $address."
             exit 0
@@ -82,4 +125,9 @@ runs:
         done
         echo "::error::$NAME never answered, and a bake needs it"
         docker logs "$container" || true
+        # The one in front answered for both of them, so what it made of the wait is half the
+        # story of a service that never came up.
+        if [ -n "$front" ]; then
+          docker logs "$front" || true
+        fi
         exit 1

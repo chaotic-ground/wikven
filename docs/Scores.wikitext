@@ -1,0 +1,72 @@
+__TOC__
+
+<languages />
+<translate>
+<!--T:1-->
+Music on a {{SITENAME}} site is engraved once, while the site is being built, and what the reader gets is the engraving. [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Score</tvar> Score] is the extension for it. Like [[<tvar name="2">Special:MyLanguage/Charts</tvar>|a chart]] it wants a program of its own beside the wiki, and unlike one it is not bundled, so a site says where to fetch it as well as where the program is.
+
+<!--T:2-->
+This page engraves one:
+</translate>
+
+<score>\relative c' { c d e f g a b c }</score>
+
+<translate>
+<!--T:3-->
+A rising scale, and in the page it is an <code>&lt;svg&gt;</code> with a PNG beside it for a browser that wants one. Both are files this build wrote; nothing is fetched while you read.
+
+<!--T:4-->
+== What a site declares ==
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+extensions:
+  - Score
+config:
+  ScoreSafeMode: false
+  ScoreUseSvg: true
+  ShellboxUrls:
+    score: http://host.docker.internal:8080
+  ShellboxSecretKey: a long random string
+  WikvenRepositories:
+    Score:
+      repository: https://github.com/wikimedia/mediawiki-extensions-Score.git
+      commit: acf9e50a3a5afde00ad755665e70114d63cba64b
+</syntaxhighlight>
+
+<translate>
+<!--T:5-->
+<code>ScoreUseSvg</code> asks for the engraving as a drawing rather than a photograph of one, and trims the page down to the music; without it you get a whole sheet of paper with a scale in the corner.
+
+<!--T:6-->
+== Where LilyPond is ==
+
+<!--T:7-->
+Score does not run [<tvar name="1">https://lilypond.org/</tvar> LilyPond] itself. It sends the command to a [<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Shellbox</tvar> Shellbox] — a small service whose one job is to run a command somewhere other than where the wiki is — and LilyPond lives there. So what a site needs beside it is a Shellbox with LilyPond in it, at an address, exactly as [[<tvar name="3">Special:MyLanguage/Charts</tvar>|a chart needs a renderer]].
+
+<!--T:8-->
+That is also the answer to <code>ScoreSafeMode</code>. LilyPond has had no safe mode since version 2.23.12, and a <code>&lt;score&gt;</code> is a program it will run; Score refuses to draw anything until you say you know. Setting it <code>false</code> is honest when LilyPond is in a container of its own, and is what the sandbox is for.
+
+<!--T:9-->
+<code>ShellboxSecretKey</code> is not optional here even though MediaWiki lets it be. Without it the build quietly runs the command itself instead of sending it, and a bake has no LilyPond, so the page fills with an error rather than music. The same string goes in the Shellbox's own configuration file.
+
+<!--T:10-->
+{{note|text=The key under <code>ShellboxUrls</code> is <code>score</code>, which is what Score calls the service. It is not <code>score-lilypond</code>, which is the route it asks that service for, and naming that instead fails the same quiet way.}}
+
+<!--T:11-->
+This site runs two such services, a chart renderer and this, so it cannot call both <code>host.docker.internal</code>; its own configuration file names this one <code>score-shellbox</code>. With one service the name above is the one to use — see [[<tvar name="1">Special:MyLanguage/Charts</tvar>|Charts]] for which name belongs to which way of baking.
+
+<!--T:12-->
+== Writing music ==
+</translate>
+
+<syntaxhighlight lang="wikitext" copy>
+<score>\relative c' { c d e f g a b c }</score>
+</syntaxhighlight>
+
+<translate>
+<!--T:13-->
+Between the tags is [<tvar name="1">https://lilypond.org/text-input.html</tvar> LilyPond], and <code>lang="ABC"</code> takes [<tvar name="2">https://abcnotation.com/</tvar> ABC] instead. Music LilyPond cannot read stops the build rather than publishing an error where the notes should be.
+</translate>
+
+{{prevnext}}

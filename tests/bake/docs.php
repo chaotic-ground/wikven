@@ -52,6 +52,10 @@ return [
 	'prevnext_page' => 'Searching',
 	'prevnext_language' => 'ko',
 
+	// Pages that engrave music. Score writes an error box rather than failing when it cannot reach
+	// the Shellbox that holds LilyPond, so a bake without one publishes a page of apology.
+	'score_pages' => ['Scores.html', 'Scores/ko.html'],
+
 	// Pages that write a formula. Math renders it here rather than fetching it, which is the whole
 	// of what Special:MyLanguage/Math promises, so the MathML in the page is what says so.
 	'math_pages' => ['Math.html', 'Math/ko.html'],

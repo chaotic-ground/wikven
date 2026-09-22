@@ -1,0 +1,14 @@
+{
+	"__": "The key is not a credential: this container lives and dies with one bake, on the docker bridge of the runner that started it, and the site it answers carries the same string in its own configuration file. A site of your own wants a real one.",
+	"secretKey": "wikven-bakes-this-documentation-site",
+	"url": "http://localhost/",
+	"tempDir": "/tmp",
+	"logToStderr": true,
+	"logToClient": true,
+	"logFile": false,
+	"useSystemd": false,
+	"useBashWrapper": false,
+	"useFirejail": false,
+	"allowedActions": ["call", "shell"],
+	"allowedRoutes": ["score-lilypond"]
+}

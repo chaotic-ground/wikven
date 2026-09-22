@@ -3,5 +3,12 @@
 		"port": 6284,
 		"repository": "https://gitlab.wikimedia.org/repos/mediawiki/services/chart-renderer.git",
 		"reference": "543b8eec4fa9f56110f3fa3d6957c077e5dc4438"
+	},
+	"score-shellbox": {
+		"port": 8080,
+		"probe": "/healthz",
+		"image": "docker-registry.wikimedia.org/wikimedia/mediawiki-libs-shellbox:2026-08-20-124436-score83",
+		"sidecar": "docker-registry.wikimedia.org/httpd-fcgi:2.4.67-1",
+		"config": "score-shellbox/config.json"
 	}
 }

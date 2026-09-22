@@ -24,6 +24,7 @@
 ** Special:MyLanguage/Hieroglyphs|sidebar-hieroglyphs
 ** Special:MyLanguage/Lua modules|sidebar-lua-modules
 ** Special:MyLanguage/Math|sidebar-math
+** Special:MyLanguage/Scores|sidebar-scores
 * sidebar-references
 ** Special:MyLanguage/Limitations|sidebar-limitations
 ** Special:MyLanguage/Why wikitext|sidebar-why-wikitext
