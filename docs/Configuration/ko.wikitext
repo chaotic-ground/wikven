@@ -64,6 +64,9 @@ MediaWiki 자체의 "소개" 바닥글 링크는 별개이며, 빌드가 채워 
 <!--T:212 @8170bc9e-->
 '''기본값:''' <code>true</code>
 
+<!--T:214 @ddfcbb7a-->
+[[File:$1|thumb|upright=2|Vector 스킨에서 본 빌드된 문서의 바닥글. MediaWiki 자체 배지 옆에 wikven 배지가 놓입니다.]]
+
 <!--T:213 @2383717e-->
 모든 문서의 바닥글에 wikven 배지를 넣을지 여부입니다. MediaWiki 자체 배지와 같은 모양으로 그려져 그 옆에 놓입니다. <code>false</code>로 두면 빌드가 배지를 쓰지 않습니다. 여러분 자신의 글과 함께 사이트가 게시하는 것은 그래도 [[#WikvenLicensesPage|라이선스 문서]]에 밝혀지며, 그 문서는 모든 문서의 바닥글이 링크합니다. 그 MediaWiki 배지는 wikven이 아니라 MediaWiki의 것이므로 어느 쪽으로 두든 남고, 여러분이 직접 쓴 <code>FooterIcons</code>도 이 값을 어느 쪽으로 두든 그대로 둡니다.
 

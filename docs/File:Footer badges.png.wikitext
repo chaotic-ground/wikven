@@ -1,0 +1,3 @@
+The footer of a page on this site, captured in Vector.
+
+Made for wikven, and under its licence: [https://github.com/chaotic-ground/wikven/blob/main/LICENSE GPL-3.0-or-later]. The MediaWiki badge in it is MediaWiki's own.
