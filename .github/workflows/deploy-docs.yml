@@ -62,7 +62,8 @@ jobs:
       - name: Bake the docs site
         uses: $/actions/bake
         with:
-          host-alias: ${{ steps.renderer.outputs.address }}
+          hosts: |
+            host.docker.internal=${{ steps.renderer.outputs.address }}
           source: docs
           output: dist
           image: wikven
