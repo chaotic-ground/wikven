@@ -410,7 +410,7 @@ if (( $GLOBALS['wgWikvenFooterBadge'] ?? true ) && !array_key_exists('FooterIcon
 		'sources' => [
 			[
 				'media' => '(min-width: 500px)',
-				'srcset' => "$wikvenBadges/poweredby-wikven.svg",
+				'srcset' => "$wikvenBadges/built-with-wikven.svg",
 				'width' => 88,
 				'height' => 31
 			]
@@ -420,7 +420,7 @@ if (( $GLOBALS['wgWikvenFooterBadge'] ?? true ) && !array_key_exists('FooterIcon
 		// The project rather than the site's licenses page: the footer already links that page beside
 		// this badge.
 		'url' => 'https://github.com/chaotic-ground/wikven',
-		'alt' => 'Powered by wikven',
+		'alt' => 'Built with wikven',
 		'lang' => 'en'
 	];
 }

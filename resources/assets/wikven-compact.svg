@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="25" height="25" role="img" aria-label="wikven">
-	<title>wikven</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="25" height="25" role="img" aria-label="Built with wikven">
+	<title>Built with wikven</title>
 	<path d="M8 20 L17 49" stroke="#10707f" stroke-width="9" fill="none" stroke-linecap="round"/>
 	<path d="M56 20 L47 49" stroke="#10707f" stroke-width="9" fill="none" stroke-linecap="round"/>
 	<path d="M13 50 L13 41 Q13 26 32 26 Q51 26 51 41 L51 50 Z" fill="#10707f"/>

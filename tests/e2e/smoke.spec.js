@@ -84,7 +84,7 @@ test("the search box suggests pages as you type", async ({ page }) => {
 // A <picture> is what makes this worth a browser: the wide badge is named in a <source srcset>,
 // which the viewport (Desktop Chrome, 1280px) picks over the compact <img src>, so currentSrc is
 // the srcset reference and nothing else reads it (#775).
-for (const badge of ["Powered by wikven", "Powered by MediaWiki"]) {
+for (const badge of ["Built with wikven", "Powered by MediaWiki"]) {
 	test(`the footer badge "${badge}" is a picture the export holds`, async ({
 		page,
 	}) => {
