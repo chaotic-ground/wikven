@@ -113,7 +113,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <ul class="citizen-siteStats" role="list" aria-label="Statistics">
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--articles" role="listitem">
 		<span class="citizen-ui-icon mw-ui-icon-article mw-ui-icon-wikimedia-article" title="articles"></span>
-		<span>63</span>
+		<span>65</span>
 		<span class="citizen-siteStats__label">articles</span>
 	</li>
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--images" role="listitem">
@@ -170,7 +170,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 		<ul class="citizen-menu__content-list">
 			
-			<li id="n-sidebar-extensions" class="mw-list-item"><a href="./Extensions.html"><span>Extensions</span></a></li><li id="n-sidebar-charts" class="mw-list-item"><a href="./Charts.html"><span>Charts</span></a></li><li id="n-sidebar-hieroglyphs" class="mw-list-item"><a href="./Hieroglyphs.html"><span>Hieroglyphs</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="./Lua_modules.html"><span>Lua modules</span></a></li><li id="n-sidebar-math" class="mw-list-item"><a href="./Math.html"><span>Math</span></a></li>
+			<li id="n-sidebar-extensions" class="mw-list-item"><a href="./Extensions.html"><span>Extensions</span></a></li><li id="n-sidebar-charts" class="mw-list-item"><a href="./Charts.html"><span>Charts</span></a></li><li id="n-sidebar-hieroglyphs" class="mw-list-item"><a href="./Hieroglyphs.html"><span>Hieroglyphs</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="./Lua_modules.html"><span>Lua modules</span></a></li><li id="n-sidebar-math" class="mw-list-item"><a href="./Math.html"><span>Math</span></a></li><li id="n-sidebar-scores" class="mw-list-item"><a href="./Scores.html"><span>Scores</span></a></li>
 		</ul>
 		
 	</div></nav>
@@ -377,12 +377,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<nav
 	id="p-associated-pages"
 	class="citizen-menu mw-portlet mw-portlet-associated-pages"
-	aria-label="Related pages"
+	aria-label="associated-pages"
 	
 	
 >
 	<div class="citizen-menu__heading">
-		Related pages
+		associated-pages
 	</div>
 	<div class="citizen-menu__content">
 		
@@ -488,7 +488,7 @@ It runs a real MediaWiki at build time.
 </pre>
 <p>You do not number the units by hand. Wrap the content in <code>&lt;translate></code> and add <code>&lt;languages/></code>, then run <code>translate mark</code> to insert the <code>&lt;!--T:n--></code> markers, mounting your source directory writable:
 </p>
-<style data-mw-deduplicate="TemplateStyles:r118">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}.mw-parser-output .wikven-note-warning{border:1px solid var(--border-color-warning,#ab7f2a);background-color:var(--background-color-warning-subtle,#fdf2d5)}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The four <code>translate</code> helpers come with both products. The commands on this page are the Docker form; the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> runs the same four against its working directory, as <code>wikven translate mark --all</code> and so on, with no mount to arrange. See <a href="./Commands.html#translate" title="Special:MyLanguage/Commands">Commands</a>.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r122">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}.mw-parser-output .wikven-note-warning{border:1px solid var(--border-color-warning,#ab7f2a);background-color:var(--background-color-warning-subtle,#fdf2d5)}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="./File:Note_icon.svg.html" class="mw-file-description"><img src="./assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="./assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>The four <code>translate</code> helpers come with both products. The commands on this page are the Docker form; the standalone <a href="./Standalone_binary.html" title="Special:MyLanguage/Standalone binary">binary</a> runs the same four against its working directory, as <code>wikven translate mark --all</code> and so on, with no mount to arrange. See <a href="./Commands.html#translate" title="Special:MyLanguage/Commands">Commands</a>.</p></div>
 </div>
 <div class="mw-highlight mw-highlight-lang-console mw-content-ltr" dir="ltr"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src:/workspace/src"</span><span class="w"> </span>ghcr.io/chaotic-ground/wikven<span class="w"> </span>translate<span class="w"> </span>mark<span class="w"> </span>--all
 </pre></div>
@@ -543,16 +543,16 @@ It runs a real MediaWiki at build time.
 </pre></div>
 <p>The <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/actions/check-translations/action.yml">check-translations action</a> runs the same check on pull requests, reporting each one as an annotation on the file it belongs to. Set its <code>comment</code> input and it also leaves one comment on the pull request, grouping what it found and naming the command that answers each group — written for a contributor sending their first translation, who has the annotations but not the workflow behind them. Add <code>comment-languages: auto</code> and the comment is written in English and in the language of any translation the pull request touches, from wikven's own interface messages; a change to an English page alone is answered in English alone. It fails the build on a broken source page and never on a translation that is behind; pass <code>gate: false</code> to report even a broken page without failing. This documentation site is checked this way. To bring a translation back up to date, edit it to match the new source, then <code>translate stamp</code> it again.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r122">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a></div><div class="wikven-prevnext-next"><a href="./Editing_sidebar.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a> →</div></div>
+<style data-mw-deduplicate="TemplateStyles:r126">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="./JavaScript.html" title="Special:MyLanguage/JavaScript">JavaScript</a></div><div class="wikven-prevnext-next"><a href="./Editing_sidebar.html" title="Special:MyLanguage/Editing sidebar">Editing sidebar</a> →</div></div>
 
 </div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Translating.html">https://chaotic-ground.github.io/wikven/Translating.html</a>"</div></div>
 			</div>
 			
-<aside class="citizen-page-sidebar" aria-label="Side column">
-			<nav
+<div class="citizen-page-sidebar">
+		<nav
 	id="citizen-sidebar-lastmod"
-	class="citizen-menu citizen-page-aside__panel citizen-page-aside__panel--lastmod"
+	class="citizen-menu"
 	aria-label="Last modified"
 	
 	
@@ -569,27 +569,24 @@ It runs a real MediaWiki at build time.
 		
 	</div></nav>
 
-			
-			
-			
-<div id="citizen-toc" class="citizen-toc citizen-dropdown citizen-page-aside__panel citizen-page-aside__panel--toc">
-	<details class="citizen-dropdown-details">
-		<summary
-			class="citizen-dropdown-summary" 
-			title="Contents"
-			aria-details="mw-panel-toc">
-			<span class="citizen-ui-icon mw-ui-icon-wikimedia-listBullet"></span>
-			<span>Contents</span>
-		</summary>
-	</details>
-	<nav id="mw-panel-toc" class="citizen-toc-card citizen-menu__card" aria-labelledby="mw-panel-toc-label">
-		<div class="citizen-menu__card-content">
-			<a class="citizen-toc-top citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="Back to top" href="#top" role="button">
-				<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
-				<div class="citizen-toc-text">Back to top</div>
-			</a>
-			<div id="mw-panel-toc-label" class="citizen-menu__heading">Contents</div>
-			<div class="citizen-toc-contents" id="mw-panel-toc-list">
+	<div id="citizen-toc" class="citizen-toc citizen-dropdown">
+		<details class="citizen-dropdown-details">
+			<summary
+				class="citizen-dropdown-summary" 
+				title="Contents"
+				aria-details="mw-panel-toc">
+				<span class="citizen-ui-icon mw-ui-icon-wikimedia-listBullet"></span>
+				<span>Contents</span>
+			</summary>
+		</details>
+		<nav id="mw-panel-toc" class="citizen-toc-card citizen-menu__card" aria-labelledby="mw-panel-toc-label">
+			<div class="citizen-menu__card-content">
+				<a class="citizen-toc-top citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="Back to top" href="#top" role="button">
+					<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
+					<div class="citizen-toc-text">Back to top</div>
+				</a>
+				<div id="mw-panel-toc-label" class="citizen-menu__heading">Contents</div>
+				<div class="citizen-toc-contents" id="mw-panel-toc-list">
 				<div class="citizen-toc-indicator"></div>
 				<ul class="citizen-toc-list">
 					<li id="toc-Enabling_translation"
@@ -684,11 +681,9 @@ It runs a real MediaWiki at build time.
 		</li>
 	</ul>
 			</div>		</div>
-	</nav>
-</div>
-
-</aside>
-
+		</nav>
+	</div>
+	</div>
 			<footer class="citizen-page-footer">
 				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw-interface=""></div>
 					<div class="page-info">

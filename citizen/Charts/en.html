@@ -113,7 +113,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <ul class="citizen-siteStats" role="list" aria-label="Statistics">
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--articles" role="listitem">
 		<span class="citizen-ui-icon mw-ui-icon-article mw-ui-icon-wikimedia-article" title="articles"></span>
-		<span>63</span>
+		<span>65</span>
 		<span class="citizen-siteStats__label">articles</span>
 	</li>
 	<li class="citizen-siteStats__item" id="citizen-siteStats__item--images" role="listitem">
@@ -170,7 +170,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 		<ul class="citizen-menu__content-list">
 			
-			<li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/en.html"><span>Extensions</span></a></li><li id="n-sidebar-charts" class="mw-list-item"><a href="../Charts/en.html"><span>Charts</span></a></li><li id="n-sidebar-hieroglyphs" class="mw-list-item"><a href="../Hieroglyphs/en.html"><span>Hieroglyphs</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="../Lua_modules/en.html"><span>Lua modules</span></a></li><li id="n-sidebar-math" class="mw-list-item"><a href="../Math/en.html"><span>Math</span></a></li>
+			<li id="n-sidebar-extensions" class="mw-list-item"><a href="../Extensions/en.html"><span>Extensions</span></a></li><li id="n-sidebar-charts" class="mw-list-item"><a href="../Charts/en.html"><span>Charts</span></a></li><li id="n-sidebar-hieroglyphs" class="mw-list-item"><a href="../Hieroglyphs/en.html"><span>Hieroglyphs</span></a></li><li id="n-sidebar-lua-modules" class="mw-list-item"><a href="../Lua_modules/en.html"><span>Lua modules</span></a></li><li id="n-sidebar-math" class="mw-list-item"><a href="../Math/en.html"><span>Math</span></a></li><li id="n-sidebar-scores" class="mw-list-item"><a href="../Scores/en.html"><span>Scores</span></a></li>
 		</ul>
 		
 	</div></nav>
@@ -377,12 +377,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<nav
 	id="p-associated-pages"
 	class="citizen-menu mw-portlet mw-portlet-associated-pages"
-	aria-label="Related pages"
+	aria-label="associated-pages"
 	
 	
 >
 	<div class="citizen-menu__heading">
-		Related pages
+		associated-pages
 	</div>
 	<div class="citizen-menu__content">
 		
@@ -511,7 +511,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <dd>The build runs on your machine, so the renderer is at <code><a rel="nofollow" class="external free" href="http://localhost:6284/v1/chart/render">http://localhost:6284/v1/chart/render</a></code>.</dd>
 <dt>the image, or the <a href="../Deploying/en.html" title="Special:MyLanguage/Deploying">bake action</a></dt>
 <dd>The build runs inside a container and your machine is outside it, by the name <code>host.docker.internal</code>. That is what this site uses, and what the example above shows.</dd></dl>
-<style data-mw-deduplicate="TemplateStyles:r118">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}.mw-parser-output .wikven-note-warning{border:1px solid var(--border-color-warning,#ab7f2a);background-color:var(--background-color-warning-subtle,#fdf2d5)}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>A self-hosted runner whose Docker lives in a sidecar container is the case none of those covers: a bake reaches that sidecar's daemon, so neither name finds the runner. Give the renderer an address of its own there.</p></div>
+<style data-mw-deduplicate="TemplateStyles:r122">.mw-parser-output .wikven-note{display:flex;align-items:center;column-gap:0.75em;margin:1em 0;padding:0.75em 1em;border:1px solid var(--border-color-subtle,#c8ccd1);border-radius:2px;background-color:var(--background-color-neutral-subtle,#f8f9fa);color:var(--color-base,#202122)}.mw-parser-output .wikven-note-text p{margin:0}.mw-parser-output .wikven-note-warning{border:1px solid var(--border-color-warning,#ab7f2a);background-color:var(--background-color-warning-subtle,#fdf2d5)}</style><div class="wikven-note"><div><span typeof="mw:File"><a href="../File:Note_icon.svg.html" class="mw-file-description"><img src="../assets/img-62fcb86c2d5a.png" decoding="async" width="32" height="32" class="mw-file-element" srcset="../assets/img-40a5b8c47c42.png 2x"/></a></span></div><div class="wikven-note-text"><p>A self-hosted runner whose Docker lives in a sidecar container is the case none of those covers: a bake reaches that sidecar's daemon, so neither name finds the runner. Give the renderer an address of its own there.</p></div>
 </div>
 <p>The published site never talks to the renderer. It is asked once per chart while the page is being written, and what it answers is baked in — so the site you deploy has no dependency on it, and neither does the reader.
 </p>
@@ -528,16 +528,16 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </pre></div>
 <p>Which is the line above the chart at the top of this page.
 </p>
-<style data-mw-deduplicate="TemplateStyles:r122">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Extensions/en.html" title="Special:MyLanguage/Extensions">Extensions</a></div><div class="wikven-prevnext-next"><a href="../Hieroglyphs/en.html" title="Special:MyLanguage/Hieroglyphs">Hieroglyphs</a> →</div></div>
+<style data-mw-deduplicate="TemplateStyles:r126">.mw-parser-output .wikven-prevnext{clear:both;overflow:hidden}.mw-parser-output .wikven-prevnext-prev{float:left}.mw-parser-output .wikven-prevnext-next{float:right}</style><div class="wikven-prevnext"><div class="wikven-prevnext-prev">← <a href="../Extensions/en.html" title="Special:MyLanguage/Extensions">Extensions</a></div><div class="wikven-prevnext-next"><a href="../Hieroglyphs/en.html" title="Special:MyLanguage/Hieroglyphs">Hieroglyphs</a> →</div></div>
 
 </div></section></div>
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Charts/en.html">https://chaotic-ground.github.io/wikven/Charts/en.html</a>"</div></div>
 			</div>
 			
-<aside class="citizen-page-sidebar" aria-label="Side column">
-			<nav
+<div class="citizen-page-sidebar">
+		<nav
 	id="citizen-sidebar-lastmod"
-	class="citizen-menu citizen-page-aside__panel citizen-page-aside__panel--lastmod"
+	class="citizen-menu"
 	aria-label="Last modified"
 	
 	
@@ -554,27 +554,24 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 	</div></nav>
 
-			
-			
-			
-<div id="citizen-toc" class="citizen-toc citizen-dropdown citizen-page-aside__panel citizen-page-aside__panel--toc">
-	<details class="citizen-dropdown-details">
-		<summary
-			class="citizen-dropdown-summary" 
-			title="Contents"
-			aria-details="mw-panel-toc">
-			<span class="citizen-ui-icon mw-ui-icon-wikimedia-listBullet"></span>
-			<span>Contents</span>
-		</summary>
-	</details>
-	<nav id="mw-panel-toc" class="citizen-toc-card citizen-menu__card" aria-labelledby="mw-panel-toc-label">
-		<div class="citizen-menu__card-content">
-			<a class="citizen-toc-top citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="Back to top" href="#top" role="button">
-				<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
-				<div class="citizen-toc-text">Back to top</div>
-			</a>
-			<div id="mw-panel-toc-label" class="citizen-menu__heading">Contents</div>
-			<div class="citizen-toc-contents" id="mw-panel-toc-list">
+	<div id="citizen-toc" class="citizen-toc citizen-dropdown">
+		<details class="citizen-dropdown-details">
+			<summary
+				class="citizen-dropdown-summary" 
+				title="Contents"
+				aria-details="mw-panel-toc">
+				<span class="citizen-ui-icon mw-ui-icon-wikimedia-listBullet"></span>
+				<span>Contents</span>
+			</summary>
+		</details>
+		<nav id="mw-panel-toc" class="citizen-toc-card citizen-menu__card" aria-labelledby="mw-panel-toc-label">
+			<div class="citizen-menu__card-content">
+				<a class="citizen-toc-top citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="Back to top" href="#top" role="button">
+					<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
+					<div class="citizen-toc-text">Back to top</div>
+				</a>
+				<div id="mw-panel-toc-label" class="citizen-menu__heading">Contents</div>
+				<div class="citizen-toc-contents" id="mw-panel-toc-list">
 				<div class="citizen-toc-indicator"></div>
 				<ul class="citizen-toc-list">
 					<li id="toc-What_a_site_declares"
@@ -624,11 +621,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		</li>
 	</ul>
 			</div>		</div>
-	</nav>
-</div>
-
-</aside>
-
+		</nav>
+	</div>
+	</div>
 			<footer class="citizen-page-footer">
 				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw-interface=""><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden category: <ul><li><a href="../Category:Pages_using_the_Chart_extension.html" title="Category:Pages using the Chart extension">Pages using the Chart extension</a></li></ul></div></div>
 					<div class="page-info">
