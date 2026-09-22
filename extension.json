@@ -195,7 +195,7 @@
 		},
 		"WikvenFooterBadge": {
 			"value": true,
-			"description": "Whether every page's footer carries a wikven badge, the way a hosted wiki's footer names the farm that runs it. A site's footer is the site's, so set it false to build without one; what the build publishes alongside the site's words is still acknowledged on the licenses page. MediaWiki's own badge beside it is core's rather than wikven's and is unaffected, as is a FooterIcons the site writes for itself, which is left alone whichever way this is set."
+			"description": "Whether every page's footer carries a wikven badge, drawn to match MediaWiki's own badge and shown beside it. A site's footer is the site's, so set it false to build without one; what the build publishes alongside the site's words is still acknowledged on the licenses page. MediaWiki's own badge beside it is core's rather than wikven's and is unaffected, as is a FooterIcons the site writes for itself, which is left alone whichever way this is set."
 		},
 		"WikvenFooterUrl": {
 			"value": "",

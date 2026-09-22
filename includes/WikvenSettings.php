@@ -395,9 +395,9 @@ if (in_array('Math', $config['extensions'], true)) {
 	}
 }
 
-// A built site says what built it, the way a hosted wiki does (#775). The footer is the site's,
-// so WikvenFooterBadge declines, and so does a FooterIcons the site wrote itself. MediaWiki's
-// badge beside it is core's.
+// A built site says what built it, in a badge drawn to match MediaWiki's own (#775). The footer
+// is the site's, so WikvenFooterBadge declines, and so does a FooterIcons the site wrote itself.
+// MediaWiki's badge is core's.
 if (( $GLOBALS['wgWikvenFooterBadge'] ?? true ) && !array_key_exists('FooterIcons', $wikvenSiteConfig)) {
 	// These live in the install's own tree, which an export does not contain. storeImages.php copies
 	// each into the asset directory, looking under $wgScriptPath: a path not starting there is one
