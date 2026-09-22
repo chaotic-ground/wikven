@@ -119,8 +119,6 @@ $wgFavicon = 'data:image/svg+xml,'
 	. ' fill="#ffffff" text-anchor="middle">W</text></svg>'
 );
 
-unset($wgFooterIcons['poweredby']);
-
 // Detect image backend at run time; SVG never via ImageMagick (IM7 lacks `convert`).
 $wikvenFindExe = static function (array $names) {
 	// Core's own environment checks locate the same binaries with this, so the two agree on where
@@ -395,6 +393,36 @@ if (in_array('Math', $config['extensions'], true)) {
 	foreach (array_intersect($wikvenMathUrls, array_keys($wikvenSiteConfig)) as $wikvenMathUrl) {
 		$GLOBALS['wgWikvenRefused'][] = "$wikvenMathUrl (a rendering service's address, and a bake asks none)";
 	}
+}
+
+// A built site says what built it, in a badge drawn to match MediaWiki's own (#775). The footer
+// is the site's, so WikvenFooterBadge declines, and so does a FooterIcons the site wrote itself.
+// MediaWiki's badge is core's.
+if (( $GLOBALS['wgWikvenFooterBadge'] ?? true ) && !array_key_exists('FooterIcons', $wikvenSiteConfig)) {
+	// These live in the install's own tree, which an export does not contain. storeImages.php copies
+	// each into the asset directory, looking under $wgScriptPath: a path not starting there is one
+	// it will not recognise.
+	$wikvenBadges = (string)( $GLOBALS['wgScriptPath'] ?? '' ) . '/extensions/Wikven/resources/assets';
+	$GLOBALS['wgFooterIcons']['poweredby']['wikven'] = [
+		'src' => "$wikvenBadges/wikven-compact.svg",
+		// Core's own shape: the compact mark on a narrow screen, the wide badge above 500px. See
+		// SetupDynamicConfig.php, which fills MediaWiki's entry in the same way.
+		'sources' => [
+			[
+				'media' => '(min-width: 500px)',
+				'srcset' => "$wikvenBadges/built-with-wikven.svg",
+				'width' => 88,
+				'height' => 31
+			]
+		],
+		'width' => 25,
+		'height' => 25,
+		// The project rather than the site's licenses page: the footer already links that page beside
+		// this badge.
+		'url' => 'https://github.com/chaotic-ground/wikven',
+		'alt' => 'Built with wikven',
+		'lang' => 'en'
+	];
 }
 
 // Say which config names nothing defines. This is the quietest way a line in a site's file is

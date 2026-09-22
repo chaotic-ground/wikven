@@ -356,4 +356,28 @@ class UploadReferenceTest extends MediaWikiUnitTestCase {
 				})
 		);
 	}
+
+	/**
+	 * The defect #775 is about. MediaWiki's footer badge names its wide image in a <source srcset>,
+	 * and a rewriter reading src alone left every page pointing at a file the export lacks.
+	 */
+	public function testAPictureSourceTheInstallServesIsAnsweredBesideThePage() {
+		$this->assertSame(
+			'<source media="(min-width: 500px)" srcset="./assets/img-abc123def456.png" width="88">',
+			self::glyphs()
+				->rewrite(
+					'<source media="(min-width: 500px)" srcset="/extensions/Wikven/x.png" width="88">',
+					self::published()
+				)
+		);
+	}
+
+	/**
+	 * "src=" must not be read out of the tail of "srcset=": the two are different attributes, and a
+	 * srcset is the one that may hold a list.
+	 */
+	public function testASrcsetOfSeveralCandidatesIsLeftAsThePageWroteIt() {
+		$html = '<img srcset="/extensions/Wikven/a.png 1x, /extensions/Wikven/b.png 2x">';
+		$this->assertSame($html, self::glyphs()->rewrite($html, self::published()));
+	}
 }

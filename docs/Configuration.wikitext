@@ -101,6 +101,19 @@ The title of the page saying what your site publishes that is not your own, and 
 MediaWiki's own "About" footer link is a separate thing, and not one the build fills in: with no page where <code>MediaWiki:Aboutpage</code> points, that entry is blanked along with the other dead ones. A site that wants it writes its own introduction and a <code>MediaWiki:Aboutpage.wikitext</code> naming that page.
 </translate>
 
+=== <code>WikvenFooterBadge</code> ===
+
+<translate>
+<!--T:212-->
+'''Default:''' <code>true</code>
+
+<!--T:214-->
+[[File:<tvar name="1">Footer badges.png</tvar>|thumb|upright=2|A built page's footer in Vector: the wikven badge beside MediaWiki's own.]]
+
+<!--T:213-->
+Whether the footer of every page carries a wikven badge, drawn to match MediaWiki's own badge and shown beside it. Set it <code>false</code> and the build writes none; what your site publishes alongside your own words is still acknowledged on the [[#WikvenLicensesPage|licenses page]], which the footer links from every page. That MediaWiki badge belongs to MediaWiki rather than to wikven and stays either way, and a <code>FooterIcons</code> you write for yourself is left alone whichever way this is set.
+</translate>
+
 === <code>WikvenFooterUrl</code> ===
 
 <translate>
