@@ -193,6 +193,10 @@
 			"value": "assets",
 			"description": "Directory the build writes everything it generates into, under the output directory: the stylesheets, the script bundles, and the images and webfont files their CSS names. Left at the output root with \".\", where they sit among the pages. One directory rather than one per kind because a stylesheet reaches its images by a path relative to itself, so they cannot be parted."
 		},
+		"WikvenFooterBadge": {
+			"value": true,
+			"description": "Whether every page's footer carries a wikven badge, the way a hosted wiki's footer names the farm that runs it. A site's footer is the site's, so set it false to build without one; what the build publishes alongside the site's words is still acknowledged on the licenses page. MediaWiki's own badge beside it is core's rather than wikven's and is unaffected, as is a FooterIcons the site writes for itself, which is left alone whichever way this is set."
+		},
 		"WikvenFooterUrl": {
 			"value": "",
 			"description": "Url that is added as a footer item."

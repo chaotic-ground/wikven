@@ -61,6 +61,12 @@ Wikven은 또한 브라우저가 <code>/favicon.ico</code>에서 404를 내지 �
 <!--T:62 @54ec68e6-->
 MediaWiki 자체의 "소개" 바닥글 링크는 별개이며, 빌드가 채워 주지 않습니다. <code>MediaWiki:Aboutpage</code>가 가리키는 문서가 없으면 그 항목은 다른 죽은 링크들과 함께 비워집니다. 그 링크를 두고 싶은 사이트는 소개 문서를 직접 쓰고, 그 문서를 가리키는 <code>MediaWiki:Aboutpage.wikitext</code>를 함께 두면 됩니다.
 
+<!--T:212 @8170bc9e-->
+'''기본값:''' <code>true</code>
+
+<!--T:213 @78180f31-->
+모든 문서의 바닥글에 wikven 배지를 넣을지 여부입니다. 호스팅되는 위키의 바닥글이 자신을 돌리는 위키팜의 이름을 밝히는 것과 같은 방식입니다. <code>false</code>로 두면 빌드가 배지를 쓰지 않습니다. 여러분 자신의 글과 함께 사이트가 게시하는 것은 그래도 [[#WikvenLicensesPage|라이선스 문서]]에 밝혀지며, 그 문서는 모든 문서의 바닥글이 링크합니다. 그 옆의 MediaWiki 자체 배지는 wikven이 아니라 MediaWiki의 것이므로 어느 쪽으로 두든 남고, 여러분이 직접 쓴 <code>FooterIcons</code>도 이 값을 어느 쪽으로 두든 그대로 둡니다.
+
 <!--T:49 @6ab2d6cb-->
 '''기본값:''' 비어 있음
 
