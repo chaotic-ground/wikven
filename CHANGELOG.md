@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.2.0](https://github.com/chaotic-ground/wikven/compare/v1.1.0...v1.2.0) (2026-09-24)
+
+
+### Features
+
+* let a bake reach more than one service ([#798](https://github.com/chaotic-ground/wikven/issues/798)) ([2d25205](https://github.com/chaotic-ground/wikven/commit/2d2520566ff4807e9683da924a2978df5698b0c7))
+* say above the tables what baked the site ([#774](https://github.com/chaotic-ground/wikven/issues/774)) ([7f36389](https://github.com/chaotic-ground/wikven/commit/7f363896a342089bd43a24a44c88355153112f66))
+* say what built a site, in the footer of every page ([#799](https://github.com/chaotic-ground/wikven/issues/799)) ([2b17d0b](https://github.com/chaotic-ground/wikven/commit/2b17d0b2470d731f5cb74a7ee11e7ea932321741))
+* say what the translations phase spends its time on ([#800](https://github.com/chaotic-ground/wikven/issues/800)) ([eb78cfa](https://github.com/chaotic-ground/wikven/commit/eb78cfa55a024bb6cb2616d4660f08d4a483a52c))
+
+
+### Bugfixes
+
+* copy the pictures an extension serves out of its own directory ([#787](https://github.com/chaotic-ground/wikven/issues/787)) ([541a21a](https://github.com/chaotic-ground/wikven/commit/541a21aef6907d65e4b22f58c9ed5b7c3a894e25))
+* give a chart's identifiers numbers of the page's own ([#782](https://github.com/chaotic-ground/wikven/issues/782)) ([659d8dd](https://github.com/chaotic-ground/wikven/commit/659d8dd04d069eca020b0a5dad69eeeccd6543c9))
+* import again, in a fresh boot, the pages that waited on another page ([#772](https://github.com/chaotic-ground/wikven/issues/772)) ([1a58d19](https://github.com/chaotic-ground/wikven/commit/1a58d199d8ef750619b5acb3af20af9636266785))
+* name the page an import refuses instead of ending in a trace ([#765](https://github.com/chaotic-ground/wikven/issues/765)) ([8506b52](https://github.com/chaotic-ground/wikven/commit/8506b521d21c86696bd96044ec9a84f9731cf75a))
+* turn off JsonConfig's cache for a build that makes what it reads ([#770](https://github.com/chaotic-ground/wikven/issues/770)) ([feff623](https://github.com/chaotic-ground/wikven/commit/feff623dd704aa0ffd1ffffccf9af71ff33f11a9))
+
 ## [1.1.0](https://github.com/chaotic-ground/wikven/compare/v1.0.0...v1.1.0) (2026-09-20)
 
 
