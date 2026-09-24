@@ -317,6 +317,34 @@ This very site fetches [<tvar name="2">https://www.mediawiki.org/wiki/Special:My
 
 <!--T:28-->
 A standard MediaWiki setting ([<tvar name="2">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces</tvar> <code>$wgContentNamespaces</code>]) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven sets the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see [[<tvar name="1">Special:MyLanguage/Pages#categories</tvar>|Pages#Categories]]. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
+</translate>
+
+<span id="RawHtml"></span>
+=== <code>RawHtml</code> ===
+
+<translate>
+<!--T:215-->
+'''Default:''' <code>false</code>
+
+<!--T:216-->
+Another standard MediaWiki setting ([<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgRawHtml</tvar> <code>$wgRawHtml</code>]), and one wikven leaves off but a site can turn on. Set it <code>true</code> and a page can carry HTML of its own inside an <code>&lt;html&gt;</code> tag, which the build writes into the page exactly as given: elements and attributes wikitext does not allow, <code>&lt;script&gt;</code> and event handlers included.
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+config:
+  RawHtml: true
+</syntaxhighlight>
+
+<syntaxhighlight lang="wikitext" copy>
+<html><iframe src="https://example.org/embed" width="560" height="315"></iframe></html>
+</syntaxhighlight>
+
+<translate>
+<!--T:217-->
+A live wiki keeps it off because anyone who can edit a page could then run script in every reader's browser. A {{SITENAME}} site has no editors but the people who can change its source directory, and they can already change its <code>MediaWiki:Common.js</code>, so turning it on hands nobody anything they did not have. What it does hand you is the whole of what that HTML says: nothing checks it, and it reaches readers unchanged.
+
+<!--T:218-->
+Unchanged also means not rewritten. A link in wikitext becomes the relative path of the file it builds to; a link inside <code>&lt;html&gt;</code> stays exactly as you wrote it, so write the built file's name (<code>Getting_Started.html</code>, with the underscore) and, from a subpage, the path back up to it. The tag works in pages and in the templates they use, but not in interface messages: a <code>MediaWiki:</code> page the skin draws, such as <code>MediaWiki:Sitenotice</code>, shows an error in its place.
 
 <!--T:29-->
 == Defaults ==
