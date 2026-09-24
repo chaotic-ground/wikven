@@ -38,9 +38,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-22T12:15:57Z">
-<meta property="article:published_time" content="2026-09-22T12:15:57Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","description":"Configuration lives in a .wikven.yaml file in your source directory. It follows the same shape as MediaWiki's own YAML settings format: a top-level extensions list...","dateModified":"2026-09-22T12:15:57Z","datePublished":"2026-09-22T12:15:57Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-09-24T04:43:36Z">
+<meta property="article:published_time" content="2026-09-24T04:43:36Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","description":"Configuration lives in a .wikven.yaml file in your source directory. It follows the same shape as MediaWiki's own YAML settings format: a top-level extensions list...","dateModified":"2026-09-24T04:43:36Z","datePublished":"2026-09-24T04:43:36Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration_en rootpage-Configuration_en skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
@@ -523,6 +523,18 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			<ul id="toc-ContentNamespaces-sublist" class="vector-toc-list">
 			</ul>
 		</li>
+		<li id="toc-RawHtml"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#RawHtml">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.16</span>
+					<span>RawHtml</span>
+				</div>
+			</a>
+			
+			<ul id="toc-RawHtml-sublist" class="vector-toc-list">
+			</ul>
+		</li>
 	</ul>
 	</li>
 	<li id="toc-Defaults"
@@ -898,6 +910,19 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="mw-heading mw-heading3"><h3 id="ContentNamespaces"><code>ContentNamespaces</code></h3></div>
 <p><b>Default:</b> <code>[0, 6]</code>
 </p><p>A standard MediaWiki setting (<a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgContentNamespaces"><code>$wgContentNamespaces</code></a>) that decides which pages wikven exports: only pages in a content namespace are written to the static site. Wikven sets the main and File: namespaces, so file description pages are exported without dumping every <code>Template:</code> or <code>MediaWiki:</code> page. Add the Category namespace (<code>14</code>) to export category pages too; see <a href="../Pages/en.html#categories" title="Special:MyLanguage/Pages">Pages#Categories</a>. Because a <code>config</code> value replaces the default rather than extending it, list the full set you want, including the defaults you keep.
+</p><p><span id="RawHtml"></span>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="RawHtml"><code>RawHtml</code></h3></div>
+<p><b>Default:</b> <code>false</code>
+</p><p>Another standard MediaWiki setting (<a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgRawHtml"><code>$wgRawHtml</code></a>), and one wikven leaves off but a site can turn on. Set it <code>true</code> and a page can carry HTML of its own inside an <code>&lt;html&gt;</code> tag, which the build writes into the page exactly as given: elements and attributes wikitext does not allow, <code>&lt;script&gt;</code> and event handlers included.
+</p>
+<div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">RawHtml</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+<div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>&lt;html&gt;&lt;iframe src=&quot;<span class="nl">https://example.org/embed</span>&quot; width=&quot;560&quot; height=&quot;315&quot;&gt;&lt;/iframe&gt;&lt;/html&gt;
+</pre></div>
+<p>A live wiki keeps it off because anyone who can edit a page could then run script in every reader's browser. A Wikven site has no editors but the people who can change its source directory, and they can already change its <code>MediaWiki:Common.js</code>, so turning it on hands nobody anything they did not have. What it does hand you is the whole of what that HTML says: nothing checks it, and it reaches readers unchanged.
+</p><p>Unchanged also means not rewritten. A link in wikitext becomes the relative path of the file it builds to; a link inside <code>&lt;html&gt;</code> stays exactly as you wrote it, so write the built file's name (<code>Getting_Started.html</code>, with the underscore) and, from a subpage, the path back up to it. The tag works in pages and in the templates they use, but not in interface messages: a <code>MediaWiki:</code> page the skin draws, such as <code>MediaWiki:Sitenotice</code>, shows an error in its place.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Defaults">Defaults</h2></div>
 <p>Before reading your <code>.wikven.yaml</code>, Wikven applies its own defaults from a <code>default.yml</code> bundled with wikven. It is written in the same format as your configuration, so it doubles as a reference for what Wikven sets for you: the site name, page titles kept as written, InstantCommons, local image uploads (including SVG), the Vector 2022 skin options, and so on. It also ships an <code>extensions</code> and a <code>skins</code> default, so every site gets <a href="../Searching/en.html" title="Special:MyLanguage/Searching">SifterSearch</a> search and the Vector skin without listing them. Your <code>.wikven.yaml</code> is merged on top, with your <code>config</code> keys overriding the defaults and your <code>extensions</code> and <code>skins</code> appended.
@@ -921,7 +946,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 22 September 2026, at 12:15.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 24 September 2026, at 04:43.</li>
 </ul>
 
 	<ul id="footer-places">
