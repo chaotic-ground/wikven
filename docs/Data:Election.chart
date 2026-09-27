@@ -2,7 +2,7 @@
     "license": "CC0-1.0",
     "version": 1,
     "source": "Election.tab",
-    "type": "line",
+    "type": "bar",
     "title": {
         "en": "1993 Canadian federal election"
     },
