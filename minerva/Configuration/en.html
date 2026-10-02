@@ -45,9 +45,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-24T04:43:36Z">
-<meta property="article:published_time" content="2026-09-24T04:43:36Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","description":"Configuration lives in a .wikven.yaml file in your source directory. It follows the same shape as MediaWiki's own YAML settings format: a top-level extensions list...","dateModified":"2026-09-24T04:43:36Z","datePublished":"2026-09-24T04:43:36Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-10-02T09:53:06Z">
+<meta property="article:published_time" content="2026-10-02T09:53:06Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Configuration - Wikven","headline":"Configuration - Wikven","mainEntityOfPage":"Configuration","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Configuration\/en.html","description":"Configuration lives in a .wikven.yaml file in your source directory. It follows the same shape as MediaWiki's own YAML settings format: a top-level extensions list...","dateModified":"2026-10-02T09:53:06Z","datePublished":"2026-10-02T09:53:06Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Configuration_en rootpage-Configuration_en skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -223,13 +223,14 @@ Wikven
 <li class="toclevel-2 tocsection-13"><a href="#WikvenFailOnCategories"><span class="tocnumber">3.10</span> <span class="toctext">WikvenFailOnCategories</span></a></li>
 <li class="toclevel-2 tocsection-14"><a href="#WikvenFileNames"><span class="tocnumber">3.11</span> <span class="toctext">WikvenFileNames</span></a></li>
 <li class="toclevel-2 tocsection-15"><a href="#WikvenBuildFor"><span class="tocnumber">3.12</span> <span class="toctext">WikvenBuildFor</span></a></li>
-<li class="toclevel-2 tocsection-16"><a href="#WikvenAssetDirectory"><span class="tocnumber">3.13</span> <span class="toctext">WikvenAssetDirectory</span></a></li>
-<li class="toclevel-2 tocsection-17"><a href="#WikvenRepositories"><span class="tocnumber">3.14</span> <span class="toctext">WikvenRepositories</span></a></li>
-<li class="toclevel-2 tocsection-18"><a href="#ContentNamespaces"><span class="tocnumber">3.15</span> <span class="toctext">ContentNamespaces</span></a></li>
-<li class="toclevel-2 tocsection-19"><a href="#RawHtml"><span class="tocnumber">3.16</span> <span class="toctext">RawHtml</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#WikvenBuildVector"><span class="tocnumber">3.13</span> <span class="toctext">WikvenBuildVector</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#WikvenAssetDirectory"><span class="tocnumber">3.14</span> <span class="toctext">WikvenAssetDirectory</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#WikvenRepositories"><span class="tocnumber">3.15</span> <span class="toctext">WikvenRepositories</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#ContentNamespaces"><span class="tocnumber">3.16</span> <span class="toctext">ContentNamespaces</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#RawHtml"><span class="tocnumber">3.17</span> <span class="toctext">RawHtml</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-20"><a href="#Defaults"><span class="tocnumber">4</span> <span class="toctext">Defaults</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#Defaults"><span class="tocnumber">4</span> <span class="toctext">Defaults</span></a></li>
 </ul>
 </div>
 
@@ -253,7 +254,7 @@ Wikven
 <p>A list of extension names to load. An extension that ships inside Wikven works by name alone; any other name is treated as third-party and fetched from a source you declare in the <a href="#WikvenRepositories"><code>WikvenRepositories</code> map</a>. See <a href="../Extensions/en.html" title="Special:MyLanguage/Extensions">Extensions</a> for what ships and what does not.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="skins"><code>skins</code></h2></div>
-<p>A list of skin names to enable; Vector is built whatever else is listed. Which one the site is read in is set with <code>DefaultSkin</code> under <code>config</code>, and without it the first skin built. As with extensions, a non-bundled name is fetched from the <a href="#WikvenRepositories"><code>WikvenRepositories</code> map</a>. See <a href="../Skins/en.html" title="Special:MyLanguage/Skins">Skins</a>.
+<p>A list of skin names to enable. Vector is built too, whatever else is listed, unless <a href="#WikvenBuildVector"><code>WikvenBuildVector</code></a> is false; from 2.0 the list replaces it instead. Which one the site is read in is set with <code>DefaultSkin</code> under <code>config</code>, and without it the first skin built. As with extensions, a non-bundled name is fetched from the <a href="#WikvenRepositories"><code>WikvenRepositories</code> map</a>. See <a href="../Skins/en.html" title="Special:MyLanguage/Skins">Skins</a>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="config"><code>config</code></h2></div>
 <p>A map of configuration variables, each named without the <code>wg</code> prefix, just like in MediaWiki's YAML settings format. Any <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings">configuration setting</a> can be defined here, and so can one an extension or skin you load declares for itself, and so can Wikven's own variables, which the sections below describe one by one.
@@ -334,6 +335,11 @@ Wikven
 <p><b>Default:</b> <code>site</code>
 </p><p>Set it to <code>skin-preview</code> and the chrome is left as the skin drew it: the personal menu, the toolbox, the tabs and the footer are the skin's own work rather than Wikven's reading of them, which is what a skin author baking a few pages wants to look at. Everything that makes the output a working set of files is unchanged.
 </p><p><b>This mode is experimental, and will stay so.</b> A skin is written against several MediaWiki releases; a bake renders on the one Wikven carries. What you get is your skin on that version and no evidence about any other, which is less than a skin author needs and more than this project can widen. <code>examples/skin-preview</code> in the Wikven repository is a source tree to bake with it, and its README is where the mode is described.
+</p><p><span id="WikvenBuildVector"></span>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="WikvenBuildVector"><code>WikvenBuildVector</code></h3></div>
+<p><b>Default:</b> <code>true</code>
+</p><p>Set it to <code>false</code> to build without Vector, which the defaults otherwise add to every site's <code>skins</code>. Vector is still built if the site lists it itself, or lists no other skin, since a site needs one. It is a stopgap: in 2.0 a site's <code>skins</code> list replaces the default, so listing the skins you want is how to leave Vector out, and this setting is deprecated. See <a href="../Skins/en.html" title="Special:MyLanguage/Skins">Skins</a>.
 </p><p><span id="WikvenStyleDirectory"></span>
 <span id="WikvenAssetDirectory"></span>
 </p>
@@ -427,8 +433,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1790225016">
-  				<span>Last edited on 24 September 2026, at 04:43</span>
+  				data-timestamp="1790934786">
+  				<span>Last edited on 2 October 2026, at 09:53</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -452,7 +458,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 24 September 2026, at 04:43.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 2 October 2026, at 09:53.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

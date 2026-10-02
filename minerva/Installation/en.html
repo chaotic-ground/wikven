@@ -45,9 +45,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-09T16:11:23Z">
-<meta property="article:published_time" content="2026-09-09T16:11:23Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Installation - Wikven","headline":"Installation - Wikven","mainEntityOfPage":"Installation","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Installation\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Installation\/en.html","description":"Wikven runs in two ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. To run a change...","dateModified":"2026-09-09T16:11:23Z","datePublished":"2026-09-09T16:11:23Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-10-02T09:53:06Z">
+<meta property="article:published_time" content="2026-10-02T09:53:06Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Installation - Wikven","headline":"Installation - Wikven","mainEntityOfPage":"Installation","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Installation\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Installation\/en.html","description":"Wikven runs in two ways. On Linux the standalone binary is the simplest, a single file with no Docker. On macOS or Windows, use the Docker image. To run a change...","dateModified":"2026-10-02T09:53:06Z","datePublished":"2026-10-02T09:53:06Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Installation_en rootpage-Installation_en skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -210,6 +210,7 @@ Wikven
 <li class="toclevel-1 tocsection-1"><a href="#Binary"><span class="tocnumber">1</span> <span class="toctext">Binary</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Docker"><span class="tocnumber">2</span> <span class="toctext">Docker</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Which_MediaWiki"><span class="tocnumber">3</span> <span class="toctext">Which MediaWiki</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Versions"><span class="tocnumber">4</span> <span class="toctext">Versions</span></a></li>
 </ul>
 </div>
 
@@ -237,6 +238,11 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Which_MediaWiki">Which MediaWiki</h2></div>
 <p>You do not install MediaWiki: every way of running Wikven brings its own. The image and the binary are built on <b>MediaWiki 1.46.0</b>, and that is what renders your pages however you run them.
+</p><p><span id="versions"></span>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Versions">Versions</h2></div>
+<p>A new major version of Wikven comes with every MediaWiki release it moves to, and only then. It follows each MediaWiki release rather than only the long-term-support ones, which comes to about two majors a year. A new MediaWiki can change the HTML your <code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> select against, so read a major's <a href="../Release_notes.html" title="Special:MyLanguage/Release notes">release notes</a> before moving to it, and build your site and look at it afterwards.
+</p><p>A change of Wikven's own that would break a site does not get a major of its own. It waits for the next MediaWiki release, and until then the old behaviour keeps working and the documentation says what is coming, so a minor or patch release does not break a site that built before it. The one exception is a change that fixes something harmful, which does not wait.
 </p>
 <hr />
 <p>Once you have Wikven, head to <a href="../Getting_Started/en.html" title="Special:MyLanguage/Getting Started">Getting Started</a> to build your first site.
@@ -258,8 +264,8 @@ chmod<span class="w"> </span>+x<span class="w"> </span>wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788970283">
-  				<span>Last edited on 9 September 2026, at 16:11</span>
+  				data-timestamp="1790934786">
+  				<span>Last edited on 2 October 2026, at 09:53</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -283,7 +289,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 9 September 2026, at 16:11.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 2 October 2026, at 09:53.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
