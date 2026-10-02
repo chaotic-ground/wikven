@@ -147,16 +147,16 @@ config:
     # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      commit: 6dd857d35b77bf2c025c838fe01c339739f1e0c5
+      commit: b9e4b36dfa7cf5b8edb1fa4cf189f02ca6ce2ad4
     # Chart draws the chart on Special:MyLanguage/Charts, and JsonConfig is what holds the two
     # Data: pages it reads. Neither tags this branch, so both are pinned to a commit on it for the
     # reason MobileFrontend is. updatecli moves the pins.
     Chart:
       repository: https://github.com/wikimedia/mediawiki-extensions-Chart.git
-      commit: 831c1d06d879e2b5eec26705ddbeaf9f36392e08
+      commit: a05075ccbefa4a5be50061d36af5bc9578a87f98
     JsonConfig:
       repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
-      commit: 75ed9e28183e8024e803ddf99a73cb79a48a0528
+      commit: 93a2f566b660197b54a07be1d7a6699efa06f99d
     # Draws the hieroglyphs on Special:MyLanguage/Hieroglyphs. Its newest tag is two releases
     # behind this branch, so it is pinned to a commit on the branch, as the others here are.
     wikihiero:
