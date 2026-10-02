@@ -27,7 +27,7 @@
 		}
 	],
 	"extra": {
-		"mago-version": "1.49.0"
+		"mago-version": "1.50.0"
 	},
 	"config": {
 		"allow-plugins": {
