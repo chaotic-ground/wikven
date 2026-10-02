@@ -34,7 +34,7 @@ skins:
 
 <translate>
 <!--T:36-->
-To build without it, set [[<tvar name="2">Special:MyLanguage/Configuration#WikvenBuildVector</tvar>|<code>WikvenBuildVector</code>]] to <code>false</code>. That setting is a stopgap: in 2.0 a <code>skins</code> list will replace the default rather than add to it, so a site that wants to keep Vector should list it too. Listing it now changes nothing, since it is built anyway, and keeps the site the same across the upgrade. See [[<tvar name="1">Special:MyLanguage/Installation#versions</tvar>|Versions]] for why the change waits for 2.0.
+To build without it, set [[<tvar name="2">Special:MyLanguage/Configuration#WikvenBuildVector</tvar>|<code>WikvenBuildVector</code>]] to <code>false</code>. That setting is a stopgap: in 2.0 a <code>skins</code> list will replace the default rather than add to it, so a site that wants to keep Vector should list it too. Adding Vector to <code>skins</code> now changes nothing, since it is built anyway, and keeps the site the same across the upgrade.
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
