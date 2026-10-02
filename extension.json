@@ -258,6 +258,10 @@
 			"value": false,
 			"description": "When true and UniversalLanguageSelector is installed, bake its webfonts for the export's languages into a static stylesheet, so readers of a script their system lacks a font for see the intended typeface instead of tofu. Off by default because it adds font payload to the output."
 		},
+		"WikvenBuildVector": {
+			"value": true,
+			"description": "Set to false to build without Vector, which the defaults otherwise add to every site's skins list. Vector is still built when the site lists it itself, or lists no other skin. Deprecated in 2.0, where a site's skins list replaces the default rather than adding to it."
+		},
 		"WikvenFileNames": {
 			"value": "readable",
 			"description": "How a page is named in the output, and so what every link to it says. \"readable\", the default, names each page as its title is written: \"Vector_(skin).html\", \"File:Bakery_oven.jpg.html\". Those are the plainest URLs, and what a link carries is that name URL-encoded, so a static server asking for it finds it. Windows cannot hold a file whose name has a colon in it, so a site whose output directory is a Windows filesystem -- a bind mount from Docker Desktop, say -- cannot write a page outside the main namespace this way, and wants \"encoded\" instead: that leaves every escape the file cache made in place (\"File%3ABakery_oven.jpg.html\"), which any filesystem can hold, at the cost of URLs carrying that percent sign doubled. Four characters a Windows path cannot hold either -- a quote, an asterisk, a question mark and a backslash -- stay escaped under both, since they are rare in a title and keeping them costs nothing legible. An unrecognised value is reported and read as \"readable\"."

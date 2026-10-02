@@ -120,3 +120,7 @@ MobileFrontend의 설치 여부와 관계없이, <code>$wgMinerva*</code> 설정
 
 <!--T:18 @2ad8756b-->
 작동하지 않는 설정들이 구성했을 법한 것은, 가능한 범위에서 {{SITENAME}}이 자체적인 방식으로 제공합니다. 색 테마는 빌드가 <code>Special:MobileOptions</code> 대신 기록하는 <code>Settings</code> 문서에 있고, 사이트 자체의 둘러보기는 렌더링되는 모든 문서의 주 메뉴에 기록됩니다.
+
+<!--T:36 @3e68691a-->
+Vector 없이 빌드하려면 [[$2|<code>WikvenBuildVector</code>]]를 <code>false</code>로 설정하십시오. 이 설정은 임시방편입니다. 2.0에서는 <code>skins</code> 목록이 기본값에 덧붙는 대신 기본값을 대체하므로, Vector를 계속 쓰려는 사이트는 Vector도 함께 적어야 합니다. 지금 적어 두어도 어차피 빌드되므로 달라지는 것은 없고, 업그레이드한 뒤에도 사이트가 그대로 유지됩니다. 이 변경이 왜 2.0까지 기다리는지는 [[$1|버전]]을 참고하십시오.
+

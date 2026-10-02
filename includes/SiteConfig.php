@@ -129,6 +129,14 @@ class SiteConfig {
 			}
 		}
 
+		$buildVector = $config['WikvenBuildVector'] ?? true;
+		if (!is_bool($buildVector)) {
+			$warnings[] =
+				"'WikvenBuildVector' is " . get_debug_type($buildVector) . '; expected true or false. Using true.';
+		} elseif (!$buildVector && array_filter((array)( $data['skins'] ?? [] ), 'is_string') === []) {
+			$warnings[] = "'WikvenBuildVector' is false, but 'skins' lists no other skin; building Vector anyway.";
+		}
+
 		// The settings whose value is chosen from a list rather than written freely, so the ones where
 		// a near miss is worth naming: each reads what it does not know as its own default.
 		$chosen = [

@@ -33,6 +33,17 @@ skins:
 </syntaxhighlight>
 
 <translate>
+<!--T:36-->
+To build without it, set [[<tvar name="2">Special:MyLanguage/Configuration#WikvenBuildVector</tvar>|<code>WikvenBuildVector</code>]] to <code>false</code>. That setting is a stopgap: in 2.0 a <code>skins</code> list will replace the default rather than add to it, so a site that wants to keep Vector should list it too. Listing it now changes nothing, since it is built anyway, and keeps the site the same across the upgrade. See [[<tvar name="1">Special:MyLanguage/Installation#versions</tvar>|Versions]] for why the change waits for 2.0.
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+skins:
+  - Vector
+  - MinervaNeue
+</syntaxhighlight>
+
+<translate>
 <!--T:34-->
 Which of them the site is read in is a separate question, and MediaWiki already has the setting for it. Name the skin in <code>config</code> under <code>DefaultSkin</code>, by its canonical name -- which is what MediaWiki calls a skin, and is not always what you listed it by: <code>minerva</code> for MinervaNeue, <code>vector-2022</code> for Vector.
 </translate>

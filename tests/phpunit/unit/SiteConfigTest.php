@@ -123,6 +123,30 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		$this->assertCount(2, $warnings);
 	}
 
+	public function testDroppingVectorBesideAnotherSkinPassesLint() {
+		$this->assertSame(
+			[],
+			SiteConfig::lint([
+				'skins' => ['MinervaNeue'],
+				'config' => ['WikvenBuildVector' => false]
+			])
+		);
+	}
+
+	/** With nothing else listed the build keeps Vector, and says why. */
+	public function testDroppingVectorWithNoOtherSkinIsNamed() {
+		$warnings = SiteConfig::lint(['config' => ['WikvenBuildVector' => false]]);
+		$this->assertCount(1, $warnings);
+		$this->assertStringContainsString('building Vector anyway', $warnings[0]);
+	}
+
+	/** A quoted "false" is a string, which the build reads as true. */
+	public function testAWikvenBuildVectorThatIsNotABoolIsNamedByItsType() {
+		$warnings = SiteConfig::lint(['skins' => ['MinervaNeue'], 'config' => ['WikvenBuildVector' => 'false']]);
+		$this->assertCount(1, $warnings);
+		$this->assertStringContainsString("'WikvenBuildVector' is string;", $warnings[0]);
+	}
+
 	public function testUrlTemplateMissingPlaceholderWarns() {
 		$warnings = SiteConfig::lint(['config' => ['WikvenEditUrl' => 'https://example.org/edit']]);
 		$this->assertCount(1, $warnings);

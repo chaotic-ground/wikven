@@ -14,9 +14,9 @@ Wikven은 자체 기본값(정적 위키를 위한 합리적인 MediaWiki 설정
 == <code>extensions</code> ==
 불러올 확장 기능 이름의 목록입니다. {{SITENAME}} 안에 함께 들어 있는 확장 기능은 이름만으로 작동하며, 그 밖의 이름은 서드파티로 취급되어 [[#WikvenRepositories|<code>WikvenRepositories</code> 맵]]에 선언한 소스에서 가져옵니다. 무엇이 들어 있고 무엇이 들어 있지 않은지는 [[$1|확장 기능]]을 참고하십시오.
 
-<!--T:5 @ce001193-->
+<!--T:5 @f7e046fc-->
 == <code>skins</code> ==
-활성화할 스킨 이름의 목록입니다. 무엇을 나열하든 Vector는 빌드됩니다. 어느 스킨으로 사이트를 읽을지는 <code>config</code> 아래 <code>DefaultSkin</code>으로 정하며, 설정하지 않으면 빌드된 첫 스킨입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 [[#WikvenRepositories|<code>WikvenRepositories</code> 맵]]에서 가져옵니다. [[$1|스킨]]을 참고하십시오.
+활성화할 스킨 이름의 목록입니다. [[#WikvenBuildVector|<code>WikvenBuildVector</code>]]를 끄지 않는 한, 무엇을 나열하든 Vector는 빌드됩니다. 단, 2.0부터는 이 목록이 Vector를 대체합니다. 어느 스킨으로 사이트를 읽을지는 <code>config</code> 아래 <code>DefaultSkin</code>으로 정하며, 설정하지 않으면 빌드된 첫 스킨입니다. 확장 기능과 마찬가지로 번들되지 않은 이름은 [[#WikvenRepositories|<code>WikvenRepositories</code> 맵]]에서 가져옵니다. [[$1|스킨]]을 참고하십시오.
 
 <!--T:7 @1f5113dd-->
 각각 <code>wg</code> 접두사 없이 이름을 붙인 설정 변수의 맵으로, MediaWiki의 YAML 설정 형식과 똑같습니다. 어떤 [$1 설정 값]이든 여기에 정의할 수 있고, 여러분이 불러오는 확장 기능이나 스킨이 스스로 선언한 설정도, Wikven 자체 변수도 정의할 수 있는데, 아래 절들이 그것을 하나씩 설명합니다.
@@ -244,3 +244,14 @@ wikven을 옮기면 이 핀들 밑에 깔린 코어도 함께 옮겨집니다. w
 
 <!--T:33 @c14e98db-->
 이는 [https://github.com/chaotic-ground/wikven/blob/main/default.yml 리포지터리]에도 있습니다.
+
+<!--T:219 @08e2c0d0-->
+<span id="WikvenBuildVector"></span>
+=== <code>WikvenBuildVector</code> ===
+
+<!--T:220 @8170bc9e-->
+'''기본값:''' <code>true</code>
+
+<!--T:221 @4c6e881f-->
+<code>false</code>로 설정하면 Vector 없이 빌드합니다. 설정하지 않으면 기본값이 모든 사이트의 <code>skins</code>에 Vector를 더합니다. 사이트가 Vector를 직접 나열했거나 다른 스킨을 하나도 나열하지 않았다면 Vector는 그대로 빌드됩니다. 사이트에는 스킨이 하나는 있어야 하기 때문입니다. 이 설정은 임시방편입니다. 2.0에서는 사이트의 <code>skins</code> 목록이 기본값을 대체하므로, 원하는 스킨을 나열하는 것이 Vector를 빼는 방법이 되고 이 설정은 지원 중단됩니다. [[$1|스킨]]을 참고하십시오.
+
