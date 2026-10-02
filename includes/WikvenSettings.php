@@ -210,6 +210,16 @@ foreach ([$wikvenYamlData, $wikvenSiteData] as $wikvenData) {
 // Push merged config into globals so the logo handling below reads final values.
 $wgSettings->apply();
 
+// Drop the default Vector unless the site lists it or would be left with no skin. Gone in 2.0.
+$wikvenSiteSkins = (array)( $wikvenSiteData['skins'] ?? [] );
+if (
+	( $GLOBALS['wgWikvenBuildVector'] ?? true ) === false
+	&& !in_array('Vector', $wikvenSiteSkins, true)
+	&& array_filter($wikvenSiteSkins, 'is_string') !== []
+) {
+	$config['skins'] = array_values(array_diff(array_filter($config['skins'], 'is_string'), ['Vector']));
+}
+
 // Core keeps a site's address in two halves and a site should not write it twice: it writes
 // WikvenSiteUrl once, and this hands core the half it understands (see SiteUrl). $wgServer too,
 // a reader having been handed the container's address.

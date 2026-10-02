@@ -47,6 +47,16 @@ The untagged image is the newest released version. To hold a build still, pin th
 
 <!--T:14-->
 You do not install MediaWiki: every way of running {{SITENAME}} brings its own. The image and the binary are built on '''MediaWiki {{CURRENTVERSION}}''', and that is what renders your pages however you run them.
+
+<!--T:15-->
+<span id="versions"></span>
+== Versions ==
+
+<!--T:16-->
+A new major version of {{SITENAME}} comes with every MediaWiki release it moves to, and only then. It follows each MediaWiki release rather than only the long-term-support ones, which comes to about two majors a year. A new MediaWiki can change the HTML your <code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> select against, so read a major's [[<tvar name="1">Special:MyLanguage/Release notes</tvar>|release notes]] before moving to it, and build your site and look at it afterwards.
+
+<!--T:17-->
+A change of {{SITENAME}}'s own that would break a site does not get a major of its own. It waits for the next MediaWiki release, and until then the old behaviour keeps working and the documentation says what is coming, so a minor or patch release does not break a site that built before it. The one exception is a change that fixes something harmful, which does not wait.
 </translate>
 
 ----
