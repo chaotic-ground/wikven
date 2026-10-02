@@ -377,12 +377,12 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		<nav
 	id="p-associated-pages"
 	class="citizen-menu mw-portlet mw-portlet-associated-pages"
-	aria-label="associated-pages"
+	aria-label="Related pages"
 	
 	
 >
 	<div class="citizen-menu__heading">
-		associated-pages
+		Related pages
 	</div>
 	<div class="citizen-menu__content">
 		
@@ -534,10 +534,10 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://chaotic-ground.github.io/wikven/Charts/en.html">https://chaotic-ground.github.io/wikven/Charts/en.html</a>"</div></div>
 			</div>
 			
-<div class="citizen-page-sidebar">
-		<nav
+<aside class="citizen-page-sidebar" aria-label="Side column">
+			<nav
 	id="citizen-sidebar-lastmod"
-	class="citizen-menu"
+	class="citizen-menu citizen-page-aside__panel citizen-page-aside__panel--lastmod"
 	aria-label="Last modified"
 	
 	
@@ -554,24 +554,27 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		
 	</div></nav>
 
-	<div id="citizen-toc" class="citizen-toc citizen-dropdown">
-		<details class="citizen-dropdown-details">
-			<summary
-				class="citizen-dropdown-summary" 
-				title="Contents"
-				aria-details="mw-panel-toc">
-				<span class="citizen-ui-icon mw-ui-icon-wikimedia-listBullet"></span>
-				<span>Contents</span>
-			</summary>
-		</details>
-		<nav id="mw-panel-toc" class="citizen-toc-card citizen-menu__card" aria-labelledby="mw-panel-toc-label">
-			<div class="citizen-menu__card-content">
-				<a class="citizen-toc-top citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="Back to top" href="#top" role="button">
-					<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
-					<div class="citizen-toc-text">Back to top</div>
-				</a>
-				<div id="mw-panel-toc-label" class="citizen-menu__heading">Contents</div>
-				<div class="citizen-toc-contents" id="mw-panel-toc-list">
+			
+			
+			
+<div id="citizen-toc" class="citizen-toc citizen-dropdown citizen-page-aside__panel citizen-page-aside__panel--toc">
+	<details class="citizen-dropdown-details">
+		<summary
+			class="citizen-dropdown-summary" 
+			title="Contents"
+			aria-details="mw-panel-toc">
+			<span class="citizen-ui-icon mw-ui-icon-wikimedia-listBullet"></span>
+			<span>Contents</span>
+		</summary>
+	</details>
+	<nav id="mw-panel-toc" class="citizen-toc-card citizen-menu__card" aria-labelledby="mw-panel-toc-label">
+		<div class="citizen-menu__card-content">
+			<a class="citizen-toc-top citizen-toc-link cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" title="Back to top" href="#top" role="button">
+				<div class="citizen-ui-icon mw-ui-icon-wikimedia-arrowUp"></div>
+				<div class="citizen-toc-text">Back to top</div>
+			</a>
+			<div id="mw-panel-toc-label" class="citizen-menu__heading">Contents</div>
+			<div class="citizen-toc-contents" id="mw-panel-toc-list">
 				<div class="citizen-toc-indicator"></div>
 				<ul class="citizen-toc-list">
 					<li id="toc-What_a_site_declares"
@@ -621,9 +624,11 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 		</li>
 	</ul>
 			</div>		</div>
-		</nav>
-	</div>
-	</div>
+	</nav>
+</div>
+
+</aside>
+
 			<footer class="citizen-page-footer">
 				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw-interface=""><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden category: <ul><li><a href="../Category:Pages_using_the_Chart_extension.html" title="Category:Pages using the Chart extension">Pages using the Chart extension</a></li></ul></div></div>
 					<div class="page-info">
