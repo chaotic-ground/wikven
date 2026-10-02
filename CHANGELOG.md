@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/chaotic-ground/wikven/compare/v1.2.0...v1.3.0) (2026-10-02)
+
+
+### Features
+
+* let a site build without Vector, until 2.0 makes skins replace it ([#813](https://github.com/chaotic-ground/wikven/issues/813)) ([6e77fc3](https://github.com/chaotic-ground/wikven/commit/6e77fc3c8ff465d1243a6e9b6cac2db59eb19096))
+
 ## [1.2.0](https://github.com/chaotic-ground/wikven/compare/v1.1.0...v1.2.0) (2026-09-24)
 
 
