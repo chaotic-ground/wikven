@@ -173,7 +173,7 @@ class BuildTranslations extends Maintenance {
 			return false;
 		}
 
-		$marked = $this->step('mark the pages', function () use ($record, $title, $pageTitle, $user): bool {
+		$marked = $this->step('mark the pages', function () use ($record, $title, $pageTitle, $user, $services, $sourceText): bool {
 			$translate = TranslateServices::getInstance();
 			$marker = $translate->getTranslatablePageMarker();
 
@@ -194,7 +194,9 @@ class BuildTranslations extends Maintenance {
 						$reasons[] = wfMessage($message)->inLanguage('en')->plain();
 					}
 					// DEBUG(#819): what Translate read.
-					$debugText = TranslatablePage::newFromTitle($title)->getText();
+					$debugText = $services->getRevisionLookup()->getRevisionById($record->getLatest())
+						->getContent(SlotRecord::MAIN)->getText();
+					$this->output('DEBUG same as file: ' . ($debugText === $sourceText ? 'yes' : 'no') . "\n");
 					preg_match_all('/<!--T:[^>]*-->/', (string)$debugText, $debugMarkers);
 					$this->output('DEBUG markers: ' . implode(' ', $debugMarkers[0]) . "\n");
 					$this->output('DEBUG length: ' . strlen((string)$debugText) . ' rev ' . $record->getLatest() . "\n");
