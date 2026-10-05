@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven;
 use Maintenance;
 use MediaWiki\Extension\Wikven\Output\AssetFile;
 use MediaWiki\Extension\Wikven\Output\HtmlElementRemover;
+use MediaWiki\Extension\Wikven\Output\Stylesheet;
 use MediaWiki\MediaWikiServices;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
@@ -33,9 +34,19 @@ class RewriteScripts extends Maintenance {
 		$htmlDir = rtrim((string)$config->get('WikvenHtmlDirectory'), '/');
 		$startup = AssetFile::locate($htmlDir, $assetDirectory, 'startup-static.js');
 		$modules = AssetFile::locate($htmlDir, $assetDirectory, 'modules-static.js');
-		$siteStyles = AssetFile::locate($htmlDir, $assetDirectory, 'site.styles.css');
-		$siteStylesHref = $siteStyles['href'];
-		$hasSiteStyles = is_file($siteStyles['path']) && filesize($siteStyles['path']) > 0;
+		// The site styles in each direction buildStyles rendered them in, keyed by it; see Stylesheet.
+		$siteDirection = MediaWikiServices::getInstance()->getContentLanguage()->getDir();
+		$siteStylesHref = [];
+		foreach (['ltr', 'rtl'] as $direction) {
+			$siteStyles = AssetFile::locate(
+				$htmlDir,
+				$assetDirectory,
+				Stylesheet::fileName('site.styles', $direction, $siteDirection)
+			);
+			if (is_file($siteStyles['path']) && filesize($siteStyles['path']) > 0) {
+				$siteStylesHref[$direction] = $siteStyles['href'];
+			}
+		}
 
 		// Bundled webfonts (opt-in; bakeWebfonts wrote it): link ahead of site styles so a site can
 		// still override the font-family, and let rename's reparenting fix the href on subpages.
@@ -115,11 +126,13 @@ class RewriteScripts extends Maintenance {
 				);
 			}
 
-			// Re-link the site styles last (their own file) so they win the cascade over the skin defaults.
-			if ($hasSiteStyles) {
+			// Re-link the site styles last (their own file) so they win the cascade over the skin defaults,
+			// in the direction the page reads.
+			$direction = preg_match('/<html\b[^>]*\sdir="(ltr|rtl)"/', $html, $m) ? $m[1] : $siteDirection;
+			if (isset($siteStylesHref[$direction])) {
 				$html = str_replace(
 					'</head>',
-					'<link rel="stylesheet" href="' . $siteStylesHref . '"></head>',
+					'<link rel="stylesheet" href="' . $siteStylesHref[$direction] . '"></head>',
 					$html
 				);
 			}

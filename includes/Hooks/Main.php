@@ -8,6 +8,7 @@ use MediaWiki\Extension\Wikven\Build\BuildFor;
 use MediaWiki\Extension\Wikven\LicensesPage;
 use MediaWiki\Extension\Wikven\Output\AssetFile;
 use MediaWiki\Extension\Wikven\Output\OutputName;
+use MediaWiki\Extension\Wikven\Output\Stylesheet;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationFamily;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SiteUrl;
@@ -402,14 +403,18 @@ class Main implements
 			}
 			return true;
 		});
+		// A page translated into a language read the other way links stylesheets flipped for it.
+		$direction = $out->getLanguage()->getDir();
+		$siteDirection = MediaWikiServices::getInstance()->getContentLanguage()->getDir();
 		foreach ($moduleStyles as $name) {
 			$module = $out->getResourceLoader()->getModule($name);
 			$group = $module->getGroup();
 			if (!$module->shouldEmbedModule($context)) {
 				if ($group !== 'user' || !$module->isKnownEmpty($context)) {
-					$href = AssetFile::locate($this->htmlDirectory, $this->assetDirectory, "$name.css")['href'];
+					$file = Stylesheet::fileName($name, $direction, $siteDirection);
+					$href = AssetFile::locate($this->htmlDirectory, $this->assetDirectory, $file)['href'];
 					$tags[$name] = Html::linkedStyle($href);
-					$this->addStyleToList($name);
+					$this->addStyleToList($file);
 				}
 			}
 		}
@@ -575,7 +580,8 @@ class Main implements
 		return ['owner' => $title, 'source' => $page, 'languages' => $languages];
 	}
 
-	private function addStyleToList(string $name): void {
+	/** @param string $file The stylesheet's file name, which buildStyles reads the module from. */
+	private function addStyleToList(string $file): void {
 		// Empty outside a build: there is no static site to place the file in.
 		if (MW_ENTRY_POINT !== 'cli' || $this->htmlDirectory === '') {
 			return;
@@ -587,8 +593,8 @@ class Main implements
 		if (!wfMkdirParents($path, null, __METHOD__)) {
 			return;
 		}
-		if (!file_exists("$path/$name.css")) {
-			touch("$path/$name.css");
+		if (!file_exists("$path/$file")) {
+			touch("$path/$file");
 		}
 	}
 
