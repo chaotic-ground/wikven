@@ -100,6 +100,37 @@ jobs:
           umbrella-dir: pr-preview
           comment: false
 
+      # Surface the preview as a native GitHub deployment, so the PR shows a "View deployment"
+      # button and an environment badge instead of a comment. It starts in_progress, with no URL:
+      # the preview is only stored, and publish-pages marks it success once what it published
+      # holds it (#811). Recorded before the publish is asked for, so that publish sees it.
+      # auto-inactive is off there so each open PR's preview stays active independently (one
+      # shared "preview" environment, one deployment per PR head).
+      - name: Record preview deployment
+        if: github.event.action != 'closed'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
+        with:
+          script: |
+            const number = context.payload.number;
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.pull_request.head.sha,
+              environment: 'preview',
+              transient_environment: true,
+              auto_merge: false,
+              required_contexts: [],
+              payload: { number },
+              description: `Preview for PR #${number}`,
+            });
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'in_progress',
+              description: 'Publishing the preview',
+            });
+
       # Publish, which is what puts this branch's bytes in front of a reader -- and on close, what
       # takes them away again. Asked for rather than called: a deployment to the github-pages
       # environment is allowed from the default branch, and a pull request does not run on one.
@@ -109,38 +140,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
         run: gh workflow run publish-pages.yml --repo "$REPO"
-
-      # Surface the preview as a native GitHub deployment, so the PR shows a "View deployment"
-      # button and an environment badge instead of a comment. The URL matches the umbrella path
-      # the action deploys to. auto-inactive is off so each open PR's preview stays active
-      # independently (one shared "preview" environment, one deployment per PR head).
-      - name: Record preview deployment
-        if: success() && github.event.action != 'closed'
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
-        with:
-          script: |
-            const number = context.payload.number;
-            const url = `https://${context.repo.owner}.github.io/`
-              + `${context.repo.repo}/pr-preview/pr-${number}/`;
-            const deployment = await github.rest.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: context.payload.pull_request.head.sha,
-              environment: 'preview',
-              transient_environment: true,
-              auto_merge: false,
-              required_contexts: [],
-              description: `Preview for PR #${number}`,
-            });
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deployment.data.id,
-              state: 'success',
-              environment_url: url,
-              auto_inactive: false,
-              description: 'Preview is live',
-            });
 
       # On close, mark this PR's preview deployment inactive, matching the torn-down files.
       - name: Deactivate preview deployment
