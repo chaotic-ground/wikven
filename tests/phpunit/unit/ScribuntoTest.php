@@ -10,16 +10,28 @@ use MediaWikiUnitTestCase;
  */
 class ScribuntoTest extends MediaWikiUnitTestCase {
 	public function testItFindsModuleFilesByTheirPrefix() {
-		$paths = ['index.wikitext', 'Module:Greet', 'Module:Order.wikitext', 'Template:prevnext.wikitext'];
+		$paths = [
+			'index.wikitext',
+			'Module/Greet',
+			'Module/Order.wikitext',
+			'Module:Legacy',
+			'Template/prevnext.wikitext'
+		];
 		$this->assertSame(
-			['Module:Greet', 'Module:Order.wikitext'],
+			['Module/Greet', 'Module/Order.wikitext', 'Module:Legacy'],
 			Scribunto::modulePages($paths),
-			'both namings count, and nothing else does'
+			'with or without the marker, in the directory or by the older colon, and nothing else'
 		);
 	}
 
 	public function testAPageMerelyMentioningModulesIsNotOne() {
-		$paths = ['Modules of wikven.wikitext', 'docs/Module:Nested', 'Talk:Module:Greet.wikitext'];
+		$paths = [
+			'Modules of wikven.wikitext',
+			'docs/Module/Nested',
+			'docs/Module:Nested',
+			'Talk/Module:Greet.wikitext',
+			'Modules/Greet'
+		];
 		$this->assertSame(
 			[],
 			Scribunto::modulePages($paths),

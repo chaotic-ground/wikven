@@ -116,7 +116,8 @@ Templates, the main reason to reach for {{SITENAME}} over Markdown, let you reus
 <translate nowrap>
 <!--T:20-->
 <syntaxhighlight lang="shell" copy>
-<tvar name="1">echo "</tvar>'''Note:'''<tvar name="2"> {{{1}}}" > "src/Template:Note.wikitext"
+<tvar name="1">mkdir -p src/Template
+echo "</tvar>'''Note:'''<tvar name="2"> {{{1}}}" > src/Template/Note.wikitext
 echo '{{Note|</tvar>Rebuild the site after every edit.<tvar name="3">}}' >> src/index.wikitext</tvar>
 </syntaxhighlight>
 </translate>
