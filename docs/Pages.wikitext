@@ -69,6 +69,9 @@ Prefix the file name with a namespace to place the page there:
 * <code>File:Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see [[<tvar name="2">Special:MyLanguage/Images</tvar>|Images]]).
 * <code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see [[<tvar name="3">Special:MyLanguage/JavaScript</tvar>|JavaScript]]). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.
 
+<!--T:33-->
+The colon is part of the file name, so a source with namespaced pages needs a filesystem that can hold one: Linux, macOS, or the WSL filesystem on Windows. NTFS cannot, and Git for Windows will not check such a file out, so this applies under the [[<tvar name="1">Special:MyLanguage/Installation#Docker</tvar>|Docker image]] too: keep the source inside WSL rather than bind-mounting it from a Windows drive. No other spelling of the prefix, such as <code>%3A</code> or a <code>Template/</code> directory, is read in its place. The output has no such limit; see [[<tvar name="2">Special:MyLanguage/Configuration#WikvenFileNames</tvar>|<code>WikvenFileNames</code>]].
+
 <!--T:13-->
 <span id="categories"></span>
 == Categories ==
