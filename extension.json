@@ -203,7 +203,7 @@
 		},
 		"WikvenEditUrl": {
 			"value": "",
-			"description": "URL template for the per-page \"Edit\" link. $1 is replaced with the page's percent-encoded source file name (e.g. \"Getting Started.wikitext\", \"MediaWiki:Common.css\"). Empty disables the link."
+			"description": "URL template for the per-page \"Edit\" link. $1 is replaced with the page's percent-encoded source file name (e.g. \"Getting Started.wikitext\", \"MediaWiki/Common.css\"). Empty disables the link."
 		},
 		"WikvenHistoryUrl": {
 			"value": "",

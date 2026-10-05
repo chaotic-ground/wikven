@@ -85,7 +85,7 @@ The division is what makes the passes safe to run beside each other: the orchest
 
 <!--T:41-->
 ; <code>importWikitext</code>
-: Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.
+: Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be the nested file <code>Template/Foo/styles.css</code>). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.
 
 <!--T:42-->
 ; <code>setLicensesPage</code> and <code>setSettingsPage</code>
