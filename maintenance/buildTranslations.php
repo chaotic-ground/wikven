@@ -187,9 +187,13 @@ class BuildTranslations extends Maintenance {
 			// out of the marker. One page must not end the bake, so report it and leave it untranslated.
 			try {
 				$operation = $marker->getMarkOperation($record, null, $pageTitle !== null);
-				if (!$operation->getUnitValidationStatus()->isOK()) {
-					$this->output("Wikven: {$title->getPrefixedText()} has invalid translation units; skipping\n");
-					return false;
+				$validation = $operation->getUnitValidationStatus();
+				if (!$validation->isOK()) {
+					$reasons = array_map(
+						static fn($message) => wfMessage($message)->inLanguage('en')->plain(),
+						$validation->getMessages()
+					);
+					return $this->skipUnmarkable($title, 'has invalid translation units', implode('; ', $reasons));
 				}
 				// Keep Translate's "Page display title" unit only for a page whose title is translatable; a page
 				// that fixes its own would otherwise sit short of 100% forever.
