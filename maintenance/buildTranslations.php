@@ -193,6 +193,11 @@ class BuildTranslations extends Maintenance {
 					foreach ($validation->getMessages() as $message) {
 						$reasons[] = wfMessage($message)->inLanguage('en')->plain();
 					}
+					// DEBUG(#819): what Translate read.
+					$debugText = TranslatablePage::newFromTitle($title)->getText();
+					preg_match_all('/<!--T:[^>]*-->/', (string)$debugText, $debugMarkers);
+					$this->output('DEBUG markers: ' . implode(' ', $debugMarkers[0]) . "\n");
+					$this->output('DEBUG length: ' . strlen((string)$debugText) . ' rev ' . $record->getLatest() . "\n");
 					return $this->skipUnmarkable($title, 'has invalid translation units', implode('; ', $reasons));
 				}
 				// Keep Translate's "Page display title" unit only for a page whose title is translatable; a page
