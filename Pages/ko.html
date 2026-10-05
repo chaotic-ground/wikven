@@ -623,9 +623,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					<div id="contentSub" lang="ko" dir="ltr"><div id="mw-content-subtitle" lang="ko" dir="ltr"></div></div>
 					
 					
-					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Pages.html" title="Pages">Pages</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Pages/ko.wikitext">번역한 것</a></span>이며 번역은 100% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><meta property="mw:PageProp/toc" />
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="ko">이 문서는 <a href="../Pages.html" title="Pages">Pages</a> 문서를 <span class="plainlinks"><a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/edit/main/docs/Pages/ko.wikitext">번역한 것</a></span>이며 번역은 97% 완료했습니다.</div><div class="mw-content-ltr mw-parser-output" lang="ko" dir="ltr"><meta property="mw:PageProp/toc" />
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="ko" dir="ltr"><div class="mw-pt-languages-label">다른 언어:</div><ul class="mw-pt-languages-list"><li><a href="../Pages.html" class="mw-pt-progress mw-pt-progress--complete" title="Pages (100% 번역함)" lang="en" dir="ltr">English</a></li>
-<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="ko" dir="ltr">한국어</span></li></ul></div>
+<li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--high" lang="ko" dir="ltr">한국어</span></li></ul></div>
 <p>소스 디렉터리의 각 파일은 하나의 문서가 됩니다. Wikven은 파일 경로에서 문서의 제목과 이름공간을 이끌어 내므로, 파일 이름이 곧 이를 정하는 방법입니다.
 </p><p><span id="From&#95;file&#95;name&#95;to&#95;page"></span>
 </p>
@@ -633,7 +633,13 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <p><code>.wikitext</code>로 끝나는 파일은 경로에서 <code>.wikitext</code>를 뗀 것이 제목인 위키 문서가 됩니다. 따라서 <code>src/Help.wikitext</code>는 "Help" 문서이며 <code>Help.html</code>로 제공됩니다.
 </p><p>제목은 쓴 그대로 유지됩니다. 공백은 공백으로 남고(밑줄이 아니라 <code>Getting Started.wikitext</code>로 파일 이름을 지으세요), 첫 글자의 대소문자도 그대로입니다. 공백이 남는 것은 제목이고, 그 문서가 빌드되는 파일은 <code>Getting_Started.html</code>입니다. MediaWiki가 제목의 공백을 경로에서는 밑줄로 쓰기 때문입니다. 진입 문서는 <code>index</code>로 이름 지어 <code>index.html</code>로 빌드되게 하세요. 이 파일이 바로 정적 호스트가 사이트 루트에서 제공하는 파일입니다.
 </p><p>파일 이름이 제목으로 깔끔하게 대응되지 않으면(MediaWiki가 이를 다르게 정규화하는 경우), 빌드가 경고를 냅니다. 문서의 편집·역사 링크가 파일 이름에서 만들어지는데, 그렇지 않으면 링크가 제대로 연결되지 않기 때문입니다. 이미 정규화된 제목으로 파일 이름을 바꾸세요.
-</p><p><span id="Linking&#95;between&#95;pages"></span>
+</p>
+<div lang="en" dir="ltr" class="mw-content-ltr">
+<p><span id="case"></span>
+Names that differ only in case are different pages, so <code>Foo.wikitext</code> and <code>foo.wikitext</code> are two of them. macOS and Windows keep them as one file, though: a checkout there holds only one of the two, and a site written to or served from such a disk keeps whichever page was written last. So the build stops and names both, and you rename one. An image counts by the page it imports as, so <code>Guide/diagram.png</code> and <code>Diagram.png</code> are stopped too.
+</p>
+</div>
+<p><span id="Linking&#95;between&#95;pages"></span>
 </p>
 <div class="mw-heading mw-heading2"><h2 id="문서_간_링크"><span id=".EB.AC.B8.EC.84.9C_.EA.B0.84_.EB.A7.81.ED.81.AC"></span>문서 간 링크</h2></div>
 <p>표준 <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Links">위키텍스트 링크</a>인 <code>[[Title]]</code>이나 <code>[[Title|label]]</code>로 링크합니다. Wikven은 정적 출력에서 이를 대응하는 <code>.html</code> 경로로 다시 써 주므로, 내부 링크가 서버 없이도 작동합니다.

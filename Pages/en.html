@@ -38,9 +38,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-08T11:10:46Z">
-<meta property="article:published_time" content="2026-09-08T11:10:46Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Pages - Wikven","headline":"Pages - Wikven","mainEntityOfPage":"Pages","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Pages\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Pages\/en.html","description":"Each file in your source directory becomes a page. Wikven derives the page's title, and namespace, from the file's path, so the file name is how you choose them.","dateModified":"2026-09-08T11:10:46Z","datePublished":"2026-09-08T11:10:46Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-10-05T10:10:27Z">
+<meta property="article:published_time" content="2026-10-05T10:10:27Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Pages - Wikven","headline":"Pages - Wikven","mainEntityOfPage":"Pages","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Pages\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Pages\/en.html","description":"Each file in your source directory becomes a page. Wikven derives the page's title, and namespace, from the file's path, so the file name is how you choose them.","dateModified":"2026-10-05T10:10:27Z","datePublished":"2026-10-05T10:10:27Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Pages_en rootpage-Pages_en skin-vector-2022 action-view">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
@@ -625,13 +625,15 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 					
 					<div id="mw-content-text" class="mw-body-content"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a href="https://github.com/chaotic-ground/wikven/edit/main/docs/Pages/en.wikitext" title="Special:Translate">Translate this page</a></div><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><meta property="mw:PageProp/toc" />
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><a href="../Pages.html" class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" title="Pages (100% translated)" lang="en" dir="ltr">English</a></li>
-<li><a href="../Pages/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="문서 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="../Pages/ko.html" class="mw-pt-progress mw-pt-progress--high" title="문서 (97% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>Each file in your source directory becomes a page. Wikven derives the page's title, and namespace, from the file's path, so the file name is how you choose them.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="From_file_name_to_page">From file name to page</h2></div>
 <p>A file ending in <code>.wikitext</code> becomes a wiki page whose title is the path with <code>.wikitext</code> removed, so <code>src/Help.wikitext</code> is the page "Help", served at <code>Help.html</code>.
 </p><p>Titles are kept as written: spaces stay spaces (name the file <code>Getting Started.wikitext</code>, not with an underscore), and the first letter keeps its case. The title is where a space survives; the file it builds to is <code>Getting_Started.html</code>, because MediaWiki writes a space in a title as an underscore in a path. Name your entry page <code>index</code> so it builds to <code>index.html</code>, the file a static host serves at the site root.
 </p><p>If a file name does not map cleanly to a title (MediaWiki would normalise it differently), the build warns, because the page's edit and history links are derived from the file name and would otherwise not resolve. Rename the file to a title that is already normalised.
+</p><p><span id="case"></span>
+Names that differ only in case are different pages, so <code>Foo.wikitext</code> and <code>foo.wikitext</code> are two of them. macOS and Windows keep them as one file, though: a checkout there holds only one of the two, and a site written to or served from such a disk keeps whichever page was written last. So the build stops and names both, and you rename one. An image counts by the page it imports as, so <code>Guide/diagram.png</code> and <code>Diagram.png</code> are stopped too.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Linking_between_pages">Linking between pages</h2></div>
 <p>Link with <code>[[Title]]</code>, or <code>[[Title|label]]</code>, the standard <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Links">wikitext link</a>. Wikven rewrites these to the matching <code>.html</code> paths in the static output, so internal links work with no server.
@@ -708,7 +710,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 			
 <footer id="footer" class="mw-footer" >
 	<ul id="footer-info">
-	<li id="footer-info-lastmod"> This page was last edited on 8 September 2026, at 11:10.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 5 October 2026, at 10:10.</li>
 </ul>
 
 	<ul id="footer-places">
