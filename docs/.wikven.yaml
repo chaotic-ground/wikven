@@ -153,7 +153,7 @@ config:
     # reason MobileFrontend is. updatecli moves the pins.
     Chart:
       repository: https://github.com/wikimedia/mediawiki-extensions-Chart.git
-      commit: a05075ccbefa4a5be50061d36af5bc9578a87f98
+      commit: 55de706faafab078bdcecf3caf49c8999d5a2203
     JsonConfig:
       repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
       commit: 93a2f566b660197b54a07be1d7a6699efa06f99d
