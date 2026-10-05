@@ -73,13 +73,13 @@ Put the file in a directory named for a namespace to place the page there:
 * <code>File/Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see [[<tvar name="2">Special:MyLanguage/Images</tvar>|Images]]).
 * <code>MediaWiki/Common.css</code> and <code>MediaWiki/Common.js</code> are the site-wide stylesheet and script (see [[<tvar name="3">Special:MyLanguage/JavaScript</tvar>|JavaScript]]). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.
 
-<!--T:33-->
+<!--T:34-->
 The directory is the namespace's canonical English name, spelled as a title spells it: <code>Template/</code>, <code>Category/</code>, <code>User talk/</code>, with a space and not an underscore, and in that case. Only the first directory counts, so <code>Template/Note/styles.css</code> is the subpage "Template:Note/styles.css". A directory with any other name is a subpage, as before.
 
-<!--T:34-->
+<!--T:35-->
 That makes a namespace's name unavailable to a subpage in the main namespace: <code>Help/Setup.wikitext</code> is "Help:Setup", not a subpage of "Help". The build warns where a <code>Help.wikitext</code> beside the directory suggests a subpage was meant; rename the directory to keep it one. A [[<tvar name="1">Special:MyLanguage/Pages#translation-not-subpage</tvar>|translation]] such as <code>Help/ko.wikitext</code> beside a translatable <code>Help.wikitext</code> is still a translation.
 
-<!--T:35-->
+<!--T:36-->
 Naming the namespace in the file name, as in <code>Template:Infobox.wikitext</code>, is still read, but the build warns about every such file: Windows cannot hold a <code>:</code> in a file name, so a source written that way cannot be checked out there, and the next major version will stop reading it. A source with both spellings of one page stops the build.
 
 <!--T:13-->

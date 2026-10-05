@@ -173,7 +173,7 @@ class BuildTranslations extends Maintenance {
 			return false;
 		}
 
-		$marked = $this->step('mark the pages', function () use ($record, $title, $pageTitle, $user, $services, $sourceText): bool {
+		$marked = $this->step('mark the pages', function () use ($record, $title, $pageTitle, $user): bool {
 			$translate = TranslateServices::getInstance();
 			$marker = $translate->getTranslatablePageMarker();
 
@@ -193,13 +193,6 @@ class BuildTranslations extends Maintenance {
 					foreach ($validation->getMessages() as $message) {
 						$reasons[] = wfMessage($message)->inLanguage('en')->plain();
 					}
-					// DEBUG(#819): what Translate read.
-					$debugText = $services->getRevisionLookup()->getRevisionById($record->getLatest())
-						->getContent(SlotRecord::MAIN)->getText();
-					$this->output('DEBUG same as file: ' . ($debugText === $sourceText ? 'yes' : 'no') . "\n");
-					preg_match_all('/<!--T:[^>]*-->/', (string)$debugText, $debugMarkers);
-					$this->output('DEBUG markers: ' . implode(' ', $debugMarkers[0]) . "\n");
-					$this->output('DEBUG length: ' . strlen((string)$debugText) . ' rev ' . $record->getLatest() . "\n");
 					return $this->skipUnmarkable($title, 'has invalid translation units', implode('; ', $reasons));
 				}
 				// Keep Translate's "Page display title" unit only for a page whose title is translatable; a page
