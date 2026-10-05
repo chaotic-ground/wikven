@@ -189,10 +189,10 @@ class BuildTranslations extends Maintenance {
 				$operation = $marker->getMarkOperation($record, null, $pageTitle !== null);
 				$validation = $operation->getUnitValidationStatus();
 				if (!$validation->isOK()) {
-					$reasons = array_map(
-						static fn($message) => wfMessage($message)->inLanguage('en')->plain(),
-						$validation->getMessages()
-					);
+					$reasons = [];
+					foreach ($validation->getMessages() as $message) {
+						$reasons[] = wfMessage($message)->inLanguage('en')->plain();
+					}
 					return $this->skipUnmarkable($title, 'has invalid translation units', implode('; ', $reasons));
 				}
 				// Keep Translate's "Page display title" unit only for a page whose title is translatable; a page
