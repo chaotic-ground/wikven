@@ -17,7 +17,7 @@
 		"mediawiki/mediawiki-codesniffer": "52.0.1",
 		"mediawiki/mediawiki-phan-config": "0.20.0",
 		"mediawiki/minus-x": "2.0.1",
-		"phpro/grumphp": "2.23.0"
+		"phpro/grumphp": "2.24.0"
 	},
 	"repositories": [
 		{
