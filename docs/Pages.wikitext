@@ -17,6 +17,10 @@ Titles are kept as written: spaces stay spaces (name the file <code>Getting Star
 <!--T:5-->
 If a file name does not map cleanly to a title (MediaWiki would normalise it differently), the build warns, because the page's edit and history links are derived from the file name and would otherwise not resolve. Rename the file to a title that is already normalised.
 
+<!--T:33-->
+<span id="case"></span>
+Names that differ only in case are different pages, so <code>Foo.wikitext</code> and <code>foo.wikitext</code> are two of them. macOS and Windows keep them as one file, though: a checkout there holds only one of the two, and a site written to or served from such a disk keeps whichever page was written last. So the build stops and names both, and you rename one. An image counts by the page it imports as, so <code>Guide/diagram.png</code> and <code>Diagram.png</code> are stopped too.
+
 <!--T:6-->
 == Linking between pages ==
 
