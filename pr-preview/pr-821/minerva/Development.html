@@ -46,9 +46,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-20T13:18:43Z">
-<meta property="article:published_time" content="2026-09-20T13:18:43Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-09-20T13:18:43Z","datePublished":"2026-09-20T13:18:43Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-10-05T10:12:25Z">
+<meta property="article:published_time" content="2026-10-05T10:12:25Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-10-05T10:12:25Z","datePublished":"2026-10-05T10:12:25Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Development rootpage-Development skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -283,7 +283,7 @@ Wikven
 <dl><dt><code>importImages</code></dt>
 <dd>Uploads the image files in the source directory into the <code>File:</code> namespace. It runs <b>before</b> the wikitext import, so pages that embed a local image render a real thumbnail instead of a broken-media placeholder.</dd></dl>
 <dl><dt><code>importWikitext</code></dt>
-<dd>Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.</dd></dl>
+<dd>Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be the nested file <code>Template/Foo/styles.css</code>). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.</dd></dl>
 <dl><dt><code>setLicensesPage</code> and <code>setSettingsPage</code></dt>
 <dd>Write the two pages a build generates: the <a href="./Configuration.html#WikvenLicensesPage" title="Special:MyLanguage/Configuration">Licenses page</a> listing what the site publishes and under which licenses, which the footer links from every page, and the <a href="./Skins.html#settings" title="Special:MyLanguage/Skins">Settings page</a> carrying the reader's colour theme and skin. A source page of either name is used instead of the generated one.</dd></dl>
 <dl><dt><code>dropDeadPlaceLinks</code> and <code>dropDeadCategoryLink</code></dt>
@@ -390,10 +390,10 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
   		 <span class="minerva-icon minerva-icon-size-medium minerva-icon--modified-history"></span>
  
   		<span class="last-modified-bar__text modified-enhancement"
-  				data-user-name="Lens0021"
+  				data-user-name="Claude"
   				data-user-gender="unknown"
-  				data-timestamp="1789910323">
-  				<span>Last edited on 20 September 2026, at 13:18</span>
+  				data-timestamp="1791195145">
+  				<span>Last edited on 5 October 2026, at 10:12</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -417,7 +417,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 20 September 2026, at 13:18.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 5 October 2026, at 10:12.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
