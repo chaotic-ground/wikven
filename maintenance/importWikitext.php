@@ -265,7 +265,7 @@ class ImportWikitext extends Maintenance {
 	/**
 	 * Say what a file's namespace spelling will cost.
 	 *
-	 * "Template:note.wikitext" is one Windows cannot hold and the next major version will not read;
+	 * "Template:note.wikitext" is one Windows cannot hold, deprecated since 1.4.0;
 	 * "Help/Setup.wikitext" beside a "Help.wikitext" was likely meant as a subpage.
 	 */
 	private function warnAboutSpelling(string $relative, string $sourceDirectory): void {
@@ -273,8 +273,8 @@ class ImportWikitext extends Maintenance {
 			$colon = strpos($relative, ':');
 			$moved = substr($relative, 0, $colon) . '/' . substr($relative, $colon + 1);
 			$this->output(
-				"Warning: '$relative' names its namespace with ':', which Windows cannot hold"
-				. " and the next major version will not read; move it to '$moved'.\n"
+				"Warning: '$relative' names its namespace with ':', which Windows cannot hold;"
+				. " deprecated since 1.4.0, and 2.0.0 will not read it. Move it to '$moved'.\n"
 			);
 			return;
 		}
