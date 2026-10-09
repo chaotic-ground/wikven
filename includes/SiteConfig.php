@@ -137,6 +137,14 @@ class SiteConfig {
 			$warnings[] = "'WikvenBuildVector' is false, but 'skins' lists no other skin; building Vector anyway.";
 		}
 
+		$extraPages = $config['WikvenPreviewExtraPages'] ?? [];
+		if (!is_array($extraPages) || array_filter($extraPages, 'is_string') !== $extraPages) {
+			$warnings[] = "'WikvenPreviewExtraPages' must be a list of page names; ignoring what is not one.";
+		}
+		if ($extraPages && ( $config['WikvenBuildFor'] ?? BuildFor::SITE ) !== BuildFor::SKIN_PREVIEW) {
+			$warnings[] = "'WikvenPreviewExtraPages' is read only in a skin preview; nothing it lists is rendered.";
+		}
+
 		// The settings whose value is chosen from a list rather than written freely, so the ones where
 		// a near miss is worth naming: each reads what it does not know as its own default.
 		$chosen = [
