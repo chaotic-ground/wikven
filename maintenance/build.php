@@ -840,6 +840,8 @@ class Build extends Maintenance {
 		$this->step('render the pages', RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", [
 			'overwrite' => true
 		]);
+		// Beside the pages, so every pass below treats them as pages; nothing unless a preview lists some.
+		$this->step('render the listed pages', RenderPreviewPages::class, "$own/renderPreviewPages.php");
 		// RebuildFileCache renders in the content language; re-render translations in their own.
 		$this->step('re-render the translations', RetranslateChrome::class, "$own/retranslateChrome.php");
 		// Every page is rendered by now: drop what each one recorded about the request that made it.

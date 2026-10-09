@@ -218,6 +218,35 @@ Set it to <code>skin-preview</code> and the chrome is left as the skin drew it: 
 
 <!--T:200-->
 '''This mode is experimental, and will stay so.''' A skin is written against several MediaWiki releases; a bake renders on the one {{SITENAME}} carries. What you get is your skin on that version and no evidence about any other, which is less than a skin author needs and more than this project can widen. <code>examples/skin-preview</code> in the {{SITENAME}} repository is a source tree to bake with it, and its README is where the mode is described.
+</translate>
+
+<span id="WikvenPreviewExtraPages"></span>
+=== <code>WikvenPreviewExtraPages</code> ===
+
+<translate>
+<!--T:222-->
+'''Default:''' empty
+
+<!--T:223-->
+Pages a skin preview renders beyond the source tree's own, read only where <code>WikvenBuildFor</code> is <code>skin-preview</code>. A bake renders the pages in the source tree and nothing else, so special pages, a page's history and its diffs never reach the output, and a skin change that only touches them shows nothing. Each entry is a title, followed by the query a link to it would carry where it needs one:
+</translate>
+
+<syntaxhighlight lang="yaml" copy>
+config:
+  WikvenBuildFor: skin-preview
+  WikvenPreviewExtraPages:
+    - Special:RecentChanges
+    - Special:Version
+    - index?action=history
+    - index?diff=prev
+</syntaxhighlight>
+
+<translate>
+<!--T:224-->
+Each is written beside the pages, with its query after a <code>#</code> in its name — <code>index#action=history.html</code> — since no title can hold one. A link the rendered chrome makes to the same title with the same query reaches it, so the history tab of <code>index</code> opens its history. A bake imports one revision of each page, so a diff shows the diff's own header and navigation rather than changed lines.
+
+<!--T:225-->
+Only the listed ones are rendered. Rendering every page's history would cost a render per page that nobody reads, which is why a bake skips it to begin with.
 
 <!--T:219-->
 <span id="WikvenBuildVector"></span>

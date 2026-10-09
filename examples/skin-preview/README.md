@@ -54,11 +54,27 @@ nightly — the dated pre-releases on the releases page, newest first; once one 
 
 Open `dist/index.html`, and `dist/<your-skin>/index.html` for every skin after the first.
 
+## Special pages, histories and diffs
+
+A bake renders the pages in the tree and nothing else. `.wikven.yaml` lists a few more under
+`WikvenPreviewExtraPages` — two special pages, the main page's history and a diff — so a skin that
+styles those has something to show. Each entry is a title with the query a link would carry:
+
+```yaml
+WikvenPreviewExtraPages:
+  - Special:RecentChanges
+  - index?action=history
+```
+
+They are written beside the pages, the query after a `#` in the name (`index#action=history.html`),
+and the chrome's links to them lead there. Every page has one revision, so a diff shows its header
+and navigation but no changed lines. Add the ones your skin touches; only those are rendered.
+
 ## What you will see that a real site would not
 
-A toolbox full of `Special:` links that go nowhere, a login that does nothing, a talk tab with
-nothing behind it. That is the point: it is what your skin renders. `WikvenBuildFor` is `site` by
-default for exactly this reason, and a published site should leave it there.
+A toolbox full of `Special:` links that go nowhere unless listed above, a login that does nothing, a
+talk tab with nothing behind it. That is the point: it is what your skin renders. `WikvenBuildFor`
+is `site` by default for exactly this reason, and a published site should leave it there.
 
 ## Editing it
 
