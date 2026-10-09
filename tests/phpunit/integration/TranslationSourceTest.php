@@ -185,7 +185,7 @@ class TranslationSourceTest extends MediaWikiIntegrationTestCase {
 			'the title the file imports as' => ['/src/Getting Started.wikitext', $page, 'Getting Started'],
 			'a one-word title' => ['/src/Pages.wikitext', $page, 'Pages'],
 			'a namespaced page keeps its prefix' => [
-				'/src/MediaWiki:Sidebar-docs.wikitext',
+				'/src/MediaWiki/Sidebar-docs.wikitext',
 				$page,
 				'MediaWiki:Sidebar-docs'
 			],

@@ -127,6 +127,48 @@ class MainTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * A page a skin preview lists is one it rendered, so a link asking for it goes there rather
+	 * than to the history host (#830). The query matches whatever order the link wrote it in.
+	 */
+	public function testALinkToAListedPreviewPageReachesIt() {
+		$this->setMwGlobals('wgWikvenBuildFor', BuildFor::SKIN_PREVIEW);
+		$this->overrideConfigValue('WikvenHistoryUrl', 'https://repo/history/$1');
+		$this->setMwGlobals('wgWikvenPreviewExtraPages', [
+			'Getting Started?action=history',
+			'Getting Started?diff=prev&oldid=1',
+			'Special:RecentChanges'
+		]);
+		$main = $this->main();
+		$title = Title::newFromText('Getting Started');
+
+		$history = '/x';
+		$main->onGetLocalURL($title, $history, 'action=history');
+		$this->assertSame('./Getting_Started%23action=history.html', $history);
+
+		$diff = '/x';
+		$main->onGetLocalURL($title, $diff, 'oldid=1&diff=prev');
+		$this->assertSame('./Getting_Started%23diff=prev&oldid=1.html', $diff);
+
+		$unlisted = '/x';
+		$main->onGetLocalURL($title, $unlisted, 'diff=prev&oldid=2');
+		$this->assertSame('https://repo/history/Getting%20Started.wikitext', $unlisted);
+
+		$special = '/x';
+		$main->onGetLocalURL(Title::newFromText('Special:RecentChanges'), $special, '');
+		$this->assertSame('./Special:Recentchanges.html', $special);
+	}
+
+	/** A site renders none of them, so its history links go where they always went. */
+	public function testASiteIgnoresThePreviewList() {
+		$this->overrideConfigValue('WikvenHistoryUrl', 'https://repo/history/$1');
+		$this->setMwGlobals('wgWikvenPreviewExtraPages', ['Getting Started?action=history']);
+
+		$url = '/x';
+		$this->main()->onGetLocalURL(Title::newFromText('Getting Started'), $url, 'action=history');
+		$this->assertSame('https://repo/history/Getting%20Started.wikitext', $url);
+	}
+
+	/**
 	 * With no edit URL configured, even an action=edit link falls back to the
 	 * static page rather than a dead query string.
 	 */
