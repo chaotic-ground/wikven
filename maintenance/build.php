@@ -12,6 +12,7 @@ use MediaWiki\Extension\Wikven\Build\BuildFor;
 use MediaWiki\Extension\Wikven\Build\BuildTimes;
 use MediaWiki\Extension\Wikven\Build\SkinPass;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationSource;
+use MediaWiki\Extension\Wikven\Source\CaseCollisions;
 use MediaWiki\Extension\Wikven\Source\SourceAuthors;
 use MediaWiki\Extension\Wikven\Source\SourceFile;
 use MediaWiki\Extension\Wikven\Source\SourceHistory;
@@ -84,6 +85,7 @@ class Build extends Maintenance {
 		$this->phase('check what the site listed', $this->assertEverythingListedIsHere(...));
 		$this->phase('check what the site asked for', $this->assertNothingRefused(...));
 		$this->phase('check the Lua', $this->checkLuaAgainstThisBuild(...));
+		$this->phase('check the names', $this->assertNoNamesDifferOnlyInCase(...));
 		$this->phase('clear the output directory', $this->clearOutputDirectory(...));
 		$this->phase('set the main page', $this->setMainPage(...));
 		$this->phase('import the images', $this->importImages(...), "$ip/maintenance/importImages.php");
@@ -185,6 +187,34 @@ class Build extends Maintenance {
 		if ($warning !== null) {
 			$this->output("$warning\n");
 		}
+	}
+
+	/**
+	 * Stop on two source files that a disk ignoring case would hold as one; see CaseCollisions.
+	 *
+	 * The host can be such a disk even where this build is not, so this is refused everywhere.
+	 */
+	private function assertNoNamesDifferOnlyInCase(): void {
+		$config = $this->getConfig();
+		$source = rtrim((string)$config->get('WikvenSourceDirectory'), '/');
+		if ($source === '' || !is_dir($source)) {
+			return;
+		}
+		$images = [];
+		foreach (ImageImport::sources($source, (array)$config->get('FileExtensions')) as $path) {
+			$images[] = substr($path, strlen($source) + 1);
+		}
+		$collisions = CaseCollisions::find(self::sourcePaths($source), $images);
+		if ($collisions === []) {
+			return;
+		}
+		foreach ($collisions as $paths) {
+			$this->error('Wikven: these differ only in case: ' . implode(', ', $paths));
+		}
+		$this->fatalError(
+			'Wikven: macOS and Windows hold each of those as one file, in a checkout and in the output,'
+			. ' so one page would silently replace the other. Rename all but one of each; aborting the build.'
+		);
 	}
 
 	/**
@@ -810,6 +840,8 @@ class Build extends Maintenance {
 		$this->step('render the pages', RebuildFileCache::class, "$ip/maintenance/rebuildFileCache.php", [
 			'overwrite' => true
 		]);
+		// Beside the pages, so every pass below treats them as pages; nothing unless a preview lists some.
+		$this->step('render the listed pages', RenderPreviewPages::class, "$own/renderPreviewPages.php");
 		// RebuildFileCache renders in the content language; re-render translations in their own.
 		$this->step('re-render the translations', RetranslateChrome::class, "$own/retranslateChrome.php");
 		// Every page is rendered by now: drop what each one recorded about the request that made it.

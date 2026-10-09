@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\Wikven;
 use Maintenance;
 use MediaWiki\Extension\Wikven\Output\OutputName;
 use MediaWiki\Extension\Wikven\Output\RelativeUrl;
+use MediaWiki\Extension\Wikven\Output\TitleName;
 use MediaWiki\MediaWikiServices;
 
 $IP = strval(getenv('MW_INSTALL_PATH')) !== ''
@@ -36,7 +37,11 @@ class Rename extends Maintenance {
 	public function execute() {
 		$path = rtrim((string)$this->getConfig()->get('WikvenHtmlDirectory'), '/');
 
-		$namespaceText = MediaWikiServices::getInstance()->getContentLanguage()->getNsText(...);
+		$language = MediaWikiServices::getInstance()->getContentLanguage();
+		// A special page is named canonically, as every link to one is; see TitleName.
+		$namespaceText = static function (int $namespace) use ($language): string {
+			return $namespace === NS_SPECIAL ? TitleName::specialNamespace() : (string)$language->getNsText($namespace);
+		};
 
 		$moved = 0;
 		foreach (glob("$path/*") ?: [] as $filename) {

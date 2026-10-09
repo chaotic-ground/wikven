@@ -76,7 +76,7 @@ class ImageImport {
 	 * @param string $name A file's base name.
 	 * @return string The name two files have to share to be one page.
 	 */
-	private static function title(string $name): string {
+	public static function title(string $name): string {
 		$collapsed = preg_replace(
 			'/[ _\x{00A0}\x{1680}\x{180E}\x{2000}-\x{200A}\x{2028}\x{2029}\x{202F}\x{205F}\x{3000}]+/u',
 			'_',

@@ -913,7 +913,7 @@ class Checks {
 	 * @return string[]
 	 */
 	private static function sidebarPages(Site $site): array {
-		$source = rtrim((string)$site->source, '/') . '/MediaWiki:Sidebar.wikitext';
+		$source = rtrim((string)$site->source, '/') . '/MediaWiki/Sidebar.wikitext';
 		$pages = [];
 		foreach (explode("\n", $site->read($source)) as $line) {
 			$found = [];

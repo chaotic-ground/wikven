@@ -5,10 +5,12 @@ namespace MediaWiki\Extension\Wikven\Hooks;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
 use MediaWiki\Extension\Wikven\Build\BuildFor;
+use MediaWiki\Extension\Wikven\Build\PreviewPages;
 use MediaWiki\Extension\Wikven\LicensesPage;
 use MediaWiki\Extension\Wikven\Output\AssetFile;
 use MediaWiki\Extension\Wikven\Output\OutputName;
 use MediaWiki\Extension\Wikven\Output\Stylesheet;
+use MediaWiki\Extension\Wikven\Output\TitleName;
 use MediaWiki\Extension\Wikven\PageTranslation\TranslationFamily;
 use MediaWiki\Extension\Wikven\Search;
 use MediaWiki\Extension\Wikven\SiteUrl;
@@ -42,6 +44,9 @@ class Main implements
 
 	/** Where the site says it will be published, unknown where it has not said. */
 	private SiteUrl $siteUrl;
+
+	/** @var ?array<string,string> See previewPages(). */
+	private ?array $previewPages = null;
 
 	/** The licenses page's per-language copies, read from the source tree once; see licensesCluster(). */
 	private ?array $licensesCopies = null;
@@ -175,11 +180,20 @@ class Main implements
 			return $search === null ? ['local' => '#', 'whole' => null] : $this->inTheExport($search);
 		}
 
-		// The file this title is written to, url-encoded so a static server asking for it finds it;
-		// see OutputName, which rename.php asks the same question of from the file's side.
-		$href = OutputName::href(OutputName::of(...$this->nameFor($title)));
+		$name = TitleName::of($title);
 		// Parse query to name=>value; substring-matching "action=" would also match "veaction=edit".
 		$params = wfCgiToArray($query);
+		// Ahead of the edit and history links below: a page a preview lists is one it rendered.
+		$listedQuery = PreviewPages::query($params);
+		$listed = $listedQuery === null
+			? null
+			: $this->previewPages()[self::previewKey($name, $listedQuery)] ?? null;
+		if ($listed !== null) {
+			return $this->inTheExport($listed);
+		}
+		// The file this title is written to, url-encoded so a static server asking for it finds it;
+		// see OutputName, which rename.php asks the same question of from the file's side.
+		$href = OutputName::href(OutputName::of(...$name));
 		$action = $params['action'] ?? null;
 		// A diff is history too: the export holds one revision, so what changed is only in the
 		// repository. Citizen's "last modified" button asks for the latest diff, and without this it
@@ -204,25 +218,35 @@ class Main implements
 	}
 
 	/**
-	 * The namespace and title a link is written from.
+	 * The href of each page a skin preview renders beyond the content, by previewKey().
 	 *
-	 * A special page is named canonically rather than as this wiki names it: a surviving link is a
-	 * marker for a later pass, and a marker has to be one string.
+	 * An entry naming no title is left out here; renderPreviewPages.php is what says so.
 	 *
-	 * @return array{string,string} Namespace text and dbkey, as OutputName::of() takes them.
+	 * @return array<string,string>
 	 */
-	private function nameFor(Title $title): array {
-		if ($title->getNamespace() !== NS_SPECIAL) {
-			return [(string)$title->getNsText(), $title->getDBkey()];
+	private function previewPages(): array {
+		if ($this->previewPages !== null) {
+			return $this->previewPages;
 		}
-		$services = MediaWikiServices::getInstance();
-		$canonical = (string)$services->getNamespaceInfo()->getCanonicalName(NS_SPECIAL);
-		[$name, $subpage] = $services->getSpecialPageFactory()->resolveAlias($title->getDBkey());
-		// A name no special page answers to has no canonical form to be written in; leave it as typed.
-		if ($name === null) {
-			return [$canonical, $title->getDBkey()];
+		$this->previewPages = [];
+		foreach (PreviewPages::entries() as $entry) {
+			[$text, $params] = PreviewPages::parse($entry);
+			$title = Title::newFromText($text);
+			$query = PreviewPages::query($params);
+			if ($title === null || $query === null) {
+				continue;
+			}
+			[$namespace, $dbkey] = TitleName::of($title);
+			$key = self::previewKey([$namespace, $dbkey], $query);
+			$file = OutputName::of($namespace, PreviewPages::dbkey($dbkey, $query));
+			$this->previewPages[$key] = OutputName::href($file);
 		}
-		return [$canonical, $subpage === null ? $name : "$name/$subpage"];
+		return $this->previewPages;
+	}
+
+	/** @param array{string,string} $name As TitleName::of() answers. */
+	private static function previewKey(array $name, string $query): string {
+		return implode("\n", [...$name, $query]);
 	}
 
 	/**
@@ -236,7 +260,7 @@ class Main implements
 		if (!$results) {
 			return null;
 		}
-		$url = OutputName::href(OutputName::of(...$this->nameFor($results)));
+		$url = OutputName::href(OutputName::of(...TitleName::of($results)));
 		$term = wfCgiToArray($query)['search'] ?? '';
 		return $term === '' ? $url : $url . '?' . wfArrayToCgi(['search' => $term]);
 	}
@@ -475,7 +499,7 @@ class Main implements
 		if ($mainSkin === '' || $skin === $mainSkin) {
 			return [];
 		}
-		$href = OutputName::href(OutputName::of(...$this->nameFor($title)));
+		$href = OutputName::href(OutputName::of(...TitleName::of($title)));
 		return [
 			'link-canonical' => Html::element('link', [
 				'rel' => 'canonical',

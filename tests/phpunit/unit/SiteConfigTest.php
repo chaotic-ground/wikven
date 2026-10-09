@@ -147,6 +147,36 @@ class SiteConfigTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString("'WikvenBuildVector' is string;", $warnings[0]);
 	}
 
+	public function testPreviewExtraPagesInASkinPreviewPassLint() {
+		$this->assertSame(
+			[],
+			SiteConfig::lint([
+				'config' => [
+					'WikvenBuildFor' => 'skin-preview',
+					'WikvenPreviewExtraPages' => ['Special:Version', 'index?action=history']
+				]
+			])
+		);
+	}
+
+	/** A site renders none of them, so a list there is a list that does nothing. */
+	public function testPreviewExtraPagesOutsideASkinPreviewAreNamed() {
+		$warnings = SiteConfig::lint(['config' => ['WikvenPreviewExtraPages' => ['Special:Version']]]);
+		$this->assertCount(1, $warnings);
+		$this->assertStringContainsString('read only in a skin preview', $warnings[0]);
+	}
+
+	public function testPreviewExtraPagesThatAreNotNamesAreNamed() {
+		foreach (['Special:Version', ['Special:Version', 3]] as $written) {
+			$warnings = SiteConfig::lint(['config' => [
+				'WikvenBuildFor' => 'skin-preview',
+				'WikvenPreviewExtraPages' => $written
+			]]);
+			$this->assertCount(1, $warnings);
+			$this->assertStringContainsString('must be a list of page names', $warnings[0]);
+		}
+	}
+
 	public function testUrlTemplateMissingPlaceholderWarns() {
 		$warnings = SiteConfig::lint(['config' => ['WikvenEditUrl' => 'https://example.org/edit']]);
 		$this->assertCount(1, $warnings);

@@ -93,4 +93,5 @@ jobs:
       contents: read
       pages: write
       id-token: write
+      deployments: write  # publish-pages marks the previews it published as live
     uses: $/.github/workflows/publish-pages.yml
