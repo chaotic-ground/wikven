@@ -52,6 +52,55 @@ class StylesheetTest extends MediaWikiUnitTestCase {
 		$this->assertStringContainsString($file, $problem);
 	}
 
+	public function testAPageInTheSitesDirectionLinksTheSitesStylesheet() {
+		$this->assertSame('skins.vector.styles.css', Stylesheet::fileName('skins.vector.styles', 'ltr', 'ltr'));
+		$this->assertSame('skins.vector.styles.css', Stylesheet::fileName('skins.vector.styles', 'rtl', 'rtl'));
+	}
+
+	/** An Arabic translation on an English site, and an English one on an Arabic site. */
+	public function testAPageReadTheOtherWayLinksACopyNamedForItsDirection() {
+		$this->assertSame('skins.vector.styles.rtl.css', Stylesheet::fileName('skins.vector.styles', 'rtl', 'ltr'));
+		$this->assertSame('skins.vector.styles.ltr.css', Stylesheet::fileName('skins.vector.styles', 'ltr', 'rtl'));
+	}
+
+	public function testTheSitesOwnStylesheetIsItsModuleInNoParticularDirection() {
+		$this->assertSame(
+			['module' => 'skins.vector.styles', 'direction' => null],
+			Stylesheet::module('/out/assets/skins.vector.styles.css', $this->modules('skins.vector.styles'))
+		);
+	}
+
+	public function testADirectionalCopyIsItsModuleInThatDirection() {
+		$isModule = $this->modules('skins.vector.styles');
+
+		$this->assertSame(
+			['module' => 'skins.vector.styles', 'direction' => 'rtl'],
+			Stylesheet::module('/out/assets/skins.vector.styles.rtl.css', $isModule)
+		);
+		$this->assertSame(
+			['module' => 'skins.vector.styles', 'direction' => 'ltr'],
+			Stylesheet::module('skins.vector.styles.ltr.css', $isModule)
+		);
+	}
+
+	/** A name only looks like a copy; a module of that very name is the module itself. */
+	public function testAModuleWhoseNameEndsInADirectionIsThatModule() {
+		$this->assertSame(
+			['module' => 'ext.example.rtl', 'direction' => null],
+			Stylesheet::module('ext.example.rtl.css', $this->modules('ext.example', 'ext.example.rtl'))
+		);
+	}
+
+	/**
+	 * @param string ...$names The modules ResourceLoader has.
+	 * @return callable(string):bool
+	 */
+	private function modules(string ...$names): callable {
+		return static function (string $name) use ($names): bool {
+			return in_array($name, $names, true);
+		};
+	}
+
 	/**
 	 * A failing write warns, and a build wants to see that warning; a test that asks for the
 	 * failure on purpose does not, and PHPUnit would otherwise make the expected one a failure.

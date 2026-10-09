@@ -21,7 +21,8 @@ class AssetLocalizer {
 		array $files,
 		string $lang,
 		string $skin,
-		bool $inline = false
+		bool $inline = false,
+		?string $direction = null
 	): void {
 		$mwRoot = rtrim((string)( $GLOBALS['IP'] ?? '' ), '/');
 		$map = [];
@@ -37,11 +38,11 @@ class AssetLocalizer {
 				// escaped " / ' CSSMin emits whenever a url() has to be quoted.
 				'~url\(\s*(?:\\\\u002[27]|[\'"])?([^)\'"]*load\.php\?[^)\'"]*image=[^)\'"]*?)'
 				. '(?:\\\\u002[27]|[\'"])?\s*\)~',
-				static function ($m) use (&$map, $rl, $dir, $lang, $skin, $inline) {
+				static function ($m) use (&$map, $rl, $dir, $lang, $skin, $inline, $direction) {
 					// Decode the JSON-string escapes used inside JS bundles.
 					$url = self::decodeJsonString($m[1]);
 					if (!array_key_exists($url, $map)) {
-						$map[$url] = self::dumpRlImage($rl, $url, $dir, $lang, $skin, $inline);
+						$map[$url] = self::dumpRlImage($rl, $url, $dir, $lang, $skin, $inline, $direction);
 					}
 					return $map[$url] !== null ? 'url(' . $map[$url] . ')' : $m[0];
 				},
@@ -104,7 +105,8 @@ class AssetLocalizer {
 		string $dir,
 		string $lang,
 		string $skin,
-		bool $inline = false
+		bool $inline = false,
+		?string $direction = null
 	): ?string {
 		$qs = parse_url($url, PHP_URL_QUERY);
 		if (!$qs) {
@@ -126,7 +128,12 @@ class AssetLocalizer {
 			$query['variant'] = $p['variant'];
 		}
 
-		$bytes = ModuleRenderer::render($rl, new Context($rl, new FauxRequest($query)));
+		// A stylesheet flipped for the other direction wants its icons flipped too.
+		$request = new FauxRequest($query);
+		$context = $direction === null
+			? new Context($rl, $request)
+			: new DirectionalContext($rl, $request, $direction);
+		$bytes = ModuleRenderer::render($rl, $context);
 
 		$isSvg = str_contains($bytes, '<svg');
 		$isPng = strncmp($bytes, "\x89PNG\r\n\x1a\n", 8) === 0;
@@ -140,7 +147,13 @@ class AssetLocalizer {
 
 		// Hash without the cache-busting version so filenames are stable across rebuilds.
 		$key = preg_replace('/[&?]version=[^&]*/', '', $url);
-		$name = 'img-' . substr(md5($key), 0, 12) . ( $isSvg ? '.svg' : '.png' );
+		$extension = $isSvg ? '.svg' : '.png';
+		$name = 'img-' . substr(md5($key), 0, 12) . $extension;
+		// The url is the same in both directions and the picture usually is too, so a flipped
+		// stylesheet takes the site direction's copy unless its own differs.
+		if ($direction !== null && !( is_file("$dir/$name") && file_get_contents("$dir/$name") === $bytes )) {
+			$name = 'img-' . substr(md5("$key&dir=$direction"), 0, 12) . $extension;
+		}
 		file_put_contents("$dir/$name", $bytes, LOCK_EX);
 		return "./$name";
 	}
