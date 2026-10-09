@@ -3,10 +3,14 @@
 namespace MediaWiki\Extension\Wikven\Tests\Integration;
 
 use MediaWiki\Extension\Wikven\Fetching\RetryingForeignRepo;
+use MediaWiki\FileRepo\File\ForeignAPIFile;
+use MediaWiki\FileRepo\ForeignAPIRepo;
 use MediaWiki\Http\MWHttpRequest;
 use MediaWiki\Status\Status;
+use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 use MockHttpTrait;
+use ReflectionMethod;
 use RuntimeException;
 use Wikimedia\FileBackend\FSFileBackend;
 use Wikimedia\ObjectCache\WANObjectCache;
@@ -100,6 +104,19 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 		return $response;
 	}
 
+	/**
+	 * Look a thumbnail up as core does: from MediaWiki 1.47 with the file, fetched with its
+	 * thumbnail URLs, and before that with its name.
+	 */
+	private function thumbUrl(RetryingForeignRepo $repo, string $name, int $width, int $height): string|false {
+		$takesFile = ( new ReflectionMethod(
+			ForeignAPIRepo::class,
+			'getThumbUrlFromCache'
+		) )->getParameters()[0]->hasType();
+		$file = $takesFile ? ForeignAPIFile::newFromTitle(Title::newFromText($name, NS_FILE), $repo) : $name;
+		return $repo->getThumbUrlFromCache($file, $width, $height);
+	}
+
 	/** An imageinfo response body, with a thumbnail URL unless $thumbUrl is null. */
 	private function imageInfo(?string $thumbUrl): string {
 		// Both shapes: core up to 1.46 reads the one url asked for, later core the list (T56037).
@@ -140,7 +157,7 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 		$url = 'https://upload.example.org/commons/thumb/a/ab/Bakery_oven.jpg/32px-Bakery_oven.jpg';
 		$this->answerWith([['body' => $this->imageInfo($url)]], $made);
 
-		$this->assertSame($url, $this->newRepo()->getThumbUrlFromCache('Bakery oven.jpg', 32, -1));
+		$this->assertSame($url, $this->thumbUrl($this->newRepo(), 'Bakery oven.jpg', 32, -1));
 	}
 
 	public function testAThumbnailTheRemoteCannotSupplyEndsTheBuildWithAnAnswerableMessage() {
@@ -151,7 +168,7 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 
 		$this->expectException(RuntimeException::class);
 		$this->expectExceptionMessage('Xclamation SVG.svg');
-		$this->newRepo()->getThumbUrlFromCache('Xclamation SVG.svg', 32, -1);
+		$this->thumbUrl($this->newRepo(), 'Xclamation SVG.svg', 32, -1);
 	}
 
 	/**
@@ -169,7 +186,7 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 			);
 		});
 
-		$this->newRepo()->getThumbUrlFromCache('Bakery oven.jpg', 32, -1);
+		$this->thumbUrl($this->newRepo(), 'Bakery oven.jpg', 32, -1);
 
 		$this->assertNotSame([], $agents, 'the lookup should have made a request');
 		foreach ($agents as $agent) {
@@ -197,7 +214,7 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 		$this->answerWith([['body' => $this->imageInfo(null)]], $made);
 
 		try {
-			$this->newRepo()->getThumbUrlFromCache('Xclamation SVG.svg', 32, 64);
+			$this->thumbUrl($this->newRepo(), 'Xclamation SVG.svg', 32, 64);
 			$this->fail('a thumbnail the remote cannot supply should end the build');
 		} catch (RuntimeException $e) {
 			$this->assertStringContainsString('testcommons', $e->getMessage());
