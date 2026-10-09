@@ -143,6 +143,24 @@ class OutputNameTest extends MediaWikiUnitTestCase {
 		}
 	}
 
+	/**
+	 * A page a skin preview lists is written in the cache's spelling too, and a special page's
+	 * namespace number is negative (#830).
+	 *
+	 * @dataProvider provideBothSchemes
+	 */
+	public function testASpecialPageTheCacheSpellingNamesIsRenamed(string $scheme) {
+		$titles = [['Special', 'Recentchanges'], ['Special', 'Whatlinkshere/index'], ['', 'index#action=history']];
+		foreach ($titles as [$namespace, $dbkey]) {
+			$cached = self::asTheCacheWritesIt($namespace === '' ? 0 : -1, $dbkey);
+			$this->assertSame(
+				OutputName::of($namespace, $dbkey, $scheme),
+				OutputName::fromCache($cached, self::alwaysNamespace($namespace), $scheme),
+				"$namespace:$dbkey, $scheme"
+			);
+		}
+	}
+
 	/** Nothing the file cache wrote, so nothing to rename: left exactly as it is. */
 	public function testANameTheCacheDidNotWriteIsUntouched() {
 		$namespaceText = self::alwaysNamespace('Help');

@@ -85,7 +85,7 @@ The division is what makes the passes safe to run beside each other: the orchest
 
 <!--T:41-->
 ; <code>importWikitext</code>
-: Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be a nested file). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.
+: Imports every <code>*.wikitext</code> file (recursing into subdirectories, so a page like <code>Template:Foo/styles.css</code> can be the nested file <code>Template/Foo/styles.css</code>). <code>File:</code> description pages and <code>MediaWiki:</code> system pages are saved as the current revision so their edit hooks fire; ordinary pages are imported as old revisions. The build aborts here if the main page is missing.
 
 <!--T:42-->
 ; <code>setLicensesPage</code> and <code>setSettingsPage</code>
@@ -120,6 +120,10 @@ Each pass renders the whole site in its own skin, into its own directory: the fi
 <!--T:32-->
 ; <code>RebuildFileCache</code>
 : Renders every content page to an HTML file. This is MediaWiki's own file cache; {{SITENAME}} treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.
+
+<!--T:59-->
+; <code>renderPreviewPages</code>
+: In a skin preview, renders the special pages, histories and diffs [[<tvar name="1">Special:MyLanguage/Configuration#WikvenPreviewExtraPages</tvar>|<code>WikvenPreviewExtraPages</code>]] lists, writing each where the file cache would have, so every step after it treats them as pages. A no-op otherwise.
 
 <!--T:48-->
 ; <code>retranslateChrome</code>

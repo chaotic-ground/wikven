@@ -80,7 +80,7 @@ class OutputName {
 	 * @param ?string $scheme One of all(); the site's own by default.
 	 */
 	public static function fromCache(string $cacheName, callable $namespaceText, ?string $scheme = null): string {
-		if (!preg_match('/^ns(\d+)%3A/', $cacheName, $matches)) {
+		if (!preg_match('/^ns(-?\d+)%3A/', $cacheName, $matches)) {
 			return $cacheName;
 		}
 		return self::assemble(

@@ -1,10 +1,10 @@
 <languages />
 <translate>
 <!--T:1-->
-The navigation sidebar is configured the same way as on MediaWiki, through the <code>MediaWiki:Sidebar</code> system message. Create a <code>MediaWiki:Sidebar.wikitext</code> file in your source directory, alongside your other pages.
+The navigation sidebar is configured the same way as on MediaWiki, through the <code>MediaWiki:Sidebar</code> system message. Create a <code>MediaWiki/Sidebar.wikitext</code> file in your source directory, alongside your other pages.
 
 <!--T:2-->
-Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the wording in your source language goes in <code>MediaWiki:Sidebar-docs.wikitext</code> and each translation in <code>MediaWiki:Sidebar-docs/&lt;language&gt;.wikitext</code>, next to your other pages, the way every other translated page is named. A sidebar then reads like this:
+Each top-level <code>*</code> line is a heading, and each <code>**</code> line below it is a link written as <code>page|label</code>. Headings and labels are looked up as system messages first and only fall back to the literal text when no such message exists, so <code>mainpage</code> and <code>mainpage-description</code> resolve to the main page and its label. Write your own as message names too, because a message is what makes a label translatable: the wording in your source language goes in <code>MediaWiki/Sidebar-docs.wikitext</code> and each translation in <code>MediaWiki/Sidebar-docs/&lt;language&gt;.wikitext</code>, next to your other pages, the way every other translated page is named. A sidebar then reads like this:
 </translate>
 
 <syntaxhighlight lang="wikitext" copy>
@@ -43,7 +43,7 @@ A target names one page, so an entry leads to that page and no other: a reader o
 {{note|text=The spelling is a wiki's; the rule behind it is not. On a wiki, that special page redirects at request time to the reader's own interface language, whatever page the link sat on, so two readers of one page follow the same entry to different translations. A static export has no request and no reader to ask, so the build settles each link once, by the language of the page holding it, and every reader of that page follows it to the same place.}}
 
 <!--T:10-->
-The main page keeps its plain <code>mainpage</code> entry, because that target is a message: the prefix goes in the message instead. Write <code>Special:MyLanguage/index</code> in <code>MediaWiki:Mainpage.wikitext</code> (<code>index</code> being whatever <code>WikvenMainPage</code> names), as Meta-Wiki does. Every skin points its logo at that same message, so the logo follows the reader's language too. The cost is that the wiki stops recognising the page as its main page: the page title shows in the browser tab, and MinervaNeue leaves out its main-page styling.
+The main page keeps its plain <code>mainpage</code> entry, because that target is a message: the prefix goes in the message instead. Write <code>Special:MyLanguage/index</code> in <code>MediaWiki/Mainpage.wikitext</code> (<code>index</code> being whatever <code>WikvenMainPage</code> names), as Meta-Wiki does. Every skin points its logo at that same message, so the logo follows the reader's language too. The cost is that the wiki stops recognising the page as its main page: the page title shows in the browser tab, and MinervaNeue leaves out its main-page styling.
 
 <!--T:3-->
 == What is removed ==

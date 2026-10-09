@@ -94,6 +94,7 @@ class ImportWikitext extends Maintenance {
 		$defer = $this->hasOption('defer');
 		$failed = [];
 		$refused = [];
+		$seen = [];
 		foreach ($files as $filename) {
 			$title = Title::newFromText($this->filenameToTitle($filename, $sourceDirectory));
 			if (!$title) {
@@ -102,8 +103,18 @@ class ImportWikitext extends Maintenance {
 				continue;
 			}
 
-			// Warn if the title won't round-trip to the filename; export edit/history links would 404.
 			$relative = substr($filename, strlen($sourceDirectory) + 1);
+			// Two files, one page: whichever saved last would be the page, and nothing would say so.
+			$prefixed = $title->getPrefixedText();
+			if (isset($seen[$prefixed])) {
+				$this->output("Both '{$seen[$prefixed]}' and '$relative' import as page '$prefixed'; keep one.\n");
+				$failed[] = $relative;
+				continue;
+			}
+			$seen[$prefixed] = $relative;
+			$this->warnAboutSpelling($relative, $sourceDirectory);
+
+			// Warn if the title won't round-trip to the filename; export edit/history links would 404.
 			if (SourceFile::titleToFilename($title->getPrefixedText()) !== $relative) {
 				$this->output(
 					"Warning: '$relative' imports as page '{$title->getPrefixedText()}'; "
@@ -249,6 +260,31 @@ class ImportWikitext extends Maintenance {
 		}
 
 		return $files;
+	}
+
+	/**
+	 * Say what a file's namespace spelling will cost.
+	 *
+	 * "Template:note.wikitext" is one Windows cannot hold, deprecated since 1.4.0;
+	 * "Help/Setup.wikitext" beside a "Help.wikitext" was likely meant as a subpage.
+	 */
+	private function warnAboutSpelling(string $relative, string $sourceDirectory): void {
+		if (SourceFile::hasColonPrefix($relative)) {
+			$colon = strpos($relative, ':');
+			$moved = substr($relative, 0, $colon) . '/' . substr($relative, $colon + 1);
+			$this->output(
+				"Warning: '$relative' names its namespace with ':', which Windows cannot hold;"
+				. " deprecated since 1.4.0, and 2.0.0 will not read it. Move it to '$moved'.\n"
+			);
+			return;
+		}
+		$namespace = SourceFile::namespaceDirectory($relative);
+		if ($namespace !== null && is_file("$sourceDirectory/$namespace.wikitext")) {
+			$this->output(
+				"Warning: '$relative' is read as a page in the $namespace namespace,"
+				. " not as a subpage of '$namespace'; rename the directory to keep it a subpage.\n"
+			);
+		}
 	}
 
 	/** Map a page file to its title via SourceFile's naming convention. */

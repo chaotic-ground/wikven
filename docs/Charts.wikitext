@@ -91,8 +91,9 @@ Chart reads two pages out of the <code>Data:</code> namespace, and both are sour
 
 <syntaxhighlight lang="text">
 docs/
-  Data:Election.tab      the numbers
-  Data:Election.chart    what to draw with them
+  Data/
+    Election.tab         the numbers
+    Election.chart       what to draw with them
 </syntaxhighlight>
 
 <translate>
