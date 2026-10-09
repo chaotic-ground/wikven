@@ -54,8 +54,8 @@ RUN arch="$TARGETARCH" \
 ENV COMPOSER_ALLOW_SUPERUSER=1
 # Commits, not the branch tip: REL1_46 takes translatewiki updates weekly, so a branch pin would
 # build a different Translate from the same wikven commit a week later. updatecli moves them.
-ARG TRANSLATE_VERSION=0dfb7ed15c44199d8e1dba695cd90591f4b23956
-ARG ULS_VERSION=b088469c714fdf835cd398181aee4d8496789d6e
+ARG TRANSLATE_VERSION=e6e4e6b1838361936e91b50acd9ece0a6efa922c
+ARG ULS_VERSION=b24dde40118e10fb1aaf4ab353dd978f10e2db30
 # Translate asks for both by range, so an unpinned install takes whatever Packagist serves that day.
 # Exact versions, as temporary constraints rather than written into Translate's manifest.
 ARG SPYC_VERSION=0.6.3
