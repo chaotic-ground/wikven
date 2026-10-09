@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.0](https://github.com/chaotic-ground/wikven/compare/v1.3.0...v1.4.0) (2026-10-09)
+
+
+### Features
+
+* **build:** stop on source names that differ only in case ([#822](https://github.com/chaotic-ground/wikven/issues/822)) ([8d8b743](https://github.com/chaotic-ground/wikven/commit/8d8b743d567984638f14fa0bcf79b30eb42767bd))
+* let a skin preview render special pages, histories and diffs it lists ([#831](https://github.com/chaotic-ground/wikven/issues/831)) ([ea66019](https://github.com/chaotic-ground/wikven/commit/ea66019c30e67f7f5e7cede3a91346647fbba683))
+* read a namespace from a directory, so a source tree checks out on Windows ([#821](https://github.com/chaotic-ground/wikven/issues/821)) ([fcca04a](https://github.com/chaotic-ground/wikven/commit/fcca04ab3aa57158d2d5e27017752f3767f016f9))
+
+
+### Bugfixes
+
+* flip the stylesheets a right-to-left translation links ([#818](https://github.com/chaotic-ground/wikven/issues/818)) ([39047c4](https://github.com/chaotic-ground/wikven/commit/39047c4c3f1d1ffbc7fde0b22ba2eb7b50647588))
+
 ## [1.3.0](https://github.com/chaotic-ground/wikven/compare/v1.2.0...v1.3.0) (2026-10-02)
 
 
