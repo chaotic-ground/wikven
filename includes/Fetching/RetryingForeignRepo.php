@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\Wikven\Fetching;
 
+use MediaWiki\FileRepo\File\ForeignAPIFile;
 use MediaWiki\FileRepo\ForeignAPIRepo;
 use RuntimeException;
 
@@ -18,12 +19,16 @@ class RetryingForeignRepo extends ForeignAPIRepo {
 	 *
 	 * Core's only caller is the ForeignAPIFile::transform() branch above, which cannot cope with a
 	 * false. So end the build here, where the file and the reason are still known.
+	 *
+	 * @param ForeignAPIFile|string $file The file from MediaWiki 1.47, its name before.
 	 */
-	public function getThumbUrlFromCache($name, $width, $height, $params = '') {
-		$url = parent::getThumbUrlFromCache($name, $width, $height, $params);
+	public function getThumbUrlFromCache($file, $width, $height, $params = '') {
+		$url = parent::getThumbUrlFromCache($file, $width, $height, $params);
 		if ($url !== false) {
 			return $url;
 		}
+
+		$name = $file instanceof ForeignAPIFile ? $file->getTitle()->getText() : $file;
 
 		$size = $height > 0 ? "{$width}x{$height}" : "{$width}px";
 		$attempts = Attempts::FETCH;
