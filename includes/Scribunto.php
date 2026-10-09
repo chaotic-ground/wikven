@@ -12,8 +12,11 @@ class Scribunto {
 	/** The extension a site lists to ask for Lua. */
 	public const EXTENSION = 'Scribunto';
 
-	/** Namespace prefixes a module source file carries. Canonical only: see modulePages(). */
-	public const MODULE_PREFIXES = ['Module:'];
+	/**
+	 * Namespace prefixes a module source file carries: the directory, and the older colon. Canonical
+	 * only: see modulePages().
+	 */
+	public const MODULE_PREFIXES = ['Module/', 'Module:'];
 
 	/**
 	 * The source files that are Lua modules.

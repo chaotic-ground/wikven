@@ -27,3 +27,12 @@ config:
   # to be exported too. The default is [0, 6]; this adds the Category namespace rather than
   # replacing it, which a config value does not do for you.
   ContentNamespaces: [0, 6, 14]
+
+  # Pages a bake never renders on its own, for a skin that styles them: a special page, a history,
+  # a diff. Only the ones listed are rendered, and the chrome's links to them then lead somewhere.
+  WikvenPreviewExtraPages:
+    - Special:RecentChanges
+    - Special:Version
+    - index?action=history
+    - index?diff=prev
+    - Special:WhatLinksHere/index
