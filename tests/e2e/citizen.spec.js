@@ -156,7 +156,9 @@ test("Citizen's last-modified button leads to what changed", async ({
 	// The skin asks for the latest diff, which an export holding one revision of a page cannot
 	// show; the repository can, and that is where the history link already goes. Left alone it
 	// resolves to the page it is already on.
-	const lastmod = page.locator("#citizen-lastmod-relative").first();
+	const lastmod = page
+		.locator("#citizen-page-aside-lastmod .citizen-page-aside__link")
+		.first();
 	await expect(lastmod).toBeVisible();
 	const href = await lastmod.getAttribute("href");
 	expect(href).not.toMatch(/Installation\.html$/);
