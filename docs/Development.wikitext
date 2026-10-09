@@ -121,6 +121,10 @@ Each pass renders the whole site in its own skin, into its own directory: the fi
 ; <code>RebuildFileCache</code>
 : Renders every content page to an HTML file. This is MediaWiki's own file cache; {{SITENAME}} treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.
 
+<!--T:59-->
+; <code>renderPreviewPages</code>
+: In a skin preview, renders the special pages, histories and diffs [[<tvar name="1">Special:MyLanguage/Configuration#WikvenPreviewExtraPages</tvar>|<code>WikvenPreviewExtraPages</code>]] lists, writing each where the file cache would have, so every step after it treats them as pages. A no-op otherwise.
+
 <!--T:48-->
 ; <code>retranslateChrome</code>
 : Re-renders each page written in a language other than the wiki's own — the translations, and the language copies of the [[<tvar name="1">Special:MyLanguage/Configuration#WikvenLicensesPage</tvar>|Licenses page]] the build writes — with that language as the interface language. The file cache only caches the canonical anonymous view, which would leave every one of them wearing the content language's chrome.

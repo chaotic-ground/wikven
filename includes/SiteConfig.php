@@ -138,7 +138,7 @@ class SiteConfig {
 		}
 
 		$extraPages = $config['WikvenPreviewExtraPages'] ?? [];
-		if (!is_array($extraPages) || array_filter($extraPages, static fn($entry) => !is_string($entry))) {
+		if (!is_array($extraPages) || array_filter($extraPages, 'is_string') !== $extraPages) {
 			$warnings[] = "'WikvenPreviewExtraPages' must be a list of page names; ignoring what is not one.";
 		}
 		if ($extraPages && ( $config['WikvenBuildFor'] ?? BuildFor::SITE ) !== BuildFor::SKIN_PREVIEW) {

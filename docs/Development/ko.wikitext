@@ -100,6 +100,10 @@
 ; <code>RebuildFileCache</code>
 : 모든 콘텐츠 문서를 HTML 파일로 렌더링합니다. MediaWiki 자체의 파일 캐시이며, {{SITENAME}}은 <code>File:</code>도 콘텐츠 네임스페이스로 취급하므로 모든 틀을 쏟아내지 않으면서 파일 설명 문서까지 내보냅니다.
 
+<!--T:59 @452e5d68-->
+; <code>renderPreviewPages</code>
+: 스킨 미리보기에서 [[$1|<code>WikvenPreviewExtraPages</code>]]가 나열한 특수 문서, 역사, 차이 보기를 렌더합니다. 파일 캐시가 썼을 자리에 쓰므로 뒤의 모든 단계가 이것들을 문서로 다룹니다. 그 밖에는 아무것도 하지 않습니다.
+
 <!--T:48 @6182eb37-->
 ; <code>retranslateChrome</code>
 : 위키 자신의 언어가 아닌 언어로 쓰인 각 문서 — 번역 문서와, 빌드가 언어별로 쓰는 [[$1|라이선스 문서]] 사본 — 를 그 언어를 인터페이스 언어로 삼아 다시 렌더링합니다. 파일 캐시는 표준 익명 열람만 캐시하므로, 그대로 두면 그 문서들이 모두 콘텐츠 언어의 인터페이스를 두르게 됩니다.
@@ -188,7 +192,7 @@ e2e 실행은 GitHub Pages가 그러하듯 <code>dist/</code>를 <code>/wikven/<
 <!--T:22 @9c7c0fee-->
 == 지속적 통합 ==
 
-<!--T:23 @b34c3152-->
+<!--T:23 @545e1d30-->
 * <code>lint.yml</code>은 포매터와 린터(Biome, mago, rumdl, taplo, typos, yamllint, zizmor, phpcs)를 실행하고, 모든 소스 주석을 낱말 수 예산 안에 묶어 두며, 이 사이트가 {{SITENAME}}의 모든 설정 변수와 빌드의 모든 단계를 문서화하고 있는지 검사합니다.
 * <code>test.yml</code>은 실제 MediaWiki를 상대로 PHPUnit 스위트와 phan, 커버리지를 실행하고 Caddy 플러그인을 빌드합니다.
 * <code>semantic-pull-request.yml</code>은 풀 리퀘스트 제목을 읽습니다. 이 제목이 스쿼시 커밋의 제목이 되므로 Conventional Commits를 따라야 하며, {{SITENAME}} 자체가 아니라 저장소를 바꾸는 변경(<code>docs/</code>, 리드미, <code>.tf/</code>, <code>.github/</code>)은 <code>feat</code>나 <code>fix</code>를 칭할 수 없습니다. release-please가 그것을 변경 로그에 넣고 버전을 올릴 것으로 읽기 때문입니다.

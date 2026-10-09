@@ -68,7 +68,9 @@ class RenderPreviewPages extends Maintenance {
 		// HistoryAction saves itself into the file cache's history/ tree, which this export deletes.
 		$noFileCache = $this->getServiceContainer()
 			->getHookContainer()
-			->scopedRegister('HTMLFileCache::useFileCache', static fn(): bool => false);
+			->scopedRegister('HTMLFileCache::useFileCache', static function (): bool {
+				return false;
+			});
 		ob_start();
 		try {
 			$this->show($entry, $title, $params, $context);
