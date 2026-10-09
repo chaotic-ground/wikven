@@ -46,9 +46,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-10-05T13:00:40Z">
-<meta property="article:published_time" content="2026-10-05T13:00:40Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-10-05T13:00:40Z","datePublished":"2026-10-05T13:00:40Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-10-09T04:39:18Z">
+<meta property="article:published_time" content="2026-10-09T04:39:18Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Development - Wikven","headline":"Development - Wikven","mainEntityOfPage":"Development","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Development.html","description":"This page explains how Wikven is built, for people who want to work on it. Wikven is a MediaWiki extension plus a handful of maintenance scripts that turn a directory...","dateModified":"2026-10-09T04:39:18Z","datePublished":"2026-10-09T04:39:18Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Development rootpage-Development skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -239,7 +239,7 @@ Wikven
 </div>
 
 <div class="mw-pt-languages noprint navigation-not-searchable" lang="en" dir="ltr"><div class="mw-pt-languages-label">Other languages:</div><ul class="mw-pt-languages-list"><li><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete" lang="en" dir="ltr">English</span></li>
-<li><a href="./Development/ko.html" class="mw-pt-progress mw-pt-progress--high" title="개발 (98% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
+<li><a href="./Development/ko.html" class="mw-pt-progress mw-pt-progress--complete" title="개발 (100% translated)" lang="ko" dir="ltr">한국어</a></li></ul></div>
 <p>This page explains how Wikven is built, for people who want to work on it. Wikven is a <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/MediaWiki">MediaWiki</a> extension plus a handful of maintenance scripts that turn a directory of wikitext into a static website; it does not add a new rendering engine, it drives MediaWiki itself and then captures the result. If you are writing an extension or skin that has to survive a build rather than working on Wikven itself, <a href="./Writing_an_extension.html" title="Special:MyLanguage/Writing an extension">Writing an extension</a> is the page for that.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Architecture">Architecture</h2></div>
@@ -301,6 +301,8 @@ Wikven
 </p>
 <dl><dt><code>RebuildFileCache</code></dt>
 <dd>Renders every content page to an HTML file. This is MediaWiki's own file cache; Wikven treats <code>File:</code> as a content namespace too, so file description pages are exported without dumping every template.</dd></dl>
+<dl><dt><code>renderPreviewPages</code></dt>
+<dd>In a skin preview, renders the special pages, histories and diffs <a href="./Configuration.html#WikvenPreviewExtraPages" title="Special:MyLanguage/Configuration"><code>WikvenPreviewExtraPages</code></a> lists, writing each where the file cache would have, so every step after it treats them as pages. A no-op otherwise.</dd></dl>
 <dl><dt><code>retranslateChrome</code></dt>
 <dd>Re-renders each page written in a language other than the wiki's own — the translations, and the language copies of the <a href="./Configuration.html#WikvenLicensesPage" title="Special:MyLanguage/Configuration">Licenses page</a> the build writes — with that language as the interface language. The file cache only caches the canonical anonymous view, which would leave every one of them wearing the content language's chrome.</dd></dl>
 <dl><dt><code>stripBuildStamps</code></dt>
@@ -392,8 +394,8 @@ npm<span class="w"> </span>run<span class="w"> </span>test:e2e
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1791205240">
-  				<span>Last edited on 5 October 2026, at 13:00</span>
+  				data-timestamp="1791520758">
+  				<span>Last edited on 9 October 2026, at 04:39</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -417,7 +419,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 5 October 2026, at 13:00.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 9 October 2026, at 04:39.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
