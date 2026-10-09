@@ -102,7 +102,11 @@ class RetryingForeignRepoTest extends MediaWikiIntegrationTestCase {
 
 	/** An imageinfo response body, with a thumbnail URL unless $thumbUrl is null. */
 	private function imageInfo(?string $thumbUrl): string {
-		$info = $thumbUrl !== null ? ['thumburl' => $thumbUrl] : [];
+		// Both shapes: core up to 1.46 reads the one url asked for, later core the list (T56037).
+		$info = ['timestamp' => '2026-08-03T00:00:00Z'];
+		if ($thumbUrl !== null) {
+			$info += ['thumburl' => $thumbUrl, 'thumburls' => [32 => ['url' => $thumbUrl]]];
+		}
 		return json_encode(['query' => ['pages' => [['imageinfo' => [$info]]]]]);
 	}
 
