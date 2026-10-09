@@ -47,9 +47,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-09-06T06:38:11Z">
-<meta property="article:published_time" content="2026-09-06T06:38:11Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Lua modules - Wikven","headline":"Lua modules - Wikven","mainEntityOfPage":"Lua modules","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Lua_modules.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Lua_modules.html","description":"A great many wikis keep their templates' logic in Lua, and Wikven runs a real MediaWiki at build time, so a module runs the way it always does. The page that invokes...","dateModified":"2026-09-06T06:38:11Z","datePublished":"2026-09-06T06:38:11Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-10-05T13:00:40Z">
+<meta property="article:published_time" content="2026-10-05T13:00:40Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Lua modules - Wikven","headline":"Lua modules - Wikven","mainEntityOfPage":"Lua modules","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/Lua_modules.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/Lua_modules.html","description":"A great many wikis keep their templates' logic in Lua, and Wikven runs a real MediaWiki at build time, so a module runs the way it always does. The page that invokes...","dateModified":"2026-10-05T13:00:40Z","datePublished":"2026-10-05T13:00:40Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="./assets/webfonts.css"><link rel="stylesheet" href="./assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Lua_modules rootpage-Lua_modules skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -245,10 +245,11 @@ Wikven
 <p>A module is content, so it lives in your source tree beside your pages. Its file carries no <code>.wikitext</code> marker, because a <code>Module:</code> page's content model is Lua and not wikitext:
 </p>
 <div class="mw-highlight mw-highlight-lang-text mw-content-ltr" dir="ltr"><pre><span></span>src/
-  Module:Example
+  Module/
+    Example
   Home.wikitext
 </pre></div>
-<p>A file named <code>Module:Example.wikitext</code> is imported too, but the bare name is the convention, and it is the one Wikven maps a page back to when it needs the file that page came from.
+<p>A file named <code>Module/Example.wikitext</code> is imported too, but the bare name is the convention, and it is the one Wikven maps a page back to when it needs the file that page came from.
 </p><p>A name with no extension leaves your editor with nothing to go on, so it will not colour the file or offer you Lua anything. Every editor can be told once, by the name rather than the extension:
 </p>
 <div class="tabber tabber--init"><header class="tabber__header"><button class="tabber__header__prev" tabindex="-1" type="button" aria-hidden="true"></button><nav class="tabber__tabs" role="tablist"><a class="tabber__tab" role="tab" id="tabber-VS_Code-label" href="#tabber-VS_Code" aria-controls="tabber-VS_Code">VS Code</a><a class="tabber__tab" role="tab" id="tabber-Helix-label" href="#tabber-Helix" aria-controls="tabber-Helix">Helix</a><a class="tabber__tab" role="tab" id="tabber-Vim-label" href="#tabber-Vim" aria-controls="tabber-Vim">Vim</a></nav><button class="tabber__header__next" tabindex="-1" type="button" aria-hidden="true"></button></header><div class="tabber__section"><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-VS_Code" aria-labelledby="tabber-VS_Code-label"><p class="mw-empty-elt">
@@ -256,7 +257,7 @@ Wikven
 </p>
 <div class="mw-highlight mw-highlight-lang-json mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;files.associations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;Module:*&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
+<span class="w">    </span><span class="nt">&quot;**/Module/*&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -265,15 +266,15 @@ Wikven
 </p>
 <div class="mw-highlight mw-highlight-lang-toml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">[[language]]</span>
 <span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;lua&quot;</span>
-<span class="n">file-types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">glob</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Module:*&quot;</span><span class="w"> </span><span class="p">}]</span>
+<span class="n">file-types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">glob</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;**/Module/*&quot;</span><span class="w"> </span><span class="p">}]</span>
 </pre></div>
 <p class="mw-empty-elt"></p></div><div class="tabber__panel" role="tabpanel" tabindex="0" id="tabber-Vim" aria-labelledby="tabber-Vim-label"><p class="mw-empty-elt">
 </p><p>In <code>~/.vim/filetype.vim</code>, or anywhere your <code>vimrc</code> is sourced from:
 </p>
-<div class="mw-highlight mw-highlight-lang-vim mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>autocmd <span class="nb">BufRead</span><span class="p">,</span><span class="nb">BufNewFile</span> Module:* <span class="k">setfiletype</span> <span class="k">lua</span>
+<div class="mw-highlight mw-highlight-lang-vim mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span>autocmd <span class="nb">BufRead</span><span class="p">,</span><span class="nb">BufNewFile</span> *<span class="sr">/Module/</span>* <span class="k">setfiletype</span> <span class="k">lua</span>
 </pre></div>
 <p class="mw-empty-elt"></p></div></div></div>
-<p>The other way round works as well: a file named <code>Module:Example.lua</code> is imported, because the marker is only needed where the title would otherwise be wikitext. But the name is kept as it is, so the page becomes <code>Module:Example.lua</code> and every <code>{{#invoke:}}</code> has to spell it that way.
+<p>The other way round works as well: a file named <code>Module/Example.lua</code> is imported, because the marker is only needed where the title would otherwise be wikitext. But the name is kept as it is, so the page becomes <code>Module:Example.lua</code> and every <code>{{#invoke:}}</code> has to spell it that way.
 </p><p>The module is ordinary Lua. This one is the module this site really has, in full:
 </p>
 <div class="mw-highlight mw-highlight-lang-lua mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
@@ -369,8 +370,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788676691">
-  				<span>Last edited on 6 September 2026, at 06:38</span>
+  				data-timestamp="1791205240">
+  				<span>Last edited on 5 October 2026, at 13:00</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -394,7 +395,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 6 September 2026, at 06:38.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 5 October 2026, at 13:00.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">

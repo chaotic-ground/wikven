@@ -45,9 +45,9 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <meta property="og:image" content="https://chaotic-ground.github.io/wikven/assets/img-0d4a6695d20b.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="article:modified_time" content="2026-08-29T12:00:53Z">
-<meta property="article:published_time" content="2026-08-29T12:00:53Z">
-<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"JavaScript - Wikven","headline":"JavaScript - Wikven","mainEntityOfPage":"JavaScript","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/JavaScript\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/JavaScript\/en.html","description":"Wikven bundles the wiki's own JavaScript into the static export at build time, so site scripts and gadgets run without a live server or load.php.","dateModified":"2026-08-29T12:00:53Z","datePublished":"2026-08-29T12:00:53Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
+<meta property="article:modified_time" content="2026-10-05T13:00:40Z">
+<meta property="article:published_time" content="2026-10-05T13:00:40Z">
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"JavaScript - Wikven","headline":"JavaScript - Wikven","mainEntityOfPage":"JavaScript","identifier":"https:\/\/chaotic-ground.github.io\/wikven\/JavaScript\/en.html","url":"https:\/\/chaotic-ground.github.io\/wikven\/JavaScript\/en.html","description":"Wikven bundles the wiki's own JavaScript into the static export at build time, so site scripts and gadgets run without a live server or load.php.","dateModified":"2026-10-05T13:00:40Z","datePublished":"2026-10-05T13:00:40Z","image":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-0d4a6695d20b.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"publisher":{"@type":"Organization","name":"Wikven","url":"https:\/\/chaotic-ground.github.io","logo":{"@type":"ImageObject","url":"https:\/\/chaotic-ground.github.io\/wikven\/assets\/img-5d163c4d9d29.png","caption":"Wikven"}},"potentialAction":{"@type":"SearchAction","target":"https:\/\/chaotic-ground.github.io\/wikven\/Search.html?search={search_term}","query-input":"required name=search_term"}}</script>
 <link rel="stylesheet" href="../assets/webfonts.css"><link rel="stylesheet" href="../assets/site.styles.css"></head>
 <body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-JavaScript_en rootpage-JavaScript_en skin-minerva action-view skin--responsive minerva--history-page-action-enabled">
 <div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><div id="mw-mf-viewport">
@@ -210,7 +210,7 @@ Wikven
 <p>Wikven bundles the wiki's own JavaScript into the static export at build time, so site scripts and gadgets run without a live server or <code>load.php</code>.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="MediaWiki:Common.js">MediaWiki:Common.js</h2></div>
-<p>Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a regular wiki. Create a <code>MediaWiki:Common.js</code> file in your source directory and it runs on every page. A <code>.js</code> page carries its own content model, so it needs no <code>.wikitext</code> marker. The skin's <code>MediaWiki:Vector.js</code> (and so on) works the same way.
+<p>Site-wide JavaScript lives in <code>MediaWiki:Common.js</code>, just like on a regular wiki. Create a <code>MediaWiki/Common.js</code> file in your source directory and it runs on every page. A <code>.js</code> page carries its own content model, so it needs no <code>.wikitext</code> marker. The skin's <code>MediaWiki:Vector.js</code> (and so on) works the same way.
 </p>
 <div class="mw-heading mw-heading2"><h2 id="Gadgets">Gadgets</h2></div>
 <p>To use <a class="external text" href="https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Gadgets">gadgets</a>, enable the bundled Gadgets extension in <a href="../Configuration/en.html" title="Special:MyLanguage/Configuration">.wikven.yaml</a>:
@@ -218,7 +218,7 @@ Wikven
 <div class="mw-highlight mw-highlight-lang-yaml mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="nt">extensions</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gadgets</span>
 </pre></div>
-<p>List your gadgets in <code>MediaWiki:Gadgets-definition.wikitext</code>, and put each gadget's code in <code>MediaWiki:Gadget-&lt;name&gt;.js</code>:
+<p>List your gadgets in <code>MediaWiki/Gadgets-definition.wikitext</code>, and put each gadget's code in <code>MediaWiki/Gadget-&lt;name&gt;.js</code>:
 </p>
 <div class="mw-highlight mw-highlight-lang-wikitext mw-content-ltr mw-highlight-copy" dir="ltr"><pre><span></span><span class="k">*</span> MyGadget[ResourceLoader|default]|MyGadget.js
 </pre></div>
@@ -242,8 +242,8 @@ Wikven
   		<span class="last-modified-bar__text modified-enhancement"
   				data-user-name="Lens0021"
   				data-user-gender="unknown"
-  				data-timestamp="1788004853">
-  				<span>Last edited on 29 August 2026, at 12:00</span>
+  				data-timestamp="1791205240">
+  				<span>Last edited on 5 October 2026, at 13:00</span>
   		</span>
   		 <span class="minerva-icon minerva-icon-size-small minerva-icon--expand"></span>
  
@@ -267,7 +267,7 @@ Wikven
 </ul>
 			</div>
 			<ul id="footer-info" class="footer-info hlist hlist-separated">
-	<li id="footer-info-lastmod"> This page was last edited on 29 August 2026, at 12:00.</li>
+	<li id="footer-info-lastmod"> This page was last edited on 5 October 2026, at 13:00.</li>
 </ul>
 
 			<ul id="footer-places" class="footer-places hlist hlist-separated">
