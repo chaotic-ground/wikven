@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/chaotic-ground/wikven/compare/v1.4.0...v1.4.1) (2026-10-09)
+
+
+### Bugfixes
+
+* keep plain spaces in code, where MediaWiki makes them no-break ([#834](https://github.com/chaotic-ground/wikven/issues/834)) ([57d0661](https://github.com/chaotic-ground/wikven/commit/57d066184eab08114e1c533004123015c2472096))
+* take the file MediaWiki 1.47 passes to a thumbnail lookup ([#835](https://github.com/chaotic-ground/wikven/issues/835)) ([4bb50d9](https://github.com/chaotic-ground/wikven/commit/4bb50d97271e3678a638e57861b8dfa8c451db31))
+
 ## [1.4.0](https://github.com/chaotic-ground/wikven/compare/v1.3.0...v1.4.0) (2026-10-09)
 
 
