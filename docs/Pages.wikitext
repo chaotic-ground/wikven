@@ -66,12 +66,21 @@ All three have to hold at once, so any one of them is the way out: a subpage of 
 == Namespaces ==
 
 <!--T:11-->
-Prefix the file name with a namespace to place the page there:
+Put the file in a directory named for a namespace to place the page there:
 
 <!--T:12-->
-* <code>Template:Infobox.wikitext</code> is the template "Template:Infobox" (see [[<tvar name="1">Special:MyLanguage/Pages#templates</tvar>|Templates]]).
-* <code>File:Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see [[<tvar name="2">Special:MyLanguage/Images</tvar>|Images]]).
-* <code>MediaWiki:Common.css</code> and <code>MediaWiki:Common.js</code> are the site-wide stylesheet and script (see [[<tvar name="3">Special:MyLanguage/JavaScript</tvar>|JavaScript]]). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.
+* <code>Template/Infobox.wikitext</code> is the template "Template:Infobox" (see [[<tvar name="1">Special:MyLanguage/Pages#templates</tvar>|Templates]]).
+* <code>File/Logo.png.wikitext</code> is the description page for an uploaded <code>Logo.png</code> (see [[<tvar name="2">Special:MyLanguage/Images</tvar>|Images]]).
+* <code>MediaWiki/Common.css</code> and <code>MediaWiki/Common.js</code> are the site-wide stylesheet and script (see [[<tvar name="3">Special:MyLanguage/JavaScript</tvar>|JavaScript]]). These keep their extension and need no <code>.wikitext</code> marker, because the name already carries the content type.
+
+<!--T:34-->
+The directory is the namespace's canonical English name, spelled as a title spells it: <code>Template/</code>, <code>Category/</code>, <code>User talk/</code>, with a space and not an underscore, and in that case. Only the first directory counts, so <code>Template/Note/styles.css</code> is the subpage "Template:Note/styles.css". A directory with any other name makes a subpage.
+
+<!--T:35-->
+That makes a namespace's name unavailable to a subpage in the main namespace: <code>Help/Setup.wikitext</code> is "Help:Setup", not a subpage of "Help". The build warns where a <code>Help.wikitext</code> beside the directory suggests a subpage was meant; rename the directory to keep it one. A [[<tvar name="1">Special:MyLanguage/Pages#translation-not-subpage</tvar>|translation]] such as <code>Help/ko.wikitext</code> beside a translatable <code>Help.wikitext</code> is still a translation.
+
+<!--T:36-->
+Naming the namespace in the file name, as in <code>Template:Infobox.wikitext</code>, is deprecated since 1.4.0, and 2.0.0 will stop reading it. Until then the build warns about every such file: Windows cannot hold a <code>:</code> in a file name, so a source written that way cannot be checked out there. A source with both spellings of one page stops the build.
 
 <!--T:13-->
 <span id="categories"></span>
@@ -81,7 +90,7 @@ Prefix the file name with a namespace to place the page there:
 Add <code><nowiki>[[Category:Name]]</nowiki></code> to a page to [<tvar name="1">https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Categories</tvar> categorise] it; the categories show in the page footer, as on any wiki.
 
 <!--T:15-->
-A category's own page is not exported by default, though. {{SITENAME}} writes only ''content'' pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your [[<tvar name="1">Special:MyLanguage/Configuration#ContentNamespaces</tvar>|<code>.wikven.yaml</code> file]] and add a <code>Category:Name.wikitext</code> file to your source:
+A category's own page is not exported by default, though. {{SITENAME}} writes only ''content'' pages to the static site, and counts just the main and File: namespaces as content. (Namespaces have numeric IDs: main is <code>0</code>, File: is <code>6</code>, and Category is <code>14</code>.) So a footer category links to a <code>Category:Name.html</code> the static host does not serve, a dead link, until you export the category page. To do that, set <code>ContentNamespaces</code> in your [[<tvar name="1">Special:MyLanguage/Configuration#ContentNamespaces</tvar>|<code>.wikven.yaml</code> file]] and add a <code>Category/Name.wikitext</code> file to your source:
 </translate>
 
 <syntaxhighlight lang="yaml" copy>
@@ -101,7 +110,7 @@ To keep a maintenance or tracking category out of the footer instead, add the <c
 == Templates ==
 
 <!--T:19-->
-Put a <code>Template:Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>. For example, this file:
+Put a <code>Template/Name.wikitext</code> file in your source and use it on any page as <code><nowiki>{{Name}}</nowiki></code>. For example, this file:
 </translate>
 
 <translate nowrap>
@@ -113,7 +122,7 @@ Put a <code>Template:Name.wikitext</code> file in your source and use it on any 
 
 <translate>
 <!--T:20-->
-saved as <code>Template:Note.wikitext</code> and used on a page as:
+saved as <code>Template/Note.wikitext</code> and used on a page as:
 </translate>
 
 <translate nowrap>

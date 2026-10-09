@@ -183,7 +183,8 @@ jobs:
           {{#invoke:Greet|thisPage}}
           EOF
 
-          cat > 'work/src/Module:Greet' <<'EOF'
+          mkdir work/src/Module
+          cat > work/src/Module/Greet <<'EOF'
           local p = {}
 
           function p.thisPage()
