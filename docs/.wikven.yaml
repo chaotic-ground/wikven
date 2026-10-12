@@ -175,4 +175,4 @@ config:
     # reads 2.7.0 and >= 1.42. The tag is mis-stamped, so its name promises code it does not hold.
     WikiSEO:
       repository: https://github.com/wikimedia/mediawiki-extensions-WikiSEO.git
-      commit: e13a60e4f339da29fcbf0ceedcabe6bf44537bd0
+      commit: 6d948bc9bed07a8a7bb1ee03e75473ea431c58ea
