@@ -199,6 +199,9 @@ class BuildTranslations extends Maintenance {
 				// that fixes its own would otherwise sit short of 100% forever.
 				$settings = new TranslatablePageSettings([], false, '', [], $pageTitle !== null, false, false);
 				$marker->markForTranslation($operation, $settings, RequestContext::getMain(), $user);
+				// Translate keeps its list of translatable pages in the process cache, which marking does
+				// not clear, so a page marked after the list was read would get no translation pages (#839).
+				$this->getServiceContainer()->getMainWANObjectCache()->clearProcessCache();
 			} catch (ParsingFailure $failure) {
 				return $this->skipUnmarkable($title, 'is not wikitext Translate can parse', $failure->getMessage());
 			} catch (TranslatablePageMarkException $failure) {
