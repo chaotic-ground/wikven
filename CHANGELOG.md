@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/chaotic-ground/wikven/compare/v1.4.1...v1.4.2) (2026-10-12)
+
+
+### Bugfixes
+
+* count every marked page as translatable when rendering ([#840](https://github.com/chaotic-ground/wikven/issues/840)) ([86c36f4](https://github.com/chaotic-ground/wikven/commit/86c36f48a1fca2e10423fd30a38e3ccda9bbd6aa))
+
 ## [1.4.1](https://github.com/chaotic-ground/wikven/compare/v1.4.0...v1.4.1) (2026-10-09)
 
 
