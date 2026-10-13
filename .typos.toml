@@ -11,4 +11,6 @@ extend-ignore-re = [
   # Pagefind names each language's index after a hex digest of it ("ko_72ba3bbda7"), and a test
   # that pins the bundle's entry file quotes them verbatim. Hex, not words.
   '\b[a-z]{2,3}_[0-9a-f]{10}\b',
+  # A Go pseudo-version ends in the commit's short hash: "c5f79b8a11ba" reads as a misspelling.
+  '-\d{14}-[0-9a-f]{12}\b',
 ]

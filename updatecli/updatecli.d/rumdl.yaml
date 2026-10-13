@@ -43,6 +43,6 @@ targets:
     scmid: default
     sourceid: release
     spec:
-      file: .github/workflows/lint.yml
-      matchpattern: 'RUMDL_VERSION: "[^"]*"'
-      replacepattern: 'RUMDL_VERSION: "{{ source "release" }}"'
+      file: .tool-versions
+      matchpattern: '(?m)^rumdl .*$'
+      replacepattern: 'rumdl {{ source "release" }}'
