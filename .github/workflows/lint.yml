@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: rvben/rumdl@bb84a49a85625b31ecf6c3e58b7bca7c75fbfefb  # v0.2.77
+      - uses: rvben/rumdl@9c4cc2a2ebe176de68e1788106e25af8a9bd3899  # v0.2.78
         with:
           version: ${{ env.RUMDL_VERSION }}
 
@@ -120,7 +120,7 @@ jobs:
     env:
       # Its own name so updatecli has something to match on, and an exact patch version: given one,
       # the action resolves it on the spot, where a bare minor or "latest" fetches a version map.
-      GOLANGCI_LINT_VERSION: "v2.5.0"
+      GOLANGCI_LINT_VERSION: "v2.14.0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -171,7 +171,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: crate-ci/typos@00f422f3b19c57bc6338715ebfe3316d38768461  # v1.50.3
+      - uses: crate-ci/typos@7f9d0819ca1c008ade73f4b41fa9d258d48f605b  # v1.51.1
 
   # MediaWiki coding-standard checks mago doesn't cover: docs, naming, and forbidden patterns.
   phpcs:
