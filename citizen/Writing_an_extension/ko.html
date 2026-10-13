@@ -11,7 +11,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 <script src="../assets/startup-static.js"></script><script src="../assets/modules-static.js"></script><script>mw.loader.load(["ext.pygments.view","site","mediawiki.page.ready","mediawiki.toc","skins.citizen.scripts","ext.translate.pagetranslation.uls","ext.Wikven.citizenSearchShortcuts","ext.Wikven.pinnableState","ext.Wikven.appearance","ext.Wikven.citizenSkins","ext.sifter.retarget","ext.gadget.PersistTabber","ext.gadget.SidebarCurrentPage","ext.uls.compactlinks","ext.uls.interface","skins.citizen.toc"]);</script>
 <meta name="ResourceLoaderDynamicStyles" content="">
 
-<meta name="generator" content="MediaWiki 1.46.0">
+<meta name="generator" content="MediaWiki 1.46.2">
 <meta name="robots" content="noindex,follow,max-image-preview:standard">
 <meta name="format-detection" content="telephone=no">
 <meta name="google-site-verification" content="2rzhjoB0M6oJLKFCyvqcW6_SGAkxpf7o4RIWOGfpfPY">
@@ -468,7 +468,7 @@ RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.option
 </p>
 </section><section id="citizen-section-1" class="citizen-section"><div class="mw-heading mw-heading2 citizen-section-heading"><h2 id="빌드란_무엇인가"><span id=".EB.B9.8C.EB.93.9C.EB.9E.80_.EB.AC.B4.EC.97.87.EC.9D.B8.EA.B0.80"></span>빌드란 무엇인가</h2></div><div class="citizen-section-body">
 <p>Wikven 빌드는 명령줄에서 MediaWiki를 한 번 부팅해 모든 문서를 파일로 렌더링한 뒤 종료합니다. 그다음 독자에게는 PHP를 실행하지 않는 호스트가 평범한 파일을 내어 줍니다.
-</p><p>그 MediaWiki는 이미지와 바이너리가 올라앉은 릴리스인 <b>1.46.0</b>이고, 따라서 여러분의 확장 기능이 맞춰야 할 대상입니다. Wikven 자체는 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/extension.json"><code>extension.json</code></a>이 적어둔 릴리스 이상을 지원합니다. 더 새로운 것에 맞춰 쓰면, 배포된 이미지를 쓰는 사이트에는 그것이 없습니다.
+</p><p>그 MediaWiki는 이미지와 바이너리가 올라앉은 릴리스인 <b>1.46.2</b>이고, 따라서 여러분의 확장 기능이 맞춰야 할 대상입니다. Wikven 자체는 <a rel="nofollow" class="external text" href="https://github.com/chaotic-ground/wikven/blob/main/extension.json"><code>extension.json</code></a>이 적어둔 릴리스 이상을 지원합니다. 더 새로운 것에 맞춰 쓰면, 배포된 이미지를 쓰는 사이트에는 그것이 없습니다.
 </p><p>아래 내용 전체를 관통하는 두 가지 결과가 있습니다:
 </p>
 <ul><li><b>여러분의 코드는 볼 때가 아니라 빌드할 때 실행됩니다.</b> 사이트가 배포된 뒤에는 <code>load.php</code>도, 액션 API도, 데이터베이스도 없습니다. 평소 요청에 응답하며 하던 일은 빌드 도중에 끝나 있거나, 서버가 필요 없는 정적 자바스크립트로 실려야 합니다.</li>
