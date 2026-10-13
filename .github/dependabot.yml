@@ -80,6 +80,15 @@ updates:
       gomod:
         patterns:
           - "*"
+  # Only the golangci-lint that lint.yml runs, kept apart from /caddy so its dependencies stay out
+  # of the server's build.
+  - package-ecosystem: gomod
+    directory: /tools/golangci-lint
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
   - package-ecosystem: terraform
     directory: /.tf
     schedule:

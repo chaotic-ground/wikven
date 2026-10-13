@@ -24,6 +24,7 @@ playwright-report
 pw-root
 test-results
 tests
+tools
 updatecli
 vendor
 

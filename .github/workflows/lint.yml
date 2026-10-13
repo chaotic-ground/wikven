@@ -59,18 +59,14 @@ jobs:
   rumdl:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      # Named, because the action's default is to ask GitHub what the latest release is, and GitHub
-      # answered that with a 504 three times in one afternoon. Its own name so that updatecli has
-      # something to match on: the version input is written the same way two jobs down, for taplo.
-      RUMDL_VERSION: "0.2.62"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: rvben/rumdl@9c4cc2a2ebe176de68e1788106e25af8a9bd3899  # v0.2.78
-        with:
-          version: ${{ env.RUMDL_VERSION }}
+      # Pinned in pyproject.toml beside yamllint, where Dependabot moves it. A version written in a
+      # workflow is one updatecli cannot push: GITHUB_TOKEN may not change a workflow file.
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
+      - run: uv run --frozen --group lint rumdl check .
 
   taplo:
     runs-on: ubuntu-latest
@@ -117,14 +113,20 @@ jobs:
   golangci-lint:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      # Its own name so updatecli has something to match on, and an exact patch version: given one,
-      # the action resolves it on the spot, where a bare minor or "latest" fetches a version map.
-      GOLANGCI_LINT_VERSION: "v2.14.0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+
+      # Pinned in tools/golangci-lint/go.mod, where Dependabot moves it; a version written here is
+      # one updatecli cannot push. An exact patch version: given one, the action resolves it on the
+      # spot, where a bare minor or "latest" fetches a version map.
+      - id: version
+        run: |
+          v=$(awk '{ sub(/^require[ \t]+/, "") } $1 == "github.com/golangci/golangci-lint/v2" { print $2 }' \
+            tools/golangci-lint/go.mod)
+          test -n "$v"
+          echo "golangci-lint=$v" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
         with:
@@ -134,7 +136,7 @@ jobs:
       # Formatters configured in caddy/.golangci.yml are reported by run, so this is the whole check.
       - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a  # v9.3.0
         with:
-          version: ${{ env.GOLANGCI_LINT_VERSION }}
+          version: ${{ steps.version.outputs.golangci-lint }}
           working-directory: caddy
 
   # A comment that has grown into an essay is documentation nobody finishes reading. The budget and
