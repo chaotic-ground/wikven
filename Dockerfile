@@ -1,6 +1,6 @@
 # Digest-pinned and version-tagged, so dependabot's bumps read as versions. The pin fixes the base
 # images alone: apk below resolves against the current Alpine index, so the image is not reproducible.
-FROM composer:2.10.3@sha256:d8f6343d3fae98107426bc49163ccad46ef85aabd4a27d80a74401fab4aba332 AS composer
+FROM composer:2.10.3@sha256:af98f42dfff7c68ba8d53c2164fd9fde1087b7d449514baa38c418b1f6bc4bac AS composer
 
 # The alpine variant: nothing here serves over HTTP, so the default variant's Apache never starts.
 # Same extensions, 873MB against 1.5GB. A bump onto a new release branch has to take the bundled
