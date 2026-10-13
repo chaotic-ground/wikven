@@ -147,25 +147,25 @@ config:
     # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      commit: 97019081c2add79db87ba43e6950e82bb1a2d55f
+      commit: 530a4f2e6de28ae2f551ef43cf0999f90f4c2790
     # Chart draws the chart on Special:MyLanguage/Charts, and JsonConfig is what holds the two
     # Data: pages it reads. Neither tags this branch, so both are pinned to a commit on it for the
     # reason MobileFrontend is. updatecli moves the pins.
     Chart:
       repository: https://github.com/wikimedia/mediawiki-extensions-Chart.git
-      commit: 55de706faafab078bdcecf3caf49c8999d5a2203
+      commit: b1f48da616faf20aac7bd6a254258e0c4926d74f
     JsonConfig:
       repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
-      commit: 035b6ce392f860a42cdf739611cff9cf1d30d5c6
+      commit: fccb3eb5d716d58184dcf1e125a08b195b572252
     # Draws the hieroglyphs on Special:MyLanguage/Hieroglyphs. Its newest tag is two releases
     # behind this branch, so it is pinned to a commit on the branch, as the others here are.
     wikihiero:
       repository: https://github.com/wikimedia/mediawiki-extensions-wikihiero.git
-      commit: 833d04bec7bfdc8a03a31799fdf7b8e82cc90bfe
+      commit: afde73541003459fcf9913d13d157e82f37a067f
     # Draws the music on Special:MyLanguage/Scores. No release tag for this branch either.
     Score:
       repository: https://github.com/wikimedia/mediawiki-extensions-Score.git
-      commit: 017461e09a4670a187a7acc9f20a75a78c62e168
+      commit: c9da006e8d666c7d6daa41dc8e8c75cb297a62f1
     # WikiSEO writes the head tags a static export cannot get any other way: the site
     # verification token above, and later the canonical and hreflang links. Not bundled in the
     # image, so it is fetched here.
@@ -175,4 +175,4 @@ config:
     # reads 2.7.0 and >= 1.42. The tag is mis-stamped, so its name promises code it does not hold.
     WikiSEO:
       repository: https://github.com/wikimedia/mediawiki-extensions-WikiSEO.git
-      commit: e13a60e4f339da29fcbf0ceedcabe6bf44537bd0
+      commit: 6d948bc9bed07a8a7bb1ee03e75473ea431c58ea
