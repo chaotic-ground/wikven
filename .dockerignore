@@ -39,6 +39,7 @@ vendor
 .release-please-manifest.json
 .rumdl.toml
 .taplo.toml
+.tool-versions
 .typos.toml
 .yamllint.yml
 Dockerfile

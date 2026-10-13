@@ -63,10 +63,15 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      # Pinned in package.json, where Dependabot moves it. A version written in a workflow is one
-      # updatecli cannot push: GITHUB_TOKEN may not change a workflow file.
-      - run: npm ci --ignore-scripts
-      - run: npx --no-install rumdl check .
+      # Named, because the action's default is to ask GitHub what the latest release is, and GitHub
+      # answered that with a 504 three times in one afternoon. Kept in .tool-versions, where updatecli
+      # moves it: a version written here is one it cannot push, as GITHUB_TOKEN may not change a
+      # workflow file.
+      - id: version
+        run: echo "rumdl=$(awk '$1 == "rumdl" { print $2 }' .tool-versions)" >> "$GITHUB_OUTPUT"
+      - uses: rvben/rumdl@9c4cc2a2ebe176de68e1788106e25af8a9bd3899  # v0.2.78
+        with:
+          version: ${{ steps.version.outputs.rumdl }}
 
   taplo:
     runs-on: ubuntu-latest

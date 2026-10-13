@@ -7,7 +7,6 @@
 		"test:e2e": "playwright test"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.63.0",
-		"rumdl": "^0.2.62"
+		"@playwright/test": "^1.63.0"
 	}
 }
