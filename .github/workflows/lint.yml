@@ -63,10 +63,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      # Pinned in pyproject.toml beside yamllint, where Dependabot moves it. A version written in a
-      # workflow is one updatecli cannot push: GITHUB_TOKEN may not change a workflow file.
-      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
-      - run: uv run --frozen --group lint rumdl check .
+      # Pinned in package.json, where Dependabot moves it. A version written in a workflow is one
+      # updatecli cannot push: GITHUB_TOKEN may not change a workflow file.
+      - run: npm ci --ignore-scripts
+      - run: npx --no-install rumdl check .
 
   taplo:
     runs-on: ubuntu-latest
