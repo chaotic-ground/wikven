@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/chaotic-ground/wikven/compare/v1.4.2...v1.4.3) (2026-10-13)
+
+
+### Bugfixes
+
+* link the footer badge to the documentation rather than the repository ([#850](https://github.com/chaotic-ground/wikven/issues/850)) ([0518565](https://github.com/chaotic-ground/wikven/commit/0518565cf97d651d9b96229b601553a5e068f193))
+
 ## [1.4.2](https://github.com/chaotic-ground/wikven/compare/v1.4.1...v1.4.2) (2026-10-12)
 
 
