@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-	<title>Note</title>
-	<circle cx="16" cy="16" r="15" fill="#2f889c"/>
-	<circle cx="16" cy="9" r="2" fill="#fff"/>
-	<path d="M16 14 L16 24" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-</svg>
