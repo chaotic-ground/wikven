@@ -427,9 +427,9 @@ if (( $GLOBALS['wgWikvenFooterBadge'] ?? true ) && !array_key_exists('FooterIcon
 		],
 		'width' => 25,
 		'height' => 25,
-		// The project rather than the site's licenses page: the footer already links that page beside
-		// this badge.
-		'url' => 'https://github.com/chaotic-ground/wikven',
+		// The project's documentation rather than the site's licenses page: the footer already links
+		// that page beside this badge.
+		'url' => 'https://chaotic-ground.github.io/wikven/',
 		'alt' => 'Built with wikven',
 		'lang' => 'en'
 	];
