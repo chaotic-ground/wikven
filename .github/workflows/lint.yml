@@ -120,7 +120,7 @@ jobs:
     env:
       # Its own name so updatecli has something to match on, and an exact patch version: given one,
       # the action resolves it on the spot, where a bare minor or "latest" fetches a version map.
-      GOLANGCI_LINT_VERSION: "v2.5.0"
+      GOLANGCI_LINT_VERSION: "v2.14.0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
