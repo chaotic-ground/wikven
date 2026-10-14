@@ -11,6 +11,8 @@ linters:
     - gocritic
     - gocyclo
     - misspell
+    # Older idioms the Go version in go.mod has a newer spelling for.
+    - modernize
     # The reassignments the standard set leaves: another package's variable, and an overwrite
     # across a branch.
     - reassign
