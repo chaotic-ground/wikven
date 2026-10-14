@@ -239,8 +239,7 @@ func reexec(extraEnv []string, args ...string) (int, error) {
 		// finished and nothing else here has anything left to do, so exiting is the honest answer.
 		//
 		// A signalled child reports -1; call that 1.
-		var exit *exec.ExitError
-		if errors.As(err, &exit) {
+		if exit, ok := errors.AsType[*exec.ExitError](err); ok {
 			if code := exit.ExitCode(); code > 0 {
 				os.Exit(code)
 			}
