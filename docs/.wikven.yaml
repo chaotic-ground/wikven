@@ -161,7 +161,7 @@ config:
     # behind this branch, so it is pinned to a commit on the branch, as the others here are.
     wikihiero:
       repository: https://github.com/wikimedia/mediawiki-extensions-wikihiero.git
-      commit: afde73541003459fcf9913d13d157e82f37a067f
+      commit: 9d316da8198b214ce406b475740001f1aff5cb84
     # Draws the music on Special:MyLanguage/Scores. No release tag for this branch either.
     Score:
       repository: https://github.com/wikimedia/mediawiki-extensions-Score.git
