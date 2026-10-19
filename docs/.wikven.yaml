@@ -147,13 +147,13 @@ config:
     # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      commit: 530a4f2e6de28ae2f551ef43cf0999f90f4c2790
+      commit: 5a895cdbbecc10d9b3d268ceba23da68fdfeaa4a
     # Chart draws the chart on Special:MyLanguage/Charts, and JsonConfig is what holds the two
     # Data: pages it reads. Neither tags this branch, so both are pinned to a commit on it for the
     # reason MobileFrontend is. updatecli moves the pins.
     Chart:
       repository: https://github.com/wikimedia/mediawiki-extensions-Chart.git
-      commit: b1f48da616faf20aac7bd6a254258e0c4926d74f
+      commit: 736e76e5b0bc23e15f1cbe19b971f5bc0a1584bf
     JsonConfig:
       repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
       commit: fccb3eb5d716d58184dcf1e125a08b195b572252
@@ -161,7 +161,7 @@ config:
     # behind this branch, so it is pinned to a commit on the branch, as the others here are.
     wikihiero:
       repository: https://github.com/wikimedia/mediawiki-extensions-wikihiero.git
-      commit: afde73541003459fcf9913d13d157e82f37a067f
+      commit: 9d316da8198b214ce406b475740001f1aff5cb84
     # Draws the music on Special:MyLanguage/Scores. No release tag for this branch either.
     Score:
       repository: https://github.com/wikimedia/mediawiki-extensions-Score.git
