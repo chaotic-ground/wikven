@@ -180,7 +180,7 @@ jobs:
         with:
           persist-credentials: false
       - if: needs.changes.outputs.docs-only != 'true'
-        uses: femiwiki/quibble-action@2b5f2466dec6f421394630fd653445da1f86b11c  # v3.0.0
+        uses: femiwiki/quibble-action@e2f130548c1322e8414c77e4f46d11f6dfcfa432  # v3.0.3
         with:
           stage: phan
           dependencies: ${{ env.PHAN_DEPENDENCIES }}
@@ -204,7 +204,7 @@ jobs:
           persist-credentials: false
       - id: quibble
         if: needs.changes.outputs.docs-only != 'true'
-        uses: femiwiki/quibble-action@2b5f2466dec6f421394630fd653445da1f86b11c  # v3.0.0
+        uses: femiwiki/quibble-action@e2f130548c1322e8414c77e4f46d11f6dfcfa432  # v3.0.3
         with:
           stage: coverage
           dependencies: ${{ env.WIKI_DEPENDENCIES }}
