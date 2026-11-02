@@ -5,7 +5,7 @@ FROM composer:2.10.3@sha256:af98f42dfff7c68ba8d53c2164fd9fde1087b7d449514baa38c4
 # The alpine variant: nothing here serves over HTTP, so the default variant's Apache never starts.
 # Same extensions, 873MB against 1.5GB. A bump onto a new release branch has to take the bundled
 # extensions with it; their branch is in updatecli/updatecli.d/mediawiki-extensions.yaml.
-FROM mediawiki:1.46.2-fpm-alpine@sha256:80897e5f23979385cb112127034b665505806da3504d502b18c12cb4809e54b0
+FROM mediawiki:1.46.2-fpm-alpine@sha256:92a3873b338c76c8b116930ce6c758c32d8801013fd98c6236d4150340dfd5c4
 
 # composer installs third-party extensions at bake time. rsvg-convert renders SVG thumbnails, and
 # alpine splits ImageMagick's delegates out, so its convert reads only the PNG family without these.
