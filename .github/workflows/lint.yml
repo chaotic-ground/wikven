@@ -69,7 +69,7 @@ jobs:
       # workflow file.
       - id: version
         run: echo "rumdl=$(awk '$1 == "rumdl" { print $2 }' .tool-versions)" >> "$GITHUB_OUTPUT"
-      - uses: rvben/rumdl@a7a8434abe60f64239ea05624885f9bad66a1026  # v0.2.79
+      - uses: rvben/rumdl@19006897519812a2fdc508314b34738e5c281233  # v0.3.0
         with:
           version: ${{ steps.version.outputs.rumdl }}
 
@@ -93,7 +93,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884  # v10.3.0
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e  # v10.3.2
       - run: uv run --frozen --group lint yamllint --strict .
 
   mago:
@@ -169,7 +169,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482  # v0.6.4
+      - uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b  # v0.8.0
 
   typos:
     runs-on: ubuntu-latest
