@@ -156,7 +156,7 @@ config:
       commit: 3685a6cef996b4ee7d627a85c37355bd32542366
     JsonConfig:
       repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
-      commit: fccb3eb5d716d58184dcf1e125a08b195b572252
+      commit: bfbd60c16585798d5a50b58dc77e341aa6e1454f
     # Draws the hieroglyphs on Special:MyLanguage/Hieroglyphs. Its newest tag is two releases
     # behind this branch, so it is pinned to a commit on the branch, as the others here are.
     wikihiero:
