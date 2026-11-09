@@ -93,7 +93,7 @@ jobs:
       # close. Nothing serves that branch; publish-pages below is what puts it in front of a
       # reader. comment: false - this surfaces as a native GitHub deployment, not a comment.
       - name: Store the preview
-        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9  # v1.8.1
+        uses: rossjrw/pr-preview-action@873417d2df72380da1f3978378fb58560bcde976  # v1.8.2
         with:
           source-dir: dist
           preview-branch: previews
