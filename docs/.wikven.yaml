@@ -147,25 +147,25 @@ config:
     # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      commit: e56b6d66ac7df35979b23ae170d06397918003b5
+      commit: 3b566dd3bc06bf88e5eeffaf2eb85e6ad8d190a1
     # Chart draws the chart on Special:MyLanguage/Charts, and JsonConfig is what holds the two
     # Data: pages it reads. Neither tags this branch, so both are pinned to a commit on it for the
     # reason MobileFrontend is. updatecli moves the pins.
     Chart:
       repository: https://github.com/wikimedia/mediawiki-extensions-Chart.git
-      commit: 3685a6cef996b4ee7d627a85c37355bd32542366
+      commit: db66d07cadc1f383475fd2e6855e8c7f6c677989
     JsonConfig:
       repository: https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git
-      commit: bfbd60c16585798d5a50b58dc77e341aa6e1454f
+      commit: c756b48b44bebefced438fe25b3f511d6e4794ef
     # Draws the hieroglyphs on Special:MyLanguage/Hieroglyphs. Its newest tag is two releases
     # behind this branch, so it is pinned to a commit on the branch, as the others here are.
     wikihiero:
       repository: https://github.com/wikimedia/mediawiki-extensions-wikihiero.git
-      commit: 8e3309f9d97320052878f28f117059136ec3409f
+      commit: a4867a3cd7ab695d3be94e787db5f394a757325a
     # Draws the music on Special:MyLanguage/Scores. No release tag for this branch either.
     Score:
       repository: https://github.com/wikimedia/mediawiki-extensions-Score.git
-      commit: 151dae2fc84f9eaf386915b81e6d2a8359aaf3bd
+      commit: 4462bbc08b5e2f12be58042c48ce70ea7f2f1f80
     # WikiSEO writes the head tags a static export cannot get any other way: the site
     # verification token above, and later the canonical and hreflang links. Not bundled in the
     # image, so it is fetched here.
