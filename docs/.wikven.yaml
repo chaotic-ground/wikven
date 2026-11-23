@@ -147,7 +147,7 @@ config:
     # repository fetches the code that revision was tested against. updatecli moves the pin.
     MobileFrontend:
       repository: https://github.com/wikimedia/mediawiki-extensions-MobileFrontend.git
-      commit: 3b566dd3bc06bf88e5eeffaf2eb85e6ad8d190a1
+      commit: 2695f1103e5b150a00ac6a35e47c26c3ed685b4c
     # Chart draws the chart on Special:MyLanguage/Charts, and JsonConfig is what holds the two
     # Data: pages it reads. Neither tags this branch, so both are pinned to a commit on it for the
     # reason MobileFrontend is. updatecli moves the pins.
