@@ -165,7 +165,7 @@ config:
     # Draws the music on Special:MyLanguage/Scores. No release tag for this branch either.
     Score:
       repository: https://github.com/wikimedia/mediawiki-extensions-Score.git
-      commit: 4462bbc08b5e2f12be58042c48ce70ea7f2f1f80
+      commit: 7ce7bfd4a49dbcc1b9329fde9e48ea5a4e26a4f6
     # WikiSEO writes the head tags a static export cannot get any other way: the site
     # verification token above, and later the canonical and hreflang links. Not bundled in the
     # image, so it is fetched here.
